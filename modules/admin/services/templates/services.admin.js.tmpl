@@ -1,0 +1,51 @@
+jQuery(document).ready(function() {
+	// init main content
+	AdminInterface.content.find('table.service_list').prepareWidget(function(service_list) {
+		
+		var sidebar;
+		AdminInterface.sidebar.find('.ui-list').prepareWidget(function(widget) {
+			sidebar = widget;
+			sidebar.settings.row_click_active_mode = 'activate';
+			var initial_selection = "{{writeRequestValue=service_category_id}}";
+			if(initial_selection) {
+				initial_selection = isNaN(initial_selection) ? initial_selection : parseInt(initial_selection, 10);
+				sidebar.handle('loaded', function() {
+					sidebar.activate_row(sidebar.row_from_row_data({service_category_id: initial_selection}));
+				}, true, true);
+			}
+			
+			sidebar.handle('list.row-click', function(event, row, element) {
+				var service_category_id = element.data('service_category_id');
+				if(!element.is('.ui-state-active')) {
+					// handle initial_selection for custom elements
+				 	service_category_id = null;
+				}
+				service_list.setOption('service_category_id', service_category_id);
+				service_list.reload();
+			});
+		});
+		
+		// init info_bar
+		AdminInterface.info_bar.prepareWidget(function(info_bar) {
+			info_bar.add_button('add-new-item', function() {
+				Widget.create('service_detail', function(widget) {
+					widget.settings.initial_category_id = sidebar.active_row().data('service_category_id');
+					widget.open();
+					widget.save_callback = function() {
+						service_list.reload();
+					};
+				});
+			}, 'n', true).add_button('add-new-item', function() {
+				Widget.create('sidebar_input', function(widget) {
+					widget.add_new_sidebar_input("{{writeString=wns.service_category.default_name}}", 'ServiceCategory', sidebar, 'cmos-services_categories_changed');
+				});
+			}).add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
+				if(service_list.setSearch(search)) {
+					service_list.reload();
+				}
+			});
+			// add row_count_info
+			info_bar.add_row_count_info_for_list(service_list);
+		});
+	});
+});

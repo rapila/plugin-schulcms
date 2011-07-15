@@ -1,0 +1,59 @@
+Widget.types.classes_edit = {
+	prepare: function() {
+		var _this = this;
+		
+		this.mode_dropdown = jQuery("<select/>");
+		this.mode_dropdown.populate(this.getDisplayModes(), this.getDisplayMode());
+		this.mode_dropdown.change(function() {
+			_this.setDisplayMode(_this.mode_dropdown.val());
+			_this.reload_preview(_this.mode_dropdown.val());
+		});
+		
+		var detail_widget;
+		Widget.create('class_detail', function(widget) {
+			_this.detail_widget = widget;
+			widget.save_callback = _this.reload_preview.bind(_this);
+		});
+
+		this._element.append(this.mode_dropdown);
+		
+		this.result_list = jQuery('<ol/>').addClass('ui-editable-items-list');
+		this._element.append(this.result_list);
+		this.result_list.delegate('li', 'click', function() {
+			var id = jQuery(this).data('id');
+			_this.detail_widget.setSchoolClassId(id);
+			_this.detail_widget.fill_data();
+			_this.detail_widget.open();
+		});
+		
+		this.mode_dropdown.change();
+	},
+	
+	reload_preview: function(display_mode) {
+		var _this = this;
+		this.result_list.empty();
+		if(display_mode == 'klassen_kontext_detail' || display_mode == 'schul_statistik'){
+			return;
+		}
+
+		this.allClasses(function(classes) {
+			jQuery.each(classes, function(i, school_class) {
+				_this.result_list.append(jQuery('<li/>').text(school_class.NAME).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', school_class.ID));
+			});
+		});
+	},
+	
+	save: function(callback) {
+		var data = this.mode_dropdown.val();
+		this.saveData(data, callback);
+	},
+	
+	additional_buttons: [
+		{
+			text: '{{writeString=classes.do_admin}}',
+			icon: 'wrench',
+			action: jQuery.openLink.bind(window, "{{writeLink=classes;manager=AdminManager}}")
+		}
+	]
+
+};

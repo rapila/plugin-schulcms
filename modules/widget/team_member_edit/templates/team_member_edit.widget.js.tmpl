@@ -1,0 +1,69 @@
+Widget.types.team_member_edit = {
+	prepare: function() {
+		var _this = this;
+		this.display_mode = this.getDisplayMode();
+		this.mode_dropdown = jQuery("<select/>").attr('name' , 'display_mode').addClass('ui-widget-content');
+		jQuery.each(this.getDisplayModes(), function(key, mode) {
+			_this.mode_dropdown.append(jQuery('<option/>').attr('value', key).text(mode));
+		});
+		this.mode_dropdown.val(this.display_mode);
+		this.mode_dropdown.change(function() {
+			_this.setDisplayMode(_this.mode_dropdown.val());
+			_this.reload_preview(_this.mode_dropdown.val());
+		});
+		
+		var detail_widget;
+		Widget.create('team_member_detail', function(widget) {
+			_this.detail_widget = widget;
+			widget.save_callback = _this.reload_preview.bind(_this);
+		});
+
+		this._element.append(this.mode_dropdown);
+		
+		this.result_list = jQuery('<ol/>').addClass('ui-editable-items-list');
+		if(this.mode_dropdown.val() == 'team_mitglied_detail') {
+			this.detail_dropdown = jQuery("<select/>").attr('name' , 'team_member_id');
+			_this.allTeamMembers(function(team_members) {
+				jQuery.each(team_members, function(i, team_member) {
+					_this.detail_dropdown.append(jQuery('<option/>').attr('value', team_member.ID).text(team_member.LAST_NAME+', '+team_member.FIRST_NAME));
+				});
+				this._element.append(this.detail_dropdown);
+			});
+		}
+		this.reload_preview(this.mode_dropdown.val());
+		this._element.append(this.result_list);
+		this.result_list.delegate('li', 'click', function() {
+			var id = jQuery(this).data('id');
+			_this.detail_widget.setTeamMemberId(id);
+			_this.detail_widget.fill_data();
+			_this.detail_widget.open();
+		});
+	},
+	
+	reload_preview: function(display_mode) {
+		var _this = this;
+		this.result_list.empty();
+		if(display_mode == 'team_mitglied_detail'){
+			return;
+		}
+		var function_group_id = isNaN(display_mode) ? null : display_mode;
+		this.allTeamMembers(function_group_id, function(team_members) {
+			jQuery.each(team_members, function(i, team_member) {
+				_this.result_list.append(jQuery('<li/>').text(team_member.full_name_inverted).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', team_member.id));
+			});
+		});
+	},
+	
+	save: function(callback) {
+		var data = this.mode_dropdown.val();
+		this.saveData(data, callback);
+	},
+	
+	additional_buttons: [
+		{
+			text: '{{writeString=team_members.do_admin}}',
+			icon: 'wrench',
+			action: jQuery.openLink.bind(window, "{{writeLink=team_members;manager=AdminManager}}")
+		}
+	]
+};

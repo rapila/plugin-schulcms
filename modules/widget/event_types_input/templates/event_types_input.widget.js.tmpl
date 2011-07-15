@@ -1,0 +1,32 @@
+Widget.types.event_types_input = {
+	prepare: function() {
+		var _this = this;
+		this.reload();
+	},
+	
+	reload: function() {
+		var current = this._element.val();
+		this._element.empty();
+		var option = jQuery('<option/>');
+		this.allEventTypes(function(event_types) {
+			jQuery.each(event_types, function(id, name) {
+				option.clone().text(name).attr('value', id).appendTo(this._element);
+			}.bind(this));
+			option.text(this.settings.custom_option).val('').prependTo(this._element);
+			if(current) {
+				this._element.val(current);
+			} else {
+				this._element.val(this.settings.initial_selection || '');
+			}
+		});
+	},
+		
+	val: function() {
+		return this._element.val();
+	},
+	
+	settings: {
+		initial_selection: null,
+		custom_option: '------'
+	}
+};

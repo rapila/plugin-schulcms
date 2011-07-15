@@ -1,0 +1,45 @@
+jQuery(document).ready(function() {
+	// init main content
+	AdminInterface.content.find('table.event_list').prepareWidget(function(event_list) {
+
+		var sidebar;
+		AdminInterface.sidebar.find('.ui-list').prepareWidget(function(widget) {
+			sidebar = widget;
+			sidebar.settings.row_click_active_mode = 'activate';
+			var initial_selection = "{{writeRequestValue=event_type_id}}";
+			if(initial_selection) {
+				initial_selection = isNaN(initial_selection) ? initial_selection : parseInt(initial_selection, 10);
+				sidebar.handle('loaded', function() {
+					sidebar.activate_row(sidebar.row_from_row_data({event_type_id: initial_selection}));
+				}, true, true);
+			}
+			
+			sidebar.handle('list.row-click', function(event, row, element) {
+				var event_type_id = element.data('event_type_id');
+				if(!element.is('.ui-state-active')) {
+				 	event_type_id = null;
+				}
+				event_list.setOption('event_type_id', event_type_id);
+				event_list.reload();
+			});
+		});
+		// init info_bar
+		AdminInterface.info_bar.prepareWidget(function(info_bar) {
+			info_bar.add_button('add-new-item', function() {
+				Widget.create('event_detail', function(widget) {
+					widget.settings.initial_type_id = sidebar.active_row().data('event_type_id');
+					widget.open();
+					widget.save_callback = function() {
+						event_list.reload();
+					};
+				});
+			}, 'n', true).add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
+				if(event_list.setSearch(search)) {
+					event_list.reload();
+				}
+			});
+			// add row_count_info
+			info_bar.add_row_count_info_for_list(event_list);
+		});
+	});
+});

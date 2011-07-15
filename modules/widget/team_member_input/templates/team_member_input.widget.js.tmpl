@@ -1,0 +1,19 @@
+Widget.types.team_member_input = {
+	prepare: function() {
+		var _this = this;
+		var option = jQuery('<option/>');
+		this.allTeamMembers(function(team_members) {
+			jQuery.each(team_members, function(id, name) {
+				option.clone().val(id).text(name).appendTo(_this._element);
+			});
+			if(this.settings.default_value_label) {
+				this._element.prepend(option.clone().attr('value', '').text(this.settings.default_value_label));
+				this._element.val('');
+			}
+		});
+	},
+	
+	settings: {
+		default_value_label: '-----'
+	}
+};

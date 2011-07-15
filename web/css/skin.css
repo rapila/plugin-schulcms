@@ -1,0 +1,7 @@
+#blackboard_area { display: none;}
+body.default #header_main { background: transparent url(../images/header_bg_anlaesse.jpg) no-repeat top left; }
+body.default.schule #header_main { background: transparent url(../images/header_bg_schule.jpg) no-repeat top left; }
+body.default.klassen #header_main { background: transparent url(../images/header_bg_klassen.jpg) no-repeat top left; }
+body.default.angebote #header_main { background: transparent url(../images/header_bg_angebote.jpg) no-repeat top left; }
+body.default.eltern #header_main { background: transparent url(../images/header_bg_eltern.jpg) no-repeat top left; }
+body.default.team #header_main { background: transparent url(../images/header_bg_team.jpg) no-repeat top left; }

@@ -1,0 +1,72 @@
+admin_menu:
+  left:
+    - preview
+    - edit
+    - module.dashboard
+    - ~
+    -
+      - ~
+      - module.events
+      - module.classes
+      - module.team_members
+      - module.services
+      - ~
+      - module.strings
+      - module.documents
+      - module.links
+      - ~
+      - module.newsletters
+      - module.subscribers
+      - ~
+      - module.users
+  right:
+    - activity
+    - tag
+    - ~
+    - domain_name
+    - logo
+    - user
+    - logout
+
+dashboard: 
+  layout: 2cols2thirds
+  widgets: 
+    - 
+      config: [ ]
+      color: 'rgb(20, 142, 164)'
+      collapsed: false
+      type: my_classes
+      title: 'Meine Klassen'
+      container: 'column-1'
+    - 
+      config: 
+        text: |
+          <p>
+          Hier werden die Klassen angezeigt, deren KlassenlehrerIn du bist.</p>
+          <p>
+          Für diese Klassen kannst du</p>
+          <ul>
+          <li>
+          das Klassenfoto hochladen</li>
+          <li>
+          den Stundenplan hochladen</li>
+          <li>
+          den Wochenplan hochladen</li>
+          <li>
+          Anlässe, Galerien, Berichte erstellen</li>
+          <li>
+          Links erstellen</li>
+          </ul>
+          <p>
+          Wenn du Fragen hast oder Hilfe brauchst, so wende dich bitte an die Administratoren oder Superuser, von denen es in jeder Schule mindestens ein(e) gibt.</p>
+          <p>
+          Viel Vergnügen.</p>
+          <p>
+          &nbsp;</p>
+          
+      color: 'rgb(141, 193, 0)'
+      contrastColor: 'black'
+      collapsed: false
+      type: static_text
+      title: Hinweise
+      container: column-2

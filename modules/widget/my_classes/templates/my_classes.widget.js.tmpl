@@ -1,0 +1,56 @@
+Widget.types.my_classes = {
+	prepare: function() {
+		var _this = this;
+		this._element.empty();
+		this.list = jQuery('<table/>').attr('style','width: 100%;').appendTo(this._element);
+		this.settings.row_prototype = jQuery.parseHTML("{{includeTemplate=class_item}}", false, 'table');
+		this.reload_list();
+	},
+	
+	reload_list: function() {
+		var _this = this;
+		this.list.empty();
+		this.listClasses(this.settings.dashboard, function(result) {
+			if(result.length === 0) {
+				_this.list.append(jQuery('<tr/>').addClass('ui-list-row').append(jQuery('<td/>').attr('colspan', 4).text('{{writeString=wns.no_results}}')));
+			}
+			jQuery.each(result, function(class_id, row_data) {
+				var row = _this.settings.row_prototype.clone();
+				row.find('.name').text(row_data.Name);
+				row.find('.type').text(row_data.Type);
+				row.find('.preview a').attr('href', row_data.ClassLink).click(function(event) {
+					event.stopPropagation();
+				});
+				row.find('.portrait div').addClass(row_data.ClassPortrait ? 'ui-icon ui-icon-image' : '' );
+				row.find('.class_schedule div').addClass(row_data.ClassSchedule ? 'ui-icon ui-icon-document' : '' );
+				row.find('.week_schedule div').addClass(row_data.WeekSchedule ? 'ui-icon ui-icon-document' : '' );
+				_this.fill_count(row_data.Amount, 'SchülerInnen', row.find('.amount'))
+				_this.fill_count(row_data.Events, 'Anlässe', row.find('.events'))
+				_this.fill_count(row_data.Links, 'Links', row.find('.links'))
+				row.dblclick(function(event) {
+					Widget.create('class_detail', function(widget) {
+						if(jQuery(event.target).hasClass('events') || jQuery(event.target).hasClass('links')) {
+							widget.settings.accordion_active = 1;
+						} 
+					}, function(widget) {
+						widget.setSchoolClassId(row_data.Id);
+						widget.fill_data();
+						widget.open();
+						widget.save_callback = function(event_id) {
+							_this.reload_list();
+						};
+					});
+				});
+				_this.list.append(row);
+			});
+		});
+	},
+	
+	fill_count: function(number, name, element) {
+		if(number === 0) {
+			element.addClass('no-entry');
+			number = 'Keine';
+		}
+		element.text(number + ' ' + name);
+	}
+};

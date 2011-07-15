@@ -1,0 +1,207 @@
+Widget.types.event_detail = {
+	initialize: function() {
+		var _this = this;
+		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		
+		this.uploader = Widget.create('file_upload');
+		this.preview_text = this.content.find('div.event_preview');
+		this.review_text = this.content.find('div.event_review');
+		this.droppable_area = _this.content.find('.droppable_area');
+		this.droppable_area.sortable({
+			update: function(document, ui) {
+				var ids = _this.droppable_area.children().map(function() {
+					return jQuery(this).data('document_id');
+				}).get();
+				if(_this.current_detail_id !== null) {
+					// only reorder if detail has been saved, otherwise sort order is taken from dom at saving time
+					_this.reorderDocuments(ids);
+				}
+			}
+		});
+
+		Widget.create('detail', function(widget) {
+			this.detail_widget = widget.set_instance(this);
+			jQuery.extend(widget.settings, {
+				title: "{{writeString=wns.event.create}}",
+				width: 800
+			});
+			_this.current_detail_id = null;
+			this.content.find("input[name^='date_']").datepicker({
+				dateFormat: 'dd.mm.yy'
+			});
+			this.content.find("select[name='event_type_id']").prepareWidget(function(event_types_input_widget) {
+				event_types_input_widget.settings.initial_selection = _this.settings.initial_type_id;
+			}, jQuery.noop);
+			this.content.find("select[name='service_id']").prepareWidget(function(services_input_widget) {
+				if(jQuery(services_input_widget._element).find('option').length == (services_input_widget.settings.default_value_label ? 1 : 0)) {
+					_this.content.find('.service_select_items').each(function() {
+						jQuery(this).hide();
+					});
+				}
+			});
+			
+			var school_class_select = this.content.find("select[name='school_class_id']");
+			school_class_select.prepareWidget(function(classes_input_widget) {
+				jQuery(school_class_select).val(_this.settings.predefined_school_class_id);
+				classes_input_widget.settings.disabled = !!_this.settings.predefined_school_class_id;
+			}, function(classes_input_widget) {
+				if(_this.settings.predefined_school_class_id) {
+					classes_input_widget._element.val(_this.settings.predefined_school_class_id);
+					_this.content.find('.service_select_items').each(function() {
+						jQuery(this).hide();
+					});
+				}
+			});
+			
+			_this.uploader.allow_drag_to(_this.droppable_area, null, function(target, file) {
+				return { document_category_id: _this.settings.event_file_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
+			});
+		
+			// this.richtext 
+			if(this.auto_open) {
+				this.open();
+			}
+			
+			_this.content.find('div.accordion').accordion({active: 0, autoHeight: false, clearStyle: true, collapsible:false});
+		}.bind(_this));
+	
+		_this.handle('saving', function(event, data) {
+			data.body_preview = _this.event_preview_editor.get_data();
+			data.body_review = _this.event_review_editor.get_data();
+		}.bind(_this));
+	},
+	
+	open: function() {
+		if(!this.detail_widget) {
+			this.auto_open = true;
+			return false;
+		}
+		this.init_textareas();
+		this.detail_widget.open();
+		this.detail_widget.content.find("input[name='title']").focus();
+	},
+	
+	fill_data: function() {
+		var _this = this;
+		this.init_textareas();
+		this.eventData(function(event_data) {
+			_this.current_detail_id = event_data.Id;
+			this.content.find("input[name='title']").val(event_data.Title);
+			this.content.find("textarea[name='teaser']").val(event_data.Teaser);
+			this.content.find("input[name='date_start']").val(event_data.DateStart);
+			this.content.find("input[name='date_end']").val(event_data.DateEnd);
+			this.content.find("input[name='time_details']").val(event_data.TimeDetails);
+			this.content.find("input[name='location_info']").val(event_data.LocationInfo);
+			this.content.find("input[name='is_active']").attr('checked', event_data.IsActive);
+			this.content.find("input[name='show_on_frontpage']").attr('checked', event_data.ShowOnFrontpage);
+			this.content.find("select[name='service_id']").val(event_data.ServiceId || '');
+			if(!_this.settings.predefined_school_class_id) {
+				this.content.find("select[name='school_class_id']").val(event_data.SchoolClassId);
+			}
+			this.content.find("select[name='event_type_id']").val(event_data.EventTypeId);
+			this.content.find(".updated_info").text(event_data.UpdatedInfo);
+			this.content.find(".created_info").text(event_data.CreatedInfo);
+			this.detail_widget.set_title(this.detail_widget.settings.title = event_data.Title);
+			this.preview_text.ensureWidget(function(widget) {
+				widget.set_data(event_data.BodyPreview);
+			});
+			this.review_text.ensureWidget(function(widget) {
+				widget.set_data(event_data.BodyReview);
+			});
+			_this.update_documents();
+		});
+	},
+	
+	update_documents: function() {
+		var _this = this;
+		this.droppable_area.empty();
+		this.allDocuments(_this.settings.thumbnail_size, function(documents) {
+			jQuery.each(documents, function(i, document_data) {
+				_this.insert_thumbnail(document_data);
+			});
+		});
+	},
+	
+	insert_thumbnail: function(document_data) {
+		var _this = this;
+		var document_id = document_data.Id;
+		var px_size = ''+this.settings.thumbnail_size+'px';
+		var doc = jQuery('<div/>').addClass('ui-widget ui-widget-content ui-image-picker-image ui-placeholder');
+		doc.css({width: px_size, height: px_size});
+		doc.data('document_id', document_id);
+		
+		jQuery('<span/>').addClass('ui-icon ui-icon-trash').click(function(event) {
+			var delete_message = AdminInterface.strings.get_string('wns.document.delete_warning', { document_name: document_data.Name});
+			Widget.confirm("{{writeString=wns.delete_warning_title}}", delete_message, function(confirmed) {
+				if(confirmed) {
+					_this.deleteDocument( document_id, function(result) {
+						jQuery(doc).remove();
+					});
+				}
+			});
+			return false;
+		}).appendTo(doc);
+		var document_object = jQuery.parseHTML(document_data.Preview);
+		doc.addClass('pointer').attr('title', '{{writeString=wns.edit_file.dblclick}}').dblclick(function() {
+			Widget.create('document_detail', function(detail) {
+				detail.settings.hide_inputs_if_called_externally = true;
+				detail.auto_open = true;
+			}, function(detail) {
+				detail.setDocumentId(document_id);
+				detail.fill_data();
+			});
+		});
+		doc.append(document_object);
+		this.droppable_area.append(doc);
+	},
+	
+	upload_success: function(document_id, options) {
+		var _this = this;
+		this.addEventDocument(document_id, function() {
+			_this.insert_thumbnail(_this.getSingleDocument(document_id, _this.settings.thumbnail_size));				
+		});
+	},
+	
+	upload_error: function(error) {
+	},
+	
+	init_textareas: function() {
+		var _this = this;
+		if(!this.preview_text.didPrepareWidget()) {
+			this.preview_text.prepareWidget(function(rich_text_widget) {
+				_this.event_preview_editor = rich_text_widget;
+				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings);
+			}, jQuery.noop);
+		}
+		if(!this.review_text.didPrepareWidget()) {
+			this.review_text.prepareWidget(function(rich_text_widget) {
+				_this.event_review_editor = rich_text_widget;
+				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings, {
+					height: 350
+				});
+			}, jQuery.noop);
+		}
+	},
+
+	close: function() {
+		this.detail_widget.close();
+		this.close_callback();
+	},
+	
+	save_callback: jQuery.noop,
+	close_callback: jQuery.noop,
+	
+	settings: {
+		richtext_settings: {
+			height: 120,
+			toolbar_Full: [
+				['Bold','Italic','-', 'BulletedList'],['Link','Unlink'],
+				['Undo','Redo','-','RemoveFormat'],
+				['Maximize','Format'],['Source']
+			]
+		},
+		thumbnail_size: 180,
+		initial_type_id: null,
+		predefined_school_class_id: null
+	}
+};

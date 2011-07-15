@@ -1,0 +1,11 @@
+/* add general ie related specs */
+
+ul#meta_navigation li a,
+ul#meta_navigation li span,
+ul#main_navigation li a,
+ul#main_navigation li span,
+ul#secondary_navigation li a,
+ul#secondary_navigation li span {
+	font-weight: bold;
+	letter-spacing: .05em;
+}

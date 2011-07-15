@@ -1,0 +1,65 @@
+<form>
+	<div class="accordion">
+		<h3><a href="#">Daten und Vorschau</a></h3>
+		<div class="general_info">
+			<div class="status_section">
+				<div class="hide_if_not_saved">
+		  		<label>{{writeString=wns.created_info}}:</label><span class="created_info status"></span><br />
+		  		<label>{{writeString=wns.updated.info}}:</label><span class="updated_info status"></span><br />
+				</div>
+				<div class="select_container">
+					<label for="event_type_id">Anlass-Art</label>
+					<select name="event_type_id" class="ui-widget-content" data-widget-type="event_types_input"></select>
+					<label for="school_class_id">Klasse</label>
+					<select name="school_class_id" class="ui-widget-content" data-widget-type="classes_input">{{school_class_options}}</select>
+					<label for="service_id" class="service_select_items">Angebot</label>
+					<select name="service_id" class="ui-widget-content service_select_items" data-widget-type="services_input">{{service_input_options}}</select>
+				</div>
+				<div style="padding: .3em 0;">
+					<input type="checkbox" style="display:inline;" name="is_active" />
+					<label for="is_active">{{writeString=wns.is_online}}</label>
+					<input type="checkbox" style="display:inline;" name="show_on_frontpage" class="service_select_items" />
+					<label for="show_on_frontpage" class="service_select_items">{{writeString=wns.event.show_on_frontpage}}</label><br />
+				</div>
+			</div>
+			<div class="main_content">
+				<label for="title" class="validate-title_required">{{writeString=wns.event.title}}*</label>
+				<input type="text" name="title" size="30" class="ui-widget-content event"/><br />
+				<label for="teaser" class="validate-is_activ_teaser_required">{{writeString=wns.event.teaser}}*</label>
+				<textarea name="teaser" class="ui-widget-content event" rows="3" cols="40"></textarea><br />
+				<div>
+					<div class="group_fields">
+						<label for="date_start" class="validate-date_start_required">{{writeString=wns.event.date_start}}*</label>
+						<input type="text" name="date_start" size="10" class="ui-widget-content autowidth"/><br />
+					</div>
+					<div class="group_fields">
+						<label for="date_end">{{writeString=wns.event.date_end}}</label>
+						<input type="text" name="date_end" size="10" class="ui-widget-content autowidth"/><br />
+					</div>
+					<div class="group_fields">
+						<label for="time_details">{{writeString=wns.event.time_details}}</label>
+						<input type="text" name="time_details" size="10" class="ui-widget-content time_details"/><br />
+					</div><br />
+				</div>
+				<div>
+					<label for="location_info">{{writeString=wns.event.location_info}}</label>
+					<input type="text" name="location_info" class="ui-widget-content event"/><br />
+				</div><br />
+			</div>
+			<div class="event_preview" data-widget-type="rich_text">
+				<textarea name="body_preview" class="ui-widget-content" rows="10" cols="50"></textarea>
+			</div>
+		</div>
+		<h3><a href="#">Bericht</a></h3>
+		<div class="general_info">
+			<div class="event_review" data-widget-type="rich_text">
+				<textarea name="body_review" class="ui-widget-content" rows="10" cols="50"></textarea>
+			</div>
+		</div>
+		<h3><a href="#">Bilder / Dokumente</a></h3>
+		<div class="droppable_area">
+		</div>
+	</div>
+</form>
+
+

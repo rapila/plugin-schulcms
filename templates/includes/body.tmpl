@@ -1,0 +1,43 @@
+	<body class="{{navigation=top_css}} default">
+		<div id="top_left_area">
+		</div>
+		<div id="main_left_area">
+			<a href="http://www.schule-***REMOVED***.ch/de/" title="Zur Webseite von Schulen ***REMOVED***" id="***REMOVED***_logo"><img src="{{writeConstantValue=EXT_IMAGES_DIR_FE}}/***REMOVED***_logo_claim.png" alt="Logo ***REMOVED*** Schulen" /></a>
+			<ul id="secondary_navigation">
+				{{navigation=secondary}}
+			</ul>
+		</div>
+		<form id="searchbar">
+			<input type="text" name="suchbegriff" placeholder="Suche" accesskey='f' id="search_field" value="{{writeRequestValue=suchbegriff}}" /><a id="search_button" href="">&nbsp;</a>
+		</form>
+		<div id="main_right_area">
+			<div id="top_right_area">
+				<ul id="meta_navigation">
+					<li><a href="{{writeLink=pages/\{\{page_id\}\};content_language=\{\{writeSessionAttribute=language\}\};manager=AdminManager;position=last}}">Login</a></li>
+					<li>{{page_link;name=kontakt}}</li>
+					<li>{{page_link;name=datenschutz}}</li>
+				</ul>
+			</div>
+			<div id="header_main">
+				<a id="school_logo" href="{{page_link;name=root;href_only}}"><img src="{{writeConstantValue=EXT_IMAGES_DIR_FE}}/***REMOVED***_logo.png" alt="Primarschule ***REMOVED*** Schriftzug" /></a>
+				<div id="blackboard_area">
+				</div>
+			</div>
+			<div id="content_main"><div id="spacer">
+				<ul id="main_navigation" class="outside">
+					{{navigation=main}}
+				</ul>
+				</div>
+				<div class="inner">
+				{{container=content}}
+				{{search_results}}
+				</div>
+			</div>
+			<div id="sidebar_right">
+				<div class="inner">
+					{{container=context;inherit=true;allowed_modules=text,related,empty}}
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,48 @@
+<form enctype="multipart/form-data">
+	<div class="accordion">
+		<h3><a href="#">Allgemeine Infos</a></h3>
+		<div class="tab_part general_info">
+			<div class="status_section">
+				<div class="hide_if_not_saved">
+					<h3>Daten aus ***REMOVED*** [ ID :<span class="original_id status"></span> ]</h3>
+					<label>Name:</label><span class="name status"></span><br />
+					<label>Jahr:</label><span class="year_period status"></span><br />
+					<label>Klassenlehrer:</label><span class="class_teacher status"></span><br />
+					<label>Zimmer:</label><span class="room_number status"></span><br />
+					<div class="stundenplan">
+						<span class="description">{{writeString=wns.draganddrop}} Stundenplan<span title="{{writeString=wns.class.remove_schedule}}" class="remove"> ✘</span></span>
+						<div class="class_schedule"></div>
+					</div>
+					<div class="wochenplan">
+						<span class="description">{{writeString=wns.draganddrop}} Wochenplan<span title="{{writeString=wns.class.remove_schedule}}" class="remove"> ✘</span></span>
+						<div class="week_schedule"></div>
+					</div>
+				</div>
+			</div>
+			<div class="specials">
+				<div class="preview">
+					<div class="portrait_area">
+						<span class="description">{{writeString=wns.draganddrop}} Bild<span title="{{writeString=wns.class.remove_portrait}}" class="remove"> ✘</span></span>
+						<div class="class_portrait"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<h3><a href="#">{{writeString=wns.class.events_and_links}}</a></h3>
+		<div class="tab_part events_and_galleries">
+			<fieldset class="option_groups"><legend>{{writeString=wns.class.events}}</legend>
+				<table class="event_list ui-list">
+				</table>
+				<a class="add-new-item add_entry add_event"> </a>
+			</fieldset>
+			<fieldset class="option_groups"><legend>{{writeString=wns.class.links}}</legend>
+				<table class="link_list ui-list">
+				</table>
+				<a class="add-new-item add_entry add_link"> </a>
+			</fieldset>
+			<fieldset class="option_groups"><legend></legend>
+				<a class="page_link" href="" target="_blank">{{writeString=wns.class.page_link}}</a>
+			</fieldset>
+		</div>
+	</div>
+	</form>

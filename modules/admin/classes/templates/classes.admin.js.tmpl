@@ -1,0 +1,39 @@
+jQuery(document).ready(function() {
+	// init main content
+	AdminInterface.content.find('table.class_list').prepareWidget(function(class_list) {
+		// init infobar
+		var sidebar;
+		AdminInterface.sidebar.find('.ui-list').prepareWidget(function(widget) {
+			sidebar = widget;
+			sidebar.settings.row_click_active_mode = 'activate';
+			var initial_selection = "{{writeRequestValue=class_type_id}}";
+			if(initial_selection) {
+				initial_selection = isNaN(initial_selection) ? initial_selection : parseInt(initial_selection, 10);
+				sidebar.handle('loaded', function() {
+					sidebar.activate_row(sidebar.row_from_row_data({class_type_id: initial_selection}));
+				}, true, true);
+			}
+			
+			sidebar.handle('list.row-click', function(event, row, element) {
+				var class_type_id = element.data('class_type_id');
+				if(!element.is('.ui-state-active')) {
+					// handle initial_selection for custom elements
+				 	class_type_id = null;
+				}
+				class_list.setOption('class_type_id', class_type_id);
+				class_list.reload();
+			});
+		});
+
+		AdminInterface.info_bar.prepareWidget(function(info_bar) {
+			info_bar.add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
+				if(class_list.setSearch(search)) {
+					class_list.reload();
+				}
+			});;
+	
+			// add row_count_info
+			info_bar.add_row_count_info_for_list(class_list);
+		});
+	});
+});

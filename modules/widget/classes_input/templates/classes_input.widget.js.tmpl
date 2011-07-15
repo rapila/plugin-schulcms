@@ -1,0 +1,21 @@
+Widget.types.classes_input = {
+	prepare: function() {
+		var _this = this;
+		var option = jQuery('<option/>');
+		var classes = this.getClasses();
+		jQuery.each(classes, function(id, name) {
+			option.clone().val(id).text(name).appendTo(_this._element);
+		});
+		if(this.settings.default_value_label) {
+			this._element.prepend(option.clone().attr('value', '').text(this.settings.default_value_label));
+			this._element.val('');
+		}
+		if(this.settings.disabled) {
+			this._element.attr('disabled', true);
+		}
+	},
+	
+	settings: {
+		default_value_label: '------'
+	}
+};

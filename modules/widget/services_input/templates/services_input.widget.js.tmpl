@@ -1,0 +1,21 @@
+Widget.types.services_input = {
+	prepare: function() {
+		var _this = this;
+		var option_prototype = jQuery('<option/>');
+		this.allServices(function(services) {
+			jQuery.each(services, function(id, name) {
+				option_prototype.clone().val(id).text(name).appendTo(_this._element);
+			});
+			if(services.length === 0) {
+				this._element.prepend(option_prototype.clone().attr('value', '').text('{{writeString=wns.service_input.none_available}}'));
+			} else if(this.settings.default_value_label) {
+				this._element.prepend(option_prototype.clone().attr('value', '').text(this.settings.default_value_label));
+				this._element.val('');
+			}
+		});
+	},
+	
+	settings: {
+		default_value_label: '------'
+	}
+};

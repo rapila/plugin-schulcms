@@ -1,0 +1,83 @@
+general:
+  multilingual:   false
+  caching:        true
+  environment:    auto # production, development
+
+domain_holder:
+  domain: 'primarschule-***REMOVED***.ch'
+  name:   'Primarschule ***REMOVED***'
+  domain: 'primarschule-***REMOVED***.ch'
+  email:  'info@primarschule-***REMOVED***.ch'
+  
+developer:
+  email: jm@mosaics.ch
+
+school_settings:
+  ***REMOVED***_school_id: 1
+  externally_managed_categories:
+    event_files: 14
+    service_files: 18
+    class_links: 2
+    class_portraits: 11
+    class_schedules: 12
+    class_weekplans: 13
+    team_portraits: 1
+  internal_service_category: 3
+    
+admin:
+  # set this to false if your containers overlap
+  use_parsed_css_in_config: false
+  title: 'CMS ***REMOVED*** — {{module_name}}'
+  hide_externally_managed:
+    links: false
+    documents: false
+
+text_module:  
+  toolbar: 
+    - 
+      - ["Bold", "Italic"]
+      - ["Link", "Unlink", "-", "Image"]
+      - ["NumberedList", "BulletedList"]
+      - ["Undo", "Redo"]
+      - ["Format"]
+      - ["RemoveFormat", "Source", "-", "Maximize"] 
+  richtext_width: 700
+
+frontend:
+  title: 'Primarschule ***REMOVED***'
+  main_template: general
+  search_template: general
+  inherit_contents: false
+  protect_email_addresses: true
+    
+encoding:
+  db: utf-8
+  browser: utf-8
+
+session_default:
+  language: de &fe_language
+  content_language: *fe_language
+
+language_chooser:
+  link_separator: ""
+  template: 'language'
+  template_active: 'language_active'
+  show_active_language: true
+
+navigations:
+  main:
+    1:
+      - {template: main_current, on: 'is_current'}
+      - {template: main_active, on: 'is_active'}
+      - {template: main_default}
+  secondary:
+    2:
+      - {template: secondary_level_default, on: is_current}
+      - {template: secondary_level_default, on: is_child_of_current|is_sibling_of_active|is_active}
+      - {show: false}
+  top_css:
+    no_newline: true
+    0:
+      - {template_inline: '{{name}}', on: is_current}
+    1:
+      - {template_inline: '{{name}}', on: is_active}

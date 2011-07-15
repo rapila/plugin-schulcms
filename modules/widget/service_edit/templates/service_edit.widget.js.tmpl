@@ -1,0 +1,77 @@
+Widget.types.service_edit = { 
+	prepare: function() {
+		
+		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		this._element.append(this.content);
+		this.result_list = this._element.find('ol.ui-editable-items-list');
+		
+		var display_modes = this.getDisplayMode();
+		var _this = this;
+
+		// display mode selector
+		this.mode_dropdown = this.content.find("select[name='display_mode']");
+		this.services_dropdown = this.content.find("select[name='service_id']");
+		this.show_for_detail = this._element.find('.show_for_detail');
+		jQuery.each(this.getDisplayModes(), function(key, mode) {
+			var option = jQuery('<option/>').attr('value', key).text(mode);
+			_this.mode_dropdown.append(option);
+		});
+		this.mode_dropdown.val(display_modes.display_mode);
+		this.mode_dropdown.change(function() {
+			_this.reload_preview(_this.mode_dropdown.val());
+			if(_this.mode_dropdown.val() === 'service_detail') {
+				_this.show_for_detail.show();
+			} else {
+				_this.services_dropdown.val('');
+				_this.show_for_detail.hide();
+			}
+		});
+
+		// display detail selector only if mode select is on detail
+		jQuery.each(this.getServices(), function(i, params) {
+			_this.services_dropdown.append(jQuery('<option/>').attr('value', params.ID).text(params.NAME));
+		});
+
+		this.services_dropdown.prepend(jQuery('<option/>').attr('value', '').text("{{writeString=wns.service_detail.default}}"));
+		this.services_dropdown.val(display_modes.service_id);
+		this.mode_dropdown.change();
+		
+		var detail_widget;
+		Widget.create('service_detail', function(widget) {
+			_this.detail_widget = widget;
+			widget.save_callback = _this.reload_preview.bind(_this);
+		});
+
+		this.result_list.delegate('li', 'click', function() {
+			var id = jQuery(this).data('id');
+			_this.detail_widget.setServiceId(id);
+			_this.detail_widget.fill_data();
+			_this.detail_widget.open();
+		});
+	},
+	
+	reload_preview: function(display_mode) {
+		var _this = this;
+		this.result_list.empty();
+		if(display_mode === 'service_detail' || display_mode === 'random_service_teaser') {
+			return;
+		}
+		var service_category = isNaN(display_mode) ? null : parseInt(display_mode, 10);
+		jQuery.each(this.getServices(service_category), function(i, service) {
+			_this.result_list.append(jQuery('<li/>').text(service.NAME).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', service.ID));
+		});
+	},
+	
+	save: function(callback) {
+		this.saveData(this._element.serializeArrayKV(), callback);
+	},
+		
+	additional_buttons: [
+		{
+			text: '{{writeString=services.do_admin}}',
+			icon: 'wrench',
+			action: jQuery.openLink.bind(window, "{{writeLink=services;manager=AdminManager}}")
+		}
+	]
+
+};

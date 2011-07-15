@@ -1,0 +1,66 @@
+Widget.types.event_edit = { 
+	prepare: function() {
+		var _this = this;
+		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		this._element.append(this.content);
+		
+		this.result_list = this._element.find('ol.ui-editable-items-list');
+
+		// display mode selector
+		this.mode_dropdown = this.content.find("select[name='display_mode']");
+		jQuery.each(this.getDisplayModes(), function(key, mode) {
+			var option = jQuery('<option/>').attr('value', key).text(mode);
+			_this.mode_dropdown.append(option);
+		});
+		this.mode_dropdown.val(this.getDisplayMode());
+		this.mode_dropdown.change(function() {
+			_this.reload_preview();
+		});
+		this.mode_dropdown.change();
+		
+		var detail_widget;
+		Widget.create('event_detail', function(widget) {
+			_this.detail_widget = widget;
+			widget.save_callback = _this.reload_preview.bind(_this);
+		});
+
+		this.result_list.delegate('li', 'click', function() {
+			var id = jQuery(this).data('id');
+			_this.detail_widget.setEventId(id);
+			_this.detail_widget.fill_data();
+			_this.detail_widget.open();
+		});
+	},
+	
+	reload_preview: function() {
+		var display_mode = this.mode_dropdown.val();
+		var _this = this;
+		this.result_list.empty();
+		if(display_mode === 'detail_automatic' || display_mode === 'detail_teaser' || display_mode === 'next_class_event') {
+			return;
+		}
+		var params = display_mode.split('-');
+		var event_type_id = params[0] === 'liste_alle' ? null : params[0];
+		var is_archive = params[1] ? params[1] === 'archive' : false; 
+		this.allEvents(event_type_id, is_archive, function(events) {
+			jQuery.each(events, function(id, title) {
+				_this.result_list.append(jQuery('<li/>').text(title).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', id));
+			});
+		});
+	},
+	
+	save: function(callback) {
+		this.saveData(this._element.serializeArrayKV(), callback);
+	},
+	
+	additional_buttons: [
+		{
+			text: '{{writeString=events.do_admin}}',
+			icon: 'wrench',
+			action: jQuery.openLink.bind(window, "{{writeLink=events;manager=AdminManager}}")
+		}
+	]
+};
+
+
+

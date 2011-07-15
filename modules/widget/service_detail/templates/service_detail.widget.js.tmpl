@@ -1,0 +1,254 @@
+Widget.types.service_detail = {
+	initialize: function() {
+		var _this = this;
+		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		this.document_prototype = jQuery.parseHTML("{{includeTemplate=document}}");
+		this.content.find('div.hide_if_not_saved').hide();
+
+		this.team_member_container = this.content.find('tbody.team_member_container');
+		this.team_member_content = jQuery.parseHTML("{{includeTemplate=team_member}}", true, 'tbody');
+
+		this.uploader = Widget.create('file_upload');
+		this.droppable_area = _this.content.find('.droppable_area');
+		this.droppable_area.sortable({
+			update: function(document, ui) {
+				var ids = _this.droppable_area.children().map(function() {
+					return jQuery(this).data('document_id');
+				}).get();
+				if(_this.current_detail_id !== null) {
+					// only reorder if detail has been saved, otherwise sort order is taken from dom at saving time
+					_this.reorderDocuments(ids);
+				}
+			}
+		});
+		
+		var add_new_team_member_button = jQuery('<a/>').addClass('add-new-item add_entry').text(' ');
+		add_new_team_member_button.click(function() {
+			_this.team_member_content.clone().appendTo(_this.team_member_container);
+		});
+		this.team_member_container.parent().after(add_new_team_member_button);
+		this.team_member_container.delegate('.delete_team_member', 'click', function(event) {
+			jQuery(this).closest('.team_member').remove();
+		});
+		
+		this.service_text = this.content.find('div.service_text');
+		this.service_text.prepareWidget(function(rich_text_widget) {
+			_this.service_text_editor = rich_text_widget;
+			jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings);
+		}, jQuery.noop);
+		
+		// logo
+		var logo_area = _this.content.find('.logo_area');
+		logo_area.find('.remove').hide().click(function() {
+			_this.service_logo_id = null;
+		});
+		
+		_this.uploader.allow_drag_to(logo_area, null, function(target, file) {
+			if(file.type.indexOf('image/') !== 0) {
+				Widget.notifyUser('alert', 'Das Logo muss ein Bild sein (Datei vom Typ «PNG», «GIF», «JPG»)');
+				return false;
+			}
+			return {document_kind: 'image', document_id: _this.service_logo_id, document_category_id: _this.settings.service_file_category_id, callback: _this.logo_upload_success.bind(_this), error: _this.upload_error.bind(_this) };
+		}, true);
+		
+		//FIXME: When adoption of Firefox 4 is widespread, use Object.defineProperty
+		var service_logo_id = null;
+		_this.__defineGetter__('service_logo_id', function() {
+			return service_logo_id;
+		});
+		_this.__defineSetter__('service_logo_id', function(service_logo) {
+			service_logo_id = service_logo;
+			var remove_link = logo_area.find('.remove');
+			if(service_logo_id === null) {
+				logo_area.find('.service_logo').empty();
+				remove_link.hide();
+			} else {
+				remove_link.show();
+				Widget.callStatic('document_detail', 'documentPreview', service_logo_id, 50, function(html) {
+					logo_area.find('.service_logo').html(html);
+				});
+			}
+		});
+
+		Widget.create('detail', function(widget) {
+			this.detail_widget = widget.set_instance(this);
+			jQuery.extend(widget.settings, {
+				title: "{{writeString=wns.service.create}}",
+				width: 700
+			});
+			_this.current_detail_id = null;
+			this.content.find("select[name='service_category_id']").prepareWidget(function(service_category) {
+				service_category.settings.initial_category_id = _this.settings.initial_category_id;
+			}, jQuery.noop);
+			
+			widget.handle('opening-initial', function() {
+				this.init_textareas();
+			}.bind(this));
+			
+			this.accordion = jQuery(widget.content.find('div.accordion')).accordion({active: 0, autoHeight: false, clearStyle: true, collapsible:false});
+			_this.uploader.allow_drag_to(_this.droppable_area, null, function(target, file) {
+				return { document_category_id: _this.settings.service_file_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
+			});
+
+			if(this.auto_open) {
+				this.open();
+			}
+		}.bind(this));
+		
+		_this.handle('saving', function(event, data) {
+			data.logo_id = _this.service_logo_id;
+			data.body_text = _this.service_text_editor.get_data();
+		}.bind(_this));
+	},
+
+	open: function() {
+		if(!this.detail_widget) {
+			this.auto_open = true;
+			return false;
+		}
+		this.detail_widget.open();
+		this.detail_widget.content.find('input[name=name]').focus();
+	},
+	
+	fill_data: function() {
+		var _this = this;
+		this.team_member_container.hide();
+		this.serviceData(function(service_data) {
+			_this.current_detail_id = service_data.Id;
+			_this.service_logo_id = service_data.LogoId;
+			this.content.find("input[name='name']").val(service_data.Name);
+			this.content.find('[name="service_category_id"]').val(service_data.ServiceCategoryId);
+			this.content.find("textarea[name='teaser']").val(service_data.Teaser);
+			this.content.find("textarea[name='address']").val(service_data.Address);
+			this.content.find("textarea[name='opening_hours']").val(service_data.OpeningHours);
+			this.content.find("input[name='phone']").val(service_data.Phone);
+			this.content.find("input[name='email']").val(service_data.Email);
+			this.content.find("input[name='website']").val(service_data.Website);
+			this.content.find("input[name='is_active']").prop('checked', service_data.IsActive);
+			this.content.find(".updated_info").text(service_data.UpdatedInfo);
+			this.content.find(".created_info").text(service_data.CreatedInfo);
+			this.content.find('div.hide_if_not_saved').show();
+			this.detail_widget.set_title(this.detail_widget.settings.title = "{{writeString=wns.service}} "+service_data.Name);
+			
+			_this.team_member_container.empty();
+			jQuery.each(service_data.team_members, function(team_member_id, function_name) {
+				var team_member_content = _this.team_member_content.clone();
+				team_member_content.find('select[name="team_member_id[]"]').val(team_member_id);
+				team_member_content.find('input[name="function_name[]"]').val(function_name);
+				team_member_content.appendTo(_this.team_member_container);
+			});
+			this.team_member_container.show();
+			
+			this.service_text.prepareWidget(function(widget) {
+				widget.set_data(service_data.Body);
+			});
+			var richtext_area = this.content.find("textarea[name='body_text']").val(service_data.Body);
+			_this.update_documents();
+		});
+	},
+	
+	init_textareas: function() {
+		this.content.find('div.service_text').each(function() {
+			var text = jQuery(this);
+			if(!text.attr('data-widget-type')) {
+				text.attr('data-widget-type', 'rich_text').prepareWidget(function(widget) {
+					widget.settings.height = 230;
+					widget.settings.toolbar_Full = [
+						['Bold','-', 'BulletedList'],['Link','Unlink'],
+						['Undo','Redo','-','RemoveFormat'],
+						['Maximize','Format'],['Source']
+					];
+				}, jQuery.noop);
+			}
+		});
+	},
+	
+	update_documents: function() {
+		var _this = this;
+		this.droppable_area.empty();
+		this.allDocuments(function(documents) {
+			jQuery.each(documents, function(i, document_data) {
+				_this.insert_document(document_data);
+			});
+		});
+	},
+
+	insert_document: function(document_data) {
+		var _this = this;
+		var document_id = document_data.Id;
+		var document_item = this.document_prototype.clone();
+		document_item.data('document_id', document_id);
+		this.droppable_area.append(document_item);
+		document_item.find('span.delete_doc').click(function(event) {
+			var delete_message = AdminInterface.strings.get_string('wns.document.delete_warning', { document_name: document_data.Name});
+			Widget.confirm("{{writeString=wns.delete_warning_title}}", delete_message, function(confirmed) {
+				if(confirmed) {
+					_this.deleteDocument( document_id, function(result) {
+						jQuery(document_item).remove();
+					});
+				}
+			});
+			return false;
+		});
+		var document_name = document_item.find('span.document_name');
+		document_name.text(document_data.Name+'.'+document_data.Extension);
+		document_name.addClass('pointer').attr('title', '{{writeString=wns.edit_file.dblclick}}').dblclick(function() {
+			Widget.create('document_detail', function(detail) {
+				detail.settings.hide_inputs_if_called_externally = true;
+				detail.auto_open = true;
+			}, function(detail) {
+				detail.setDocumentId(document_id);
+				detail.fill_data();
+			});
+		});
+		var document_link = document_item.find('a.document_link').attr('href', document_data.DisplayUrl);
+		document_link.addClass('pointer').attr('title', '{{writeString=wns.document.download}}');
+
+	},
+	
+	upload_success: function(document_id, options) {
+		console.log(document_id, options);
+		var _this = this;
+		this.addServiceDocument(document_id, function() {
+			_this.insert_document(_this.getSingleDocument(document_id));				
+		});
+	},
+	
+	logo_upload_success: function(logo_id, options) {
+		console.log(logo_id, options);
+		this.service_logo_id = logo_id;
+		this.save(true);
+	},
+	
+	upload_error: function(error) {
+	},
+	
+	save: function(should_remain_open) {
+		if(should_remain_open) {
+			this.settings.remains_open = true;
+		}
+		this.detail_widget.settings.save_callback();
+		if(should_remain_open) {
+			this.settings.remains_open = false;
+		}
+	},
+
+	close: function() {
+		this.detail_widget.close();
+		this.close_callback();
+	},
+	
+	close_callback: jQuery.noop,
+	
+	settings: {
+		initial_category_id: null,
+		richtext_settings: {
+			height: 250,
+			toolbar_Full: [
+				['Bold','Italic','-', 'BulletedList'],['Link','Unlink'],
+				['Undo','Redo','-','RemoveFormat'],
+				['Maximize','Format'],['Source']
+			]
+		}
+	}
+};
