@@ -1,83 +1,39 @@
-general:
-  multilingual:   false
-  caching:        true
-  environment:    auto # production, development
-
-domain_holder:
-  domain: 'primarschule-***REMOVED***.ch'
-  name:   'Primarschule ***REMOVED***'
-  domain: 'primarschule-***REMOVED***.ch'
-  email:  'info@primarschule-***REMOVED***.ch'
-  
-developer:
-  email: jm@mosaics.ch
+# school settings, can be overwritten in site/config/config.yml
+# if you want these documents and links "externally managed", ie not visible as a default behaviour in the links and documents module
+# create the respective categories and enter the ids here
 
 school_settings:
-  ***REMOVED***_school_id: 1
-  externally_managed_categories:
-    event_files: 14
-    service_files: 18
-    class_links: 2
-    class_portraits: 11
-    class_schedules: 12
-    class_weekplans: 13
-    team_portraits: 1
-  internal_service_category: 3
-    
-admin:
-  # set this to false if your containers overlap
-  use_parsed_css_in_config: false
-  title: 'CMS ***REMOVED*** — {{module_name}}'
-  hide_externally_managed:
-    links: false
-    documents: false
+	***REMOVED***_school_id: null
+	externally_managed_document_categories:
+		event_documents: 14
+		service_documents: 18
+		team_member_portraits: 10
+		school_class_portraits: 11
+		school_class_schedules: 12
+		school_class_weekplans: 13
+	externally_managed_link_categories:
+		school_class_links: null
+	internally_used_service_category: null
 
-text_module:  
-  toolbar: 
-    - 
-      - ["Bold", "Italic"]
-      - ["Link", "Unlink", "-", "Image"]
-      - ["NumberedList", "BulletedList"]
-      - ["Undo", "Redo"]
-      - ["Format"]
-      - ["RemoveFormat", "Source", "-", "Maximize"] 
-  richtext_width: 700
-
-frontend:
-  title: 'Primarschule ***REMOVED***'
-  main_template: general
-  search_template: general
-  inherit_contents: false
-  protect_email_addresses: true
-    
-encoding:
-  db: utf-8
-  browser: utf-8
-
-session_default:
-  language: de &fe_language
-  content_language: *fe_language
-
-language_chooser:
-  link_separator: ""
-  template: 'language'
-  template_active: 'language_active'
-  show_active_language: true
-
+# example navigation like in pilote project ***REMOVED***
 navigations:
-  main:
-    1:
-      - {template: main_current, on: 'is_current'}
-      - {template: main_active, on: 'is_active'}
-      - {template: main_default}
-  secondary:
-    2:
-      - {template: secondary_level_default, on: is_current}
-      - {template: secondary_level_default, on: is_child_of_current|is_sibling_of_active|is_active}
-      - {show: false}
-  top_css:
-    no_newline: true
-    0:
-      - {template_inline: '{{name}}', on: is_current}
-    1:
-      - {template_inline: '{{name}}', on: is_active}
+	main:
+		1:
+			- {template: main_current, on: 'is_current'}
+			- {template: main_active, on: 'is_active'}
+			- {template: main_default}
+	secondary:
+		2:
+			- {template: secondary_level_default, on: is_current}
+			- {template: secondary_level_default, on: is_child_of_current|is_sibling_of_active|is_active}
+			- {show: false}
+	top_css:
+		no_newline: true
+		0:
+			- {template_inline: '{{name}}', on: is_current}
+		1:
+			- {template_inline: '{{name}}', on: is_active}
+
+
+
+
