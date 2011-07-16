@@ -15,9 +15,6 @@ admin_menu:
       - module.documents
       - module.links
       - ~
-      - module.newsletters
-      - module.subscribers
-      - ~
       - module.users
   right:
     - activity
