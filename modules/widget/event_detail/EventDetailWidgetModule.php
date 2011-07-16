@@ -8,8 +8,8 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 	
 	public function __construct($sWidgetId) {
 		parent::__construct($sWidgetId);
-    // config section 'school_settings' :'externally_managed_categories'
-		$this->setSetting('event_file_category_id', SchoolPeer::getCategoryConfig('event_files'));
+    // config section 'school_settings' :'externally_managed_document_categories'
+		$this->setSetting('events_document_category_id', SchoolPeer::getDocumentCategoryConfig('event_documents'));
 	}
 	
 	public function setEventId($iEventId) {

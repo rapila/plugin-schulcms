@@ -8,7 +8,7 @@ class TeamMemberDetailWidgetModule extends PersistentWidgetModule {
 
 	public function __construct($sWidgetId) {
 		parent::__construct($sWidgetId);
-		$this->setSetting('portrait_category_id', SchoolPeer::getCategoryConfig('team_portraits'));
+		$this->setSetting('portrait_category_id', SchoolPeer::getDocumentCategoryConfig('team_member_portraits'));
 	}
 	
 	public function setTeamMemberId($iTeamMemberId) {

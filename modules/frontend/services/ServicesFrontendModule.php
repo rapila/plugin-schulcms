@@ -17,7 +17,7 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 	}
 	
 	public function renderFrontend() { 
-		$this->iExcludeInternalCategoryId = Settings::getSetting("school_settings", 'internal_service_category', null);
+		$this->iExcludeInternalCategoryId = Settings::getSetting("school_settings", 'internally_used_service_category', null);
 
 		// always show detail of requested or random team member
 		$aOptions = @unserialize($this->getData());

@@ -54,7 +54,7 @@ Widget.types.event_detail = {
 			});
 			
 			_this.uploader.allow_drag_to(_this.droppable_area, null, function(target, file) {
-				return { document_category_id: _this.settings.event_file_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
+				return { document_category_id: _this.settings.events_document_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
 			});
 		
 			// this.richtext 

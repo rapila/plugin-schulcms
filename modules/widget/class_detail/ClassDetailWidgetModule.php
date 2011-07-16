@@ -8,11 +8,11 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 	
 	public function __construct($sWidgetId) {
 		parent::__construct($sWidgetId);
-    // config section 'school_settings' :'externally_managed_categories'
-		$this->setSetting('class_portrait_category_id', SchoolPeer::getCategoryConfig('class_portraits'));
-		$this->setSetting('class_schedule_category_id', SchoolPeer::getCategoryConfig('class_schedules'));
-		$this->setSetting('week_plan_category_id', SchoolPeer::getCategoryConfig('class_weekplans'));
-		$this->setSetting('link_category_id', SchoolPeer::getCategoryConfig('class_links'));
+    // config section 'school_settings'
+		$this->setSetting('class_portrait_category_id', SchoolPeer::getDocumentCategoryConfig('school_class_portraits'));
+		$this->setSetting('class_schedule_category_id', SchoolPeer::getDocumentCategoryConfig('school_class_schedules'));
+		$this->setSetting('week_plan_category_id', SchoolPeer::getDocumentCategoryConfig('school_class_weekplans'));
+		$this->setSetting('link_category_id', SchoolPeer::getLinkCategoryConfig('school_class_links'));
 	}
 	
 	public function setSchoolClassId($iSchoolClassId) {

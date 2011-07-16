@@ -7,9 +7,9 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 
 	public function __construct($sWidgetId) {
 		parent::__construct($sWidgetId);
-    // config section 'school_settings' :'externally_managed_categories'
+    // config section 'school_settings' :'externally_managed_document_categories'
 		// all documents and logo are stored here
-		$this->setSetting('service_file_category_id', SchoolPeer::getCategoryConfig('service_files'));
+		$this->setSetting('service_file_category_id', SchoolPeer::getDocumentCategoryConfig('service_documents'));
 	}
 	
 	public function setServiceId($iServiceId) {
