@@ -4,7 +4,7 @@ html, body {
   font-family: Trebuchet MS, Georgia, Arial, Helvetica, Sans Serif;
   font-size: 10px;
   color: #222222;
-  background-color: #e0dede;
+  background-color: #e6e4cc;
 }
 a {
   text-decoration: none;
@@ -127,7 +127,7 @@ p, ul { padding-bottom: 0.5em; }
   padding-left: 0.1em;
   margin-bottom: 0.5em;
   color: #ffffff;
-  background-color: #22499b;
+  background-color: #5e61a8;
   line-height: 24px;
   border-bottom: 1px solid #5a2323;
 }
@@ -136,7 +136,7 @@ p, ul { padding-bottom: 0.5em; }
   padding-left: 0.1em;
   margin-bottom: 0.5em;
   color: #ffffff;
-  background-color: #22499b;
+  background-color: #5e61a8;
   line-height: 24px;
   border-bottom: 1px solid #5a2323;
 }
@@ -145,15 +145,15 @@ p, ul { padding-bottom: 0.5em; }
   padding-left: 0.1em;
   margin-bottom: 0.5em;
   color: #ffffff;
-  background-color: #22499b;
+  background-color: #5e61a8;
   line-height: 24px;
   border-bottom: 1px solid #5a2323;
 }
 a.close_detail:hover {
-  border: 1px solid #22499b;
+  border: 1px solid #5e61a8;
   background: rgba(255, 255, 255, 0.7) url(../images/close_detail_hover.png) no-repeat right center;
 }
-a.close_detail:hover { border: 1px solid #22499b; }
+a.close_detail:hover { border: 1px solid #5e61a8; }
 #sidebar_right p { padding-left: 0.1em; }
 #top_left_area, #main_left_area {
   position: absolute;
@@ -163,7 +163,7 @@ a.close_detail:hover { border: 1px solid #22499b; }
 #top_left_area {
   top: 0;
   height: 50px;
-  background-color: #bab6b5;
+  background-color: #d3d1b8;
 }
 #main_left_area {
   top: 50px;
@@ -185,7 +185,7 @@ a.close_detail:hover { border: 1px solid #22499b; }
 #top_right_area {
   top: 0;
   height: 50px;
-  background-color: #bab6b5;
+  background-color: #d3d1b8;
 }
 #main_right_area {
   background-color: #ffffff;
@@ -236,16 +236,16 @@ a#school_logo {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #22499b;
+  background-color: #5e61a8;
   width: 188px;
   height: 50px;
 }
 a#***REMOVED***_logo {
-  background-color: #bab6b5;
+  background-color: #d3d1b8;
   display: block;
   width: 188px;
-  padding-top: 4px;
-  height: 46px;
+  padding-top: 0px;
+  height: 50px;
 }
 #***REMOVED***_logo img { padding: 4px 3px; }
 ul#meta_navigation {
@@ -255,7 +255,7 @@ ul#meta_navigation {
   left: 188px;
   right: 0;
   height: 100%;
-  background-color: #e0dede;
+  background-color: #e6e4cc;
   display: block;
 }
 ul#main_navigation {
@@ -316,14 +316,14 @@ body.default ul#main_navigation li a { color: #666666; }
 body.default ul#main_navigation li span { color: #666666; }
 ul#secondary_navigation li a { color: #6f6f6e; }
 ul#secondary_navigation li span { color: #6f6f6e; }
-body.default ul#main_navigation li span { color: #22499b; }
-body.default ul#main_navigation li a.active { color: #22499b; }
-body.default ul#main_navigation li a.current { color: #22499b; }
-ul#secondary_navigation li a.current { color: #22499b; }
-ul#secondary_navigation li a.active { color: #22499b; }
-ul#secondary_navigation li span { color: #22499b; }
-ul#meta_navigation li span { color: #22499b; }
-ul#secondary_navigation li a.active { color: #22499b; }
+body.default ul#main_navigation li span { color: #5e61a8; }
+body.default ul#main_navigation li a.active { color: #5e61a8; }
+body.default ul#main_navigation li a.current { color: #5e61a8; }
+ul#secondary_navigation li a.current { color: #5e61a8; }
+ul#secondary_navigation li a.active { color: #5e61a8; }
+ul#secondary_navigation li span { color: #5e61a8; }
+ul#meta_navigation li span { color: #5e61a8; }
+ul#secondary_navigation li a.active { color: #5e61a8; }
 ul#main_navigation li {
   float: left;
   padding: 0 2.5em 0 3em;
@@ -350,7 +350,7 @@ ul#secondary_navigation li { padding: 0.2em 1em; }
 #sidebar_right {
   right: 0;
   width: 194px;
-  background-color: #d8d3d2;
+  background-color: #d3d1b8;
 }
 .team #sidebar_right h2 { font-weight: normal; }
 #searchbar {
@@ -434,24 +434,24 @@ th {
   color: #999999;
 }
 .row.active td {
-  color: #22499b !important;
+  color: #5e61a8 !important;
   height: 100%;
 }
 .row.active td a {
-  color: #22499b !important;
+  color: #5e61a8 !important;
   height: 100%;
 }
 .statistics_list td {
-  border: 1px solid #22499b;
+  border: 1px solid #5e61a8;
   line-height: 22px;
   font-size: 11px;
 }
 .is_active {
-  color: #22499b;
+  color: #5e61a8;
   width: 2em;
   text-align: right;
 }
-.row:first-child div { border-top: 1px solid #e0dede; }
+.row:first-child div { border-top: 1px solid #e6e4cc; }
 .row:first-child td div { border-top: none; }
 a.stundenplan {
   background: transparent url(../images/pdf.png) no-repeat center left;
@@ -469,7 +469,7 @@ a.stundenplan:hover { background: transparent url(../images/pdf_hover.png) no-re
 .class_info a.stundenplan { display: inline-block; }
 #sidebar_right .class_info p {
   padding: 0.2em 0.2em;
-  border-bottom: 1px solid #22499b;
+  border-bottom: 1px solid #5e61a8;
 }
 .sidebar_detail { padding: 0.1em; }
 .class_info label {
@@ -480,7 +480,7 @@ a.stundenplan:hover { background: transparent url(../images/pdf_hover.png) no-re
   display: block;
   font-style: oblique !important;
   margin-top: 0.6em;
-  color: #22499b;
+  color: #5e61a8;
 }
 #sidebar_right h4 {
   margin: 0;
@@ -490,7 +490,7 @@ a.stundenplan:hover { background: transparent url(../images/pdf_hover.png) no-re
   display: block;
   font-style: oblique !important;
   margin-top: 0.6em;
-  color: #22499b;
+  color: #5e61a8;
 }
 .class_info label:first-child { margin-top: 0; }
 #content h2 {
@@ -649,13 +649,13 @@ img.service_logo {
   margin: 0 1em 1em 2em;
 }
 .not_found_page {
-  border: 1px solid #22499b;
+  border: 1px solid #5e61a8;
   padding: 1em;
 }
-#aktuell_container { color: #22499b; }
-.events a.active { color: #22499b; }
-#content_main li em { color: #22499b; }
-#content_main h2 { color: #22499b; }
-a:hover { color: #22499b; }
-#content_main h1 { color: #22499b; }
-#content_main h2 { color: #22499b; }
+#aktuell_container { color: #5e61a8; }
+.events a.active { color: #5e61a8; }
+#content_main li em { color: #5e61a8; }
+#content_main h2 { color: #5e61a8; }
+a:hover { color: #5e61a8; }
+#content_main h1 { color: #5e61a8; }
+#content_main h2 { color: #5e61a8; }
