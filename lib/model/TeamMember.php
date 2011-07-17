@@ -132,19 +132,5 @@ class TeamMember extends BaseTeamMember {
 	public function getTeamMemberFunctionsJoinSchoolFunction($oCriteria = null, $oConn = null, $oJoinBehaviour = Criteria::INNER_JOIN) {
 		return parent::getTeamMemberFunctionsJoinSchoolFunction($oCriteria, $oConn, $oJoinBehaviour);
 	}
-	
-	public function getFunctionGroupName() {
-		foreach($this->getTeamMemberFunctionsJoinSchoolFunction() as $oTeamMemberFunction) {
-			
-		}
-		return null;
-	}
-	
-	public function preSave(PropelPDO $con = null) {
-		if($this->isColumnModified(TeamMemberPeer::FIRST_NAME) || $this->isColumnModified(TeamMemberPeer::LAST_NAME)) {
-			$this->setSlug(StringUtil::normalize($this->getLastName().' '.$this->getFirstName()));
-			parent::preSave($con);
-		}
-	}
 }
 
