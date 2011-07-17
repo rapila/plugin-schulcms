@@ -6,7 +6,7 @@ class SchoolFilterModule extends FilterModule {
 	const CLASSES_REQUEST_KEY = 'classes';
 	
 	public function onNavigationItemChildrenRequested($oNavigationItem) {
-		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getIdentifier() === 'klassen') {
+		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getIdentifier() === 'classes') {
 			$oCriteria = SchoolClassQuery::create()->distinct();
 			$oCriteria->clearSelectColumns()->addSelectColumn(SchoolClassPeer::SLUG);
 			$oCriteria->filterByHasStudents()->orderByUnitName(Criteria::ASC);

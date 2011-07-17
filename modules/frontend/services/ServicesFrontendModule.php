@@ -155,12 +155,12 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 	public function renderTeaserDetail() {
 		$oService = ServiceQuery::create()->filterByIsActive(true)->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL)->filterByTeaser(null, Criteria::ISNOTNULL)->orderByRand()->findOne();
 		if($oService) {
-			$oAngebotsSeite = PageQuery::create()->filterByIdentifier('angebote')->filterByIsInactive(false)->findOne();
-			if($oAngebotsSeite === null) {
+			$oServicesPage = PageQuery::create()->filterByIdentifier('services')->filterByIsInactive(false)->findOne();
+			if($oServicesPage === null) {
 				return;
 			}
 			$oTemplate = $this->constructTemplate('teaser_context_detail');
-			$oTemplate->replaceIdentifier('detail_link', LinkUtil::link(array_merge($oAngebotsSeite->getFullPathArray(), array(self::DETAIL_IDENTIFIER, $oService->getId()))));
+			$oTemplate->replaceIdentifier('detail_link', LinkUtil::link(array_merge($oServicesPage->getFullPathArray(), array(self::DETAIL_IDENTIFIER, $oService->getId()))));
 			$oTemplate->replaceIdentifier('name', $oService->getName());
 			$oTemplate->replaceIdentifier('teaser', $oService->getTeaser());
 			$oTemplate->replaceIdentifier('goto_title', "mehr zu Details des Angebots ".$oService->getName());

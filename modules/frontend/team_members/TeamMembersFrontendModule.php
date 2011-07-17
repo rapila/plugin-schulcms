@@ -19,7 +19,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	}
 	
 	public function renderFrontend() { 
-		$this->oClassPage = PagePeer::getPageByIdentifier('klassen');
+		$this->oClassPage = PagePeer::getPageByIdentifier('classes');
 
 		// always show detail of requested or random team member
 		if(self::$TEAM_MEMBER === null && isset($_REQUEST[self::DETAIL_IDENTIFIER])) {
@@ -63,7 +63,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 			$aClassTeachers = $oTeamMember->getIsClassTeacherClasses();
 			if(count($aClassTeachers) > 0) {
 				foreach($aClassTeachers as $i => $oClassTeacher) {
-					$aLink = array_merge($this->oClassPage->getFullPathArray(), array(ClassesFrontendModule::DETAIL_IDENTIFIER, $oClassTeacher->getSchoolClassId()));
+					$aLink = array_merge($this->oClassPage->getFullPathArray(), array($oClassTeacher->getSchoolClass()->getSlug()));
 					$sComma = $i > 0 ? ', ' : '';
 					$oItemTemplate->replaceIdentifierMultiple('school_class', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.class.link_title_prefix').$oClassTeacher->getSchoolClass()->getName(), 'href' => LinkUtil::link($aLink)), $sComma . $oClassTeacher->getSchoolClass()->getName()));
 				}
