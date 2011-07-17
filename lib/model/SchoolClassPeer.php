@@ -36,15 +36,15 @@ class SchoolClassPeer extends BaseSchoolClassPeer {
 	public static function getSchoolUnitsBySchoolIdCriteria($iSchoolId = null) {
 		$iSchoolId = $iSchoolId === null ? SchoolPeer::getSchoolId() : $iSchoolId;
 		$oSchool = SchoolQuery::create()->filterByOriginalId($iSchoolId)->findOne();
-		if($oSchool === null) {
-			return array();
-		}
 		$oCriteria = new Criteria();
+		if($oSchool === null) {
+			return $oCriteria;
+		}
 		$oCriteria->setDistinct();
 		$oCriteria->addJoin(SchoolClassPeer::SCHOOL_ID, SchoolPeer::ID, Criteria::INNER_JOIN);
 		$oCriteria->addJoin(SchoolClassPeer::ID, ClassStudentPeer::SCHOOL_CLASS_ID, Criteria::INNER_JOIN);
 		$oCriteria->add(SchoolClassPeer::YEAR, $oSchool->getCurrentYear());
-		$oCriteria->add(SchoolClassPeer::SCHOOL_ID, $iSchoolId);
+		$oCriteria->add(SchoolClassPeer::SCHOOL_ID, $oSchool->getId());
 		$oCriteria->addGroupByColumn(SchoolClassPeer::UNIT_NAME);
 		return $oCriteria;
 	}
