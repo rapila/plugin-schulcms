@@ -3,7 +3,7 @@
 # create the respective categories and enter the ids here
 
 school_settings:
-	***REMOVED***_school_id: null
+	***REMOVED***_school_id: 40
 	externally_managed_document_categories:
 		event_documents: 14
 		service_documents: 18
@@ -12,7 +12,7 @@ school_settings:
 		school_class_schedules: 12
 		school_class_weekplans: 13
 	externally_managed_link_categories:
-		school_class_links: null
+		school_class_links: 2
 	internally_used_service_category: null
 
 # example navigation like in pilote project ***REMOVED***
@@ -33,6 +33,11 @@ navigations:
 			- {template_inline: '{{name}}', on: is_current}
 		1:
 			- {template_inline: '{{name}}', on: is_active}
+
+# default language
+session_default:
+  language: de &fe_language
+  content_language: *fe_language
 
 
 
