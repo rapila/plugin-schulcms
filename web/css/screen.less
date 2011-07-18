@@ -95,19 +95,29 @@ ul, li {
   margin-left: 1.5em;
 }
 
-.inner ul, .inner li,
-[contenteditable] ul, [contenteditable] li {
+.inner ul, 
+.inner li,
+[contenteditable] ul, 
+[contenteditable] li {
 	list-style-image: url(../images/list-bg-img.png); 
 	list-style-position: outside;
 	padding-bottom: .3em;
 }
+
+[contenteditable] ul {
+  padding-left: 1.6em;
+}
+
+.inner ul {
+  margin-left: 2em;
+} 
 
 .inner li {
   padding-left: 0;
 }
 
 [contenteditable] li {
-  padding-left: 1em;
+  padding-left:0;
 }
 
 p, ul {

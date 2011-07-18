@@ -44,6 +44,18 @@ session_default:
   language: de &fe_language
   content_language: *fe_language
 
+# simple richtext toolbar defaults
+text_module:	
+	toolbar: 
+		- 
+			- ["Bold", "Italic"]
+			- ["Link", "Unlink", "-", "Image"]
+			- ["NumberedList", "BulletedList"]
+			- ["Undo", "Redo"]
+			- ["Format"]
+			- ["RemoveFormat", "Source", "-", "Maximize"] 
+	richtext_width: 700
+
 
 
 

@@ -105,8 +105,10 @@ ul, li {
   list-style-position: outside;
   padding-bottom: 0.3em;
 }
+[contenteditable] ul { padding-left: 1.6em; }
+.inner ul { margin-left: 2em; }
 .inner li { padding-left: 0; }
-[contenteditable] li { padding-left: 1em; }
+[contenteditable] li { padding-left: 0; }
 p, ul { padding-bottom: 0.5em; }
 #content_main h1 {
   font-size: 19px;
