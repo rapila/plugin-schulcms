@@ -168,7 +168,8 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		if($oEvent === null) {
 			return null;
 		}
-		$oEventPage = PagePeer::getPageByIdentifier($oEvent->getEventTypeId() === 2 ? 'projekte' : 'veranstaltungen');
+		$sPageIdentifier = SchoolPeer::getPageIdentifier($oEvent->getEventTypeId() === 2 ? 'classes' : 'events');
+		$oEventPage = PagePeer::getPageByIdentifier($sPageIdentifier);
 		$oTemplate = $this->constructTemplate('teaser');
 		$oTemplate->replaceIdentifier('title', $oEvent->getTitle());
 		$oTemplate->replaceIdentifier('date', $oEvent->getDateFromTo());

@@ -38,6 +38,14 @@ CREATE TABLE IF NOT EXISTS `link_categories` (
   KEY `link_categories_FI_2` (`updated_by`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
+# default link categories
 INSERT INTO `link_categories` (`id`, `name`, `is_externally_managed`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
 (1, 'Beispiel Linkliste', 0, '2010-12-02 14:47:25', '2011-06-20 10:11:54', 1, 1),
 (2, 'Klassenlinks', 1, '2011-04-13 15:37:55', '2011-04-13 15:37:55', 1, 1);
+
+# event categories
+INSERT INTO `event_types` (`id` ,`name` ,`created_at` ,`updated_at` ,`created_by` ,`updated_by`)
+VALUES
+( NULL , 'Veranstaltungen', NOW( ) , NOW( ) , '1', '1'), 
+( NULL , 'Projekte', NOW( ) , NOW( ) , '1', '1');
+

@@ -19,6 +19,8 @@ school_settings:
 		classes: 	'classes'
 		team: 		'team'
 		services: 'services'
+		events: 'events'
+		projects: 'projects'
 
 # example navigation like in pilote project ***REMOVED***
 navigations:

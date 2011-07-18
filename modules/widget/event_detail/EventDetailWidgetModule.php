@@ -66,7 +66,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oEvent);
 		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oEvent);
 		$oEventType = EventTypePeer::retrieveByPK($oEvent->getEventTypeId() ? $oEvent->getEventTypeId() : 1);
-		$aResult['AnlassTyp'] = $oEventType->getName();
+		$aResult['AnlassTyp'] = $oEventType ? $oEventType->getName() : '';
     $sBodyPreview = '';
 		if(is_resource($oEvent->getBodyPreview())) {
 			$sBodyPreview = RichtextUtil::parseStorageForBackendOutput(stream_get_contents($oEvent->getBodyPreview()))->render();
