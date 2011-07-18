@@ -11,19 +11,23 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	public $oClassPage;
 	
 	const MODE_SELECT_KEY = 'display_mode';
-	const DETAIL_IDENTIFIER = 'id';
 	const PORTRAIT_DUMMY_ID = 7;
+	const IDENTIFIER_REQUEST_KEY = 'name';
 	
 	public static function acceptedRequestParams() {
-		return array(self::DETAIL_IDENTIFIER);
+		return array('%' => self::IDENTIFIER_REQUEST_KEY);
 	}
 	
 	public function renderFrontend() { 
 		$this->oClassPage = PagePeer::getPageByIdentifier('classes');
 
 		// always show detail of requested or random team member
-		if(self::$TEAM_MEMBER === null && isset($_REQUEST[self::DETAIL_IDENTIFIER])) {
-			self::$TEAM_MEMBER = TeamMemberPeer::retrieveByPK($_REQUEST[self::DETAIL_IDENTIFIER]);
+		if(self::$TEAM_MEMBER === null && isset($_REQUEST[self::IDENTIFIER_REQUEST_KEY])) {
+			self::$TEAM_MEMBER = TeamMemberQuery::create()->filterBySlug($_REQUEST[self::IDENTIFIER_REQUEST_KEY])->findOne();
+			if(self::$TEAM_MEMBER === null) {
+				// handle not found, redirect to error_404 page
+				$this->redirectToNotFound();
+			}
 		}
 
 		$aOptions = @unserialize($this->getData());
@@ -47,7 +51,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 		if($this->iFunctionGroupId !== null) {
 			$oTeamMemberQuery->filterByTeamMemberFunctionGroup($this->iFunctionGroupId);
 		}
-    // Util::dumpAll($oTeamMemberQuery->orderByLastName()->orderByFirstName()->toString());
+
 		$aTeamMembers = $oTeamMemberQuery->orderByLastName()->orderByFirstName()->find();
 		$sOddEven = 'odd';
 		foreach($aTeamMembers as $oTeamMember) {
@@ -57,9 +61,10 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 				$oItemTemplate->replaceIdentifier('is_active_class', ' active');
 				$oItemTemplate->replaceIdentifier('show_active', '➜');
 			}
-			$oItemTemplate->replaceIdentifier('detail_link_name', TagWriter::quickTag('a', array('href' => LinkUtil::link(array_merge($aLinkParams, array(self::DETAIL_IDENTIFIER, $oTeamMember->getId())))),$oTeamMember->getFullNameInverted()));
+			$oItemTemplate->replaceIdentifier('detail_link_name', TagWriter::quickTag('a', array('href' => LinkUtil::link(array_merge($aLinkParams, array($oTeamMember->getSlug())))),$oTeamMember->getFullNameInverted()));
 			$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.team_member.link_title_prefix').$oTeamMember->getFullName());
 			$oItemTemplate->replaceIdentifier('first_function_name', $oTeamMember->getFirstTeamMemberFunctionName());
+
 			$aClassTeachers = $oTeamMember->getIsClassTeacherClasses();
 			if(count($aClassTeachers) > 0) {
 				foreach($aClassTeachers as $i => $oClassTeacher) {
@@ -104,7 +109,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 						}
 					}
 		      $oItemTemplate = $this->constructTemplate('class_item');
-  				$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link(array_merge($this->oClassPage->getFullPathArray(), array(ClassesFrontendModule::DETAIL_IDENTIFIER, $oSchoolClass->getSchoolClass()->getId())))), $oSchoolClass->getSchoolClass()->getFullClassName()));
+  				$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link(array_merge($this->oClassPage->getFullPathArray(), array($oSchoolClass->getSchoolClass()->getSlug())))), $oSchoolClass->getSchoolClass()->getFullClassName()));
   				$oTemplate->replaceIdentifierMultiple('klassenlehrer_info', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
 		    }
 			}

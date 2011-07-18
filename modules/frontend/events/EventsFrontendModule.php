@@ -187,7 +187,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		}
 		$oEvent = EventQuery::create()->filterBySchoolClassId(null, Criteria::ISNOTNULL)->filterByDateRangePreview()->orderByDateStart(Criteria::DESC)->findOne();
 		if($oEvent) {
-			$oClassPage = PagePeer::getPageByIdentifier('classes');
+			$oClassPage = PagePeer::getPageByIdentifier(Settings::getSetting('school_settings', 'page_identifiers_classes', 'something'));
 			$aClassLinkParams = array_merge($oClassPage->getFullPathArray(), array(ClassesFrontendModule::DETAIL_IDENTIFIER, $oEvent->getSchoolClassId()));
 			$aLinkParams = array_merge($aClassLinkParams, array(ClassesFrontendModule::DETAIL_IDENTIFIER_EVENT, $oEvent->getId()));
 			$sClassLink = TagWriter::quickTag('a', array('class' => 'event_teaser_classlink', 'href' => LinkUtil::link($aLinkParams)), StringPeer::getString('wns.class.school_class').' '.$oEvent->getSchoolClass()->getName());

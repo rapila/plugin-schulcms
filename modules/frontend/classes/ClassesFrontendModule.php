@@ -36,7 +36,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 
 	private function renderKlassenliste() {
 		$oPage = FrontendManager::$CURRENT_PAGE;
-		$aClasses = SchoolClassPeer::getSchoolUnitsBySchoolId();
+		$aClasses = SchoolClassPeer::getSchoolUnitsBySchool();
 		$sOddEven = 'odd';
 		$oTemplate = $this->constructTemplate('list');
 		foreach($aClasses as $oClass) {
@@ -45,7 +45,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			$oItemTemplate->replaceIdentifier('name', $oClass->getUnitName());
 			$aClassTeachers = $oClass->getClassTeachersOrdered();
 			foreach($aClassTeachers as $i => $oClassTeacher) {
-				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.team_member.view_detail').$oClassTeacher->getTeamMember()->getFullName(), 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array(TeamMembersFrontendModule::DETAIL_IDENTIFIER, $oClassTeacher->getTeamMember()->getId())))), $oClassTeacher->getTeamMember()->getFullNameShort()));
+				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.team_member.view_detail').$oClassTeacher->getTeamMember()->getFullName(), 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug())))), $oClassTeacher->getTeamMember()->getFullNameShort()));
 				if($i < count($aClassTeachers)-1) {
 					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ');
 				}
@@ -92,10 +92,12 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		// students
 		$aClassStudents = ClassStudentQuery::create()->filterBySchoolClassId($aClassIds)->orderByFirstName()->find();
 		if(count($aClassStudents) > 0) {
-			foreach($aClassStudents as $i => $oClassStudent) {
-				$aStudents[] = $oClassStudent->getStudent()->getFirstName();
+			if(Settings::getSetting('school_settings', 'display_student_names', true)) {
+				foreach($aClassStudents as $i => $oClassStudent) {
+					$aStudents[] = $oClassStudent->getStudent()->getFirstName();
+				}
+				$oTemplate->replaceIdentifier('students_names', implode(', ', $aStudents));
 			}
-			$oTemplate->replaceIdentifier('students_names', implode(', ', $aStudents));
 			$oTemplate->replaceIdentifier('students_count', count($aClassStudents));
 		}
 		// teachers
@@ -109,7 +111,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 					$oTemplate->replaceIdentifier('label_class_teacher',	StringPeer::getString('wns.class.class_teacher'.($oClassTeacher->getTeamMember()->getGenderId() === 'f' ? '_female': '_male')));
 				}
 			}
-			$aTeacherLink = array_merge($this->oTeamPage->getFullPathArray(), array(TeamMembersFrontendModule::DETAIL_IDENTIFIER, $oClassTeacher->getTeamMemberId()));
+			$aTeacherLink = array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug()));
 			$oClassTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aTeacherLink)), $oClassTeacher->getTeamMember()->getFullName());
 			$oTemplate->replaceIdentifierMultiple('name_class_teacher', $oClassTeacherLink.($i < ($iClassTeacherCount-1) ? ', ': ''), null, Template::NO_HTML_ESCAPE);
 		}
@@ -122,7 +124,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 				$oTemplate->replaceIdentifier('label_other_teacher', 'Weitere LehrerInnen');
 			}
 			if($oOtherTeacher->getTeamMember()->getFullName()) {
-				$aTeacherLink = array_merge($this->oTeamPage->getFullPathArray(), array(TeamMembersFrontendModule::DETAIL_IDENTIFIER, $oOtherTeacher->getTeamMemberId()));
+				$aTeacherLink = array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug()));
 				$oOtherTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aTeacherLink)), $oOtherTeacher->getTeamMember()->getFullName());
 				$sComma = $i < ($iOtherTeachers-1) ? ', ' : '';
 
@@ -163,12 +165,15 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 	public function renderSchulStatistik() {
 		$oTemplate = $this->constructTemplate('statistics');
 		$aResult = array_merge(
-			array('Klassen' => SchoolClassPeer::countActiveSchoolClassesBySchoolId(SchoolPeer::getSchoolId())), 
-			array('SchülerInnen' => ClassStudentPeer::countStudents()), 
-			array('Lehrpersonen' => TeamMemberPeer::countLehrpersonen()),
-			array('Verwaltung / Hauswartung' => TeamMemberPeer::countNonTeachingPersonel())
+			array(StringPeer::getString('statistics_key_classes', null, 'Klassen') => SchoolClassPeer::countActiveSchoolUnitsBySchool()), 
+			array(StringPeer::getString('statistics_key_students', null, 'SchülerInnen') => ClassStudentPeer::countStudents()), 
+			array(StringPeer::getString('statistics_key_teachers', null, 'Lehrpersonen') => TeamMemberPeer::countLehrpersonen()),
+			array(StringPeer::getString('statistics_key_others', null, 'Andere Mitarbeiter') => TeamMemberPeer::countNonTeachingPersonel())
 			);
 		foreach($aResult as $sName => $iCount) {
+			if($iCount === 0) {
+				continue;
+			}
 			$oItem = $this->constructTemplate('statistics_item');
 			$oItem->replaceIdentifier('name', $sName);
 			$oItem->replaceIdentifier('count', $iCount);

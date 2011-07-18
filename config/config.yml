@@ -14,6 +14,11 @@ school_settings:
 	externally_managed_link_categories:
 		school_class_links: 2
 	internally_used_service_category: null
+	display_student_names: false
+	page_identifiers:
+		classes: 	'classes'
+		team: 		'team'
+		services: 'services'
 
 # example navigation like in pilote project ***REMOVED***
 navigations:

@@ -51,7 +51,9 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		if(is_numeric($iCategory)) {
 			$oQuery->filterByServiceCategoryId((int) $iCategory);
 		} else {
-			$oQuery->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL);
+			if($this->iExcludeInternalCategoryId) {
+				$oQuery->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL);
+			}
 		}
 		$aServices = $oQuery->orderByName()->find();
 		$oTemplate = $this->constructTemplate('list');

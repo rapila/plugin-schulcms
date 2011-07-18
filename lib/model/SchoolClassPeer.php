@@ -23,23 +23,24 @@ class SchoolClassPeer extends BaseSchoolClassPeer {
 	  return $aResult;
 	}
 	
-	public static function countActiveSchoolClassesBySchoolId($iSchoolId) {
-		return self::doCount(self::getSchoolUnitsBySchoolIdCriteria($iSchoolId));
+	public static function countActiveSchoolUnitsBySchool($oSchool = null) {
+		return self::doCount(self::getSchoolUnitsBySchoolCriteria($oSchool));
 	}
 	
-	public static function getSchoolUnitsBySchoolId($iSchoolId = null) {
-		$oCriteria = self::getSchoolUnitsBySchoolIdCriteria($iSchoolId);
+	public static function getSchoolUnitsBySchool($oSchool = null) {
+		$oCriteria = self::getSchoolUnitsBySchoolCriteria($oSchool);
 		$oCriteria->addAscendingOrderByColumn(SchoolClassPeer::UNIT_NAME);
 		return self::doSelect($oCriteria);
 	}
 	
-	public static function getSchoolUnitsBySchoolIdCriteria($iSchoolId = null) {
-		$iSchoolId = $iSchoolId === null ? SchoolPeer::getSchoolId() : $iSchoolId;
-		$oSchool = SchoolQuery::create()->filterByOriginalId($iSchoolId)->findOne();
-		$oCriteria = new Criteria();
+	public static function getSchoolUnitsBySchoolCriteria($oSchool = null) {
 		if($oSchool === null) {
-			return $oCriteria;
+			$oSchool = SchoolPeer::getSchool();
 		}
+		if($oSchool === null) {
+			throw new Exception(__METHOD__.' valid school object required. Please check ***REMOVED*** configuration or ***REMOVED***Sync');
+		}
+		$oCriteria = new Criteria();
 		$oCriteria->setDistinct();
 		$oCriteria->addJoin(SchoolClassPeer::SCHOOL_ID, SchoolPeer::ID, Criteria::INNER_JOIN);
 		$oCriteria->addJoin(SchoolClassPeer::ID, ClassStudentPeer::SCHOOL_CLASS_ID, Criteria::INNER_JOIN);
