@@ -22,6 +22,9 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
 			return null;
 		}
+		if(is_numeric($aOptions[self::MODE_SELECT_KEY])) {
+			return $this->renderKlassenliste($aOptions[self::MODE_SELECT_KEY]);
+		}
 		switch($aOptions[self::MODE_SELECT_KEY]) {
 			case 'klassen_kontext_detail': return $this->renderKontext();
 			case 'schul_statistik': return $this->renderSchulStatistik();
@@ -34,9 +37,9 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		}
 	}
 
-	private function renderKlassenliste() {
+	private function renderKlassenliste($iClassTypeId = null) {
 		$oPage = FrontendManager::$CURRENT_PAGE;
-		$aClasses = SchoolClassPeer::getSchoolUnitsBySchool();
+		$aClasses = SchoolClassPeer::getSchoolUnitsBySchool(null, $iClassTypeId);
 		$sOddEven = 'odd';
 		$oTemplate = $this->constructTemplate('list');
 		foreach($aClasses as $oClass) {

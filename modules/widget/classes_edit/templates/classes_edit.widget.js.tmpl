@@ -35,8 +35,8 @@ Widget.types.classes_edit = {
 		if(display_mode == 'klassen_kontext_detail' || display_mode == 'schul_statistik'){
 			return;
 		}
-
-		this.allClasses(function(classes) {
+		var class_type_id =  isNaN(display_mode) ? null : parseInt(display_mode, 10);
+		this.allClasses(class_type_id, function(classes) {
 			jQuery.each(classes, function(i, school_class) {
 				_this.result_list.append(jQuery('<li/>').text(school_class.NAME).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', school_class.ID));
 			});

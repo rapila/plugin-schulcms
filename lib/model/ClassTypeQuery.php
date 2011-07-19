@@ -1,17 +1,14 @@
 <?php
-
-
 /**
- * Skeleton subclass for performing query and update operations on the 'class_types' table.
- *
- * 
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- *
  * @package    propel.generator.model
  */
 class ClassTypeQuery extends BaseClassTypeQuery {
+	
+	public function filterByHasClassesWithStudents($bOnlyWithClassesAndStudents = true) {
+		if($bOnlyWithClassesAndStudents === false) return $this;
+		$this->addJoin(ClassTypePeer::ID, SchoolClassPeer::CLASS_TYPE_ID, Criteria::INNER_JOIN);
+		$this->addJoin(SchoolClassPeer::ID, ClassStudentPeer::SCHOOL_CLASS_ID, Criteria::INNER_JOIN);
+		return $this;
+	}
+}
 
-} // ClassTypeQuery
