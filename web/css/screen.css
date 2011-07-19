@@ -582,6 +582,7 @@ img.class_portrait {
   width: 165px;
   height: 165px;
   line-height: 165px;
+  margin-right: 2px;
 }
 .gallery .gallery-canvas .gallery-frame {
   position: absolute;
