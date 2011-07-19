@@ -67,6 +67,7 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 			$oItemTemplate->replaceIdentifier('detail_link_text', $oService->getName());
 			$oItemTemplate->replaceIdentifier('detail_link_title', 'Details von '.$oService->getName());			
 			$oItemTemplate->replaceIdentifier('phone', $oService->getPhone());
+			$oItemTemplate->replaceIdentifier('teaser', StringUtil::truncate($oService->getTeaser(),60));
 			$oItemTemplate->replaceIdentifier('website', $oService->getWebsiteWithProtocol());
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
@@ -123,13 +124,12 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		foreach(self::$SERVICE->getServiceMembers() as $i => $oServiceMember) {
 			$i++;
 			if($oServiceMember->getTeamMember()) {
-				$sName = $oServiceMember->getTeamMember()->getFullName();
-				
+				$sName = $oServiceMember->getTeamMember()->getFullName();				
 				if($oServiceMember->getFunctionName()) {
 					$bIsFemale = $oServiceMember->getTeamMember()->getGenderId() === 'f';
 					$sName .= ', '. $oServiceMember->getFunctionName();
 					$oTeamMember = TagWriter::quickTag('div', array(), $sName);
-					$oTemplate->replaceIdentifierMultiple('team_member', $oTeamMember);
+					$oTemplate->replaceIdentifierMultiple('team_member', $oTeamMember, null, Template::NO_NEW_CONTEXT);
 				}
 			}
 		}
