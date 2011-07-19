@@ -117,12 +117,11 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		$oTemplate = $this->constructTemplate('detail');
 		$bIsPreview = self::$EVENT->getLastDate() < date('d.m.Y');
 		$sBody = null;
-		if ($bIsPreview && self::$EVENT->getBodyReview())
+		if (!$bIsPreview && self::$EVENT->getBodyReview()) {
 			$sBody = RichtextUtil::parseStorageForFrontendOutput(stream_get_contents(self::$EVENT->getBodyReview()));
-
-		if ($sBody === null && self::$EVENT->getBodyPreview())
+		} else if (self::$EVENT->getBodyPreview()) {
 			$sBody = RichtextUtil::parseStorageForFrontendOutput(stream_get_contents(self::$EVENT->getBodyPreview()));
-			
+		}
 		if ($sBody === null) {
 			$sBody = self::$EVENT->getTeaser();
 		}
@@ -163,12 +162,12 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 	
 	public function renderDetailTeaser($oEvent = null, $sClassLink = null) {
 		if($oEvent === null) {
-			$oEvent = EventQuery::create()->filterByShowOnFrontpage(true)->orderByRand()->findOne();
+			$oEvent = EventQuery::create()->filterByShowOnFrontpage(true)->filterByDateRangePreview()->orderByRand()->findOne();
 		}
 		if($oEvent === null) {
 			return null;
 		}
-		$sPageIdentifier = SchoolPeer::getPageIdentifier($oEvent->getEventTypeId() === 2 ? 'classes' : 'events');
+		$sPageIdentifier = SchoolPeer::getPageIdentifier($oEvent->getEventTypeId() === 2 ? 'projects' : 'events');
 		$oEventPage = PagePeer::getPageByIdentifier($sPageIdentifier);
 		$oTemplate = $this->constructTemplate('teaser');
 		$oTemplate->replaceIdentifier('title', $oEvent->getTitle());
