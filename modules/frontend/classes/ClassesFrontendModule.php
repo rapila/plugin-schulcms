@@ -17,7 +17,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 	}
 	
 	public function renderFrontend() {
-		$this->oTeamPage = PagePeer::getPageByIdentifier('team');
+		$this->oTeamPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('team'));
 		$aOptions = @unserialize($this->getData());
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
 			return null;

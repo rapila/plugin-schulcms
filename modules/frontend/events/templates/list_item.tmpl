@@ -1,8 +1,8 @@
 <tr class="row {{oddeven}}">
 	<td class="datum"><a href="{{detail_link}}" title="{{detail_link_title}}">{{date_from_to}}</a></td>
-	<td class="highlight">
+	<td class="event_title" style="padding-left:.5em;">
 		<a href="{{detail_link}}" title="{{detail_link_title}}">{{detail_link_text}}</a>
-		<p>{{teaser}}</p>
+		<p>{{truncate=\{\{teaser\}\};length=60;}} <a href="{{detail_link}}">{{writeString=text.read_more}}</a></p>
 	</td>
-	<td class="align_right"><a href="{{detail_link}}">mehr</a></td>
+	<td class="align_right"></td>
 </tr>

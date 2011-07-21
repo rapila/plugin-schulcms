@@ -19,7 +19,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	}
 	
 	public function renderFrontend() { 
-		$this->oClassPage = PagePeer::getPageByIdentifier('classes');
+		$this->oClassPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('classes'));
 
 		// always show detail of requested or random team member
 		if(self::$TEAM_MEMBER === null && isset($_REQUEST[self::IDENTIFIER_REQUEST_KEY])) {
