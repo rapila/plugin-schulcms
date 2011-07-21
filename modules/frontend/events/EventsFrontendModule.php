@@ -175,7 +175,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		if($sClassLink) {
 			$oTemplate->replaceIdentifier('class_link', $sClassLink);
 		}
-		$oTemplate->replaceIdentifier('teaser_truncated', $oEvent->getTeaser());
+		$oTemplate->replaceIdentifier('teaser', $oEvent->getTeaser());
 		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link(array_merge($oEventPage->getFullPathArray(), array(self::DETAIL_IDENTIFIER, $oEvent->getId()))));
 		$oTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.event.goto_detail').$oEvent->getTitle());
 		return $oTemplate;
