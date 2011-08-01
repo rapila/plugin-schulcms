@@ -33,8 +33,8 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		
 		$this->addJoin(TeamMemberPeer::ID, TeamMemberFunctionPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
 		$this->addJoin(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID, SchoolFunctionPeer::ID, Criteria::INNER_JOIN);
-		$sTeacherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getTeacherFunctionGroupIds(), Criteria::IN);
-		$sOtherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getOtherFunctionGroupIds(), self::IN);
+		$sTeacherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeachers(), Criteria::IN);
+		$sOtherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForOthers(), self::IN);
 		$this->addJoin(TeamMemberPeer::ID, ClassTeacherPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
 		$sTeacherCrit->addAnd($this->getNewCriterion(ClassTeacherPeer::TEAM_MEMBER_ID, null, self::ISNOTNULL));
 		

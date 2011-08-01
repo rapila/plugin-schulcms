@@ -21,6 +21,9 @@ school_settings:
 		services: 'services'
 		events: 'events'
 		projects: 'projects'
+	active_function_groups:
+		teachers: [1, 2]
+		others: [6, 7]
 
 # example navigation like in pilote project ***REMOVED***
 navigations:

@@ -13,31 +13,26 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	const MODE_SELECT_KEY = 'display_mode';
 	const PORTRAIT_DUMMY_ID = 7;
 	const IDENTIFIER_REQUEST_KEY = 'name';
-	
-	public static function acceptedRequestParams() {
-		return array('%' => self::IDENTIFIER_REQUEST_KEY);
-	}
-	
-	public function renderFrontend() { 
-		$this->oClassPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('classes'));
 
+	public function renderFrontend() { 
+		$aOptions = @unserialize($this->getData());
+		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
+			return null;
+		}
 		// always show detail of requested or random team member
-		if(self::$TEAM_MEMBER === null && isset($_REQUEST[self::IDENTIFIER_REQUEST_KEY])) {
-			self::$TEAM_MEMBER = TeamMemberQuery::create()->filterBySlug($_REQUEST[self::IDENTIFIER_REQUEST_KEY])->findOne();
+		$this->oClassPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('classes'));
+		if(self::$TEAM_MEMBER === null && isset($_REQUEST[TeamMemberFilterModule::TEAM_REQUEST_KEY])) {
+			self::$TEAM_MEMBER = $_REQUEST[TeamMemberFilterModule::TEAM_REQUEST_KEY];
 			if(self::$TEAM_MEMBER === null) {
 				// handle not found, redirect to error_404 page
 				$this->redirectToNotFound();
 			}
 		}
-
-		$aOptions = @unserialize($this->getData());
-		if(isset($aOptions[self::MODE_SELECT_KEY])) {
-			$this->iFunctionGroupId = is_numeric($aOptions[self::MODE_SELECT_KEY]) ? $aOptions[self::MODE_SELECT_KEY] : null;
-
-			switch($aOptions[self::MODE_SELECT_KEY]) {
-				case 'team_mitglied_detail' : return $this->renderDetail();
-				default: return $this->renderTeamliste($aOptions[self::MODE_SELECT_KEY]);
-			}
+		
+		$this->iFunctionGroupId = is_numeric($aOptions[self::MODE_SELECT_KEY]) ? $aOptions[self::MODE_SELECT_KEY] : null;
+		switch($aOptions[self::MODE_SELECT_KEY]) {
+			case 'team_mitglied_detail' : return $this->renderDetail();
+			default: return $this->renderTeamliste();
 		}
 	}
 	
@@ -95,7 +90,6 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 				$oTemplate->replaceIdentifier('profession', self::$TEAM_MEMBER->getProfession());
 			}
 			$aSchoolClasses = self::$TEAM_MEMBER->getClassTeacherClasses();
-      // Util::dumpAll($aSchoolClasses);
 		  if(count($aSchoolClasses) > 0) {
   			$bChange = null;
 		    foreach($aSchoolClasses as $oSchoolClass) {

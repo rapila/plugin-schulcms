@@ -103,7 +103,7 @@ class TeamMember extends BaseTeamMember {
 	
 	public function getFirstTeamMemberFunctionName() {
 	  $oCriteria = new Criteria();
-		$oCriteria->add(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupsTeamlist(), Criteria::IN);
+		$oCriteria->add(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeamlist(), Criteria::IN);
 		foreach($this->getTeamMemberFunctionsJoinSchoolFunction($oCriteria) as $oFunction) {
 			return $oFunction->getSchoolFunction()->getTitle();
 		}
@@ -119,7 +119,7 @@ class TeamMember extends BaseTeamMember {
 	
 	public function getIsActiveTeamMember() {
     if(self::$TEAMLIST_GROUPS == null) {
-      self::$TEAMLIST_GROUPS = FunctionGroupPeer::getFunctionGroupsTeamlist();
+      self::$TEAMLIST_GROUPS = FunctionGroupPeer::getFunctionGroupIdsForTeamlist();
     }
     foreach($this->getTeamMemberFunctionsJoinSchoolFunction() as $oFunction) {
       if(in_array($oFunction->getSchoolFunction()->getFunctionGroupId(), self::$TEAMLIST_GROUPS)) {

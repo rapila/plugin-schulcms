@@ -5,8 +5,9 @@
 
 class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBasedFrontendModule {
 	
-	public static $DISPLAY_MODES = array('klassen_liste', 'klassen_with_detail', 'klassen_kontext_detail', 'schul_statistik');
+	public static $DISPLAY_MODES = array('klassen_liste', 'klassen_with_detail', 'klassen_kontext_detail', 'klassen_main_detail');
 	public static $EVENT;
+	public static $CLASS;
 	public $oTeamPage;
 	
 	const MODE_SELECT_KEY = 'display_mode';
@@ -26,7 +27,8 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			return $this->renderKlassenliste($aOptions[self::MODE_SELECT_KEY]);
 		}
 		switch($aOptions[self::MODE_SELECT_KEY]) {
-			case 'klassen_kontext_detail': return $this->renderKontext();
+			case 'klassen_kontext_detail': return $this->renderKlassenKontext();
+			case 'klassen_main_detail': return $this->renderKlassenDetail();
 			case 'schul_statistik': return $this->renderSchulStatistik();
 			case 'klassen_with_detail':
 			default:
@@ -74,6 +76,9 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			if(self::$EVENT) {
 				return $this->renderClassEvent();
 			}
+		}
+		if(!isset($_REQUEST[SchoolFilterModule::CLASSES_REQUEST_KEY])) {
+			return null;
 		}
 		$aClasses = $_REQUEST[SchoolFilterModule::CLASSES_REQUEST_KEY];
 		$aClassIds = array();
@@ -165,27 +170,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		return $oEventTemplate;
 	}
 	
-	public function renderSchulStatistik() {
-		$oTemplate = $this->constructTemplate('statistics');
-		$aResult = array_merge(
-			array(StringPeer::getString('statistics_key_classes', null, 'Klassen') => SchoolClassPeer::countActiveSchoolUnitsBySchool()), 
-			array(StringPeer::getString('statistics_key_students', null, 'SchülerInnen') => ClassStudentPeer::countStudents()), 
-			array(StringPeer::getString('statistics_key_teachers', null, 'Lehrpersonen') => TeamMemberPeer::countLehrpersonen()),
-			array(StringPeer::getString('statistics_key_others', null, 'Andere Mitarbeiter') => TeamMemberPeer::countNonTeachingPersonel())
-			);
-		foreach($aResult as $sName => $iCount) {
-			if($iCount === 0) {
-				continue;
-			}
-			$oItem = $this->constructTemplate('statistics_item');
-			$oItem->replaceIdentifier('name', $sName);
-			$oItem->replaceIdentifier('count', $iCount);
-			$oTemplate->replaceIdentifierMultiple('statistics_item', $oItem);		
-		}
-		return $oTemplate;	
-	}
-	
-	public function renderKontext($bShowRandomKontext = false) {
+	public function renderKlassenKontext($bShowRandomKontext = false) {
 		if(!isset($_REQUEST[SchoolFilterModule::CLASSES_REQUEST_KEY])) {
 			return null;
 		}

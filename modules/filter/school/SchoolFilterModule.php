@@ -6,11 +6,13 @@ class SchoolFilterModule extends FilterModule {
 	const CLASSES_REQUEST_KEY = 'classes';
 	
 	public function onNavigationItemChildrenRequested($oNavigationItem) {
-		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getIdentifier() === 'classes') {
+		$aSubpagesIdentifier = Settings::getSetting('school_settings', 'subpages_classes_identifiers', array());
+		if($oNavigationItem instanceof PageNavigationItem && 
+			($oNavigationItem->getIdentifier() === 'classes' || in_array($oNavigationItem->getIdentifier(), $aSubpagesIdentifier))) {
+				
 			$oCriteria = SchoolClassQuery::create()->distinct();
 			$oCriteria->clearSelectColumns()->addSelectColumn(SchoolClassPeer::SLUG);
 			$oCriteria->filterByHasStudents()->orderByUnitName(Criteria::ASC);
-			
 			foreach(SchoolClassPeer::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_COLUMN) as $sSlug) {
 				$oClass = SchoolClassQuery::create()->filterBySlug($sSlug)->findOne();
 				$oNavItem = new HiddenVirtualNavigationItem(self::CLASS_ITEM_TYPE, $sSlug, $oClass->getUnitName(), null, null);

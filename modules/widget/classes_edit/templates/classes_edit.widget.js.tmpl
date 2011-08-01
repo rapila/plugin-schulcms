@@ -2,7 +2,7 @@ Widget.types.classes_edit = {
 	prepare: function() {
 		var _this = this;
 		
-		this.mode_dropdown = jQuery("<select/>");
+		this.mode_dropdown = jQuery("<select/>").addClass('ui-widget-content');
 		this.mode_dropdown.populate(this.getDisplayModes(), this.getDisplayMode());
 		this.mode_dropdown.change(function() {
 			_this.setDisplayMode(_this.mode_dropdown.val());
@@ -15,6 +15,7 @@ Widget.types.classes_edit = {
 			widget.save_callback = _this.reload_preview.bind(_this);
 		});
 
+		this._element.append(jQuery('<label/>').text('{{writeString=wns.classes.display_options}}'));
 		this._element.append(this.mode_dropdown);
 		
 		this.result_list = jQuery('<ol/>').addClass('ui-editable-items-list');

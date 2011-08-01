@@ -30,7 +30,7 @@ class ClassesEditWidgetModule extends PersistentWidgetModule {
 	public function getDisplayModes() {
 	  $aResult = array();
 	  foreach(ClassesFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
-	    $aResult[$sDisplayMode] = StringPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);
+	    $aResult[$sDisplayMode] = StringPeer::getString('classes.display_mode.'.$sDisplayMode, null, $sDisplayMode);
 	  }
 	  $aClassTypes = ClassTypeQuery::create()->filterByHasClassesWithStudents()->orderByName()->find();
 		if(count($aClassTypes) > 0) {

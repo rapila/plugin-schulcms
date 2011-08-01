@@ -1,0 +1,20 @@
+Widget.types.school_edit = {
+	prepare: function() {
+		var _this = this;
+		
+		this.mode_dropdown = jQuery("<select/>").addClass('ui-widget-content');
+		this.mode_dropdown.populate(this.getDisplayModes(), this.getDisplayMode());
+		this.mode_dropdown.change(function() {
+			_this.setDisplayMode(_this.mode_dropdown.val());
+		});
+		this.mode_dropdown.change();
+		
+		this._element.append(jQuery('<label/>').text('{{writeString=wns.classes.display_options}}'));
+		this._element.append(this.mode_dropdown);
+	},
+		
+	save: function(callback) {
+		var data = this.mode_dropdown.val();
+		this.saveData(data, callback);
+	}
+};

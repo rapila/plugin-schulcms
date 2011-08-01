@@ -6,26 +6,21 @@
  * @package    propel.generator.model
  */
 class FunctionGroupPeer extends BaseFunctionGroupPeer {
-  
-	// These reference function group ids
-	private static $ACTIVE_TEACHER_GROUPS = array(1,2);
-	private static $ACTIVE_OTHERS_GROUPS = array(6,7);
-	
-	// ATTENTION: addOrderByField is ordered separately, manually
-	public static function getFunctionGroupsTeamlist() {
-		return array_merge(self::$ACTIVE_TEACHER_GROUPS, self::$ACTIVE_OTHERS_GROUPS);
+  	
+	public static function getFunctionGroupIdsForTeamlist() {
+		return array_merge(self::getFunctionGroupIdsForTeachers(), self::getFunctionGroupIdsForOthers());
 	}
 	
-	public static function getTeacherFunctionGroupIds() {
-		return self::$ACTIVE_TEACHER_GROUPS;
+	public static function getFunctionGroupIdsForTeachers() {
+		return SchoolPeer::getActiveFunctionGroupIds('teachers');
 	}
 	
-	public static function getOtherFunctionGroupIds() {
-		return self::$ACTIVE_OTHERS_GROUPS;
+	public static function getFunctionGroupIdsForOthers() {
+		return SchoolPeer::getActiveFunctionGroupIds('others');
 	}
 	
   public static function getActiveFunctionGroups($aIds = null) {
-		$aIds = $aIds !== null ? $aIds : self::getFunctionGroupsTeamlist();
+		$aIds = $aIds !== null ? $aIds : self::getFunctionGroupIdsForTeamlist();
     $oCriteria = new myCriteria();
     $oCriteria->setDistinct();
     $oCriteria->add(self::ID, $aIds, Criteria::IN);

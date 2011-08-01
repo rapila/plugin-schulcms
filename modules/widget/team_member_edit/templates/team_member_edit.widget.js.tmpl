@@ -18,6 +18,7 @@ Widget.types.team_member_edit = {
 			widget.save_callback = _this.reload_preview.bind(_this);
 		});
 
+		this._element.append(jQuery('<label/>').text('{{writeString=wns.team_members.display_options}}'));
 		this._element.append(this.mode_dropdown);
 		
 		this.result_list = jQuery('<ol/>').addClass('ui-editable-items-list');
