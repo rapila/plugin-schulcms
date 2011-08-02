@@ -39,7 +39,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	private function renderTeamliste() {
 		// get current navigation item and link array for detail
 		$oPage = FrontendManager::$CURRENT_NAVIGATION_ITEM;
-		$aLinkParams = $oPage instanceof VirtualNavigationItem ? array_merge($oPage->getParent()->getMe()->getFullPathArray(), array($oPage->getName())) : $oPage->getMe()->getFullPathArray();
+		$aLinkParams = $oPage instanceof VirtualNavigationItem ? $oPage->getParent()->getMe()->getFullPathArray() : $oPage->getMe()->getFullPathArray();
 		
 		$oTemplate = $this->constructTemplate('list');
 		$oTeamMemberQuery = TeamMemberQuery::create()->excludeInactive();
