@@ -23,20 +23,16 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
 			return null;
 		}
+		if(isset($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY]) || $aOptions[self::MODE_SELECT_KEY] === 'klassen_kontext_detail') {
+			if($aOptions[self::MODE_SELECT_KEY] === 'klassen_kontext_detail') {
+				return $this->renderKlassenKontext();	
+			}
+			return $this->renderKlassenDetail();
+		}
 		if(is_numeric($aOptions[self::MODE_SELECT_KEY])) {
 			return $this->renderKlassenliste($aOptions[self::MODE_SELECT_KEY]);
 		}
-		switch($aOptions[self::MODE_SELECT_KEY]) {
-			case 'klassen_kontext_detail': return $this->renderKlassenKontext();
-			case 'klassen_main_detail': return $this->renderKlassenDetail();
-			case 'schul_statistik': return $this->renderSchulStatistik();
-			case 'klassen_with_detail':
-			default:
-				if(isset($_REQUEST[SchoolFilterModule::CLASSES_REQUEST_KEY])) {
-					return $this->renderKlassenDetail();
-				}
-				return $this->renderKlassenliste();
-		}
+		return $this->renderKlassenliste();
 	}
 
 	private function renderKlassenliste($iClassTypeId = null) {
@@ -77,10 +73,10 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 				return $this->renderClassEvent();
 			}
 		}
-		if(!isset($_REQUEST[SchoolFilterModule::CLASSES_REQUEST_KEY])) {
+		if(!isset($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY])) {
 			return null;
 		}
-		$aClasses = $_REQUEST[SchoolFilterModule::CLASSES_REQUEST_KEY];
+		$aClasses = $_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY];
 		$aClassIds = array();
 		foreach($aClasses as $oClass) {
 			$aClassIds[] = $oClass->getId();
@@ -171,10 +167,10 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 	}
 	
 	public function renderKlassenKontext($bShowRandomKontext = false) {
-		if(!isset($_REQUEST[SchoolFilterModule::CLASSES_REQUEST_KEY])) {
+		if(!isset($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY])) {
 			return null;
 		}
-		$aClasses = $_REQUEST[SchoolFilterModule::CLASSES_REQUEST_KEY];
+		$aClasses = $_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY];
 		$aClassIds = array();
 		foreach($aClasses as $oClass) {
 			$aClassIds[] = $oClass->getId();
