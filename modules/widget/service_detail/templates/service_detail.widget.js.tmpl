@@ -207,7 +207,6 @@ Widget.types.service_detail = {
 	},
 	
 	upload_success: function(document_id, options) {
-		console.log(document_id, options);
 		var _this = this;
 		this.addServiceDocument(document_id, function() {
 			_this.insert_document(_this.getSingleDocument(document_id));				
@@ -215,7 +214,6 @@ Widget.types.service_detail = {
 	},
 	
 	logo_upload_success: function(logo_id, options) {
-		console.log(logo_id, options);
 		this.service_logo_id = logo_id;
 		this.save(true);
 	},
