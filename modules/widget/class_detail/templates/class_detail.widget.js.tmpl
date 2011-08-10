@@ -39,22 +39,23 @@ Widget.types.class_detail = {
 				return {document_kind: 'image', document_id: _this.class_portrait_id, document_category_id: _this.settings.class_portrait_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this), class_document_type: 'portrait'};
 			}, true);
 			
-			//FIXME: When adoption of Firefox 4 is widespread, use Object.defineProperty
 			var class_portrait_id = null;
-			_this.__defineGetter__('class_portrait_id', function() {
-				return class_portrait_id;
-			});
-			_this.__defineSetter__('class_portrait_id', function(class_portrait) {
-				class_portrait_id = class_portrait;
-				var remove_link = portrait_area.find('.remove');
-				if(class_portrait_id === null) {
-					portrait_area.find('.class_portrait').empty();
-					remove_link.hide();
-				} else {
-					remove_link.show();
-					Widget.callStatic('document_detail', 'documentPreview', class_portrait_id, 250, function(html) {
-						portrait_area.find('.class_portrait').html(html);
-					});
+			Object.defineProperty(_this, 'class_portrait_id', {
+				get: function() {
+					return class_portrait_id;
+				},
+				set: function(class_portrait) {
+					class_portrait_id = class_portrait;
+					var remove_link = portrait_area.find('.remove');
+					if(class_portrait_id === null) {
+						portrait_area.find('.class_portrait').empty();
+						remove_link.hide();
+					} else {
+						remove_link.show();
+						Widget.callStatic('document_detail', 'documentPreview', class_portrait_id, 250, function(html) {
+							portrait_area.find('.class_portrait').html(html);
+						});
+					}
 				}
 			});
 			
@@ -73,18 +74,20 @@ Widget.types.class_detail = {
 			}, true);
 			
 			var class_schedule_id = null;
-			_this.__defineGetter__('class_schedule_id', function() {
-				return class_schedule_id;
-			});
-			_this.__defineSetter__('class_schedule_id', function(class_schedule) {
-				class_schedule_id = class_schedule;
-				var remove_link = stundenplan.find('.remove');
-				if(class_schedule_id === null) {
-					stundenplan.find('.class_schedule').empty();
-					remove_link.hide();
-				} else {
-					remove_link.show();
-					stundenplan.find('.class_schedule').html('<a class="pdf" href="'+FILE_PREFIX+'/display_document/'+class_schedule_id+'">Stundenplan</a>');
+			Object.defineProperty(_this, 'class_schedule_id', {
+				get: function() {
+					return class_schedule_id;
+				},
+				set: function(class_schedule) {
+					class_schedule_id = class_schedule;
+					var remove_link = stundenplan.find('.remove');
+					if(class_schedule_id === null) {
+						stundenplan.find('.class_schedule').empty();
+						remove_link.hide();
+					} else {
+						remove_link.show();
+						stundenplan.find('.class_schedule').html('<a class="pdf" href="'+FILE_PREFIX+'/display_document/'+class_schedule_id+'">Stundenplan</a>');
+					}
 				}
 			});
 			
@@ -103,18 +106,20 @@ Widget.types.class_detail = {
 			
 			
 			var week_schedule_id = null;
-			_this.__defineGetter__('week_schedule_id', function() {
-				return week_schedule_id;
-			});
-			_this.__defineSetter__('week_schedule_id', function(week_schedule) {
-				week_schedule_id = week_schedule;
-				var remove_link = wochenplan.find('.remove');
-				if(week_schedule_id === null) {
-					wochenplan.find('.week_schedule').empty();
-					remove_link.hide();
-				} else {
-					remove_link.show();
-					wochenplan.find('.week_schedule').html('<a class="pdf" href="'+FILE_PREFIX+'/display_document/'+week_schedule_id+'">Wochenplan</a>');
+			Object.defineProperty(_this, 'week_schedule_id', {
+				get: function() {
+					return week_schedule_id;
+				},
+				set: function(week_schedule) {
+					week_schedule_id = week_schedule;
+					var remove_link = wochenplan.find('.remove');
+					if(week_schedule_id === null) {
+						wochenplan.find('.week_schedule').empty();
+						remove_link.hide();
+					} else {
+						remove_link.show();
+						wochenplan.find('.week_schedule').html('<a class="pdf" href="'+FILE_PREFIX+'/display_document/'+week_schedule_id+'">Wochenplan</a>');
+					}
 				}
 			});
 		});
