@@ -9,10 +9,29 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 	public function __construct($sWidgetId) {
 		parent::__construct($sWidgetId);
     // config section 'school_settings'
-		$this->setSetting('class_portrait_category_id', SchoolPeer::getDocumentCategoryConfig('school_class_portraits'));
-		$this->setSetting('class_schedule_category_id', SchoolPeer::getDocumentCategoryConfig('school_class_schedules'));
-		$this->setSetting('week_plan_category_id', SchoolPeer::getDocumentCategoryConfig('school_class_weekplans'));
-		$this->setSetting('link_category_id', SchoolPeer::getLinkCategoryConfig('school_class_links'));
+		$iClassPortraitCategory = SchoolPeer::getDocumentCategoryConfig('school_class_portraits');
+		if(DocumentCategoryQuery::create()->filterById($iClassPortraitCategory)->count() === 0) {
+			throw new Exception('Config error: school_settings > externally_managed_document_categories > school_class_portraits');
+		}
+		$this->setSetting('class_portrait_category_id', $iClassPortraitCategory);
+		
+		$iClassScheduleCategory = SchoolPeer::getDocumentCategoryConfig('school_class_schedules');
+		if(DocumentCategoryQuery::create()->filterById($iClassScheduleCategory)->count() === 0) {
+			throw new Exception('Config error: school_settings > externally_managed_document_categories > school_class_schedules');
+		}
+		$this->setSetting('class_schedule_category_id', $iClassScheduleCategory);
+		
+		$iClassWeekplanCategory = SchoolPeer::getDocumentCategoryConfig('school_class_weekplans');
+		if(DocumentCategoryQuery::create()->filterById($iClassWeekplanCategory)->count() === 0) {
+			throw new Exception('Config error: school_settings > externally_managed_document_categories > school_class_weekplans');
+		}
+		$this->setSetting('week_plan_category_id', $iClassWeekplanCategory);
+		
+		$iSchoolLinkCategory = SchoolPeer::getLinkCategoryConfig('school_class_links');
+		if(LinkCategoryQuery::create()->filterById($iSchoolLinkCategory)->count() === 0) {
+			throw new Exception('Config error: school_settings > externally_managed_link_categories > school_class_links');
+		}
+		$this->setSetting('link_category_id', $iSchoolLinkCategory);
 	}
 	
 	public function setSchoolClassId($iSchoolClassId) {

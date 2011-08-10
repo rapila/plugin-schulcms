@@ -8,7 +8,11 @@ class TeamMemberDetailWidgetModule extends PersistentWidgetModule {
 
 	public function __construct($sWidgetId) {
 		parent::__construct($sWidgetId);
-		$this->setSetting('portrait_category_id', SchoolPeer::getDocumentCategoryConfig('team_member_portraits'));
+		$iTeamMemberPortraitCategory = SchoolPeer::getDocumentCategoryConfig('team_member_portraits');
+		if(DocumentCategoryQuery::create()->filterById($iTeamMemberPortraitCategory)->count() === 0) {
+			throw new Exception('Error: school_settings config: externally_managed_document_categories > team_member_portraits does not exist');
+		}
+		$this->setSetting('portrait_category_id', $iTeamMemberPortraitCategory);
 	}
 	
 	public function setTeamMemberId($iTeamMemberId) {
