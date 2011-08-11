@@ -171,12 +171,16 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			return null;
 		}
 		$aClasses = $_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY];
+		if(count($aClasses) === 0) {
+			return null;
+		}
 		$aClassIds = array();
 		foreach($aClasses as $oClass) {
 			$aClassIds[] = $oClass->getId();
 		}
 		$oTemplate = $this->constructTemplate('detail_context');
 		// main class attributes
+
 		if($aClasses[0]->getDocumentRelatedByClassScheduleId()) {
 			$oTemplate->replaceIdentifier('stundenplan', TagWriter::quickTag('a', array('href' => $aClasses[0]->getDocumentRelatedByClassScheduleId()->getDisplayUrl(), 'class' => "stundenplan", 'title' => StringPeer::getString('wns.download_stundenplan')), ' '));
 		}

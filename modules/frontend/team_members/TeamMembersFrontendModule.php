@@ -89,7 +89,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 			if(self::$TEAM_MEMBER->getProfession() != null) {
 				$oTemplate->replaceIdentifier('profession', self::$TEAM_MEMBER->getProfession());
 			}
-			$aSchoolClasses = self::$TEAM_MEMBER->getClassTeacherClasses(true);
+			$aSchoolClasses = self::$TEAM_MEMBER->getClassTeacherClasses();
 		  if(count($aSchoolClasses) > 0) {
   			$bChange = null;
 		    foreach($aSchoolClasses as $oSchoolClass) {
