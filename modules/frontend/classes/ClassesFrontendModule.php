@@ -105,12 +105,12 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			$oTemplate->replaceIdentifier('students_count', count($aClassStudents));
 		}
 		// teachers
-		$aClassTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->filterByIsClassTeacher(true)->orderBySortOrder()->orderByLastName()->find();
+		$aClassTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->filterByIsClassTeacher(true)->orderBySortOrder()->orderByLastName()->groupByTeamMemberId()->find();
 		$iClassTeacherCount = count($aClassTeachers);
 		foreach($aClassTeachers as $i => $oClassTeacher) {
 			if($i === 0) {
 				if($iClassTeacherCount > 1) {
-					$oTemplate->replaceIdentifier('label_class_teacher', 'KlassenlehrerInnen');
+					$oTemplate->replaceIdentifier('label_class_teacher', StringPeer::getString('wns.class.class_teachers'));
 				} else {
 					$oTemplate->replaceIdentifier('label_class_teacher',	StringPeer::getString('wns.class.class_teacher'.($oClassTeacher->getTeamMember()->getGenderId() === 'f' ? '_female': '_male')));
 				}
@@ -121,11 +121,11 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		}
 
 		// other teachers
-		$aOtherTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->filterByIsClassTeacher(false)->orderBySortOrder()->orderByLastName()->find();
+		$aOtherTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->filterByIsClassTeacher(false)->orderBySortOrder()->orderByLastName()->groupByTeamMemberId()->find();
 		$iOtherTeachers = count($aOtherTeachers);
 		foreach($aOtherTeachers as $i => $oOtherTeacher) {
 			if($i === 0) {
-				$oTemplate->replaceIdentifier('label_other_teacher', 'Weitere LehrerInnen');
+				$oTemplate->replaceIdentifier('label_other_teacher', StringPeer::getString('wns.class.other_teachers'));
 			}
 			if($oOtherTeacher->getTeamMember()->getFullName()) {
 				$aTeacherLink = array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug()));
