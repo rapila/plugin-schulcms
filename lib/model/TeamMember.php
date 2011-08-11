@@ -41,9 +41,18 @@ class TeamMember extends BaseTeamMember {
 		}
 		return $this->getClassTeachersJoinSchoolClass($oCriteria);
 	}
-	
-	public function getClassTeacherClasses() {
+		
+	/**
+	* getClassTeacherClasses()
+	* @param boolean $bGroupByUnitName, default=false
+	* for the team_member detail we only want to display the teaching units and not the classes
+	* @return PropelCollection|array ClassTeacher[] List of ClassTeacher objects
+	*/
+	public function getClassTeacherClasses($bGroupByUnitName = false) {
 		$oCriteria = new Criteria();
+		if($bGroupByUnitName) {
+			$oCriteria->addGroupByColumn(SchoolClassPeer::UNIT_NAME);
+		}
     $oCriteria->addDescendingOrderByColumn(ClassTeacherPeer::IS_CLASS_TEACHER);
 		return $this->getClassTeachersJoinSchoolClass($oCriteria);
 	}	
