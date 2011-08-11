@@ -1,0 +1,21 @@
+Widget.types.year_input = {
+	prepare: function() {
+		var _this = this;
+		console.log(_this.settings.initial_selection);
+		var option = jQuery('<option/>');
+		var school_years = this.getSchoolYears();
+		jQuery.each(school_years, function(id, name) {
+			option.clone().val(id).text(name).appendTo(_this._element);
+		});
+		if(this.settings.default_value_label) {
+			this._element.prepend(option.clone().attr('value', '').text(this.settings.default_value_label));
+			this._element.val('');
+		}
+		this._element.val(this.settings.initial_selection || '');
+	},
+	
+	settings: {
+		initial_selection: null,
+		default_value_label: '------'
+	}
+};

@@ -56,8 +56,7 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getYearPeriod() {
-	  $sYear = $this->getYear();
-		return $sYear.'-'.(substr($this->getYear() + 1, 2));
+		return SchoolPeer::getPeriodFromYear($this->getYear());
 	}
 	
 	public function getLinkToClassSchedule() {
