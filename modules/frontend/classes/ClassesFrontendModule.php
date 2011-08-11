@@ -128,7 +128,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 				$oTemplate->replaceIdentifier('label_other_teacher', StringPeer::getString('wns.class.other_teachers'));
 			}
 			if($oOtherTeacher->getTeamMember()->getFullName()) {
-				$aTeacherLink = array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug()));
+				$aTeacherLink = array_merge($this->oTeamPage->getFullPathArray(), array($oOtherTeacher->getTeamMember()->getSlug()));
 				$oOtherTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aTeacherLink)), $oOtherTeacher->getTeamMember()->getFullName());
 				$sComma = $i < ($iOtherTeachers-1) ? ', ' : '';
 
