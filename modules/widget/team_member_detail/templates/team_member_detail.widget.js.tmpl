@@ -37,28 +37,26 @@ Widget.types.team_member_detail = {
 				return {document_kind: 'image', document_id: _this.portrait_id, document_category_id: _this.settings.portrait_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
 			}, true);
 			
-			//Portrait setter/getter
+			// Portrait setter/getter
 			var portrait_id = null;
-			
-			//FIXME: When adoption of Firefox 4 is widespread, use Object.defineProperty
-			_this.__defineGetter__('portrait_id', function() {
-				return portrait_id;
-			});
-				
-			_this.__defineSetter__('portrait_id', function(portrait) {
-				portrait_id = portrait;
-				var remove_link = portrait_area.find('.remove');
-				if(portrait_id === null) {
-					portrait_area.find('.portrait').empty();
-					remove_link.hide();
-				} else {
-					remove_link.show();
-					Widget.callStatic('document_detail', 'documentPreview', portrait_id, 194, function(html) {
-						portrait_area.find('.portrait').html(html);
-					});
+			Object.defineProperty(_this, 'portrait_id', {
+				get: function() {
+					return portrait_id;
+				},
+				set: function(portrait) {
+					portrait_id = portrait;
+					var remove_link = portrait_area.find('.remove');
+					if(portrait_id === null) {
+						portrait_area.find('.portrait').empty();
+						remove_link.hide();
+					} else {
+						remove_link.show();
+						Widget.callStatic('document_detail', 'documentPreview', portrait_id, 194, function(html) {
+							portrait_area.find('.portrait').html(html);
+						});
+					}
 				}
 			});
-			
 		});
 		
 		this.handle('saving', function(event, data) {

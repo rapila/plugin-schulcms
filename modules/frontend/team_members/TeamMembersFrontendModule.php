@@ -60,7 +60,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 			$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.team_member.link_title_prefix').$oTeamMember->getFullName());
 			$oItemTemplate->replaceIdentifier('first_function_name', $oTeamMember->getFirstTeamMemberFunctionName());
 
-			$aClassTeachers = $oTeamMember->getIsClassTeacherClasses();
+			$aClassTeachers = $oTeamMember->getIsClassTeacherClasses(true);
 			if(count($aClassTeachers) > 0) {
 				foreach($aClassTeachers as $i => $oClassTeacher) {
 					$aLink = array_merge($this->oClassPage->getFullPathArray(), array($oClassTeacher->getSchoolClass()->getSlug()));

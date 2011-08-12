@@ -105,12 +105,12 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			$oTemplate->replaceIdentifier('students_count', count($aClassStudents));
 		}
 		// teachers
-		$aClassTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->filterByIsClassTeacher(true)->orderBySortOrder()->orderByLastName()->find();
+		$aClassTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->filterByIsClassTeacher(true)->orderBySortOrder()->orderByLastName()->groupByTeamMemberId()->find();
 		$iClassTeacherCount = count($aClassTeachers);
 		foreach($aClassTeachers as $i => $oClassTeacher) {
 			if($i === 0) {
 				if($iClassTeacherCount > 1) {
-					$oTemplate->replaceIdentifier('label_class_teacher', 'KlassenlehrerInnen');
+					$oTemplate->replaceIdentifier('label_class_teacher', StringPeer::getString('wns.class.class_teachers'));
 				} else {
 					$oTemplate->replaceIdentifier('label_class_teacher',	StringPeer::getString('wns.class.class_teacher'.($oClassTeacher->getTeamMember()->getGenderId() === 'f' ? '_female': '_male')));
 				}
@@ -121,14 +121,14 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		}
 
 		// other teachers
-		$aOtherTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->filterByIsClassTeacher(false)->orderBySortOrder()->orderByLastName()->find();
+		$aOtherTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->filterByIsClassTeacher(false)->orderBySortOrder()->orderByLastName()->groupByTeamMemberId()->find();
 		$iOtherTeachers = count($aOtherTeachers);
 		foreach($aOtherTeachers as $i => $oOtherTeacher) {
 			if($i === 0) {
-				$oTemplate->replaceIdentifier('label_other_teacher', 'Weitere LehrerInnen');
+				$oTemplate->replaceIdentifier('label_other_teacher', StringPeer::getString('wns.class.other_teachers'));
 			}
 			if($oOtherTeacher->getTeamMember()->getFullName()) {
-				$aTeacherLink = array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug()));
+				$aTeacherLink = array_merge($this->oTeamPage->getFullPathArray(), array($oOtherTeacher->getTeamMember()->getSlug()));
 				$oOtherTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aTeacherLink)), $oOtherTeacher->getTeamMember()->getFullName());
 				$sComma = $i < ($iOtherTeachers-1) ? ', ' : '';
 
@@ -171,12 +171,16 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			return null;
 		}
 		$aClasses = $_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY];
+		if(count($aClasses) === 0) {
+			return null;
+		}
 		$aClassIds = array();
 		foreach($aClasses as $oClass) {
 			$aClassIds[] = $oClass->getId();
 		}
 		$oTemplate = $this->constructTemplate('detail_context');
 		// main class attributes
+
 		if($aClasses[0]->getDocumentRelatedByClassScheduleId()) {
 			$oTemplate->replaceIdentifier('stundenplan', TagWriter::quickTag('a', array('href' => $aClasses[0]->getDocumentRelatedByClassScheduleId()->getDisplayUrl(), 'class' => "stundenplan", 'title' => StringPeer::getString('wns.download_stundenplan')), ' '));
 		}
