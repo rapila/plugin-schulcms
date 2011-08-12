@@ -65,7 +65,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 				foreach($aClassTeachers as $i => $oClassTeacher) {
 					$aLink = array_merge($this->oClassPage->getFullPathArray(), array($oClassTeacher->getSchoolClass()->getSlug()));
 					if($i > 0) {
-						$oItemTemplate->replaceIdentifierMultiple('shool_class', ', ');
+						$oItemTemplate->replaceIdentifierMultiple('school_class', ', ');
 					}
 					$oItemTemplate->replaceIdentifierMultiple('school_class', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.class.link_title_prefix').$oClassTeacher->getSchoolClass()->getName(), 'href' => LinkUtil::link($aLink)), $oClassTeacher->getSchoolClass()->getName()));
 				}
