@@ -12,6 +12,10 @@ class SchoolPeer extends BaseSchoolPeer {
 	private static $SCHOOL = null;
 	private static $ACTIVE_FUNCTION_GROUPS = null;
 	
+	public static function getPeriodFromYear($sYear) {
+		return $sYear.'-'.(substr($sYear + 1, 2));
+	}
+	
 	public static function getDocumentCategoryConfig($sKey) { 
 		if(!is_array(self::$EXTERNALLY_MANAGED_DOCUMENT_CATEGORIES)) {
 			self::$EXTERNALLY_MANAGED_DOCUMENT_CATEGORIES = Settings::getSetting('school_settings', 'externally_managed_document_categories', array());
@@ -64,7 +68,7 @@ class SchoolPeer extends BaseSchoolPeer {
 			return self::$SCHOOL->getCurrentYear();
 		}
 	}
-	
+
 	public static function getSchoolId() {
 		$iSchoolId = Settings::getSetting("school_settings", '***REMOVED***_school_id', null);
 		if($iSchoolId) {

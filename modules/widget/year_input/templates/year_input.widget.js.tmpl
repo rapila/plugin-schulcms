@@ -1,0 +1,22 @@
+Widget.types.year_input = {
+	prepare: function() {
+		this.fill_content();
+		this._element.change(function() {
+			if(this.settings.store_value) {
+				this.setSelectedYear(this._element.val());
+			}
+			this.fire('value-changed', this._element.val());
+		}.bind(this));
+	},
+
+	fill_content: function() {
+		this._element.empty();
+		this.allSchoolYears(function(school_years) {
+			this._element.populate(school_years, this.getSelectedYear());
+		});
+	},
+
+	settings: {
+		store_value: false
+	}
+};

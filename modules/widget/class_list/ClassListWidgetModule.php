@@ -7,6 +7,7 @@ class ClassListWidgetModule extends WidgetModule {
 	private $oListWidget;
 	public $oDelegateProxy;
 	public $oClassesWithStudentsInputFilter;
+	public $oSchoolYearInputFilter;
 	public $bShowWithStudentsOnly;
 	
 	public function __construct() {
@@ -15,6 +16,8 @@ class ClassListWidgetModule extends WidgetModule {
 		$this->oListWidget->setDelegate($this->oDelegateProxy);
 		$this->oClassesWithStudentsInputFilter = WidgetModule::getWidget('classes_with_students_input', null, true);
 		$this->oDelegateProxy->setCountStudents(true);
+		$this->oDelegateProxy->setYearPeriod(SchoolPeer::getCurrentYear());
+		$this->oSchoolYearInputFilter = WidgetModule::getWidget('year_input', null, $this->oDelegateProxy->getYearPeriod());
 	}
 	
 	public function doWidget() {
@@ -39,7 +42,9 @@ class ClassListWidgetModule extends WidgetModule {
         $aResult['field_name'] = 'class_type_name';
 				break;
 			case 'year_period':
-				$aResult['heading'] = StringPeer::getString('wns.class.year_period');
+				$aResult['heading'] = '';
+				$aResult['heading_filter'] = array('year_input', $this->oSchoolYearInputFilter->getSessionKey());
+				$aResult['is_sortable'] = false;
 				break;
 			case 'level':
 				$aResult['heading'] = StringPeer::getString('wns.class.level');
@@ -94,6 +99,9 @@ class ClassListWidgetModule extends WidgetModule {
 	
 	public function getFilterTypeForColumn($sColumnIdentifier) {
     if($sColumnIdentifier === 'class_type_id') {
+			return CriteriaListWidgetDelegate::FILTER_TYPE_IS;
+		}
+    if($sColumnIdentifier === 'year_period') {
 			return CriteriaListWidgetDelegate::FILTER_TYPE_IS;
 		}
 		return null;
