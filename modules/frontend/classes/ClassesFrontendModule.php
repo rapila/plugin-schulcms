@@ -12,6 +12,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 	
 	const MODE_SELECT_KEY = 'display_mode';
 	const DETAIL_IDENTIFIER_EVENT = 'anlass';
+	const CACHE_KEY = 'classes_list_';
 	
 	public static function acceptedRequestParams() {
 		return array(self::DETAIL_IDENTIFIER_EVENT);
@@ -36,6 +37,11 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 	}
 
 	private function renderKlassenliste($iClassTypeId = null) {
+    $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($iClassTypeId !== null ? $iClassTypeId.'_' : "").DIRNAME_FULL_PAGE);  
+    if($oCache->cacheFileExists()) {
+      return $oCache->getContentsAsVariable();
+    }
+
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$aClasses = SchoolClassPeer::getSchoolUnitsBySchool(null, $iClassTypeId);
 		$sOddEven = 'odd';
@@ -63,6 +69,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			}
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
+		$oCache->setContents($oTemplate);
 		return $oTemplate;
 	}
 	

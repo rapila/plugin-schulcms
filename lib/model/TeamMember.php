@@ -17,16 +17,6 @@ class TeamMember extends BaseTeamMember {
 		return substr($this->getFirstName(),0,1).'. '.$this->getLastName();
 	}
 	
-	public function getSchoolClasses($bToString=false) {
-		foreach($this->getClassTeachersJoinSchoolClass(Criteria::INNER_JOIN) as $oSchoolClass) {
-			if(!$bToString) {
-				return $oSchoolClass;
-			}			
-			return $oSchoolClass->getSchoolClass()->getName();
-		}
-		return null;
-	}
-		
 	/**
 	* getIsClassTeacherClasses()
 	* @param boolean $bGroupByUnitName, default=false
@@ -40,6 +30,16 @@ class TeamMember extends BaseTeamMember {
 			$oCriteria->addGroupByColumn(SchoolClassPeer::UNIT_NAME);
 		}
 		return $this->getClassTeachersJoinSchoolClass($oCriteria);
+	}
+
+	public function getClassTeachersJoinSchoolClass($oCriteria = null, $oCon = null, $sJoinBehavior = Criteria::LEFT_JOIN, $bIncludeOldClasses = false) {
+		if(!$oCriteria) {
+			$oCriteria = new Criteria();
+		}
+		if(!$bIncludeOldClasses) {
+			$oCriteria->add(SchoolClassPeer::YEAR, SchoolPeer::getCurrentYear());
+		}
+		return parent::getClassTeachersJoinSchoolClass($oCriteria, $oCon, $sJoinBehavior);
 	}
 		
 	/**
