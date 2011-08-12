@@ -36,7 +36,7 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 		return $aResult;
 	}
 	
-	public static function getClassPageLink($oClass = null) {
+	public static function getClassPageLink($mClass = null) {
 		$sPageIdentifier = SchoolPeer::getPageIdentifier('classes');
 		if(self::$CLASS_PAGE === null) {
 			self::$CLASS_PAGE = PageQuery::create()->filterByIdentifier($sPageIdentifier)->findOne();
@@ -44,8 +44,9 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 		if(self::$CLASS_PAGE === null) {
 			throw new Exception(__METHOD__.' There is no page with the identifier: '.$sPageIdentifier);
 		}
-		if($oClass instanceof SchoolClass) {
-			return array_merge(self::$CLASS_PAGE->getFullPathArray(), array($oClass->getSlug()));
+		$mClass = $mClass instanceof SchoolClass ? $mClass->getSlug() : $mClass;
+		if($mClass) {
+			return array_merge(self::$CLASS_PAGE->getFullPathArray(), array($mClass));
 		}
 		return self::$CLASS_PAGE->getFullPathArray();
 	}
