@@ -20,8 +20,7 @@ class TeamMemberFilterModule extends FilterModule {
 			return;
 		}
 		$oCriteria = TeamMemberQuery::create()->distinct();
-		$oCriteria->clearSelectColumns()->addSelectColumn(TeamMemberPeer::SLUG)
-		->addSelectColumn(TeamMemberPeer::LAST_NAME)->addSelectColumn(TeamMemberPeer::FIRST_NAME);
+		$oCriteria->clearSelectColumns()->addSelectColumn(TeamMemberPeer::SLUG)->addSelectColumn(TeamMemberPeer::LAST_NAME)->addSelectColumn(TeamMemberPeer::FIRST_NAME);
 		$oCriteria->excludeInactive()->orderBySlug();	
 		$aIds = explode(self::TEAM_FUNCTION_GROUP_ID_SEPARATOR, $oNavigationItem->getIdentifier());
 		if(count($aIds) === 2) {
