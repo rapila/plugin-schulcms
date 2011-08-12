@@ -63,6 +63,12 @@ class SchoolPeer extends BaseSchoolPeer {
 		return self::$SCHOOL;
 	}
 	
+	public static function getCurrentYear() {
+		if(self::getSchool()) {
+			return self::$SCHOOL->getCurrentYear();
+		}
+	}
+
 	public static function getSchoolId() {
 		$iSchoolId = Settings::getSetting("school_settings", '***REMOVED***_school_id', null);
 		if($iSchoolId) {

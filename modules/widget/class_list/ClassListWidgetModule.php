@@ -16,8 +16,8 @@ class ClassListWidgetModule extends WidgetModule {
 		$this->oListWidget->setDelegate($this->oDelegateProxy);
 		$this->oClassesWithStudentsInputFilter = WidgetModule::getWidget('classes_with_students_input', null, true);
 		$this->oDelegateProxy->setCountStudents(true);
-		$this->oSchoolYearInputFilter = WidgetModule::getWidget('year_input', null, SchoolPeer::getSchool()->getCurrentYear());
-		ErrorHandler::log('school_year_filter', $this->oSchoolYearInputFilter);
+		$this->oDelegateProxy->setYearPeriod(SchoolPeer::getCurrentYear());
+		$this->oSchoolYearInputFilter = WidgetModule::getWidget('year_input', null, $this->oDelegateProxy->getYearPeriod());
 	}
 	
 	public function doWidget() {
@@ -99,6 +99,9 @@ class ClassListWidgetModule extends WidgetModule {
 	
 	public function getFilterTypeForColumn($sColumnIdentifier) {
     if($sColumnIdentifier === 'class_type_id') {
+			return CriteriaListWidgetDelegate::FILTER_TYPE_IS;
+		}
+    if($sColumnIdentifier === 'year_period') {
 			return CriteriaListWidgetDelegate::FILTER_TYPE_IS;
 		}
 		return null;
