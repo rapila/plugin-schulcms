@@ -38,8 +38,8 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	
 	private function renderTeamliste() {
 		// get current navigation item and link array for detail
-		$oPage = FrontendManager::$CURRENT_NAVIGATION_ITEM;
-		$aLinkParams = $oPage instanceof VirtualNavigationItem ? $oPage->getParent()->getMe()->getFullPathArray() : $oPage->getMe()->getFullPathArray();
+		$oPage = FrontendManager::$CURRENT_PAGE;
+		$aLinkParams = $oPage->getFullPathArray();
 		
 		$oTemplate = $this->constructTemplate('list');
 		$oTeamMemberQuery = TeamMemberQuery::create()->excludeInactive();
@@ -63,10 +63,10 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 			$aClassTeachers = $oTeamMember->getIsClassTeacherClasses(true);
 			if(count($aClassTeachers) > 0) {
 				foreach($aClassTeachers as $i => $oClassTeacher) {
-					$aLink = array_merge($this->oClassPage->getFullPathArray(), array($oClassTeacher->getSchoolClass()->getSlug()));
 					if($i > 0) {
 						$oItemTemplate->replaceIdentifierMultiple('school_class', ', ');
 					}
+					$aLink = $oClassTeacher->getSchoolClass()->getClassLink($this->oClassPage);
 					$oItemTemplate->replaceIdentifierMultiple('school_class', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.class.link_title_prefix').$oClassTeacher->getSchoolClass()->getName(), 'href' => LinkUtil::link($aLink)), $oClassTeacher->getSchoolClass()->getName()));
 				}
 			} else {
