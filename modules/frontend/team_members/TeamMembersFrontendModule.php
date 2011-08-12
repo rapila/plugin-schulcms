@@ -13,6 +13,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	const MODE_SELECT_KEY = 'display_mode';
 	const PORTRAIT_DUMMY_ID = 7;
 	const IDENTIFIER_REQUEST_KEY = 'name';
+	const CACHE_KEY = 'team_member_list_';
 
 	public function renderFrontend() { 
 		$aOptions = @unserialize($this->getData());
@@ -37,6 +38,11 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	}
 	
 	private function renderTeamliste() {
+    // $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($this->iFunctionGroupId !== null ? $this->iFunctionGroupId.'_' : "").DIRNAME_FULL_PAGE);  
+    // if($oCache->cacheFileExists()) {
+    //   return $oCache->getContentsAsVariable();
+    // }
+		
 		// get current navigation item and link array for detail
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$aLinkParams = $oPage->getFullPathArray();
@@ -76,7 +82,8 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 			$oItemTemplate->replaceIdentifier('profession', $oTeamMember->getProfession());
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
-		return $oTemplate;
+		// $oCache->setContents($oTemplate);
+    return $oTemplate;
 	}
 	
 	public function renderDetail() {
@@ -96,13 +103,10 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
   			$bChange = null;
 		    foreach($aSchoolClasses as $oSchoolClass) {
 		      if($oSchoolClass->getIsClassTeacher() !== $bChange) {
-						// var_dump('klassenteacher '.($oSchoolClass->getIsClassTeacher() ? 'ja' : 'nein').' '.$oSchoolClass->getFunctionName());
 						$bChange = $oSchoolClass->getIsClassTeacher();
 						if($oSchoolClass->getIsClassTeacher()) {
 	  					$oTemplate->replaceIdentifier('class_teacher', self::$TEAM_MEMBER->getClassTeacherTitle(). ' von: ');
-						} else {
-  						// $oTemplate->replaceIdentifier('class_teacher', $oSchoolClass->getFunctionName());
-						}
+						} 
 					}
 		      $oItemTemplate = $this->constructTemplate('class_item');
   				$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link(array_merge($this->oClassPage->getFullPathArray(), array($oSchoolClass->getSchoolClass()->getSlug())))), $oSchoolClass->getSchoolClass()->getFullClassName()));
@@ -120,10 +124,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 			return $oTemplate;
 		}
 	}
-	
- /**
-	* use in SchoolFilter for title
-	*/
+
 	public function getTeamMember() {
 		return self::$TEAM_MEMBER;
 	}

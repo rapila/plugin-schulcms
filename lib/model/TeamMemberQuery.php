@@ -33,13 +33,15 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		
 		$this->addJoin(TeamMemberPeer::ID, TeamMemberFunctionPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
 		$this->addJoin(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID, SchoolFunctionPeer::ID, Criteria::INNER_JOIN);
-		$sTeacherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeachers(), Criteria::IN);
-		$sOtherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForOthers(), self::IN);
+		$oTeacherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeachers(), Criteria::IN);
 		$this->addJoin(TeamMemberPeer::ID, ClassTeacherPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
-		$sTeacherCrit->addAnd($this->getNewCriterion(ClassTeacherPeer::TEAM_MEMBER_ID, null, self::ISNOTNULL));
+		$oTeacherCrit->addAnd($this->getNewCriterion(ClassTeacherPeer::TEAM_MEMBER_ID, null, self::ISNOTNULL));
+		$this->addJoin(ClassTeacherPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, Criteria::INNER_JOIN);
+		$oTeacherCrit->addAnd($this->getNewCriterion(SchoolClassPeer::YEAR, SchoolPeer::getCurrentYear()));
 		
-		$sTeacherCrit->addOr($sOtherCrit);
-		$this->addAnd($sTeacherCrit);
+		$oOtherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForOthers(), self::IN);
+		$oTeacherCrit->addOr($oOtherCrit);
+		$this->addAnd($oTeacherCrit);
 		
 		return $this;
 	}

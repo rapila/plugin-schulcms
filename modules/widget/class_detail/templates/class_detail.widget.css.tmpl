@@ -3,7 +3,7 @@
 }
 
 .ui-dialog.detail-widget-class_detail .ui-accordion-content  {
-  border: none;
+	border: none;
 	padding: 0;
 }
 
@@ -17,17 +17,20 @@
 	background-color: #ebedef;
 }
 
-.ui-dialog.detail-widget-class_detail .ui-dialog-content .ui-state-active, .ui-widget-content .ui-state-active,
-.ui-dialog.detail-widget-class_detail .ui-dialog-content.ui-widget-content .ui-state-default  {
+.ui-dialog.detail-widget-class_detail .ui-dialog-content .ui-state-active,
+.ui-dialog.detail-widget-class_detail .ui-dialog-content.ui-widget-content .ui-state-default, 
+.ui-widget-content .ui-state-active {
 	background:url("") repeat scroll 0 0 #ebedef;
-	border: 0;
 }
 
-.ui-dialog.detail-widget-class_detail h3 {
+.ui-dialog.detail-widget-class_detail .status_section h3 {
 	border-bottom: #C1C2C4 1px solid;
+	font-weight: 700;
+	margin-bottom: 0.5em;
+	margin-top: 1em;
 }
 
-.detail-widget-class_detail .status_section {
+.ui-dialog.detail-widget-class_detail .status_section {
 	 width: 21em;
 }
 
@@ -41,7 +44,7 @@
 	width: 22em;
 }
 
-.detail-widget-class_detail .status_section .hide_if_not_saved label {
+.ui-dialog.detail-widget-class_detail .status_section .hide_if_not_saved label {
 	width: 8em;
 }
 
@@ -51,12 +54,12 @@
 	text-align: center;
 	width: 250px;
 	height: 194px;
-  display: block;
-  line-height: 1.6em;
-  min-height: 7em;
-  padding: 0;
+	display: block;
+	line-height: 1.6em;
+	min-height: 7em;
+	padding: 0;
 	margin: .5em 1em;
-  color: #bebebe;
+	color: #bebebe;
 	border: 1px solid #f1f1f1;
 }
 
@@ -88,21 +91,22 @@ a.pdf {
 	padding-left:1.5em;
 	padding-bottom: .3em;
 	color: #999;
-	background: transparent url("../../../site/web/images/admin/pdf.png") no-repeat;
+	background: transparent url("{{writeDirectInclude=admin/pdf.png;template=location_only}}") no-repeat;
 	display:inline-block;
 }
 
 .events_and_galleries a.add_entry {
 	height: 16px;
 	width: 16px;
-	display:none;
+	display: inline-block !important;
 }
 
 .events_and_galleries table {
 	width: 100%;
 }
 
-fieldset.option_groups, fieldset.option_groups:first-child {
+fieldset.option_groups,
+fieldset.option_groups:first-child {
 	margin-top: 1.0em;
 }
 
