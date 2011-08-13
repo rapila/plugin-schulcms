@@ -57,5 +57,12 @@ class TeamMemberPeer extends BaseTeamMemberPeer {
 	public static function countNonTeachingPersonel() {
 		return self::countTeamMembersByFunctionGroupIds();
 	}
+	
+	public static function getInactiveDatabaseTeachers() {
+		$oCriteria = new Criteria();
+		$oCriteria->addJoin(TeamMemberPeer::ID, ClassTeacherPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
+		$oCriteria->add(ClassTeacherPeer::SCHOOL_CLASS_ID, null, Criteria::ISNULL);
+		return TeamMemberPeer::doSelect($oCriteria);
+	}
 }
 
