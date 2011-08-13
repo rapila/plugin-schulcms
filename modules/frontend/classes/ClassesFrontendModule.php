@@ -60,7 +60,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassTypeName());
 			$oItemTemplate->replaceIdentifier('count_students', $oClass->countClassStudents());
 			$oItemTemplate->replaceIdentifier('year', $oClass->getYearPeriod());
-			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link(array_merge($oPage->getFullPathArray(), array($oClass->getSlug()))));
+			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getClassLink($oPage)));
 			$oItemTemplate->replaceIdentifier('detail_title', StringPeer::getString('wns.class.view_detail').$oClass->getUnitName());
 			if($oClass->getDocumentRelatedByClassScheduleId()) {
 				$oItemTemplate->replaceIdentifier('stundenplan', TagWriter::quickTag('a', array('href' => $oClass->getDocumentRelatedByClassScheduleId()->getDisplayUrl(), 'class' => "stundenplan", 'title' => StringPeer::getString('wns.download_stundenplan')), ' '));

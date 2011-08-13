@@ -32,7 +32,7 @@ class TeamMember extends BaseTeamMember {
 		return $this->getClassTeachersJoinSchoolClass($oCriteria);
 	}
 
-	public function getClassTeachersJoinSchoolClass($oCriteria = null, $oCon = null, $sJoinBehavior = Criteria::LEFT_JOIN, $bIncludeOldClasses = false) {
+	public function getClassTeachersJoinSchoolClass($oCriteria = null, $oCon = null, $sJoinBehavior = Criteria::INNER_JOIN, $bIncludeOldClasses = false) {
 		if(!$oCriteria) {
 			$oCriteria = new Criteria();
 		}

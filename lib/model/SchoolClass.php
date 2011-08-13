@@ -58,6 +58,17 @@ class SchoolClass extends BaseSchoolClass {
 	public function getYearPeriod() {
 		return SchoolPeer::getPeriodFromYear($this->getYear());
 	}
+
+	public function getClassLink($oClassesPage = null) {
+		if($oClassesPage === null) {
+			$oClassesPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_CLASSES));
+		}
+		$aParams = array($this->getSlug());
+		if(!$this->isCurrent()) {
+			array_push($aParams, $this->getYear());
+		}
+		return array_merge($oClassesPage->getFullPathArray(), $aParams);
+	}
 	
 	public function getLinkToClassSchedule() {
 		if($this->getDocumentRelatedByClassScheduleId()) {
@@ -99,6 +110,10 @@ class SchoolClass extends BaseSchoolClass {
 			}
 		}
 		return false;
+	}
+	
+	public function isCurrent() {
+		return $this->getYear() === SchoolPeer::getCurrentYear();
 	}
 	
 	public function isClassLink($iLinkId) {
