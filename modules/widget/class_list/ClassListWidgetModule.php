@@ -28,7 +28,7 @@ class ClassListWidgetModule extends WidgetModule {
 	}
 	
 	public function getColumnIdentifiers() {
-		return array('id', 'name', 'class_type_id', 'year_period', 'level', 'count_students', 'class_teacher_names', 'room_number', 'has_class_portrait', 'link_to_class_schedule', 'count_events', 'count_links');
+		return array('id', 'name', 'class_type_id', 'year_period', 'level', 'count_students', 'class_teacher_names', 'has_class_portrait', 'link_to_class_schedule', 'count_events', 'count_links');
 	}
 	
 	public function getMetadataForColumn($sColumnIdentifier) {
