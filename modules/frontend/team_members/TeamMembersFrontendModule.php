@@ -38,7 +38,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	}
 	
 	private function renderTeamliste() {
-    // $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($this->iFunctionGroupId !== null ? $this->iFunctionGroupId.'_' : "").DIRNAME_FULL_PAGE);  
+    // $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($this->iFunctionGroupId !== null ? $this->iFunctionGroupId.'_' : ""), DIRNAME_PRELOAD);  
     // if($oCache->cacheFileExists()) {
     //   return $oCache->getContentsAsVariable();
     // }

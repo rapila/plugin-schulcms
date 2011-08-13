@@ -37,7 +37,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 	}
 
 	private function renderKlassenliste($iClassTypeId = null) {
-    $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($iClassTypeId !== null ? $iClassTypeId.'_' : "").DIRNAME_FULL_PAGE);  
+    $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($iClassTypeId !== null ? $iClassTypeId.'_' : ""), DIRNAME_PRELOAD);  
     if($oCache->cacheFileExists()) {
       return $oCache->getContentsAsVariable();
     }
