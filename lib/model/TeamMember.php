@@ -150,5 +150,12 @@ class TeamMember extends BaseTeamMember {
 	public function getTeamMemberFunctionsJoinSchoolFunction($oCriteria = null, $oConn = null, $oJoinBehaviour = Criteria::INNER_JOIN) {
 		return parent::getTeamMemberFunctionsJoinSchoolFunction($oCriteria, $oConn, $oJoinBehaviour);
 	}
+	
+	public function delete(PropelPDO $con = null) {
+		if($this->getUserRelatedByUserId()) {
+			$this->getUserRelatedByUserId()->delete();
+		}
+		parent::delete($con);
+	}
 }
 
