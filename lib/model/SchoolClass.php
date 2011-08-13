@@ -130,4 +130,11 @@ class SchoolClass extends BaseSchoolClass {
 		$this->setSlug(StringUtil::normalize(str_replace('-', '', $sName), '-', '-'));
 		return parent::setUnitName($sName);
 	}
+	
+	public function getTeachingUnitName($bTruncate = 15) {
+		if($bTruncate !== null) {
+			return StringUtil::truncate($this->getTeachingUnit(), $bTruncate);
+		}
+		return $this->getTeachingUnit();
+	}
 }
