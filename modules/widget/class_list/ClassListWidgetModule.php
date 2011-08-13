@@ -28,7 +28,7 @@ class ClassListWidgetModule extends WidgetModule {
 	}
 	
 	public function getColumnIdentifiers() {
-		return array('id', 'name', 'class_type_id', 'year_period', 'level', 'count_students', 'class_teacher_names', 'has_class_portrait', 'has_class_schedule', 'count_events', 'count_links');
+		return array('id', 'name', 'teaching_unit_name', 'class_type_id', 'year_period', 'level', 'count_students', 'class_teacher_names', 'has_class_portrait', 'has_class_schedule', 'count_events');
 	}
 	
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -36,6 +36,9 @@ class ClassListWidgetModule extends WidgetModule {
 		switch($sColumnIdentifier) {
 			case 'name':
 				$aResult['heading'] = StringPeer::getString('wns.class.name');
+				break;
+			case 'teaching_unit_name':
+				$aResult['heading'] = StringPeer::getString('wns.class.teaching_unit_short');
 				break;
 			case 'class_type_id':
 				$aResult['heading'] = StringPeer::getString('wns.class.type');
@@ -89,6 +92,9 @@ class ClassListWidgetModule extends WidgetModule {
 		}
 		if($sColumnIdentifier === 'has_class_portrait') {
 			return SchoolClassPeer::CLASS_PORTRAIT_ID;
+		}		
+		if($sColumnIdentifier === 'teaching_unit_name') {
+			return SchoolClassPeer::TEACHING_UNIT;
 		}		
 		if($sColumnIdentifier === 'has_class_schedule') {
 			return SchoolClassPeer::CLASS_SCHEDULE_ID;
