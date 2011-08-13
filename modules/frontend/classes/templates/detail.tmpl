@@ -1,6 +1,6 @@
-<div><a href="{{list_link}}" class="close_detail" title="{{writeString=wns.back_to_list}}"> </a>
+<div><a href="{{list_link}}" class="close_detail" title="{{writeString=wns.back_to_list}}"> </a>{{identifierContext=start;name=portrait_display_url}}
 	<img class="class_portrait" src="{{portrait_display_url}}" alt="{{portrait_alt}}" /><br style="clear:both;"/>
-	
+	{{identifierContext=end;name=portrait_display_url}}
 	<div class="class_info">
   	<label>{{students_count}} SchülerInnen</label><span style="display:block;margin-bottom:1em;">{{students_names}}</span>{{identifierContext=start;name=label_class_teacher}}
  		<label>{{label_class_teacher}}</label>
@@ -8,6 +8,4 @@
 		<label>{{label_other_teacher}}</label>{{name_other_teacher}}{{identifierContext=end;name=label_other_teacher}}
 	</div>
 </div>
-<div>
 
-</div>
