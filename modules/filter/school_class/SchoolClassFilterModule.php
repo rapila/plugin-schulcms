@@ -48,8 +48,9 @@ class SchoolClassFilterModule extends FilterModule {
 		}
 		if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ITEM_TYPE) {
 			if(count($_REQUEST[self::CLASSES_REQUEST_KEY]) === 0) {
+				$bIsNotFoundMutable = &$aNotFound[0];
 				//No current class exists (history only)
-				$aNotFound['not_found'] = true;
+				$bIsNotFoundMutable = true;
 			}
 		}
 	}
