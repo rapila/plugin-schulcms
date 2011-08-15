@@ -6,6 +6,7 @@
 class SchoolPeer extends BaseSchoolPeer {
 	
 	const PAGE_IDENTIFIER_CLASSES = 'classes';
+	const PAGE_IDENTIFIER_TEAM = 'team';
 	private static $EXTERNALLY_MANAGED_DOCUMENT_CATEGORIES = null;
 	private static $EXTERNALLY_MANAGED_LINK_CATEGORIES = null;
 	private static $PAGE_IDENTIFIERS = null;

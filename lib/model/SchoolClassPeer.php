@@ -52,6 +52,6 @@ class SchoolClassPeer extends BaseSchoolClassPeer {
 		$oCriteria->addGroupByColumn(SchoolClassPeer::UNIT_NAME);
 		return $oCriteria;
 	}
-
+	
 }
 

@@ -46,6 +46,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		$aClasses = SchoolClassPeer::getSchoolUnitsBySchool(null, $iClassTypeId);
 		$sOddEven = 'odd';
 		$oTemplate = $this->constructTemplate('list');
+		$iCountStudents = 0;
 		foreach($aClasses as $oClass) {
 			$oItemTemplate = $this->constructTemplate('list_item');
 			$oItemTemplate->replaceIdentifier('oddeven', $sOddEven = $sOddEven === 'even' ? 'odd' : 'even');
@@ -58,7 +59,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 				}
 			}
 			$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassTypeName());
-			$oItemTemplate->replaceIdentifier('count_students', $oClass->countClassStudents());
+			$oItemTemplate->replaceIdentifier('count_students', ClassStudentPeer::countStudents($oClass->getUnitName()));
 			$oItemTemplate->replaceIdentifier('year', $oClass->getYearPeriod());
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getClassLink($oPage)));
 			$oItemTemplate->replaceIdentifier('detail_title', StringPeer::getString('wns.class.view_detail').$oClass->getUnitName());
@@ -100,6 +101,8 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		}
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$oTemplate->replaceIdentifier('list_link', LinkUtil::link($oPage->getFullPathArray()));
+		$oTemplate->replaceIdentifier('unit_name', $aClasses[0]->getUnitName());
+		$oTemplate->replaceIdentifier('full_unit_name', $aClasses[0]->getFullClassName());
 		// students
 		$aClassStudents = ClassStudentQuery::create()->filterBySchoolClassId($aClassIds)->orderByFirstName()->find();
 		if(count($aClassStudents) > 0) {
@@ -220,9 +223,11 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		}
 		
 		if($bRequiresBackToLink) {
-			$oTemplate->replaceIdentifier('class_name', TagWriter::quickTag('a', array('href' => LinkUtil::link($aClassLinkParams)), $aClasses[0]->getFullClassName()));
+			$oTemplate->replaceIdentifier('unit_name', TagWriter::quickTag('a', array('href' => LinkUtil::link($aClassLinkParams)), $aClasses[0]->getUnitName()));
+			$oTemplate->replaceIdentifier('full_unit_name', TagWriter::quickTag('a', array('href' => LinkUtil::link($aClassLinkParams)), $aClasses[0]->getFullClassName()));
 		} else {
-			$oTemplate->replaceIdentifier('class_name', $aClasses[0]->getFullClassName());
+			$oTemplate->replaceIdentifier('full_unit_name', $aClasses[0]->getFullClassName());
+			$oTemplate->replaceIdentifier('unit_name', $aClasses[0]->getUnitName());
 		}
 		
 		// links

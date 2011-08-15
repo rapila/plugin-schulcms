@@ -157,5 +157,13 @@ class TeamMember extends BaseTeamMember {
 		}
 		parent::delete($con);
 	}
+	
+	public function getTeamMemberLink($oTeamMemberPage = null) {
+		if($oTeamMemberPage === null) {
+			$oTeamMemberPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_TEAM));
+		}
+		return array_merge($oTeamMemberPage->getFullPathArray(), array($this->getSlug()));
+	}
+
 }
 

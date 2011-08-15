@@ -45,7 +45,6 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 		
 		// get current navigation item and link array for detail
 		$oPage = FrontendManager::$CURRENT_PAGE;
-		$aLinkParams = $oPage->getFullPathArray();
 		
 		$oTemplate = $this->constructTemplate('list');
 		$oTeamMemberQuery = TeamMemberQuery::create()->excludeInactive();
@@ -62,7 +61,7 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 				$oItemTemplate->replaceIdentifier('is_active_class', ' active');
 				$oItemTemplate->replaceIdentifier('show_active', '➜');
 			}
-			$oItemTemplate->replaceIdentifier('detail_link_name', TagWriter::quickTag('a', array('href' => LinkUtil::link(array_merge($aLinkParams, array($oTeamMember->getSlug())))),$oTeamMember->getFullNameInverted()));
+			$oItemTemplate->replaceIdentifier('detail_link_name', TagWriter::quickTag('a', array('href' => LinkUtil::link($oTeamMember->getTeamMemberLink($oPage))),$oTeamMember->getFullNameInverted()));
 			$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.team_member.link_title_prefix').$oTeamMember->getFullName());
 			$oItemTemplate->replaceIdentifier('first_function_name', $oTeamMember->getFirstTeamMemberFunctionName());
 
