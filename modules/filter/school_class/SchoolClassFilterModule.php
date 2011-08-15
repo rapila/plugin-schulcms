@@ -33,12 +33,17 @@ class SchoolClassFilterModule extends FilterModule {
 	}
 	
 	public function onPageHasBeenSet($oPage, $bIsNotFound, $oNavigationItem) {
+		$oQuery = null;
 		if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ITEM_TYPE) {
 			$sSlug = $oNavigationItem->getName();
-			$_REQUEST[self::CLASSES_REQUEST_KEY] = SchoolClassQuery::create()->filterByIsCurrent(true)->filterByHasStudents()->filterBySlug($sSlug)->find();
+			$oQuery = SchoolClassQuery::create()->filterByIsCurrent(true)->filterByHasStudents()->filterBySlug($sSlug);
 		} else if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ARCHIVE_ITEM_TYPE) {
 			list($sSlug, $iYear) = $oNavigationItem->getData();
-			$_REQUEST[self::CLASSES_REQUEST_KEY] = SchoolClassQuery::create()->filterByHasStudents()->filterBySlug($sSlug)->filterByYear($iYear)->find();
+			$oQuery = SchoolClassQuery::create()->filterByHasStudents()->filterBySlug($sSlug)->filterByYear($iYear);
+		}
+		if($oQuery !== null) {
+			$oQuery->clearSelectColumns()->addSelectColumn(SchoolClassPeer::ID);
+			$_REQUEST[self::CLASSES_REQUEST_KEY] = SchoolClassPeer::doSelectStmt($oQuery)->fetchAll(PDO::FETCH_COLUMN);
 		}
 	}
 	
@@ -48,8 +53,9 @@ class SchoolClassFilterModule extends FilterModule {
 		}
 		if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ITEM_TYPE) {
 			if(count($_REQUEST[self::CLASSES_REQUEST_KEY]) === 0) {
+				$bIsNotFoundMutable = &$aNotFound[0];
 				//No current class exists (history only)
-				$aNotFound['not_found'] = true;
+				$bIsNotFoundMutable = true;
 			}
 		}
 	}
