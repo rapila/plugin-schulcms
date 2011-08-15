@@ -83,7 +83,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		if(!isset($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY])) {
 			return null;
 		}
-		$aClasses = $_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY];
+		$aClasses = SchoolClassQuery::create()->filterById($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY])->find();
 		$aClassIds = array();
 		foreach($aClasses as $oClass) {
 			$aClassIds[] = $oClass->getId();
@@ -177,7 +177,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		if(!isset($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY])) {
 			return null;
 		}
-		$aClasses = $_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY];
+		$aClasses = SchoolClassQuery::create()->filterById($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY])->find();
 		if(count($aClasses) === 0) {
 			return null;
 		}
