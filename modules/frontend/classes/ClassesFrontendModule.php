@@ -30,10 +30,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			}
 			return $this->renderKlassenDetail();
 		}
-		if(is_numeric($aOptions[self::MODE_SELECT_KEY])) {
-			return $this->renderKlassenliste($aOptions[self::MODE_SELECT_KEY]);
-		}
-		return $this->renderKlassenliste();
+		return $this->renderKlassenliste(is_numeric($aOptions[self::MODE_SELECT_KEY]) ? $aOptions[self::MODE_SELECT_KEY] : null);
 	}
 
 	private function renderKlassenliste($iClassTypeId = null) {
@@ -44,20 +41,12 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$aClasses = SchoolClassPeer::getSchoolUnitsBySchool(null, $iClassTypeId);
-		$sOddEven = 'odd';
 		$oTemplate = $this->constructTemplate('list');
-		$iCountStudents = 0;
-		foreach($aClasses as $oClass) {
+		$sOddEven = 'odd';
+		foreach($aClasses as $i => $oClass) {
 			$oItemTemplate = $this->constructTemplate('list_item');
 			$oItemTemplate->replaceIdentifier('oddeven', $sOddEven = $sOddEven === 'even' ? 'odd' : 'even');
 			$oItemTemplate->replaceIdentifier('name', $oClass->getUnitName());
-			$aClassTeachers = $oClass->getClassTeachersOrdered();
-			foreach($aClassTeachers as $i => $oClassTeacher) {
-				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.team_member.view_detail').$oClassTeacher->getTeamMember()->getFullName(), 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug())))), $oClassTeacher->getTeamMember()->getFullNameShort()));
-				if($i < count($aClassTeachers)-1) {
-					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ');
-				}
-			}
 			$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassTypeName());
 			$oItemTemplate->replaceIdentifier('count_students', ClassStudentPeer::countStudents($oClass->getUnitName()));
 			$oItemTemplate->replaceIdentifier('year', $oClass->getYearPeriod());
@@ -67,6 +56,13 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 				$oItemTemplate->replaceIdentifier('stundenplan', TagWriter::quickTag('a', array('href' => $oClass->getDocumentRelatedByClassScheduleId()->getDisplayUrl(), 'class' => "stundenplan", 'title' => StringPeer::getString('wns.download_stundenplan')), ' '));
 			} else {
 				$oItemTemplate->replaceIdentifier('stundenplan', '-');
+			}
+			$aClassTeachers = $oClass->getClassTeachersOrdered();
+			foreach($aClassTeachers as $i => $oClassTeacher) {
+				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.team_member.view_detail').$oClassTeacher->getTeamMember()->getFullName(), 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug())))), $oClassTeacher->getTeamMember()->getFullNameShort()));
+				if($i < count($aClassTeachers)-1) {
+					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ');
+				}
 			}
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
@@ -89,8 +85,8 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		foreach($aClasses as $oClass) {
 			$aClassIds[] = $oClass->getId();
 		}
-		$oProtraitDummyId = 46;
 		$oTemplate = $this->constructTemplate('detail');
+
 		// portrait
 		foreach($aClasses as $oClass) {
 			$oPortrait = $oClass->getDocumentRelatedByClassPortraitId();
@@ -99,10 +95,10 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 				$oTemplate->replaceIdentifierMultiple('portrait_alt', "Portrait von ". $aClasses[0]->getUnitName());
 			}
 		}
-		$oPage = FrontendManager::$CURRENT_PAGE;
-		$oTemplate->replaceIdentifier('list_link', LinkUtil::link($oPage->getFullPathArray()));
+		$oTemplate->replaceIdentifier('list_link', LinkUtil::link(FrontendManager::$CURRENT_PAGE->getFullPathArray()));
 		$oTemplate->replaceIdentifier('unit_name', $aClasses[0]->getUnitName());
 		$oTemplate->replaceIdentifier('full_unit_name', $aClasses[0]->getFullClassName());
+
 		// students
 		$aClassStudents = ClassStudentQuery::create()->filterBySchoolClassId($aClassIds)->orderByFirstName()->find();
 		if(count($aClassStudents) > 0) {
@@ -114,6 +110,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			}
 			$oTemplate->replaceIdentifier('students_count', count($aClassStudents));
 		}
+
 		// teachers
 		$aClassTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->filterByIsClassTeacher(true)->orderBySortOrder()->orderByLastName()->groupByTeamMemberId()->find();
 		$iClassTeacherCount = count($aClassTeachers);
