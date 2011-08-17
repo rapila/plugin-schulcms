@@ -34,10 +34,10 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 	}
 
 	private function renderKlassenliste($iClassTypeId = null) {
-    $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($iClassTypeId !== null ? $iClassTypeId.'_' : ""), DIRNAME_PRELOAD);  
-    if($oCache->cacheFileExists()) {
-      return $oCache->getContentsAsVariable();
-    }
+    // $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($iClassTypeId !== null ? $iClassTypeId.'_' : ""), DIRNAME_PRELOAD);  
+    // if($oCache->cacheFileExists()) {
+    //   return $oCache->getContentsAsVariable();
+    // }
 
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$aClasses = SchoolClassPeer::getSchoolUnitsBySchool(null, $iClassTypeId);
@@ -46,9 +46,9 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		foreach($aClasses as $i => $oClass) {
 			$oItemTemplate = $this->constructTemplate('list_item');
 			$oItemTemplate->replaceIdentifier('oddeven', $sOddEven = $sOddEven === 'even' ? 'odd' : 'even');
+			// get all infos that are independent of teaching unit
 			$oItemTemplate->replaceIdentifier('name', $oClass->getUnitName());
 			$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassTypeName());
-			$oItemTemplate->replaceIdentifier('count_students', ClassStudentPeer::countStudents($oClass->getUnitName()));
 			$oItemTemplate->replaceIdentifier('year', $oClass->getYearPeriod());
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getClassLink($oPage)));
 			$oItemTemplate->replaceIdentifier('detail_title', StringPeer::getString('wns.class.view_detail').$oClass->getUnitName());
@@ -57,16 +57,18 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			} else {
 				$oItemTemplate->replaceIdentifier('stundenplan', '-');
 			}
-			$aClassTeachers = $oClass->getClassTeachersOrdered();
-			foreach($aClassTeachers as $i => $oClassTeacher) {
-				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.team_member.view_detail').$oClassTeacher->getTeamMember()->getFullName(), 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug())))), $oClassTeacher->getTeamMember()->getFullNameShort()));
-				if($i < count($aClassTeachers)-1) {
+			// get infos related to teaching unit, all classes concerned
+			$oItemTemplate->replaceIdentifier('count_students', ClassStudentPeer::countStudents($oClass->getUnitName()));
+			$aTeachers = TeamMemberPeer::getTeachersByUnitName($oClass->getUnitName());
+			foreach($aTeachers as $i => $oTeacher) {
+				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.team_member.view_detail').$oTeacher->getFullName(), 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oTeacher->getSlug())))), $oTeacher->getFullNameShort()));
+				if($i < count($aTeachers)-1) {
 					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ');
 				}
 			}
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
-		$oCache->setContents($oTemplate);
+		// $oCache->setContents($oTemplate);
 		return $oTemplate;
 	}
 	
