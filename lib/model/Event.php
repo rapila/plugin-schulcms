@@ -4,7 +4,12 @@
  * @package		 propel.generator.model
  */
 class Event extends BaseEvent {
-	
+
+	public function setTitle($sTitle) {
+		$this->setTitleNormalized(StringUtil::normalize(str_replace('-', '', $sTitle), '-', '-'));
+		return parent::setTitle($sTitle);
+	}
+
 	public function getIsClassEvent() {
 		return $this->getSchoolClassId() !== null;
 	}

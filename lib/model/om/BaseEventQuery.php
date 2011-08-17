@@ -8,6 +8,7 @@
  *
  * @method     EventQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     EventQuery orderByTitle($order = Criteria::ASC) Order by the title column
+ * @method     EventQuery orderByTitleNormalized($order = Criteria::ASC) Order by the title_normalized column
  * @method     EventQuery orderByTeaser($order = Criteria::ASC) Order by the teaser column
  * @method     EventQuery orderByBodyPreview($order = Criteria::ASC) Order by the body_preview column
  * @method     EventQuery orderByBodyReview($order = Criteria::ASC) Order by the body_review column
@@ -28,6 +29,7 @@
  *
  * @method     EventQuery groupById() Group by the id column
  * @method     EventQuery groupByTitle() Group by the title column
+ * @method     EventQuery groupByTitleNormalized() Group by the title_normalized column
  * @method     EventQuery groupByTeaser() Group by the teaser column
  * @method     EventQuery groupByBodyPreview() Group by the body_preview column
  * @method     EventQuery groupByBodyReview() Group by the body_review column
@@ -83,6 +85,7 @@
  *
  * @method     Event findOneById(int $id) Return the first Event filtered by the id column
  * @method     Event findOneByTitle(string $title) Return the first Event filtered by the title column
+ * @method     Event findOneByTitleNormalized(string $title_normalized) Return the first Event filtered by the title_normalized column
  * @method     Event findOneByTeaser(string $teaser) Return the first Event filtered by the teaser column
  * @method     Event findOneByBodyPreview(resource $body_preview) Return the first Event filtered by the body_preview column
  * @method     Event findOneByBodyReview(resource $body_review) Return the first Event filtered by the body_review column
@@ -103,6 +106,7 @@
  *
  * @method     array findById(int $id) Return Event objects filtered by the id column
  * @method     array findByTitle(string $title) Return Event objects filtered by the title column
+ * @method     array findByTitleNormalized(string $title_normalized) Return Event objects filtered by the title_normalized column
  * @method     array findByTeaser(string $teaser) Return Event objects filtered by the teaser column
  * @method     array findByBodyPreview(resource $body_preview) Return Event objects filtered by the body_preview column
  * @method     array findByBodyReview(resource $body_review) Return Event objects filtered by the body_review column
@@ -266,6 +270,28 @@ abstract class BaseEventQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(EventPeer::TITLE, $title, $comparison);
+	}
+
+	/**
+	 * Filter the query on the title_normalized column
+	 * 
+	 * @param     string $titleNormalized The value to use as filter.
+	 *            Accepts wildcards (* and % trigger a LIKE)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    EventQuery The current query, for fluid interface
+	 */
+	public function filterByTitleNormalized($titleNormalized = null, $comparison = null)
+	{
+		if (null === $comparison) {
+			if (is_array($titleNormalized)) {
+				$comparison = Criteria::IN;
+			} elseif (preg_match('/[\%\*]/', $titleNormalized)) {
+				$titleNormalized = str_replace('*', '%', $titleNormalized);
+				$comparison = Criteria::LIKE;
+			}
+		}
+		return $this->addUsingAlias(EventPeer::TITLE_NORMALIZED, $titleNormalized, $comparison);
 	}
 
 	/**

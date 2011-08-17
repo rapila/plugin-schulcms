@@ -2,7 +2,7 @@ Widget.types.team_member_edit = {
 	prepare: function() {
 		var _this = this;
 		this.display_mode = this.getDisplayMode();
-		this.mode_dropdown = jQuery("<select/>").attr('name' , 'display_mode').addClass('ui-widget-content');
+		this.mode_dropdown = jQuery("<select/>").attr({ name: 'display_mode'}).addClass('ui-widget-content');
 		jQuery.each(this.getDisplayModes(), function(key, mode) {
 			_this.mode_dropdown.append(jQuery('<option/>').attr('value', key).text(mode));
 		});

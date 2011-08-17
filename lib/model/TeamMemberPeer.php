@@ -43,7 +43,7 @@ class TeamMemberPeer extends BaseTeamMemberPeer {
 	  return self::doCount($oCriteria);
 	}
 	
-	public static function countTeamMembersByFunctionGroupIds($mFuntionGroups = array(6, 7)) {
+	public static function countTeamMembersByFunctionGroupIds($mFuntionGroups) {
 		$aFunctionGroups = is_array($mFuntionGroups) ? $mFuntionGroups : array($mFuntionGroups);
 		$oCriteria = new Criteria();
 	  $oCriteria->setDistinct();
@@ -55,7 +55,7 @@ class TeamMemberPeer extends BaseTeamMemberPeer {
 	}
 	
 	public static function countNonTeachingPersonel() {
-		return self::countTeamMembersByFunctionGroupIds();
+		return self::countTeamMembersByFunctionGroupIds(SchoolPeer::getActiveFunctionGroupIds('others'));
 	}
 	
 	public static function getInactiveDatabaseTeachers() {
@@ -63,6 +63,21 @@ class TeamMemberPeer extends BaseTeamMemberPeer {
 		$oCriteria->addJoin(TeamMemberPeer::ID, ClassTeacherPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
 		$oCriteria->add(ClassTeacherPeer::SCHOOL_CLASS_ID, null, Criteria::ISNULL);
 		return TeamMemberPeer::doSelect($oCriteria);
+	}
+	
+	public static function getTeachersByUnitName($sUnitName, $bIsClassTeacher=true) {
+		$oCriteria = new Criteria();
+		$oCriteria->setDistinct();
+		$oCriteria->addJoin(self::ID, ClassTeacherPeer::TEAM_MEMBER_ID, Criteria::INNER_JOIN);
+		$oCriteria->addJoin(ClassTeacherPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, Criteria::INNER_JOIN);
+		if($bIsClassTeacher) {
+			$oCriteria->add(ClassTeacherPeer::IS_CLASS_TEACHER, true);
+		}
+		if($sUnitName !== null) {
+			$oCriteria->add(SchoolClassPeer::UNIT_NAME, $sUnitName);
+		}
+		$oCriteria->add(SchoolClassPeer::YEAR, SchoolPeer::getSchool()->getCurrentYear());
+		return self::doSelect($oCriteria);
 	}
 }
 
