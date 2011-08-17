@@ -14,7 +14,9 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		
 		$this->addJoin(TeamMemberPeer::ID, TeamMemberFunctionPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
 		$this->addJoin(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID, SchoolFunctionPeer::ID, Criteria::INNER_JOIN);
-		if(is_numeric($mFunctionGroup)) {
+		if(is_array($mFunctionGroup)) {
+			$this->addAnd(SchoolFunctionPeer::FUNCTION_GROUP_ID, $mFunctionGroup, Criteria::IN);
+		} else if(is_numeric($mFunctionGroup)) {
 			$this->addAnd(SchoolFunctionPeer::FUNCTION_GROUP_ID, $mFunctionGroup);
 		} else {
 			$this->addJoin(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::ID, Criteria::INNER_JOIN);

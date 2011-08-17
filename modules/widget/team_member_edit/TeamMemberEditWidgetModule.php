@@ -2,38 +2,45 @@
 class TeamMemberEditWidgetModule extends PersistentWidgetModule {
 	private $oFrontendModule;
 	private $sDisplayMode;
+	private $aFunctionGroupIds;
 	
 	public function __construct($sSessionKey, $oFrontendModule) {
 		parent::__construct($sSessionKey);
 		$this->oFrontendModule = $oFrontendModule;
-		$this->sDisplayMode = $this->oFrontendModule->widgetData();
+		$aData = $this->oFrontendModule->widgetData();
+		$this->sDisplayMode = $aData[TeamMembersFrontendModule::MODE_SELECT_KEY];
+		$this->aFunctionGroupIds = $aData[TeamMembersFrontendModule::GROUPS_SELECT_KEY];
 	}
 	
-	public function setDisplayMode($sDisplayMode) {
-		$this->sDisplayMode = $sDisplayMode;
-	}
-
 	public function getDisplayMode() {
 		return $this->sDisplayMode;
 	}
 	
-	public function allTeamMembers($iFunctionGroupId = null) {
+	public function getFunctionGroupIds() {
+		return $this->aFunctionGroupIds;
+	}
+
+	public function allTeamMembers($aFunctionGroupIds = null) {
 		$oTeamMemberQuery = TeamMemberQuery::create()->excludeInactive();
-		if($iFunctionGroupId !== null) {
-			$oTeamMemberQuery->filterByTeamMemberFunctionGroup($iFunctionGroupId);
+		if($aFunctionGroupIds !== null) {
+			$oTeamMemberQuery->filterByTeamMemberFunctionGroup($aFunctionGroupIds);
 		}
 		return WidgetJsonFileModule::jsonBaseObjects($oTeamMemberQuery->orderByLastName()->orderByFirstName()->find(), array('id', 'full_name_inverted'));
 	}
 	
-	public function getDisplayModes() {
-	  $aResult = array();
-		foreach(FunctionGroupPeer::getActiveFunctionGroups() as $oFunctionGroup) {
-	    $aResult[$oFunctionGroup->getId()] = $oFunctionGroup->getName();
+	public function displayModes() {
+		$aResult = array();
+		foreach(TeamMembersFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
+			$aResult[$sDisplayMode] = StringPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);
 		}
-	  foreach(TeamMembersFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
-	    $aResult[$sDisplayMode] = StringPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);
-	  }
-		$aFunctionGroups = FunctionGroupPeer::getActiveFunctionGroups();
+		return $aResult;
+	}
+
+	public function functionGroups() {
+		$aResult = array();
+		foreach(FunctionGroupQuery::create()->orderByName()->find() as $oFunctionGroup) {
+			$aResult[$oFunctionGroup->getId()] = $oFunctionGroup->getName();
+		}
 		return $aResult;
 	}
 	

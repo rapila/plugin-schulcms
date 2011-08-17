@@ -9,6 +9,5 @@ class FunctionGroup extends BaseFunctionGroup {
 		$this->setNameNormalized(StringUtil::normalize($sNewName));
 		return parent::setOriginalName($sNewName);
 	}
-
 }
 

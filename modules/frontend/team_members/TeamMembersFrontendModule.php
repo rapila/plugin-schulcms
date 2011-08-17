@@ -7,30 +7,24 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	
 	public static $DISPLAY_MODES = array('team_liste', 'team_mitglied_detail');
 	public static $TEAM_MEMBER;
-	public $iFunctionGroupId;
+	public $aFunctionGroupIds;
 	public $oClassPage;
 	
 	const MODE_SELECT_KEY = 'display_mode';
+	const GROUPS_SELECT_KEY = 'function_groups';
 	const PORTRAIT_DUMMY_ID = 7;
 	const IDENTIFIER_REQUEST_KEY = 'name';
 	const CACHE_KEY = 'team_member_list_';
 
+	public function __construct($oLanguageObject = null, $aPath = null, $iId = 1) {
+		parent::__construct($oLanguageObject, $aPath, $iId);
+		$this->oClassPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('classes'));
+	}
+
 	public function renderFrontend() { 
 		$aOptions = @unserialize($this->getData());
-		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
-			return null;
-		}
-		// always show detail of requested or random team member
-		$this->oClassPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('classes'));
-		if(self::$TEAM_MEMBER === null && isset($_REQUEST[TeamMemberFilterModule::TEAM_REQUEST_KEY])) {
-			self::$TEAM_MEMBER = $_REQUEST[TeamMemberFilterModule::TEAM_REQUEST_KEY];
-			if(self::$TEAM_MEMBER === null) {
-				// handle not found, redirect to error_404 page
-				$this->redirectToNotFound();
-			}
-		}
-		
-		$this->iFunctionGroupId = is_numeric($aOptions[self::MODE_SELECT_KEY]) ? $aOptions[self::MODE_SELECT_KEY] : null;
+		$this->aFunctionGroupIds = @$aOptions[self::GROUPS_SELECT_KEY];
+
 		switch($aOptions[self::MODE_SELECT_KEY]) {
 			case 'team_mitglied_detail' : return $this->renderDetail();
 			default: return $this->renderTeamliste();
@@ -48,8 +42,8 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 		
 		$oTemplate = $this->constructTemplate('list');
 		$oTeamMemberQuery = TeamMemberQuery::create()->excludeInactive();
-		if($this->iFunctionGroupId !== null) {
-			$oTeamMemberQuery->filterByTeamMemberFunctionGroup($this->iFunctionGroupId);
+		if($this->aFunctionGroupIds !== null) {
+			$oTeamMemberQuery->filterByTeamMemberFunctionGroup($this->aFunctionGroupIds);
 		}
 
 		$aTeamMembers = $oTeamMemberQuery->orderByLastName()->orderByFirstName()->find();
@@ -86,62 +80,57 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	}
 	
 	public function renderDetail() {
-		if(self::$TEAM_MEMBER) {
-			$oTemplate = $this->constructTemplate('detail');
-			$oPortrait = self::$TEAM_MEMBER->getDocument();
-			if($oPortrait) {
-				$oTemplate->replaceIdentifier('portrait_display_url', $oPortrait->getDisplayUrl(array('max_width' => 194)));
-				$oTemplate->replaceIdentifier('portrait_alt', "Portrait von ". self::$TEAM_MEMBER->getFullName());
-			}
-			$oTemplate->replaceIdentifier('full_name_inverted', self::$TEAM_MEMBER->getFullName());
-			if(self::$TEAM_MEMBER->getProfession() != null) {
-				$oTemplate->replaceIdentifier('profession', self::$TEAM_MEMBER->getProfession());
-			}
-			$aSchoolClasses = self::$TEAM_MEMBER->getClassTeacherClasses();
-		  if(count($aSchoolClasses) > 0) {
-  			$bChange = null;
-		    foreach($aSchoolClasses as $oSchoolClass) {
-		      if($oSchoolClass->getIsClassTeacher() !== $bChange) {
-						$bChange = $oSchoolClass->getIsClassTeacher();
-						if($oSchoolClass->getIsClassTeacher()) {
-	  					$oTemplate->replaceIdentifier('class_teacher', self::$TEAM_MEMBER->getClassTeacherTitle(). ' von: ');
-						} 
-					}
-		      $oItemTemplate = $this->constructTemplate('class_item');
-  				$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link(array_merge($this->oClassPage->getFullPathArray(), array($oSchoolClass->getSchoolClass()->getSlug())))), $oSchoolClass->getSchoolClass()->getFullClassName()));
-  				$oTemplate->replaceIdentifierMultiple('klassenlehrer_info', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
-		    }
-			}
-			$aTeamMemberFunctions = self::$TEAM_MEMBER->getTeamMemberFunctions();
-			if(count($aTeamMemberFunctions) > 0) {
-		    foreach($aTeamMemberFunctions as $oTeamMemberFunction) {
-		      $oItemTemplate = $this->constructTemplate('function_item');
-  				$oItemTemplate->replaceIdentifier('function_name', $oTeamMemberFunction->getSchoolFunction()->getTitle());
-  				$oTemplate->replaceIdentifierMultiple('functions', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
-		    }
-			}
-			return $oTemplate;
+		if(!self::$TEAM_MEMBER) {
+			return null;
 		}
+		$oTemplate = $this->constructTemplate('detail');
+		$oPortrait = self::$TEAM_MEMBER->getDocument();
+		if($oPortrait) {
+			$oTemplate->replaceIdentifier('portrait_display_url', $oPortrait->getDisplayUrl(array('max_width' => 194)));
+			$oTemplate->replaceIdentifier('portrait_alt', "Portrait von ". self::$TEAM_MEMBER->getFullName());
+		}
+		$oTemplate->replaceIdentifier('full_name_inverted', self::$TEAM_MEMBER->getFullName());
+		if(self::$TEAM_MEMBER->getProfession() != null) {
+			$oTemplate->replaceIdentifier('profession', self::$TEAM_MEMBER->getProfession());
+		}
+		$aSchoolClasses = self::$TEAM_MEMBER->getClassTeacherClasses();
+		if(count($aSchoolClasses) > 0) {
+			$bChange = null;
+			foreach($aSchoolClasses as $oSchoolClass) {
+				if($oSchoolClass->getIsClassTeacher() !== $bChange) {
+					$bChange = $oSchoolClass->getIsClassTeacher();
+					if($oSchoolClass->getIsClassTeacher()) {
+						$oTemplate->replaceIdentifier('class_teacher', self::$TEAM_MEMBER->getClassTeacherTitle(). ' von: ');
+					} 
+				}
+				$oItemTemplate = $this->constructTemplate('class_item');
+				$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link(array_merge($this->oClassPage->getFullPathArray(), array($oSchoolClass->getSchoolClass()->getSlug())))), $oSchoolClass->getSchoolClass()->getFullClassName()));
+				$oTemplate->replaceIdentifierMultiple('klassenlehrer_info', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
+			}
+		}
+		$aTeamMemberFunctions = self::$TEAM_MEMBER->getTeamMemberFunctions();
+		if(count($aTeamMemberFunctions) > 0) {
+			foreach($aTeamMemberFunctions as $oTeamMemberFunction) {
+				$oItemTemplate = $this->constructTemplate('function_item');
+				$oItemTemplate->replaceIdentifier('function_name', $oTeamMemberFunction->getSchoolFunction()->getTitle());
+				$oTemplate->replaceIdentifierMultiple('functions', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
+			}
+		}
+		return $oTemplate;
 	}
 
-	public function getTeamMember() {
-		return self::$TEAM_MEMBER;
-	}
-	
 	public function widgetData() {
 		$aOptions = @unserialize($this->getData()); 
-		return $aOptions[self::MODE_SELECT_KEY];
+		return $aOptions;
 	}
 	
 	public function widgetSave($mData) {
-		$this->oLanguageObject->setData(serialize(array(self::MODE_SELECT_KEY => $mData)));
+		$this->oLanguageObject->setData(serialize($mData));
 		return $this->oLanguageObject->save();
 	}
 	
 	public function getWidget() {
-		$aOptions = @unserialize($this->getData()); 
 		$oWidget = new TeamMemberEditWidgetModule(null, $this);
-		$oWidget->setDisplayMode($aOptions[self::MODE_SELECT_KEY]);
 		return $oWidget;
 	}
 }

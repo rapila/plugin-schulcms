@@ -30,7 +30,7 @@ class TeamMemberFilterModule extends FilterModule {
 		}
 		if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::TEAM_MEMBER_ITEM_TYPE) {
 			$aParams = $oNavigationItem->getName();
-			$_REQUEST[self::TEAM_REQUEST_KEY] = TeamMemberQuery::create()->filterBySlug($aParams)->findOne();
+			TeamMembersFrontendModule::$TEAM_MEMBER = TeamMemberQuery::create()->filterBySlug($aParams)->findOne();
 		}
 	}	
 }
