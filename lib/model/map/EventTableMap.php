@@ -39,6 +39,7 @@ class EventTableMap extends TableMap {
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		$this->addColumn('TITLE', 'Title', 'VARCHAR', false, 255, null);
+		$this->addColumn('TITLE_NORMALIZED', 'TitleNormalized', 'VARCHAR', false, 255, null);
 		$this->addColumn('TEASER', 'Teaser', 'VARCHAR', false, 514, null);
 		$this->addColumn('BODY_PREVIEW', 'BodyPreview', 'BLOB', false, null, null);
 		$this->addColumn('BODY_REVIEW', 'BodyReview', 'BLOB', false, null, null);

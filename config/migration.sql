@@ -365,3 +365,7 @@ DROP `klassentyp_normalized`;
 
 #20110715.1247
 ALTER TABLE `team_members` ADD `slug` VARCHAR( 80 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL AFTER `first_name`;
+
+#20110817.1740
+ALTER TABLE `events` ADD `title_normalized` VARCHAR( 255 ) NOT NULL AFTER `title` ,
+ADD INDEX ( `title_normalized` );

@@ -4,14 +4,6 @@ class TeamMemberFilterModule extends FilterModule {
 	const TEAM_MEMBER_ITEM_TYPE = 'team_member';
 	const TEAM_REQUEST_KEY = 'team';
 	const TEAM_FUNCTION_GROUP_ID_SEPARATOR = '-';
-
-	private static function isTeamPageWithRequestedList($sIdentifier) {
-		if($sIdentifier === null)
-			return false;
-		if(FrontendManager::$CURRENT_PAGE === null)
-			return false;
-		return $sIdentifier === FrontendManager::$CURRENT_PAGE->getIdentifier();
-	}
 	
 	public function onNavigationItemChildrenRequested(NavigationItem $oNavigationItem) {
 		$sPattern = '/^'.self::TEAM_REQUEST_KEY.'('.self::TEAM_FUNCTION_GROUP_ID_SEPARATOR.'\d+)?$/';
