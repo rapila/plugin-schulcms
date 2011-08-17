@@ -7,6 +7,9 @@ class SchoolPeer extends BaseSchoolPeer {
 	
 	const PAGE_IDENTIFIER_CLASSES = 'classes';
 	const PAGE_IDENTIFIER_TEAM = 'team';
+	const PAGE_IDENTIFIER_EVENTS = 'events';
+	const PAGE_IDENTIFIER_SERVICES = 'services';
+
 	private static $EXTERNALLY_MANAGED_DOCUMENT_CATEGORIES = null;
 	private static $EXTERNALLY_MANAGED_LINK_CATEGORIES = null;
 	private static $PAGE_IDENTIFIERS = null;
@@ -44,7 +47,7 @@ class SchoolPeer extends BaseSchoolPeer {
 		if(isset(self::$PAGE_IDENTIFIERS[$sKey])) {
 			return self::$PAGE_IDENTIFIERS[$sKey];
 		}
-		throw new Exception(__METHOD__.': Please check your page_identifiers in config section school_settings > page_identifiers');
+		return $sKey;
 	}
 	
 	public static function getActiveFunctionGroupIds($sKey) {

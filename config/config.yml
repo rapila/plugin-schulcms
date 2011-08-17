@@ -24,7 +24,6 @@ school_settings:
 		team: 		'team'
 		services: 'services'
 		events: 'events'
-		projects: 'projects'
 		
 	#declare function_group_ids in sort order
 	active_function_groups:
