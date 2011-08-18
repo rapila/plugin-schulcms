@@ -34,7 +34,7 @@ class TeamMemberPeer extends BaseTeamMemberPeer {
 		return self::doSelectOne($oCriteria);
 	}
 	
-	public static function countLehrpersonen($iYear = 2010) {
+	public static function countLehrpersonen($iYear = null) {
 	  $oCriteria = new Criteria();
 	  $oCriteria->setDistinct();
 	  $oCriteria->addJoin(self::ID, ClassTeacherPeer::TEAM_MEMBER_ID, Criteria::INNER_JOIN);
@@ -65,7 +65,7 @@ class TeamMemberPeer extends BaseTeamMemberPeer {
 		return TeamMemberPeer::doSelect($oCriteria);
 	}
 	
-	public static function getTeachersByUnitName($sUnitName, $bIsClassTeacher=true) {
+	public static function getTeachersByUnitName($sUnitName, $bIsClassTeacher=true, $iLimit = null) {
 		$oCriteria = new Criteria();
 		$oCriteria->setDistinct();
 		$oCriteria->addJoin(self::ID, ClassTeacherPeer::TEAM_MEMBER_ID, Criteria::INNER_JOIN);
@@ -76,7 +76,14 @@ class TeamMemberPeer extends BaseTeamMemberPeer {
 		if($sUnitName !== null) {
 			$oCriteria->add(SchoolClassPeer::UNIT_NAME, $sUnitName);
 		}
+		if($iLimit) {
+			$oCriteria->setLimit($iLimit);
+		}
 		$oCriteria->add(SchoolClassPeer::YEAR, SchoolPeer::getSchool()->getCurrentYear());
+		$oCriteria->addAscendingOrderByColumn(ClassTeacherPeer::IS_CLASS_TEACHER);
+		$oCriteria->addAscendingOrderByColumn(ClassTeacherPeer::SORT_ORDER);
+		$oCriteria->addAscendingOrderByColumn(self::LAST_NAME);
+		
 		return self::doSelect($oCriteria);
 	}
 }

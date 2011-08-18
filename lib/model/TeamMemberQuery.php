@@ -35,14 +35,38 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		
 		$this->addJoin(TeamMemberPeer::ID, TeamMemberFunctionPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
 		$this->addJoin(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID, SchoolFunctionPeer::ID, Criteria::INNER_JOIN);
-		$oTeacherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeachers(), Criteria::IN);
 		$this->addJoin(TeamMemberPeer::ID, ClassTeacherPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
-		$oTeacherCrit->addAnd($this->getNewCriterion(ClassTeacherPeer::TEAM_MEMBER_ID, null, self::ISNOTNULL));
 		$this->addJoin(ClassTeacherPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, Criteria::LEFT_JOIN);
-		$oTeacherCrit->addAnd($this->getNewCriterion(SchoolClassPeer::YEAR, SchoolPeer::getCurrentYear()));
-		$oOtherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForOthers(), Criteria::IN);
-		$oTeacherCrit->addOr($oOtherCrit);
-		$this->addAnd($oTeacherCrit);
+
+		// get teachers that require active classes
+		if(count(FunctionGroupPeer::getFunctionGroupIdsForTeachersRequireClasses())) {
+			$oTeacherWithClassesCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeachersRequireClasses(), Criteria::IN);
+			$oTeacherWithClassesCrit->addAnd($this->getNewCriterion(SchoolClassPeer::YEAR, SchoolPeer::getCurrentYear()));
+			$oTeacherWithClassesCrit->addAnd($this->getNewCriterion(ClassTeacherPeer::TEAM_MEMBER_ID, null, self::ISNOTNULL));
+		}
+		
+		// get other teachers
+		if(count(FunctionGroupPeer::getFunctionGroupIdsForTeachers())) {
+			$oTeacherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeachers(), Criteria::IN);
+			$oTeacherCrit->addAnd($this->getNewCriterion(SchoolClassPeer::YEAR, SchoolPeer::getCurrentYear()));
+			if($oTeacherWithClassesCrit) {
+				$oTeacherWithClassesCrit->addOr($oTeacherCrit);
+				$this->addAnd($oTeacherWithClassesCrit);
+			}
+		}
+
+		// get other team_members
+		if(count(FunctionGroupPeer::getFunctionGroupIdsForOthers())) {
+			$oOtherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForOthers(), Criteria::IN);
+			if($oTeacherWithClassesCrit) {
+				$oTeacherWithClassesCrit->addOr($oOtherCrit);
+			} elseif($oTeacherCrit) {
+				$oTeacherCrit->addOr($oOtherCrit);
+				$this->addAnd($oTeacherCrit);
+			} else {
+				$this->addAnd($oOtherCrit);
+			}
+		}		
 		return $this;
 	}
 	

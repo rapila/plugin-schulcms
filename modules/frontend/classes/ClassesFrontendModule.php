@@ -58,8 +58,8 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 				$oItemTemplate->replaceIdentifier('stundenplan', '-');
 			}
 			// get infos related to teaching unit, all classes concerned
-			$oItemTemplate->replaceIdentifier('count_students', ClassStudentPeer::countStudents($oClass->getUnitName()));
-			$aTeachers = TeamMemberPeer::getTeachersByUnitName($oClass->getUnitName());
+			$oItemTemplate->replaceIdentifier('count_students', ClassStudentPeer::countStudentsByUnitName($oClass->getUnitName()));
+			$aTeachers = TeamMemberPeer::getTeachersByUnitName($oClass->getUnitName(), false, 3);
 			foreach($aTeachers as $i => $oTeacher) {
 				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.team_member.view_detail').$oTeacher->getFullName(), 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oTeacher->getSlug())))), $oTeacher->getFullNameShort()));
 				if($i < count($aTeachers)-1) {
@@ -90,7 +90,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		$oTemplate = $this->constructTemplate('detail');
 
 		// portrait
-		foreach($aClasses as $oClass) {
+		foreach($aClasses as $i => $oClass) {
 			$oPortrait = $oClass->getDocumentRelatedByClassPortraitId();
 			if($oPortrait) {
 				$oTemplate->replaceIdentifierMultiple('portrait_display_url', $oPortrait->getDisplayUrl(array('max_width' => 670)));
@@ -102,46 +102,31 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		$oTemplate->replaceIdentifier('full_unit_name', $aClasses[0]->getFullClassName());
 
 		// students
-		$aClassStudents = ClassStudentQuery::create()->filterBySchoolClassId($aClassIds)->orderByFirstName()->find();
-		if(count($aClassStudents) > 0) {
+		$iCountStudents = ClassStudentPeer::countStudentsByUnitName($aClasses[0]->getUnitName());
+		if($iCountStudents > 0) {
 			if(Settings::getSetting('school_settings', 'display_student_names', true)) {
-				foreach($aClassStudents as $i => $oClassStudent) {
+				foreach(ClassStudentPeer::getStudentsByUnitName($aClasses[0]->getUnitName()) as $i => $oClassStudent) {
 					$aStudents[] = $oClassStudent->getStudent()->getFirstName();
 				}
 				$oTemplate->replaceIdentifier('students_names', implode(', ', $aStudents));
 			}
-			$oTemplate->replaceIdentifier('students_count', count($aClassStudents));
+			$oTemplate->replaceIdentifier('count_students', $iCountStudents);
 		}
 
 		// teachers
-		$aClassTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->filterByIsClassTeacher(true)->orderBySortOrder()->orderByLastName()->groupByTeamMemberId()->find();
-		$iClassTeacherCount = count($aClassTeachers);
+		$aClassTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->orderBySortOrder()->orderByLastName()->groupByTeamMemberId()->find();
+		$iCount = count($aClassTeachers);
 		foreach($aClassTeachers as $i => $oClassTeacher) {
 			if($i === 0) {
-				if($iClassTeacherCount > 1) {
-					$oTemplate->replaceIdentifier('label_class_teacher', StringPeer::getString('wns.class.class_teachers'));
-				} else {
-					$oTemplate->replaceIdentifier('label_class_teacher',	StringPeer::getString('wns.class.class_teacher'.($oClassTeacher->getTeamMember()->getGenderId() === 'f' ? '_female': '_male')));
+				$oTemplate->replaceIdentifier('label_class_teacher', StringPeer::getString('wns.class.class_teachers'));
+			}
+			if($oClassTeacher->getTeamMember()->getFullName()) {
+				$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oClassTeacher->getTeamMember()->getTeamMemberLink($this->oTeamPage))), $oClassTeacher->getTeamMember()->getFullName());
+				$sFunctionName = $oClassTeacher->getIsClassTeacher() ? $oClassTeacher->getTeamMember()->getClassTeacherTitle() : $oClassTeacher->getFunctionName();
+				$oTemplate->replaceIdentifierMultiple('name_class_teacher', '<span class="function">'.$sFunctionName.'</span> '.$oTeacherLink, null, Template::NO_HTML_ESCAPE);
+				if($i < ($iCount-1)) {
+					$oTemplate->replaceIdentifierMultiple('name_class_teacher', ', ');
 				}
-			}
-			$aTeacherLink = array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug()));
-			$oClassTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aTeacherLink)), $oClassTeacher->getTeamMember()->getFullName());
-			$oTemplate->replaceIdentifierMultiple('name_class_teacher', $oClassTeacherLink.($i < ($iClassTeacherCount-1) ? ', ': ''), null, Template::NO_HTML_ESCAPE);
-		}
-
-		// other teachers
-		$aOtherTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->filterByIsClassTeacher(false)->orderBySortOrder()->orderByLastName()->groupByTeamMemberId()->find();
-		$iOtherTeachers = count($aOtherTeachers);
-		foreach($aOtherTeachers as $i => $oOtherTeacher) {
-			if($i === 0) {
-				$oTemplate->replaceIdentifier('label_other_teacher', StringPeer::getString('wns.class.other_teachers'));
-			}
-			if($oOtherTeacher->getTeamMember()->getFullName()) {
-				$aTeacherLink = array_merge($this->oTeamPage->getFullPathArray(), array($oOtherTeacher->getTeamMember()->getSlug()));
-				$oOtherTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aTeacherLink)), $oOtherTeacher->getTeamMember()->getFullName());
-				$sComma = $i < ($iOtherTeachers-1) ? ', ' : '';
-
-				$oTemplate->replaceIdentifierMultiple('name_other_teacher', '<span class="function">'.$oOtherTeacher->getFunctionName().'</span> '.$oOtherTeacherLink.$sComma, null, Template::NO_HTML_ESCAPE);
 			}
 		}
 		return $oTemplate;
@@ -199,6 +184,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		if($aClasses[0]->getRoomNumber()) {
 			$oTemplate->replaceIdentifier('room_number', $aClasses[0]->getRoomNumber());
 		}
+		$oTemplate->replaceIdentifier('count_students', ClassStudentPeer::countStudentsByUnitName($aClasses[0]->getUnitName()));
 		// events
 		$aEvents = EventQuery::create()->filterBySchoolClassId($aClassIds)->find();
 		$bRequiresBackToLink = false;
