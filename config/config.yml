@@ -27,6 +27,7 @@ school_settings:
 		
 	#declare function_group_ids in sort order
 	active_function_groups:
+		teachers_require_classes: []
 		teachers: [1, 2]
 		others: [6, 7, 12]
 
