@@ -2,7 +2,7 @@
 	<img class="class_portrait" src="{{portrait_display_url}}" alt="{{portrait_alt}}" /><br style="clear:both;"/>
 	{{identifierContext=end;name=portrait_display_url}}
 	<div class="class_info">
-  	<label>{{students_count}} SchülerInnen</label><span style="display:block;margin-bottom:1em;">{{students_names}}</span>{{identifierContext=start;name=label_class_teacher}}
+  	<label>{{students_count}} {{writeString=school_class.students}}</label><span style="display:block;margin-bottom:1em;">{{students_names}}</span>{{identifierContext=start;name=label_class_teacher}}
  		<label>{{label_class_teacher}}</label>
 		<span>{{name_class_teacher}}</span>{{identifierContext=end;name=label_class_teacher}}{{identifierContext=start;name=label_other_teacher}}
 		<label>{{label_other_teacher}}</label>{{name_other_teacher}}{{identifierContext=end;name=label_other_teacher}}
