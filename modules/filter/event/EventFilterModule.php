@@ -46,7 +46,8 @@ class EventFilterModule extends FilterModule {
 	public function onPageHasBeenSet($oPage, $bIsNotFound, $oNavigationItem) {
 		if($oNavigationItem instanceof VirtualNavigationItem && in_array($oNavigationItem->getType(), array(self::ITEM_EVENT_YEAR, self::ITEM_EVENT_MONTH, self::ITEM_EVENT_DAY, self::ITEM_EVENT))) {
 			if(self::selectNames($oNavigationItem->getData()) === 1) {
-				$_REQUEST[self::EVENT_REQUEST_KEY] = self::selectNames($oNavigationItem->getData(), EventPeer::ID);
+				$aId = self::selectNames($oNavigationItem->getData(), EventPeer::ID);
+				$_REQUEST[self::EVENT_REQUEST_KEY] = (int) $aId[0];
 			}
 		}
 	}

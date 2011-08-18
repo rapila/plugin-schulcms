@@ -96,7 +96,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		}
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$oTemplate = $this->constructTemplate('detail');
-		$bIsPreview = self::$EVENT->getLastDate('Ymd') < date('Ymd');
+		$bIsPreview = self::$EVENT->getLastDate('Ymd') >= date('Ymd');
 		$sBody = null;
 		if (!$bIsPreview && self::$EVENT->getBodyReview()) {
 			$sBody = RichtextUtil::parseStorageForFrontendOutput(stream_get_contents(self::$EVENT->getBodyReview()));
