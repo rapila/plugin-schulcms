@@ -23,7 +23,6 @@ Widget.types.team_member_edit = {
 			this.groups_dropdown.change(this.reload_preview.bind(this));
 		}.deferred(finish));
 
-		console.log(finish);
 		jQuery.when.apply(jQuery, finish).then(function() {
 			this.reload_preview();
 		}.bind(this));
