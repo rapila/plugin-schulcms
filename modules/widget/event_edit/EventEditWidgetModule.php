@@ -5,13 +5,18 @@ class EventEditWidgetModule extends EditWidgetModule {
 	  $aResult = array();
 	  $aEventTypes = EventTypeQuery::create()->orderByName()->find();
 		if(count($aEventTypes) > 0) {
+			$aResult['event_types'] = array();
 			foreach($aEventTypes as $oEventType) {
-				$aResult[$oEventType->getId()] = $oEventType->getName();
-				$aResult[$oEventType->getId().'-archive'] = $oEventType->getName(). ' Archiv';
+				$aResult['event_types'][$oEventType->getId()] = $oEventType->getName();
 			}
 		}
+		$aResult['display_modes'] = array();
 	  foreach(EventsFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
-	    $aResult[$sDisplayMode] = StringPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);
+	    $aResult['display_modes'][$sDisplayMode] = StringPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);
+	  }
+		$aResult['event_limits'] = array('' => StringPeer::getString('wns.events.display_all'));
+	  foreach(range(1,4) as $iCount) {
+	    $aResult['event_limits'][$iCount] = $iCount;
 	  }
 		return $aResult;
 	}

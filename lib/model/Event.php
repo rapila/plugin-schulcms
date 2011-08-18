@@ -69,6 +69,14 @@ class Event extends BaseEvent {
 	  $oCriteria->addAscendingOrderByColumn(EventDocumentPeer::SORT);
 	  return $this->getEventDocuments($oCriteria);
 	}
+	
+	public function getEventPageLink($oEventPage = null) {
+		if($oEventPage === null) {
+			$oEventPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS));
+		}
+		$aDateStart = explode('-', $this->getDateStart('Y-n-j'));
+		return array_merge($oEventPage->getFullPathArray(), array_merge($aDateStart, array($this->getTitleNormalized())));
+	}
 
 }
 

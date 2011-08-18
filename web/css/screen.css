@@ -396,8 +396,7 @@ table {
   border-collapse: collapse;
   margin-top: -17px;
 }
-table tr.even td { background-color: #fafaf9; }
-table tr.even td { background-color: #fafaf9; }
+table.list_view tr.even td { background-color: #fafaf9; }
 table.list_view tr.row:nth-child(2n+1) td { background-color: #fafaf9; }
 td, th {
   padding: 0 0.3em;
