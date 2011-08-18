@@ -25,8 +25,8 @@ class SchoolFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		$oTemplate = $this->constructTemplate('statistics');
 		$aResult = array_merge(
 			array(StringPeer::getString('statistics_key_classes', null, 'Klassen') => SchoolClassPeer::countActiveSchoolUnitsBySchool()), 
-			array(StringPeer::getString('statistics_key_students', null, 'SchülerInnen') => ClassStudentPeer::countStudents()), 
-			array(StringPeer::getString('statistics_key_teachers', null, 'Lehrpersonen') => TeamMemberPeer::countLehrpersonen()),
+			array(StringPeer::getString('statistics_key_students', null, 'SchülerInnen') => ClassStudentPeer::countStudentsByUnitName()), 
+			array(StringPeer::getString('statistics_key_teachers', null, 'Lehrpersonen') => TeamMemberPeer::countLehrpersonen(SchoolPeer::getCurrentYear())),
 			array(StringPeer::getString('statistics_key_others', null, 'Andere Mitarbeiter') => TeamMemberPeer::countNonTeachingPersonel())
 			);
 		foreach($aResult as $sName => $iCount) {
