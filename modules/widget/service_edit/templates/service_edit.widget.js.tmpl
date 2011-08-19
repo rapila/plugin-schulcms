@@ -53,7 +53,7 @@ Widget.types.service_edit = {
 	reload_preview: function(display_mode) {
 		var _this = this;
 		this.result_list.empty();
-		if(display_mode === 'service_detail' || display_mode === 'random_service_teaser') {
+		if(display_mode === 'service_detail' || display_mode === 'team_member_portraits' || display_mode === 'random_service_teaser') {
 			return;
 		}
 		var service_category = isNaN(display_mode) ? null : parseInt(display_mode, 10);

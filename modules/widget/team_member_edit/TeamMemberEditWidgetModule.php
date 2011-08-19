@@ -38,7 +38,7 @@ class TeamMemberEditWidgetModule extends PersistentWidgetModule {
 
 	public function functionGroups() {
 		$aResult = array();
-		foreach(FunctionGroupQuery::create()->orderByName()->find() as $oFunctionGroup) {
+		foreach(FunctionGroupQuery::create()->orderByName()->filterbyId(FunctionGroupPeer::getFunctionGroupIdsForTeamlist(), Criteria::IN)->find() as $oFunctionGroup) {
 			$aResult[$oFunctionGroup->getId()] = $oFunctionGroup->getName();
 		}
 		return $aResult;
