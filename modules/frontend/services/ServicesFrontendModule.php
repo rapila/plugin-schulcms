@@ -5,7 +5,7 @@
 
 class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBasedFrontendModule {
 	
-	public static $DISPLAY_MODES = array('service_liste', 'service_detail', 'random_service_teaser');
+	public static $DISPLAY_MODES = array('service_liste', 'service_detail', 'team_member_portraits', 'random_service_teaser');
 	public static $SERVICE;
 	public $iExcludeInternalCategoryId;
 	
@@ -24,8 +24,7 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		if(self::$SERVICE === null) {
 			if(isset($_REQUEST[self::DETAIL_IDENTIFIER])) {
 				self::$SERVICE = ServicePeer::retrieveByPK($_REQUEST[self::DETAIL_IDENTIFIER]);
-			} else if( $aOptions[self::MODE_SELECT_KEY] === 'service_detail' 
-					&& isset($aOptions['service_id']) 
+			} else if(isset($aOptions['service_id']) 
 					&& is_numeric($aOptions['service_id'])) 
 			{
 				self::$SERVICE = ServicePeer::retrieveByPK($aOptions['service_id']);
@@ -34,6 +33,9 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		if(self::$SERVICE) {
 			if($this->oLanguageObject->getContentObject()->getContainerName() == 'context') {
 				return $this->renderDetailContext();
+			}
+			if($aOptions[self::MODE_SELECT_KEY] === 'team_member_portraits') {
+				return $this->renderTeamMemberPortraits();
 			}
 			return $this->renderDetail();
 		}
@@ -44,6 +46,27 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 				default: return $this->renderList($aOptions[self::MODE_SELECT_KEY]);
 			}
 		}
+	}
+	
+	private function renderTeamMemberPortraits() {
+		if(self::$SERVICE === null) {
+			return;
+		}
+		$iWidth = 150;
+		$oTemplate = $this->constructTemplate('portraits');
+		$oCriteria = new Criteria();
+		$oCriteria->addJoin(ServiceMemberPeer::TEAM_MEMBER_ID, TeamMemberPeer::ID, Criteria::INNER_JOIN);
+		$oCriteria->add(TeamMemberPeer::PORTRAIT_ID, null, Criteria::ISNOTNULL);
+		foreach(self::$SERVICE->getServiceMembers($oCriteria) as $oServiceMember) {
+			if($oServiceMember->getTeamMember()->getDocument()) {
+				$oPortraitTemplate = $this->constructTemplate('portrait_item');
+				$oPortraitTemplate->replaceIdentifier('portrait_width', $iWidth);
+				$oPortraitTemplate->replaceIdentifier('name', $oServiceMember->getTeamMember()->getFullName());
+				$oPortraitTemplate->replaceIdentifier('image', TagWriter::quickTag('img', array('src' => $oServiceMember->getTeamMember()->getDocument()->getDisplayUrl(array('max_width' => $iWidth)), 'alt' => 'Portrait von '.$oServiceMember->getTeamMember()->getFullName())));
+				$oTemplate->replaceIdentifierMultiple('portrait', $oPortraitTemplate);
+			}
+		}
+		return $oTemplate;
 	}
 	
 	private function renderlist($iCategory) {
