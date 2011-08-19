@@ -25,6 +25,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		if($aOptions[self::MODE_SELECT_KEY] === 'list') {
 			return $this->renderList($aOptions[self::MODE_EVENT_TYPE_ID], $aOptions[self::MODE_EVENT_LIMIT]);
 		}
+		return '';
 	}
 	
 	private function renderList($iEventTypeId=null, $iLimit=null) {
