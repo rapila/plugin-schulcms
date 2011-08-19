@@ -19,12 +19,6 @@ Widget.types.service_edit = {
 		this.mode_dropdown.val(display_modes.display_mode);
 		this.mode_dropdown.change(function() {
 			_this.reload_preview(_this.mode_dropdown.val());
-			if(_this.mode_dropdown.val() === 'service_detail' || _this.mode_dropdown.val() === 'team_member_portraits') {
-				_this.show_for_detail.show();
-			} else {
-				_this.services_dropdown.val('');
-				_this.show_for_detail.hide();
-			}
 		});
 
 		// display detail selector only if mode select is on detail
@@ -53,9 +47,11 @@ Widget.types.service_edit = {
 	reload_preview: function(display_mode) {
 		var _this = this;
 		this.result_list.empty();
-		if(display_mode === 'service_detail' || display_mode === 'team_member_portraits' || display_mode === 'random_service_teaser') {
+		if(display_mode === 'service_detail' || display_mode === 'team_member_portraits' || display_mode === 'random_service_teaser'  || display_mode === service_intern_detail) {
+			_this.show_for_detail.show();
 			return;
 		}
+		_this.show_for_detail.hide();
 		var service_category = isNaN(display_mode) ? null : parseInt(display_mode, 10);
 		jQuery.each(this.getServices(service_category), function(i, service) {
 			_this.result_list.append(jQuery('<li/>').text(service.NAME).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', service.ID));
