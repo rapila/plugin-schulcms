@@ -47,8 +47,8 @@ Widget.types.event_edit = {
 	
 	reload_preview: function() {
 		var display_mode = this.mode_dropdown.val();
-		var _this = this;
-		this.result_list.empty();
+		var result_list = this.result_list;
+		result_list.empty();
 		if(display_mode === 'detail_context') {
 			this.list_options.hide();
 			return;
@@ -57,7 +57,7 @@ Widget.types.event_edit = {
 
 		this.allEvents(this.type_dropdown.val(), this.limit_dropdown.val(), function(events) {
 			jQuery.each(events, function(id, title) {
-				_this.result_list.append(jQuery('<li/>').text(title).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', id));
+				result_list.append(jQuery('<li/>').text(title).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', id));
 			});
 		});
 	},

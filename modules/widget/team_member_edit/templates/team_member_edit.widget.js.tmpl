@@ -7,6 +7,7 @@ Widget.types.team_member_edit = {
 		this.mode_dropdown = this._element.find('select[name=display_mode]');
 		this.groups_dropdown = this._element.find('select[name=function_groups\\[\\]]');
 		this.result_list = this._element.find('ol.preview');
+		this.list_options = this._element.find('div.list_option_only');
 
 		//Mode/Group finish callbacks
 		var finish = [];
@@ -39,15 +40,17 @@ Widget.types.team_member_edit = {
 			_this.detail_widget.fill_data();
 			_this.detail_widget.open();
 		});
-
 	},
 	
 	reload_preview: function() {
 		var result_list = this.result_list;
 		result_list.empty();
-		if(this.mode_dropdown.val() == 'team_mitglied_detail'){
+		if(this.mode_dropdown.val() === 'team_mitglied_detail'){
+			this.list_options.hide();
+			debugger;
 			return;
 		}
+		this.list_options.show();
 		this.allTeamMembers(this.selected_groups(), function(team_members) {
 			jQuery.each(team_members, function(i, team_member) {
 				result_list.append(jQuery('<li/>').text(team_member.full_name_inverted).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', team_member.id));
