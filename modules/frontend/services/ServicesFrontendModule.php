@@ -5,7 +5,7 @@
 
 class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBasedFrontendModule {
 	
-	public static $DISPLAY_MODES = array('service_liste', 'service_detail', 'team_member_portraits', 'random_service_teaser');
+	public static $DISPLAY_MODES = array('service_liste', 'service_detail', 'service_intern_detail', 'team_member_portraits', 'random_service_teaser');
 	public static $SERVICE;
 	public $iExcludeInternalCategoryId;
 	
@@ -37,7 +37,7 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 			if($aOptions[self::MODE_SELECT_KEY] === 'team_member_portraits') {
 				return $this->renderTeamMemberPortraits();
 			}
-			return $this->renderDetail();
+			return $this->renderDetail($aOptions[self::MODE_SELECT_KEY] === 'service_intern_detail');
 		}
 		if(isset($aOptions[self::MODE_SELECT_KEY])) {
 			switch($aOptions[self::MODE_SELECT_KEY]) {
@@ -52,8 +52,12 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		if(self::$SERVICE === null) {
 			return;
 		}
-		$iWidth = 150;
 		$oTemplate = $this->constructTemplate('portraits');
+		$this->setPortraits($oTemplate);
+		return $oTemplate;
+	}
+	
+	private function setPortraits($oTemplate, $iWidth = 150) {
 		$oCriteria = new Criteria();
 		$oCriteria->addJoin(ServiceMemberPeer::TEAM_MEMBER_ID, TeamMemberPeer::ID, Criteria::INNER_JOIN);
 		$oCriteria->add(TeamMemberPeer::PORTRAIT_ID, null, Criteria::ISNOTNULL);
@@ -66,7 +70,6 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 				$oTemplate->replaceIdentifierMultiple('portrait', $oPortraitTemplate);
 			}
 		}
-		return $oTemplate;
 	}
 	
 	private function renderlist($iCategory) {
@@ -101,12 +104,12 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		return self::$SERVICE;
 	}
 	
-	public function renderDetail() {
+	public function renderDetail($isIntern=false) {
 		if(self::$SERVICE === null) {
 			return;
 		}
 		$oPage = FrontendManager::$CURRENT_PAGE;
-		$oTemplate = $this->constructTemplate('detail');
+		$oTemplate = $this->constructTemplate($isIntern === true ? 'detail_intern' : 'detail');
 		if(self::$SERVICE->getDocument()) {
 			$oTemplate->replaceIdentifier('logo', TagWriter::quickTag('img', array('src' => self::$SERVICE->getDocument()->getDisplayUrl(array('max_width' => 120)), 'class' => 'service_logo')));
 		}
@@ -115,6 +118,9 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 			$oTemplate->replaceIdentifier('body', RichtextUtil::parseStorageForFrontendOutput(stream_get_contents(self::$SERVICE->getBody())));
 		}
 		$oTemplate->replaceIdentifier('list_link', $oPage->getFullPathArray());
+		$oPortraitTemplate = $this->constructTemplate('portraits');
+		$this->setPortraits($oPortraitTemplate);
+		$oTemplate->replaceIdentifier('portraits', $oPortraitTemplate);
 		return $oTemplate;
 	}
 	
