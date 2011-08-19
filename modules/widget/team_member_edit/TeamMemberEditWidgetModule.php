@@ -9,7 +9,7 @@ class TeamMemberEditWidgetModule extends PersistentWidgetModule {
 		$this->oFrontendModule = $oFrontendModule;
 		$aData = $this->oFrontendModule->widgetData();
 		$this->sDisplayMode = $aData[TeamMembersFrontendModule::MODE_SELECT_KEY];
-		$this->aFunctionGroupIds = $aData[TeamMembersFrontendModule::GROUPS_SELECT_KEY];
+		$this->aFunctionGroupIds = @$aData[TeamMembersFrontendModule::GROUPS_SELECT_KEY];
 	}
 	
 	public function getDisplayMode() {
