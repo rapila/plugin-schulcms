@@ -424,6 +424,7 @@ td p {
   padding: 2px 0;
   margin-bottom: 0.8em;
 }
+.context_list.event_list td p { margin-bottom: 0.4em; }
 .event_list td { line-height: 22px; }
 .event_list td a { line-height: 22px; }
 td a { display: inline-block; }
