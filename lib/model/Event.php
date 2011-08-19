@@ -5,6 +5,8 @@
  */
 class Event extends BaseEvent {
 
+	private static $EVENT_PAGES = array();
+	
 	public function setTitle($sTitle) {
 		$this->setTitleNormalized(StringUtil::normalize(str_replace('-', '', $sTitle), '-', '-'));
 		return parent::setTitle($sTitle);
@@ -72,9 +74,13 @@ class Event extends BaseEvent {
 	
 	public function getEventPageLink($oEventPage = null) {
 		if($oEventPage === null) {
-			$oEventPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS));
+			if(!isset(self::$EVENT_PAGES[$this->getEventTypeId()])) {
+				$EVENT_PAGES[$this->getEventTypeId()] = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS).'-'.$this->getEventTypeId());
+			}
+			$oEventPage = $EVENT_PAGES[$this->getEventTypeId()];
 		}
 		$aDateStart = explode('-', $this->getDateStart('Y-n-j'));
+		
 		return array_merge($oEventPage->getFullPathArray(), array_merge($aDateStart, array($this->getTitleNormalized())));
 	}
 

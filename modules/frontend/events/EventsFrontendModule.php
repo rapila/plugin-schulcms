@@ -39,9 +39,11 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		}
 
 		if($this->oLanguageObject->getContentObject()->getContainerName() === 'context') {
+			$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$iEventTypeId));
 			$oTemplate = $this->constructTemplate('list_context');
 			$oItemTempl = $this->constructTemplate('list_item_context');
 		} else {
+			$oPage = FrontendManager::$CURRENT_PAGE;
 			$oTemplate = $this->constructTemplate('list');
 			$oItemTempl = $this->constructTemplate('list_item');
 		}
@@ -51,7 +53,6 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 			$oEventQuery->filterByDateRangePreview()->orderByDateStart();
 		}
 		
-		$oPage = FrontendManager::$CURRENT_PAGE;
 		$sOddEven = 'odd';
 		LocaleUtil::setLocaleToLanguageId(Session::language(), LC_TIME);
 		
