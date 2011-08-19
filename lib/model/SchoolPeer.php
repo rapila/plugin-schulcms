@@ -57,7 +57,7 @@ class SchoolPeer extends BaseSchoolPeer {
 		if(isset(self::$ACTIVE_FUNCTION_GROUPS[$sKey])) {
 			return self::$ACTIVE_FUNCTION_GROUPS[$sKey];
 		}
-		throw new Exception(__METHOD__.': Please check your page_identifiers in config section active_function_groups teachers/others');
+		throw new Exception(__METHOD__.': Please check your config parameter "'.$sKey.'" section active_function_groups');
 	}
 	
 	public static function getSchool() {
