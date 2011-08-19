@@ -28,11 +28,14 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 	}
 	
 	/**
-	* Excludes all team members that don’t have any function other than being teachers and are not currently assigned a class
+	* Excludes all team members that are not part of the configured active_function_groups
+	* they can be 
+	* - teachers
+	* - teachers_require_classes, that require active class relationship
+	* - others, any other function group not related to teaching
 	*/
 	public function excludeInactive() {
 		$this->setDistinct();
-		
 		$this->addJoin(TeamMemberPeer::ID, TeamMemberFunctionPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
 		$this->addJoin(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID, SchoolFunctionPeer::ID, Criteria::INNER_JOIN);
 		$this->addJoin(TeamMemberPeer::ID, ClassTeacherPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
