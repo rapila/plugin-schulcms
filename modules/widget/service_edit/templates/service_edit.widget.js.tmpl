@@ -19,7 +19,7 @@ Widget.types.service_edit = {
 		this.mode_dropdown.val(display_modes.display_mode);
 		this.mode_dropdown.change(function() {
 			_this.reload_preview(_this.mode_dropdown.val());
-			if(_this.mode_dropdown.val() === 'service_detail') {
+			if(_this.mode_dropdown.val() === 'service_detail' || _this.mode_dropdown.val() === 'team_member_portraits') {
 				_this.show_for_detail.show();
 			} else {
 				_this.services_dropdown.val('');
