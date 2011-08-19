@@ -40,7 +40,7 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		$this->addJoin(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID, SchoolFunctionPeer::ID, Criteria::INNER_JOIN);
 		$this->addJoin(TeamMemberPeer::ID, ClassTeacherPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
 		$this->addJoin(ClassTeacherPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, Criteria::LEFT_JOIN);
-		
+
 		// get teachers that require active classes
 		if(count(FunctionGroupPeer::getFunctionGroupIdsForTeachersRequireClasses())) {
 			$oTeacherWithClassesCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeachersRequireClasses(), Criteria::IN);
