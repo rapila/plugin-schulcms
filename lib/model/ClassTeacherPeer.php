@@ -21,6 +21,7 @@ class ClassTeacherPeer extends BaseClassTeacherPeer {
 		$oCriteria->addAscendingOrderByColumn(self::SORT_ORDER);
 		$oCriteria->addAscendingOrderByColumn(TeamMemberPeer::LAST_NAME);
 		$oCriteria->addAscendingOrderByColumn(TeamMemberPeer::FIRST_NAME);
+		$oCriteria->addGroupByColumn(self::TEAM_MEMBER_ID);
 		if($iLimit !== null) {
 			$oCriteria->setLimit($iLimit);
 		}
