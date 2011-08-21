@@ -42,6 +42,8 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$aClasses = SchoolClassPeer::getSchoolUnitsBySchool(null, $iClassTypeId);
 		$oTemplate = $this->constructTemplate('list');
+		$bShowClassTeachersOnly = Settings::getSetting('school_settings', 'show_class_teachers_only_in_class_list', true);
+		$oTemplate->replaceIdentifier('header_col_teachers', StringPeer::getString('wns.col_header_teachers.'.($bShowClassTeachersOnly ? 'class_teachers' : 'teachers')));
 		$sOddEven = 'odd';
 		foreach($aClasses as $i => $oClass) {
 			$oItemTemplate = $this->constructTemplate('list_item');
@@ -59,12 +61,21 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			}
 			// get infos related to teaching unit, all classes concerned
 			$oItemTemplate->replaceIdentifier('count_students', ClassStudentPeer::countStudentsByUnitName($oClass->getUnitName()));
-			$aTeachers = TeamMemberPeer::getTeachersByUnitName($oClass->getUnitName(), false, 3);
-			foreach($aTeachers as $i => $oTeacher) {
-				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.team_member.view_detail').$oTeacher->getFullName(), 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oTeacher->getSlug())))), $oTeacher->getFullNameShort()));
-				if($i < count($aTeachers)-1) {
-					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ');
+			$aClassTeachers = ClassTeacherPeer::getClassTeachersByUnitName($oClass->getUnitName(), null, $bShowClassTeachersOnly);
+			$iLimit = 3;
+			$iCountTeachers = count($aClassTeachers);
+			$iCountMax = $iCountTeachers < $iLimit ? $iCountTeachers : $iLimit;
+			foreach($aClassTeachers as $i => $oClassTeacher) {
+				if($i < ($iLimit)) {
+					$sFunctionAddon = $oClassTeacher->getIsClassTeacher() ? $oClassTeacher->getTeamMember()->getClassTeacherTitle() : $oClassTeacher->getFunctionName();
+					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => $oClassTeacher->getTeamMember()->getFullName().', '.$sFunctionAddon, 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug())))), $oClassTeacher->getTeamMember()->getFullNameShort()));
+					if($i < $iCountMax-1) {
+						$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ');
+					}
 				}
+			}
+			if(count($aClassTeachers) > $iLimit) {
+				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', etc.');
 			}
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
@@ -114,7 +125,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		}
 
 		// teachers
-		$aClassTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->orderBySortOrder()->orderByLastName()->groupByTeamMemberId()->find();
+		$aClassTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->orderByIsClassTeacher(Criteria::DESC)->orderBySortOrder()->orderByLastName()->groupByTeamMemberId()->find();
 		$iCount = count($aClassTeachers);
 		foreach($aClassTeachers as $i => $oClassTeacher) {
 			if($i === 0) {
@@ -123,9 +134,9 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 			if($oClassTeacher->getTeamMember()->getFullName()) {
 				$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oClassTeacher->getTeamMember()->getTeamMemberLink($this->oTeamPage))), $oClassTeacher->getTeamMember()->getFullName());
 				$sFunctionName = $oClassTeacher->getIsClassTeacher() ? $oClassTeacher->getTeamMember()->getClassTeacherTitle() : $oClassTeacher->getFunctionName();
-				$oTemplate->replaceIdentifierMultiple('name_class_teacher', '<span class="function">'.$sFunctionName.'</span> '.$oTeacherLink, null, Template::NO_HTML_ESCAPE);
+				$oTemplate->replaceIdentifierMultiple('name_class_teacher', $oTeacherLink.' <span class="function">'.$sFunctionName.'</span>', null, Template::NO_HTML_ESCAPE);
 				if($i < ($iCount-1)) {
-					$oTemplate->replaceIdentifierMultiple('name_class_teacher', ', ');
+					$oTemplate->replaceIdentifierMultiple('name_class_teacher', TagWriter::quickTag('br'));
 				}
 			}
 		}

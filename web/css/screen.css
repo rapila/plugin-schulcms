@@ -496,19 +496,11 @@ a.stundenplan:hover { background: transparent url(../images/pdf_hover.png) no-re
   color: #5e61a8;
 }
 .class_info label:first-child { margin-top: 0; }
-#content h2 {
+#content_main h1 {
   margin-top: 0;
   margin-bottom: 9px;
 }
-#content ul {
-  margin-top: 0;
-  margin-bottom: 9px;
-}
-#content p {
-  margin-top: 0;
-  margin-bottom: 9px;
-}
-#content form {
+#content_main h2 {
   margin-top: 0;
   margin-bottom: 9px;
 }

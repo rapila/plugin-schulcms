@@ -80,7 +80,7 @@ class TeamMemberPeer extends BaseTeamMemberPeer {
 			$oCriteria->setLimit($iLimit);
 		}
 		$oCriteria->add(SchoolClassPeer::YEAR, SchoolPeer::getSchool()->getCurrentYear());
-		$oCriteria->addAscendingOrderByColumn(ClassTeacherPeer::IS_CLASS_TEACHER);
+		$oCriteria->addDescendingOrderByColumn(ClassTeacherPeer::IS_CLASS_TEACHER);
 		$oCriteria->addAscendingOrderByColumn(ClassTeacherPeer::SORT_ORDER);
 		$oCriteria->addAscendingOrderByColumn(self::LAST_NAME);
 		
