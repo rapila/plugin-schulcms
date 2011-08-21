@@ -5,7 +5,7 @@
 
 class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBasedFrontendModule {
 	
-	public static $DISPLAY_MODES = array('service_liste', 'service_detail', 'service_intern_detail', 'team_member_portraits', 'random_service_teaser');
+	public static $DISPLAY_MODES = array('service_liste', 'service_detail', 'service_intern_detail', 'team_member_portraits', 'service_teaser');
 	public static $SERVICE;
 	public $iExcludeInternalCategoryId;
 	
@@ -21,6 +21,7 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 
 		// always show detail of requested or random team member
 		$aOptions = @unserialize($this->getData());
+
 		if(self::$SERVICE === null) {
 			if(isset($_REQUEST[self::DETAIL_IDENTIFIER])) {
 				self::$SERVICE = ServicePeer::retrieveByPK($_REQUEST[self::DETAIL_IDENTIFIER]);
@@ -37,12 +38,15 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 			if($aOptions[self::MODE_SELECT_KEY] === 'team_member_portraits') {
 				return $this->renderTeamMemberPortraits();
 			}
+			if($this->oLanguageObject->getContentObject()->getContainerName() === 'aktuelles') {
+				return $this->renderTeaserDetail();
+			}
 			return $this->renderDetail($aOptions[self::MODE_SELECT_KEY] === 'service_intern_detail');
 		}
 		if(isset($aOptions[self::MODE_SELECT_KEY])) {
 			switch($aOptions[self::MODE_SELECT_KEY]) {
 				case 'service_detail' : return $this->renderDetail();
-				case 'random_service_teaser' : return $this->renderTeaserDetail();
+				case 'service_teaser' : return $this->renderTeaserDetail($aOptions['service_id']);
 				default: return $this->renderList($aOptions[self::MODE_SELECT_KEY]);
 			}
 		}
@@ -73,7 +77,7 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 	}
 	
 	private function renderlist($iCategory) {
-		$oQuery = ServiceQuery::create();
+		$oQuery = ServiceQuery::create()->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL);
 		if(is_numeric($iCategory)) {
 			$oQuery->filterByServiceCategoryId((int) $iCategory);
 		} else {
@@ -183,21 +187,24 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		return $oTemplate;
 	}
 	
-	public function renderTeaserDetail() {
-		$oService = ServiceQuery::create()->filterByIsActive(true)->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL)->filterByTeaser(null, Criteria::ISNOTNULL)->orderByRand()->findOne();
-		if($oService) {
-			$oServicesPage = PageQuery::create()->filterByIdentifier('services')->filterByIsInactive(false)->findOne();
+	public function renderTeaserDetail($iServiceId = null) { 
+		if(self::$SERVICE === null) {
+			self::$SERVICE =  ServiceQuery::create()->filterByIsActive(true)->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL)->filterByTeaser(null, Criteria::ISNOTNULL)->orderByRand()->findOne();
+		}
+		if(self::$SERVICE !== null) {
+			$oServicesPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_SERVICES));
 			if($oServicesPage === null) {
 				return;
 			}
-			$oTemplate = $this->constructTemplate('teaser_context_detail');
-			$oTemplate->replaceIdentifier('detail_link', LinkUtil::link(array_merge($oServicesPage->getFullPathArray(), array(self::DETAIL_IDENTIFIER, $oService->getId()))));
-			$oTemplate->replaceIdentifier('name', $oService->getName());
-			$oTemplate->replaceIdentifier('teaser', $oService->getTeaser());
-			$oTemplate->replaceIdentifier('goto_title', "mehr zu Details des Angebots ".$oService->getName());
-			$oTemplate->replaceIdentifier('read_more_text', "mehr lesen…");
+			$oTemplate = $this->constructTemplate('teaser_aktuell_detail');
+			$oTemplate->replaceIdentifier('detail_link', LinkUtil::link(array_merge($oServicesPage->getFullPathArray(), array(self::DETAIL_IDENTIFIER, self::$SERVICE->getId()))));
+			$oTemplate->replaceIdentifier('name', self::$SERVICE->getName());
+			$oTemplate->replaceIdentifier('teaser', self::$SERVICE->getTeaser());
+			$oTemplate->replaceIdentifier('goto_title', "mehr zu Details des Angebots ".self::$SERVICE->getName());
+			$oTemplate->replaceIdentifier('read_more_text', StringPeer::getString('text.read_more'));
 			return $oTemplate;
 		}
+		return;
 	}
 	
 	public function widgetData() {
