@@ -75,7 +75,7 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 				}
 			}
 			if(count($aClassTeachers) > $iLimit) {
-				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', etc.');
+				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', usw.');
 			}
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
