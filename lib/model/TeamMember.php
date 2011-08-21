@@ -54,6 +54,7 @@ class TeamMember extends BaseTeamMember {
 			$oCriteria->addGroupByColumn(SchoolClassPeer::UNIT_NAME);
 		}
     $oCriteria->addDescendingOrderByColumn(ClassTeacherPeer::IS_CLASS_TEACHER);
+    $oCriteria->addAscendingOrderByColumn(SchoolClassPeer::NAME);
 		return $this->getClassTeachersJoinSchoolClass($oCriteria);
 	}	
 	
