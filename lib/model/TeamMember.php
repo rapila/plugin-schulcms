@@ -25,7 +25,7 @@ class TeamMember extends BaseTeamMember {
 	*/
 	public function getIsClassTeacherClasses($bGroupByUnitName = false) {
 		$oCriteria = new Criteria();
-    $oCriteria->add(ClassTeacherPeer::IS_CLASS_TEACHER, true);
+		$oCriteria->add(ClassTeacherPeer::IS_CLASS_TEACHER, true);
 		if($bGroupByUnitName) {
 			$oCriteria->addGroupByColumn(SchoolClassPeer::UNIT_NAME);
 		}
@@ -53,10 +53,10 @@ class TeamMember extends BaseTeamMember {
 		if($bGroupByUnitName) {
 			$oCriteria->addGroupByColumn(SchoolClassPeer::UNIT_NAME);
 		}
-    $oCriteria->addDescendingOrderByColumn(ClassTeacherPeer::IS_CLASS_TEACHER);
-    $oCriteria->addAscendingOrderByColumn(SchoolClassPeer::NAME);
+		$oCriteria->addDescendingOrderByColumn(ClassTeacherPeer::IS_CLASS_TEACHER);
+		$oCriteria->addAscendingOrderByColumn(SchoolClassPeer::NAME);
 		return $this->getClassTeachersJoinSchoolClass($oCriteria);
-	}	
+	} 
 	
 	public function getClassNames() {
 		$aResult = array();
@@ -121,8 +121,9 @@ class TeamMember extends BaseTeamMember {
 	}
 	
 	public function getFirstTeamMemberFunctionName() {
-	  $oCriteria = new Criteria();
+		$oCriteria = new Criteria();
 		$oCriteria->add(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeamlist(), Criteria::IN);
+		$oCriteria->addAscendingOrderByColumn(SchoolFunctionPeer::TITLE);
 		foreach($this->getTeamMemberFunctionsJoinSchoolFunction($oCriteria) as $oFunction) {
 			return $oFunction->getSchoolFunction()->getTitle();
 		}
@@ -137,15 +138,15 @@ class TeamMember extends BaseTeamMember {
 	}
 	
 	public function getIsActiveTeamMember() {
-    if(self::$TEAMLIST_GROUPS == null) {
-      self::$TEAMLIST_GROUPS = FunctionGroupPeer::getFunctionGroupIdsForTeamlist();
-    }
-    foreach($this->getTeamMemberFunctionsJoinSchoolFunction() as $oFunction) {
-      if(in_array($oFunction->getSchoolFunction()->getFunctionGroupId(), self::$TEAMLIST_GROUPS)) {
-        return true;
-      }
-    }
-    return false;
+		if(self::$TEAMLIST_GROUPS == null) {
+			self::$TEAMLIST_GROUPS = FunctionGroupPeer::getFunctionGroupIdsForTeamlist();
+		}
+		foreach($this->getTeamMemberFunctionsJoinSchoolFunction() as $oFunction) {
+			if(in_array($oFunction->getSchoolFunction()->getFunctionGroupId(), self::$TEAMLIST_GROUPS)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public function getTeamMemberFunctionsJoinSchoolFunction($oCriteria = null, $oConn = null, $oJoinBehaviour = Criteria::INNER_JOIN) {
