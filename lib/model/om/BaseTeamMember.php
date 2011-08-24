@@ -104,6 +104,13 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	protected $is_deleted;
 
 	/**
+	 * The value for the is_newly_updated field.
+	 * Note: this column has a database default value of: false
+	 * @var        boolean
+	 */
+	protected $is_newly_updated;
+
+	/**
 	 * The value for the created_at field.
 	 * @var        string
 	 */
@@ -185,6 +192,7 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	public function applyDefaultValues()
 	{
 		$this->is_deleted = false;
+		$this->is_newly_updated = false;
 	}
 
 	/**
@@ -381,6 +389,16 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	public function getIsDeleted()
 	{
 		return $this->is_deleted;
+	}
+
+	/**
+	 * Get the [is_newly_updated] column value.
+	 * 
+	 * @return     boolean
+	 */
+	public function getIsNewlyUpdated()
+	{
+		return $this->is_newly_updated;
 	}
 
 	/**
@@ -806,6 +824,26 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	} // setIsDeleted()
 
 	/**
+	 * Set the value of [is_newly_updated] column.
+	 * 
+	 * @param      boolean $v new value
+	 * @return     TeamMember The current object (for fluent API support)
+	 */
+	public function setIsNewlyUpdated($v)
+	{
+		if ($v !== null) {
+			$v = (boolean) $v;
+		}
+
+		if ($this->is_newly_updated !== $v || $this->isNew()) {
+			$this->is_newly_updated = $v;
+			$this->modifiedColumns[] = TeamMemberPeer::IS_NEWLY_UPDATED;
+		}
+
+		return $this;
+	} // setIsNewlyUpdated()
+
+	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
@@ -965,6 +1003,10 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 				return false;
 			}
 
+			if ($this->is_newly_updated !== false) {
+				return false;
+			}
+
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -1000,10 +1042,11 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 			$this->portrait_id = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
 			$this->user_id = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
 			$this->is_deleted = ($row[$startcol + 12] !== null) ? (boolean) $row[$startcol + 12] : null;
-			$this->created_at = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
-			$this->updated_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
-			$this->created_by = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
-			$this->updated_by = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
+			$this->is_newly_updated = ($row[$startcol + 13] !== null) ? (boolean) $row[$startcol + 13] : null;
+			$this->created_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+			$this->updated_at = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+			$this->created_by = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
+			$this->updated_by = ($row[$startcol + 17] !== null) ? (int) $row[$startcol + 17] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1012,7 +1055,7 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 17; // 17 = TeamMemberPeer::NUM_COLUMNS - TeamMemberPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 18; // 18 = TeamMemberPeer::NUM_COLUMNS - TeamMemberPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating TeamMember object", $e);
@@ -1513,15 +1556,18 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 				return $this->getIsDeleted();
 				break;
 			case 13:
-				return $this->getCreatedAt();
+				return $this->getIsNewlyUpdated();
 				break;
 			case 14:
-				return $this->getUpdatedAt();
+				return $this->getCreatedAt();
 				break;
 			case 15:
-				return $this->getCreatedBy();
+				return $this->getUpdatedAt();
 				break;
 			case 16:
+				return $this->getCreatedBy();
+				break;
+			case 17:
 				return $this->getUpdatedBy();
 				break;
 			default:
@@ -1561,10 +1607,11 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 			$keys[10] => $this->getPortraitId(),
 			$keys[11] => $this->getUserId(),
 			$keys[12] => $this->getIsDeleted(),
-			$keys[13] => $this->getCreatedAt(),
-			$keys[14] => $this->getUpdatedAt(),
-			$keys[15] => $this->getCreatedBy(),
-			$keys[16] => $this->getUpdatedBy(),
+			$keys[13] => $this->getIsNewlyUpdated(),
+			$keys[14] => $this->getCreatedAt(),
+			$keys[15] => $this->getUpdatedAt(),
+			$keys[16] => $this->getCreatedBy(),
+			$keys[17] => $this->getUpdatedBy(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aDocument) {
@@ -1650,15 +1697,18 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 				$this->setIsDeleted($value);
 				break;
 			case 13:
-				$this->setCreatedAt($value);
+				$this->setIsNewlyUpdated($value);
 				break;
 			case 14:
-				$this->setUpdatedAt($value);
+				$this->setCreatedAt($value);
 				break;
 			case 15:
-				$this->setCreatedBy($value);
+				$this->setUpdatedAt($value);
 				break;
 			case 16:
+				$this->setCreatedBy($value);
+				break;
+			case 17:
 				$this->setUpdatedBy($value);
 				break;
 		} // switch()
@@ -1698,10 +1748,11 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 		if (array_key_exists($keys[10], $arr)) $this->setPortraitId($arr[$keys[10]]);
 		if (array_key_exists($keys[11], $arr)) $this->setUserId($arr[$keys[11]]);
 		if (array_key_exists($keys[12], $arr)) $this->setIsDeleted($arr[$keys[12]]);
-		if (array_key_exists($keys[13], $arr)) $this->setCreatedAt($arr[$keys[13]]);
-		if (array_key_exists($keys[14], $arr)) $this->setUpdatedAt($arr[$keys[14]]);
-		if (array_key_exists($keys[15], $arr)) $this->setCreatedBy($arr[$keys[15]]);
-		if (array_key_exists($keys[16], $arr)) $this->setUpdatedBy($arr[$keys[16]]);
+		if (array_key_exists($keys[13], $arr)) $this->setIsNewlyUpdated($arr[$keys[13]]);
+		if (array_key_exists($keys[14], $arr)) $this->setCreatedAt($arr[$keys[14]]);
+		if (array_key_exists($keys[15], $arr)) $this->setUpdatedAt($arr[$keys[15]]);
+		if (array_key_exists($keys[16], $arr)) $this->setCreatedBy($arr[$keys[16]]);
+		if (array_key_exists($keys[17], $arr)) $this->setUpdatedBy($arr[$keys[17]]);
 	}
 
 	/**
@@ -1726,6 +1777,7 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 		if ($this->isColumnModified(TeamMemberPeer::PORTRAIT_ID)) $criteria->add(TeamMemberPeer::PORTRAIT_ID, $this->portrait_id);
 		if ($this->isColumnModified(TeamMemberPeer::USER_ID)) $criteria->add(TeamMemberPeer::USER_ID, $this->user_id);
 		if ($this->isColumnModified(TeamMemberPeer::IS_DELETED)) $criteria->add(TeamMemberPeer::IS_DELETED, $this->is_deleted);
+		if ($this->isColumnModified(TeamMemberPeer::IS_NEWLY_UPDATED)) $criteria->add(TeamMemberPeer::IS_NEWLY_UPDATED, $this->is_newly_updated);
 		if ($this->isColumnModified(TeamMemberPeer::CREATED_AT)) $criteria->add(TeamMemberPeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(TeamMemberPeer::UPDATED_AT)) $criteria->add(TeamMemberPeer::UPDATED_AT, $this->updated_at);
 		if ($this->isColumnModified(TeamMemberPeer::CREATED_BY)) $criteria->add(TeamMemberPeer::CREATED_BY, $this->created_by);
@@ -1803,6 +1855,7 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 		$copyObj->setPortraitId($this->portrait_id);
 		$copyObj->setUserId($this->user_id);
 		$copyObj->setIsDeleted($this->is_deleted);
+		$copyObj->setIsNewlyUpdated($this->is_newly_updated);
 		$copyObj->setCreatedAt($this->created_at);
 		$copyObj->setUpdatedAt($this->updated_at);
 		$copyObj->setCreatedBy($this->created_by);
@@ -2642,6 +2695,7 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 		$this->portrait_id = null;
 		$this->user_id = null;
 		$this->is_deleted = null;
+		$this->is_newly_updated = null;
 		$this->created_at = null;
 		$this->updated_at = null;
 		$this->created_by = null;

@@ -50,6 +50,7 @@ class TeamMemberTableMap extends TableMap {
 		$this->addForeignKey('PORTRAIT_ID', 'PortraitId', 'INTEGER', 'documents', 'ID', false, null, null);
 		$this->addForeignKey('USER_ID', 'UserId', 'INTEGER', 'users', 'ID', false, null, null);
 		$this->addColumn('IS_DELETED', 'IsDeleted', 'BOOLEAN', false, 1, false);
+		$this->addColumn('IS_NEWLY_UPDATED', 'IsNewlyUpdated', 'BOOLEAN', false, 1, false);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
 		$this->addForeignKey('CREATED_BY', 'CreatedBy', 'INTEGER', 'users', 'ID', false, null, null);

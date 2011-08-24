@@ -369,3 +369,7 @@ ALTER TABLE `team_members` ADD `slug` VARCHAR( 80 ) CHARACTER SET utf8 COLLATE u
 #20110817.1740
 ALTER TABLE `events` ADD `title_normalized` VARCHAR( 255 ) NOT NULL AFTER `title` ,
 ADD INDEX ( `title_normalized` );
+
+#20110824.1820
+ALTER TABLE `team_members` ADD `is_newly_updated` TINYINT( 1 ) UNSIGNED NOT NULL AFTER `is_deleted` ,
+ADD INDEX ( `is_newly_updated` );

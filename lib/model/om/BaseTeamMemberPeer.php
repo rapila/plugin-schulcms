@@ -26,7 +26,7 @@ abstract class BaseTeamMemberPeer {
 	const TM_CLASS = 'TeamMemberTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 17;
+	const NUM_COLUMNS = 18;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -70,6 +70,9 @@ abstract class BaseTeamMemberPeer {
 	/** the column name for the IS_DELETED field */
 	const IS_DELETED = 'team_members.IS_DELETED';
 
+	/** the column name for the IS_NEWLY_UPDATED field */
+	const IS_NEWLY_UPDATED = 'team_members.IS_NEWLY_UPDATED';
+
 	/** the column name for the CREATED_AT field */
 	const CREATED_AT = 'team_members.CREATED_AT';
 
@@ -98,12 +101,12 @@ abstract class BaseTeamMemberPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'OriginalId', 'LastName', 'FirstName', 'Slug', 'GenderId', 'EmployedSince', 'DateOfBirth', 'Profession', 'EmailG', 'PortraitId', 'UserId', 'IsDeleted', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'originalId', 'lastName', 'firstName', 'slug', 'genderId', 'employedSince', 'dateOfBirth', 'profession', 'emailG', 'portraitId', 'userId', 'isDeleted', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::ORIGINAL_ID, self::LAST_NAME, self::FIRST_NAME, self::SLUG, self::GENDER_ID, self::EMPLOYED_SINCE, self::DATE_OF_BIRTH, self::PROFESSION, self::EMAIL_G, self::PORTRAIT_ID, self::USER_ID, self::IS_DELETED, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ORIGINAL_ID', 'LAST_NAME', 'FIRST_NAME', 'SLUG', 'GENDER_ID', 'EMPLOYED_SINCE', 'DATE_OF_BIRTH', 'PROFESSION', 'EMAIL_G', 'PORTRAIT_ID', 'USER_ID', 'IS_DELETED', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'original_id', 'last_name', 'first_name', 'slug', 'gender_id', 'employed_since', 'date_of_birth', 'profession', 'email_g', 'portrait_id', 'user_id', 'is_deleted', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'OriginalId', 'LastName', 'FirstName', 'Slug', 'GenderId', 'EmployedSince', 'DateOfBirth', 'Profession', 'EmailG', 'PortraitId', 'UserId', 'IsDeleted', 'IsNewlyUpdated', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'originalId', 'lastName', 'firstName', 'slug', 'genderId', 'employedSince', 'dateOfBirth', 'profession', 'emailG', 'portraitId', 'userId', 'isDeleted', 'isNewlyUpdated', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::ORIGINAL_ID, self::LAST_NAME, self::FIRST_NAME, self::SLUG, self::GENDER_ID, self::EMPLOYED_SINCE, self::DATE_OF_BIRTH, self::PROFESSION, self::EMAIL_G, self::PORTRAIT_ID, self::USER_ID, self::IS_DELETED, self::IS_NEWLY_UPDATED, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ORIGINAL_ID', 'LAST_NAME', 'FIRST_NAME', 'SLUG', 'GENDER_ID', 'EMPLOYED_SINCE', 'DATE_OF_BIRTH', 'PROFESSION', 'EMAIL_G', 'PORTRAIT_ID', 'USER_ID', 'IS_DELETED', 'IS_NEWLY_UPDATED', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'original_id', 'last_name', 'first_name', 'slug', 'gender_id', 'employed_since', 'date_of_birth', 'profession', 'email_g', 'portrait_id', 'user_id', 'is_deleted', 'is_newly_updated', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
 	);
 
 	/**
@@ -113,12 +116,12 @@ abstract class BaseTeamMemberPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OriginalId' => 1, 'LastName' => 2, 'FirstName' => 3, 'Slug' => 4, 'GenderId' => 5, 'EmployedSince' => 6, 'DateOfBirth' => 7, 'Profession' => 8, 'EmailG' => 9, 'PortraitId' => 10, 'UserId' => 11, 'IsDeleted' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, 'CreatedBy' => 15, 'UpdatedBy' => 16, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'originalId' => 1, 'lastName' => 2, 'firstName' => 3, 'slug' => 4, 'genderId' => 5, 'employedSince' => 6, 'dateOfBirth' => 7, 'profession' => 8, 'emailG' => 9, 'portraitId' => 10, 'userId' => 11, 'isDeleted' => 12, 'createdAt' => 13, 'updatedAt' => 14, 'createdBy' => 15, 'updatedBy' => 16, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::ORIGINAL_ID => 1, self::LAST_NAME => 2, self::FIRST_NAME => 3, self::SLUG => 4, self::GENDER_ID => 5, self::EMPLOYED_SINCE => 6, self::DATE_OF_BIRTH => 7, self::PROFESSION => 8, self::EMAIL_G => 9, self::PORTRAIT_ID => 10, self::USER_ID => 11, self::IS_DELETED => 12, self::CREATED_AT => 13, self::UPDATED_AT => 14, self::CREATED_BY => 15, self::UPDATED_BY => 16, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ORIGINAL_ID' => 1, 'LAST_NAME' => 2, 'FIRST_NAME' => 3, 'SLUG' => 4, 'GENDER_ID' => 5, 'EMPLOYED_SINCE' => 6, 'DATE_OF_BIRTH' => 7, 'PROFESSION' => 8, 'EMAIL_G' => 9, 'PORTRAIT_ID' => 10, 'USER_ID' => 11, 'IS_DELETED' => 12, 'CREATED_AT' => 13, 'UPDATED_AT' => 14, 'CREATED_BY' => 15, 'UPDATED_BY' => 16, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'original_id' => 1, 'last_name' => 2, 'first_name' => 3, 'slug' => 4, 'gender_id' => 5, 'employed_since' => 6, 'date_of_birth' => 7, 'profession' => 8, 'email_g' => 9, 'portrait_id' => 10, 'user_id' => 11, 'is_deleted' => 12, 'created_at' => 13, 'updated_at' => 14, 'created_by' => 15, 'updated_by' => 16, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OriginalId' => 1, 'LastName' => 2, 'FirstName' => 3, 'Slug' => 4, 'GenderId' => 5, 'EmployedSince' => 6, 'DateOfBirth' => 7, 'Profession' => 8, 'EmailG' => 9, 'PortraitId' => 10, 'UserId' => 11, 'IsDeleted' => 12, 'IsNewlyUpdated' => 13, 'CreatedAt' => 14, 'UpdatedAt' => 15, 'CreatedBy' => 16, 'UpdatedBy' => 17, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'originalId' => 1, 'lastName' => 2, 'firstName' => 3, 'slug' => 4, 'genderId' => 5, 'employedSince' => 6, 'dateOfBirth' => 7, 'profession' => 8, 'emailG' => 9, 'portraitId' => 10, 'userId' => 11, 'isDeleted' => 12, 'isNewlyUpdated' => 13, 'createdAt' => 14, 'updatedAt' => 15, 'createdBy' => 16, 'updatedBy' => 17, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::ORIGINAL_ID => 1, self::LAST_NAME => 2, self::FIRST_NAME => 3, self::SLUG => 4, self::GENDER_ID => 5, self::EMPLOYED_SINCE => 6, self::DATE_OF_BIRTH => 7, self::PROFESSION => 8, self::EMAIL_G => 9, self::PORTRAIT_ID => 10, self::USER_ID => 11, self::IS_DELETED => 12, self::IS_NEWLY_UPDATED => 13, self::CREATED_AT => 14, self::UPDATED_AT => 15, self::CREATED_BY => 16, self::UPDATED_BY => 17, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ORIGINAL_ID' => 1, 'LAST_NAME' => 2, 'FIRST_NAME' => 3, 'SLUG' => 4, 'GENDER_ID' => 5, 'EMPLOYED_SINCE' => 6, 'DATE_OF_BIRTH' => 7, 'PROFESSION' => 8, 'EMAIL_G' => 9, 'PORTRAIT_ID' => 10, 'USER_ID' => 11, 'IS_DELETED' => 12, 'IS_NEWLY_UPDATED' => 13, 'CREATED_AT' => 14, 'UPDATED_AT' => 15, 'CREATED_BY' => 16, 'UPDATED_BY' => 17, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'original_id' => 1, 'last_name' => 2, 'first_name' => 3, 'slug' => 4, 'gender_id' => 5, 'employed_since' => 6, 'date_of_birth' => 7, 'profession' => 8, 'email_g' => 9, 'portrait_id' => 10, 'user_id' => 11, 'is_deleted' => 12, 'is_newly_updated' => 13, 'created_at' => 14, 'updated_at' => 15, 'created_by' => 16, 'updated_by' => 17, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
 	);
 
 	/**
@@ -203,6 +206,7 @@ abstract class BaseTeamMemberPeer {
 			$criteria->addSelectColumn(TeamMemberPeer::PORTRAIT_ID);
 			$criteria->addSelectColumn(TeamMemberPeer::USER_ID);
 			$criteria->addSelectColumn(TeamMemberPeer::IS_DELETED);
+			$criteria->addSelectColumn(TeamMemberPeer::IS_NEWLY_UPDATED);
 			$criteria->addSelectColumn(TeamMemberPeer::CREATED_AT);
 			$criteria->addSelectColumn(TeamMemberPeer::UPDATED_AT);
 			$criteria->addSelectColumn(TeamMemberPeer::CREATED_BY);
@@ -221,6 +225,7 @@ abstract class BaseTeamMemberPeer {
 			$criteria->addSelectColumn($alias . '.PORTRAIT_ID');
 			$criteria->addSelectColumn($alias . '.USER_ID');
 			$criteria->addSelectColumn($alias . '.IS_DELETED');
+			$criteria->addSelectColumn($alias . '.IS_NEWLY_UPDATED');
 			$criteria->addSelectColumn($alias . '.CREATED_AT');
 			$criteria->addSelectColumn($alias . '.UPDATED_AT');
 			$criteria->addSelectColumn($alias . '.CREATED_BY');

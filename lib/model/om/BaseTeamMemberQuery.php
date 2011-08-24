@@ -19,6 +19,7 @@
  * @method     TeamMemberQuery orderByPortraitId($order = Criteria::ASC) Order by the portrait_id column
  * @method     TeamMemberQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method     TeamMemberQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
+ * @method     TeamMemberQuery orderByIsNewlyUpdated($order = Criteria::ASC) Order by the is_newly_updated column
  * @method     TeamMemberQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     TeamMemberQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method     TeamMemberQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
@@ -37,6 +38,7 @@
  * @method     TeamMemberQuery groupByPortraitId() Group by the portrait_id column
  * @method     TeamMemberQuery groupByUserId() Group by the user_id column
  * @method     TeamMemberQuery groupByIsDeleted() Group by the is_deleted column
+ * @method     TeamMemberQuery groupByIsNewlyUpdated() Group by the is_newly_updated column
  * @method     TeamMemberQuery groupByCreatedAt() Group by the created_at column
  * @method     TeamMemberQuery groupByUpdatedAt() Group by the updated_at column
  * @method     TeamMemberQuery groupByCreatedBy() Group by the created_by column
@@ -90,6 +92,7 @@
  * @method     TeamMember findOneByPortraitId(int $portrait_id) Return the first TeamMember filtered by the portrait_id column
  * @method     TeamMember findOneByUserId(int $user_id) Return the first TeamMember filtered by the user_id column
  * @method     TeamMember findOneByIsDeleted(boolean $is_deleted) Return the first TeamMember filtered by the is_deleted column
+ * @method     TeamMember findOneByIsNewlyUpdated(boolean $is_newly_updated) Return the first TeamMember filtered by the is_newly_updated column
  * @method     TeamMember findOneByCreatedAt(string $created_at) Return the first TeamMember filtered by the created_at column
  * @method     TeamMember findOneByUpdatedAt(string $updated_at) Return the first TeamMember filtered by the updated_at column
  * @method     TeamMember findOneByCreatedBy(int $created_by) Return the first TeamMember filtered by the created_by column
@@ -108,6 +111,7 @@
  * @method     array findByPortraitId(int $portrait_id) Return TeamMember objects filtered by the portrait_id column
  * @method     array findByUserId(int $user_id) Return TeamMember objects filtered by the user_id column
  * @method     array findByIsDeleted(boolean $is_deleted) Return TeamMember objects filtered by the is_deleted column
+ * @method     array findByIsNewlyUpdated(boolean $is_newly_updated) Return TeamMember objects filtered by the is_newly_updated column
  * @method     array findByCreatedAt(string $created_at) Return TeamMember objects filtered by the created_at column
  * @method     array findByUpdatedAt(string $updated_at) Return TeamMember objects filtered by the updated_at column
  * @method     array findByCreatedBy(int $created_by) Return TeamMember objects filtered by the created_by column
@@ -540,6 +544,23 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
 			$is_deleted = in_array(strtolower($isDeleted), array('false', 'off', '-', 'no', 'n', '0')) ? false : true;
 		}
 		return $this->addUsingAlias(TeamMemberPeer::IS_DELETED, $isDeleted, $comparison);
+	}
+
+	/**
+	 * Filter the query on the is_newly_updated column
+	 * 
+	 * @param     boolean|string $isNewlyUpdated The value to use as filter.
+	 *            Accepts strings ('false', 'off', '-', 'no', 'n', and '0' are false, the rest is true)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    TeamMemberQuery The current query, for fluid interface
+	 */
+	public function filterByIsNewlyUpdated($isNewlyUpdated = null, $comparison = null)
+	{
+		if (is_string($isNewlyUpdated)) {
+			$is_newly_updated = in_array(strtolower($isNewlyUpdated), array('false', 'off', '-', 'no', 'n', '0')) ? false : true;
+		}
+		return $this->addUsingAlias(TeamMemberPeer::IS_NEWLY_UPDATED, $isNewlyUpdated, $comparison);
 	}
 
 	/**
