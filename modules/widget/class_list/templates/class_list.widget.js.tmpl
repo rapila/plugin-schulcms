@@ -2,7 +2,7 @@ jQuery(document).ready(function() {
 	jQuery('table.class_list').each(function() {
 		jQuery(this).prepareWidget(function(widget) {
 			Widget.callStatic('detail', 'connect_detail_with_list', 'class', widget, 'setSchoolClassId');
-			widget.handle('list.cell-click', function(event, rowIndex, col, row, cell) {
+			widget.handle('list-cell_click', function(event, rowIndex, col, row, cell) {
 			});
 			AdminInterface.strings.handle_strings_for_list_result('wns.classes.no_result', ['class_type_name'], widget);
 		});
