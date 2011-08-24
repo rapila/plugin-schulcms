@@ -18,10 +18,10 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 
 	public function __construct($oLanguageObject = null, $aPath = null, $iId = 1) {
 		parent::__construct($oLanguageObject, $aPath, $iId);
-		$this->oClassPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('classes'));
 	}
 
 	public function renderFrontend() { 
+		$this->oClassPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('classes'));
 		$aOptions = @unserialize($this->getData());
 		$this->aFunctionGroupIds = @$aOptions[self::GROUPS_SELECT_KEY];
 
@@ -32,21 +32,11 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	}
 	
 	private function renderTeamliste() {
-    // $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($this->iFunctionGroupId !== null ? $this->iFunctionGroupId.'_' : ""), DIRNAME_PRELOAD);  
-    // if($oCache->cacheFileExists()) {
-    //   return $oCache->getContentsAsVariable();
-    // }
-		
-		// get current navigation item and link array for detail
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		
 		$oTemplate = $this->constructTemplate('list');
-		$oTeamMemberQuery = TeamMemberQuery::create()->excludeInactive();
-		if($this->aFunctionGroupIds !== null) {
-			$oTeamMemberQuery->filterByTeamMemberFunctionGroup($this->aFunctionGroupIds);
-		}
-
-		$aTeamMembers = $oTeamMemberQuery->orderByLastName()->orderByFirstName()->find();
+		$aTeamMembers = $this->listQuery()->find();
+		
 		$sOddEven = 'odd';
 		foreach($aTeamMembers as $oTeamMember) {
 			$oItemTemplate = $this->constructTemplate('list_item');
@@ -75,7 +65,6 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 			$oItemTemplate->replaceIdentifier('profession', $oTeamMember->getProfession());
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
-		// $oCache->setContents($oTemplate);
     return $oTemplate;
 	}
 	
@@ -117,6 +106,15 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 			}
 		}
 		return $oTemplate;
+	}
+	
+	public function listQuery() {
+		$oTeamMemberQuery = TeamMemberQuery::create()->excludeInactive();
+		if($this->aFunctionGroupIds !== null) {
+			$oTeamMemberQuery->filterByTeamMemberFunctionGroup($this->aFunctionGroupIds);
+		}
+		$oTeamMemberQuery->orderByLastName()->orderByFirstName();
+		return $oTeamMemberQuery;
 	}
 
 	public function widgetData() {

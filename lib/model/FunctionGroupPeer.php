@@ -8,19 +8,15 @@
 class FunctionGroupPeer extends BaseFunctionGroupPeer {
 
 	public static function getFunctionGroupIdsForTeamlist() {
-		return array_merge(self::getFunctionGroupIdsForTeachers(), self::getFunctionGroupIdsForTeachersRequireClasses(), self::getFunctionGroupIdsForOthers());
-	}
-	
-	public static function getFunctionGroupIdsForTeachers() {
-		return SchoolPeer::getActiveFunctionGroupIds('teachers');
+		return array_merge(self::getFunctionGroupIdsForTeamMembersWithClasses(), self::getFunctionGroupIdsForOtherTeamMembers());
 	}
 
-	public static function getFunctionGroupIdsForTeachersRequireClasses() {
-		return SchoolPeer::getActiveFunctionGroupIds('teachers_require_classes');
+	public static function getFunctionGroupIdsForTeamMembersWithClasses() {
+		return SchoolPeer::getActiveFunctionGroupIds('team_members_with_classes');
 	}
 	
-	public static function getFunctionGroupIdsForOthers() {
-		return SchoolPeer::getActiveFunctionGroupIds('others');
+	public static function getFunctionGroupIdsForOtherTeamMembers() {
+		return SchoolPeer::getActiveFunctionGroupIds('team_members_others');
 	}
 }
 

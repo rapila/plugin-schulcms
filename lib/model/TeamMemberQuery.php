@@ -4,6 +4,7 @@
  * @package		 propel.generator.model
  */
 class TeamMemberQuery extends BaseTeamMemberQuery {
+	private $oPrevCrit;
 		
 	public function orderByRand() {
 		return $this->addAscendingOrderByColumn(' RAND()');;
@@ -30,9 +31,8 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 	/**
 	* Excludes all team members that are not part of the configured active_function_groups
 	* they can be 
-	* - teachers
-	* - teachers_require_classes, that require active class relationship
-	* - others, any other function group not related to teaching
+	* - team_members with classes
+	* - other team_members, any other function group s.a. admin, services, teacher without defined class relationships
 	*/
 	public function excludeInactive() {
 		$this->setDistinct();
@@ -40,37 +40,33 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		$this->addJoin(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID, SchoolFunctionPeer::ID, Criteria::INNER_JOIN);
 		$this->addJoin(TeamMemberPeer::ID, ClassTeacherPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
 		$this->addJoin(ClassTeacherPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, Criteria::LEFT_JOIN);
-
-		// get teachers that require active classes
-		if(count(FunctionGroupPeer::getFunctionGroupIdsForTeachersRequireClasses())) {
-			$oTeacherWithClassesCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeachersRequireClasses(), Criteria::IN);
+		
+		// get team_members that require active classes
+		if(count(FunctionGroupPeer::getFunctionGroupIdsForTeamMembersWithClasses())) {
+			$oTeacherWithClassesCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeamMembersWithClasses(), Criteria::IN);
 			$oTeacherWithClassesCrit->addAnd($this->getNewCriterion(SchoolClassPeer::YEAR, SchoolPeer::getCurrentYear()));
 			$oTeacherWithClassesCrit->addAnd($this->getNewCriterion(ClassTeacherPeer::TEAM_MEMBER_ID, null, self::ISNOTNULL));
+			$this->addToFunctionGroupCriterion($oTeacherWithClassesCrit);
 		}
 		
-		// get other teachers
-		if(count(FunctionGroupPeer::getFunctionGroupIdsForTeachers())) {
-			$oTeacherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeachers(), Criteria::IN);
-			$oTeacherCrit->addAnd($this->getNewCriterion(SchoolClassPeer::YEAR, SchoolPeer::getCurrentYear()));
-			if($oTeacherWithClassesCrit) {
-				$oTeacherWithClassesCrit->addOr($oTeacherCrit);
-				$this->addAnd($oTeacherWithClassesCrit);
-			}
-		}
-
 		// get other team_members
-		if(count(FunctionGroupPeer::getFunctionGroupIdsForOthers())) {
-			$oOtherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForOthers(), Criteria::IN);
-			if($oTeacherWithClassesCrit) {
-				$oTeacherWithClassesCrit->addOr($oOtherCrit);
-			} elseif($oTeacherCrit) {
-				$oTeacherCrit->addOr($oOtherCrit);
-				$this->addAnd($oTeacherCrit);
-			} else {
-				$this->addAnd($oOtherCrit);
-			}
-		}		
+		if(count(FunctionGroupPeer::getFunctionGroupIdsForOtherTeamMembers())) {
+			$oOtherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForOtherTeamMembers(), Criteria::IN);
+			$this->addToFunctionGroupCriterion($oOtherCrit);
+		}
+		if($this->oPrevCrit) {
+			$this->addAnd($this->oPrevCrit);
+			$this->oPrevCrit = null;
+		}
 		return $this;
+	}
+	
+	private function addToFunctionGroupCriterion(Criterion $oCriterion) {
+		if($this->oPrevCrit === null) {
+			$this->oPrevCrit = $oCriterion;
+		} else {
+			$this->oPrevCrit->addOr($oCriterion);
+		}
 	}
 	
 	public function filterByHasPortrait() {

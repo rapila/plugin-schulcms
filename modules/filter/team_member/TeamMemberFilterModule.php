@@ -6,25 +6,33 @@ class TeamMemberFilterModule extends FilterModule {
 	const TEAM_FUNCTION_GROUP_ID_SEPARATOR = '-';
 	
 	public function onNavigationItemChildrenRequested(NavigationItem $oNavigationItem) {
-		$sPattern = '/^'.self::TEAM_REQUEST_KEY.'('.self::TEAM_FUNCTION_GROUP_ID_SEPARATOR.'\d+)?$/';
 		if(!($oNavigationItem instanceof PageNavigationItem 
-			&& preg_match($sPattern, $oNavigationItem->getIdentifier()) > 0)) {
+		   && (StringUtil::startsWith($oNavigationItem->getIdentifier(), self::TEAM_REQUEST_KEY.self::TEAM_FUNCTION_GROUP_ID_SEPARATOR) || $oNavigationItem->getIdentifier() === self::TEAM_REQUEST_KEY))) {
 			return;
 		}
-		$oCriteria = TeamMemberQuery::create()->distinct();
-		$oCriteria->clearSelectColumns()->addSelectColumn(TeamMemberPeer::SLUG)->addSelectColumn(TeamMemberPeer::LAST_NAME)->addSelectColumn(TeamMemberPeer::FIRST_NAME);
-		$oCriteria->excludeInactive()->orderBySlug();	
-		$aIds = explode(self::TEAM_FUNCTION_GROUP_ID_SEPARATOR, $oNavigationItem->getIdentifier());
-		if(count($aIds) === 2) {
-			$oCriteria->filterByTeamMemberFunctionGroup((int) $aIds[1]);
+		
+		$oObject = LanguageObjectQuery::create()->filterByLanguageId(Session::language())->joinContentObject()->useQuery('ContentObject')->filterByPageId($oNavigationItem->getMe()->getId())->filterByContainerName('content')->filterByObjectType('team_members')->endUse()->findOne();
+		if(!$oObject) {
+			return;
 		}
+		
+		$oModule = new TeamMembersFrontendModule($oObject);
+		$aOptions = $oModule->widgetData();
+		$oModule->aFunctionGroupIds = @$aOptions[TeamMembersFrontendModule::GROUPS_SELECT_KEY];
+		$oCriteria = $oModule->listQuery();
+		$oCriteria->clearSelectColumns()
+			->addSelectColumn(TeamMemberPeer::SLUG)
+			->addSelectColumn(TeamMemberPeer::LAST_NAME)
+			->addSelectColumn(TeamMemberPeer::FIRST_NAME);
+		
 		foreach(TeamMemberPeer::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_CLASS) as $aParams) {
-			$oNavItem = new HiddenVirtualNavigationItem(self::TEAM_MEMBER_ITEM_TYPE, $aParams->SLUG, $aParams->LAST_NAME.' '.$aParams->FIRST_NAME , null, null);
+			$oNavItem = new HiddenVirtualNavigationItem(self::TEAM_MEMBER_ITEM_TYPE, $aParams->SLUG, $aParams->LAST_NAME.', '.$aParams->FIRST_NAME, null, null);
 			$oNavigationItem->addChild($oNavItem);
 		}
 	}
 
 	public function onPageHasBeenSet($oPage, $bIsNotFound, $oNavigationItem) {
+		// ErrorHandler::log($bIsNotFound, $bIsNotFound || !($oNavigationItem instanceof VirtualNavigationItem) || $oNavigationItem->getType() !== self::TEAM_MEMBER_ITEM_TYPE);
 		if($bIsNotFound || !($oNavigationItem instanceof VirtualNavigationItem) || $oNavigationItem->getType() !== self::TEAM_MEMBER_ITEM_TYPE) {
 				return;
 		}
