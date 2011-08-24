@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package    propel.generator.model
+ * @package		 propel.generator.model
  */
 class ClassType extends BaseClassType {
 
@@ -11,16 +11,22 @@ class ClassType extends BaseClassType {
 	}
 	
 	public function getName() {
-	  return $this->getOriginalName();
+		return $this->getOriginalName();
 	}
 	
-  // public function countSchoolClasss(Criteria $oCriteria = null, $bDistinct = true, PropelPDO $oConn = null) {
-  //     // $oQuery = ClassTypeQuery::create()->joinSchoolClass(null, Criteria::INNER_JOIN)->joinClassStudent();
-  //   $oCriteria = new Criteria();
-  //     $oCriteria->addJoin(ClassTypePeer::ID, SchoolClassPeer::CLASS_TYPE_ID, Criteria::INNER_JOIN);
-  //     $oCriteria->addJoin(SchoolClassPeer::ID, ClassStudentPeer::SCHOOL_CLASS_ID, Criteria::INNER_JOIN);
-  //   return parent::countSchoolClasss($oCriteria, $bDistinct, $oConn);
-  // }
+	public function getClassCountCurrentYear() {
+		return $this->getClassCount();
+	}
+
+	public function getClassCountOtherYears() {
+		return $this->getClassCount(false);
+	}
+	
+	private function getClassCount($bCurrentYear=true) {
+		$oCriteria = new Criteria();
+		$oCriteria->add(SchoolClassPeer::YEAR, SchoolPeer::getCurrentYear(), $bCurrentYear ? Criteria::EQUAL : Criteria::NOT_EQUAL);
+		return parent::countSchoolClasss($oCriteria);
+	}
 
 }
 

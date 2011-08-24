@@ -1,0 +1,13 @@
+Widget.types['class_types'] = {
+	initialize: function() {
+	},
+
+	prepare: function() {
+		var _this = this;
+		Widget.createWithElement('list', function(list) {
+			_this._element.append(list._element);
+		}, this.settings.list_widget_session);
+	},
+	
+	settings: {}
+};
