@@ -474,7 +474,11 @@ a.stundenplan:hover { background: transparent url(../images/pdf_hover.png) no-re
   padding: 0.2em 0.2em;
   border-bottom: 1px solid #5e61a8;
 }
-.sidebar_detail { padding: 0.1em; }
+.sidebar_detail {
+  padding: 0.1em;
+  position: fixed;
+  width: 193px;
+}
 .class_info label {
   margin: 0;
   padding: 0;
