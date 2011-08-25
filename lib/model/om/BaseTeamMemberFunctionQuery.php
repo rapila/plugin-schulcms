@@ -9,6 +9,7 @@
  * @method     TeamMemberFunctionQuery orderByTeamMemberId($order = Criteria::ASC) Order by the team_member_id column
  * @method     TeamMemberFunctionQuery orderBySchoolFunctionId($order = Criteria::ASC) Order by the school_function_id column
  * @method     TeamMemberFunctionQuery orderByIsMainFunction($order = Criteria::ASC) Order by the is_main_function column
+ * @method     TeamMemberFunctionQuery orderByIsNewlyUpdated($order = Criteria::ASC) Order by the is_newly_updated column
  * @method     TeamMemberFunctionQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     TeamMemberFunctionQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method     TeamMemberFunctionQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
@@ -17,6 +18,7 @@
  * @method     TeamMemberFunctionQuery groupByTeamMemberId() Group by the team_member_id column
  * @method     TeamMemberFunctionQuery groupBySchoolFunctionId() Group by the school_function_id column
  * @method     TeamMemberFunctionQuery groupByIsMainFunction() Group by the is_main_function column
+ * @method     TeamMemberFunctionQuery groupByIsNewlyUpdated() Group by the is_newly_updated column
  * @method     TeamMemberFunctionQuery groupByCreatedAt() Group by the created_at column
  * @method     TeamMemberFunctionQuery groupByUpdatedAt() Group by the updated_at column
  * @method     TeamMemberFunctionQuery groupByCreatedBy() Group by the created_by column
@@ -48,6 +50,7 @@
  * @method     TeamMemberFunction findOneByTeamMemberId(int $team_member_id) Return the first TeamMemberFunction filtered by the team_member_id column
  * @method     TeamMemberFunction findOneBySchoolFunctionId(int $school_function_id) Return the first TeamMemberFunction filtered by the school_function_id column
  * @method     TeamMemberFunction findOneByIsMainFunction(boolean $is_main_function) Return the first TeamMemberFunction filtered by the is_main_function column
+ * @method     TeamMemberFunction findOneByIsNewlyUpdated(boolean $is_newly_updated) Return the first TeamMemberFunction filtered by the is_newly_updated column
  * @method     TeamMemberFunction findOneByCreatedAt(string $created_at) Return the first TeamMemberFunction filtered by the created_at column
  * @method     TeamMemberFunction findOneByUpdatedAt(string $updated_at) Return the first TeamMemberFunction filtered by the updated_at column
  * @method     TeamMemberFunction findOneByCreatedBy(int $created_by) Return the first TeamMemberFunction filtered by the created_by column
@@ -56,6 +59,7 @@
  * @method     array findByTeamMemberId(int $team_member_id) Return TeamMemberFunction objects filtered by the team_member_id column
  * @method     array findBySchoolFunctionId(int $school_function_id) Return TeamMemberFunction objects filtered by the school_function_id column
  * @method     array findByIsMainFunction(boolean $is_main_function) Return TeamMemberFunction objects filtered by the is_main_function column
+ * @method     array findByIsNewlyUpdated(boolean $is_newly_updated) Return TeamMemberFunction objects filtered by the is_newly_updated column
  * @method     array findByCreatedAt(string $created_at) Return TeamMemberFunction objects filtered by the created_at column
  * @method     array findByUpdatedAt(string $updated_at) Return TeamMemberFunction objects filtered by the updated_at column
  * @method     array findByCreatedBy(int $created_by) Return TeamMemberFunction objects filtered by the created_by column
@@ -230,6 +234,23 @@ abstract class BaseTeamMemberFunctionQuery extends ModelCriteria
 			$is_main_function = in_array(strtolower($isMainFunction), array('false', 'off', '-', 'no', 'n', '0')) ? false : true;
 		}
 		return $this->addUsingAlias(TeamMemberFunctionPeer::IS_MAIN_FUNCTION, $isMainFunction, $comparison);
+	}
+
+	/**
+	 * Filter the query on the is_newly_updated column
+	 * 
+	 * @param     boolean|string $isNewlyUpdated The value to use as filter.
+	 *            Accepts strings ('false', 'off', '-', 'no', 'n', and '0' are false, the rest is true)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    TeamMemberFunctionQuery The current query, for fluid interface
+	 */
+	public function filterByIsNewlyUpdated($isNewlyUpdated = null, $comparison = null)
+	{
+		if (is_string($isNewlyUpdated)) {
+			$is_newly_updated = in_array(strtolower($isNewlyUpdated), array('false', 'off', '-', 'no', 'n', '0')) ? false : true;
+		}
+		return $this->addUsingAlias(TeamMemberFunctionPeer::IS_NEWLY_UPDATED, $isNewlyUpdated, $comparison);
 	}
 
 	/**

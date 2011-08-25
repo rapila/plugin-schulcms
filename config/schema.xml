@@ -27,6 +27,7 @@
 		<reference local="school_function_id" foreign="id" />
 	</foreign-key>	
 	<column name="is_main_function" type="boolean" size="1" default="0" />
+	<column name="is_newly_updated" type="boolean" size="1" default="0" />
 </table>
 
 <table name="school_functions" phpName="SchoolFunction">

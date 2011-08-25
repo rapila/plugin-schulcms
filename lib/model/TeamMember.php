@@ -123,7 +123,9 @@ class TeamMember extends BaseTeamMember {
 	public function getFirstTeamMemberFunctionName() {
 		$oCriteria = new Criteria();
 		$oCriteria->add(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeamlist(), Criteria::IN);
+		$oCriteria->addDescendingOrderByColumn(TeamMemberFunctionPeer::IS_MAIN_FUNCTION);
 		$oCriteria->addAscendingOrderByColumn(SchoolFunctionPeer::TITLE);
+		$oCriteria->setLimit(1);
 		foreach($this->getTeamMemberFunctionsJoinSchoolFunction($oCriteria) as $oFunction) {
 			return $oFunction->getSchoolFunction()->getTitle();
 		}
