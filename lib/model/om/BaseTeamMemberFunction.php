@@ -37,6 +37,13 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 	protected $school_function_id;
 
 	/**
+	 * The value for the is_main_function field.
+	 * Note: this column has a database default value of: false
+	 * @var        boolean
+	 */
+	protected $is_main_function;
+
+	/**
 	 * The value for the created_at field.
 	 * @var        string
 	 */
@@ -95,6 +102,27 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 	protected $alreadyInValidation = false;
 
 	/**
+	 * Applies default values to this object.
+	 * This method should be called from the object's constructor (or
+	 * equivalent initialization method).
+	 * @see        __construct()
+	 */
+	public function applyDefaultValues()
+	{
+		$this->is_main_function = false;
+	}
+
+	/**
+	 * Initializes internal state of BaseTeamMemberFunction object.
+	 * @see        applyDefaults()
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		$this->applyDefaultValues();
+	}
+
+	/**
 	 * Get the [team_member_id] column value.
 	 * 
 	 * @return     int
@@ -112,6 +140,16 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 	public function getSchoolFunctionId()
 	{
 		return $this->school_function_id;
+	}
+
+	/**
+	 * Get the [is_main_function] column value.
+	 * 
+	 * @return     boolean
+	 */
+	public function getIsMainFunction()
+	{
+		return $this->is_main_function;
 	}
 
 	/**
@@ -257,6 +295,26 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 
 		return $this;
 	} // setSchoolFunctionId()
+
+	/**
+	 * Set the value of [is_main_function] column.
+	 * 
+	 * @param      boolean $v new value
+	 * @return     TeamMemberFunction The current object (for fluent API support)
+	 */
+	public function setIsMainFunction($v)
+	{
+		if ($v !== null) {
+			$v = (boolean) $v;
+		}
+
+		if ($this->is_main_function !== $v || $this->isNew()) {
+			$this->is_main_function = $v;
+			$this->modifiedColumns[] = TeamMemberFunctionPeer::IS_MAIN_FUNCTION;
+		}
+
+		return $this;
+	} // setIsMainFunction()
 
 	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
@@ -414,6 +472,10 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 	 */
 	public function hasOnlyDefaultValues()
 	{
+			if ($this->is_main_function !== false) {
+				return false;
+			}
+
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -438,10 +500,11 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 
 			$this->team_member_id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->school_function_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-			$this->created_at = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-			$this->updated_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-			$this->created_by = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-			$this->updated_by = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+			$this->is_main_function = ($row[$startcol + 2] !== null) ? (boolean) $row[$startcol + 2] : null;
+			$this->created_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+			$this->updated_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+			$this->created_by = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+			$this->updated_by = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -450,7 +513,7 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 6; // 6 = TeamMemberFunctionPeer::NUM_COLUMNS - TeamMemberFunctionPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 7; // 7 = TeamMemberFunctionPeer::NUM_COLUMNS - TeamMemberFunctionPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating TeamMemberFunction object", $e);
@@ -856,15 +919,18 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 				return $this->getSchoolFunctionId();
 				break;
 			case 2:
-				return $this->getCreatedAt();
+				return $this->getIsMainFunction();
 				break;
 			case 3:
-				return $this->getUpdatedAt();
+				return $this->getCreatedAt();
 				break;
 			case 4:
-				return $this->getCreatedBy();
+				return $this->getUpdatedAt();
 				break;
 			case 5:
+				return $this->getCreatedBy();
+				break;
+			case 6:
 				return $this->getUpdatedBy();
 				break;
 			default:
@@ -893,10 +959,11 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 		$result = array(
 			$keys[0] => $this->getTeamMemberId(),
 			$keys[1] => $this->getSchoolFunctionId(),
-			$keys[2] => $this->getCreatedAt(),
-			$keys[3] => $this->getUpdatedAt(),
-			$keys[4] => $this->getCreatedBy(),
-			$keys[5] => $this->getUpdatedBy(),
+			$keys[2] => $this->getIsMainFunction(),
+			$keys[3] => $this->getCreatedAt(),
+			$keys[4] => $this->getUpdatedAt(),
+			$keys[5] => $this->getCreatedBy(),
+			$keys[6] => $this->getUpdatedBy(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aTeamMember) {
@@ -949,15 +1016,18 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 				$this->setSchoolFunctionId($value);
 				break;
 			case 2:
-				$this->setCreatedAt($value);
+				$this->setIsMainFunction($value);
 				break;
 			case 3:
-				$this->setUpdatedAt($value);
+				$this->setCreatedAt($value);
 				break;
 			case 4:
-				$this->setCreatedBy($value);
+				$this->setUpdatedAt($value);
 				break;
 			case 5:
+				$this->setCreatedBy($value);
+				break;
+			case 6:
 				$this->setUpdatedBy($value);
 				break;
 		} // switch()
@@ -986,10 +1056,11 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 
 		if (array_key_exists($keys[0], $arr)) $this->setTeamMemberId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setSchoolFunctionId($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setCreatedAt($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setUpdatedAt($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setCreatedBy($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setUpdatedBy($arr[$keys[5]]);
+		if (array_key_exists($keys[2], $arr)) $this->setIsMainFunction($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setCreatedAt($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setUpdatedAt($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setCreatedBy($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setUpdatedBy($arr[$keys[6]]);
 	}
 
 	/**
@@ -1003,6 +1074,7 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 
 		if ($this->isColumnModified(TeamMemberFunctionPeer::TEAM_MEMBER_ID)) $criteria->add(TeamMemberFunctionPeer::TEAM_MEMBER_ID, $this->team_member_id);
 		if ($this->isColumnModified(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID)) $criteria->add(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID, $this->school_function_id);
+		if ($this->isColumnModified(TeamMemberFunctionPeer::IS_MAIN_FUNCTION)) $criteria->add(TeamMemberFunctionPeer::IS_MAIN_FUNCTION, $this->is_main_function);
 		if ($this->isColumnModified(TeamMemberFunctionPeer::CREATED_AT)) $criteria->add(TeamMemberFunctionPeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(TeamMemberFunctionPeer::UPDATED_AT)) $criteria->add(TeamMemberFunctionPeer::UPDATED_AT, $this->updated_at);
 		if ($this->isColumnModified(TeamMemberFunctionPeer::CREATED_BY)) $criteria->add(TeamMemberFunctionPeer::CREATED_BY, $this->created_by);
@@ -1077,6 +1149,7 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 	{
 		$copyObj->setTeamMemberId($this->team_member_id);
 		$copyObj->setSchoolFunctionId($this->school_function_id);
+		$copyObj->setIsMainFunction($this->is_main_function);
 		$copyObj->setCreatedAt($this->created_at);
 		$copyObj->setUpdatedAt($this->updated_at);
 		$copyObj->setCreatedBy($this->created_by);
@@ -1326,6 +1399,7 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 	{
 		$this->team_member_id = null;
 		$this->school_function_id = null;
+		$this->is_main_function = null;
 		$this->created_at = null;
 		$this->updated_at = null;
 		$this->created_by = null;
@@ -1333,6 +1407,7 @@ abstract class BaseTeamMemberFunction extends BaseObject  implements Persistent
 		$this->alreadyInSave = false;
 		$this->alreadyInValidation = false;
 		$this->clearAllReferences();
+		$this->applyDefaultValues();
 		$this->resetModified();
 		$this->setNew(true);
 		$this->setDeleted(false);

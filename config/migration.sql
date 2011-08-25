@@ -373,3 +373,6 @@ ADD INDEX ( `title_normalized` );
 #20110824.1820
 ALTER TABLE `team_members` ADD `is_newly_updated` TINYINT( 1 ) UNSIGNED NOT NULL AFTER `is_deleted` ,
 ADD INDEX ( `is_newly_updated` );
+
+#20110825.0804
+ALTER TABLE `team_member_functions` ADD `is_main_function` TINYINT( 1 ) UNSIGNED NOT NULL AFTER `school_function_id`;

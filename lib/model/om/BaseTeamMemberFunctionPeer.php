@@ -26,7 +26,7 @@ abstract class BaseTeamMemberFunctionPeer {
 	const TM_CLASS = 'TeamMemberFunctionTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 6;
+	const NUM_COLUMNS = 7;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -36,6 +36,9 @@ abstract class BaseTeamMemberFunctionPeer {
 
 	/** the column name for the SCHOOL_FUNCTION_ID field */
 	const SCHOOL_FUNCTION_ID = 'team_member_functions.SCHOOL_FUNCTION_ID';
+
+	/** the column name for the IS_MAIN_FUNCTION field */
+	const IS_MAIN_FUNCTION = 'team_member_functions.IS_MAIN_FUNCTION';
 
 	/** the column name for the CREATED_AT field */
 	const CREATED_AT = 'team_member_functions.CREATED_AT';
@@ -65,12 +68,12 @@ abstract class BaseTeamMemberFunctionPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('TeamMemberId', 'SchoolFunctionId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('teamMemberId', 'schoolFunctionId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-		BasePeer::TYPE_COLNAME => array (self::TEAM_MEMBER_ID, self::SCHOOL_FUNCTION_ID, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('TEAM_MEMBER_ID', 'SCHOOL_FUNCTION_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-		BasePeer::TYPE_FIELDNAME => array ('team_member_id', 'school_function_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+		BasePeer::TYPE_PHPNAME => array ('TeamMemberId', 'SchoolFunctionId', 'IsMainFunction', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('teamMemberId', 'schoolFunctionId', 'isMainFunction', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+		BasePeer::TYPE_COLNAME => array (self::TEAM_MEMBER_ID, self::SCHOOL_FUNCTION_ID, self::IS_MAIN_FUNCTION, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('TEAM_MEMBER_ID', 'SCHOOL_FUNCTION_ID', 'IS_MAIN_FUNCTION', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+		BasePeer::TYPE_FIELDNAME => array ('team_member_id', 'school_function_id', 'is_main_function', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
 	);
 
 	/**
@@ -80,12 +83,12 @@ abstract class BaseTeamMemberFunctionPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('TeamMemberId' => 0, 'SchoolFunctionId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, 'CreatedBy' => 4, 'UpdatedBy' => 5, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('teamMemberId' => 0, 'schoolFunctionId' => 1, 'createdAt' => 2, 'updatedAt' => 3, 'createdBy' => 4, 'updatedBy' => 5, ),
-		BasePeer::TYPE_COLNAME => array (self::TEAM_MEMBER_ID => 0, self::SCHOOL_FUNCTION_ID => 1, self::CREATED_AT => 2, self::UPDATED_AT => 3, self::CREATED_BY => 4, self::UPDATED_BY => 5, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('TEAM_MEMBER_ID' => 0, 'SCHOOL_FUNCTION_ID' => 1, 'CREATED_AT' => 2, 'UPDATED_AT' => 3, 'CREATED_BY' => 4, 'UPDATED_BY' => 5, ),
-		BasePeer::TYPE_FIELDNAME => array ('team_member_id' => 0, 'school_function_id' => 1, 'created_at' => 2, 'updated_at' => 3, 'created_by' => 4, 'updated_by' => 5, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+		BasePeer::TYPE_PHPNAME => array ('TeamMemberId' => 0, 'SchoolFunctionId' => 1, 'IsMainFunction' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, 'CreatedBy' => 5, 'UpdatedBy' => 6, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('teamMemberId' => 0, 'schoolFunctionId' => 1, 'isMainFunction' => 2, 'createdAt' => 3, 'updatedAt' => 4, 'createdBy' => 5, 'updatedBy' => 6, ),
+		BasePeer::TYPE_COLNAME => array (self::TEAM_MEMBER_ID => 0, self::SCHOOL_FUNCTION_ID => 1, self::IS_MAIN_FUNCTION => 2, self::CREATED_AT => 3, self::UPDATED_AT => 4, self::CREATED_BY => 5, self::UPDATED_BY => 6, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('TEAM_MEMBER_ID' => 0, 'SCHOOL_FUNCTION_ID' => 1, 'IS_MAIN_FUNCTION' => 2, 'CREATED_AT' => 3, 'UPDATED_AT' => 4, 'CREATED_BY' => 5, 'UPDATED_BY' => 6, ),
+		BasePeer::TYPE_FIELDNAME => array ('team_member_id' => 0, 'school_function_id' => 1, 'is_main_function' => 2, 'created_at' => 3, 'updated_at' => 4, 'created_by' => 5, 'updated_by' => 6, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
 	);
 
 	/**
@@ -159,6 +162,7 @@ abstract class BaseTeamMemberFunctionPeer {
 		if (null === $alias) {
 			$criteria->addSelectColumn(TeamMemberFunctionPeer::TEAM_MEMBER_ID);
 			$criteria->addSelectColumn(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID);
+			$criteria->addSelectColumn(TeamMemberFunctionPeer::IS_MAIN_FUNCTION);
 			$criteria->addSelectColumn(TeamMemberFunctionPeer::CREATED_AT);
 			$criteria->addSelectColumn(TeamMemberFunctionPeer::UPDATED_AT);
 			$criteria->addSelectColumn(TeamMemberFunctionPeer::CREATED_BY);
@@ -166,6 +170,7 @@ abstract class BaseTeamMemberFunctionPeer {
 		} else {
 			$criteria->addSelectColumn($alias . '.TEAM_MEMBER_ID');
 			$criteria->addSelectColumn($alias . '.SCHOOL_FUNCTION_ID');
+			$criteria->addSelectColumn($alias . '.IS_MAIN_FUNCTION');
 			$criteria->addSelectColumn($alias . '.CREATED_AT');
 			$criteria->addSelectColumn($alias . '.UPDATED_AT');
 			$criteria->addSelectColumn($alias . '.CREATED_BY');

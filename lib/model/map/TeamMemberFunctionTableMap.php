@@ -39,6 +39,7 @@ class TeamMemberFunctionTableMap extends TableMap {
 		// columns
 		$this->addForeignPrimaryKey('TEAM_MEMBER_ID', 'TeamMemberId', 'INTEGER' , 'team_members', 'ID', true, null, null);
 		$this->addForeignPrimaryKey('SCHOOL_FUNCTION_ID', 'SchoolFunctionId', 'INTEGER' , 'school_functions', 'ID', true, null, null);
+		$this->addColumn('IS_MAIN_FUNCTION', 'IsMainFunction', 'BOOLEAN', false, 1, false);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
 		$this->addForeignKey('CREATED_BY', 'CreatedBy', 'INTEGER', 'users', 'ID', false, null, null);
