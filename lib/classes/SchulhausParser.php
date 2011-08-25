@@ -3,24 +3,12 @@ class SchulhausParser extends SAXParser {
 	protected static $URL = 'http://***REMOVED***.***REMOVED***.ch/websiteobjects/get_schulhausInfo.asp';
 
 	protected function gotElement($sElementName, $aAttributes) {
-		if($sElementName === 'Bezeichnung') {
-			$this->expectCharacters();
-		}
-		if($sElementName === 'Schuleinheit') {
-			$this->expectCharacters();
-		}
-		if($sElementName === 'Schuljahr') {
-			$this->expectCharacters();
-		}
-		if($sElementName === 'Strasse') {
-			$this->expectCharacters();
-		}
-		if($sElementName === 'PLZ') {
-			$this->expectCharacters();
-		}
-		if($sElementName === 'Ort') {
-			$this->expectCharacters();
-		}
+		if($sElementName === 'Bezeichnung') $this->expectCharacters();
+		if($sElementName === 'Schuleinheit') $this->expectCharacters();
+		if($sElementName === 'Schuljahr') $this->expectCharacters();
+		if($sElementName === 'Strasse') $this->expectCharacters();
+		if($sElementName === 'PLZ') $this->expectCharacters();
+		if($sElementName === 'Ort') $this->expectCharacters();
 		if($sElementName === 'Klasse') {
 			if(!isset($this->mResult['classes'])) {
 				$this->mResult['classes'] = array();
