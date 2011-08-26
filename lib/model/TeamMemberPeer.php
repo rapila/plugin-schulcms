@@ -55,7 +55,7 @@ class TeamMemberPeer extends BaseTeamMemberPeer {
 	}
 	
 	public static function countNonTeachingPersonel() {
-		return self::countTeamMembersByFunctionGroupIds(SchoolPeer::getActiveFunctionGroupIds('others'));
+		return self::countTeamMembersByFunctionGroupIds(SchoolPeer::getActiveFunctionGroupIds('team_members_others'));
 	}
 	
 	public static function getInactiveDatabaseTeachers() {
