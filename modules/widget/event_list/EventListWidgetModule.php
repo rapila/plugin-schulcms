@@ -34,7 +34,7 @@ class EventListWidgetModule extends WidgetModule {
 	}
 	
 	public function getColumnIdentifiers() {
-		return array('id', 'title', 'teaser_truncated', 'is_class_event', 'is_service_event', 'is_active', 'show_on_frontpage', 'delete');
+		return array('id', 'title', 'teaser_truncated', 'date_start_formatted', 'is_class_event', 'is_service_event', 'is_active', 'show_on_frontpage', 'delete');
 	}
 	
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -45,6 +45,9 @@ class EventListWidgetModule extends WidgetModule {
 				break;
 			case 'teaser_truncated':
 				$aResult['heading'] = StringPeer::getString('wns.event.teaser');
+				break;
+			case 'date_start_formatted':
+				$aResult['heading'] = StringPeer::getString('wns.event.date_start');
 				break;
 			case 'is_class_event':
         $aResult['heading'] = StringPeer::getString('wns.events.general');
@@ -72,6 +75,9 @@ class EventListWidgetModule extends WidgetModule {
 	public function getDatabaseColumnForColumn($sColumnIdentifier) {
 		if($sColumnIdentifier === 'is_class_event') {
 			return EventPeer::SCHOOL_CLASS_ID;
+		}    
+		if($sColumnIdentifier === 'date_start_formatted') {
+			return EventPeer::DATE_START;
 		}    
 		if($sColumnIdentifier === 'teaser_truncated') {
 			return EventPeer::TEASER;

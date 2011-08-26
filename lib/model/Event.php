@@ -52,6 +52,10 @@ class Event extends BaseEvent {
 		return $this->getDateStart($sFormat);
 	}
 	
+	public function getDateStartFormatted($sFormat = 'Y.m.d') {
+		return $this->getDateStart($sFormat);
+	}
+	
 	public function getDateStartTimeStamp() {
 		return $this->date_start;
 	}
