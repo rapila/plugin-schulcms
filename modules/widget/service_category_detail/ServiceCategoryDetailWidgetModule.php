@@ -6,7 +6,7 @@ class ServiceCategoryDetailWidgetModule extends PersistentWidgetModule {
 
 	private $iCategoryId = null;
 	
-	public function setCategoryId($iCategoryId) {
+	public function setServiceCategoryId($iCategoryId) {
 		$this->iCategoryId = $iCategoryId;
 	}
 	
