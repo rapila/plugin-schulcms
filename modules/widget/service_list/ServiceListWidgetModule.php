@@ -21,7 +21,7 @@ class ServiceListWidgetModule extends WidgetModule {
 	}
 	
 	public function getColumnIdentifiers() {
-		return array('id', 'name', 'phone', 'email', 'website', 'team_count', 'is_active', 'delete');
+		return array('id', 'name', 'phone', 'service_category_name', 'website', 'team_count', 'is_active', 'delete');
 	}
 	
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -33,8 +33,8 @@ class ServiceListWidgetModule extends WidgetModule {
 			case 'phone':
 				$aResult['heading'] = StringPeer::getString('wns.phone');
 				break;
-			case 'email':
-				$aResult['heading'] = StringPeer::getString('wns.email');
+			case 'service_category_name':
+				$aResult['heading'] = StringPeer::getString('wns.service_category.short');
 				break;
 			case 'website':
 				$aResult['heading'] = StringPeer::getString('wns.service.website');
@@ -63,6 +63,9 @@ class ServiceListWidgetModule extends WidgetModule {
 	}
 	
 	public function getDatabaseColumnForColumn($sColumnIdentifier) {
+		if($sColumnIdentifier === 'service_category_name') {
+			return ServicePeer::SERVICE_CATEGORY_ID;
+		}
 		return null;
 	}
 	

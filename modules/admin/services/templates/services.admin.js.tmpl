@@ -1,46 +1,85 @@
 jQuery(document).ready(function() {
-	// init main content
-	AdminInterface.content.find('table.service_list').prepareWidget(function(service_list) {
+
+	var sidebar = AdminInterface.sidebar;
+	var content_list = AdminInterface.content;
+	var info_bar = AdminInterface.info_bar;
+	
+	var handlers = [];
+	
+	sidebar.children('[data-widget-type]').prepareWidget(function(widget) {
+		sidebar = widget;
+	}.deferred(handlers));
+		content_list.children('[data-widget-type]').prepareWidget(function(widget) {
+		content_list = widget;
+	}.deferred(handlers));
+	info_bar.prepareWidget(function(widget) {
+		info_bar = widget;
+	}.deferred(handlers));
+	
+	jQuery.when.apply(jQuery, handlers).then(function() {
 		
-		var sidebar;
-		AdminInterface.sidebar.find('.ui-list').prepareWidget(function(widget) {
-			sidebar = widget;
-			sidebar.settings.row_click_active_mode = 'activate';
-			var initial_selection = "{{writeRequestValue=service_category_id}}";
-			if(initial_selection) {
-				initial_selection = isNaN(initial_selection) ? initial_selection : parseInt(initial_selection, 10);
-				sidebar.handle('loaded', function() {
-					sidebar.activate_row(sidebar.row_from_row_data({service_category_id: initial_selection}));
-				}, true, true);
+		// add new Service
+		info_bar.add_button('add-new-item', function() {
+			Widget.create('service_detail', function(widget) {
+				widget.settings.initial_category_id = sidebar.active_row().data('service_category_id');
+				widget.open();
+				widget.save_callback = function() {
+					content_list.reload();
+				};
+			});
+		}, 'n', true);
+		
+		// add new ServiceCategory
+		info_bar.add_button('add-new-item', function() {
+			Widget.create('sidebar_input', function(widget) {
+				widget.add_new_sidebar_input("{{writeString=wns.service_category.default_name}}", 'ServiceCategory', sidebar, 'cmos-services_categories_changed');
+			});
+		});
+
+		/// @todo remove and edit buttons, only show if has permission
+		var remove_item = info_bar.add_button('remove-item', function() {
+			sidebar.delete_row(sidebar.active_row());
+		}).disable();
+		
+		var edit_item = info_bar.add_button('edit-item', function() {
+			Widget.create('service_category_detail', function(widget) {
+				widget.setServiceCategoryId(sidebar.active_row_datas()[0].service_category_id);
+				widget.open();
+				widget.fill_data();
+				widget.save_callback = function() {
+					sidebar.reload();
+					content_list.reload();
+				};
+			});
+		}).disable();
+
+		// add search input
+		info_bar.add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
+			if(content_list.setSearch(search)) {
+				content_list.reload();
 			}
-			
-			sidebar.handle('list-selection_changed', function(event, selection) {
-				service_list.setOption('service_category_id', selection[0] && selection[0].service_category_id);
-				service_list.reload();
-			});
 		});
 		
-		// init info_bar
-		AdminInterface.info_bar.prepareWidget(function(info_bar) {
-			info_bar.add_button('add-new-item', function() {
-				Widget.create('service_detail', function(widget) {
-					widget.settings.initial_category_id = sidebar.active_row().data('service_category_id');
-					widget.open();
-					widget.save_callback = function() {
-						service_list.reload();
-					};
-				});
-			}, 'n', true).add_button('add-new-item', function() {
-				Widget.create('sidebar_input', function(widget) {
-					widget.add_new_sidebar_input("{{writeString=wns.service_category.default_name}}", 'ServiceCategory', sidebar, 'cmos-services_categories_changed');
-				});
-			}).add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
-				if(service_list.setSearch(search)) {
-					service_list.reload();
-				}
-			});
-			// add row_count_info
-			info_bar.add_row_count_info_for_list(service_list);
+		// add row_count_info
+		info_bar.add_row_count_info_for_list(content_list);
+		
+		// list-selection_changed
+		sidebar.handle('list-selection_changed', function(event, selection) {
+			var service_category_id = selection[0] && selection[0].service_category_id;
+			var has_detail = selection.length === 1 && service_category_id.constructor === Number;
+			remove_item[has_detail ? 'enable' : 'disable']();
+			edit_item[has_detail ? 'enable' : 'disable']();
+			content_list.setOption('service_category_id', service_category_id);
+			content_list.reload();
 		});
+		
+		sidebar.settings.row_click_active_mode = 'activate';
+		var initial_selection = "{{writeRequestValue=service_category_id}}";
+		if(initial_selection) {
+			initial_selection = isNaN(initial_selection) ? initial_selection : parseInt(initial_selection, 10);
+			sidebar.handle('loaded', function() {
+				sidebar.activate_row(sidebar.row_from_row_data({service_category_id: initial_selection}));
+			}, true, true);
+		}
 	});
 });

@@ -45,6 +45,13 @@ class Service extends BaseService {
 		}
 		return array_merge($oServicePage->getFullPathArray(), array($this->getSlug()));
 	}
+	
+	public function getServiceCategoryName() {
+		if($this->getServiceCategory()) {
+			return $this->getServiceCategory()->getName();
+		}
+		return null;
+	}
 
 }
 
