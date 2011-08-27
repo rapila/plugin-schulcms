@@ -63,7 +63,7 @@ class ServiceTableMap extends TableMap {
 	public function buildRelations()
 	{
     $this->addRelation('Document', 'Document', RelationMap::MANY_TO_ONE, array('logo_id' => 'id', ), 'SET NULL', null);
-    $this->addRelation('ServiceCategory', 'ServiceCategory', RelationMap::MANY_TO_ONE, array('service_category_id' => 'id', ), 'CASCADE', null);
+    $this->addRelation('ServiceCategory', 'ServiceCategory', RelationMap::MANY_TO_ONE, array('service_category_id' => 'id', ), 'SET NULL', null);
     $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
     $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
     $this->addRelation('Event', 'Event', RelationMap::ONE_TO_MANY, array('id' => 'service_id', ), 'CASCADE', null);

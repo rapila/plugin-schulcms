@@ -54,7 +54,7 @@ class ServiceCategoryTableMap extends TableMap {
 	{
     $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
     $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('Service', 'Service', RelationMap::ONE_TO_MANY, array('id' => 'service_category_id', ), 'CASCADE', null);
+    $this->addRelation('Service', 'Service', RelationMap::ONE_TO_MANY, array('id' => 'service_category_id', ), 'SET NULL', null);
 	} // buildRelations()
 
 	/**

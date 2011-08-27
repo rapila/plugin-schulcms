@@ -235,7 +235,7 @@
 		<reference local="logo_id" foreign="id" />
 	</foreign-key>
 	<column name="service_category_id" type="integer" />
-	<foreign-key foreignTable="service_categories" onDelete="cascade">
+	<foreign-key foreignTable="service_categories" onDelete="setnull">
 		<reference local="service_category_id" foreign="id" />
 	</foreign-key>
 </table>

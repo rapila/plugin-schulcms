@@ -1168,7 +1168,7 @@ abstract class BaseServiceCategoryPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += ServiceCategoryPeer::doOnDeleteCascade(new Criteria(ServiceCategoryPeer::DATABASE_NAME), $con);
+			ServiceCategoryPeer::doOnDeleteSetNull(new Criteria(ServiceCategoryPeer::DATABASE_NAME), $con);
 			$affectedRows += BasePeer::doDeleteAll(ServiceCategoryPeer::TABLE_NAME, $con, ServiceCategoryPeer::DATABASE_NAME);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
@@ -1223,7 +1223,7 @@ abstract class BaseServiceCategoryPeer {
 			
 			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
 			$c = clone $criteria;
-			$affectedRows += ServiceCategoryPeer::doOnDeleteCascade($c, $con);
+			ServiceCategoryPeer::doOnDeleteSetNull($c, $con);
 			
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
@@ -1249,7 +1249,7 @@ abstract class BaseServiceCategoryPeer {
 	}
 
 	/**
-	 * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+	 * This is a method for emulating ON DELETE SET NULL DBs that don't support this
 	 * feature (like MySQL or SQLite).
 	 *
 	 * This method is not very speedy because it must perform a query first to get
@@ -1259,25 +1259,24 @@ abstract class BaseServiceCategoryPeer {
 	 *
 	 * @param      Criteria $criteria
 	 * @param      PropelPDO $con
-	 * @return     int The number of affected rows (if supported by underlying database driver).
+	 * @return     void
 	 */
-	protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+	protected static function doOnDeleteSetNull(Criteria $criteria, PropelPDO $con)
 	{
-		// initialize var to track total num of affected rows
-		$affectedRows = 0;
 
 		// first find the objects that are implicated by the $criteria
 		$objects = ServiceCategoryPeer::doSelect($criteria, $con);
 		foreach ($objects as $obj) {
 
+			// set fkey col in related Service rows to NULL
+			$selectCriteria = new Criteria(ServiceCategoryPeer::DATABASE_NAME);
+			$updateValues = new Criteria(ServiceCategoryPeer::DATABASE_NAME);
+			$selectCriteria->add(ServicePeer::SERVICE_CATEGORY_ID, $obj->getId());
+			$updateValues->add(ServicePeer::SERVICE_CATEGORY_ID, null);
 
-			// delete related Service objects
-			$criteria = new Criteria(ServicePeer::DATABASE_NAME);
-			
-			$criteria->add(ServicePeer::SERVICE_CATEGORY_ID, $obj->getId());
-			$affectedRows += ServicePeer::doDelete($criteria, $con);
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+
 		}
-		return $affectedRows;
 	}
 
 	/**
