@@ -5,95 +5,52 @@
 
 class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBasedFrontendModule {
 	
-	public static $DISPLAY_MODES = array('service_liste', 'service_detail', 'service_intern_detail', 'team_member_portraits', 'service_teaser');
+	public static $DISPLAY_MODES = array('service_liste', 'service_detail', 'service_intern_detail', 'service_teaser', 'team_member_portraits');
 	public static $SERVICE;
+	public $aServiceCategoryIds;
 	public $iExcludeInternalCategoryId;
 	
 	const DETAIL_IDENTIFIER = 'id';
 	const MODE_SELECT_KEY = 'display_mode';
-	
-	public static function acceptedRequestParams() {
-		return array(self::DETAIL_IDENTIFIER);
+	const SERVICE_CATEGORY_IDS = "service_category_id";
+	const SERVICE_ID = "service_id";
+
+	public function __construct($oLanguageObject = null, $aPath = null, $iId = 1) {
+		$this->iExcludeInternalCategoryId = Settings::getSetting("school_settings", 'internally_used_service_category', null);
+		parent::__construct($oLanguageObject, $aPath, $iId);
 	}
 	
 	public function renderFrontend() { 
-		$this->iExcludeInternalCategoryId = Settings::getSetting("school_settings", 'internally_used_service_category', null);
-
-		// always show detail of requested or random team member
 		$aOptions = @unserialize($this->getData());
+		$this->aServiceCategoryIds = @$aOptions[self::SERVICE_CATEGORY_IDS];
+		$iServiceId = @$aOptions['service_id'];
+		if($iServiceId) {
+			self::$SERVICE = ServicePeer::retrieveByPK($iServiceId);
+		}
 
-		if(self::$SERVICE === null) {
-			if(isset($_REQUEST[self::DETAIL_IDENTIFIER])) {
-				self::$SERVICE = ServicePeer::retrieveByPK($_REQUEST[self::DETAIL_IDENTIFIER]);
-			} else if(isset($aOptions['service_id']) 
-					&& is_numeric($aOptions['service_id'])) 
-			{
-				self::$SERVICE = ServicePeer::retrieveByPK($aOptions['service_id']);
-			}
+		switch($aOptions[self::MODE_SELECT_KEY]) {
+			case 'service_detail' : return $this->renderDetail();
+			case 'service_intern_detail' : return $this->renderDetail(true);
+			case 'service_teaser' : return $this->renderTeaserDetail();
+			case 'team_member_portraits' : return $this->renderTeamMemberPortraits();
+			default: return $this->renderList();
 		}
+		return '';
+	}
+	
+	// renderList
+	private function renderList() {
 		if(self::$SERVICE) {
-			if($this->oLanguageObject->getContentObject()->getContainerName() == 'context') {
-				return $this->renderDetailContext();
-			}
-			if($aOptions[self::MODE_SELECT_KEY] === 'team_member_portraits') {
-				return $this->renderTeamMemberPortraits();
-			}
-			if($this->oLanguageObject->getContentObject()->getContainerName() === 'aktuelles') {
-				return $this->renderTeaserDetail();
-			}
-			return $this->renderDetail($aOptions[self::MODE_SELECT_KEY] === 'service_intern_detail');
+			return $this->renderDetail();
 		}
-		if(isset($aOptions[self::MODE_SELECT_KEY])) {
-			switch($aOptions[self::MODE_SELECT_KEY]) {
-				case 'service_detail' : return $this->renderDetail();
-				case 'service_teaser' : return $this->renderTeaserDetail($aOptions['service_id']);
-				default: return $this->renderList($aOptions[self::MODE_SELECT_KEY]);
-			}
-		}
-	}
-	
-	private function renderTeamMemberPortraits() {
-		if(self::$SERVICE === null) {
-			return;
-		}
-		$oTemplate = $this->constructTemplate('portraits');
-		$this->setPortraits($oTemplate);
-		return $oTemplate;
-	}
-	
-	private function setPortraits($oTemplate, $iWidth = 150) {
-		$oCriteria = new Criteria();
-		$oCriteria->addJoin(ServiceMemberPeer::TEAM_MEMBER_ID, TeamMemberPeer::ID, Criteria::INNER_JOIN);
-		$oCriteria->add(TeamMemberPeer::PORTRAIT_ID, null, Criteria::ISNOTNULL);
-		foreach(self::$SERVICE->getServiceMembers($oCriteria) as $oServiceMember) {
-			if($oServiceMember->getTeamMember()->getDocument()) {
-				$oPortraitTemplate = $this->constructTemplate('portrait_item');
-				$oPortraitTemplate->replaceIdentifier('portrait_width', $iWidth);
-				$oPortraitTemplate->replaceIdentifier('name', $oServiceMember->getTeamMember()->getFullName());
-				$oPortraitTemplate->replaceIdentifier('image', TagWriter::quickTag('img', array('src' => $oServiceMember->getTeamMember()->getDocument()->getDisplayUrl(array('max_width' => $iWidth)), 'alt' => 'Portrait von '.$oServiceMember->getTeamMember()->getFullName())));
-				$oTemplate->replaceIdentifierMultiple('portrait', $oPortraitTemplate);
-			}
-		}
-	}
-	
-	private function renderlist($iCategory) {
-		$oQuery = ServiceQuery::create()->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL);
-		if(is_numeric($iCategory)) {
-			$oQuery->filterByServiceCategoryId((int) $iCategory);
-		} else {
-			if($this->iExcludeInternalCategoryId) {
-				$oQuery->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL);
-			}
-		}
-		$aServices = $oQuery->orderByName()->find();
+		$aServices = $this->listQuery()->find();
 		$oTemplate = $this->constructTemplate('list');
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$sOddEven = 'odd';
 		foreach($aServices as $oService) {
 			$oItemTemplate = $this->constructTemplate('list_item');
 			$oItemTemplate->replaceIdentifier('oddeven', $sOddEven = $sOddEven === 'even' ? 'odd' : 'even');
-			$aDetailLink = array_merge($oPage->getFullPathArray(), array(self::DETAIL_IDENTIFIER, $oService->getId()));
-			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($aDetailLink));
+			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oService->getServiceLink($oPage)));
 			$oItemTemplate->replaceIdentifier('detail_link_text', $oService->getName());
 			$oItemTemplate->replaceIdentifier('detail_link_title', 'Details von '.$oService->getName());			
 			$oItemTemplate->replaceIdentifier('phone', $oService->getPhone());
@@ -104,13 +61,12 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		return $oTemplate;
 	}
 	
-	public function getService() {
-		return self::$SERVICE;
-	}
-	
 	public function renderDetail($isIntern=false) {
 		if(self::$SERVICE === null) {
 			return;
+		}
+		if($this->oLanguageObject->getContentObject()->getContainerName() == 'context') {
+			return $this->renderDetailContext();
 		}
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$oTemplate = $this->constructTemplate($isIntern === true ? 'detail_intern' : 'detail');
@@ -180,7 +136,7 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 			
     foreach(self::$SERVICE->getServiceDocuments() as $oServiceDocument) {
 			if($oServiceDocument->getDocument()) {
-        // $oTemplate->replaceIdentifierMultiple('service_documents', TagWriter::quickTag(), null, Template::NO_NEW_CONTEXT); 
+        $oTemplate->replaceIdentifierMultiple('service_document', TagWriter::quickTag('a', array('href' => $oServiceDocument->getDocument()->getDisplayUrl(), 'class' => $oServiceDocument->getDocument()->getExtension()), $oServiceDocument->getDocument()->getName()), null, Template::NO_NEW_CONTEXT); 
 			}
 		}
 
@@ -192,12 +148,8 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 			self::$SERVICE =  ServiceQuery::create()->filterByIsActive(true)->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL)->filterByTeaser(null, Criteria::ISNOTNULL)->orderByRand()->findOne();
 		}
 		if(self::$SERVICE !== null) {
-			$oServicesPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_SERVICES));
-			if($oServicesPage === null) {
-				return;
-			}
 			$oTemplate = $this->constructTemplate('teaser_aktuell_detail');
-			$oTemplate->replaceIdentifier('detail_link', LinkUtil::link(array_merge($oServicesPage->getFullPathArray(), array(self::DETAIL_IDENTIFIER, self::$SERVICE->getId()))));
+			$oTemplate->replaceIdentifier('detail_link', LinkUtil::link(self::$SERVICE->getServiceLink()));
 			$oTemplate->replaceIdentifier('name', self::$SERVICE->getName());
 			$oTemplate->replaceIdentifier('teaser', self::$SERVICE->getTeaser());
 			$oTemplate->replaceIdentifier('goto_title', "mehr zu Details des Angebots ".self::$SERVICE->getName());
@@ -207,6 +159,42 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		return;
 	}
 	
+	private function renderTeamMemberPortraits() {
+		if(self::$SERVICE === null) {
+			return;
+		}
+		$oTemplate = $this->constructTemplate('portraits');
+		$this->setPortraits($oTemplate);
+		return $oTemplate;
+	}
+	
+	private function setPortraits($oTemplate, $iWidth = 150) {
+		$oCriteria = new Criteria();
+		$oCriteria->addJoin(ServiceMemberPeer::TEAM_MEMBER_ID, TeamMemberPeer::ID, Criteria::INNER_JOIN);
+		$oCriteria->add(TeamMemberPeer::PORTRAIT_ID, null, Criteria::ISNOTNULL);
+		foreach(self::$SERVICE->getServiceMembers($oCriteria) as $oServiceMember) {
+			if($oServiceMember->getTeamMember()->getDocument()) {
+				$oPortraitTemplate = $this->constructTemplate('portrait_item');
+				$oPortraitTemplate->replaceIdentifier('portrait_width', $iWidth);
+				$oPortraitTemplate->replaceIdentifier('name', $oServiceMember->getTeamMember()->getFullName());
+				$oPortraitTemplate->replaceIdentifier('image', TagWriter::quickTag('img', array('src' => $oServiceMember->getTeamMember()->getDocument()->getDisplayUrl(array('max_width' => $iWidth)), 'alt' => 'Portrait von '.$oServiceMember->getTeamMember()->getFullName())));
+				$oTemplate->replaceIdentifierMultiple('portrait', $oPortraitTemplate);
+			}
+		}
+	}
+	
+	public function listQuery() {
+		$oQuery = ServiceQuery::create()->filterByIsActive(true)->orderByName();
+		if($this->aServiceCategoryIds) {
+			$oQuery->filterByServiceCategoryIds($this->aServiceCategoryIds);
+		} else {
+			if($this->iExcludeInternalCategoryId) {
+				$oQuery->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL);
+			}
+		}
+		return $oQuery;
+	}
+
 	public function widgetData() {
 		$aOptions = @unserialize($this->getData()); 
 		return $aOptions;
@@ -218,9 +206,7 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 	}
 	
 	public function getWidget() {
-		$aOptions = @unserialize($this->getData()); 
 		$oWidget = new ServiceEditWidgetModule(null, $this);
-		$oWidget->setDisplayMode($aOptions);
 		return $oWidget;
 	}
 

@@ -1,11 +1,14 @@
 <div class="group_fields">
 	<label for="display_mode">{{writeString=wns.services.display_option}}</label>
-	<select name="display_mode" class="ui-widget-content"></select>
+	<select name="display_mode" class="ui-widget-content autowidth"></select>
 </div>
-<div class="group_fields show_for_detail">
+<div class="group_fields list_option_only">
+	<label for="service_category_id[]">{{writeString=wns.service.categories}}</label>
+	<select name="service_category_id[]" class="ui-widget-content autowidth" multiple="multiple"></select>
+</div>
+<div class="group_fields detail_option_only">
 	<label for="service_id">{{writeString=wns.services.detail}}</label>
 	<select name="service_id" class="ui-widget-content autowidth"></select>
 </div>
 <br style="clear:left;" />
-<ol class="ui-editable-items-list">
-</ol>
+<ol class="ui-editable-items-list"></ol>

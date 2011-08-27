@@ -1,41 +1,48 @@
 Widget.types.service_edit = { 
 	prepare: function() {
-		
-		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
-		this._element.append(this.content);
-		this.result_list = this._element.find('ol.ui-editable-items-list');
-		
-		var display_modes = this.getDisplayMode();
 		var _this = this;
+		this._element.append(jQuery.parseHTML('{{includeTemplate=edit}}'));
 
-		// display mode selector
-		this.mode_dropdown = this.content.find("select[name='display_mode']");
-		this.services_dropdown = this.content.find("select[name='service_id']");
-		this.show_for_detail = this._element.find('.show_for_detail');
-		jQuery.each(this.getDisplayModes(), function(key, mode) {
-			var option = jQuery('<option/>').attr('value', key).text(mode);
-			_this.mode_dropdown.append(option);
-		});
-		this.mode_dropdown.val(display_modes.display_mode);
-		this.mode_dropdown.change(function() {
-			_this.reload_preview(_this.mode_dropdown.val());
-		});
+		//Elements
+		this.mode_dropdown = this._element.find('select[name=display_mode]');
+		this.categories_dropdown = this._element.find('select[name=service_category_id\\[\\]]');
+		this.services_dropdown = this._element.find('select[name=service_id]');
+		this.result_list = this._element.find('ol.ui-editable-items-list');
+		this.list_options = this._element.find('div.list_option_only').hide();
+		this.detail_options = this._element.find('div.detail_option_only').hide();
 
-		// display detail selector only if mode select is on detail
-		jQuery.each(this.getServices(), function(i, params) {
-			_this.services_dropdown.append(jQuery('<option/>').attr('value', params.ID).text(params.NAME));
-		});
-
-		this.services_dropdown.prepend(jQuery('<option/>').attr('value', '').text("{{writeString=wns.service_detail.default}}"));
-		this.services_dropdown.val(display_modes.service_id);
-		this.mode_dropdown.change();
+		//Mode/Group finish callbacks
+		var finish = [];
 		
+		//Set Modes
+		this.displayModes(function(display_modes) {
+			this.mode_dropdown.populate(display_modes, this.getDisplayMode());
+			this.mode_dropdown.change(this.reload_preview.bind(this));
+		}.deferred(finish));
+
+		//Set Categories
+		this.serviceCategories(function(service_categories) {
+			this.categories_dropdown.populate(service_categories, this.getServiceCategoryIds());
+			this.categories_dropdown.change(this.reload_preview.bind(this));
+		}.deferred(finish));
+		
+		//Set Services
+		this.allServices(null, function(services) {
+			this.services_dropdown.populate({'': "{{writeString=wns.service_detail.default}}"});
+			this.services_dropdown.populate(services, _this.getServiceId());
+			this.services_dropdown.change(this.reload_preview.bind(this));
+		}.deferred(finish));
+
+		jQuery.when.apply(jQuery, finish).then(function() {
+			_this.reload_preview();
+		}.bind(this));
+
+		//Init preview stuff
 		var detail_widget;
 		Widget.create('service_detail', function(widget) {
 			_this.detail_widget = widget;
 			widget.save_callback = _this.reload_preview.bind(_this);
 		});
-
 		this.result_list.delegate('li', 'click', function() {
 			var id = jQuery(this).data('id');
 			_this.detail_widget.setServiceId(id);
@@ -44,24 +51,38 @@ Widget.types.service_edit = {
 		});
 	},
 	
-	reload_preview: function(display_mode) {
-		var _this = this;
-		this.result_list.empty();
-		if(display_mode === 'service_detail' || display_mode === 'team_member_portraits' || display_mode === 'service_teaser'  || display_mode === 'service_intern_detail') {
-			_this.show_for_detail.show();
+	reload_preview: function() {
+		var result_list = this.result_list;
+		result_list.empty();
+		if(this.mode_dropdown.val() !== 'service_liste') {
+			console.log(this.detail_options);
+			this.list_options.hide();
+			this.detail_options.show();
 			return;
 		}
-		_this.show_for_detail.hide();
-		var service_category = isNaN(display_mode) ? null : parseInt(display_mode, 10);
-		jQuery.each(this.getServices(service_category), function(i, service) {
-			_this.result_list.append(jQuery('<li/>').text(service.NAME).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', service.ID));
+		this.list_options.show();
+		this.detail_options.hide();
+		this.allServices(this.selected_service_categories(), function(services) {
+			jQuery.each(services, function(id, name) {
+				result_list.append(jQuery('<li/>').text(name).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', id));
+			});
 		});
+	},
+
+	selected_service_categories: function() {
+		var selected_service_categories = this.categories_dropdown.val();
+		return selected_service_categories;
 	},
 	
 	save: function(callback) {
-		this.saveData(this._element.serializeArrayKV(), callback);
+		var data = {
+			service_category_id: this.selected_service_categories(),
+			display_mode: this.mode_dropdown.val(),
+			service_id: this.services_dropdown.val()
+		};
+		this.saveData(data, callback);
 	},
-		
+
 	additional_buttons: [
 		{
 			text: '{{writeString=services.do_admin}}',
@@ -69,5 +90,4 @@ Widget.types.service_edit = {
 			action: jQuery.openLink.bind(window, "{{writeLink=services;manager=AdminManager}}")
 		}
 	]
-
 };

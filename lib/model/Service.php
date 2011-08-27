@@ -4,6 +4,11 @@
  * @package		 propel.generator.model
  */
 class Service extends BaseService {
+
+	public function setName($sName) {
+		$this->setSlug(StringUtil::normalize(str_replace('-', '', $sName), '-', '-'));
+		return parent::setName($sName);
+	}
 	
 	public function getTeamCount() {
 		return $this->countServiceMembers();
@@ -33,5 +38,13 @@ class Service extends BaseService {
 	  }
 	  return 'http://'.$this->getWebsite();
 	}
+	
+	public function getServiceLink($oServicePage = null) {
+		if($oServicePage === null) {
+			$oServicePage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_SERVICES));
+		}
+		return array_merge($oServicePage->getFullPathArray(), array($this->getSlug()));
+	}
+
 }
 

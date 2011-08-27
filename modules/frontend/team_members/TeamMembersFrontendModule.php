@@ -13,8 +13,6 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 	const MODE_SELECT_KEY = 'display_mode';
 	const GROUPS_SELECT_KEY = 'function_groups';
 	const PORTRAIT_DUMMY_ID = 7;
-	const IDENTIFIER_REQUEST_KEY = 'name';
-	const CACHE_KEY = 'team_member_list_';
 
 	public function __construct($oLanguageObject = null, $aPath = null, $iId = 1) {
 		parent::__construct($oLanguageObject, $aPath, $iId);
