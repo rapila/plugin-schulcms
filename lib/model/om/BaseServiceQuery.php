@@ -8,6 +8,7 @@
  *
  * @method     ServiceQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ServiceQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     ServiceQuery orderBySlug($order = Criteria::ASC) Order by the slug column
  * @method     ServiceQuery orderByTeaser($order = Criteria::ASC) Order by the teaser column
  * @method     ServiceQuery orderByAddress($order = Criteria::ASC) Order by the address column
  * @method     ServiceQuery orderByOpeningHours($order = Criteria::ASC) Order by the opening_hours column
@@ -25,6 +26,7 @@
  *
  * @method     ServiceQuery groupById() Group by the id column
  * @method     ServiceQuery groupByName() Group by the name column
+ * @method     ServiceQuery groupBySlug() Group by the slug column
  * @method     ServiceQuery groupByTeaser() Group by the teaser column
  * @method     ServiceQuery groupByAddress() Group by the address column
  * @method     ServiceQuery groupByOpeningHours() Group by the opening_hours column
@@ -77,6 +79,7 @@
  *
  * @method     Service findOneById(int $id) Return the first Service filtered by the id column
  * @method     Service findOneByName(string $name) Return the first Service filtered by the name column
+ * @method     Service findOneBySlug(string $slug) Return the first Service filtered by the slug column
  * @method     Service findOneByTeaser(string $teaser) Return the first Service filtered by the teaser column
  * @method     Service findOneByAddress(string $address) Return the first Service filtered by the address column
  * @method     Service findOneByOpeningHours(string $opening_hours) Return the first Service filtered by the opening_hours column
@@ -94,6 +97,7 @@
  *
  * @method     array findById(int $id) Return Service objects filtered by the id column
  * @method     array findByName(string $name) Return Service objects filtered by the name column
+ * @method     array findBySlug(string $slug) Return Service objects filtered by the slug column
  * @method     array findByTeaser(string $teaser) Return Service objects filtered by the teaser column
  * @method     array findByAddress(string $address) Return Service objects filtered by the address column
  * @method     array findByOpeningHours(string $opening_hours) Return Service objects filtered by the opening_hours column
@@ -254,6 +258,28 @@ abstract class BaseServiceQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(ServicePeer::NAME, $name, $comparison);
+	}
+
+	/**
+	 * Filter the query on the slug column
+	 * 
+	 * @param     string $slug The value to use as filter.
+	 *            Accepts wildcards (* and % trigger a LIKE)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    ServiceQuery The current query, for fluid interface
+	 */
+	public function filterBySlug($slug = null, $comparison = null)
+	{
+		if (null === $comparison) {
+			if (is_array($slug)) {
+				$comparison = Criteria::IN;
+			} elseif (preg_match('/[\%\*]/', $slug)) {
+				$slug = str_replace('*', '%', $slug);
+				$comparison = Criteria::LIKE;
+			}
+		}
+		return $this->addUsingAlias(ServicePeer::SLUG, $slug, $comparison);
 	}
 
 	/**

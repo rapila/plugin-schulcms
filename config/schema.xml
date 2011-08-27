@@ -221,6 +221,7 @@
 <table name="services" phpName="Service">
 	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
 	<column name="name" type="varchar" size="80" />
+	<column name="slug" type="varchar" size="80" />
 	<column name="teaser" type="varchar" size="255" />
 	<column name="address" type="varchar" size="255" />
 	<column name="opening_hours" type="varchar" size="255" />

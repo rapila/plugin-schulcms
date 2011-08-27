@@ -26,7 +26,7 @@ abstract class BaseServicePeer {
 	const TM_CLASS = 'ServiceTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 16;
+	const NUM_COLUMNS = 17;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -36,6 +36,9 @@ abstract class BaseServicePeer {
 
 	/** the column name for the NAME field */
 	const NAME = 'services.NAME';
+
+	/** the column name for the SLUG field */
+	const SLUG = 'services.SLUG';
 
 	/** the column name for the TEASER field */
 	const TEASER = 'services.TEASER';
@@ -95,12 +98,12 @@ abstract class BaseServicePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Teaser', 'Address', 'OpeningHours', 'Phone', 'Email', 'Website', 'Body', 'IsActive', 'LogoId', 'ServiceCategoryId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'teaser', 'address', 'openingHours', 'phone', 'email', 'website', 'body', 'isActive', 'logoId', 'serviceCategoryId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::NAME, self::TEASER, self::ADDRESS, self::OPENING_HOURS, self::PHONE, self::EMAIL, self::WEBSITE, self::BODY, self::IS_ACTIVE, self::LOGO_ID, self::SERVICE_CATEGORY_ID, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'TEASER', 'ADDRESS', 'OPENING_HOURS', 'PHONE', 'EMAIL', 'WEBSITE', 'BODY', 'IS_ACTIVE', 'LOGO_ID', 'SERVICE_CATEGORY_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'teaser', 'address', 'opening_hours', 'phone', 'email', 'website', 'body', 'is_active', 'logo_id', 'service_category_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Slug', 'Teaser', 'Address', 'OpeningHours', 'Phone', 'Email', 'Website', 'Body', 'IsActive', 'LogoId', 'ServiceCategoryId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'slug', 'teaser', 'address', 'openingHours', 'phone', 'email', 'website', 'body', 'isActive', 'logoId', 'serviceCategoryId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::NAME, self::SLUG, self::TEASER, self::ADDRESS, self::OPENING_HOURS, self::PHONE, self::EMAIL, self::WEBSITE, self::BODY, self::IS_ACTIVE, self::LOGO_ID, self::SERVICE_CATEGORY_ID, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'SLUG', 'TEASER', 'ADDRESS', 'OPENING_HOURS', 'PHONE', 'EMAIL', 'WEBSITE', 'BODY', 'IS_ACTIVE', 'LOGO_ID', 'SERVICE_CATEGORY_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'slug', 'teaser', 'address', 'opening_hours', 'phone', 'email', 'website', 'body', 'is_active', 'logo_id', 'service_category_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, )
 	);
 
 	/**
@@ -110,12 +113,12 @@ abstract class BaseServicePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Teaser' => 2, 'Address' => 3, 'OpeningHours' => 4, 'Phone' => 5, 'Email' => 6, 'Website' => 7, 'Body' => 8, 'IsActive' => 9, 'LogoId' => 10, 'ServiceCategoryId' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, 'CreatedBy' => 14, 'UpdatedBy' => 15, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'teaser' => 2, 'address' => 3, 'openingHours' => 4, 'phone' => 5, 'email' => 6, 'website' => 7, 'body' => 8, 'isActive' => 9, 'logoId' => 10, 'serviceCategoryId' => 11, 'createdAt' => 12, 'updatedAt' => 13, 'createdBy' => 14, 'updatedBy' => 15, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NAME => 1, self::TEASER => 2, self::ADDRESS => 3, self::OPENING_HOURS => 4, self::PHONE => 5, self::EMAIL => 6, self::WEBSITE => 7, self::BODY => 8, self::IS_ACTIVE => 9, self::LOGO_ID => 10, self::SERVICE_CATEGORY_ID => 11, self::CREATED_AT => 12, self::UPDATED_AT => 13, self::CREATED_BY => 14, self::UPDATED_BY => 15, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'TEASER' => 2, 'ADDRESS' => 3, 'OPENING_HOURS' => 4, 'PHONE' => 5, 'EMAIL' => 6, 'WEBSITE' => 7, 'BODY' => 8, 'IS_ACTIVE' => 9, 'LOGO_ID' => 10, 'SERVICE_CATEGORY_ID' => 11, 'CREATED_AT' => 12, 'UPDATED_AT' => 13, 'CREATED_BY' => 14, 'UPDATED_BY' => 15, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'teaser' => 2, 'address' => 3, 'opening_hours' => 4, 'phone' => 5, 'email' => 6, 'website' => 7, 'body' => 8, 'is_active' => 9, 'logo_id' => 10, 'service_category_id' => 11, 'created_at' => 12, 'updated_at' => 13, 'created_by' => 14, 'updated_by' => 15, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Slug' => 2, 'Teaser' => 3, 'Address' => 4, 'OpeningHours' => 5, 'Phone' => 6, 'Email' => 7, 'Website' => 8, 'Body' => 9, 'IsActive' => 10, 'LogoId' => 11, 'ServiceCategoryId' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, 'CreatedBy' => 15, 'UpdatedBy' => 16, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'slug' => 2, 'teaser' => 3, 'address' => 4, 'openingHours' => 5, 'phone' => 6, 'email' => 7, 'website' => 8, 'body' => 9, 'isActive' => 10, 'logoId' => 11, 'serviceCategoryId' => 12, 'createdAt' => 13, 'updatedAt' => 14, 'createdBy' => 15, 'updatedBy' => 16, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NAME => 1, self::SLUG => 2, self::TEASER => 3, self::ADDRESS => 4, self::OPENING_HOURS => 5, self::PHONE => 6, self::EMAIL => 7, self::WEBSITE => 8, self::BODY => 9, self::IS_ACTIVE => 10, self::LOGO_ID => 11, self::SERVICE_CATEGORY_ID => 12, self::CREATED_AT => 13, self::UPDATED_AT => 14, self::CREATED_BY => 15, self::UPDATED_BY => 16, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'SLUG' => 2, 'TEASER' => 3, 'ADDRESS' => 4, 'OPENING_HOURS' => 5, 'PHONE' => 6, 'EMAIL' => 7, 'WEBSITE' => 8, 'BODY' => 9, 'IS_ACTIVE' => 10, 'LOGO_ID' => 11, 'SERVICE_CATEGORY_ID' => 12, 'CREATED_AT' => 13, 'UPDATED_AT' => 14, 'CREATED_BY' => 15, 'UPDATED_BY' => 16, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'slug' => 2, 'teaser' => 3, 'address' => 4, 'opening_hours' => 5, 'phone' => 6, 'email' => 7, 'website' => 8, 'body' => 9, 'is_active' => 10, 'logo_id' => 11, 'service_category_id' => 12, 'created_at' => 13, 'updated_at' => 14, 'created_by' => 15, 'updated_by' => 16, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, )
 	);
 
 	/**
@@ -189,6 +192,7 @@ abstract class BaseServicePeer {
 		if (null === $alias) {
 			$criteria->addSelectColumn(ServicePeer::ID);
 			$criteria->addSelectColumn(ServicePeer::NAME);
+			$criteria->addSelectColumn(ServicePeer::SLUG);
 			$criteria->addSelectColumn(ServicePeer::TEASER);
 			$criteria->addSelectColumn(ServicePeer::ADDRESS);
 			$criteria->addSelectColumn(ServicePeer::OPENING_HOURS);
@@ -206,6 +210,7 @@ abstract class BaseServicePeer {
 		} else {
 			$criteria->addSelectColumn($alias . '.ID');
 			$criteria->addSelectColumn($alias . '.NAME');
+			$criteria->addSelectColumn($alias . '.SLUG');
 			$criteria->addSelectColumn($alias . '.TEASER');
 			$criteria->addSelectColumn($alias . '.ADDRESS');
 			$criteria->addSelectColumn($alias . '.OPENING_HOURS');

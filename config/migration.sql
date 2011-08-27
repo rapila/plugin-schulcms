@@ -378,3 +378,6 @@ ADD INDEX ( `is_newly_updated` );
 ALTER TABLE `team_member_functions` ADD `is_main_function` TINYINT( 1 ) UNSIGNED NOT NULL AFTER `school_function_id`;
 ALTER TABLE `team_member_functions` ADD `is_newly_updated` TINYINT( 1 ) UNSIGNED NOT NULL AFTER `is_main_function` ,
 ADD INDEX ( `is_newly_updated` );
+
+#20110827.0701
+ALTER TABLE `services` ADD `slug` VARCHAR( 80 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `name`;
