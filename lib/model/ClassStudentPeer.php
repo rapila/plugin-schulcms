@@ -16,6 +16,8 @@ class ClassStudentPeer extends BaseClassStudentPeer {
 		$oCriteria->addJoin(self::SCHOOL_CLASS_ID, SchoolClassPeer::ID, Criteria::INNER_JOIN);
 		if($sUnitName !== null) {
 			$oCriteria->add(SchoolClassPeer::UNIT_NAME, $sUnitName);
+		} else {
+		  SchoolClassPeer::excludeClassTypeCriteria($oCriteria);
 		}
 		return $oCriteria->add(SchoolClassPeer::YEAR, SchoolPeer::getSchool()->getCurrentYear());
 	}

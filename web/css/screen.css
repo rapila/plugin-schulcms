@@ -122,8 +122,6 @@ p, ul { padding-bottom: 0.5em; }
   font-weight: normal;
   padding-bottom: 0.5em;
 }
-#content_main .inner { line-height: 1.4em; }
-#sidebar_right .inner { line-height: 1.4em; }
 #sidebar_right h1 {
   font-size: 1.05em;
   padding-left: 0.1em;
@@ -390,8 +388,10 @@ input::-webkit-input-placeholder { color: #a5a2a1; }
   line-height: 1.3em;
   font-family: Arial, Helvetica, Sans Serif;
 }
+#content_main .inner { line-height: 1.4em; }
+#sidebar_right .inner { line-height: 1.4em; }
 .home #sidebar_right .inner { padding-top: 56px; }
-#content_main .inner { padding: 0px 5px 5px 5px; }
+#content_main .inner { padding: 0px 5px 20px 5px; }
 table {
   width: 100%;
   border-collapse: collapse;
