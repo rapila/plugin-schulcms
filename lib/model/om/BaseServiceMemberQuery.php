@@ -9,6 +9,7 @@
  * @method     ServiceMemberQuery orderByServiceId($order = Criteria::ASC) Order by the service_id column
  * @method     ServiceMemberQuery orderByFunctionName($order = Criteria::ASC) Order by the function_name column
  * @method     ServiceMemberQuery orderByTeamMemberId($order = Criteria::ASC) Order by the team_member_id column
+ * @method     ServiceMemberQuery orderBySort($order = Criteria::ASC) Order by the sort column
  * @method     ServiceMemberQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ServiceMemberQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method     ServiceMemberQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
@@ -17,6 +18,7 @@
  * @method     ServiceMemberQuery groupByServiceId() Group by the service_id column
  * @method     ServiceMemberQuery groupByFunctionName() Group by the function_name column
  * @method     ServiceMemberQuery groupByTeamMemberId() Group by the team_member_id column
+ * @method     ServiceMemberQuery groupBySort() Group by the sort column
  * @method     ServiceMemberQuery groupByCreatedAt() Group by the created_at column
  * @method     ServiceMemberQuery groupByUpdatedAt() Group by the updated_at column
  * @method     ServiceMemberQuery groupByCreatedBy() Group by the created_by column
@@ -48,6 +50,7 @@
  * @method     ServiceMember findOneByServiceId(int $service_id) Return the first ServiceMember filtered by the service_id column
  * @method     ServiceMember findOneByFunctionName(string $function_name) Return the first ServiceMember filtered by the function_name column
  * @method     ServiceMember findOneByTeamMemberId(int $team_member_id) Return the first ServiceMember filtered by the team_member_id column
+ * @method     ServiceMember findOneBySort(int $sort) Return the first ServiceMember filtered by the sort column
  * @method     ServiceMember findOneByCreatedAt(string $created_at) Return the first ServiceMember filtered by the created_at column
  * @method     ServiceMember findOneByUpdatedAt(string $updated_at) Return the first ServiceMember filtered by the updated_at column
  * @method     ServiceMember findOneByCreatedBy(int $created_by) Return the first ServiceMember filtered by the created_by column
@@ -56,6 +59,7 @@
  * @method     array findByServiceId(int $service_id) Return ServiceMember objects filtered by the service_id column
  * @method     array findByFunctionName(string $function_name) Return ServiceMember objects filtered by the function_name column
  * @method     array findByTeamMemberId(int $team_member_id) Return ServiceMember objects filtered by the team_member_id column
+ * @method     array findBySort(int $sort) Return ServiceMember objects filtered by the sort column
  * @method     array findByCreatedAt(string $created_at) Return ServiceMember objects filtered by the created_at column
  * @method     array findByUpdatedAt(string $updated_at) Return ServiceMember objects filtered by the updated_at column
  * @method     array findByCreatedBy(int $created_by) Return ServiceMember objects filtered by the created_by column
@@ -235,6 +239,37 @@ abstract class BaseServiceMemberQuery extends ModelCriteria
 			$comparison = Criteria::IN;
 		}
 		return $this->addUsingAlias(ServiceMemberPeer::TEAM_MEMBER_ID, $teamMemberId, $comparison);
+	}
+
+	/**
+	 * Filter the query on the sort column
+	 * 
+	 * @param     int|array $sort The value to use as filter.
+	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    ServiceMemberQuery The current query, for fluid interface
+	 */
+	public function filterBySort($sort = null, $comparison = null)
+	{
+		if (is_array($sort)) {
+			$useMinMax = false;
+			if (isset($sort['min'])) {
+				$this->addUsingAlias(ServiceMemberPeer::SORT, $sort['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($sort['max'])) {
+				$this->addUsingAlias(ServiceMemberPeer::SORT, $sort['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(ServiceMemberPeer::SORT, $sort, $comparison);
 	}
 
 	/**

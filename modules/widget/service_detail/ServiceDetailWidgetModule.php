@@ -29,7 +29,9 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oService);
 		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oService);
 		$aResult['team_members'] = array();
-		foreach($oService->getServiceMembers() as $oServiceMember) {
+		$oCriteria = new Criteria();
+		$oCriteria->addAscendingOrderByColumn(ServiceMemberPeer::SORT);
+		foreach($oService->getServiceMembers($oCriteria) as $oServiceMember) {
 			$aResult["team_members"][$oServiceMember->getTeamMemberId()] = $oServiceMember->getFunctionName();
 		}
 		$sBody = '';
@@ -150,10 +152,12 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 				if(isset($aServiceMembers[$iCounter])) {
 					$oServiceMember = $aServiceMembers[$iCounter];
 					$oServiceMember->setFunctionName($aServiceData['function_name'][$iCounter]);
+					$oServiceMember->setSort($iCounter+1);
 				} else {
 					$oServiceMember = new ServiceMember();
 					$oServiceMember->setTeamMemberId($iTeamMemberId);
 					$oServiceMember->setFunctionName($aServiceData['function_name'][$iCounter]);
+					$oServiceMember->setSort($iCounter+1);
 					$aServiceMembers[$iCounter] = $oServiceMember;
 					$oService->addServiceMember($oServiceMember);
 				}

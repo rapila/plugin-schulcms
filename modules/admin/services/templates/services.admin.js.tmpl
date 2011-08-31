@@ -63,6 +63,13 @@ jQuery(document).ready(function() {
 		// add row_count_info
 		info_bar.add_row_count_info_for_list(content_list);
 		
+		var initial_selection = "{{writeRequestValue=service_category_id}}";
+		if(initial_selection) {
+			initial_selection = isNaN(initial_selection) ? initial_selection : parseInt(initial_selection, 10);
+			sidebar.handle('loaded', function() {
+				sidebar.row_from_row_data({service_category_id: initial_selection}).addClass(sidebar.settings.row_click_active_class);
+			}, true, true);
+			
 		// list-selection_changed
 		sidebar.handle('list-selection_changed', function(event, selection) {
 			var service_category_id = selection[0] && selection[0].service_category_id;
@@ -74,12 +81,6 @@ jQuery(document).ready(function() {
 		});
 		
 		sidebar.settings.row_click_active_mode = 'activate';
-		var initial_selection = "{{writeRequestValue=service_category_id}}";
-		if(initial_selection) {
-			initial_selection = isNaN(initial_selection) ? initial_selection : parseInt(initial_selection, 10);
-			sidebar.handle('loaded', function() {
-				sidebar.activate_row(sidebar.row_from_row_data({service_category_id: initial_selection}));
-			}, true, true);
 		}
 	});
 });

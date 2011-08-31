@@ -26,7 +26,7 @@ abstract class BaseServiceMemberPeer {
 	const TM_CLASS = 'ServiceMemberTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 7;
+	const NUM_COLUMNS = 8;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -39,6 +39,9 @@ abstract class BaseServiceMemberPeer {
 
 	/** the column name for the TEAM_MEMBER_ID field */
 	const TEAM_MEMBER_ID = 'service_members.TEAM_MEMBER_ID';
+
+	/** the column name for the SORT field */
+	const SORT = 'service_members.SORT';
 
 	/** the column name for the CREATED_AT field */
 	const CREATED_AT = 'service_members.CREATED_AT';
@@ -68,12 +71,12 @@ abstract class BaseServiceMemberPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('ServiceId', 'FunctionName', 'TeamMemberId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('serviceId', 'functionName', 'teamMemberId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-		BasePeer::TYPE_COLNAME => array (self::SERVICE_ID, self::FUNCTION_NAME, self::TEAM_MEMBER_ID, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('SERVICE_ID', 'FUNCTION_NAME', 'TEAM_MEMBER_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-		BasePeer::TYPE_FIELDNAME => array ('service_id', 'function_name', 'team_member_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+		BasePeer::TYPE_PHPNAME => array ('ServiceId', 'FunctionName', 'TeamMemberId', 'Sort', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('serviceId', 'functionName', 'teamMemberId', 'sort', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+		BasePeer::TYPE_COLNAME => array (self::SERVICE_ID, self::FUNCTION_NAME, self::TEAM_MEMBER_ID, self::SORT, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('SERVICE_ID', 'FUNCTION_NAME', 'TEAM_MEMBER_ID', 'SORT', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+		BasePeer::TYPE_FIELDNAME => array ('service_id', 'function_name', 'team_member_id', 'sort', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
 	);
 
 	/**
@@ -83,12 +86,12 @@ abstract class BaseServiceMemberPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('ServiceId' => 0, 'FunctionName' => 1, 'TeamMemberId' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, 'CreatedBy' => 5, 'UpdatedBy' => 6, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('serviceId' => 0, 'functionName' => 1, 'teamMemberId' => 2, 'createdAt' => 3, 'updatedAt' => 4, 'createdBy' => 5, 'updatedBy' => 6, ),
-		BasePeer::TYPE_COLNAME => array (self::SERVICE_ID => 0, self::FUNCTION_NAME => 1, self::TEAM_MEMBER_ID => 2, self::CREATED_AT => 3, self::UPDATED_AT => 4, self::CREATED_BY => 5, self::UPDATED_BY => 6, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('SERVICE_ID' => 0, 'FUNCTION_NAME' => 1, 'TEAM_MEMBER_ID' => 2, 'CREATED_AT' => 3, 'UPDATED_AT' => 4, 'CREATED_BY' => 5, 'UPDATED_BY' => 6, ),
-		BasePeer::TYPE_FIELDNAME => array ('service_id' => 0, 'function_name' => 1, 'team_member_id' => 2, 'created_at' => 3, 'updated_at' => 4, 'created_by' => 5, 'updated_by' => 6, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+		BasePeer::TYPE_PHPNAME => array ('ServiceId' => 0, 'FunctionName' => 1, 'TeamMemberId' => 2, 'Sort' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, 'CreatedBy' => 6, 'UpdatedBy' => 7, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('serviceId' => 0, 'functionName' => 1, 'teamMemberId' => 2, 'sort' => 3, 'createdAt' => 4, 'updatedAt' => 5, 'createdBy' => 6, 'updatedBy' => 7, ),
+		BasePeer::TYPE_COLNAME => array (self::SERVICE_ID => 0, self::FUNCTION_NAME => 1, self::TEAM_MEMBER_ID => 2, self::SORT => 3, self::CREATED_AT => 4, self::UPDATED_AT => 5, self::CREATED_BY => 6, self::UPDATED_BY => 7, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('SERVICE_ID' => 0, 'FUNCTION_NAME' => 1, 'TEAM_MEMBER_ID' => 2, 'SORT' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, 'CREATED_BY' => 6, 'UPDATED_BY' => 7, ),
+		BasePeer::TYPE_FIELDNAME => array ('service_id' => 0, 'function_name' => 1, 'team_member_id' => 2, 'sort' => 3, 'created_at' => 4, 'updated_at' => 5, 'created_by' => 6, 'updated_by' => 7, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
 	);
 
 	/**
@@ -163,6 +166,7 @@ abstract class BaseServiceMemberPeer {
 			$criteria->addSelectColumn(ServiceMemberPeer::SERVICE_ID);
 			$criteria->addSelectColumn(ServiceMemberPeer::FUNCTION_NAME);
 			$criteria->addSelectColumn(ServiceMemberPeer::TEAM_MEMBER_ID);
+			$criteria->addSelectColumn(ServiceMemberPeer::SORT);
 			$criteria->addSelectColumn(ServiceMemberPeer::CREATED_AT);
 			$criteria->addSelectColumn(ServiceMemberPeer::UPDATED_AT);
 			$criteria->addSelectColumn(ServiceMemberPeer::CREATED_BY);
@@ -171,6 +175,7 @@ abstract class BaseServiceMemberPeer {
 			$criteria->addSelectColumn($alias . '.SERVICE_ID');
 			$criteria->addSelectColumn($alias . '.FUNCTION_NAME');
 			$criteria->addSelectColumn($alias . '.TEAM_MEMBER_ID');
+			$criteria->addSelectColumn($alias . '.SORT');
 			$criteria->addSelectColumn($alias . '.CREATED_AT');
 			$criteria->addSelectColumn($alias . '.UPDATED_AT');
 			$criteria->addSelectColumn($alias . '.CREATED_BY');

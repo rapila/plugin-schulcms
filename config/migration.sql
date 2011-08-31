@@ -381,3 +381,6 @@ ADD INDEX ( `is_newly_updated` );
 
 #20110827.0701
 ALTER TABLE `services` ADD `slug` VARCHAR( 80 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `name`;
+
+#20110831.1204
+ALTER TABLE `service_members` ADD `sort` INT UNSIGNED NULL DEFAULT NULL AFTER `team_member_id`;

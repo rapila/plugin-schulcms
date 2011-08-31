@@ -43,6 +43,12 @@ abstract class BaseServiceMember extends BaseObject  implements Persistent
 	protected $team_member_id;
 
 	/**
+	 * The value for the sort field.
+	 * @var        int
+	 */
+	protected $sort;
+
+	/**
 	 * The value for the created_at field.
 	 * @var        string
 	 */
@@ -128,6 +134,16 @@ abstract class BaseServiceMember extends BaseObject  implements Persistent
 	public function getTeamMemberId()
 	{
 		return $this->team_member_id;
+	}
+
+	/**
+	 * Get the [sort] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getSort()
+	{
+		return $this->sort;
 	}
 
 	/**
@@ -293,6 +309,26 @@ abstract class BaseServiceMember extends BaseObject  implements Persistent
 
 		return $this;
 	} // setTeamMemberId()
+
+	/**
+	 * Set the value of [sort] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     ServiceMember The current object (for fluent API support)
+	 */
+	public function setSort($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->sort !== $v) {
+			$this->sort = $v;
+			$this->modifiedColumns[] = ServiceMemberPeer::SORT;
+		}
+
+		return $this;
+	} // setSort()
 
 	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
@@ -475,10 +511,11 @@ abstract class BaseServiceMember extends BaseObject  implements Persistent
 			$this->service_id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->function_name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
 			$this->team_member_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-			$this->created_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-			$this->updated_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-			$this->created_by = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-			$this->updated_by = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+			$this->sort = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+			$this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+			$this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+			$this->created_by = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+			$this->updated_by = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -487,7 +524,7 @@ abstract class BaseServiceMember extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 7; // 7 = ServiceMemberPeer::NUM_COLUMNS - ServiceMemberPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 8; // 8 = ServiceMemberPeer::NUM_COLUMNS - ServiceMemberPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating ServiceMember object", $e);
@@ -896,15 +933,18 @@ abstract class BaseServiceMember extends BaseObject  implements Persistent
 				return $this->getTeamMemberId();
 				break;
 			case 3:
-				return $this->getCreatedAt();
+				return $this->getSort();
 				break;
 			case 4:
-				return $this->getUpdatedAt();
+				return $this->getCreatedAt();
 				break;
 			case 5:
-				return $this->getCreatedBy();
+				return $this->getUpdatedAt();
 				break;
 			case 6:
+				return $this->getCreatedBy();
+				break;
+			case 7:
 				return $this->getUpdatedBy();
 				break;
 			default:
@@ -934,10 +974,11 @@ abstract class BaseServiceMember extends BaseObject  implements Persistent
 			$keys[0] => $this->getServiceId(),
 			$keys[1] => $this->getFunctionName(),
 			$keys[2] => $this->getTeamMemberId(),
-			$keys[3] => $this->getCreatedAt(),
-			$keys[4] => $this->getUpdatedAt(),
-			$keys[5] => $this->getCreatedBy(),
-			$keys[6] => $this->getUpdatedBy(),
+			$keys[3] => $this->getSort(),
+			$keys[4] => $this->getCreatedAt(),
+			$keys[5] => $this->getUpdatedAt(),
+			$keys[6] => $this->getCreatedBy(),
+			$keys[7] => $this->getUpdatedBy(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aService) {
@@ -993,15 +1034,18 @@ abstract class BaseServiceMember extends BaseObject  implements Persistent
 				$this->setTeamMemberId($value);
 				break;
 			case 3:
-				$this->setCreatedAt($value);
+				$this->setSort($value);
 				break;
 			case 4:
-				$this->setUpdatedAt($value);
+				$this->setCreatedAt($value);
 				break;
 			case 5:
-				$this->setCreatedBy($value);
+				$this->setUpdatedAt($value);
 				break;
 			case 6:
+				$this->setCreatedBy($value);
+				break;
+			case 7:
 				$this->setUpdatedBy($value);
 				break;
 		} // switch()
@@ -1031,10 +1075,11 @@ abstract class BaseServiceMember extends BaseObject  implements Persistent
 		if (array_key_exists($keys[0], $arr)) $this->setServiceId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setFunctionName($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setTeamMemberId($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setCreatedAt($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setUpdatedAt($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setCreatedBy($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setUpdatedBy($arr[$keys[6]]);
+		if (array_key_exists($keys[3], $arr)) $this->setSort($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setCreatedBy($arr[$keys[6]]);
+		if (array_key_exists($keys[7], $arr)) $this->setUpdatedBy($arr[$keys[7]]);
 	}
 
 	/**
@@ -1049,6 +1094,7 @@ abstract class BaseServiceMember extends BaseObject  implements Persistent
 		if ($this->isColumnModified(ServiceMemberPeer::SERVICE_ID)) $criteria->add(ServiceMemberPeer::SERVICE_ID, $this->service_id);
 		if ($this->isColumnModified(ServiceMemberPeer::FUNCTION_NAME)) $criteria->add(ServiceMemberPeer::FUNCTION_NAME, $this->function_name);
 		if ($this->isColumnModified(ServiceMemberPeer::TEAM_MEMBER_ID)) $criteria->add(ServiceMemberPeer::TEAM_MEMBER_ID, $this->team_member_id);
+		if ($this->isColumnModified(ServiceMemberPeer::SORT)) $criteria->add(ServiceMemberPeer::SORT, $this->sort);
 		if ($this->isColumnModified(ServiceMemberPeer::CREATED_AT)) $criteria->add(ServiceMemberPeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(ServiceMemberPeer::UPDATED_AT)) $criteria->add(ServiceMemberPeer::UPDATED_AT, $this->updated_at);
 		if ($this->isColumnModified(ServiceMemberPeer::CREATED_BY)) $criteria->add(ServiceMemberPeer::CREATED_BY, $this->created_by);
@@ -1124,6 +1170,7 @@ abstract class BaseServiceMember extends BaseObject  implements Persistent
 		$copyObj->setServiceId($this->service_id);
 		$copyObj->setFunctionName($this->function_name);
 		$copyObj->setTeamMemberId($this->team_member_id);
+		$copyObj->setSort($this->sort);
 		$copyObj->setCreatedAt($this->created_at);
 		$copyObj->setUpdatedAt($this->updated_at);
 		$copyObj->setCreatedBy($this->created_by);
@@ -1374,6 +1421,7 @@ abstract class BaseServiceMember extends BaseObject  implements Persistent
 		$this->service_id = null;
 		$this->function_name = null;
 		$this->team_member_id = null;
+		$this->sort = null;
 		$this->created_at = null;
 		$this->updated_at = null;
 		$this->created_by = null;

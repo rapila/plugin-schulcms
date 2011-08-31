@@ -40,6 +40,7 @@ class ServiceMemberTableMap extends TableMap {
 		$this->addForeignPrimaryKey('SERVICE_ID', 'ServiceId', 'INTEGER' , 'services', 'ID', true, null, null);
 		$this->addColumn('FUNCTION_NAME', 'FunctionName', 'VARCHAR', false, 80, null);
 		$this->addForeignPrimaryKey('TEAM_MEMBER_ID', 'TeamMemberId', 'INTEGER' , 'team_members', 'ID', true, null, null);
+		$this->addColumn('SORT', 'Sort', 'INTEGER', false, null, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
 		$this->addForeignKey('CREATED_BY', 'CreatedBy', 'INTEGER', 'users', 'ID', false, null, null);

@@ -256,6 +256,7 @@
 	<foreign-key foreignTable="team_members" onDelete="cascade">
 		<reference local="team_member_id" foreign="id" />
 	</foreign-key>
+	<column name="sort" type="integer" />
 </table>
 
 <table name="service_documents" phpName="ServiceDocument">

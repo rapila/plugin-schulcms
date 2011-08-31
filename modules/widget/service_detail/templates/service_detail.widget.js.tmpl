@@ -6,6 +6,8 @@ Widget.types.service_detail = {
 		this.content.find('div.hide_if_not_saved').hide();
 
 		this.team_member_container = this.content.find('tbody.team_member_container');
+		this.team_member_container.sortable({});
+
 		this.team_member_content = jQuery.parseHTML("{{includeTemplate=team_member}}", true, 'tbody');
 
 		this.uploader = Widget.create('file_upload');
@@ -21,6 +23,7 @@ Widget.types.service_detail = {
 				}
 			}
 		});
+		
 		
 		var add_new_team_member_button = jQuery('<a/>').addClass('add-new-item add_entry').text(' ');
 		add_new_team_member_button.click(function() {
@@ -132,11 +135,14 @@ Widget.types.service_detail = {
 			this.detail_widget.set_title(this.detail_widget.settings.title = "{{writeString=wns.service}} "+service_data.Name);
 			
 			_this.team_member_container.empty();
+			var counter = 1;
 			jQuery.each(service_data.team_members, function(team_member_id, function_name) {
 				var team_member_content = _this.team_member_content.clone();
 				team_member_content.find('select[name="team_member_id[]"]').val(team_member_id);
 				team_member_content.find('input[name="function_name[]"]').val(function_name);
+				// team_member_content.find('dt.counter').html(counter);
 				team_member_content.appendTo(_this.team_member_container);
+				counter++;
 			});
 			this.team_member_container.show();
 			
