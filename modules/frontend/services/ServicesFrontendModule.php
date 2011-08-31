@@ -110,7 +110,9 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		$i = 0;
 		
 		// team_members
-		foreach(self::$SERVICE->getServiceMembers() as $i => $oServiceMember) {
+		$oCriteria = new Criteria();
+		$oCriteria->addAscendingOrderByColumn(ServiceMemberPeer::SORT);
+		foreach(self::$SERVICE->getServiceMembers($oCriteria) as $i => $oServiceMember) {
 			$i++;
 			if($oServiceMember->getTeamMember()) {
 				$sName = $oServiceMember->getTeamMember()->getFullName();				
@@ -172,6 +174,7 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		$oCriteria = new Criteria();
 		$oCriteria->addJoin(ServiceMemberPeer::TEAM_MEMBER_ID, TeamMemberPeer::ID, Criteria::INNER_JOIN);
 		$oCriteria->add(TeamMemberPeer::PORTRAIT_ID, null, Criteria::ISNOTNULL);
+		$oCriteria->addAscendingOrderByColumn(ServiceMemberPeer::SORT);
 		foreach(self::$SERVICE->getServiceMembers($oCriteria) as $oServiceMember) {
 			if($oServiceMember->getTeamMember()->getDocument()) {
 				$oPortraitTemplate = $this->constructTemplate('portrait_item');
