@@ -9,12 +9,12 @@ class ClassesAdminModule extends AdminModule {
 	public function __construct() {
 		$this->oListWidget = new ClassListWidgetModule();
 		if(isset($_REQUEST['class_type_id'])) {
-			$this->oListWidget->oDelegateProxy->setClassTypeName($_REQUEST['class_type_id']);
+			$this->oListWidget->oDelegateProxy->setClassTypeId($_REQUEST['class_type_id']);
 		}
-		$this->addResourceParameter(ResourceIncluder::RESOURCE_TYPE_JS, 'class_type_id', $this->oListWidget->oDelegateProxy->getClassTypeName());
 		$this->oSidebarWidget = new ListWidgetModule();
 		$this->oSidebarWidget->setListTag(new TagWriter('ul'));
 		$this->oSidebarWidget->setDelegate(new CriteriaListWidgetDelegate($this, 'ClassType', 'name'));
+		$this->oSidebarWidget->setSetting('initial_selection', array('class_type_id' => $this->oListWidget->oDelegateProxy->getClassTypeId()));
 	}
 	
 	public function mainContent() {

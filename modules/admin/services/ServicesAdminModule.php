@@ -15,7 +15,7 @@ class ServicesAdminModule extends AdminModule {
 		if(isset($_REQUEST['service_category_id'])) {
 			$this->oListWidget->oDelegateProxy->setServiceCategoryId($_REQUEST['service_category_id']);
 		}
-		$this->addResourceParameter(ResourceIncluder::RESOURCE_TYPE_JS, 'service_category_id', $this->oListWidget->oDelegateProxy->getServiceCategoryId());
+    $this->oSidebarWidget->setSetting('initial_selection', array('service_category_id' => $this->oListWidget->oDelegateProxy->getServiceCategoryId()));
 	}
 	
 	public function mainContent() {

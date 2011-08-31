@@ -42,7 +42,7 @@ class ClassListWidgetModule extends WidgetModule {
 				break;
 			case 'class_type_id':
 				$aResult['heading'] = StringPeer::getString('wns.class.type');
-        $aResult['field_name'] = 'class_type_name';
+				$aResult['field_name'] = 'class_type_name';
 				break;
 			case 'year_period':
 				$aResult['heading'] = '';
@@ -106,22 +106,22 @@ class ClassListWidgetModule extends WidgetModule {
 	}
 	
 	public function getFilterTypeForColumn($sColumnIdentifier) {
-    if($sColumnIdentifier === 'class_type_id') {
+		if($sColumnIdentifier === 'class_type_id') {
 			return CriteriaListWidgetDelegate::FILTER_TYPE_IS;
 		}
-    if($sColumnIdentifier === 'year_period') {
+		if($sColumnIdentifier === 'year_period') {
 			return CriteriaListWidgetDelegate::FILTER_TYPE_IS;
 		}
 		return null;
 	}
 	
 	public function setCountStudents($bShowWithStudentsOnly) {
-	  $this->bShowWithStudentsOnly = $bShowWithStudentsOnly;
+		$this->bShowWithStudentsOnly = $bShowWithStudentsOnly;
 	}
 	
 	public function getClassTypeName() {
 		if($this->oDelegateProxy->getClassTypeId() === CriteriaListWidgetDelegate::SELECT_ALL) {
-		  return null;
+			return null;
 		}
 		$oClassType = ClassTypePeer::retrieveByPK($this->oDelegateProxy->getClassTypeId());
 		return $oClassType->getName();
@@ -132,7 +132,7 @@ class ClassListWidgetModule extends WidgetModule {
 		$oCriteria->setDistinct();
 		$oCriteria->addJoin(SchoolClassPeer::ID, ClassTeacherPeer::SCHOOL_CLASS_ID, Criteria::LEFT_JOIN);
 		if($this->bShowWithStudentsOnly) {
-		  $oCriteria->addJoin(SchoolClassPeer::ID, ClassStudentPeer::SCHOOL_CLASS_ID, Criteria::INNER_JOIN);
+			$oCriteria->addJoin(SchoolClassPeer::ID, ClassStudentPeer::SCHOOL_CLASS_ID, Criteria::INNER_JOIN);
 		}
 		return $oCriteria;
 	}
