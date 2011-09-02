@@ -9,6 +9,7 @@ class EventFilterModule extends FilterModule {
 	const ITEM_EVENT = 'event_normalized_title';
 	
 	const EVENT_REQUEST_KEY = 'event_detail';
+	const NAV_TITLE = "Alle ";
 
 	public function onNavigationItemChildrenRequested(NavigationItem $oNavigationItem) {
 		$mIdentifier = $oNavigationItem->getIdentifier();
@@ -20,7 +21,7 @@ class EventFilterModule extends FilterModule {
 		   && $mIdentifier[0] === SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS)) {
 			$aData = array('event_type' => $mIdentifier[1]);
 			foreach(self::selectNames($aData, 'YEAR(DATE_START)') as $iYear) {
-				$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, $iYear, null, array_merge($aData, array('year' => $iYear))));
+				$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE.$iYear, null, array_merge($aData, array('year' => $iYear))));
 			}
 		} else if($oNavigationItem instanceof VirtualNavigationItem
 		          && $oNavigationItem->getType() === self::ITEM_EVENT_YEAR) {
@@ -53,19 +54,7 @@ class EventFilterModule extends FilterModule {
 	}
 	
 	private static function selectNames($aData, $sColumn = null) {
-		$oQuery = EventQuery::create()->distinct()->filterByEventTypeId($aData['event_type']);
-		if(isset($aData['year'])) {
-			$oQuery->add('YEAR(DATE_START)', $aData['year']);
-		}
-		if(isset($aData['month'])) {
-			$oQuery->add('MONTH(DATE_START)', $aData['month']);
-		}
-		if(isset($aData['day'])) {
-			$oQuery->add('DAY(DATE_START)', $aData['day']);
-		}
-		if(isset($aData['title_normalized'])) {
-			$oQuery->add(EventPeer::TITLE_NORMALIZED, $aData['title_normalized']);
-		}
+		$oQuery = EventQuery::create()->distinct()->filterByNavigationItem($aData);
 		if(is_string($sColumn)) {
 			$oQuery->clearSelectColumns()->addSelectColumn($sColumn);
 			return EventPeer::doSelectStmt($oQuery)->fetchAll(PDO::FETCH_COLUMN);

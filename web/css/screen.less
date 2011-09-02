@@ -463,6 +463,10 @@ table {
 	margin-top: -17px;
 }
 
+table.list_view td {
+  vertical-align: top;
+}
+
 table.list_view tr.even td,
 table.list_view tr.row:nth-child(2n+1) td {
    background-color: #fafaf9; 
@@ -808,4 +812,18 @@ a:hover,
 #content_main h1, 
 #content_main h2 {
   color: @school_color;
+}
+
+td.status_icons, td.status_icons a {
+  width: 20px;
+}
+
+td.status_icons.has_bericht {
+	background: transparent url(../images/has_bericht.png) no-repeat middle top; 
+}
+
+.event_list td a.detail_link {
+  display: block;
+  width: 20px;
+	background: transparent url(../images/detail_link.png) no-repeat middle top; 
 }

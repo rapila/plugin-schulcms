@@ -15,13 +15,14 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 	const MODE_EVENT_LIMIT = 'event_limit';
 	
 	public function renderFrontend() { 
+		$aOptions = @unserialize($this->getData());
+
 		if(self::$EVENT === null && isset($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY])) {
 			self::$EVENT = EventPeer::retrieveByPK($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY]);
 			if(self::$EVENT) {
 				return $this->renderDetail();
 			}
 		}
-		$aOptions = @unserialize($this->getData());
 		if($aOptions[self::MODE_SELECT_KEY] === 'list') {
 			return $this->renderList($aOptions[self::MODE_EVENT_TYPE_ID], $aOptions[self::MODE_EVENT_LIMIT]);
 		}
@@ -29,29 +30,25 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 	}
 	
 	private function renderList($iEventTypeId=null, $iLimit=null) {
-		$bIsArchive = false;
-		$oEventQuery = EventQuery::create()->filterByIsActive(true)->filterBySchoolClassId(null, Criteria::ISNULL);
-		if($iEventTypeId !== null) {
-			$oEventQuery->filterByEventTypeId($iEventTypeId);
-		}
+		$oEventQuery = EventQuery::create();
 		if($iLimit !== null) {
 			$oEventQuery->limit($iLimit);
 		}
-
-		if($this->oLanguageObject->getContentObject()->getContainerName() === 'context') {
-			$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$iEventTypeId));
-			$oTemplate = $this->constructTemplate('list_context');
-			$oItemTempl = $this->constructTemplate('list_item_context');
-		} else {
+		if($this->oLanguageObject->getContentObject()->getContainerName() !== 'context') {
+			$oEventQuery = EventQuery::create()->filterByIsActive(true)->filterBySchoolClassId(null, Criteria::ISNULL)->filterByNavigationItem();
 			$oPage = FrontendManager::$CURRENT_PAGE;
 			$oTemplate = $this->constructTemplate('list');
 			$oItemTempl = $this->constructTemplate('list_item');
+		} else {
+			$oEventQuery = EventQuery::create()->filterByIsActive(true)->filterBySchoolClassId(null, Criteria::ISNULL)->filterByDateRangePreview();
+			if($iEventTypeId !== null) {
+				$oEventQuery->filterByEventTypeId($iEventTypeId);
+			}
+			$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$iEventTypeId));
+			$oTemplate = $this->constructTemplate('list_context');
+			$oItemTempl = $this->constructTemplate('list_item_context');
 		}
-		
-		// archive, requires link to aktuell, parent of current archive page
-		if($bIsArchive === false) {
-			$oEventQuery->filterByDateRangePreview()->orderByDateStart();
-		}
+		$oEventQuery->orderByDateStart();
 		
 		$sOddEven = 'odd';
 		LocaleUtil::setLocaleToLanguageId(Session::language(), LC_TIME);
@@ -60,7 +57,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		$aEvents = $oEventQuery->find();
 		if(count($aEvents) === 0) {
 			$oItemTemplate = $this->constructTemplate('no_entries');
-			$oItemTemplate->replaceIdentifier('no_entries_text', StringPeer::getString('wns.event.no_entries'.($bIsArchive ? '_archive' : '')));
+			$oItemTemplate->replaceIdentifier('no_entries_text', StringPeer::getString('wns.event.no_entries'));
 			$oTemplate->replaceIdentifier('list_item', $oItemTemplate);
 			return $oTemplate;
 		}
@@ -69,18 +66,23 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 			$oItemTemplate->replaceIdentifier('oddeven', $sOddEven = $sOddEven === 'even' ? 'odd' : 'even');
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getEventPageLink($oPage)));
 			$oItemTemplate->replaceIdentifier('detail_link_text', $oEvent->getTitle());
-			$oItemTemplate->replaceIdentifier('detail_link_title', 'Details von '.$oEvent->getTitle());			
+			$oItemTemplate->replaceIdentifier('detail_link_title', 'Details von '.$oEvent->getTitle());		
+			$oItemTemplate->replaceIdentifier('has_images_class', $oEvent->hasImages() ? ' has_images' : '');
+			$oItemTemplate->replaceIdentifier('has_images_title', $oEvent->hasImages() ?  ' title="'.StringPeer::getString('event.has_images').'"' : '', null, Template::NO_HTML_ESCAPE);
+			$oItemTemplate->replaceIdentifier('has_bericht_class', $oEvent->hasBericht() ? ' has_bericht' : '');
+			$oItemTemplate->replaceIdentifier('has_bericht_title', $oEvent->hasImages() ? ' title="'.StringPeer::getString('event.has_bericht').'"' : '', null, Template::NO_HTML_ESCAPE);
 			$oItemTemplate->replaceIdentifier('teaser', $oEvent->getTeaser());
 			
 			$oDateTemplate = clone $oDate;
 			$oDateTemplate->replaceIdentifier('date_day', strftime("%d",$oEvent->getDateStart('U')));
+			$oDateTemplate->replaceIdentifier('class_passed', $oEvent->isReview() ? ' passed' : '');
 			$oDateTemplate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
 			$oItemTemplate->replaceIdentifier('date_from_to', $oDateTemplate);
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
 		return $oTemplate;
 	}
-	
+
 	private function renderArchivlist($iEventTypeId=null) {
 		$oEventQuery = EventQuery::create()->filterByIsActive()->filterByDateRangeReview()->orderByDateStart(Criteria::DESC);
 		if($iEventTypeId !== null) {
@@ -98,9 +100,8 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		}
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$oTemplate = $this->constructTemplate('detail');
-		$bIsPreview = self::$EVENT->getLastDate('Ymd') >= date('Ymd');
 		$sBody = null;
-		if (!$bIsPreview && self::$EVENT->getBodyReview()) {
+		if (self::$EVENT->hasBericht()) {
 			$sBody = RichtextUtil::parseStorageForFrontendOutput(stream_get_contents(self::$EVENT->getBodyReview()));
 		} else if (self::$EVENT->getBodyPreview()) {
 			$sBody = RichtextUtil::parseStorageForFrontendOutput(stream_get_contents(self::$EVENT->getBodyPreview()));
@@ -110,7 +111,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		}
 
 		$oTemplate->replaceIdentifier('body', $sBody);
-		if($bIsPreview) {
+		if(self::$EVENT->isPreview()) {
 			if(self::$EVENT->getLocationInfo())	 {
 				$oTemplate->replaceIdentifier('location_info', self::$EVENT->getLocationInfo());
 			}
@@ -151,7 +152,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 			return null;
 		}
 		$sPageIdentifier = SchoolPeer::getPageIdentifier($oEvent->getEventTypeId() === 2 ? 'projects' : 'events');
-		$oEventPage = PagePeer::getPageByIdentifier($sPageIdentifier);
+		$oPage = PagePeer::getPageByIdentifier($sPageIdentifier);
 		$oTemplate = $this->constructTemplate('teaser');
 		$oTemplate->replaceIdentifier('title', $oEvent->getTitle());
 		$oTemplate->replaceIdentifier('date', $oEvent->getDateFromTo());
@@ -159,7 +160,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 			$oTemplate->replaceIdentifier('class_link', $sClassLink);
 		}
 		$oTemplate->replaceIdentifier('teaser', $oEvent->getTeaser());
-		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getEventPageLink($oEventPage)));
+		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getEventPageLink($oPage)));
 		$oTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.event.goto_detail').$oEvent->getTitle());
 		return $oTemplate;
 	}

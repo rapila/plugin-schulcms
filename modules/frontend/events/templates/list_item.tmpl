@@ -2,7 +2,9 @@
 	<td class="datum"><a href="{{detail_link}}" title="{{detail_link_title}}">{{date_from_to}}</a></td>
 	<td class="event_title" style="padding-left:.5em;">
 		<a href="{{detail_link}}" title="{{detail_link_title}}">{{detail_link_text}}</a>
-		<p>{{truncate=\{\{teaser\}\};length=60;}} <a href="{{detail_link}}">{{writeString=text.read_more}}</a></p>
+		<p>{{truncate=\{\{teaser\}\};length=70;}} <a href="{{detail_link}}">{{writeString=text.read_more}}</a></p>
 	</td>
-	<td class="align_right"></td>
+	<td class="status_icons{{has_bericht_class}}"{{has_bericht_title}}></td>
+	<td class="status_icons{{has_images_class}}"{{has_images_title}}></td>
+	<td class="status_icons"><a class="detail_link" title="{{detail_link_title}}" href="{{detail_link}}"> </a></td>
 </tr>

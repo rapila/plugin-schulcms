@@ -70,6 +70,22 @@ class Event extends BaseEvent {
 		return false;
 	}
 	
+	public function isReview() {
+		return $this->getLastDate('Ymd') < date('Ymd');
+	}
+	
+	public function hasImages() {
+		return $this->countEventDocuments() > 0;
+	}
+	
+	public function hasReviewText() {
+		return $this->getBodyReview() !== null;
+	}
+	
+	public function hasBericht() {
+		return $this->isReview() && $this->hasReviewText();
+	}
+	
 	public function getEventDocumentsOrdered() {
 	  $oCriteria = new Criteria();
 	  $oCriteria->addAscendingOrderByColumn(EventDocumentPeer::SORT);
