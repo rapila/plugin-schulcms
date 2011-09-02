@@ -23,6 +23,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 				return $this->renderDetail();
 			}
 		}
+
 		if($aOptions[self::MODE_SELECT_KEY] === 'list') {
 			return $this->renderList($aOptions[self::MODE_EVENT_TYPE_ID], $aOptions[self::MODE_EVENT_LIMIT]);
 		}
@@ -31,9 +32,6 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 	
 	private function renderList($iEventTypeId=null, $iLimit=null) {
 		$oEventQuery = EventQuery::create();
-		if($iLimit !== null) {
-			$oEventQuery->limit($iLimit);
-		}
 		if($this->oLanguageObject->getContentObject()->getContainerName() !== 'context') {
 			$oEventQuery = EventQuery::create()->filterByIsActive(true)->filterBySchoolClassId(null, Criteria::ISNULL)->filterByNavigationItem();
 			$oPage = FrontendManager::$CURRENT_PAGE;
@@ -49,6 +47,10 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 			$oItemTempl = $this->constructTemplate('list_item_context');
 		}
 		$oEventQuery->orderByDateStart();
+
+		if($iLimit !== null) {
+			$oEventQuery->limit($iLimit);
+		}
 		
 		$sOddEven = 'odd';
 		LocaleUtil::setLocaleToLanguageId(Session::language(), LC_TIME);
@@ -104,9 +106,12 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		if (self::$EVENT->hasBericht()) {
 			$sBody = RichtextUtil::parseStorageForFrontendOutput(stream_get_contents(self::$EVENT->getBodyReview()));
 		} else if (self::$EVENT->getBodyPreview()) {
-			$sBody = RichtextUtil::parseStorageForFrontendOutput(stream_get_contents(self::$EVENT->getBodyPreview()));
+			$sContent = stream_get_contents(self::$EVENT->getBodyPreview());
+			if($sContent != '') {
+				$sBody = RichtextUtil::parseStorageForFrontendOutput();
+			}
 		}
-		if ($sBody === null) {
+		if ($sBody == null) {
 			$sBody = self::$EVENT->getTeaser();
 		}
 
