@@ -670,3 +670,4 @@ td.status_icons.has_bericht { background: transparent url(../images/has_bericht.
   width: 20px;
   background: transparent url(../images/detail_link.png) no-repeat middle top;
 }
+iframe { border: 0; }

@@ -120,9 +120,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 			if(self::$EVENT->getLocationInfo())	 {
 				$oTemplate->replaceIdentifier('location_info', self::$EVENT->getLocationInfo());
 			}
-			if(self::$EVENT->getTimeDetails())	{
-				$oTemplate->replaceIdentifier('time_details', self::$EVENT->getTimeDetails());
-			}
+      $oTemplate->replaceIdentifier('time_details', self::$EVENT->getTimeDetails());
 		}
 		$oTemplate->replaceIdentifier('list_link', LinkUtil::link($oPage->getFullPathArray()));
 		$oTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
