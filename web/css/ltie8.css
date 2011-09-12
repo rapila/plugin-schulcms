@@ -2,3 +2,14 @@
   display: inline-block;
   height: 100%;
 }
+
+div.gallery span.gallery-item-holder img {
+	position: relative;
+	margin-top: 50% !important;
+	top: expression('-'+(this.clientHeight/2)+"px");
+}
+
+#aktuell_container {
+	margin-left: 0;
+}
+
