@@ -2,7 +2,7 @@ html,body{margin:0;padding:0;font-family:"Trebuchet MS",Georgia,Arial,Helvetica,
 a{text-decoration:none;color:#666}
 .inner a{background:transparent url("../images/link_icon.gif") no-repeat right center;padding-right:8px}
 #sidebar_right .inner a{background:transparent url("../images/link_icon_sidebar.gif") no-repeat right center}
-#sidebar_right .inner .datum a{background:none}
+#sidebar_right .inner .datum a,#sidebar_right .inner .datum a:hover,.inner .datum a,.inner .datum a:hover{background:none;padding-right:0}
 #sidebar_right .inner a:hover,.inner a:hover{background:transparent url("../images/link_icon_hover.gif") no-repeat right center}
 a.close_detail,a.close_detail:hover{float:right;z-index:5000;border:1px solid #b8abaa;background:rgba(255,255,255,0.70) url("../images/close_detail.png") no-repeat right center;margin-top:1px;padding:0;display:block;width:22px;height:22px}
 .klassen a.close_detail,.klassen a.close_detail:hover{margin-top:-26.5em;font-size:18.7167px;z-index:100;color:#fff;border:1px solid #fff}
@@ -15,7 +15,8 @@ ul,li{list-style:none;margin:0;padding:0}
 .inner li{padding-left:0}
 p,ul{padding-bottom:.5em}
 #content_main h1,#content_main h2{font-size:19px;line-height:1em;font-weight:normal;padding-bottom:.5em}
-#sidebar_right h1,#sidebar_right h2,#aktuell_container h2{font-size:1.05em;padding-left:.1em;margin-bottom:.5em;color:#fff;background-color:#5e61a8;line-height:24px;border-bottom:1px solid #5a2323}
+#sidebar_right h1,#sidebar_right h2,#aktuell_container h2{padding-left:.1em;margin-bottom:.5em;color:#fff;line-height:24px}
+#sidebar_right h1,#sidebar_right h2{font-size:1.05em;border-bottom:1px solid #5a2323;background-color:#5e61a8}
 a.close_detail:hover{border:1px solid #5e61a8;background:rgba(255,255,255,0.70) url("../images/close_detail_hover.png") no-repeat right center}
 a.close_detail:hover{border:1px solid #5e61a8}
 #sidebar_right p{padding-left:.1em}
@@ -108,7 +109,7 @@ img.class_portrait,.class_info span{padding-right:.5em}
 .class_info span.schedule{display:inline-block;width:70px}
 .date_square span{font-family:Arial;font-size:.7em}
 .date_square div{border:none}
-.date_square{background-color:#f5f173;color:#333;font-size:15px;margin-top:0;padding:.4em 0;width:34px;line-height:.85em;text-align:center;border:0;border-bottom:1px solid #d1c4c4;border-left:1px solid #d1c4c4;margin-bottom:.3em}
+.date_square{background-color:#f5f173;color:#333;font-size:15px;margin-top:0;padding:.4em 0;width:38px;line-height:.85em;text-align:center;border:0;border-bottom:1px solid #d1c4c4;border-left:1px solid #d1c4c4;margin-bottom:.3em}
 .gallery .gallery-canvas{display:inline-block;position:relative;width:165px;height:165px;line-height:165px;margin-right:2px}
 .gallery .gallery-canvas .gallery-frame,.gallery .gallery-canvas .gallery-item,.gallery .gallery-canvas .gallery-item .gallery-item-holder{position:absolute;top:0;left:0;right:0;bottom:0;z-index:0}
 .gallery a,.gallery span{display:block}
