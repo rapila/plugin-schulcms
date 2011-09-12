@@ -1,0 +1,612 @@
+@import "***REMOVED***_vars"
+
+html, body
+	margin: 0
+	padding: 0
+	font-family: "Trebuchet MS", Georgia, Arial, Helvetica, sans-serif
+	font-size: 10px
+	color: #222
+	background-color: background_color
+/*	background: url(../images/bg_raster.jpg) background_color no-repeat; */
+
+a
+	text-decoration: none
+	color: #666
+
+.inner a
+	background: transparent url(../images/link_icon.gif) no-repeat right center
+	padding-right: 8px
+
+#sidebar_right .inner a
+	background: transparent url(../images/link_icon_sidebar.gif) no-repeat right center
+
+#sidebar_right .inner .datum a
+	background: none
+
+#sidebar_right .inner a:hover, .inner a:hover
+	background: transparent url(../images/link_icon_hover.gif) no-repeat right center
+
+a.close_detail, a.close_detail:hover
+	float: right
+	z-index: 5000
+	border: 1px solid #B8ABAA
+	background: rgba(255, 255, 255, 0.7) url(../images/close_detail.png) no-repeat right center
+	margin-top: 1px
+	padding: 0
+	display: block
+	width: 22px
+	height: 22px
+
+.klassen a.close_detail, .klassen a.close_detail:hover
+	margin-top: -26.5em
+	font-size: 18.7167px
+	z-index: 100
+	color: #FFF
+	border: 1px solid #FFF
+
+.datum a
+	display: block
+	background: none
+	padding-right: 0px
+
+p, h1, h2, ul
+	margin: 0
+	padding: 0
+
+[contenteditable] p, [contenteditable] h1, [contenteditable] h2, [contenteditable] li
+	font-family: Trebuchet MS, Georgia, Arial, Helvetica, Sans Serif
+	font-size: 1.2em
+
+#content_main .inner h2:first-child
+	margin-top: 0
+
+ul, li
+	list-style: none
+	margin: 0
+	padding: 0
+
+.inner ul
+	margin-left: 1.5em
+
+.inner ul, .inner li, [contenteditable] ul, [contenteditable] li
+	list-style-image: url(../images/list-bg-img.png)
+	list-style-position: outside
+	padding-bottom: .3em
+
+[contenteditable] ul
+	padding-left: 1.6em
+
+.inner li
+	padding-left: 0
+
+[contenteditable] li
+	padding-left: 0
+
+p, ul
+	padding-bottom: .5em
+
+#content_main h1, #content_main h2
+	font-size: 19px
+	line-height: 1em
+	font-weight: normal
+	padding-bottom: .5em
+
+#sidebar_right h1, #sidebar_right h2, #aktuell_container h2
+	font-size: 1.05em
+	padding-left: .1em
+	margin-bottom: .5em
+	color: #FFF
+	background-color: school_color
+	line-height: 24px
+	border-bottom: 1px solid #5A2323
+
+a.close_detail:hover
+	border: 1px solid school_color
+	background: rgba(255, 255, 255, 0.7) url(../images/close_detail_hover.png) no-repeat right center
+
+a.close_detail:hover
+	border: 1px solid school_color
+
+#sidebar_right p
+	padding-left: .1em
+
+#top_left_area, #main_left_area
+	position: absolute
+	left: 0
+	width: sidebar_left_width
+
+#top_left_area
+	top: 0
+	height: top_area_height
+	background-color: background_dark_color
+
+#main_left_area
+	top: top_area_height
+	bottom: 0
+
+#top_right_area
+	position: absolute
+	left: 0
+	right: 0
+	top: 0
+
+#main_right_area
+	position: absolute
+	left: sidebar_left_width
+	right: 30px
+	min-width: main_right_width_min
+	max-width: main_right_width_max
+
+#top_right_area
+	top: 0
+	height: top_area_height
+	background-color: background_dark_color
+
+#main_right_area
+	background-color: #FFF
+	top: 0
+	min-height: 100%
+
+#header_main, #blackboard_area
+	background: transparent url(../images/blackboard.jpg) no-repeat top right
+	position: absolute
+	top: top_area_height
+	height: header_main_height
+
+#blackboard_text, #content_main h1, #content_main h2
+	font-family: 'Architects Daughter', Courier, Serif
+	line-height: 1em
+	padding-bottom: .1em
+
+#blackboard_text
+	float: right
+	margin: .5em 2em 0 0
+	width: 580px
+	height: 50px
+	font-size: 3.5em
+	color: #DFD86E
+
+.home #header_main, .home #blackboard_area
+	height: header_main_height+22px
+
+#blackboard_area
+	top: 0
+
+#header_main
+	left: 0
+	right: 0
+
+#blackboard_area
+	right: 0
+	width: sidebar_right_width
+
+a#school_logo
+	position: absolute
+	top: 0
+	left: 0
+	background-color: school_color
+	width: sidebar_left_width
+	height: logo_height
+
+a#***REMOVED***_logo
+	background-color: background_dark_color
+	display: block
+	width: header_top_left_width - sidebar_left_width
+	padding-top: 0px
+	height: logo_height
+
+#***REMOVED***_logo img
+	padding: 4px 3px
+
+ul#meta_navigation
+	position: absolute
+	top: 0em
+	padding-top: .5em
+	left: sidebar_left_width
+	right: 0
+	height: 100%
+	background-color: background_color
+	display: block
+
+ul#main_navigation
+	display: block
+	padding-bottom: .6em
+
+ul#main_navigation.home
+	bottom: 0
+	right: sidebar_right_width
+	margin-top: 12em
+
+ul#main_navigation.outside
+	top: 5px
+
+#spacer
+	height: 75px
+
+ul#secondary_navigation
+	margin-top: 142px
+
+ul#meta_navigation li a, ul#meta_navigation li span, ul#main_navigation li a, ul#main_navigation li span, ul#secondary_navigation li a, ul#secondary_navigation li span
+	text-transform: uppercase
+	letter-spacing: .08em
+	font-size: 1.3em
+	line-height: 1.4em
+	color: #FFF
+
+body.default ul#main_navigation li a, body.default ul#main_navigation li span
+	color: #666
+
+ul#secondary_navigation li a, ul#secondary_navigation li span
+	color: #6F6F6E
+
+body.default ul#main_navigation li span, body.default ul#main_navigation li a.active, body.default ul#main_navigation li a.current, ul#secondary_navigation li a.current, ul#secondary_navigation li a.active, ul#secondary_navigation li span, ul#meta_navigation li span, ul#secondary_navigation li a.active
+	color: school_color
+
+ul#main_navigation li
+	float: left
+	padding: 0 2.5em 0 3em
+
+ul#main_navigation li:first-child
+	padding: 0 2.5em 0 .7em
+
+ul#meta_navigation li
+	float: right
+	padding: 0 0 0 2em
+
+ul#meta_navigation li a
+	color: #A3A19F
+
+ul#secondary_navigation li
+	padding: .2em 1em
+
+#sidebar_right
+	position: absolute
+	top: (header_main_height + top_area_height)
+	bottom: 0
+	background-color: #E7D9D9
+
+.home #sidebar_right
+	top: (header_main_height+22px + top_area_height)
+
+#content_main
+	margin-top: (header_main_height + top_area_height)
+	margin-right: sidebar_right_width
+
+.home #content_main
+	margin-top: (header_main_height + top_area_height + 75px)
+
+#sidebar_right
+	right: 0
+	width: sidebar_right_width
+	background-color: sidebar_right_color
+
+.team #sidebar_right h2
+	font-weight: normal
+
+#searchbar
+	position: fixed
+	bottom: 10px
+	left: 10px
+	z-index: 1
+	height: 28px
+	margin-left: .3em
+	font-size: 1.4em
+	display: none
+
+#searchbar input
+	color: black
+	background-color: #E8E6E6
+	padding: .2em .4em
+	width: 145px
+	border: 1px solid #bab6b5
+	border-top-color: #bab6b5
+	border-left-color: #bab6b5
+	border-bottom-color: #F1EFEF
+	border-right-color: #F1EFEF
+
+input::-moz-placeholder, input::-webkit-input-placeholder
+	color: #A5A2A1
+
+#search_button
+	background: transparent url(../images/search_icon.png) no-repeat center center
+	display: inline-block
+	padding: .1em .3em
+
+#search_button.active
+	background: transparent url(../images/search_icon_active.png) no-repeat center center
+
+.inner
+	padding-top: 75px
+	font-size: 1.3em
+	line-height: 1.3em
+	font-family: Arial, Helvetica, Sans Serif
+
+#content_main .inner, #sidebar_right .inner
+	line-height: 1.4em
+
+.home #sidebar_right .inner
+	padding-top: 56px
+
+#content_main .inner
+	padding: 0px 5px 20px 5px
+
+table
+	width: 100%
+	border-collapse: collapse
+	margin-top: -17px
+
+table.list_view td
+	vertical-align: top
+
+table.list_view tr.even td, table.list_view tr.row:nth-child(2n+1) td
+	background-color: #FdFdFd
+
+td, th
+	padding: 0 .3em
+	vertical-align: top
+	border-bottom: 1px solid #F9F9F9
+
+.even td
+	border-bottom: 1px solid #EBEBEB
+
+.event_list.odd td
+	border-bottom: 1px solid #EFEFEF
+
+td.datum
+	padding-left: 0
+	padding-right: 0em
+	width: 42px
+	border-bottom-color: transparent
+
+table tr.even td.datum
+	background-color: transparent
+
+td, th, td a
+	line-height: 24px
+
+td p
+	line-height: 16px
+	margin: 0
+	padding: 0
+
+.event_list td p
+	line-height: 16px
+	padding: 2px 0
+	margin-bottom: .8em
+
+.context_list.event_list td p
+	margin-bottom: .4em
+
+.event_list td, .event_list td a
+	line-height: 22px
+
+td a
+	display: inline-block
+
+th
+	text-align: left
+	font-weight: normal
+	font-size: .9em
+	font-style: oblique
+	line-height: 18px
+	color: #999
+
+.row.active td, .row.active td a
+	color: school_color
+	height: 100%
+
+.statistics_list td
+	border: 1px solid school_color
+	line-height: 22px
+	font-size: 11px
+
+.is_active
+	color: school_color
+	width: 2em
+	text-align: right
+
+.row:first-child div
+	border-top: 1px solid background_color
+
+.row:first-child td div
+	border-top: none
+
+a.stundenplan, #sidebar_right a.stundenplan
+	background: transparent url(../images/pdf.png) no-repeat center left
+	width: 15px
+	padding-right: 2px
+	float: right
+
+a.stundenplan:hover
+	background: transparent url(../images/pdf_hover.png) no-repeat center left
+
+.class_info a.stundenplan
+	display: inline-block
+
+#sidebar_right .class_info p
+	padding: .2em .2em
+	border-bottom: 1px solid school_color
+
+.sidebar_detail
+	padding: .1em
+	position: fixed
+	width: sidebar_right_width - 1px
+
+.class_info label, #sidebar_right h4
+	margin: 0
+	padding: 0
+	font-weight: normal
+	font-size: inherit
+	display: block
+	font-style: oblique
+	margin-top: .6em
+	color: school_color
+
+.class_info label:first-child
+	margin-top: 0
+
+#content_main h1, #content_main h2, [contenteditable] p, [contenteditable] h1, [contenteditable] h2
+	margin-top: 0
+	margin-bottom: 9px
+
+#aktuell_container
+	float: right
+	width: 240px
+	margin-left: 24px
+
+#aktuell_container
+	font-style: oblique
+
+#aktuell_container p, #aktuell_container h2
+	margin-left: 10px
+	margin-right: 10px
+
+.home #content_main .inner
+	width: 440px
+
+.home #aktuell_container .inner
+	width: auto
+
+.class_info span.function
+	font-style: oblique
+	display: inline-block
+	font-size: .9em
+	margin-bottom: .3em
+	padding-right: 0
+
+img
+	vertical-align: bottom
+
+a img
+	border: none
+
+img.class_portrait
+	width: 668px
+	margin-bottom: 1em
+
+img.class_portrait
+
+.class_info span
+	padding-right: .5em
+
+.class_info span.schedule
+	display: inline-block
+	width: 70px
+
+.date_square span
+	font-family: Arial
+	font-size: .7em
+
+.date_square div
+	border: none
+
+.date_square
+	background-color: #F5F173
+	color: #333
+	font-size: 15px
+	margin-top: 0px
+	padding: .4em 0
+	width: 34px
+	line-height: .85em
+	text-align: center
+	border: 0
+	border-bottom: 1px solid #D1C4C4
+	border-left: 1px solid #D1C4C4
+	margin-bottom: .3em
+
+.gallery .gallery-canvas
+	display: inline-block
+	position: relative
+	width: slide_frame
+	height: slide_frame
+	line-height: slide_frame
+	margin-right: 2px
+
+.gallery .gallery-canvas .gallery-frame, .gallery .gallery-canvas .gallery-item, .gallery .gallery-canvas .gallery-item .gallery-item-holder
+	position: absolute
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	z-index: 0
+
+.gallery a, .gallery span
+	display: block
+
+.gallery .gallery-canvas .gallery-frame
+	z-index: 1
+	background: transparent url('../images/slide_frame.png') no-repeat scroll center center
+
+.gallery .gallery-canvas .gallery-item
+	top: 3px
+	left: 3px
+	right: 3px
+	bottom: 3px
+	background-color: black
+
+.gallery .gallery-canvas.gallery-detail-link
+	background-image: none
+	padding-right: 0
+
+.gallery .gallery-canvas .gallery-item .gallery-item-holder
+	display: block
+	text-align: center
+
+.gallery .gallery-canvas .gallery-item .gallery-item-holder img
+	margin: 0 auto
+	vertical-align: middle
+
+a.event_teaser_classlink
+	margin-left: 1em
+
+.class_info h1 a
+	color: #f6f6f6
+
+.class_info h1 a:hover
+	background: url("../images/link_icon.gif") no-repeat scroll right center transparent
+
+.date
+	font-style: oblique
+
+.wraptocenter
+	background: #f1f1f1
+	display: table-cell
+	text-align: center
+	vertical-align: middle
+	width: 163px
+	height: 163px
+
+.wraptocenter *
+	vertical-align: middle
+
+p em
+	font-size: 1.05em
+
+.align_right
+	text-align: right
+
+img.service_logo
+	float: right
+	margin: 0 1em 1em 2em
+
+.not_found_page
+	border: 1px solid school_color
+	padding: 1em
+
+#aktuell_container, .events a.active, #content_main li em, #content_main h2, a:hover, #content_main h1, #content_main h2
+	color: school_color
+
+td.status_icons, td.status_icons a
+	width: 20px
+
+td.status_icons.has_bericht
+	background: transparent url(../images/has_bericht.png) no-repeat middle top
+
+.event_list td a.detail_link
+	display: block
+	width: 20px
+	background: transparent url(../images/detail_link.png) no-repeat middle top
+
+iframe
+	border: 0
+
