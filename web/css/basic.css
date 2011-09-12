@@ -75,6 +75,7 @@ table.list_view tr.even td,table.list_view tr.row:nth-child(2n+1) td{background-
 td,th{padding:0 .3em;vertical-align:top;border-bottom:1px solid #f9f9f9}
 .even td{border-bottom:1px solid #ebebeb}
 .event_list.odd td{border-bottom:1px solid #efefef}
+table.context_list tr td{border-bottom:1px solid #c9c5b3}
 td.datum{padding-left:0;padding-right:0;width:42px;border-bottom-color:transparent}
 table tr.even td.datum{background-color:transparent}
 td,th,td a{line-height:24px}
