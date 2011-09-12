@@ -8,14 +8,11 @@ a.close_detail,a.close_detail:hover{float:right;z-index:5000;border:1px solid #b
 .klassen a.close_detail,.klassen a.close_detail:hover{margin-top:-26.5em;font-size:18.7167px;z-index:100;color:#fff;border:1px solid #fff}
 .datum a{display:block;background:none;padding-right:0}
 p,h1,h2,ul{margin:0;padding:0}
-[contenteditable] p,[contenteditable] h1,[contenteditable] h2,[contenteditable] li{font-family:Trebuchet MS,Georgia,Arial,Helvetica,Sans Serif;font-size:1.2em}
 #content_main .inner h2:first-child{margin-top:0}
 ul,li{list-style:none;margin:0;padding:0}
 .inner ul{margin-left:1.5em}
-.inner ul,.inner li,[contenteditable] ul,[contenteditable] li{list-style-image:url("../images/list-bg-img.png");list-style-position:outside;padding-bottom:.3em}
-[contenteditable] ul{padding-left:1.6em}
+.inner ul,.inner li{list-style-image:url("../images/list-bg-img.png");list-style-position:outside;padding-bottom:.3em}
 .inner li{padding-left:0}
-[contenteditable] li{padding-left:0}
 p,ul{padding-bottom:.5em}
 #content_main h1,#content_main h2{font-size:19px;line-height:1em;font-weight:normal;padding-bottom:.5em}
 #sidebar_right h1,#sidebar_right h2,#aktuell_container h2{font-size:1.05em;padding-left:.1em;margin-bottom:.5em;color:#fff;background-color:#5e61a8;line-height:24px;border-bottom:1px solid #5a2323}
@@ -70,6 +67,7 @@ input::-moz-placeholder,input::-webkit-input-placeholder{color:#a5a2a1}
 .home #sidebar_right .inner{padding-top:56px}
 #content_main .inner{padding:0 5px 20px 5px}
 table{width:100%;border-collapse:collapse;margin-top:-17px}
+table.event_list.context_list{margin-top:-6px}
 table.list_view td{vertical-align:top}
 table.list_view tr.even td,table.list_view tr.row:nth-child(2n+1) td{background-color:#fdfdfd}
 td,th{padding:0 .3em;vertical-align:top;border-bottom:1px solid #f9f9f9}
@@ -96,7 +94,7 @@ a.stundenplan:hover{background:transparent url("../images/pdf_hover.png") no-rep
 .sidebar_detail{padding:.1em;position:fixed;width:193px}
 .class_info label,#sidebar_right h4{margin:0;padding:0;font-weight:normal;font-size:inherit;display:block;font-style:oblique;margin-top:.6em;color:#5e61a8}
 .class_info label:first-child{margin-top:0}
-#content_main h1,#content_main h2,[contenteditable] p,[contenteditable] h1,[contenteditable] h2{margin-top:0;margin-bottom:9px}
+#content_main h1,#content_main h2{margin-top:0;margin-bottom:9px}
 #aktuell_container{float:right;width:240px;margin-left:24px}
 #aktuell_container{font-style:oblique}
 #aktuell_container p,#aktuell_container h2{margin-left:10px;margin-right:10px}
@@ -134,3 +132,5 @@ td.status_icons,td.status_icons a{width:20px}
 td.status_icons.has_bericht{background:transparent url("../images/has_bericht.png") no-repeat middle top}
 .event_list td a.detail_link{display:block;width:20px;background:transparent url("../images/detail_link.png") no-repeat middle top}
 iframe{border:0}
+date_square.passed{background-color:#f7f7f7}
+#ajax_loader{display:none}

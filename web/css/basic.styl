@@ -7,7 +7,6 @@ html, body
 	font-size: 10px
 	color: #222
 	background-color: background_color
-/*	background: url(../images/bg_raster.jpg) background_color no-repeat; */
 
 a
 	text-decoration: none
@@ -53,10 +52,6 @@ p, h1, h2, ul
 	margin: 0
 	padding: 0
 
-[contenteditable] p, [contenteditable] h1, [contenteditable] h2, [contenteditable] li
-	font-family: Trebuchet MS, Georgia, Arial, Helvetica, Sans Serif
-	font-size: 1.2em
-
 #content_main .inner h2:first-child
 	margin-top: 0
 
@@ -68,18 +63,12 @@ ul, li
 .inner ul
 	margin-left: 1.5em
 
-.inner ul, .inner li, [contenteditable] ul, [contenteditable] li
+.inner ul, .inner li
 	list-style-image: url(../images/list-bg-img.png)
 	list-style-position: outside
 	padding-bottom: .3em
 
-[contenteditable] ul
-	padding-left: 1.6em
-
 .inner li
-	padding-left: 0
-
-[contenteditable] li
 	padding-left: 0
 
 p, ul
@@ -334,6 +323,9 @@ table
 	width: 100%
 	border-collapse: collapse
 	margin-top: -17px
+	
+table.event_list.context_list
+	margin-top: -6px
 
 table.list_view td
 	vertical-align: top
@@ -445,7 +437,7 @@ a.stundenplan:hover
 .class_info label:first-child
 	margin-top: 0
 
-#content_main h1, #content_main h2, [contenteditable] p, [contenteditable] h1, [contenteditable] h2
+#content_main h1, #content_main h2
 	margin-top: 0
 	margin-bottom: 9px
 
@@ -610,3 +602,8 @@ td.status_icons.has_bericht
 iframe
 	border: 0
 
+date_square.passed 
+	background-color: #F7F7F7;
+
+#ajax_loader 
+	display: none;
