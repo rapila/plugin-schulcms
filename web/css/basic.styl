@@ -223,15 +223,16 @@ ul#main_navigation.outside
 	top: 5px
 
 #blackboard_text {
-	margin-top: .8em;
+	margin-top: .8em
 	margin-left: sidebar_left_width+30px
-	color: background-color;
+	color: background-color
 	height: 60px
 }
 
 #blackboard_text p {
+	color: background-color
 	line-height: 1.2em
-	font-size: 3em;
+	font-size: 3em
 }
 
 #spacer
@@ -352,6 +353,8 @@ input::-moz-placeholder, input::-webkit-input-placeholder
 table
 	width: 100%
 	border-collapse: collapse
+
+#content_main table 
 	margin-top: -17px
 	
 table.event_list.context_list
@@ -375,7 +378,7 @@ td, th
 	border-bottom: 1px solid #EFEFEF
 
 table.context_list tr td
-	border-bottom: 1px solid #C9C5B3
+	border-bottom: 1px solid sidebar_right_line_color
 
 td.datum
 	padding-left: 0
@@ -419,9 +422,12 @@ th
 .row.active td, .row.active td a
 	color: school_color
 	height: 100%
-
+	
+table.statistics_list 
+	margin-top: -5px
+	
 .statistics_list td
-	border: 1px solid school_color
+	border-bottom: 1px solid sidebar_right_line_color
 	line-height: 22px
 	font-size: 11px
 
