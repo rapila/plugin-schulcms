@@ -41,8 +41,10 @@ a#***REMOVED***_logo{background-color:#d3d1b8;display:block;width:188px;padding-
 #***REMOVED***_logo img{padding:4px 3px}
 ul#meta_navigation{position:absolute;top:0;padding-top:.5em;left:188px;right:0;height:100%;background-color:#e6e4cc;display:block}
 ul#main_navigation{display:block;padding-bottom:.6em}
-ul#main_navigation.home{bottom:0;right:194px;margin-top:12em}
+ul#main_navigation.home{right:194px;margin-top:5.4em}
 ul#main_navigation.outside{top:5px}
+#blackboard_text{margin-top:.8em;margin-left:218px;color:background-color;height:60px}
+#blackboard_text p{line-height:1.2em;font-size:3em}
 #spacer{height:75px}
 ul#secondary_navigation{margin-top:142px}
 ul#meta_navigation li a,ul#meta_navigation li span,ul#main_navigation li a,ul#main_navigation li span,ul#secondary_navigation li a,ul#secondary_navigation li span{text-transform:uppercase;letter-spacing:.08em;font-size:1.3em;line-height:1.4em;color:#fff}
