@@ -29,9 +29,11 @@ a.close_detail:hover{border:1px solid #5e61a8}
 #main_right_area{background-color:#fff;top:0;min-height:100%}
 #header_main,#blackboard_area{background:transparent url("../images/blackboard.jpg") no-repeat top right;position:absolute;top:50px;height:120px}
 #blackboard_text,#content_main h1,#content_main h2{font-family:"Architects Daughter",Courier,Serif;line-height:1em;padding-bottom:.1em}
-#blackboard_text{float:right;margin:.5em 2em 0 0;width:580px;height:50px;font-size:3.5em;color:#dfd86e}
 .home #header_main,.home #blackboard_area{height:142px}
 #blackboard_area{top:0}
+.document_list a.pdf,#sidebar_right .inner a.pdf{padding-left:1.5em;background:transparent url("../images/pdf.png") no-repeat left center}
+.service_portraits{float:right;width:150px;margin:0 0 20px 20px}
+.portrait_item span{display:block;font-size:.95em;margin-bottom:.8em;font-style:oblique}
 #header_main{left:0;right:0}
 #blackboard_area{right:0;width:194px}
 a#school_logo{position:absolute;top:0;left:0;background-color:#5e61a8;width:188px;height:50px}
@@ -112,6 +114,7 @@ img.class_portrait,.class_info span{padding-right:.5em}
 .date_square span{font-family:Arial;font-size:.7em}
 .date_square div{border:none}
 .date_square{background-color:#f5f173;color:#333;font-size:15px;margin-top:0;padding:.4em 0;width:38px;line-height:.85em;text-align:center;border:0;border-bottom:1px solid #d1c4c4;border-left:1px solid #d1c4c4;margin-bottom:.3em}
+.date_square.passed{background-color:#f7f7f7}
 .gallery .gallery-canvas{display:inline-block;position:relative;width:165px;height:165px;line-height:165px;margin-right:2px}
 .gallery .gallery-canvas .gallery-frame,.gallery .gallery-canvas .gallery-item,.gallery .gallery-canvas .gallery-item .gallery-item-holder{position:absolute;top:0;left:0;right:0;bottom:0;z-index:0}
 .gallery a,.gallery span{display:block}
@@ -137,5 +140,4 @@ td.status_icons.has_images{background:transparent url("../images/has_images.png"
 .event_list td a.detail_link{display:block;width:20px;background:transparent url("../images/detail_link.png") no-repeat 0 3px}
 .event_list td a.detail_link:hover{background:transparent url("../images/detail_link_hover.png") no-repeat 0 3px}
 iframe{border:0}
-date_square.passed{background-color:#f7f7f7}
 #ajax_loader{display:none}
