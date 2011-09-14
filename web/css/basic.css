@@ -107,7 +107,7 @@ a.stundenplan:hover{background:transparent url("../images/pdf_hover.png") no-rep
 #aktuell_container{float:right;width:240px;margin-left:24px}
 #aktuell_container{font-style:oblique}
 #aktuell_container p,#aktuell_container h2{margin-left:10px;margin-right:10px}
-.home #content_main .inner{width:440px}
+.home #content_main .inner{max-width:440px}
 .home #aktuell_container .inner{width:auto}
 .class_info span.function{font-style:oblique;display:inline-block;font-size:.9em;margin-bottom:.3em;padding-right:0}
 img{vertical-align:bottom}
