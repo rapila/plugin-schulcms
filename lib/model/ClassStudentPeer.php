@@ -14,6 +14,7 @@ class ClassStudentPeer extends BaseClassStudentPeer {
 		$oCriteria = new Criteria();
 		$oCriteria->setDistinct();
 		$oCriteria->addJoin(self::SCHOOL_CLASS_ID, SchoolClassPeer::ID, Criteria::INNER_JOIN);
+		$oCriteria->addGroupByColumn(self::STUDENT_ID);
 		if($sUnitName !== null) {
 			$oCriteria->add(SchoolClassPeer::UNIT_NAME, $sUnitName);
 		} else {
