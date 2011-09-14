@@ -92,7 +92,7 @@ td a{display:inline-block}
 th{text-align:left;font-weight:normal;font-size:.9em;font-style:oblique;line-height:18px;color:#999}
 .row.active td,.row.active td a{color:#5e61a8;height:100%}
 table.statistics_list{margin-top:-5px}
-.statistics_list td{border-bottom:1px solid #c9c5b3;line-height:22px;font-size:11px}
+.statistics_list td{border-bottom:1px solid #c9c5b3;line-height:22px;font-size:12px}
 .is_active{color:#5e61a8;width:2em;text-align:right}
 .row:first-child div{border-top:1px solid #e6e4cc}
 .row:first-child td div{border-top:none}
