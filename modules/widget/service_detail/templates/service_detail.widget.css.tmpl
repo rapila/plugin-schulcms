@@ -36,6 +36,10 @@
 	width: 80%;
 }
 
+ol.droppable_area.ui-editable-items-list li {
+	padding-left: .5em;
+}
+
 .logo_area {
 	background-color: #FFF;
 	vertical-align: center;
@@ -67,8 +71,8 @@ span.document_name {
 	background: transparent url("{{writeDirectInclude=admin/pdf.png;template=location_only}}") no-repeat;
 	display: inline-block;
 }
-span.pdf {
-	background: transparent url("{{writeDirectInclude=admin/pdf.png;template=location_only}}") no-repeat;
+span.document_name.docx, span.document_name.doc {
+	background: transparent url("{{writeDirectInclude=admin/doc.png;template=location_only}}") no-repeat;
 }
 
 td.counter {
