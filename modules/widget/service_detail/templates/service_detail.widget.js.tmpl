@@ -34,10 +34,6 @@ Widget.types.service_detail = {
 		});
 		
 		this.service_text = this.content.find('div.service_text');
-		this.service_text.prepareWidget(function(rich_text_widget) {
-			_this.service_text_editor = rich_text_widget;
-			jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings);
-		}, jQuery.noop);
 		
 		// logo
 		var logo_area = _this.content.find('.logo_area');
@@ -84,10 +80,6 @@ Widget.types.service_detail = {
 				service_category.settings.initial_category_id = _this.settings.initial_category_id;
 			}, jQuery.noop);
 			
-			widget.handle('opening-initial', function() {
-				this.init_textareas();
-			}.bind(this));
-			
 			this.accordion = jQuery(widget.content.find('div.accordion')).accordion({active: 0, autoHeight: false, clearStyle: true, collapsible:false});
 			_this.uploader.allow_drag_to(_this.droppable_area, null, function(target, file) {
 				return { document_category_id: _this.settings.service_file_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
@@ -109,6 +101,7 @@ Widget.types.service_detail = {
 			this.auto_open = true;
 			return false;
 		}
+		this.init_textareas();
 		this.detail_widget.open();
 		this.detail_widget.content.find('input[name=name]').focus();
 	},
@@ -139,13 +132,13 @@ Widget.types.service_detail = {
 				var team_member_content = _this.team_member_content.clone();
 				team_member_content.find('select[name="team_member_id[]"]').val(team_member_id);
 				team_member_content.find('input[name="function_name[]"]').val(function_name);
-				// team_member_content.find('dt.counter').html(counter);
 				team_member_content.appendTo(_this.team_member_container);
 				counter++;
 			});
 			this.team_member_container.show();
 			
 			this.service_text.prepareWidget(function(widget) {
+				console.log('service_data.Body', service_data.Body, widget);
 				widget.set_data(service_data.Body);
 			});
 			var richtext_area = this.content.find("textarea[name='body_text']").val(service_data.Body);
@@ -154,19 +147,13 @@ Widget.types.service_detail = {
 	},
 	
 	init_textareas: function() {
-		this.content.find('div.service_text').each(function() {
-			var text = jQuery(this);
-			if(!text.attr('data-widget-type')) {
-				text.attr('data-widget-type', 'rich_text').prepareWidget(function(widget) {
-					widget.settings.height = 230;
-					widget.settings.toolbar_Full = [
-						['Bold','-', 'BulletedList'],['Link','Unlink'],
-						['Undo','Redo','-','RemoveFormat'],
-						['Maximize','Format'],['Source']
-					];
-				}, jQuery.noop);
-			}
-		});
+		var _this = this;
+		if(!this.service_text.didPrepareWidget()) {
+			this.service_text.attr('data-widget-session', this.settings.richtext_session).prepareWidget(function(rich_text_widget) {
+				_this.service_text_editor = rich_text_widget;
+				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings);
+			}, jQuery.noop);
+		}
 	},
 	
 	update_documents: function() {

@@ -8,6 +8,10 @@ html, body
 	color: #222
 	background-color: background_color
 
+body.editing
+	font-size: 13px
+	line-height: 1.4em
+
 a
 	text-decoration: none
 	color: #666
@@ -64,15 +68,15 @@ ul, li
 	margin: 0
 	padding: 0
 
-.inner ul
+.inner ul, body.editing ul
 	margin-left: 1.5em
 
-.inner ul, .inner li
+.inner ul, .inner li, body.editing ul, body.editing li
 	list-style-image: url(../images/list-bg-img.png)
 	list-style-position: outside
 	padding-bottom: .3em
 
-.inner li
+.inner li, body.editing li
 	padding-left: 0
 
 p, ul
@@ -148,7 +152,8 @@ a.close_detail:hover
 	top: top_area_height
 	height: header_main_height
 
-#blackboard_text, #content_main h1, #content_main h2
+#blackboard_text, #content_main h1, #content_main h2,
+body.editing h1, body.editing h2
 	font-family: 'Architects Daughter', Courier, Serif
 	line-height: 1em
 	padding-bottom: .1em
@@ -504,6 +509,11 @@ a.stundenplan:hover
 #aktuell_container p, #aktuell_container h2
 	margin-left: 10px
 	margin-right: 10px
+	
+#aktuell_container h2
+	// font-family: Arial;
+	// font-size: 1.2em
+	font-size:1.3em
 
 .home #content_main .inner
 	width: 440px
