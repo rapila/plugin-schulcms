@@ -54,7 +54,7 @@ body.default ul#main_navigation li a:hover,ul#meta_navigation li a:hover,ul#seco
 ul#main_navigation li{float:left;padding:0 2.5em 0 3em}
 ul#main_navigation li:first-child{padding:0 2.5em 0 .7em}
 ul#meta_navigation li{float:right;padding:0 0 0 2em}
-ul#meta_navigation li a{color:#a3a19f}
+ul#meta_navigation li a{color:#817f7d}
 ul#secondary_navigation li{padding:.2em 1em}
 #sidebar_right{position:absolute;top:170px;bottom:0;background-color:#e7d9d9}
 .home #sidebar_right{top:192px}
@@ -72,7 +72,7 @@ input::-moz-placeholder,input::-webkit-input-placeholder{color:#a5a2a1}
 .home #sidebar_right .inner{padding-top:56px}
 #content_main .inner{padding:0 5px 20px 5px}
 table{width:100%;border-collapse:collapse}
-#content_main table{margin-top:-17px}
+#content_main table:first-child{margin-top:-17px}
 table.event_list.context_list{margin-top:-6px}
 table.list_view td{vertical-align:top}
 table.list_view tr.even td,table.list_view tr.row:nth-child(2n+1) td{background-color:#fdfdfd}
