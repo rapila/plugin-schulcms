@@ -74,10 +74,11 @@ Widget.types.service_edit = {
 	},
 	
 	save: function(callback) {
+		var service_id = this.mode_dropdown.val() === 'service_liste' ? null : this.services_dropdown.val();
 		var data = {
 			service_category_id: this.selected_service_categories(),
 			display_mode: this.mode_dropdown.val(),
-			service_id: this.services_dropdown.val()
+			service_id: service_id
 		};
 		this.saveData(data, callback);
 	},
