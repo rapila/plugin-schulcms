@@ -101,7 +101,9 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		$oTemplate = $this->constructTemplate('detail');
 
 		// portrait
+		$sUnitName = null;
 		foreach($aClasses as $i => $oClass) {
+			$sUnitName = $oClass->getUnitName();
 			$oPortrait = $oClass->getDocumentRelatedByClassPortraitId();
 			if($oPortrait) {
 				$oTemplate->replaceIdentifierMultiple('portrait_display_url', $oPortrait->getDisplayUrl(array('max_width' => 670)));
@@ -125,11 +127,15 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		}
 
 		// teachers
-		$aClassTeachers = ClassTeacherQuery::create()->filterBySchoolClassId($aClassIds)->orderByIsClassTeacher(Criteria::DESC)->orderBySortOrder()->orderByLastName()->groupByTeamMemberId()->find();
+		$aClassTeachers = ClassTeacherPeer::getClassTeachersByUnitName($sUnitName, null, false);
 		$iCount = count($aClassTeachers);
+		$aClassTeachersSet = array();
 		foreach($aClassTeachers as $i => $oClassTeacher) {
 			if($i === 0) {
 				$oTemplate->replaceIdentifier('label_class_teacher', StringPeer::getString('wns.class.class_teachers'));
+			}
+			if(!in_array($oClassTeacher->getTeamMemberId(), $aClassTeachersSet)) {
+				$aClassTeachersSet[] = $oClassTeacher->getTeamMemberId();
 			}
 			if($oClassTeacher->getTeamMember()->getFullName()) {
 				$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oClassTeacher->getTeamMember()->getTeamMemberLink($this->oTeamPage))), $oClassTeacher->getTeamMember()->getFullName());

@@ -7,7 +7,6 @@ class ClassTeacherPeer extends BaseClassTeacherPeer {
 	
 	public static function getClassTeachersByUnitName($sUnitName, $iLimit = null, $bIsClassTeacher=null) {
 		$oCriteria = new Criteria();
-		$oCriteria->setDistinct();
 		if($bIsClassTeacher) {
 			$oCriteria->add(self::IS_CLASS_TEACHER, $bIsClassTeacher);
 		}
@@ -21,7 +20,6 @@ class ClassTeacherPeer extends BaseClassTeacherPeer {
 		$oCriteria->addAscendingOrderByColumn(self::SORT_ORDER);
 		$oCriteria->addAscendingOrderByColumn(TeamMemberPeer::LAST_NAME);
 		$oCriteria->addAscendingOrderByColumn(TeamMemberPeer::FIRST_NAME);
-		$oCriteria->addGroupByColumn(self::TEAM_MEMBER_ID);
 		if($iLimit !== null) {
 			$oCriteria->setLimit($iLimit);
 		}
