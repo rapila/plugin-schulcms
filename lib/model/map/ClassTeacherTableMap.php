@@ -38,10 +38,10 @@ class ClassTeacherTableMap extends TableMap {
 		$this->setUseIdGenerator(false);
 		// columns
 		$this->addForeignPrimaryKey('SCHOOL_CLASS_ID', 'SchoolClassId', 'INTEGER' , 'school_classes', 'ID', true, null, null);
-		$this->addColumn('FUNCTION_NAME', 'FunctionName', 'VARCHAR', false, 80, null);
+		$this->addForeignPrimaryKey('TEAM_MEMBER_ID', 'TeamMemberId', 'INTEGER' , 'team_members', 'ID', true, null, null);
+		$this->addPrimaryKey('FUNCTION_NAME', 'FunctionName', 'VARCHAR', true, 80, null);
 		$this->addColumn('SORT_ORDER', 'SortOrder', 'INTEGER', false, null, null);
 		$this->addColumn('IS_CLASS_TEACHER', 'IsClassTeacher', 'BOOLEAN', false, 1, false);
-		$this->addForeignPrimaryKey('TEAM_MEMBER_ID', 'TeamMemberId', 'INTEGER' , 'team_members', 'ID', true, null, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
 		$this->addForeignKey('CREATED_BY', 'CreatedBy', 'INTEGER', 'users', 'ID', false, null, null);

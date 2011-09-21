@@ -7,20 +7,20 @@
  * 
  *
  * @method     ClassTeacherQuery orderBySchoolClassId($order = Criteria::ASC) Order by the school_class_id column
+ * @method     ClassTeacherQuery orderByTeamMemberId($order = Criteria::ASC) Order by the team_member_id column
  * @method     ClassTeacherQuery orderByFunctionName($order = Criteria::ASC) Order by the function_name column
  * @method     ClassTeacherQuery orderBySortOrder($order = Criteria::ASC) Order by the sort_order column
  * @method     ClassTeacherQuery orderByIsClassTeacher($order = Criteria::ASC) Order by the is_class_teacher column
- * @method     ClassTeacherQuery orderByTeamMemberId($order = Criteria::ASC) Order by the team_member_id column
  * @method     ClassTeacherQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ClassTeacherQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method     ClassTeacherQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
  * @method     ClassTeacherQuery orderByUpdatedBy($order = Criteria::ASC) Order by the updated_by column
  *
  * @method     ClassTeacherQuery groupBySchoolClassId() Group by the school_class_id column
+ * @method     ClassTeacherQuery groupByTeamMemberId() Group by the team_member_id column
  * @method     ClassTeacherQuery groupByFunctionName() Group by the function_name column
  * @method     ClassTeacherQuery groupBySortOrder() Group by the sort_order column
  * @method     ClassTeacherQuery groupByIsClassTeacher() Group by the is_class_teacher column
- * @method     ClassTeacherQuery groupByTeamMemberId() Group by the team_member_id column
  * @method     ClassTeacherQuery groupByCreatedAt() Group by the created_at column
  * @method     ClassTeacherQuery groupByUpdatedAt() Group by the updated_at column
  * @method     ClassTeacherQuery groupByCreatedBy() Group by the created_by column
@@ -50,20 +50,20 @@
  * @method     ClassTeacher findOneOrCreate(PropelPDO $con = null) Return the first ClassTeacher matching the query, or a new ClassTeacher object populated from the query conditions when no match is found
  *
  * @method     ClassTeacher findOneBySchoolClassId(int $school_class_id) Return the first ClassTeacher filtered by the school_class_id column
+ * @method     ClassTeacher findOneByTeamMemberId(int $team_member_id) Return the first ClassTeacher filtered by the team_member_id column
  * @method     ClassTeacher findOneByFunctionName(string $function_name) Return the first ClassTeacher filtered by the function_name column
  * @method     ClassTeacher findOneBySortOrder(int $sort_order) Return the first ClassTeacher filtered by the sort_order column
  * @method     ClassTeacher findOneByIsClassTeacher(boolean $is_class_teacher) Return the first ClassTeacher filtered by the is_class_teacher column
- * @method     ClassTeacher findOneByTeamMemberId(int $team_member_id) Return the first ClassTeacher filtered by the team_member_id column
  * @method     ClassTeacher findOneByCreatedAt(string $created_at) Return the first ClassTeacher filtered by the created_at column
  * @method     ClassTeacher findOneByUpdatedAt(string $updated_at) Return the first ClassTeacher filtered by the updated_at column
  * @method     ClassTeacher findOneByCreatedBy(int $created_by) Return the first ClassTeacher filtered by the created_by column
  * @method     ClassTeacher findOneByUpdatedBy(int $updated_by) Return the first ClassTeacher filtered by the updated_by column
  *
  * @method     array findBySchoolClassId(int $school_class_id) Return ClassTeacher objects filtered by the school_class_id column
+ * @method     array findByTeamMemberId(int $team_member_id) Return ClassTeacher objects filtered by the team_member_id column
  * @method     array findByFunctionName(string $function_name) Return ClassTeacher objects filtered by the function_name column
  * @method     array findBySortOrder(int $sort_order) Return ClassTeacher objects filtered by the sort_order column
  * @method     array findByIsClassTeacher(boolean $is_class_teacher) Return ClassTeacher objects filtered by the is_class_teacher column
- * @method     array findByTeamMemberId(int $team_member_id) Return ClassTeacher objects filtered by the team_member_id column
  * @method     array findByCreatedAt(string $created_at) Return ClassTeacher objects filtered by the created_at column
  * @method     array findByUpdatedAt(string $updated_at) Return ClassTeacher objects filtered by the updated_at column
  * @method     array findByCreatedBy(int $created_by) Return ClassTeacher objects filtered by the created_by column
@@ -112,16 +112,16 @@ abstract class BaseClassTeacherQuery extends ModelCriteria
 	/**
 	 * Find object by primary key
 	 * <code>
-	 * $obj = $c->findPk(array(12, 34), $con);
+	 * $obj = $c->findPk(array(12, 34, 56), $con);
 	 * </code>
-	 * @param     array[$school_class_id, $team_member_id] $key Primary key to use for the query
+	 * @param     array[$school_class_id, $team_member_id, $function_name] $key Primary key to use for the query
 	 * @param     PropelPDO $con an optional connection object
 	 *
 	 * @return    ClassTeacher|array|mixed the result, formatted by the current formatter
 	 */
 	public function findPk($key, $con = null)
 	{
-		if ((null !== ($obj = ClassTeacherPeer::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && $this->getFormatter()->isObjectFormatter()) {
+		if ((null !== ($obj = ClassTeacherPeer::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1], (string) $key[2]))))) && $this->getFormatter()->isObjectFormatter()) {
 			// the object is alredy in the instance pool
 			return $obj;
 		} else {
@@ -163,6 +163,7 @@ abstract class BaseClassTeacherQuery extends ModelCriteria
 	{
 		$this->addUsingAlias(ClassTeacherPeer::SCHOOL_CLASS_ID, $key[0], Criteria::EQUAL);
 		$this->addUsingAlias(ClassTeacherPeer::TEAM_MEMBER_ID, $key[1], Criteria::EQUAL);
+		$this->addUsingAlias(ClassTeacherPeer::FUNCTION_NAME, $key[2], Criteria::EQUAL);
 		
 		return $this;
 	}
@@ -183,6 +184,8 @@ abstract class BaseClassTeacherQuery extends ModelCriteria
 			$cton0 = $this->getNewCriterion(ClassTeacherPeer::SCHOOL_CLASS_ID, $key[0], Criteria::EQUAL);
 			$cton1 = $this->getNewCriterion(ClassTeacherPeer::TEAM_MEMBER_ID, $key[1], Criteria::EQUAL);
 			$cton0->addAnd($cton1);
+			$cton2 = $this->getNewCriterion(ClassTeacherPeer::FUNCTION_NAME, $key[2], Criteria::EQUAL);
+			$cton0->addAnd($cton2);
 			$this->addOr($cton0);
 		}
 		
@@ -204,6 +207,23 @@ abstract class BaseClassTeacherQuery extends ModelCriteria
 			$comparison = Criteria::IN;
 		}
 		return $this->addUsingAlias(ClassTeacherPeer::SCHOOL_CLASS_ID, $schoolClassId, $comparison);
+	}
+
+	/**
+	 * Filter the query on the team_member_id column
+	 * 
+	 * @param     int|array $teamMemberId The value to use as filter.
+	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    ClassTeacherQuery The current query, for fluid interface
+	 */
+	public function filterByTeamMemberId($teamMemberId = null, $comparison = null)
+	{
+		if (is_array($teamMemberId) && null === $comparison) {
+			$comparison = Criteria::IN;
+		}
+		return $this->addUsingAlias(ClassTeacherPeer::TEAM_MEMBER_ID, $teamMemberId, $comparison);
 	}
 
 	/**
@@ -274,23 +294,6 @@ abstract class BaseClassTeacherQuery extends ModelCriteria
 			$is_class_teacher = in_array(strtolower($isClassTeacher), array('false', 'off', '-', 'no', 'n', '0')) ? false : true;
 		}
 		return $this->addUsingAlias(ClassTeacherPeer::IS_CLASS_TEACHER, $isClassTeacher, $comparison);
-	}
-
-	/**
-	 * Filter the query on the team_member_id column
-	 * 
-	 * @param     int|array $teamMemberId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    ClassTeacherQuery The current query, for fluid interface
-	 */
-	public function filterByTeamMemberId($teamMemberId = null, $comparison = null)
-	{
-		if (is_array($teamMemberId) && null === $comparison) {
-			$comparison = Criteria::IN;
-		}
-		return $this->addUsingAlias(ClassTeacherPeer::TEAM_MEMBER_ID, $teamMemberId, $comparison);
 	}
 
 	/**
@@ -685,7 +688,8 @@ abstract class BaseClassTeacherQuery extends ModelCriteria
 		if ($classTeacher) {
 			$this->addCond('pruneCond0', $this->getAliasedColName(ClassTeacherPeer::SCHOOL_CLASS_ID), $classTeacher->getSchoolClassId(), Criteria::NOT_EQUAL);
 			$this->addCond('pruneCond1', $this->getAliasedColName(ClassTeacherPeer::TEAM_MEMBER_ID), $classTeacher->getTeamMemberId(), Criteria::NOT_EQUAL);
-			$this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
+			$this->addCond('pruneCond2', $this->getAliasedColName(ClassTeacherPeer::FUNCTION_NAME), $classTeacher->getFunctionName(), Criteria::NOT_EQUAL);
+			$this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2'), Criteria::LOGICAL_OR);
 	  }
 	  
 		return $this;

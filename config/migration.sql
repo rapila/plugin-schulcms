@@ -384,3 +384,6 @@ ALTER TABLE `services` ADD `slug` VARCHAR( 80 ) CHARACTER SET utf8 COLLATE utf8_
 
 #20110831.1204
 ALTER TABLE `service_members` ADD `sort` INT UNSIGNED NULL DEFAULT NULL AFTER `team_member_id`;
+
+#20110921.1038
+ALTER TABLE `class_teachers` ADD PRIMARY KEY ( `school_class_id` , `team_member_id` , `function_name` ) ;

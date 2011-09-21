@@ -31,6 +31,12 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	protected $school_class_id;
 
 	/**
+	 * The value for the team_member_id field.
+	 * @var        int
+	 */
+	protected $team_member_id;
+
+	/**
 	 * The value for the function_name field.
 	 * @var        string
 	 */
@@ -48,12 +54,6 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	 * @var        boolean
 	 */
 	protected $is_class_teacher;
-
-	/**
-	 * The value for the team_member_id field.
-	 * @var        int
-	 */
-	protected $team_member_id;
 
 	/**
 	 * The value for the created_at field.
@@ -145,6 +145,16 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Get the [team_member_id] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getTeamMemberId()
+	{
+		return $this->team_member_id;
+	}
+
+	/**
 	 * Get the [function_name] column value.
 	 * 
 	 * @return     string
@@ -172,16 +182,6 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	public function getIsClassTeacher()
 	{
 		return $this->is_class_teacher;
-	}
-
-	/**
-	 * Get the [team_member_id] column value.
-	 * 
-	 * @return     int
-	 */
-	public function getTeamMemberId()
-	{
-		return $this->team_member_id;
 	}
 
 	/**
@@ -305,6 +305,30 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	} // setSchoolClassId()
 
 	/**
+	 * Set the value of [team_member_id] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     ClassTeacher The current object (for fluent API support)
+	 */
+	public function setTeamMemberId($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->team_member_id !== $v) {
+			$this->team_member_id = $v;
+			$this->modifiedColumns[] = ClassTeacherPeer::TEAM_MEMBER_ID;
+		}
+
+		if ($this->aTeamMember !== null && $this->aTeamMember->getId() !== $v) {
+			$this->aTeamMember = null;
+		}
+
+		return $this;
+	} // setTeamMemberId()
+
+	/**
 	 * Set the value of [function_name] column.
 	 * 
 	 * @param      string $v new value
@@ -363,30 +387,6 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 
 		return $this;
 	} // setIsClassTeacher()
-
-	/**
-	 * Set the value of [team_member_id] column.
-	 * 
-	 * @param      int $v new value
-	 * @return     ClassTeacher The current object (for fluent API support)
-	 */
-	public function setTeamMemberId($v)
-	{
-		if ($v !== null) {
-			$v = (int) $v;
-		}
-
-		if ($this->team_member_id !== $v) {
-			$this->team_member_id = $v;
-			$this->modifiedColumns[] = ClassTeacherPeer::TEAM_MEMBER_ID;
-		}
-
-		if ($this->aTeamMember !== null && $this->aTeamMember->getId() !== $v) {
-			$this->aTeamMember = null;
-		}
-
-		return $this;
-	} // setTeamMemberId()
 
 	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
@@ -571,10 +571,10 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 		try {
 
 			$this->school_class_id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->function_name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-			$this->sort_order = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-			$this->is_class_teacher = ($row[$startcol + 3] !== null) ? (boolean) $row[$startcol + 3] : null;
-			$this->team_member_id = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+			$this->team_member_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+			$this->function_name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+			$this->sort_order = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+			$this->is_class_teacher = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
 			$this->created_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
 			$this->updated_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
 			$this->created_by = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
@@ -990,16 +990,16 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 				return $this->getSchoolClassId();
 				break;
 			case 1:
-				return $this->getFunctionName();
+				return $this->getTeamMemberId();
 				break;
 			case 2:
-				return $this->getSortOrder();
+				return $this->getFunctionName();
 				break;
 			case 3:
-				return $this->getIsClassTeacher();
+				return $this->getSortOrder();
 				break;
 			case 4:
-				return $this->getTeamMemberId();
+				return $this->getIsClassTeacher();
 				break;
 			case 5:
 				return $this->getCreatedAt();
@@ -1038,10 +1038,10 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 		$keys = ClassTeacherPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getSchoolClassId(),
-			$keys[1] => $this->getFunctionName(),
-			$keys[2] => $this->getSortOrder(),
-			$keys[3] => $this->getIsClassTeacher(),
-			$keys[4] => $this->getTeamMemberId(),
+			$keys[1] => $this->getTeamMemberId(),
+			$keys[2] => $this->getFunctionName(),
+			$keys[3] => $this->getSortOrder(),
+			$keys[4] => $this->getIsClassTeacher(),
 			$keys[5] => $this->getCreatedAt(),
 			$keys[6] => $this->getUpdatedAt(),
 			$keys[7] => $this->getCreatedBy(),
@@ -1095,16 +1095,16 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 				$this->setSchoolClassId($value);
 				break;
 			case 1:
-				$this->setFunctionName($value);
+				$this->setTeamMemberId($value);
 				break;
 			case 2:
-				$this->setSortOrder($value);
+				$this->setFunctionName($value);
 				break;
 			case 3:
-				$this->setIsClassTeacher($value);
+				$this->setSortOrder($value);
 				break;
 			case 4:
-				$this->setTeamMemberId($value);
+				$this->setIsClassTeacher($value);
 				break;
 			case 5:
 				$this->setCreatedAt($value);
@@ -1143,10 +1143,10 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 		$keys = ClassTeacherPeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setSchoolClassId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setFunctionName($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setSortOrder($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setIsClassTeacher($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setTeamMemberId($arr[$keys[4]]);
+		if (array_key_exists($keys[1], $arr)) $this->setTeamMemberId($arr[$keys[1]]);
+		if (array_key_exists($keys[2], $arr)) $this->setFunctionName($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setSortOrder($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setIsClassTeacher($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setCreatedAt($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setUpdatedAt($arr[$keys[6]]);
 		if (array_key_exists($keys[7], $arr)) $this->setCreatedBy($arr[$keys[7]]);
@@ -1163,10 +1163,10 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 		$criteria = new Criteria(ClassTeacherPeer::DATABASE_NAME);
 
 		if ($this->isColumnModified(ClassTeacherPeer::SCHOOL_CLASS_ID)) $criteria->add(ClassTeacherPeer::SCHOOL_CLASS_ID, $this->school_class_id);
+		if ($this->isColumnModified(ClassTeacherPeer::TEAM_MEMBER_ID)) $criteria->add(ClassTeacherPeer::TEAM_MEMBER_ID, $this->team_member_id);
 		if ($this->isColumnModified(ClassTeacherPeer::FUNCTION_NAME)) $criteria->add(ClassTeacherPeer::FUNCTION_NAME, $this->function_name);
 		if ($this->isColumnModified(ClassTeacherPeer::SORT_ORDER)) $criteria->add(ClassTeacherPeer::SORT_ORDER, $this->sort_order);
 		if ($this->isColumnModified(ClassTeacherPeer::IS_CLASS_TEACHER)) $criteria->add(ClassTeacherPeer::IS_CLASS_TEACHER, $this->is_class_teacher);
-		if ($this->isColumnModified(ClassTeacherPeer::TEAM_MEMBER_ID)) $criteria->add(ClassTeacherPeer::TEAM_MEMBER_ID, $this->team_member_id);
 		if ($this->isColumnModified(ClassTeacherPeer::CREATED_AT)) $criteria->add(ClassTeacherPeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(ClassTeacherPeer::UPDATED_AT)) $criteria->add(ClassTeacherPeer::UPDATED_AT, $this->updated_at);
 		if ($this->isColumnModified(ClassTeacherPeer::CREATED_BY)) $criteria->add(ClassTeacherPeer::CREATED_BY, $this->created_by);
@@ -1188,6 +1188,7 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 		$criteria = new Criteria(ClassTeacherPeer::DATABASE_NAME);
 		$criteria->add(ClassTeacherPeer::SCHOOL_CLASS_ID, $this->school_class_id);
 		$criteria->add(ClassTeacherPeer::TEAM_MEMBER_ID, $this->team_member_id);
+		$criteria->add(ClassTeacherPeer::FUNCTION_NAME, $this->function_name);
 
 		return $criteria;
 	}
@@ -1202,6 +1203,7 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 		$pks = array();
 		$pks[0] = $this->getSchoolClassId();
 		$pks[1] = $this->getTeamMemberId();
+		$pks[2] = $this->getFunctionName();
 
 		return $pks;
 	}
@@ -1216,6 +1218,7 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	{
 		$this->setSchoolClassId($keys[0]);
 		$this->setTeamMemberId($keys[1]);
+		$this->setFunctionName($keys[2]);
 	}
 
 	/**
@@ -1224,7 +1227,7 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	 */
 	public function isPrimaryKeyNull()
 	{
-		return (null === $this->getSchoolClassId()) && (null === $this->getTeamMemberId());
+		return (null === $this->getSchoolClassId()) && (null === $this->getTeamMemberId()) && (null === $this->getFunctionName());
 	}
 
 	/**
@@ -1240,10 +1243,10 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 		$copyObj->setSchoolClassId($this->school_class_id);
+		$copyObj->setTeamMemberId($this->team_member_id);
 		$copyObj->setFunctionName($this->function_name);
 		$copyObj->setSortOrder($this->sort_order);
 		$copyObj->setIsClassTeacher($this->is_class_teacher);
-		$copyObj->setTeamMemberId($this->team_member_id);
 		$copyObj->setCreatedAt($this->created_at);
 		$copyObj->setUpdatedAt($this->updated_at);
 		$copyObj->setCreatedBy($this->created_by);
@@ -1492,10 +1495,10 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	public function clear()
 	{
 		$this->school_class_id = null;
+		$this->team_member_id = null;
 		$this->function_name = null;
 		$this->sort_order = null;
 		$this->is_class_teacher = null;
-		$this->team_member_id = null;
 		$this->created_at = null;
 		$this->updated_at = null;
 		$this->created_by = null;

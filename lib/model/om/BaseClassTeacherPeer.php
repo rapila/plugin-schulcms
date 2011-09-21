@@ -34,6 +34,9 @@ abstract class BaseClassTeacherPeer {
 	/** the column name for the SCHOOL_CLASS_ID field */
 	const SCHOOL_CLASS_ID = 'class_teachers.SCHOOL_CLASS_ID';
 
+	/** the column name for the TEAM_MEMBER_ID field */
+	const TEAM_MEMBER_ID = 'class_teachers.TEAM_MEMBER_ID';
+
 	/** the column name for the FUNCTION_NAME field */
 	const FUNCTION_NAME = 'class_teachers.FUNCTION_NAME';
 
@@ -42,9 +45,6 @@ abstract class BaseClassTeacherPeer {
 
 	/** the column name for the IS_CLASS_TEACHER field */
 	const IS_CLASS_TEACHER = 'class_teachers.IS_CLASS_TEACHER';
-
-	/** the column name for the TEAM_MEMBER_ID field */
-	const TEAM_MEMBER_ID = 'class_teachers.TEAM_MEMBER_ID';
 
 	/** the column name for the CREATED_AT field */
 	const CREATED_AT = 'class_teachers.CREATED_AT';
@@ -74,11 +74,11 @@ abstract class BaseClassTeacherPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('SchoolClassId', 'FunctionName', 'SortOrder', 'IsClassTeacher', 'TeamMemberId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId', 'functionName', 'sortOrder', 'isClassTeacher', 'teamMemberId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-		BasePeer::TYPE_COLNAME => array (self::SCHOOL_CLASS_ID, self::FUNCTION_NAME, self::SORT_ORDER, self::IS_CLASS_TEACHER, self::TEAM_MEMBER_ID, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID', 'FUNCTION_NAME', 'SORT_ORDER', 'IS_CLASS_TEACHER', 'TEAM_MEMBER_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-		BasePeer::TYPE_FIELDNAME => array ('school_class_id', 'function_name', 'sort_order', 'is_class_teacher', 'team_member_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+		BasePeer::TYPE_PHPNAME => array ('SchoolClassId', 'TeamMemberId', 'FunctionName', 'SortOrder', 'IsClassTeacher', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId', 'teamMemberId', 'functionName', 'sortOrder', 'isClassTeacher', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+		BasePeer::TYPE_COLNAME => array (self::SCHOOL_CLASS_ID, self::TEAM_MEMBER_ID, self::FUNCTION_NAME, self::SORT_ORDER, self::IS_CLASS_TEACHER, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID', 'TEAM_MEMBER_ID', 'FUNCTION_NAME', 'SORT_ORDER', 'IS_CLASS_TEACHER', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+		BasePeer::TYPE_FIELDNAME => array ('school_class_id', 'team_member_id', 'function_name', 'sort_order', 'is_class_teacher', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
 	);
 
@@ -89,11 +89,11 @@ abstract class BaseClassTeacherPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('SchoolClassId' => 0, 'FunctionName' => 1, 'SortOrder' => 2, 'IsClassTeacher' => 3, 'TeamMemberId' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'CreatedBy' => 7, 'UpdatedBy' => 8, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId' => 0, 'functionName' => 1, 'sortOrder' => 2, 'isClassTeacher' => 3, 'teamMemberId' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'createdBy' => 7, 'updatedBy' => 8, ),
-		BasePeer::TYPE_COLNAME => array (self::SCHOOL_CLASS_ID => 0, self::FUNCTION_NAME => 1, self::SORT_ORDER => 2, self::IS_CLASS_TEACHER => 3, self::TEAM_MEMBER_ID => 4, self::CREATED_AT => 5, self::UPDATED_AT => 6, self::CREATED_BY => 7, self::UPDATED_BY => 8, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID' => 0, 'FUNCTION_NAME' => 1, 'SORT_ORDER' => 2, 'IS_CLASS_TEACHER' => 3, 'TEAM_MEMBER_ID' => 4, 'CREATED_AT' => 5, 'UPDATED_AT' => 6, 'CREATED_BY' => 7, 'UPDATED_BY' => 8, ),
-		BasePeer::TYPE_FIELDNAME => array ('school_class_id' => 0, 'function_name' => 1, 'sort_order' => 2, 'is_class_teacher' => 3, 'team_member_id' => 4, 'created_at' => 5, 'updated_at' => 6, 'created_by' => 7, 'updated_by' => 8, ),
+		BasePeer::TYPE_PHPNAME => array ('SchoolClassId' => 0, 'TeamMemberId' => 1, 'FunctionName' => 2, 'SortOrder' => 3, 'IsClassTeacher' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'CreatedBy' => 7, 'UpdatedBy' => 8, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId' => 0, 'teamMemberId' => 1, 'functionName' => 2, 'sortOrder' => 3, 'isClassTeacher' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'createdBy' => 7, 'updatedBy' => 8, ),
+		BasePeer::TYPE_COLNAME => array (self::SCHOOL_CLASS_ID => 0, self::TEAM_MEMBER_ID => 1, self::FUNCTION_NAME => 2, self::SORT_ORDER => 3, self::IS_CLASS_TEACHER => 4, self::CREATED_AT => 5, self::UPDATED_AT => 6, self::CREATED_BY => 7, self::UPDATED_BY => 8, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID' => 0, 'TEAM_MEMBER_ID' => 1, 'FUNCTION_NAME' => 2, 'SORT_ORDER' => 3, 'IS_CLASS_TEACHER' => 4, 'CREATED_AT' => 5, 'UPDATED_AT' => 6, 'CREATED_BY' => 7, 'UPDATED_BY' => 8, ),
+		BasePeer::TYPE_FIELDNAME => array ('school_class_id' => 0, 'team_member_id' => 1, 'function_name' => 2, 'sort_order' => 3, 'is_class_teacher' => 4, 'created_at' => 5, 'updated_at' => 6, 'created_by' => 7, 'updated_by' => 8, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
 	);
 
@@ -167,20 +167,20 @@ abstract class BaseClassTeacherPeer {
 	{
 		if (null === $alias) {
 			$criteria->addSelectColumn(ClassTeacherPeer::SCHOOL_CLASS_ID);
+			$criteria->addSelectColumn(ClassTeacherPeer::TEAM_MEMBER_ID);
 			$criteria->addSelectColumn(ClassTeacherPeer::FUNCTION_NAME);
 			$criteria->addSelectColumn(ClassTeacherPeer::SORT_ORDER);
 			$criteria->addSelectColumn(ClassTeacherPeer::IS_CLASS_TEACHER);
-			$criteria->addSelectColumn(ClassTeacherPeer::TEAM_MEMBER_ID);
 			$criteria->addSelectColumn(ClassTeacherPeer::CREATED_AT);
 			$criteria->addSelectColumn(ClassTeacherPeer::UPDATED_AT);
 			$criteria->addSelectColumn(ClassTeacherPeer::CREATED_BY);
 			$criteria->addSelectColumn(ClassTeacherPeer::UPDATED_BY);
 		} else {
 			$criteria->addSelectColumn($alias . '.SCHOOL_CLASS_ID');
+			$criteria->addSelectColumn($alias . '.TEAM_MEMBER_ID');
 			$criteria->addSelectColumn($alias . '.FUNCTION_NAME');
 			$criteria->addSelectColumn($alias . '.SORT_ORDER');
 			$criteria->addSelectColumn($alias . '.IS_CLASS_TEACHER');
-			$criteria->addSelectColumn($alias . '.TEAM_MEMBER_ID');
 			$criteria->addSelectColumn($alias . '.CREATED_AT');
 			$criteria->addSelectColumn($alias . '.UPDATED_AT');
 			$criteria->addSelectColumn($alias . '.CREATED_BY');
@@ -309,7 +309,7 @@ abstract class BaseClassTeacherPeer {
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
-				$key = serialize(array((string) $obj->getSchoolClassId(), (string) $obj->getTeamMemberId()));
+				$key = serialize(array((string) $obj->getSchoolClassId(), (string) $obj->getTeamMemberId(), (string) $obj->getFunctionName()));
 			} // if key === null
 			self::$instances[$key] = $obj;
 		}
@@ -329,10 +329,10 @@ abstract class BaseClassTeacherPeer {
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
 			if (is_object($value) && $value instanceof ClassTeacher) {
-				$key = serialize(array((string) $value->getSchoolClassId(), (string) $value->getTeamMemberId()));
-			} elseif (is_array($value) && count($value) === 2) {
+				$key = serialize(array((string) $value->getSchoolClassId(), (string) $value->getTeamMemberId(), (string) $value->getFunctionName()));
+			} elseif (is_array($value) && count($value) === 3) {
 				// assume we've been passed a primary key
-				$key = serialize(array((string) $value[0], (string) $value[1]));
+				$key = serialize(array((string) $value[0], (string) $value[1], (string) $value[2]));
 			} else {
 				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or ClassTeacher object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
@@ -393,10 +393,10 @@ abstract class BaseClassTeacherPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol] === null && $row[$startcol + 4] === null) {
+		if ($row[$startcol] === null && $row[$startcol + 1] === null && $row[$startcol + 2] === null) {
 			return null;
 		}
-		return serialize(array((string) $row[$startcol], (string) $row[$startcol + 4]));
+		return serialize(array((string) $row[$startcol], (string) $row[$startcol + 1], (string) $row[$startcol + 2]));
 	}
 
 	/**
@@ -410,7 +410,7 @@ abstract class BaseClassTeacherPeer {
 	 */
 	public static function getPrimaryKeyFromRow($row, $startcol = 0)
 	{
-		return array((int) $row[$startcol], (int) $row[$startcol + 4]);
+		return array((int) $row[$startcol], (int) $row[$startcol + 1], (string) $row[$startcol + 2]);
 	}
 	
 	/**
@@ -1889,6 +1889,14 @@ abstract class BaseClassTeacherPeer {
 				$selectCriteria->setPrimaryTableName(ClassTeacherPeer::TABLE_NAME);
 			}
 
+			$comparison = $criteria->getComparison(ClassTeacherPeer::FUNCTION_NAME);
+			$value = $criteria->remove(ClassTeacherPeer::FUNCTION_NAME);
+			if ($value) {
+				$selectCriteria->add(ClassTeacherPeer::FUNCTION_NAME, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(ClassTeacherPeer::TABLE_NAME);
+			}
+
 		} else { // $values is ClassTeacher object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
@@ -1969,6 +1977,7 @@ abstract class BaseClassTeacherPeer {
 			foreach ($values as $value) {
 				$criterion = $criteria->getNewCriterion(ClassTeacherPeer::SCHOOL_CLASS_ID, $value[0]);
 				$criterion->addAnd($criteria->getNewCriterion(ClassTeacherPeer::TEAM_MEMBER_ID, $value[1]));
+				$criterion->addAnd($criteria->getNewCriterion(ClassTeacherPeer::FUNCTION_NAME, $value[2]));
 				$criteria->addOr($criterion);
 				// we can invalidate the cache for this single PK
 				ClassTeacherPeer::removeInstanceFromPool($value);
@@ -2036,11 +2045,12 @@ abstract class BaseClassTeacherPeer {
 	 * Retrieve object using using composite pkey values.
 	 * @param      int $school_class_id
 	 * @param      int $team_member_id
+	 * @param      string $function_name
 	 * @param      PropelPDO $con
 	 * @return     ClassTeacher
 	 */
-	public static function retrieveByPK($school_class_id, $team_member_id, PropelPDO $con = null) {
-		$_instancePoolKey = serialize(array((string) $school_class_id, (string) $team_member_id));
+	public static function retrieveByPK($school_class_id, $team_member_id, $function_name, PropelPDO $con = null) {
+		$_instancePoolKey = serialize(array((string) $school_class_id, (string) $team_member_id, (string) $function_name));
  		if (null !== ($obj = ClassTeacherPeer::getInstanceFromPool($_instancePoolKey))) {
  			return $obj;
 		}
@@ -2051,6 +2061,7 @@ abstract class BaseClassTeacherPeer {
 		$criteria = new Criteria(ClassTeacherPeer::DATABASE_NAME);
 		$criteria->add(ClassTeacherPeer::SCHOOL_CLASS_ID, $school_class_id);
 		$criteria->add(ClassTeacherPeer::TEAM_MEMBER_ID, $team_member_id);
+		$criteria->add(ClassTeacherPeer::FUNCTION_NAME, $function_name);
 		$v = ClassTeacherPeer::doSelect($criteria, $con);
 
 		return !empty($v) ? $v[0] : null;
