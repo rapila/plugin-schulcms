@@ -14,6 +14,9 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		if(DocumentCategoryQuery::create()->filterById($iEventDocumentCategory)->count() === 0) {
 			throw new Exception('Config error: school_settings > externally_managed_document_categories > event_documents');
 		}
+		$oRichtext = WidgetModule::getWidget('rich_text', null, null, 'events');
+		$oRichtext->setTemplate(PagePeer::getPageByIdentifier('events')->getTemplate());
+		$this->setSetting('richtext_session', $oRichtext->getSessionKey());
 		$this->setSetting('events_document_category_id', $iEventDocumentCategory);
 	}
 	

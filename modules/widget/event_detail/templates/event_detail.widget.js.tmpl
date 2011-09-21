@@ -168,13 +168,13 @@ Widget.types.event_detail = {
 	init_textareas: function() {
 		var _this = this;
 		if(!this.preview_text.didPrepareWidget()) {
-			this.preview_text.prepareWidget(function(rich_text_widget) {
+			this.preview_text.attr('data-widget-session', this.settings.richtext_session).prepareWidget(function(rich_text_widget) {
 				_this.event_preview_editor = rich_text_widget;
 				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings);
 			}, jQuery.noop);
 		}
 		if(!this.review_text.didPrepareWidget()) {
-			this.review_text.prepareWidget(function(rich_text_widget) {
+			this.review_text.attr('data-widget-session', this.settings.richtext_session).prepareWidget(function(rich_text_widget) {
 				_this.event_review_editor = rich_text_widget;
 				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings, {
 					height: 350
@@ -192,14 +192,6 @@ Widget.types.event_detail = {
 	close_callback: jQuery.noop,
 	
 	settings: {
-		richtext_settings: {
-			height: 120,
-			toolbar_Full: [
-				['Bold','Italic','-', 'BulletedList'],['Link','Unlink'],
-				['Undo','Redo','-','RemoveFormat'],
-				['Maximize','Format'],['Source']
-			]
-		},
 		thumbnail_size: 180,
 		initial_type_id: null,
 		predefined_school_class_id: null
