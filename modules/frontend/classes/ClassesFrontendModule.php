@@ -127,26 +127,36 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		}
 
 		// teachers
-		$aClassTeachers = ClassTeacherPeer::getClassTeachersByUnitName($sUnitName, null, false);
-		$iCount = count($aClassTeachers);
+		$aClassTeachersOrdered = self::getClassTeachersOrdered(ClassTeacherPeer::getClassTeachersByUnitName($sUnitName, null, false));
+		$iCount = count($aClassTeachersOrdered);
+		
+		$oTemplate->replaceIdentifier('label_class_teacher', StringPeer::getString('wns.class.class_teachers'));
+		$oClassTeacherTempl = $this->constructTemplate('class_teacher');
+		foreach($aClassTeachersOrdered as $iTeamMemberId => $aParams) {
+			$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aParams['team_member']->getTeamMemberLink($this->oTeamPage))), $aParams['team_member']->getFullName());
+			$oClassTeacherTemplate = clone $oClassTeacherTempl;
+			$oClassTeacherTemplate->replaceIdentifier('class_teacher_name', $oTeacherLink);
+			$sKlassenlehrerin = $aParams['is_class_teacher'] ? $aParams['team_member']->getClassTeacherTitle().', ': '';
+			$oClassTeacherTemplate->replaceIdentifier('class_teacher_functions', $sKlassenlehrerin.implode(' und ', $aParams['functions']));
+			$oTemplate->replaceIdentifierMultiple('class_teachers', $oClassTeacherTemplate);
+		}
+		return $oTemplate;
+	}
+	
+	private static function getClassTeachersOrdered($aClassTeachers) {
 		$aClassTeachersSet = array();
-		foreach($aClassTeachers as $i => $oClassTeacher) {
-			if($i === 0) {
-				$oTemplate->replaceIdentifier('label_class_teacher', StringPeer::getString('wns.class.class_teachers'));
-			}
-			if(!in_array($oClassTeacher->getTeamMemberId(), $aClassTeachersSet)) {
-				$aClassTeachersSet[] = $oClassTeacher->getTeamMemberId();
-			}
-			if($oClassTeacher->getTeamMember()->getFullName()) {
-				$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oClassTeacher->getTeamMember()->getTeamMemberLink($this->oTeamPage))), $oClassTeacher->getTeamMember()->getFullName());
-				$sFunctionName = $oClassTeacher->getIsClassTeacher() ? $oClassTeacher->getTeamMember()->getClassTeacherTitle() : $oClassTeacher->getFunctionName();
-				$oTemplate->replaceIdentifierMultiple('name_class_teacher', $oTeacherLink.' <span class="function">'.$sFunctionName.'</span>', null, Template::NO_HTML_ESCAPE);
-				if($i < ($iCount-1)) {
-					$oTemplate->replaceIdentifierMultiple('name_class_teacher', TagWriter::quickTag('br'));
+		foreach($aClassTeachers as $oClassTeacher) {
+			if(!isset($aClassTeachersSet[$oClassTeacher->getTeamMemberId()])) {
+				$aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['team_member'] = $oClassTeacher->getTeamMember();
+				$aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['is_class_teacher'] = $oClassTeacher->getIsClassTeacher();
+				$aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['functions'][] = $oClassTeacher->getFunctionName();
+			} else {
+				if(!in_array($oClassTeacher->getFunctionName(), $aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['functions'])) {
+					$aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['functions'][] = $oClassTeacher->getFunctionName();
 				}
 			}
 		}
-		return $oTemplate;
+		return $aClassTeachersSet;
 	}
 	
 	public function renderClassEvent() {		
