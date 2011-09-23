@@ -145,9 +145,11 @@ td.status_icons.has_bericht{background:transparent url("../images/has_bericht.pn
 td.status_icons.has_images{background:transparent url("../images/has_images.png") no-repeat 0 3px}
 .event_list td a.detail_link{display:block;width:20px;background:transparent url("../images/detail_link.png") no-repeat 0 3px}
 .event_list td a.detail_link:hover{background:transparent url("../images/detail_link_hover.png") no-repeat 0 3px}
-.service_list td:first-child a,.link_list td:first-child a{display:block;padding-left:22px;background:url("../images/services.png") transparent 0 4px no-repeat}
-.link_list td:first-child,.service_list td:first-child,.link_list th:first-child,.service_list th:first-child{padding-left:0}
+.service_list td:first-child a,.link_list td:first-child a,.team_list td:first-child a,.class_list td:first-child a{display:block;padding-left:22px;background:url("../images/services.png") transparent 0 4px no-repeat}
+.link_list td:first-child,.service_list td:first-child,.team_list td:first-child,.class_list td:first-child,.link_list th:first-child,.service_list th:first-child,.team_list th:first-child,.class_list th:first-child{padding-left:0}
 .link_list td:first-child{width:15px}
 .link_list td:first-child a{background:url("../images/links.png") transparent 0 4px no-repeat;padding-left:0}
+.team_list td:first-child a{background:url("../images/team_members.png") transparent 0 4px no-repeat}
+.class_list td:first-child a{background:url("../images/classes.png") transparent 0 4px no-repeat}
 iframe{border:0}
 #ajax_loader{display:none}

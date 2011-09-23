@@ -682,14 +682,19 @@ td.status_icons.has_images
 	background: transparent url(../images/detail_link_hover.png) no-repeat 0 3px
 	
 	
-.service_list td:first-child a,
-.link_list td:first-child a 
-	display: block
-	padding-left: 22px
-	background: url('../images/services.png') transparent 0px 4px no-repeat
+.service_list,
+.link_list,
+.team_list,
+.class_list
+	td:first-child a
+		display: block
+		padding-left: 22px
+		background: url('../images/services.png') transparent 0px 4px no-repeat
 
 .link_list,
-.service_list 
+.service_list,
+.team_list,
+.class_list
 	td:first-child, 
 	th:first-child
 		padding-left: 0
@@ -700,6 +705,12 @@ td.status_icons.has_images
 .link_list td:first-child a
 	background: url('../images/links.png') transparent 0px 4px no-repeat
 	padding-left: 0
+	
+.team_list td:first-child a
+	background: url('../images/team_members.png') transparent 0px 4px no-repeat
+	
+.class_list td:first-child a
+	background: url('../images/classes.png') transparent 0px 4px no-repeat
 
 iframe
 	border: 0
