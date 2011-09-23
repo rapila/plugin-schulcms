@@ -58,7 +58,6 @@ ul#secondary_navigation li{padding:.2em 1em}
 #sidebar_right{position:absolute;top:170px;bottom:0;right:0;background-color:#e7d9d9;padding:0 2px;width:190px;background-color:#d3d1b8;}
 #sidebar_right h2,#sidebar_right img,#sidebar_right table,#sidebar_right .date_square{margin:0 -2px}
 #sidebar_right h2,#sidebar_right table td{padding-left:2px;padding-right:2px}
-#sidebar_right .class_info p{border-bottom:1px solid #5e61a8}
 #sidebar_right h2{margin-top:22px}
 #sidebar_right h2:first-child,#sidebar_right img:first-child + h2{margin-top:0}
 #sidebar_right .sidebar_detail{position:fixed}
