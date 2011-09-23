@@ -12,6 +12,7 @@ body.editing
 	font-size: 13px
 	line-height: 1.4em
 	height: 100%
+	background-color: #FFF
 
 a
 	text-decoration: none
@@ -678,6 +679,26 @@ td.status_icons.has_images
 
 .event_list td a.detail_link:hover 
 	background: transparent url(../images/detail_link_hover.png) no-repeat 0 3px
+	
+	
+.service_list td:first-child a,
+.link_list td:first-child a 
+	display: block
+	padding-left: 22px
+	background: url('../images/services.png') transparent 0px 4px no-repeat
+
+.link_list,
+.service_list 
+	td:first-child, 
+	th:first-child
+		padding-left: 0
+	
+.link_list td:first-child
+	width: 15px
+	
+.link_list td:first-child a
+	background: url('../images/links.png') transparent 0px 4px no-repeat
+	padding-left: 0
 
 iframe
 	border: 0

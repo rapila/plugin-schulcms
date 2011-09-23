@@ -1,5 +1,5 @@
 html,body{margin:0;padding:0;font-family:"Trebuchet MS",Georgia,Arial,Helvetica,sans-serif;font-size:10px;color:#222;background-color:#e6e4cc}
-body.editing{font-size:13px;line-height:1.4em;height:100%}
+body.editing{font-size:13px;line-height:1.4em;height:100%;background-color:#fff}
 a{text-decoration:none;color:#666}
 #sidebar_right .inner .datum a,#sidebar_right .inner .datum a:hover,.inner .datum a,.inner .datum a:hover{background:none;padding-right:0}
 a.close_detail,a.close_detail:hover{float:right;z-index:5000;border:1px solid #b8abaa;background:rgba(255,255,255,0.70) url("../images/close_detail.png") no-repeat right center;margin-top:1px;padding:0;display:block;width:22px;height:22px}
@@ -145,5 +145,9 @@ td.status_icons.has_bericht{background:transparent url("../images/has_bericht.pn
 td.status_icons.has_images{background:transparent url("../images/has_images.png") no-repeat 0 3px}
 .event_list td a.detail_link{display:block;width:20px;background:transparent url("../images/detail_link.png") no-repeat 0 3px}
 .event_list td a.detail_link:hover{background:transparent url("../images/detail_link_hover.png") no-repeat 0 3px}
+.service_list td:first-child a,.link_list td:first-child a{display:block;padding-left:22px;background:url("../images/services.png") transparent 0 4px no-repeat}
+.link_list td:first-child,.service_list td:first-child,.link_list th:first-child,.service_list th:first-child{padding-left:0}
+.link_list td:first-child{width:15px}
+.link_list td:first-child a{background:url("../images/links.png") transparent 0 4px no-repeat;padding-left:0}
 iframe{border:0}
 #ajax_loader{display:none}

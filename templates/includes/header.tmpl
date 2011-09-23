@@ -2,10 +2,6 @@
 	<title>{{writeSettingValue=title;section=frontend}} — {{title}}{{detailName}}</title>{{identifierContext=start;name=meta_description}}
 	<meta name="description" content="{{meta_description}}" />{{identifierContext=end;name=meta_description}}{{identifierContext=start;name=meta_keywords}}
 	<meta name="keywords" content="{{meta_keywords}}" />{{identifierContext=end;name=meta_keywords}}
-  {{writeResourceIncludes}}
-  {{addResourceInclude=screen.css;media=screen,projection}}{{addResourceInclude=skin.css;media=screen,projection}}{{addResourceInclude=print.css;media=print}}
-	{{addResourceInclude=ie.css;ie_condition=IE}}{{addResourceInclude=ltie7.css;ie_condition=lt IE 7}}
-	{{addResourceInclude=jquery;library=1.6}}{{addResourceInclude=jquery.prettyPhoto.min.js}}{{addResourceInclude=application.js}}
-	{{addResourceInclude=prettyPhoto.css}}{{addResourceInclude=http://fonts.googleapis.com/css?family=Architects+Daughter&v1;resource_type=css}}
-  {{addResourceInclude=favicon.ico;rel=shortcut icon}}
+	{{includeTemplate=resources}}
+	{{writeResourceIncludes}}
 </head>
