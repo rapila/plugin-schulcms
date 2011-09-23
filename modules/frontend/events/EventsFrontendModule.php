@@ -108,7 +108,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		} else if (self::$EVENT->getBodyPreview()) {
 			$sContent = stream_get_contents(self::$EVENT->getBodyPreview());
 			if($sContent != '') {
-				$sBody = RichtextUtil::parseStorageForFrontendOutput();
+				$sBody = RichtextUtil::parseStorageForFrontendOutput($sContent);
 			}
 		}
 		if ($sBody == null) {
