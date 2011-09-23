@@ -60,7 +60,7 @@ ul#secondary_navigation li{padding:.2em 1em}
 #sidebar_right h2,#sidebar_right table td{padding-left:2px;padding-right:2px}
 #sidebar_right h2{margin-top:22px}
 #sidebar_right h2:first-child,#sidebar_right img:first-child + h2{margin-top:0}
-#sidebar_right .sidebar_detail{position:fixed}
+#sidebar_right .sidebar_detail{position:fixed;width:190px}
 #sidebar_right .class_info p{padding:.2em .2em;border-bottom:1px solid #5e61a8}
 #sidebar_right h1,#sidebar_right h2{font-size:1.05em;border-bottom:1px solid #5a2323;background-color:#5e61a8}
 .home #sidebar_right{top:192px}
