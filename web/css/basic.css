@@ -13,8 +13,7 @@ ul,li{list-style:none;margin:0;padding:0}
 .inner li,body.editing li{padding-left:0}
 p,ul{padding-bottom:.5em}
 #content_main h1,#content_main h2{font-size:19px;line-height:1em;font-weight:normal;padding-bottom:.5em}
-#sidebar_right h1,#sidebar_right h2,#aktuell_container h2{padding-left:.1em;margin-bottom:.5em;color:#fff;line-height:24px}
-#sidebar_right h1,#sidebar_right h2{font-size:1.05em;border-bottom:1px solid #5a2323;background-color:#5e61a8}
+#sidebar_right h1,#sidebar_right h2{margin-bottom:.5em;color:#fff;line-height:24px}
 a.close_detail:hover{border:1px solid #5e61a8;background:rgba(255,255,255,0.70) url("../images/close_detail_hover.png") no-repeat right center}
 a.close_detail:hover{border:1px solid #5e61a8}
 #sidebar_right p{padding-left:.1em}
@@ -56,12 +55,18 @@ ul#main_navigation li:first-child{padding:0 2.5em 0 .7em}
 ul#meta_navigation li{float:right;padding:0 0 0 2em}
 ul#meta_navigation li a{color:#817f7d}
 ul#secondary_navigation li{padding:.2em 1em}
-#sidebar_right{position:absolute;top:170px;bottom:0;background-color:#e7d9d9}
+#sidebar_right{position:absolute;top:170px;bottom:0;right:0;background-color:#e7d9d9;padding:0 2px;width:190px;background-color:#d3d1b8;}
+#sidebar_right h2,#sidebar_right img,#sidebar_right table,#sidebar_right .date_square{margin:0 -2px}
+#sidebar_right h2,#sidebar_right table td{padding-left:2px;padding-right:2px}
+#sidebar_right .class_info p{border-bottom:1px solid #5e61a8}
+#sidebar_right h2{margin-top:22px}
+#sidebar_right h2:first-child,#sidebar_right img:first-child + h2{margin-top:0}
+#sidebar_right .sidebar_detail{position:fixed}
+#sidebar_right .class_info p{padding:.2em .2em;border-bottom:1px solid #5e61a8}
+#sidebar_right h1,#sidebar_right h2{font-size:1.05em;border-bottom:1px solid #5a2323;background-color:#5e61a8}
 .home #sidebar_right{top:192px}
 #content_main{margin-top:170px;margin-right:194px}
 .home #content_main{margin-top:245px}
-#sidebar_right{right:0;width:194px;background-color:#d3d1b8}
-.team #sidebar_right h2{font-weight:normal}
 #searchbar{position:fixed;bottom:10px;left:10px;z-index:1;height:28px;margin-left:.3em;font-size:1.4em;display:none}
 #searchbar input{color:#000;background-color:#e8e6e6;padding:.2em .4em;width:145px;border:1px solid #bab6b5;border-top-color:#bab6b5;border-left-color:#bab6b5;border-bottom-color:#f1efef;border-right-color:#f1efef}
 input::-moz-placeholder,input::-webkit-input-placeholder{color:#a5a2a1}
@@ -98,17 +103,13 @@ table.statistics_list{margin-top:-5px}
 a.stundenplan,#sidebar_right a.stundenplan{background:transparent url("../images/pdf.png") no-repeat center left;width:15px;padding-right:2px;float:right}
 a.stundenplan:hover{background:transparent url("../images/pdf_hover.png") no-repeat center left}
 .class_info a.stundenplan{display:inline-block}
-#sidebar_right .class_info p{padding:.2em .2em;border-bottom:1px solid #5e61a8}
-.sidebar_detail{padding:.1em;position:fixed;width:193px}
 .class_info label,#sidebar_right h4{margin:0;padding:0;font-weight:normal;font-size:inherit;display:block;font-style:oblique;margin-top:.6em;color:#5e61a8}
 .class_info label:first-child{margin-top:0}
 ul.class_teachers{margin-top:.3em}
 ul.class_teachers li{padding-bottom:0}
 #content_main h1,#content_main h2{margin-top:0;margin-bottom:9px}
-#aktuell_container{float:right;width:240px;margin-left:24px}
-#aktuell_container{font-style:oblique}
-#aktuell_container p,#aktuell_container h2{margin-left:10px;margin-right:10px}
-#aktuell_container h2{font-size:1.3em}
+#aktuell_container{float:right;width:240px;margin-left:24px;padding:0 10px;font-style:oblique;}
+#aktuell_container h1,#aktuell_container h2{font-size:1.3em}
 .home #content_main .inner{max-width:440px}
 .home #aktuell_container .inner{width:auto}
 .class_info span.function{font-style:oblique;display:inline-block;font-size:.9em;margin-bottom:.3em;padding-right:0}
@@ -119,7 +120,7 @@ img.class_portrait,.class_info span{padding-right:.5em}
 .class_info span.schedule{display:inline-block;width:70px}
 .date_square span{font-family:Arial;font-size:.7em}
 .date_square div{border:none}
-.date_square{background-color:#f5f173;color:#333;font-size:15px;margin-top:0;padding:.4em 0;width:38px;line-height:.85em;text-align:center;border:0;border-bottom:1px solid #d1c4c4;border-left:1px solid #d1c4c4;margin-bottom:.3em}
+.date_square{background-color:#f5f173;color:#333;font-size:15px;margin-top:0;padding:5px 0 2px;width:36px;line-height:.85em;text-align:center;border:0;border-bottom:1px solid #d1c4c4;border-left:1px solid #d1c4c4;margin-bottom:.3em}
 .date_square.passed{background-color:#f7f7f7}
 .gallery .gallery-canvas{display:inline-block;position:relative;width:165px;height:165px;line-height:165px;margin-right:2px}
 .gallery .gallery-canvas .gallery-frame,.gallery .gallery-canvas .gallery-item,.gallery .gallery-canvas .gallery-item .gallery-item-holder{position:absolute;top:0;left:0;right:0;bottom:0;z-index:0}

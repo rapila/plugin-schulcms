@@ -1,0 +1,3 @@
+[submodule "web/js/davis"]
+	path = web/js/davis
+	url = git://github.com/olivernn/davis.js.git

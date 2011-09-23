@@ -8,6 +8,7 @@ class ClassTeacherPeer extends BaseClassTeacherPeer {
 	public static function getClassTeachersByUnitName($sUnitName, $iLimit = null, $bIsClassTeacher=null) {
 		$oCriteria = new Criteria();
 		if($bIsClassTeacher) {
+			$oCriteria->addGroupByColumn(self::TEAM_MEMBER_ID);
 			$oCriteria->add(self::IS_CLASS_TEACHER, $bIsClassTeacher);
 		}
 		$oCriteria->addJoin(self::TEAM_MEMBER_ID, TeamMemberPeer::ID, Criteria::INNER_JOIN);

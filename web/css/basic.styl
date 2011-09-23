@@ -89,16 +89,10 @@ p, ul
 	font-weight: normal
 	padding-bottom: .5em
 
-#sidebar_right h1, #sidebar_right h2, #aktuell_container h2
-	padding-left: .1em
+#sidebar_right h1, #sidebar_right h2
 	margin-bottom: .5em
 	color: #FFF
 	line-height: 24px
-
-#sidebar_right h1, #sidebar_right h2
-	font-size: 1.05em
-	border-bottom: 1px solid #5A2323
-	background-color: school_color
 
 a.close_detail:hover
 	border: 1px solid school_color
@@ -302,7 +296,39 @@ ul#secondary_navigation li
 	position: absolute
 	top: (header_main_height + top_area_height)
 	bottom: 0
+	right: 0
 	background-color: #E7D9D9
+	padding: 0 2px
+	width: sidebar_right_width - 4px
+	background-color: sidebar_right_color
+
+	h2, img, table, .date_square
+		margin 0 -2px
+	h2, table td
+		padding-left 2px
+		padding-right 2px
+	
+	.class_info p
+		border-bottom: 1px solid school_color
+
+	h2
+		margin-top: 22px
+	
+	h2:first-child,
+	img:first-child + h2
+		margin-top: 0
+
+	.sidebar_detail
+		position: fixed
+		
+	.class_info p
+		padding: .2em .2em
+		border-bottom: 1px solid school_color
+	
+	h1, h2
+		font-size: 1.05em
+		border-bottom: 1px solid #5A2323
+		background-color: school_color
 
 .home #sidebar_right
 	top: (header_main_height+22px + top_area_height)
@@ -313,14 +339,6 @@ ul#secondary_navigation li
 
 .home #content_main
 	margin-top: (header_main_height + top_area_height + 75px)
-
-#sidebar_right
-	right: 0
-	width: sidebar_right_width
-	background-color: sidebar_right_color
-
-.team #sidebar_right h2
-	font-weight: normal
 
 #searchbar
 	position: fixed
@@ -473,15 +491,6 @@ a.stundenplan:hover
 .class_info a.stundenplan
 	display: inline-block
 
-#sidebar_right .class_info p
-	padding: .2em .2em
-	border-bottom: 1px solid school_color
-
-.sidebar_detail
-	padding: .1em
-	position: fixed
-	width: sidebar_right_width - 1px
-
 .class_info label, #sidebar_right h4
 	margin: 0
 	padding: 0
@@ -509,18 +518,11 @@ ul.class_teachers li
 	float: right
 	width: 240px
 	margin-left: 24px
-
-#aktuell_container
+	padding: 0 10px
 	font-style: oblique
-
-#aktuell_container p, #aktuell_container h2
-	margin-left: 10px
-	margin-right: 10px
 	
-#aktuell_container h2
-	// font-family: Arial;
-	// font-size: 1.2em
-	font-size:1.3em
+	h1, h2
+		font-size:1.3em
 
 .home #content_main .inner
 	max-width: 440px
@@ -566,8 +568,8 @@ img.class_portrait
 	color: #333
 	font-size: 15px
 	margin-top: 0px
-	padding: .4em 0
-	width: 38px
+	padding: 5px 0 2px
+	width: 36px
 	line-height: .85em
 	text-align: center
 	border: 0
