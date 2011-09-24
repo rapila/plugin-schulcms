@@ -53,6 +53,10 @@ Davis(function() {
 		if(main_nav_elements.filter('[href$="'+request.path+'"]').addClass('active').length > 0) {
 			main_nav_elements.not('[href$="'+request.path+'"]').removeClass('active current');
 		}
+		var sub_nav_elements = jQuery('#secondary_navigation > li > a');
+		if(sub_nav_elements.filter('[href$="'+request.path+'"]').addClass('active').length > 0) {
+			sub_nav_elements.not('[href$="'+request.path+'"]').removeClass('active current');
+		}
 	};
 	
 	this.configure(function() {
