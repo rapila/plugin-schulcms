@@ -120,7 +120,7 @@ img.class_portrait,.class_info span{padding-right:.5em}
 .class_info span.schedule{display:inline-block;width:70px}
 .date_square span{font-family:Arial;font-size:.7em}
 .date_square div{border:none}
-.date_square{background-color:#f5f173;color:#333;font-size:15px;margin-top:0;padding:5px 0 2px;width:36px;line-height:.85em;text-align:center;border-left:1px solid #d1c4c4;border-right:1px solid #d1c4c4;margin-bottom:.3em}
+.date_square{background-color:#f5f173;color:#333;font-size:15px;margin-top:0;padding:5px 0 2px;width:36px;line-height:.85em;text-align:center;border-left:1px solid #d1c4c4;border-bottom:1px solid #d1c4c4;margin-bottom:.3em}
 .date_square.passed{background-color:#f7f7f7}
 .gallery .gallery-canvas{display:inline-block;position:relative;width:165px;height:165px;line-height:165px;margin-right:2px}
 .gallery .gallery-canvas .gallery-frame,.gallery .gallery-canvas .gallery-item,.gallery .gallery-canvas .gallery-item .gallery-item-holder{position:absolute;top:0;left:0;right:0;bottom:0;z-index:0}
