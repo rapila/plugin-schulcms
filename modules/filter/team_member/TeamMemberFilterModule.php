@@ -15,7 +15,6 @@ class TeamMemberFilterModule extends FilterModule {
 		if(!$oObject) {
 			return;
 		}
-		
 		$oModule = new TeamMembersFrontendModule($oObject);
 		$aOptions = $oModule->widgetData();
 		$oModule->aFunctionGroupIds = @$aOptions[TeamMembersFrontendModule::GROUPS_SELECT_KEY];

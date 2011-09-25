@@ -62,7 +62,14 @@ Davis(function() {
 	this.configure(function() {
 		this.generateRequestOnPageLoad = false;
 	});
-	this.get(CONTEXT+'team/:slug', loader.bind(['context']));
+	this.get(CONTEXT+'team/fachlehrpersonen/:slug', loader.bind(['context']));
+	this.get(CONTEXT+'team/lehrpersonen/:slug', loader.bind(['context']));
+	this.get(CONTEXT+'team/schulverwaltung/:slug', loader.bind(['context']));
+	this.get(CONTEXT+'team/hauswartung/:slug', loader.bind(['context']));
+	this.get(CONTEXT+'team/fachlehrpersonen/', loader.bind(['context', 'content']));
+	this.get(CONTEXT+'team/lehrpersonen/', loader.bind(['context', 'content']));
+	this.get(CONTEXT+'team/schulverwaltung/', loader.bind(['context', 'content']));
+	this.get(CONTEXT+'team/hauswartung/', loader.bind(['context', 'content']));
 	this.get(CONTEXT+'klassen/:slug', loader.bind(['context', 'content']));
 	this.get(CONTEXT+'klassen', loader.bind(['context', 'content']));
 	this.get(CONTEXT+'team', loader.bind(['context', 'content']));
