@@ -22,61 +22,79 @@ AjaxLoader.prototype = {
 	}
 };
 
-var app;
-Davis(function() {
-	app = this;
-	var loader = function(request) {
-		jQuery.each(this, function(i, container) {
-			AjaxLoader.loader.showLoader();
-			jQuery('.container-'+container).load(request.path, {container_only: container}, function() {
-				AjaxLoader.loader.hideLoader();
+AjaxLoader.conf = function() {
+	var containers = jQuery.makeArray(arguments);
+	return function(request) {
+		AjaxLoader.loader.showLoader();
+		jQuery.post(request.path, {'ajax_containers[]': containers, ajax_title: 'true', 'ajax_navigations': ['main', 'secondary']}, function(result, code, xhr) {
+			AjaxLoader.loader.hideLoader();
+
+			jQuery.each(containers, function(i, container_name) {
+				jQuery('.container-'+container_name).html(result.container[container_name] || '');
 			});
-		});
-		
-		//Update direct links
-		jQuery('a[href$="'+request.path+'"]').each(function() {
-			var element = jQuery(this);
-			while(!(element.is('body') || element.siblings().is('.active, .current'))) {
-				element = element.parent();
-			}
-			if(element.is('body')) {
-				element = jQuery(this);
-				if(element.closest('table.list_view').length > 0) {
-					element = element.closest('tr');
+
+			//Update navigations
+			jQuery('#main_navigation').html(result.navigation.main);
+			jQuery('#secondary_navigation').html(result.navigation.secondary);
+
+			//Update direct links
+			jQuery('a[href$="'+request.path+'"]').each(function() {
+				var element = jQuery(this);
+				while(!(element.is('body') || element.siblings().is('.active, .current'))) {
+					element = element.parent();
 				}
-			}
-			element.addClass('active').siblings().removeClass('active current');
-		});
-		
-		//Update the main navigation
-		var main_nav_elements = jQuery('#main_navigation > li > a');
-		if(main_nav_elements.filter('[href$="'+request.path+'"]').addClass('active').length > 0) {
-			main_nav_elements.not('[href$="'+request.path+'"]').removeClass('active current');
-		}
-		var sub_nav_elements = jQuery('#secondary_navigation > li > a');
-		if(sub_nav_elements.filter('[href$="'+request.path+'"]').addClass('active').length > 0) {
-			sub_nav_elements.not('[href$="'+request.path+'"]').removeClass('active current');
-		}
+				if(element.is('body')) {
+					element = jQuery(this);
+					if(element.closest('table.list_view').length > 0) {
+						element = element.closest('tr');
+					}
+				}
+				element.addClass('active').siblings().removeClass('active current');
+			});
+		}, 'json');
+	};
+};
+
+AjaxLoader.davis = Davis(function() {
+	window.davis = this;
+	this.conf = function() {
+		var containers = jQuery.makeArray(arguments);
+		return function(request) {
+			AjaxLoader.loader.showLoader();
+			jQuery.post(request.path, {'ajax_containers[]': containers, ajax_title: 'true', 'ajax_navigations': ['main', 'secondary']}, function(result, code, xhr) {
+				AjaxLoader.loader.hideLoader();
+
+				jQuery.each(containers, function(i, container_name) {
+					jQuery('.container-'+container_name).html(result.container[container_name] || '');
+				});
+
+				//Update navigations
+				jQuery('#main_navigation').html(result.navigation.main);
+				jQuery('#secondary_navigation').html(result.navigation.secondary);
+
+				//Update direct links
+				jQuery('a[href$="'+request.path+'"]').each(function() {
+					var element = jQuery(this);
+					while(!(element.is('body') || element.siblings().is('.active, .current'))) {
+						element = element.parent();
+					}
+					if(element.is('body')) {
+						element = jQuery(this);
+						if(element.closest('table.list_view').length > 0) {
+							element = element.closest('tr');
+						}
+					}
+					element.addClass('active').siblings().removeClass('active current');
+				});
+			}, 'json');
+		};
 	};
 	
 	this.configure(function() {
 		this.generateRequestOnPageLoad = false;
 	});
-	this.get(CONTEXT+'team/fachlehrpersonen/:slug', loader.bind(['context']));
-	this.get(CONTEXT+'team/lehrpersonen/:slug', loader.bind(['context']));
-	this.get(CONTEXT+'team/schulverwaltung/:slug', loader.bind(['context']));
-	this.get(CONTEXT+'team/hauswartung/:slug', loader.bind(['context']));
-	this.get(CONTEXT+'team/fachlehrpersonen/', loader.bind(['context', 'content']));
-	this.get(CONTEXT+'team/lehrpersonen/', loader.bind(['context', 'content']));
-	this.get(CONTEXT+'team/schulverwaltung/', loader.bind(['context', 'content']));
-	this.get(CONTEXT+'team/hauswartung/', loader.bind(['context', 'content']));
-	this.get(CONTEXT+'klassen/:slug', loader.bind(['context', 'content']));
-	this.get(CONTEXT+'klassen', loader.bind(['context', 'content']));
-	this.get(CONTEXT+'team', loader.bind(['context', 'content']));
-	this.get(CONTEXT+'anlaesse/veranstaltungen/:year/:month/:day/:slug', loader.bind(['content', 'context']));
 });
 
 jQuery(function() {
 	AjaxLoader.loader = new AjaxLoader;
-	app.start();
 });
