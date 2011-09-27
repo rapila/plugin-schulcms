@@ -254,11 +254,11 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		}
 		
 		if($bRequiresBackToLink) {
-			$oTemplate->replaceIdentifier('unit_name', TagWriter::quickTag('a', array('href' => LinkUtil::link($aClassLinkParams)), $aClasses[0]->getUnitName()));
+			$oTemplate->replaceIdentifier('unit_name', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.class.go_to_home'),'class' => 'class_home', 'href' => LinkUtil::link($aClassLinkParams)), 'Klasse '.$aClasses[0]->getUnitName()));
 			$oTemplate->replaceIdentifier('full_unit_name', TagWriter::quickTag('a', array('href' => LinkUtil::link($aClassLinkParams)), $aClasses[0]->getFullClassName()));
 		} else {
 			$oTemplate->replaceIdentifier('full_unit_name', $aClasses[0]->getFullClassName());
-			$oTemplate->replaceIdentifier('unit_name', $aClasses[0]->getUnitName());
+			$oTemplate->replaceIdentifier('unit_name', 'Klasse '.$aClasses[0]->getUnitName());
 		}
 		
 		// links
