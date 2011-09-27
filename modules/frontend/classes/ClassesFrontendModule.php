@@ -223,13 +223,15 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		}
 		$oTemplate->replaceIdentifier('count_students', ClassStudentPeer::countStudentsByUnitName($aClasses[0]->getUnitName()));
 		// events
-		$aEvents = EventQuery::create()->filterBySchoolClassId($aClassIds)->find();
+		$aPreviewEvents = EventQuery::create()->filterByDateRangePreview()->filterBySchoolClassId($aClassIds)->orderByDateStart()->find();
+		$aReview = EventQuery::create()->filterByDateRangeReview()->filterBySchoolClassId($aClassIds)->orderByDateStart(Criteria::DESC)->find();
+		$aAllEvents = array_merge($aPreviewEvents->getData(), $aReview->getData());
 		$bRequiresBackToLink = false;
 		$oDateTmpl = $this->constructTemplate('date');
-		if(count($aEvents) > 0) {
+		if(count($aAllEvents) > 0) {
 			$oEventTempl = $this->constructTemplate('list_events');
 			$aClassLinkParams = FrontendManager::$CURRENT_NAVIGATION_ITEM->getLink();
-			foreach($aEvents as $i => $oEvent) {
+			foreach($aAllEvents as $i => $oEvent) {
 				$oEventTemplate = $this->constructTemplate('list_event_item');
 				if(self::$EVENT && self::$EVENT->getId() === $oEvent->getId()) {
 					$oEventTemplate->replaceIdentifier('class_active', 'active');
