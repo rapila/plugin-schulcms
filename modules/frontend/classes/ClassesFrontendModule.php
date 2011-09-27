@@ -163,11 +163,21 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		$oEventTemplate = $this->constructTemplate('class_event_detail');
 		$oEventTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
 		$oEventTemplate->replaceIdentifier('date_from_to', self::$EVENT->getDateFromTo());
-		if(self::$EVENT->isPreview() === false && self::$EVENT->getBodyReview() !== null) {
-			$sBody = RichtextUtil::parseStorageForFrontendOutput(stream_get_contents(self::$EVENT->getBodyReview()));
-		} elseif(self::$EVENT->getBodyPreview() !== null) {
-			$sBody = RichtextUtil::parseStorageForFrontendOutput(stream_get_contents(self::$EVENT->getBodyPreview()));
-		} else {
+		
+		$sBody = null;
+		if (self::$EVENT->hasBericht()) {
+			$sReviewContent = stream_get_contents(self::$EVENT->getBodyReview());
+			if($sReviewContent != '') {
+				$sBody = RichtextUtil::parseStorageForFrontendOutput($sReviewContent);			
+			}
+		} 
+		if ($sBody === null && self::$EVENT->getBodyPreview()) {
+			$sContent = stream_get_contents(self::$EVENT->getBodyPreview());
+			if($sContent != '') {
+				$sBody = RichtextUtil::parseStorageForFrontendOutput($sContent);
+			}
+		}
+		if ($sBody == null) {
 			$sBody = self::$EVENT->getTeaser();
 		}
 		$oEventTemplate->replaceIdentifier('body', $sBody);

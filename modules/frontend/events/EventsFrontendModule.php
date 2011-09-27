@@ -102,10 +102,15 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		}
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$oTemplate = $this->constructTemplate('detail');
+		
 		$sBody = null;
 		if (self::$EVENT->hasBericht()) {
-			$sBody = RichtextUtil::parseStorageForFrontendOutput(stream_get_contents(self::$EVENT->getBodyReview()));
-		} else if (self::$EVENT->getBodyPreview()) {
+			$sReviewContent = stream_get_contents(self::$EVENT->getBodyReview());
+			if($sReviewContent != '') {
+				$sBody = RichtextUtil::parseStorageForFrontendOutput($sReviewContent);			
+			}
+		} 
+		if ($sBody === null && self::$EVENT->getBodyPreview()) {
 			$sContent = stream_get_contents(self::$EVENT->getBodyPreview());
 			if($sContent != '') {
 				$sBody = RichtextUtil::parseStorageForFrontendOutput($sContent);

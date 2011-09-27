@@ -2,6 +2,7 @@ html,body{margin:0;padding:0;font-family:"Trebuchet MS",Georgia,Arial,Helvetica,
 body.editing{font-size:13px;line-height:1.4em;height:100%;background-color:#fff}
 a{text-decoration:none;color:#666}
 #sidebar_right .inner .datum a,#sidebar_right .inner .datum a:hover,.inner .datum a,.inner .datum a:hover{background:none;padding-right:0}
+#sidebar_right .inner h2 a,#sidebar_right .inner h2 a:hover{color:#dbdbdb}
 a.close_detail,a.close_detail:hover{float:right;z-index:5000;border:1px solid #b8abaa;background:rgba(255,255,255,0.70) url("../images/close_detail.png") no-repeat right center;margin-top:1px;padding:0;display:block;width:22px;height:22px}
 .klassen a.close_detail,.klassen a.close_detail:hover{margin-top:-26.5em;font-size:18.7167px;z-index:100;color:#fff;border:1px solid #fff}
 .datum a{display:block;background:none;padding-right:0}
