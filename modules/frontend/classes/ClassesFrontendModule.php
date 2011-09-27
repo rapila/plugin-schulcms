@@ -225,21 +225,28 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		// events
 		$aEvents = EventQuery::create()->filterBySchoolClassId($aClassIds)->find();
 		$bRequiresBackToLink = false;
+		$oDateTmpl = $this->constructTemplate('date');
 		if(count($aEvents) > 0) {
-			$oEventTempl = $this->constructTemplate('events');
-			$oEventTempl->replaceIdentifier('event_title', 'Anlässe');
+			$oEventTempl = $this->constructTemplate('list_events');
 			$aClassLinkParams = FrontendManager::$CURRENT_NAVIGATION_ITEM->getLink();
 			foreach($aEvents as $i => $oEvent) {
-				$oEventTemplate = $this->constructTemplate('event_teaser');
+				$oEventTemplate = $this->constructTemplate('list_event_item');
 				if(self::$EVENT && self::$EVENT->getId() === $oEvent->getId()) {
 					$oEventTemplate->replaceIdentifier('class_active', 'active');
 					$bRequiresBackToLink = true;
 				}
-				$oEventTemplate->replaceIdentifier('datum', $oEvent->getDateFromTo());
-				$oEventTemplate->replaceIdentifier('title', $oEvent->getTitle());
+				$oDateTemplate = clone $oDateTmpl;
+				$oDateTemplate->replaceIdentifier('date_day', strftime("%d",$oEvent->getDateStart('U')));
+				$oDateTemplate->replaceIdentifier('class_passed', $oEvent->isReview() ? ' passed' : '');
+				$oDateTemplate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
+				$oEventTemplate->replaceIdentifier('date_from_to', $oDateTemplate);
+				$oTemplate->replaceIdentifierMultiple('list_item', $oEventTemplate);
+				$oEventTemplate->replaceIdentifier('detail_link_text', $oEvent->getTitle());
 				$aLinkParams = array_merge($aClassLinkParams, array(self::DETAIL_IDENTIFIER_EVENT, $oEvent->getId()));
 				$oEventTemplate->replaceIdentifier('event_detail_link', LinkUtil::link($aLinkParams));
-				$oEventTempl->replaceIdentifierMultiple('events', $oEventTemplate);
+				$oEventTemplate->replaceIdentifier('event_detail_link_title', $oEvent->getTeaser());
+				
+				$oEventTempl->replaceIdentifierMultiple('list_item', $oEventTemplate);
 			}
 			$oTemplate->replaceIdentifier('event_section', $oEventTempl);
 		}
