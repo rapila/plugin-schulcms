@@ -94,6 +94,7 @@ td p{line-height:16px;margin:0;padding:0}
 .event_list td p{line-height:16px;padding:2px 0;margin-bottom:.8em}
 .context_list.event_list td p{margin-bottom:.4em}
 .event_list td,.event_list td a{line-height:22px}
+.event_list.context_list .event_title a{line-height:17px;padding-top:4px;padding-bottom:3px;display:block}
 td a{display:inline-block}
 th{text-align:left;font-weight:normal;font-size:.9em;font-style:oblique;line-height:18px;color:#999}
 .row.active td,.row.active td a{color:#5e61a8;height:100%}
