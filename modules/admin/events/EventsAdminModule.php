@@ -7,14 +7,13 @@ class EventsAdminModule extends AdminModule {
 	
 	public function __construct() {
 		$this->oListWidget = new EventListWidgetModule();
-		if(isset($_REQUEST['event_type_id'])) {
-			$this->oListWidget->oDelegateProxy->setEventTypeId($_REQUEST['event_type_id']);
-		}
-		$this->addResourceParameter(ResourceIncluder::RESOURCE_TYPE_JS, 'event_type_id', $this->oListWidget->oDelegateProxy->getEventTypeId());
-
 		$this->oSidebarWidget = new ListWidgetModule();
 		$this->oSidebarWidget->setListTag(new TagWriter('ul'));
 		$this->oSidebarWidget->setDelegate(new CriteriaListWidgetDelegate($this, 'EventType', 'name'));
+		if(isset($_REQUEST['event_type_id'])) {
+			$this->oListWidget->oDelegateProxy->setEventTypeId($_REQUEST['event_type_id']);
+		}
+		$this->oSidebarWidget->setSetting('initial_selection', array('event_type_id' => $this->oListWidget->oDelegateProxy->getEventTypeId()));
 	}
 	
 	public function mainContent() {
