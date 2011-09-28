@@ -105,7 +105,7 @@ table.statistics_list{margin-top:-5px}
 a.stundenplan,#sidebar_right a.stundenplan{background:transparent url("../images/pdf.png") no-repeat center left;width:15px;padding-right:2px;float:right}
 a.stundenplan:hover{background:transparent url("../images/pdf_hover.png") no-repeat center left}
 .class_info a.stundenplan{display:inline-block}
-.class_info label,#sidebar_right h4{margin:0;padding:0;font-weight:normal;font-size:inherit;display:block;font-style:oblique;margin-top:.6em;color:#5e61a8}
+.class_info label,#sidebar_right h4{margin:0;padding:0;font-weight:normal;font-size:inherit;display:block;font-style:oblique;margin-top:.8em;color:#5e61a8}
 .class_info label:first-child{margin-top:0}
 ul.class_teachers{margin-top:.3em}
 ul.class_teachers li{padding-bottom:0}
