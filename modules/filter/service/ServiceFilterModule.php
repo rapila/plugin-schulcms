@@ -33,6 +33,7 @@ class ServiceFilterModule extends FilterModule {
 				return;
 		}
 		if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::SERVICE_ITEM_TYPE) {
+			define('SERVICE_DETAIL', 'true');
 			ServicesFrontendModule::$SERVICE = ServiceQuery::create()->filterBySlug($oNavigationItem->getName())->findOne();
 		}
 	}	
