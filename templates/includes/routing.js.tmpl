@@ -1,12 +1,9 @@
 AjaxLoader.davis.get('{{page_link;name=fachlehrpersonen;href_only}}', AjaxLoader.conf('context', 'content'));
-AjaxLoader.davis.get('{{page_link;name=fachlehrpersonen;href_only}}/:slug', AjaxLoader.conf('context'));
 AjaxLoader.davis.get('{{page_link;name=lehrpersonen;href_only}}', AjaxLoader.conf('context', 'content'));
-AjaxLoader.davis.get('{{page_link;name=lehrpersonen;href_only}}/:slug', AjaxLoader.conf('context'));
 AjaxLoader.davis.get('{{page_link;name=schulverwaltung;href_only}}', AjaxLoader.conf('context', 'content'));
-AjaxLoader.davis.get('{{page_link;name=schulverwaltung;href_only}}/:slug', AjaxLoader.conf('context'));
 AjaxLoader.davis.get('{{page_link;name=hauswartung;href_only}}', AjaxLoader.conf('context', 'content'));
-AjaxLoader.davis.get('{{page_link;name=hauswartung;href_only}}/:slug', AjaxLoader.conf('context'));
 
+AjaxLoader.davis.get('{{page_link;identifier=team;href_only}}/:type/:slug', AjaxLoader.conf('context'));
 AjaxLoader.davis.get('{{page_link;identifier=team;href_only}}/:slug', AjaxLoader.conf('context'));
 AjaxLoader.davis.get('{{page_link;identifier=team;href_only}}', AjaxLoader.conf('context', 'content'));
 

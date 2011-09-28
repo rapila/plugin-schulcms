@@ -51,45 +51,16 @@ AjaxLoader.conf = function() {
 				}
 				element.addClass('active').siblings().removeClass('active current');
 			});
+			
+			//Update title
+			request.setTitle(result.page_title);
 		}, 'json');
 	};
 };
 
 AjaxLoader.davis = Davis(function() {
-	window.davis = this;
-	this.conf = function() {
-		var containers = jQuery.makeArray(arguments);
-		return function(request) {
-			AjaxLoader.loader.showLoader();
-			jQuery.post(request.path, {'ajax_containers[]': containers, ajax_title: 'true', 'ajax_navigations': ['main', 'secondary']}, function(result, code, xhr) {
-				AjaxLoader.loader.hideLoader();
-
-				jQuery.each(containers, function(i, container_name) {
-					jQuery('.container-'+container_name).html(result.container[container_name] || '');
-				});
-
-				//Update navigations
-				jQuery('#main_navigation').html(result.navigation.main);
-				jQuery('#secondary_navigation').html(result.navigation.secondary);
-
-				//Update direct links
-				jQuery('a[href$="'+request.path+'"]').each(function() {
-					var element = jQuery(this);
-					while(!(element.is('body') || element.siblings().is('.active, .current'))) {
-						element = element.parent();
-					}
-					if(element.is('body')) {
-						element = jQuery(this);
-						if(element.closest('table.list_view').length > 0) {
-							element = element.closest('tr');
-						}
-					}
-					element.addClass('active').siblings().removeClass('active current');
-				});
-			}, 'json');
-		};
-	};
-	
+	AjaxLoader.davis = this;
+	this.use(Davis.title);
 	this.configure(function() {
 		this.generateRequestOnPageLoad = false;
 	});
