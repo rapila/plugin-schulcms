@@ -53,14 +53,12 @@ AjaxLoader.conf = function() {
 			});
 			
 			//Update title
-			request.setTitle(result.page_title);
+			document.title = AjaxLoader.title_prefix+result.title;
 		}, 'json');
 	};
 };
 
 AjaxLoader.davis = Davis(function() {
-	AjaxLoader.davis = this;
-	this.use(Davis.title);
 	this.configure(function() {
 		this.generateRequestOnPageLoad = false;
 	});
@@ -68,4 +66,5 @@ AjaxLoader.davis = Davis(function() {
 
 jQuery(function() {
 	AjaxLoader.loader = new AjaxLoader;
+	AjaxLoader.davis.start();
 });
