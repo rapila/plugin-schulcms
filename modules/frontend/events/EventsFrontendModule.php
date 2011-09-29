@@ -8,6 +8,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 	public static $DISPLAY_MODES = array('list', 'detail_context');
 
 	public static $EVENT;
+	public $iEventTypeId;
 	
 	const DETAIL_IDENTIFIER = 'id';
 	const MODE_SELECT_KEY = 'display_mode';
@@ -16,21 +17,20 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 	
 	public function renderFrontend() { 
 		$aOptions = @unserialize($this->getData());
-
+		$this->iEventTypeId = $aOptions[self::MODE_EVENT_TYPE_ID];
 		if(self::$EVENT === null && isset($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY])) {
 			self::$EVENT = EventPeer::retrieveByPK($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY]);
 			if(self::$EVENT) {
 				return $this->renderDetail();
 			}
 		}
-
 		if($aOptions[self::MODE_SELECT_KEY] === 'list') {
-			return $this->renderList($aOptions[self::MODE_EVENT_TYPE_ID], $aOptions[self::MODE_EVENT_LIMIT]);
+			return $this->renderList($aOptions[self::MODE_EVENT_LIMIT]);
 		}
 		return '';
 	}
 	
-	private function renderList($iEventTypeId=null, $iLimit=null) {
+	private function renderList($iLimit=null) {
 		$oEventQuery = EventQuery::create();
 		if($this->oLanguageObject->getContentObject()->getContainerName() !== 'context') {
 			$oEventQuery = EventQuery::create()->filterByIsActive(true)->filterBySchoolClassId(null, Criteria::ISNULL)->filterByNavigationItem();
@@ -39,10 +39,10 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 			$oItemTempl = $this->constructTemplate('list_item');
 		} else {
 			$oEventQuery = EventQuery::create()->filterByIsActive(true)->filterBySchoolClassId(null, Criteria::ISNULL)->filterByDateRangePreview();
-			if($iEventTypeId !== null) {
-				$oEventQuery->filterByEventTypeId($iEventTypeId);
+			if($this->iEventTypeId !== null) {
+				$oEventQuery->filterByEventTypeId($this->iEventTypeId);
 			}
-			$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$iEventTypeId));
+			$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$this->iEventTypeId));
 			$oTemplate = $this->constructTemplate('list_context');
 			$oItemTempl = $this->constructTemplate('list_item_context');
 		}
@@ -83,13 +83,6 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
 		return $oTemplate;
-	}
-
-	private function renderArchivlist($iEventTypeId=null) {
-		$oEventQuery = EventQuery::create()->filterByIsActive()->filterByDateRangeReview()->orderByDateStart(Criteria::DESC);
-		if($iEventTypeId !== null) {
-			$oEventQuery->filterByEventTypeId($iEventTypeId);
-		}
 	}
 
 	public function getEvent() {
