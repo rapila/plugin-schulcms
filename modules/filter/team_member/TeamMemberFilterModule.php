@@ -31,7 +31,6 @@ class TeamMemberFilterModule extends FilterModule {
 	}
 
 	public function onPageHasBeenSet($oPage, $bIsNotFound, $oNavigationItem) {
-		// ErrorHandler::log($bIsNotFound, $bIsNotFound || !($oNavigationItem instanceof VirtualNavigationItem) || $oNavigationItem->getType() !== self::TEAM_MEMBER_ITEM_TYPE);
 		if($bIsNotFound || !($oNavigationItem instanceof VirtualNavigationItem) || $oNavigationItem->getType() !== self::TEAM_MEMBER_ITEM_TYPE) {
 				return;
 		}
