@@ -33,9 +33,9 @@ class EventFilterModule extends FilterModule {
 				foreach(array_diff($aAllYears, $aYears) as $iYear) {
 					$aData['event_type'] = $mIdentifier[1];
 					$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE.$iYear, null, array_merge($aData, array('year' => $iYear))));
-				} else {
-					/// what needs to be done here
 				}
+			} else {
+				/// what needs to be done here
 			}
 		} else if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::ITEM_EVENT_YEAR) {
 			$aData = $oNavigationItem->getData();
