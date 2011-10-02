@@ -159,3 +159,4 @@ td.status_icons.has_images{background:transparent url("../images/has_images.png"
 .class_list td:first-child a{background:url("../images/classes.png") transparent 0 4px no-repeat}
 iframe{border:0}
 #ajax_loader{display:none}
+.service_documents a{padding-top:2px}

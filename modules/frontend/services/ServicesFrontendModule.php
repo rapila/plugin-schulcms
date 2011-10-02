@@ -138,7 +138,7 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 			
     foreach(self::$SERVICE->getServiceDocuments() as $oServiceDocument) {
 			if($oServiceDocument->getDocument()) {
-        $oTemplate->replaceIdentifierMultiple('service_document', TagWriter::quickTag('a', array('href' => $oServiceDocument->getDocument()->getDisplayUrl(), 'class' => $oServiceDocument->getDocument()->getExtension()), $oServiceDocument->getDocument()->getName()), null, Template::NO_NEW_CONTEXT); 
+        $oTemplate->replaceIdentifierMultiple('service_document', TagWriter::quickTag('a', array('href' => $oServiceDocument->getDocument()->getDisplayUrl(), 'title' => $oServiceDocument->getDocument()->getDescription(),'class' => $oServiceDocument->getDocument()->getExtension()), $oServiceDocument->getDocument()->getName()), null, Template::NO_NEW_CONTEXT); 
 			}
 		}
 
