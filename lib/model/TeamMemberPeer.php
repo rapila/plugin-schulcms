@@ -49,7 +49,7 @@ class TeamMemberPeer extends BaseTeamMemberPeer {
 	  $oCriteria->setDistinct();
 	  $oCriteria->addJoin(self::ID, TeamMemberFunctionPeer::TEAM_MEMBER_ID, Criteria::INNER_JOIN);
 	  $oCriteria->addJoin(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID, SchoolFunctionPeer::ID, Criteria::INNER_JOIN);
-	  $oCriteria->addJoin(SchoolFunctionPeer::SCHOOL_ID, SchoolPeer::getSchoolId());
+	  $oCriteria->add(SchoolFunctionPeer::SCHOOL_ID, SchoolPeer::getSchoolId());
 		$oCriteria->add(SchoolFunctionPeer::FUNCTION_GROUP_ID, $aFunctionGroups, Criteria::IN);
 		return self::doCount($oCriteria);
 	}
