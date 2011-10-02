@@ -14,7 +14,8 @@
  *
  * @package    propel.generator.model.map
  */
-class ClassTypeTableMap extends TableMap {
+class ClassTypeTableMap extends TableMap
+{
 
 	/**
 	 * The (dot-path) name of this class
@@ -30,7 +31,7 @@ class ClassTypeTableMap extends TableMap {
 	 */
 	public function initialize()
 	{
-	  // attributes
+		// attributes
 		$this->setName('class_types');
 		$this->setPhpName('ClassType');
 		$this->setClassname('ClassType');
@@ -53,15 +54,15 @@ class ClassTypeTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('SchoolClass', 'SchoolClass', RelationMap::ONE_TO_MANY, array('id' => 'class_type_id', ), 'SET NULL', null);
+		$this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('SchoolClass', 'SchoolClass', RelationMap::ONE_TO_MANY, array('id' => 'class_type_id', ), 'SET NULL', null, 'SchoolClasss');
 	} // buildRelations()
 
 	/**
-	 * 
+	 *
 	 * Gets the list of behaviors registered for this table
-	 * 
+	 *
 	 * @return array Associative array (name => parameters) of behaviors
 	 */
 	public function getBehaviors()

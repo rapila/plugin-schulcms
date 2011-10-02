@@ -14,7 +14,8 @@
  *
  * @package    propel.generator.model.map
  */
-class TeamMemberTableMap extends TableMap {
+class TeamMemberTableMap extends TableMap
+{
 
 	/**
 	 * The (dot-path) name of this class
@@ -30,7 +31,7 @@ class TeamMemberTableMap extends TableMap {
 	 */
 	public function initialize()
 	{
-	  // attributes
+		// attributes
 		$this->setName('team_members');
 		$this->setPhpName('TeamMember');
 		$this->setClassname('TeamMember');
@@ -63,19 +64,19 @@ class TeamMemberTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('Document', 'Document', RelationMap::MANY_TO_ONE, array('portrait_id' => 'id', ), 'SET NULL', null);
-    $this->addRelation('UserRelatedByUserId', 'User', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), 'SET NULL', null);
-    $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('TeamMemberFunction', 'TeamMemberFunction', RelationMap::ONE_TO_MANY, array('id' => 'team_member_id', ), 'CASCADE', null);
-    $this->addRelation('ClassTeacher', 'ClassTeacher', RelationMap::ONE_TO_MANY, array('id' => 'team_member_id', ), 'CASCADE', null);
-    $this->addRelation('ServiceMember', 'ServiceMember', RelationMap::ONE_TO_MANY, array('id' => 'team_member_id', ), 'CASCADE', null);
+		$this->addRelation('Document', 'Document', RelationMap::MANY_TO_ONE, array('portrait_id' => 'id', ), 'SET NULL', null);
+		$this->addRelation('UserRelatedByUserId', 'User', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), 'SET NULL', null);
+		$this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('TeamMemberFunction', 'TeamMemberFunction', RelationMap::ONE_TO_MANY, array('id' => 'team_member_id', ), 'CASCADE', null, 'TeamMemberFunctions');
+		$this->addRelation('ClassTeacher', 'ClassTeacher', RelationMap::ONE_TO_MANY, array('id' => 'team_member_id', ), 'CASCADE', null, 'ClassTeachers');
+		$this->addRelation('ServiceMember', 'ServiceMember', RelationMap::ONE_TO_MANY, array('id' => 'team_member_id', ), 'CASCADE', null, 'ServiceMembers');
 	} // buildRelations()
 
 	/**
-	 * 
+	 *
 	 * Gets the list of behaviors registered for this table
-	 * 
+	 *
 	 * @return array Associative array (name => parameters) of behaviors
 	 */
 	public function getBehaviors()

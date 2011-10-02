@@ -24,12 +24,15 @@ abstract class BaseTeamMemberPeer {
 
 	/** the related TableMap class for this table */
 	const TM_CLASS = 'TeamMemberTableMap';
-	
+
 	/** The total number of columns. */
 	const NUM_COLUMNS = 18;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 18;
 
 	/** the column name for the ID field */
 	const ID = 'team_members.ID';
@@ -85,6 +88,9 @@ abstract class BaseTeamMemberPeer {
 	/** the column name for the UPDATED_BY field */
 	const UPDATED_BY = 'team_members.UPDATED_BY';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+
 	/**
 	 * An identiy map to hold any loaded instances of TeamMember objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -100,7 +106,7 @@ abstract class BaseTeamMemberPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'OriginalId', 'LastName', 'FirstName', 'Slug', 'GenderId', 'EmployedSince', 'DateOfBirth', 'Profession', 'EmailG', 'PortraitId', 'UserId', 'IsDeleted', 'IsNewlyUpdated', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'originalId', 'lastName', 'firstName', 'slug', 'genderId', 'employedSince', 'dateOfBirth', 'profession', 'emailG', 'portraitId', 'userId', 'isDeleted', 'isNewlyUpdated', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::ORIGINAL_ID, self::LAST_NAME, self::FIRST_NAME, self::SLUG, self::GENDER_ID, self::EMPLOYED_SINCE, self::DATE_OF_BIRTH, self::PROFESSION, self::EMAIL_G, self::PORTRAIT_ID, self::USER_ID, self::IS_DELETED, self::IS_NEWLY_UPDATED, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
@@ -115,7 +121,7 @@ abstract class BaseTeamMemberPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OriginalId' => 1, 'LastName' => 2, 'FirstName' => 3, 'Slug' => 4, 'GenderId' => 5, 'EmployedSince' => 6, 'DateOfBirth' => 7, 'Profession' => 8, 'EmailG' => 9, 'PortraitId' => 10, 'UserId' => 11, 'IsDeleted' => 12, 'IsNewlyUpdated' => 13, 'CreatedAt' => 14, 'UpdatedAt' => 15, 'CreatedBy' => 16, 'UpdatedBy' => 17, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'originalId' => 1, 'lastName' => 2, 'firstName' => 3, 'slug' => 4, 'genderId' => 5, 'employedSince' => 6, 'dateOfBirth' => 7, 'profession' => 8, 'emailG' => 9, 'portraitId' => 10, 'userId' => 11, 'isDeleted' => 12, 'isNewlyUpdated' => 13, 'createdAt' => 14, 'updatedAt' => 15, 'createdBy' => 16, 'updatedBy' => 17, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::ORIGINAL_ID => 1, self::LAST_NAME => 2, self::FIRST_NAME => 3, self::SLUG => 4, self::GENDER_ID => 5, self::EMPLOYED_SINCE => 6, self::DATE_OF_BIRTH => 7, self::PROFESSION => 8, self::EMAIL_G => 9, self::PORTRAIT_ID => 10, self::USER_ID => 11, self::IS_DELETED => 12, self::IS_NEWLY_UPDATED => 13, self::CREATED_AT => 14, self::UPDATED_AT => 15, self::CREATED_BY => 16, self::UPDATED_BY => 17, ),
@@ -277,7 +283,7 @@ abstract class BaseTeamMemberPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -296,7 +302,7 @@ abstract class BaseTeamMemberPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -350,7 +356,7 @@ abstract class BaseTeamMemberPeer {
 	 * @param      TeamMember $value A TeamMember object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(TeamMember $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -423,13 +429,13 @@ abstract class BaseTeamMemberPeer {
 	 */
 	public static function clearRelatedInstancePool()
 	{
-		// Invalidate objects in TeamMemberFunctionPeer instance pool, 
+		// Invalidate objects in TeamMemberFunctionPeer instance pool,
 		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
 		TeamMemberFunctionPeer::clearInstancePool();
-		// Invalidate objects in ClassTeacherPeer instance pool, 
+		// Invalidate objects in ClassTeacherPeer instance pool,
 		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
 		ClassTeacherPeer::clearInstancePool();
-		// Invalidate objects in ServiceMemberPeer instance pool, 
+		// Invalidate objects in ServiceMemberPeer instance pool,
 		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
 		ServiceMemberPeer::clearInstancePool();
 	}
@@ -454,7 +460,7 @@ abstract class BaseTeamMemberPeer {
 	}
 
 	/**
-	 * Retrieves the primary key from the DB resultset row 
+	 * Retrieves the primary key from the DB resultset row
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
 	 * a multi-column primary key, an array of the primary key columns will be returned.
 	 *
@@ -514,7 +520,7 @@ abstract class BaseTeamMemberPeer {
 			// We no longer rehydrate the object, since this can cause data loss.
 			// See http://www.propelorm.org/ticket/509
 			// $obj->hydrate($row, $startcol, true); // rehydrate
-			$col = $startcol + TeamMemberPeer::NUM_COLUMNS;
+			$col = $startcol + TeamMemberPeer::NUM_HYDRATE_COLUMNS;
 		} else {
 			$cls = TeamMemberPeer::OM_CLASS;
 			$obj = new $cls();
@@ -523,6 +529,7 @@ abstract class BaseTeamMemberPeer {
 		}
 		return array($obj, $col);
 	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related Document table
@@ -550,9 +557,9 @@ abstract class BaseTeamMemberPeer {
 		if (!$criteria->hasSelectClause()) {
 			TeamMemberPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -600,9 +607,9 @@ abstract class BaseTeamMemberPeer {
 		if (!$criteria->hasSelectClause()) {
 			TeamMemberPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -650,9 +657,9 @@ abstract class BaseTeamMemberPeer {
 		if (!$criteria->hasSelectClause()) {
 			TeamMemberPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -700,9 +707,9 @@ abstract class BaseTeamMemberPeer {
 		if (!$criteria->hasSelectClause()) {
 			TeamMemberPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -743,7 +750,7 @@ abstract class BaseTeamMemberPeer {
 		}
 
 		TeamMemberPeer::addSelectColumns($criteria);
-		$startcol = (TeamMemberPeer::NUM_COLUMNS - TeamMemberPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = TeamMemberPeer::NUM_HYDRATE_COLUMNS;
 		DocumentPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(TeamMemberPeer::PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
@@ -809,7 +816,7 @@ abstract class BaseTeamMemberPeer {
 		}
 
 		TeamMemberPeer::addSelectColumns($criteria);
-		$startcol = (TeamMemberPeer::NUM_COLUMNS - TeamMemberPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = TeamMemberPeer::NUM_HYDRATE_COLUMNS;
 		UserPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(TeamMemberPeer::USER_ID, UserPeer::ID, $join_behavior);
@@ -875,7 +882,7 @@ abstract class BaseTeamMemberPeer {
 		}
 
 		TeamMemberPeer::addSelectColumns($criteria);
-		$startcol = (TeamMemberPeer::NUM_COLUMNS - TeamMemberPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = TeamMemberPeer::NUM_HYDRATE_COLUMNS;
 		UserPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(TeamMemberPeer::CREATED_BY, UserPeer::ID, $join_behavior);
@@ -941,7 +948,7 @@ abstract class BaseTeamMemberPeer {
 		}
 
 		TeamMemberPeer::addSelectColumns($criteria);
-		$startcol = (TeamMemberPeer::NUM_COLUMNS - TeamMemberPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = TeamMemberPeer::NUM_HYDRATE_COLUMNS;
 		UserPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(TeamMemberPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
@@ -1014,9 +1021,9 @@ abstract class BaseTeamMemberPeer {
 		if (!$criteria->hasSelectClause()) {
 			TeamMemberPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1063,19 +1070,19 @@ abstract class BaseTeamMemberPeer {
 		}
 
 		TeamMemberPeer::addSelectColumns($criteria);
-		$startcol2 = (TeamMemberPeer::NUM_COLUMNS - TeamMemberPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = TeamMemberPeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (DocumentPeer::NUM_COLUMNS - DocumentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(TeamMemberPeer::PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
@@ -1199,7 +1206,7 @@ abstract class BaseTeamMemberPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(TeamMemberPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1207,9 +1214,9 @@ abstract class BaseTeamMemberPeer {
 		if (!$criteria->hasSelectClause()) {
 			TeamMemberPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1253,7 +1260,7 @@ abstract class BaseTeamMemberPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(TeamMemberPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1261,9 +1268,9 @@ abstract class BaseTeamMemberPeer {
 		if (!$criteria->hasSelectClause()) {
 			TeamMemberPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1303,7 +1310,7 @@ abstract class BaseTeamMemberPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(TeamMemberPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1311,9 +1318,9 @@ abstract class BaseTeamMemberPeer {
 		if (!$criteria->hasSelectClause()) {
 			TeamMemberPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1353,7 +1360,7 @@ abstract class BaseTeamMemberPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(TeamMemberPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1361,9 +1368,9 @@ abstract class BaseTeamMemberPeer {
 		if (!$criteria->hasSelectClause()) {
 			TeamMemberPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1407,16 +1414,16 @@ abstract class BaseTeamMemberPeer {
 		}
 
 		TeamMemberPeer::addSelectColumns($criteria);
-		$startcol2 = (TeamMemberPeer::NUM_COLUMNS - TeamMemberPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = TeamMemberPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(TeamMemberPeer::USER_ID, UserPeer::ID, $join_behavior);
 
@@ -1528,10 +1535,10 @@ abstract class BaseTeamMemberPeer {
 		}
 
 		TeamMemberPeer::addSelectColumns($criteria);
-		$startcol2 = (TeamMemberPeer::NUM_COLUMNS - TeamMemberPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = TeamMemberPeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (DocumentPeer::NUM_COLUMNS - DocumentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(TeamMemberPeer::PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
@@ -1601,10 +1608,10 @@ abstract class BaseTeamMemberPeer {
 		}
 
 		TeamMemberPeer::addSelectColumns($criteria);
-		$startcol2 = (TeamMemberPeer::NUM_COLUMNS - TeamMemberPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = TeamMemberPeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (DocumentPeer::NUM_COLUMNS - DocumentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(TeamMemberPeer::PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
@@ -1674,10 +1681,10 @@ abstract class BaseTeamMemberPeer {
 		}
 
 		TeamMemberPeer::addSelectColumns($criteria);
-		$startcol2 = (TeamMemberPeer::NUM_COLUMNS - TeamMemberPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = TeamMemberPeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (DocumentPeer::NUM_COLUMNS - DocumentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(TeamMemberPeer::PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
@@ -1765,7 +1772,7 @@ abstract class BaseTeamMemberPeer {
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a TeamMember or Criteria object.
+	 * Performs an INSERT on the database, given a TeamMember or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or TeamMember object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -1808,7 +1815,7 @@ abstract class BaseTeamMemberPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a TeamMember or Criteria object.
+	 * Performs an UPDATE on the database, given a TeamMember or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or TeamMember object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -1847,11 +1854,12 @@ abstract class BaseTeamMemberPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the team_members table.
+	 * Deletes all rows from the team_members table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(TeamMemberPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -1877,7 +1885,7 @@ abstract class BaseTeamMemberPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a TeamMember or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a TeamMember or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or TeamMember object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -1997,7 +2005,7 @@ abstract class BaseTeamMemberPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(TeamMember $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 

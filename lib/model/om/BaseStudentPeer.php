@@ -24,12 +24,15 @@ abstract class BaseStudentPeer {
 
 	/** the related TableMap class for this table */
 	const TM_CLASS = 'StudentTableMap';
-	
+
 	/** The total number of columns. */
 	const NUM_COLUMNS = 10;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 10;
 
 	/** the column name for the ID field */
 	const ID = 'students.ID';
@@ -61,6 +64,9 @@ abstract class BaseStudentPeer {
 	/** the column name for the UPDATED_BY field */
 	const UPDATED_BY = 'students.UPDATED_BY';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+
 	/**
 	 * An identiy map to hold any loaded instances of Student objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -76,7 +82,7 @@ abstract class BaseStudentPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'OriginalId', 'LastName', 'FirstName', 'DateOfBirth', 'PortraitId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'originalId', 'lastName', 'firstName', 'dateOfBirth', 'portraitId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::ORIGINAL_ID, self::LAST_NAME, self::FIRST_NAME, self::DATE_OF_BIRTH, self::PORTRAIT_ID, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
@@ -91,7 +97,7 @@ abstract class BaseStudentPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OriginalId' => 1, 'LastName' => 2, 'FirstName' => 3, 'DateOfBirth' => 4, 'PortraitId' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, 'CreatedBy' => 8, 'UpdatedBy' => 9, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'originalId' => 1, 'lastName' => 2, 'firstName' => 3, 'dateOfBirth' => 4, 'portraitId' => 5, 'createdAt' => 6, 'updatedAt' => 7, 'createdBy' => 8, 'updatedBy' => 9, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::ORIGINAL_ID => 1, self::LAST_NAME => 2, self::FIRST_NAME => 3, self::DATE_OF_BIRTH => 4, self::PORTRAIT_ID => 5, self::CREATED_AT => 6, self::UPDATED_AT => 7, self::CREATED_BY => 8, self::UPDATED_BY => 9, ),
@@ -237,7 +243,7 @@ abstract class BaseStudentPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -256,7 +262,7 @@ abstract class BaseStudentPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -310,7 +316,7 @@ abstract class BaseStudentPeer {
 	 * @param      Student $value A Student object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(Student $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -383,7 +389,7 @@ abstract class BaseStudentPeer {
 	 */
 	public static function clearRelatedInstancePool()
 	{
-		// Invalidate objects in ClassStudentPeer instance pool, 
+		// Invalidate objects in ClassStudentPeer instance pool,
 		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
 		ClassStudentPeer::clearInstancePool();
 	}
@@ -408,7 +414,7 @@ abstract class BaseStudentPeer {
 	}
 
 	/**
-	 * Retrieves the primary key from the DB resultset row 
+	 * Retrieves the primary key from the DB resultset row
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
 	 * a multi-column primary key, an array of the primary key columns will be returned.
 	 *
@@ -468,7 +474,7 @@ abstract class BaseStudentPeer {
 			// We no longer rehydrate the object, since this can cause data loss.
 			// See http://www.propelorm.org/ticket/509
 			// $obj->hydrate($row, $startcol, true); // rehydrate
-			$col = $startcol + StudentPeer::NUM_COLUMNS;
+			$col = $startcol + StudentPeer::NUM_HYDRATE_COLUMNS;
 		} else {
 			$cls = StudentPeer::OM_CLASS;
 			$obj = new $cls();
@@ -477,6 +483,7 @@ abstract class BaseStudentPeer {
 		}
 		return array($obj, $col);
 	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related Document table
@@ -504,9 +511,9 @@ abstract class BaseStudentPeer {
 		if (!$criteria->hasSelectClause()) {
 			StudentPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -554,9 +561,9 @@ abstract class BaseStudentPeer {
 		if (!$criteria->hasSelectClause()) {
 			StudentPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -604,9 +611,9 @@ abstract class BaseStudentPeer {
 		if (!$criteria->hasSelectClause()) {
 			StudentPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -647,7 +654,7 @@ abstract class BaseStudentPeer {
 		}
 
 		StudentPeer::addSelectColumns($criteria);
-		$startcol = (StudentPeer::NUM_COLUMNS - StudentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = StudentPeer::NUM_HYDRATE_COLUMNS;
 		DocumentPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(StudentPeer::PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
@@ -713,7 +720,7 @@ abstract class BaseStudentPeer {
 		}
 
 		StudentPeer::addSelectColumns($criteria);
-		$startcol = (StudentPeer::NUM_COLUMNS - StudentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = StudentPeer::NUM_HYDRATE_COLUMNS;
 		UserPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(StudentPeer::CREATED_BY, UserPeer::ID, $join_behavior);
@@ -779,7 +786,7 @@ abstract class BaseStudentPeer {
 		}
 
 		StudentPeer::addSelectColumns($criteria);
-		$startcol = (StudentPeer::NUM_COLUMNS - StudentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = StudentPeer::NUM_HYDRATE_COLUMNS;
 		UserPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(StudentPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
@@ -852,9 +859,9 @@ abstract class BaseStudentPeer {
 		if (!$criteria->hasSelectClause()) {
 			StudentPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -899,16 +906,16 @@ abstract class BaseStudentPeer {
 		}
 
 		StudentPeer::addSelectColumns($criteria);
-		$startcol2 = (StudentPeer::NUM_COLUMNS - StudentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = StudentPeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (DocumentPeer::NUM_COLUMNS - DocumentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(StudentPeer::PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
@@ -1012,7 +1019,7 @@ abstract class BaseStudentPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(StudentPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1020,9 +1027,9 @@ abstract class BaseStudentPeer {
 		if (!$criteria->hasSelectClause()) {
 			StudentPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1064,7 +1071,7 @@ abstract class BaseStudentPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(StudentPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1072,9 +1079,9 @@ abstract class BaseStudentPeer {
 		if (!$criteria->hasSelectClause()) {
 			StudentPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1114,7 +1121,7 @@ abstract class BaseStudentPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(StudentPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1122,9 +1129,9 @@ abstract class BaseStudentPeer {
 		if (!$criteria->hasSelectClause()) {
 			StudentPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1168,13 +1175,13 @@ abstract class BaseStudentPeer {
 		}
 
 		StudentPeer::addSelectColumns($criteria);
-		$startcol2 = (StudentPeer::NUM_COLUMNS - StudentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = StudentPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(StudentPeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
@@ -1265,10 +1272,10 @@ abstract class BaseStudentPeer {
 		}
 
 		StudentPeer::addSelectColumns($criteria);
-		$startcol2 = (StudentPeer::NUM_COLUMNS - StudentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = StudentPeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (DocumentPeer::NUM_COLUMNS - DocumentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(StudentPeer::PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
@@ -1338,10 +1345,10 @@ abstract class BaseStudentPeer {
 		}
 
 		StudentPeer::addSelectColumns($criteria);
-		$startcol2 = (StudentPeer::NUM_COLUMNS - StudentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = StudentPeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (DocumentPeer::NUM_COLUMNS - DocumentPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(StudentPeer::PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
@@ -1429,7 +1436,7 @@ abstract class BaseStudentPeer {
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a Student or Criteria object.
+	 * Performs an INSERT on the database, given a Student or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or Student object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -1472,7 +1479,7 @@ abstract class BaseStudentPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a Student or Criteria object.
+	 * Performs an UPDATE on the database, given a Student or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or Student object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -1511,11 +1518,12 @@ abstract class BaseStudentPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the students table.
+	 * Deletes all rows from the students table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(StudentPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -1541,7 +1549,7 @@ abstract class BaseStudentPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a Student or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a Student or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or Student object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -1649,7 +1657,7 @@ abstract class BaseStudentPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(Student $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 

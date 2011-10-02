@@ -14,7 +14,8 @@
  *
  * @package    propel.generator.model.map
  */
-class ServiceTableMap extends TableMap {
+class ServiceTableMap extends TableMap
+{
 
 	/**
 	 * The (dot-path) name of this class
@@ -30,7 +31,7 @@ class ServiceTableMap extends TableMap {
 	 */
 	public function initialize()
 	{
-	  // attributes
+		// attributes
 		$this->setName('services');
 		$this->setPhpName('Service');
 		$this->setClassname('Service');
@@ -62,19 +63,19 @@ class ServiceTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('Document', 'Document', RelationMap::MANY_TO_ONE, array('logo_id' => 'id', ), 'SET NULL', null);
-    $this->addRelation('ServiceCategory', 'ServiceCategory', RelationMap::MANY_TO_ONE, array('service_category_id' => 'id', ), 'SET NULL', null);
-    $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('Event', 'Event', RelationMap::ONE_TO_MANY, array('id' => 'service_id', ), 'CASCADE', null);
-    $this->addRelation('ServiceMember', 'ServiceMember', RelationMap::ONE_TO_MANY, array('id' => 'service_id', ), 'CASCADE', null);
-    $this->addRelation('ServiceDocument', 'ServiceDocument', RelationMap::ONE_TO_MANY, array('id' => 'service_id', ), 'CASCADE', null);
+		$this->addRelation('Document', 'Document', RelationMap::MANY_TO_ONE, array('logo_id' => 'id', ), 'SET NULL', null);
+		$this->addRelation('ServiceCategory', 'ServiceCategory', RelationMap::MANY_TO_ONE, array('service_category_id' => 'id', ), 'SET NULL', null);
+		$this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('Event', 'Event', RelationMap::ONE_TO_MANY, array('id' => 'service_id', ), 'CASCADE', null, 'Events');
+		$this->addRelation('ServiceMember', 'ServiceMember', RelationMap::ONE_TO_MANY, array('id' => 'service_id', ), 'CASCADE', null, 'ServiceMembers');
+		$this->addRelation('ServiceDocument', 'ServiceDocument', RelationMap::ONE_TO_MANY, array('id' => 'service_id', ), 'CASCADE', null, 'ServiceDocuments');
 	} // buildRelations()
 
 	/**
-	 * 
+	 *
 	 * Gets the list of behaviors registered for this table
-	 * 
+	 *
 	 * @return array Associative array (name => parameters) of behaviors
 	 */
 	public function getBehaviors()

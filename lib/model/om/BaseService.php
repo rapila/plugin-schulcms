@@ -627,18 +627,26 @@ abstract class BaseService extends BaseObject  implements Persistent
 	} // setBody()
 
 	/**
-	 * Set the value of [is_active] column.
+	 * Sets the value of the [is_active] column.
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     Service The current object (for fluent API support)
 	 */
 	public function setIsActive($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
-		if ($this->is_active !== $v || $this->isNew()) {
+		if ($this->is_active !== $v) {
 			$this->is_active = $v;
 			$this->modifiedColumns[] = ServicePeer::IS_ACTIVE;
 		}
@@ -697,45 +705,18 @@ abstract class BaseService extends BaseObject  implements Persistent
 	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     Service The current object (for fluent API support)
 	 */
 	public function setCreatedAt($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->created_at !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->created_at !== null || $dt !== null) {
+			$currentDateAsString = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->created_at = $newDateAsString;
 				$this->modifiedColumns[] = ServicePeer::CREATED_AT;
 			}
 		} // if either are not null
@@ -746,45 +727,18 @@ abstract class BaseService extends BaseObject  implements Persistent
 	/**
 	 * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     Service The current object (for fluent API support)
 	 */
 	public function setUpdatedAt($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->updated_at !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->updated_at !== null && $tmpDt = new DateTime($this->updated_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->updated_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->updated_at !== null || $dt !== null) {
+			$currentDateAsString = ($this->updated_at !== null && $tmpDt = new DateTime($this->updated_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->updated_at = $newDateAsString;
 				$this->modifiedColumns[] = ServicePeer::UPDATED_AT;
 			}
 		} // if either are not null
@@ -907,7 +861,7 @@ abstract class BaseService extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 17; // 17 = ServicePeer::NUM_COLUMNS - ServicePeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 17; // 17 = ServicePeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Service object", $e);
@@ -1015,11 +969,11 @@ abstract class BaseService extends BaseObject  implements Persistent
 
 		$con->beginTransaction();
 		try {
+			$deleteQuery = ServiceQuery::create()
+				->filterByPrimaryKey($this->getPrimaryKey());
 			$ret = $this->preDelete($con);
 			if ($ret) {
-				ServiceQuery::create()
-					->filterByPrimaryKey($this->getPrimaryKey())
-					->delete($con);
+				$deleteQuery->delete($con);
 				$this->postDelete($con);
 				$con->commit();
 				$this->setDeleted(true);
@@ -1440,12 +1394,17 @@ abstract class BaseService extends BaseObject  implements Persistent
 	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
 	 *                    Defaults to BasePeer::TYPE_PHPNAME.
 	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
 	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
 	 *
 	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $includeForeignObjects = false)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['Service'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['Service'][$this->getPrimaryKey()] = true;
 		$keys = ServicePeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -1468,16 +1427,25 @@ abstract class BaseService extends BaseObject  implements Persistent
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aDocument) {
-				$result['Document'] = $this->aDocument->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['Document'] = $this->aDocument->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aServiceCategory) {
-				$result['ServiceCategory'] = $this->aServiceCategory->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['ServiceCategory'] = $this->aServiceCategory->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aUserRelatedByCreatedBy) {
-				$result['UserRelatedByCreatedBy'] = $this->aUserRelatedByCreatedBy->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['UserRelatedByCreatedBy'] = $this->aUserRelatedByCreatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aUserRelatedByUpdatedBy) {
-				$result['UserRelatedByUpdatedBy'] = $this->aUserRelatedByUpdatedBy->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['UserRelatedByUpdatedBy'] = $this->aUserRelatedByUpdatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->collEvents) {
+				$result['Events'] = $this->collEvents->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collServiceMembers) {
+				$result['ServiceMembers'] = $this->collServiceMembers->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collServiceDocuments) {
+				$result['ServiceDocuments'] = $this->collServiceDocuments->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
 			}
 		}
 		return $result;
@@ -1687,26 +1655,27 @@ abstract class BaseService extends BaseObject  implements Persistent
 	 *
 	 * @param      object $copyObj An object of Service (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-		$copyObj->setName($this->name);
-		$copyObj->setSlug($this->slug);
-		$copyObj->setTeaser($this->teaser);
-		$copyObj->setAddress($this->address);
-		$copyObj->setOpeningHours($this->opening_hours);
-		$copyObj->setPhone($this->phone);
-		$copyObj->setEmail($this->email);
-		$copyObj->setWebsite($this->website);
-		$copyObj->setBody($this->body);
-		$copyObj->setIsActive($this->is_active);
-		$copyObj->setLogoId($this->logo_id);
-		$copyObj->setServiceCategoryId($this->service_category_id);
-		$copyObj->setCreatedAt($this->created_at);
-		$copyObj->setUpdatedAt($this->updated_at);
-		$copyObj->setCreatedBy($this->created_by);
-		$copyObj->setUpdatedBy($this->updated_by);
+		$copyObj->setName($this->getName());
+		$copyObj->setSlug($this->getSlug());
+		$copyObj->setTeaser($this->getTeaser());
+		$copyObj->setAddress($this->getAddress());
+		$copyObj->setOpeningHours($this->getOpeningHours());
+		$copyObj->setPhone($this->getPhone());
+		$copyObj->setEmail($this->getEmail());
+		$copyObj->setWebsite($this->getWebsite());
+		$copyObj->setBody($this->getBody());
+		$copyObj->setIsActive($this->getIsActive());
+		$copyObj->setLogoId($this->getLogoId());
+		$copyObj->setServiceCategoryId($this->getServiceCategoryId());
+		$copyObj->setCreatedAt($this->getCreatedAt());
+		$copyObj->setUpdatedAt($this->getUpdatedAt());
+		$copyObj->setCreatedBy($this->getCreatedBy());
+		$copyObj->setUpdatedBy($this->getUpdatedBy());
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -1733,9 +1702,10 @@ abstract class BaseService extends BaseObject  implements Persistent
 
 		} // if ($deepCopy)
 
-
-		$copyObj->setNew(true);
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -1815,11 +1785,11 @@ abstract class BaseService extends BaseObject  implements Persistent
 		if ($this->aDocument === null && ($this->logo_id !== null)) {
 			$this->aDocument = DocumentQuery::create()->findPk($this->logo_id, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aDocument->addServices($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aDocument->addServices($this);
 			 */
 		}
 		return $this->aDocument;
@@ -1864,11 +1834,11 @@ abstract class BaseService extends BaseObject  implements Persistent
 		if ($this->aServiceCategory === null && ($this->service_category_id !== null)) {
 			$this->aServiceCategory = ServiceCategoryQuery::create()->findPk($this->service_category_id, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aServiceCategory->addServices($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aServiceCategory->addServices($this);
 			 */
 		}
 		return $this->aServiceCategory;
@@ -1913,11 +1883,11 @@ abstract class BaseService extends BaseObject  implements Persistent
 		if ($this->aUserRelatedByCreatedBy === null && ($this->created_by !== null)) {
 			$this->aUserRelatedByCreatedBy = UserQuery::create()->findPk($this->created_by, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aUserRelatedByCreatedBy->addServicesRelatedByCreatedBy($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aUserRelatedByCreatedBy->addServicesRelatedByCreatedBy($this);
 			 */
 		}
 		return $this->aUserRelatedByCreatedBy;
@@ -1962,14 +1932,36 @@ abstract class BaseService extends BaseObject  implements Persistent
 		if ($this->aUserRelatedByUpdatedBy === null && ($this->updated_by !== null)) {
 			$this->aUserRelatedByUpdatedBy = UserQuery::create()->findPk($this->updated_by, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aUserRelatedByUpdatedBy->addServicesRelatedByUpdatedBy($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aUserRelatedByUpdatedBy->addServicesRelatedByUpdatedBy($this);
 			 */
 		}
 		return $this->aUserRelatedByUpdatedBy;
+	}
+
+
+	/**
+	 * Initializes a collection based on the name of a relation.
+	 * Avoids crafting an 'init[$relationName]s' method name
+	 * that wouldn't work when StandardEnglishPluralizer is used.
+	 *
+	 * @param      string $relationName The name of the relation to initialize
+	 * @return     void
+	 */
+	public function initRelation($relationName)
+	{
+		if ('Event' == $relationName) {
+			return $this->initEvents();
+		}
+		if ('ServiceMember' == $relationName) {
+			return $this->initServiceMembers();
+		}
+		if ('ServiceDocument' == $relationName) {
+			return $this->initServiceDocuments();
+		}
 	}
 
 	/**
@@ -1993,10 +1985,16 @@ abstract class BaseService extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initEvents()
+	public function initEvents($overrideExisting = true)
 	{
+		if (null !== $this->collEvents && !$overrideExisting) {
+			return;
+		}
 		$this->collEvents = new PropelObjectCollection();
 		$this->collEvents->setModel('Event');
 	}
@@ -2067,8 +2065,7 @@ abstract class BaseService extends BaseObject  implements Persistent
 	 * through the Event foreign key attribute.
 	 *
 	 * @param      Event $l Event
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     Service The current object (for fluent API support)
 	 */
 	public function addEvent(Event $l)
 	{
@@ -2079,6 +2076,8 @@ abstract class BaseService extends BaseObject  implements Persistent
 			$this->collEvents[]= $l;
 			$l->setService($this);
 		}
+
+		return $this;
 	}
 
 
@@ -2227,10 +2226,16 @@ abstract class BaseService extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initServiceMembers()
+	public function initServiceMembers($overrideExisting = true)
 	{
+		if (null !== $this->collServiceMembers && !$overrideExisting) {
+			return;
+		}
 		$this->collServiceMembers = new PropelObjectCollection();
 		$this->collServiceMembers->setModel('ServiceMember');
 	}
@@ -2301,8 +2306,7 @@ abstract class BaseService extends BaseObject  implements Persistent
 	 * through the ServiceMember foreign key attribute.
 	 *
 	 * @param      ServiceMember $l ServiceMember
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     Service The current object (for fluent API support)
 	 */
 	public function addServiceMember(ServiceMember $l)
 	{
@@ -2313,6 +2317,8 @@ abstract class BaseService extends BaseObject  implements Persistent
 			$this->collServiceMembers[]= $l;
 			$l->setService($this);
 		}
+
+		return $this;
 	}
 
 
@@ -2411,10 +2417,16 @@ abstract class BaseService extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initServiceDocuments()
+	public function initServiceDocuments($overrideExisting = true)
 	{
+		if (null !== $this->collServiceDocuments && !$overrideExisting) {
+			return;
+		}
 		$this->collServiceDocuments = new PropelObjectCollection();
 		$this->collServiceDocuments->setModel('ServiceDocument');
 	}
@@ -2485,8 +2497,7 @@ abstract class BaseService extends BaseObject  implements Persistent
 	 * through the ServiceDocument foreign key attribute.
 	 *
 	 * @param      ServiceDocument $l ServiceDocument
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     Service The current object (for fluent API support)
 	 */
 	public function addServiceDocument(ServiceDocument $l)
 	{
@@ -2497,6 +2508,8 @@ abstract class BaseService extends BaseObject  implements Persistent
 			$this->collServiceDocuments[]= $l;
 			$l->setService($this);
 		}
+
+		return $this;
 	}
 
 
@@ -2606,41 +2619,60 @@ abstract class BaseService extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 			if ($this->collEvents) {
-				foreach ((array) $this->collEvents as $o) {
+				foreach ($this->collEvents as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collServiceMembers) {
-				foreach ((array) $this->collServiceMembers as $o) {
+				foreach ($this->collServiceMembers as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collServiceDocuments) {
-				foreach ((array) $this->collServiceDocuments as $o) {
+				foreach ($this->collServiceDocuments as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
+		if ($this->collEvents instanceof PropelCollection) {
+			$this->collEvents->clearIterator();
+		}
 		$this->collEvents = null;
+		if ($this->collServiceMembers instanceof PropelCollection) {
+			$this->collServiceMembers->clearIterator();
+		}
 		$this->collServiceMembers = null;
+		if ($this->collServiceDocuments instanceof PropelCollection) {
+			$this->collServiceDocuments->clearIterator();
+		}
 		$this->collServiceDocuments = null;
 		$this->aDocument = null;
 		$this->aServiceCategory = null;
 		$this->aUserRelatedByCreatedBy = null;
 		$this->aUserRelatedByUpdatedBy = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(ServicePeer::DEFAULT_STRING_FORMAT);
 	}
 
 	// extended_timestampable behavior
@@ -2705,25 +2737,6 @@ abstract class BaseService extends BaseObject  implements Persistent
 	{
 		$this->modifiedColumns[] = ServicePeer::UPDATED_BY;
 		return $this;
-	}
-
-	/**
-	 * Catches calls to virtual methods
-	 */
-	public function __call($name, $params)
-	{
-		if (preg_match('/get(\w+)/', $name, $matches)) {
-			$virtualColumn = $matches[1];
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-			// no lcfirst in php<5.3...
-			$virtualColumn[0] = strtolower($virtualColumn[0]);
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-		}
-		return parent::__call($name, $params);
 	}
 
 } // BaseService

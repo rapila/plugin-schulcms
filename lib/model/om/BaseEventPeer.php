@@ -24,12 +24,15 @@ abstract class BaseEventPeer {
 
 	/** the related TableMap class for this table */
 	const TM_CLASS = 'EventTableMap';
-	
+
 	/** The total number of columns. */
 	const NUM_COLUMNS = 20;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 20;
 
 	/** the column name for the ID field */
 	const ID = 'events.ID';
@@ -91,6 +94,9 @@ abstract class BaseEventPeer {
 	/** the column name for the UPDATED_BY field */
 	const UPDATED_BY = 'events.UPDATED_BY';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+
 	/**
 	 * An identiy map to hold any loaded instances of Event objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -106,7 +112,7 @@ abstract class BaseEventPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'Title', 'TitleNormalized', 'Teaser', 'BodyPreview', 'BodyReview', 'LocationInfo', 'DateStart', 'DateEnd', 'TimeDetails', 'IsActive', 'ShowOnFrontpage', 'EventTypeId', 'ServiceId', 'SchoolClassId', 'GalleryId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'title', 'titleNormalized', 'teaser', 'bodyPreview', 'bodyReview', 'locationInfo', 'dateStart', 'dateEnd', 'timeDetails', 'isActive', 'showOnFrontpage', 'eventTypeId', 'serviceId', 'schoolClassId', 'galleryId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::TITLE, self::TITLE_NORMALIZED, self::TEASER, self::BODY_PREVIEW, self::BODY_REVIEW, self::LOCATION_INFO, self::DATE_START, self::DATE_END, self::TIME_DETAILS, self::IS_ACTIVE, self::SHOW_ON_FRONTPAGE, self::EVENT_TYPE_ID, self::SERVICE_ID, self::SCHOOL_CLASS_ID, self::GALLERY_ID, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
@@ -121,7 +127,7 @@ abstract class BaseEventPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Title' => 1, 'TitleNormalized' => 2, 'Teaser' => 3, 'BodyPreview' => 4, 'BodyReview' => 5, 'LocationInfo' => 6, 'DateStart' => 7, 'DateEnd' => 8, 'TimeDetails' => 9, 'IsActive' => 10, 'ShowOnFrontpage' => 11, 'EventTypeId' => 12, 'ServiceId' => 13, 'SchoolClassId' => 14, 'GalleryId' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, 'CreatedBy' => 18, 'UpdatedBy' => 19, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'title' => 1, 'titleNormalized' => 2, 'teaser' => 3, 'bodyPreview' => 4, 'bodyReview' => 5, 'locationInfo' => 6, 'dateStart' => 7, 'dateEnd' => 8, 'timeDetails' => 9, 'isActive' => 10, 'showOnFrontpage' => 11, 'eventTypeId' => 12, 'serviceId' => 13, 'schoolClassId' => 14, 'galleryId' => 15, 'createdAt' => 16, 'updatedAt' => 17, 'createdBy' => 18, 'updatedBy' => 19, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::TITLE => 1, self::TITLE_NORMALIZED => 2, self::TEASER => 3, self::BODY_PREVIEW => 4, self::BODY_REVIEW => 5, self::LOCATION_INFO => 6, self::DATE_START => 7, self::DATE_END => 8, self::TIME_DETAILS => 9, self::IS_ACTIVE => 10, self::SHOW_ON_FRONTPAGE => 11, self::EVENT_TYPE_ID => 12, self::SERVICE_ID => 13, self::SCHOOL_CLASS_ID => 14, self::GALLERY_ID => 15, self::CREATED_AT => 16, self::UPDATED_AT => 17, self::CREATED_BY => 18, self::UPDATED_BY => 19, ),
@@ -287,7 +293,7 @@ abstract class BaseEventPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -306,7 +312,7 @@ abstract class BaseEventPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -360,7 +366,7 @@ abstract class BaseEventPeer {
 	 * @param      Event $value A Event object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(Event $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -433,7 +439,7 @@ abstract class BaseEventPeer {
 	 */
 	public static function clearRelatedInstancePool()
 	{
-		// Invalidate objects in EventDocumentPeer instance pool, 
+		// Invalidate objects in EventDocumentPeer instance pool,
 		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
 		EventDocumentPeer::clearInstancePool();
 	}
@@ -458,7 +464,7 @@ abstract class BaseEventPeer {
 	}
 
 	/**
-	 * Retrieves the primary key from the DB resultset row 
+	 * Retrieves the primary key from the DB resultset row
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
 	 * a multi-column primary key, an array of the primary key columns will be returned.
 	 *
@@ -518,7 +524,7 @@ abstract class BaseEventPeer {
 			// We no longer rehydrate the object, since this can cause data loss.
 			// See http://www.propelorm.org/ticket/509
 			// $obj->hydrate($row, $startcol, true); // rehydrate
-			$col = $startcol + EventPeer::NUM_COLUMNS;
+			$col = $startcol + EventPeer::NUM_HYDRATE_COLUMNS;
 		} else {
 			$cls = EventPeer::OM_CLASS;
 			$obj = new $cls();
@@ -527,6 +533,7 @@ abstract class BaseEventPeer {
 		}
 		return array($obj, $col);
 	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related EventType table
@@ -554,9 +561,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -604,9 +611,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -654,9 +661,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -704,9 +711,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -754,9 +761,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -804,9 +811,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -847,7 +854,7 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = EventPeer::NUM_HYDRATE_COLUMNS;
 		EventTypePeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
@@ -913,7 +920,7 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = EventPeer::NUM_HYDRATE_COLUMNS;
 		ServicePeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
@@ -979,7 +986,7 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = EventPeer::NUM_HYDRATE_COLUMNS;
 		SchoolClassPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
@@ -1045,7 +1052,7 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = EventPeer::NUM_HYDRATE_COLUMNS;
 		DocumentCategoryPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(EventPeer::GALLERY_ID, DocumentCategoryPeer::ID, $join_behavior);
@@ -1111,7 +1118,7 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = EventPeer::NUM_HYDRATE_COLUMNS;
 		UserPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(EventPeer::CREATED_BY, UserPeer::ID, $join_behavior);
@@ -1177,7 +1184,7 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = EventPeer::NUM_HYDRATE_COLUMNS;
 		UserPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(EventPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
@@ -1250,9 +1257,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1303,25 +1310,25 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol2 = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = EventPeer::NUM_HYDRATE_COLUMNS;
 
 		EventTypePeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (EventTypePeer::NUM_COLUMNS - EventTypePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + EventTypePeer::NUM_HYDRATE_COLUMNS;
 
 		ServicePeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ServicePeer::NUM_COLUMNS - ServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + ServicePeer::NUM_HYDRATE_COLUMNS;
 
 		SchoolClassPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (SchoolClassPeer::NUM_COLUMNS - SchoolClassPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol5 = $startcol4 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentCategoryPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (DocumentCategoryPeer::NUM_COLUMNS - DocumentCategoryPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol6 = $startcol5 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol8 = $startcol7 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol8 = $startcol7 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
 
@@ -1485,7 +1492,7 @@ abstract class BaseEventPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(EventPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1493,9 +1500,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1543,7 +1550,7 @@ abstract class BaseEventPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(EventPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1551,9 +1558,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1601,7 +1608,7 @@ abstract class BaseEventPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(EventPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1609,9 +1616,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1659,7 +1666,7 @@ abstract class BaseEventPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(EventPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1667,9 +1674,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1717,7 +1724,7 @@ abstract class BaseEventPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(EventPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1725,9 +1732,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1773,7 +1780,7 @@ abstract class BaseEventPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(EventPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1781,9 +1788,9 @@ abstract class BaseEventPeer {
 		if (!$criteria->hasSelectClause()) {
 			EventPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1833,22 +1840,22 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol2 = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = EventPeer::NUM_HYDRATE_COLUMNS;
 
 		ServicePeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (ServicePeer::NUM_COLUMNS - ServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + ServicePeer::NUM_HYDRATE_COLUMNS;
 
 		SchoolClassPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (SchoolClassPeer::NUM_COLUMNS - SchoolClassPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentCategoryPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (DocumentCategoryPeer::NUM_COLUMNS - DocumentCategoryPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol5 = $startcol4 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
 
@@ -2002,22 +2009,22 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol2 = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = EventPeer::NUM_HYDRATE_COLUMNS;
 
 		EventTypePeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (EventTypePeer::NUM_COLUMNS - EventTypePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + EventTypePeer::NUM_HYDRATE_COLUMNS;
 
 		SchoolClassPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (SchoolClassPeer::NUM_COLUMNS - SchoolClassPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentCategoryPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (DocumentCategoryPeer::NUM_COLUMNS - DocumentCategoryPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol5 = $startcol4 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
 
@@ -2171,22 +2178,22 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol2 = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = EventPeer::NUM_HYDRATE_COLUMNS;
 
 		EventTypePeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (EventTypePeer::NUM_COLUMNS - EventTypePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + EventTypePeer::NUM_HYDRATE_COLUMNS;
 
 		ServicePeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ServicePeer::NUM_COLUMNS - ServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + ServicePeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentCategoryPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (DocumentCategoryPeer::NUM_COLUMNS - DocumentCategoryPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol5 = $startcol4 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
 
@@ -2340,22 +2347,22 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol2 = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = EventPeer::NUM_HYDRATE_COLUMNS;
 
 		EventTypePeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (EventTypePeer::NUM_COLUMNS - EventTypePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + EventTypePeer::NUM_HYDRATE_COLUMNS;
 
 		ServicePeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ServicePeer::NUM_COLUMNS - ServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + ServicePeer::NUM_HYDRATE_COLUMNS;
 
 		SchoolClassPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (SchoolClassPeer::NUM_COLUMNS - SchoolClassPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol5 = $startcol4 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
-		$startcol7 = $startcol6 + (UserPeer::NUM_COLUMNS - UserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
 
@@ -2509,19 +2516,19 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol2 = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = EventPeer::NUM_HYDRATE_COLUMNS;
 
 		EventTypePeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (EventTypePeer::NUM_COLUMNS - EventTypePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + EventTypePeer::NUM_HYDRATE_COLUMNS;
 
 		ServicePeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ServicePeer::NUM_COLUMNS - ServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + ServicePeer::NUM_HYDRATE_COLUMNS;
 
 		SchoolClassPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (SchoolClassPeer::NUM_COLUMNS - SchoolClassPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol5 = $startcol4 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentCategoryPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (DocumentCategoryPeer::NUM_COLUMNS - DocumentCategoryPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol6 = $startcol5 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
 
@@ -2654,19 +2661,19 @@ abstract class BaseEventPeer {
 		}
 
 		EventPeer::addSelectColumns($criteria);
-		$startcol2 = (EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = EventPeer::NUM_HYDRATE_COLUMNS;
 
 		EventTypePeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (EventTypePeer::NUM_COLUMNS - EventTypePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + EventTypePeer::NUM_HYDRATE_COLUMNS;
 
 		ServicePeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (ServicePeer::NUM_COLUMNS - ServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + ServicePeer::NUM_HYDRATE_COLUMNS;
 
 		SchoolClassPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (SchoolClassPeer::NUM_COLUMNS - SchoolClassPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol5 = $startcol4 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
 		DocumentCategoryPeer::addSelectColumns($criteria);
-		$startcol6 = $startcol5 + (DocumentCategoryPeer::NUM_COLUMNS - DocumentCategoryPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol6 = $startcol5 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
 
@@ -2817,7 +2824,7 @@ abstract class BaseEventPeer {
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a Event or Criteria object.
+	 * Performs an INSERT on the database, given a Event or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or Event object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -2860,7 +2867,7 @@ abstract class BaseEventPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a Event or Criteria object.
+	 * Performs an UPDATE on the database, given a Event or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or Event object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -2899,11 +2906,12 @@ abstract class BaseEventPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the events table.
+	 * Deletes all rows from the events table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(EventPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -2929,7 +2937,7 @@ abstract class BaseEventPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a Event or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a Event or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or Event object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -3037,7 +3045,7 @@ abstract class BaseEventPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(Event $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 

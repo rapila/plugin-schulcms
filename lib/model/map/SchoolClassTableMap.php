@@ -14,7 +14,8 @@
  *
  * @package    propel.generator.model.map
  */
-class SchoolClassTableMap extends TableMap {
+class SchoolClassTableMap extends TableMap
+{
 
 	/**
 	 * The (dot-path) name of this class
@@ -30,7 +31,7 @@ class SchoolClassTableMap extends TableMap {
 	 */
 	public function initialize()
 	{
-	  // attributes
+		// attributes
 		$this->setName('school_classes');
 		$this->setPhpName('SchoolClass');
 		$this->setClassname('SchoolClass');
@@ -64,24 +65,24 @@ class SchoolClassTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('DocumentRelatedByClassPortraitId', 'Document', RelationMap::MANY_TO_ONE, array('class_portrait_id' => 'id', ), 'SET NULL', null);
-    $this->addRelation('ClassType', 'ClassType', RelationMap::MANY_TO_ONE, array('class_type_id' => 'id', ), 'SET NULL', null);
-    $this->addRelation('DocumentRelatedByClassScheduleId', 'Document', RelationMap::MANY_TO_ONE, array('class_schedule_id' => 'id', ), 'SET NULL', null);
-    $this->addRelation('DocumentRelatedByWeekScheduleId', 'Document', RelationMap::MANY_TO_ONE, array('week_schedule_id' => 'id', ), 'SET NULL', null);
-    $this->addRelation('SchoolBuilding', 'SchoolBuilding', RelationMap::MANY_TO_ONE, array('school_building_id' => 'id', ), 'SET NULL', null);
-    $this->addRelation('School', 'School', RelationMap::MANY_TO_ONE, array('school_id' => 'id', ), 'CASCADE', null);
-    $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('ClassStudent', 'ClassStudent', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null);
-    $this->addRelation('ClassLink', 'ClassLink', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null);
-    $this->addRelation('ClassTeacher', 'ClassTeacher', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null);
-    $this->addRelation('Event', 'Event', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null);
+		$this->addRelation('DocumentRelatedByClassPortraitId', 'Document', RelationMap::MANY_TO_ONE, array('class_portrait_id' => 'id', ), 'SET NULL', null);
+		$this->addRelation('ClassType', 'ClassType', RelationMap::MANY_TO_ONE, array('class_type_id' => 'id', ), 'SET NULL', null);
+		$this->addRelation('DocumentRelatedByClassScheduleId', 'Document', RelationMap::MANY_TO_ONE, array('class_schedule_id' => 'id', ), 'SET NULL', null);
+		$this->addRelation('DocumentRelatedByWeekScheduleId', 'Document', RelationMap::MANY_TO_ONE, array('week_schedule_id' => 'id', ), 'SET NULL', null);
+		$this->addRelation('SchoolBuilding', 'SchoolBuilding', RelationMap::MANY_TO_ONE, array('school_building_id' => 'id', ), 'SET NULL', null);
+		$this->addRelation('School', 'School', RelationMap::MANY_TO_ONE, array('school_id' => 'id', ), 'CASCADE', null);
+		$this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('ClassStudent', 'ClassStudent', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassStudents');
+		$this->addRelation('ClassLink', 'ClassLink', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassLinks');
+		$this->addRelation('ClassTeacher', 'ClassTeacher', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassTeachers');
+		$this->addRelation('Event', 'Event', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'Events');
 	} // buildRelations()
 
 	/**
-	 * 
+	 *
 	 * Gets the list of behaviors registered for this table
-	 * 
+	 *
 	 * @return array Associative array (name => parameters) of behaviors
 	 */
 	public function getBehaviors()

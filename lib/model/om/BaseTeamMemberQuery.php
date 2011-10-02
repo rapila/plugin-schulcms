@@ -121,1035 +121,1262 @@
  */
 abstract class BaseTeamMemberQuery extends ModelCriteria
 {
+    
+    /**
+     * Initializes internal state of BaseTeamMemberQuery object.
+     *
+     * @param     string $dbName The dabase name
+     * @param     string $modelName The phpName of a model, e.g. 'Book'
+     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     */
+    public function __construct($dbName = 'rapila', $modelName = 'TeamMember', $modelAlias = null)
+    {
+        parent::__construct($dbName, $modelName, $modelAlias);
+    }
 
-	/**
-	 * Initializes internal state of BaseTeamMemberQuery object.
-	 *
-	 * @param     string $dbName The dabase name
-	 * @param     string $modelName The phpName of a model, e.g. 'Book'
-	 * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
-	 */
-	public function __construct($dbName = 'rapila', $modelName = 'TeamMember', $modelAlias = null)
-	{
-		parent::__construct($dbName, $modelName, $modelAlias);
-	}
+    /**
+     * Returns a new TeamMemberQuery object.
+     *
+     * @param     string $modelAlias The alias of a model in the query
+     * @param     Criteria $criteria Optional Criteria to build the query from
+     *
+     * @return    TeamMemberQuery
+     */
+    public static function create($modelAlias = null, $criteria = null)
+    {
+        if ($criteria instanceof TeamMemberQuery) {
+            return $criteria;
+        }
+        $query = new TeamMemberQuery();
+        if (null !== $modelAlias) {
+            $query->setModelAlias($modelAlias);
+        }
+        if ($criteria instanceof Criteria) {
+            $query->mergeWith($criteria);
+        }
+        return $query;
+    }
 
-	/**
-	 * Returns a new TeamMemberQuery object.
-	 *
-	 * @param     string $modelAlias The alias of a model in the query
-	 * @param     Criteria $criteria Optional Criteria to build the query from
-	 *
-	 * @return    TeamMemberQuery
-	 */
-	public static function create($modelAlias = null, $criteria = null)
-	{
-		if ($criteria instanceof TeamMemberQuery) {
-			return $criteria;
-		}
-		$query = new TeamMemberQuery();
-		if (null !== $modelAlias) {
-			$query->setModelAlias($modelAlias);
-		}
-		if ($criteria instanceof Criteria) {
-			$query->mergeWith($criteria);
-		}
-		return $query;
-	}
+    /**
+     * Find object by primary key
+     * Use instance pooling to avoid a database query if the object exists
+     * <code>
+     * $obj  = $c->findPk(12, $con);
+     * </code>
+     * @param     mixed $key Primary key to use for the query
+     * @param     PropelPDO $con an optional connection object
+     *
+     * @return    TeamMember|array|mixed the result, formatted by the current formatter
+     */
+    public function findPk($key, $con = null)
+    {
+        if ((null !== ($obj = TeamMemberPeer::getInstanceFromPool((string) $key))) && $this->getFormatter()->isObjectFormatter()) {
+            // the object is alredy in the instance pool
+            return $obj;
+        } else {
+            // the object has not been requested yet, or the formatter is not an object formatter
+            $criteria = $this->isKeepQuery() ? clone $this : $this;
+            $stmt = $criteria
+                ->filterByPrimaryKey($key)
+                ->getSelectStatement($con);
+            return $criteria->getFormatter()->init($criteria)->formatOne($stmt);
+        }
+    }
 
-	/**
-	 * Find object by primary key
-	 * Use instance pooling to avoid a database query if the object exists
-	 * <code>
-	 * $obj  = $c->findPk(12, $con);
-	 * </code>
-	 * @param     mixed $key Primary key to use for the query
-	 * @param     PropelPDO $con an optional connection object
-	 *
-	 * @return    TeamMember|array|mixed the result, formatted by the current formatter
-	 */
-	public function findPk($key, $con = null)
-	{
-		if ((null !== ($obj = TeamMemberPeer::getInstanceFromPool((string) $key))) && $this->getFormatter()->isObjectFormatter()) {
-			// the object is alredy in the instance pool
-			return $obj;
-		} else {
-			// the object has not been requested yet, or the formatter is not an object formatter
-			$criteria = $this->isKeepQuery() ? clone $this : $this;
-			$stmt = $criteria
-				->filterByPrimaryKey($key)
-				->getSelectStatement($con);
-			return $criteria->getFormatter()->init($criteria)->formatOne($stmt);
-		}
-	}
+    /**
+     * Find objects by primary key
+     * <code>
+     * $objs = $c->findPks(array(12, 56, 832), $con);
+     * </code>
+     * @param     array $keys Primary keys to use for the query
+     * @param     PropelPDO $con an optional connection object
+     *
+     * @return    PropelObjectCollection|array|mixed the list of results, formatted by the current formatter
+     */
+    public function findPks($keys, $con = null)
+    {
+        $criteria = $this->isKeepQuery() ? clone $this : $this;
+        return $this
+            ->filterByPrimaryKeys($keys)
+            ->find($con);
+    }
 
-	/**
-	 * Find objects by primary key
-	 * <code>
-	 * $objs = $c->findPks(array(12, 56, 832), $con);
-	 * </code>
-	 * @param     array $keys Primary keys to use for the query
-	 * @param     PropelPDO $con an optional connection object
-	 *
-	 * @return    PropelObjectCollection|array|mixed the list of results, formatted by the current formatter
-	 */
-	public function findPks($keys, $con = null)
-	{	
-		$criteria = $this->isKeepQuery() ? clone $this : $this;
-		return $this
-			->filterByPrimaryKeys($keys)
-			->find($con);
-	}
+    /**
+     * Filter the query by primary key
+     *
+     * @param     mixed $key Primary key to use for the query
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByPrimaryKey($key)
+    {
+        return $this->addUsingAlias(TeamMemberPeer::ID, $key, Criteria::EQUAL);
+    }
 
-	/**
-	 * Filter the query by primary key
-	 *
-	 * @param     mixed $key Primary key to use for the query
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByPrimaryKey($key)
-	{
-		return $this->addUsingAlias(TeamMemberPeer::ID, $key, Criteria::EQUAL);
-	}
+    /**
+     * Filter the query by a list of primary keys
+     *
+     * @param     array $keys The list of primary key to use for the query
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByPrimaryKeys($keys)
+    {
+        return $this->addUsingAlias(TeamMemberPeer::ID, $keys, Criteria::IN);
+    }
 
-	/**
-	 * Filter the query by a list of primary keys
-	 *
-	 * @param     array $keys The list of primary key to use for the query
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByPrimaryKeys($keys)
-	{
-		return $this->addUsingAlias(TeamMemberPeer::ID, $keys, Criteria::IN);
-	}
+    /**
+     * Filter the query on the id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterById(1234); // WHERE id = 1234
+     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
+     * $query->filterById(array('min' => 12)); // WHERE id > 12
+     * </code>
+     *
+     * @param     mixed $id The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterById($id = null, $comparison = null)
+    {
+        if (is_array($id) && null === $comparison) {
+            $comparison = Criteria::IN;
+        }
+        return $this->addUsingAlias(TeamMemberPeer::ID, $id, $comparison);
+    }
 
-	/**
-	 * Filter the query on the id column
-	 * 
-	 * @param     int|array $id The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterById($id = null, $comparison = null)
-	{
-		if (is_array($id) && null === $comparison) {
-			$comparison = Criteria::IN;
-		}
-		return $this->addUsingAlias(TeamMemberPeer::ID, $id, $comparison);
-	}
+    /**
+     * Filter the query on the original_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOriginalId(1234); // WHERE original_id = 1234
+     * $query->filterByOriginalId(array(12, 34)); // WHERE original_id IN (12, 34)
+     * $query->filterByOriginalId(array('min' => 12)); // WHERE original_id > 12
+     * </code>
+     *
+     * @param     mixed $originalId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByOriginalId($originalId = null, $comparison = null)
+    {
+        if (is_array($originalId)) {
+            $useMinMax = false;
+            if (isset($originalId['min'])) {
+                $this->addUsingAlias(TeamMemberPeer::ORIGINAL_ID, $originalId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($originalId['max'])) {
+                $this->addUsingAlias(TeamMemberPeer::ORIGINAL_ID, $originalId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::ORIGINAL_ID, $originalId, $comparison);
+    }
 
-	/**
-	 * Filter the query on the original_id column
-	 * 
-	 * @param     int|array $originalId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByOriginalId($originalId = null, $comparison = null)
-	{
-		if (is_array($originalId)) {
-			$useMinMax = false;
-			if (isset($originalId['min'])) {
-				$this->addUsingAlias(TeamMemberPeer::ORIGINAL_ID, $originalId['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($originalId['max'])) {
-				$this->addUsingAlias(TeamMemberPeer::ORIGINAL_ID, $originalId['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::ORIGINAL_ID, $originalId, $comparison);
-	}
+    /**
+     * Filter the query on the last_name column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByLastName('fooValue');   // WHERE last_name = 'fooValue'
+     * $query->filterByLastName('%fooValue%'); // WHERE last_name LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $lastName The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByLastName($lastName = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($lastName)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $lastName)) {
+                $lastName = str_replace('*', '%', $lastName);
+                $comparison = Criteria::LIKE;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::LAST_NAME, $lastName, $comparison);
+    }
 
-	/**
-	 * Filter the query on the last_name column
-	 * 
-	 * @param     string $lastName The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByLastName($lastName = null, $comparison = null)
-	{
-		if (null === $comparison) {
-			if (is_array($lastName)) {
-				$comparison = Criteria::IN;
-			} elseif (preg_match('/[\%\*]/', $lastName)) {
-				$lastName = str_replace('*', '%', $lastName);
-				$comparison = Criteria::LIKE;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::LAST_NAME, $lastName, $comparison);
-	}
+    /**
+     * Filter the query on the first_name column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByFirstName('fooValue');   // WHERE first_name = 'fooValue'
+     * $query->filterByFirstName('%fooValue%'); // WHERE first_name LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $firstName The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByFirstName($firstName = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($firstName)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $firstName)) {
+                $firstName = str_replace('*', '%', $firstName);
+                $comparison = Criteria::LIKE;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::FIRST_NAME, $firstName, $comparison);
+    }
 
-	/**
-	 * Filter the query on the first_name column
-	 * 
-	 * @param     string $firstName The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByFirstName($firstName = null, $comparison = null)
-	{
-		if (null === $comparison) {
-			if (is_array($firstName)) {
-				$comparison = Criteria::IN;
-			} elseif (preg_match('/[\%\*]/', $firstName)) {
-				$firstName = str_replace('*', '%', $firstName);
-				$comparison = Criteria::LIKE;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::FIRST_NAME, $firstName, $comparison);
-	}
+    /**
+     * Filter the query on the slug column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBySlug('fooValue');   // WHERE slug = 'fooValue'
+     * $query->filterBySlug('%fooValue%'); // WHERE slug LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $slug The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterBySlug($slug = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($slug)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $slug)) {
+                $slug = str_replace('*', '%', $slug);
+                $comparison = Criteria::LIKE;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::SLUG, $slug, $comparison);
+    }
 
-	/**
-	 * Filter the query on the slug column
-	 * 
-	 * @param     string $slug The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterBySlug($slug = null, $comparison = null)
-	{
-		if (null === $comparison) {
-			if (is_array($slug)) {
-				$comparison = Criteria::IN;
-			} elseif (preg_match('/[\%\*]/', $slug)) {
-				$slug = str_replace('*', '%', $slug);
-				$comparison = Criteria::LIKE;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::SLUG, $slug, $comparison);
-	}
+    /**
+     * Filter the query on the gender_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByGenderId('fooValue');   // WHERE gender_id = 'fooValue'
+     * $query->filterByGenderId('%fooValue%'); // WHERE gender_id LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $genderId The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByGenderId($genderId = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($genderId)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $genderId)) {
+                $genderId = str_replace('*', '%', $genderId);
+                $comparison = Criteria::LIKE;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::GENDER_ID, $genderId, $comparison);
+    }
 
-	/**
-	 * Filter the query on the gender_id column
-	 * 
-	 * @param     string $genderId The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByGenderId($genderId = null, $comparison = null)
-	{
-		if (null === $comparison) {
-			if (is_array($genderId)) {
-				$comparison = Criteria::IN;
-			} elseif (preg_match('/[\%\*]/', $genderId)) {
-				$genderId = str_replace('*', '%', $genderId);
-				$comparison = Criteria::LIKE;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::GENDER_ID, $genderId, $comparison);
-	}
+    /**
+     * Filter the query on the employed_since column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmployedSince('2011-03-14'); // WHERE employed_since = '2011-03-14'
+     * $query->filterByEmployedSince('now'); // WHERE employed_since = '2011-03-14'
+     * $query->filterByEmployedSince(array('max' => 'yesterday')); // WHERE employed_since > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $employedSince The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByEmployedSince($employedSince = null, $comparison = null)
+    {
+        if (is_array($employedSince)) {
+            $useMinMax = false;
+            if (isset($employedSince['min'])) {
+                $this->addUsingAlias(TeamMemberPeer::EMPLOYED_SINCE, $employedSince['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($employedSince['max'])) {
+                $this->addUsingAlias(TeamMemberPeer::EMPLOYED_SINCE, $employedSince['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::EMPLOYED_SINCE, $employedSince, $comparison);
+    }
 
-	/**
-	 * Filter the query on the employed_since column
-	 * 
-	 * @param     string|array $employedSince The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByEmployedSince($employedSince = null, $comparison = null)
-	{
-		if (is_array($employedSince)) {
-			$useMinMax = false;
-			if (isset($employedSince['min'])) {
-				$this->addUsingAlias(TeamMemberPeer::EMPLOYED_SINCE, $employedSince['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($employedSince['max'])) {
-				$this->addUsingAlias(TeamMemberPeer::EMPLOYED_SINCE, $employedSince['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::EMPLOYED_SINCE, $employedSince, $comparison);
-	}
+    /**
+     * Filter the query on the date_of_birth column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDateOfBirth('2011-03-14'); // WHERE date_of_birth = '2011-03-14'
+     * $query->filterByDateOfBirth('now'); // WHERE date_of_birth = '2011-03-14'
+     * $query->filterByDateOfBirth(array('max' => 'yesterday')); // WHERE date_of_birth > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $dateOfBirth The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByDateOfBirth($dateOfBirth = null, $comparison = null)
+    {
+        if (is_array($dateOfBirth)) {
+            $useMinMax = false;
+            if (isset($dateOfBirth['min'])) {
+                $this->addUsingAlias(TeamMemberPeer::DATE_OF_BIRTH, $dateOfBirth['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($dateOfBirth['max'])) {
+                $this->addUsingAlias(TeamMemberPeer::DATE_OF_BIRTH, $dateOfBirth['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::DATE_OF_BIRTH, $dateOfBirth, $comparison);
+    }
 
-	/**
-	 * Filter the query on the date_of_birth column
-	 * 
-	 * @param     string|array $dateOfBirth The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByDateOfBirth($dateOfBirth = null, $comparison = null)
-	{
-		if (is_array($dateOfBirth)) {
-			$useMinMax = false;
-			if (isset($dateOfBirth['min'])) {
-				$this->addUsingAlias(TeamMemberPeer::DATE_OF_BIRTH, $dateOfBirth['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($dateOfBirth['max'])) {
-				$this->addUsingAlias(TeamMemberPeer::DATE_OF_BIRTH, $dateOfBirth['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::DATE_OF_BIRTH, $dateOfBirth, $comparison);
-	}
+    /**
+     * Filter the query on the profession column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByProfession('fooValue');   // WHERE profession = 'fooValue'
+     * $query->filterByProfession('%fooValue%'); // WHERE profession LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $profession The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByProfession($profession = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($profession)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $profession)) {
+                $profession = str_replace('*', '%', $profession);
+                $comparison = Criteria::LIKE;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::PROFESSION, $profession, $comparison);
+    }
 
-	/**
-	 * Filter the query on the profession column
-	 * 
-	 * @param     string $profession The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByProfession($profession = null, $comparison = null)
-	{
-		if (null === $comparison) {
-			if (is_array($profession)) {
-				$comparison = Criteria::IN;
-			} elseif (preg_match('/[\%\*]/', $profession)) {
-				$profession = str_replace('*', '%', $profession);
-				$comparison = Criteria::LIKE;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::PROFESSION, $profession, $comparison);
-	}
+    /**
+     * Filter the query on the email_g column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmailG('fooValue');   // WHERE email_g = 'fooValue'
+     * $query->filterByEmailG('%fooValue%'); // WHERE email_g LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $emailG The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByEmailG($emailG = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($emailG)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $emailG)) {
+                $emailG = str_replace('*', '%', $emailG);
+                $comparison = Criteria::LIKE;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::EMAIL_G, $emailG, $comparison);
+    }
 
-	/**
-	 * Filter the query on the email_g column
-	 * 
-	 * @param     string $emailG The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByEmailG($emailG = null, $comparison = null)
-	{
-		if (null === $comparison) {
-			if (is_array($emailG)) {
-				$comparison = Criteria::IN;
-			} elseif (preg_match('/[\%\*]/', $emailG)) {
-				$emailG = str_replace('*', '%', $emailG);
-				$comparison = Criteria::LIKE;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::EMAIL_G, $emailG, $comparison);
-	}
+    /**
+     * Filter the query on the portrait_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPortraitId(1234); // WHERE portrait_id = 1234
+     * $query->filterByPortraitId(array(12, 34)); // WHERE portrait_id IN (12, 34)
+     * $query->filterByPortraitId(array('min' => 12)); // WHERE portrait_id > 12
+     * </code>
+     *
+     * @see       filterByDocument()
+     *
+     * @param     mixed $portraitId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByPortraitId($portraitId = null, $comparison = null)
+    {
+        if (is_array($portraitId)) {
+            $useMinMax = false;
+            if (isset($portraitId['min'])) {
+                $this->addUsingAlias(TeamMemberPeer::PORTRAIT_ID, $portraitId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($portraitId['max'])) {
+                $this->addUsingAlias(TeamMemberPeer::PORTRAIT_ID, $portraitId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::PORTRAIT_ID, $portraitId, $comparison);
+    }
 
-	/**
-	 * Filter the query on the portrait_id column
-	 * 
-	 * @param     int|array $portraitId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByPortraitId($portraitId = null, $comparison = null)
-	{
-		if (is_array($portraitId)) {
-			$useMinMax = false;
-			if (isset($portraitId['min'])) {
-				$this->addUsingAlias(TeamMemberPeer::PORTRAIT_ID, $portraitId['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($portraitId['max'])) {
-				$this->addUsingAlias(TeamMemberPeer::PORTRAIT_ID, $portraitId['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::PORTRAIT_ID, $portraitId, $comparison);
-	}
+    /**
+     * Filter the query on the user_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUserId(1234); // WHERE user_id = 1234
+     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
+     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * </code>
+     *
+     * @see       filterByUserRelatedByUserId()
+     *
+     * @param     mixed $userId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByUserId($userId = null, $comparison = null)
+    {
+        if (is_array($userId)) {
+            $useMinMax = false;
+            if (isset($userId['min'])) {
+                $this->addUsingAlias(TeamMemberPeer::USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($userId['max'])) {
+                $this->addUsingAlias(TeamMemberPeer::USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::USER_ID, $userId, $comparison);
+    }
 
-	/**
-	 * Filter the query on the user_id column
-	 * 
-	 * @param     int|array $userId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByUserId($userId = null, $comparison = null)
-	{
-		if (is_array($userId)) {
-			$useMinMax = false;
-			if (isset($userId['min'])) {
-				$this->addUsingAlias(TeamMemberPeer::USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($userId['max'])) {
-				$this->addUsingAlias(TeamMemberPeer::USER_ID, $userId['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::USER_ID, $userId, $comparison);
-	}
+    /**
+     * Filter the query on the is_deleted column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsDeleted(true); // WHERE is_deleted = true
+     * $query->filterByIsDeleted('yes'); // WHERE is_deleted = true
+     * </code>
+     *
+     * @param     boolean|string $isDeleted The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByIsDeleted($isDeleted = null, $comparison = null)
+    {
+        if (is_string($isDeleted)) {
+            $is_deleted = in_array(strtolower($isDeleted), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+        return $this->addUsingAlias(TeamMemberPeer::IS_DELETED, $isDeleted, $comparison);
+    }
 
-	/**
-	 * Filter the query on the is_deleted column
-	 * 
-	 * @param     boolean|string $isDeleted The value to use as filter.
-	 *            Accepts strings ('false', 'off', '-', 'no', 'n', and '0' are false, the rest is true)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByIsDeleted($isDeleted = null, $comparison = null)
-	{
-		if (is_string($isDeleted)) {
-			$is_deleted = in_array(strtolower($isDeleted), array('false', 'off', '-', 'no', 'n', '0')) ? false : true;
-		}
-		return $this->addUsingAlias(TeamMemberPeer::IS_DELETED, $isDeleted, $comparison);
-	}
+    /**
+     * Filter the query on the is_newly_updated column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsNewlyUpdated(true); // WHERE is_newly_updated = true
+     * $query->filterByIsNewlyUpdated('yes'); // WHERE is_newly_updated = true
+     * </code>
+     *
+     * @param     boolean|string $isNewlyUpdated The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByIsNewlyUpdated($isNewlyUpdated = null, $comparison = null)
+    {
+        if (is_string($isNewlyUpdated)) {
+            $is_newly_updated = in_array(strtolower($isNewlyUpdated), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+        return $this->addUsingAlias(TeamMemberPeer::IS_NEWLY_UPDATED, $isNewlyUpdated, $comparison);
+    }
 
-	/**
-	 * Filter the query on the is_newly_updated column
-	 * 
-	 * @param     boolean|string $isNewlyUpdated The value to use as filter.
-	 *            Accepts strings ('false', 'off', '-', 'no', 'n', and '0' are false, the rest is true)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByIsNewlyUpdated($isNewlyUpdated = null, $comparison = null)
-	{
-		if (is_string($isNewlyUpdated)) {
-			$is_newly_updated = in_array(strtolower($isNewlyUpdated), array('false', 'off', '-', 'no', 'n', '0')) ? false : true;
-		}
-		return $this->addUsingAlias(TeamMemberPeer::IS_NEWLY_UPDATED, $isNewlyUpdated, $comparison);
-	}
+    /**
+     * Filter the query on the created_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
+     * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
+     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $createdAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    {
+        if (is_array($createdAt)) {
+            $useMinMax = false;
+            if (isset($createdAt['min'])) {
+                $this->addUsingAlias(TeamMemberPeer::CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($createdAt['max'])) {
+                $this->addUsingAlias(TeamMemberPeer::CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::CREATED_AT, $createdAt, $comparison);
+    }
 
-	/**
-	 * Filter the query on the created_at column
-	 * 
-	 * @param     string|array $createdAt The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByCreatedAt($createdAt = null, $comparison = null)
-	{
-		if (is_array($createdAt)) {
-			$useMinMax = false;
-			if (isset($createdAt['min'])) {
-				$this->addUsingAlias(TeamMemberPeer::CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($createdAt['max'])) {
-				$this->addUsingAlias(TeamMemberPeer::CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::CREATED_AT, $createdAt, $comparison);
-	}
+    /**
+     * Filter the query on the updated_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
+     * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
+     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $updatedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    {
+        if (is_array($updatedAt)) {
+            $useMinMax = false;
+            if (isset($updatedAt['min'])) {
+                $this->addUsingAlias(TeamMemberPeer::UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($updatedAt['max'])) {
+                $this->addUsingAlias(TeamMemberPeer::UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::UPDATED_AT, $updatedAt, $comparison);
+    }
 
-	/**
-	 * Filter the query on the updated_at column
-	 * 
-	 * @param     string|array $updatedAt The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByUpdatedAt($updatedAt = null, $comparison = null)
-	{
-		if (is_array($updatedAt)) {
-			$useMinMax = false;
-			if (isset($updatedAt['min'])) {
-				$this->addUsingAlias(TeamMemberPeer::UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($updatedAt['max'])) {
-				$this->addUsingAlias(TeamMemberPeer::UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::UPDATED_AT, $updatedAt, $comparison);
-	}
+    /**
+     * Filter the query on the created_by column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCreatedBy(1234); // WHERE created_by = 1234
+     * $query->filterByCreatedBy(array(12, 34)); // WHERE created_by IN (12, 34)
+     * $query->filterByCreatedBy(array('min' => 12)); // WHERE created_by > 12
+     * </code>
+     *
+     * @see       filterByUserRelatedByCreatedBy()
+     *
+     * @param     mixed $createdBy The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByCreatedBy($createdBy = null, $comparison = null)
+    {
+        if (is_array($createdBy)) {
+            $useMinMax = false;
+            if (isset($createdBy['min'])) {
+                $this->addUsingAlias(TeamMemberPeer::CREATED_BY, $createdBy['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($createdBy['max'])) {
+                $this->addUsingAlias(TeamMemberPeer::CREATED_BY, $createdBy['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::CREATED_BY, $createdBy, $comparison);
+    }
 
-	/**
-	 * Filter the query on the created_by column
-	 * 
-	 * @param     int|array $createdBy The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByCreatedBy($createdBy = null, $comparison = null)
-	{
-		if (is_array($createdBy)) {
-			$useMinMax = false;
-			if (isset($createdBy['min'])) {
-				$this->addUsingAlias(TeamMemberPeer::CREATED_BY, $createdBy['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($createdBy['max'])) {
-				$this->addUsingAlias(TeamMemberPeer::CREATED_BY, $createdBy['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::CREATED_BY, $createdBy, $comparison);
-	}
+    /**
+     * Filter the query on the updated_by column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUpdatedBy(1234); // WHERE updated_by = 1234
+     * $query->filterByUpdatedBy(array(12, 34)); // WHERE updated_by IN (12, 34)
+     * $query->filterByUpdatedBy(array('min' => 12)); // WHERE updated_by > 12
+     * </code>
+     *
+     * @see       filterByUserRelatedByUpdatedBy()
+     *
+     * @param     mixed $updatedBy The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByUpdatedBy($updatedBy = null, $comparison = null)
+    {
+        if (is_array($updatedBy)) {
+            $useMinMax = false;
+            if (isset($updatedBy['min'])) {
+                $this->addUsingAlias(TeamMemberPeer::UPDATED_BY, $updatedBy['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($updatedBy['max'])) {
+                $this->addUsingAlias(TeamMemberPeer::UPDATED_BY, $updatedBy['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(TeamMemberPeer::UPDATED_BY, $updatedBy, $comparison);
+    }
 
-	/**
-	 * Filter the query on the updated_by column
-	 * 
-	 * @param     int|array $updatedBy The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByUpdatedBy($updatedBy = null, $comparison = null)
-	{
-		if (is_array($updatedBy)) {
-			$useMinMax = false;
-			if (isset($updatedBy['min'])) {
-				$this->addUsingAlias(TeamMemberPeer::UPDATED_BY, $updatedBy['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($updatedBy['max'])) {
-				$this->addUsingAlias(TeamMemberPeer::UPDATED_BY, $updatedBy['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(TeamMemberPeer::UPDATED_BY, $updatedBy, $comparison);
-	}
+    /**
+     * Filter the query by a related Document object
+     *
+     * @param     Document|PropelCollection $document The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByDocument($document, $comparison = null)
+    {
+        if ($document instanceof Document) {
+            return $this
+                ->addUsingAlias(TeamMemberPeer::PORTRAIT_ID, $document->getId(), $comparison);
+        } elseif ($document instanceof PropelCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+            return $this
+                ->addUsingAlias(TeamMemberPeer::PORTRAIT_ID, $document->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByDocument() only accepts arguments of type Document or PropelCollection');
+        }
+    }
 
-	/**
-	 * Filter the query by a related Document object
-	 *
-	 * @param     Document $document  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByDocument($document, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(TeamMemberPeer::PORTRAIT_ID, $document->getId(), $comparison);
-	}
+    /**
+     * Adds a JOIN clause to the query using the Document relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function joinDocument($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Document');
 
-	/**
-	 * Adds a JOIN clause to the query using the Document relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function joinDocument($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('Document');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'Document');
-		}
-		
-		return $this;
-	}
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
 
-	/**
-	 * Use the Document relation Document object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    DocumentQuery A secondary query class using the current class as primary query
-	 */
-	public function useDocumentQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-	{
-		return $this
-			->joinDocument($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'Document', 'DocumentQuery');
-	}
+        // add the ModelJoin to the current object
+        if($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Document');
+        }
 
-	/**
-	 * Filter the query by a related User object
-	 *
-	 * @param     User $user  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByUserRelatedByUserId($user, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(TeamMemberPeer::USER_ID, $user->getId(), $comparison);
-	}
+        return $this;
+    }
 
-	/**
-	 * Adds a JOIN clause to the query using the UserRelatedByUserId relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function joinUserRelatedByUserId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('UserRelatedByUserId');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'UserRelatedByUserId');
-		}
-		
-		return $this;
-	}
+    /**
+     * Use the Document relation Document object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    DocumentQuery A secondary query class using the current class as primary query
+     */
+    public function useDocumentQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinDocument($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Document', 'DocumentQuery');
+    }
 
-	/**
-	 * Use the UserRelatedByUserId relation User object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    UserQuery A secondary query class using the current class as primary query
-	 */
-	public function useUserRelatedByUserIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-	{
-		return $this
-			->joinUserRelatedByUserId($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'UserRelatedByUserId', 'UserQuery');
-	}
+    /**
+     * Filter the query by a related User object
+     *
+     * @param     User|PropelCollection $user The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByUserRelatedByUserId($user, $comparison = null)
+    {
+        if ($user instanceof User) {
+            return $this
+                ->addUsingAlias(TeamMemberPeer::USER_ID, $user->getId(), $comparison);
+        } elseif ($user instanceof PropelCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+            return $this
+                ->addUsingAlias(TeamMemberPeer::USER_ID, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByUserRelatedByUserId() only accepts arguments of type User or PropelCollection');
+        }
+    }
 
-	/**
-	 * Filter the query by a related User object
-	 *
-	 * @param     User $user  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByUserRelatedByCreatedBy($user, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(TeamMemberPeer::CREATED_BY, $user->getId(), $comparison);
-	}
+    /**
+     * Adds a JOIN clause to the query using the UserRelatedByUserId relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function joinUserRelatedByUserId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UserRelatedByUserId');
 
-	/**
-	 * Adds a JOIN clause to the query using the UserRelatedByCreatedBy relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function joinUserRelatedByCreatedBy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('UserRelatedByCreatedBy');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'UserRelatedByCreatedBy');
-		}
-		
-		return $this;
-	}
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
 
-	/**
-	 * Use the UserRelatedByCreatedBy relation User object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    UserQuery A secondary query class using the current class as primary query
-	 */
-	public function useUserRelatedByCreatedByQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-	{
-		return $this
-			->joinUserRelatedByCreatedBy($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'UserRelatedByCreatedBy', 'UserQuery');
-	}
+        // add the ModelJoin to the current object
+        if($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UserRelatedByUserId');
+        }
 
-	/**
-	 * Filter the query by a related User object
-	 *
-	 * @param     User $user  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByUserRelatedByUpdatedBy($user, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(TeamMemberPeer::UPDATED_BY, $user->getId(), $comparison);
-	}
+        return $this;
+    }
 
-	/**
-	 * Adds a JOIN clause to the query using the UserRelatedByUpdatedBy relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function joinUserRelatedByUpdatedBy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('UserRelatedByUpdatedBy');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'UserRelatedByUpdatedBy');
-		}
-		
-		return $this;
-	}
+    /**
+     * Use the UserRelatedByUserId relation User object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    UserQuery A secondary query class using the current class as primary query
+     */
+    public function useUserRelatedByUserIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinUserRelatedByUserId($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByUserId', 'UserQuery');
+    }
 
-	/**
-	 * Use the UserRelatedByUpdatedBy relation User object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    UserQuery A secondary query class using the current class as primary query
-	 */
-	public function useUserRelatedByUpdatedByQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-	{
-		return $this
-			->joinUserRelatedByUpdatedBy($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'UserRelatedByUpdatedBy', 'UserQuery');
-	}
+    /**
+     * Filter the query by a related User object
+     *
+     * @param     User|PropelCollection $user The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByUserRelatedByCreatedBy($user, $comparison = null)
+    {
+        if ($user instanceof User) {
+            return $this
+                ->addUsingAlias(TeamMemberPeer::CREATED_BY, $user->getId(), $comparison);
+        } elseif ($user instanceof PropelCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+            return $this
+                ->addUsingAlias(TeamMemberPeer::CREATED_BY, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByUserRelatedByCreatedBy() only accepts arguments of type User or PropelCollection');
+        }
+    }
 
-	/**
-	 * Filter the query by a related TeamMemberFunction object
-	 *
-	 * @param     TeamMemberFunction $teamMemberFunction  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByTeamMemberFunction($teamMemberFunction, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(TeamMemberPeer::ID, $teamMemberFunction->getTeamMemberId(), $comparison);
-	}
+    /**
+     * Adds a JOIN clause to the query using the UserRelatedByCreatedBy relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function joinUserRelatedByCreatedBy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UserRelatedByCreatedBy');
 
-	/**
-	 * Adds a JOIN clause to the query using the TeamMemberFunction relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function joinTeamMemberFunction($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('TeamMemberFunction');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'TeamMemberFunction');
-		}
-		
-		return $this;
-	}
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
 
-	/**
-	 * Use the TeamMemberFunction relation TeamMemberFunction object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    TeamMemberFunctionQuery A secondary query class using the current class as primary query
-	 */
-	public function useTeamMemberFunctionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		return $this
-			->joinTeamMemberFunction($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'TeamMemberFunction', 'TeamMemberFunctionQuery');
-	}
+        // add the ModelJoin to the current object
+        if($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UserRelatedByCreatedBy');
+        }
 
-	/**
-	 * Filter the query by a related ClassTeacher object
-	 *
-	 * @param     ClassTeacher $classTeacher  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByClassTeacher($classTeacher, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(TeamMemberPeer::ID, $classTeacher->getTeamMemberId(), $comparison);
-	}
+        return $this;
+    }
 
-	/**
-	 * Adds a JOIN clause to the query using the ClassTeacher relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function joinClassTeacher($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('ClassTeacher');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'ClassTeacher');
-		}
-		
-		return $this;
-	}
+    /**
+     * Use the UserRelatedByCreatedBy relation User object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    UserQuery A secondary query class using the current class as primary query
+     */
+    public function useUserRelatedByCreatedByQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinUserRelatedByCreatedBy($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByCreatedBy', 'UserQuery');
+    }
 
-	/**
-	 * Use the ClassTeacher relation ClassTeacher object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    ClassTeacherQuery A secondary query class using the current class as primary query
-	 */
-	public function useClassTeacherQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		return $this
-			->joinClassTeacher($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'ClassTeacher', 'ClassTeacherQuery');
-	}
+    /**
+     * Filter the query by a related User object
+     *
+     * @param     User|PropelCollection $user The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByUserRelatedByUpdatedBy($user, $comparison = null)
+    {
+        if ($user instanceof User) {
+            return $this
+                ->addUsingAlias(TeamMemberPeer::UPDATED_BY, $user->getId(), $comparison);
+        } elseif ($user instanceof PropelCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+            return $this
+                ->addUsingAlias(TeamMemberPeer::UPDATED_BY, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByUserRelatedByUpdatedBy() only accepts arguments of type User or PropelCollection');
+        }
+    }
 
-	/**
-	 * Filter the query by a related ServiceMember object
-	 *
-	 * @param     ServiceMember $serviceMember  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function filterByServiceMember($serviceMember, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(TeamMemberPeer::ID, $serviceMember->getTeamMemberId(), $comparison);
-	}
+    /**
+     * Adds a JOIN clause to the query using the UserRelatedByUpdatedBy relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function joinUserRelatedByUpdatedBy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UserRelatedByUpdatedBy');
 
-	/**
-	 * Adds a JOIN clause to the query using the ServiceMember relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function joinServiceMember($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('ServiceMember');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'ServiceMember');
-		}
-		
-		return $this;
-	}
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
 
-	/**
-	 * Use the ServiceMember relation ServiceMember object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    ServiceMemberQuery A secondary query class using the current class as primary query
-	 */
-	public function useServiceMemberQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		return $this
-			->joinServiceMember($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'ServiceMember', 'ServiceMemberQuery');
-	}
+        // add the ModelJoin to the current object
+        if($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UserRelatedByUpdatedBy');
+        }
 
-	/**
-	 * Exclude object from result
-	 *
-	 * @param     TeamMember $teamMember Object to remove from the list of results
-	 *
-	 * @return    TeamMemberQuery The current query, for fluid interface
-	 */
-	public function prune($teamMember = null)
-	{
-		if ($teamMember) {
-			$this->addUsingAlias(TeamMemberPeer::ID, $teamMember->getId(), Criteria::NOT_EQUAL);
-	  }
-	  
-		return $this;
-	}
+        return $this;
+    }
+
+    /**
+     * Use the UserRelatedByUpdatedBy relation User object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    UserQuery A secondary query class using the current class as primary query
+     */
+    public function useUserRelatedByUpdatedByQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinUserRelatedByUpdatedBy($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByUpdatedBy', 'UserQuery');
+    }
+
+    /**
+     * Filter the query by a related TeamMemberFunction object
+     *
+     * @param     TeamMemberFunction $teamMemberFunction  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByTeamMemberFunction($teamMemberFunction, $comparison = null)
+    {
+        if ($teamMemberFunction instanceof TeamMemberFunction) {
+            return $this
+                ->addUsingAlias(TeamMemberPeer::ID, $teamMemberFunction->getTeamMemberId(), $comparison);
+        } elseif ($teamMemberFunction instanceof PropelCollection) {
+            return $this
+                ->useTeamMemberFunctionQuery()
+                ->filterByPrimaryKeys($teamMemberFunction->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByTeamMemberFunction() only accepts arguments of type TeamMemberFunction or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the TeamMemberFunction relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function joinTeamMemberFunction($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('TeamMemberFunction');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'TeamMemberFunction');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the TeamMemberFunction relation TeamMemberFunction object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    TeamMemberFunctionQuery A secondary query class using the current class as primary query
+     */
+    public function useTeamMemberFunctionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinTeamMemberFunction($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TeamMemberFunction', 'TeamMemberFunctionQuery');
+    }
+
+    /**
+     * Filter the query by a related ClassTeacher object
+     *
+     * @param     ClassTeacher $classTeacher  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByClassTeacher($classTeacher, $comparison = null)
+    {
+        if ($classTeacher instanceof ClassTeacher) {
+            return $this
+                ->addUsingAlias(TeamMemberPeer::ID, $classTeacher->getTeamMemberId(), $comparison);
+        } elseif ($classTeacher instanceof PropelCollection) {
+            return $this
+                ->useClassTeacherQuery()
+                ->filterByPrimaryKeys($classTeacher->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByClassTeacher() only accepts arguments of type ClassTeacher or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ClassTeacher relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function joinClassTeacher($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ClassTeacher');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ClassTeacher');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ClassTeacher relation ClassTeacher object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    ClassTeacherQuery A secondary query class using the current class as primary query
+     */
+    public function useClassTeacherQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinClassTeacher($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ClassTeacher', 'ClassTeacherQuery');
+    }
+
+    /**
+     * Filter the query by a related ServiceMember object
+     *
+     * @param     ServiceMember $serviceMember  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function filterByServiceMember($serviceMember, $comparison = null)
+    {
+        if ($serviceMember instanceof ServiceMember) {
+            return $this
+                ->addUsingAlias(TeamMemberPeer::ID, $serviceMember->getTeamMemberId(), $comparison);
+        } elseif ($serviceMember instanceof PropelCollection) {
+            return $this
+                ->useServiceMemberQuery()
+                ->filterByPrimaryKeys($serviceMember->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByServiceMember() only accepts arguments of type ServiceMember or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ServiceMember relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function joinServiceMember($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ServiceMember');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ServiceMember');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ServiceMember relation ServiceMember object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    ServiceMemberQuery A secondary query class using the current class as primary query
+     */
+    public function useServiceMemberQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinServiceMember($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ServiceMember', 'ServiceMemberQuery');
+    }
+
+    /**
+     * Exclude object from result
+     *
+     * @param     TeamMember $teamMember Object to remove from the list of results
+     *
+     * @return    TeamMemberQuery The current query, for fluid interface
+     */
+    public function prune($teamMember = null)
+    {
+        if ($teamMember) {
+            $this->addUsingAlias(TeamMemberPeer::ID, $teamMember->getId(), Criteria::NOT_EQUAL);
+        }
+
+        return $this;
+    }
 
 	// extended_timestampable behavior
 	

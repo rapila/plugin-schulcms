@@ -14,7 +14,8 @@
  *
  * @package    propel.generator.model.map
  */
-class SchoolFunctionTableMap extends TableMap {
+class SchoolFunctionTableMap extends TableMap
+{
 
 	/**
 	 * The (dot-path) name of this class
@@ -30,7 +31,7 @@ class SchoolFunctionTableMap extends TableMap {
 	 */
 	public function initialize()
 	{
-	  // attributes
+		// attributes
 		$this->setName('school_functions');
 		$this->setPhpName('SchoolFunction');
 		$this->setClassname('SchoolFunction');
@@ -54,17 +55,17 @@ class SchoolFunctionTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('FunctionGroup', 'FunctionGroup', RelationMap::MANY_TO_ONE, array('function_group_id' => 'id', ), 'SET NULL', null);
-    $this->addRelation('School', 'School', RelationMap::MANY_TO_ONE, array('school_id' => 'id', ), 'CASCADE', null);
-    $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('TeamMemberFunction', 'TeamMemberFunction', RelationMap::ONE_TO_MANY, array('id' => 'school_function_id', ), 'CASCADE', null);
+		$this->addRelation('FunctionGroup', 'FunctionGroup', RelationMap::MANY_TO_ONE, array('function_group_id' => 'id', ), 'SET NULL', null);
+		$this->addRelation('School', 'School', RelationMap::MANY_TO_ONE, array('school_id' => 'id', ), 'CASCADE', null);
+		$this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('TeamMemberFunction', 'TeamMemberFunction', RelationMap::ONE_TO_MANY, array('id' => 'school_function_id', ), 'CASCADE', null, 'TeamMemberFunctions');
 	} // buildRelations()
 
 	/**
-	 * 
+	 *
 	 * Gets the list of behaviors registered for this table
-	 * 
+	 *
 	 * @return array Associative array (name => parameters) of behaviors
 	 */
 	public function getBehaviors()

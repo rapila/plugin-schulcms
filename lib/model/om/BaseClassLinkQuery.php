@@ -61,553 +61,659 @@
  */
 abstract class BaseClassLinkQuery extends ModelCriteria
 {
+    
+    /**
+     * Initializes internal state of BaseClassLinkQuery object.
+     *
+     * @param     string $dbName The dabase name
+     * @param     string $modelName The phpName of a model, e.g. 'Book'
+     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     */
+    public function __construct($dbName = 'rapila', $modelName = 'ClassLink', $modelAlias = null)
+    {
+        parent::__construct($dbName, $modelName, $modelAlias);
+    }
 
-	/**
-	 * Initializes internal state of BaseClassLinkQuery object.
-	 *
-	 * @param     string $dbName The dabase name
-	 * @param     string $modelName The phpName of a model, e.g. 'Book'
-	 * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
-	 */
-	public function __construct($dbName = 'rapila', $modelName = 'ClassLink', $modelAlias = null)
-	{
-		parent::__construct($dbName, $modelName, $modelAlias);
-	}
+    /**
+     * Returns a new ClassLinkQuery object.
+     *
+     * @param     string $modelAlias The alias of a model in the query
+     * @param     Criteria $criteria Optional Criteria to build the query from
+     *
+     * @return    ClassLinkQuery
+     */
+    public static function create($modelAlias = null, $criteria = null)
+    {
+        if ($criteria instanceof ClassLinkQuery) {
+            return $criteria;
+        }
+        $query = new ClassLinkQuery();
+        if (null !== $modelAlias) {
+            $query->setModelAlias($modelAlias);
+        }
+        if ($criteria instanceof Criteria) {
+            $query->mergeWith($criteria);
+        }
+        return $query;
+    }
 
-	/**
-	 * Returns a new ClassLinkQuery object.
-	 *
-	 * @param     string $modelAlias The alias of a model in the query
-	 * @param     Criteria $criteria Optional Criteria to build the query from
-	 *
-	 * @return    ClassLinkQuery
-	 */
-	public static function create($modelAlias = null, $criteria = null)
-	{
-		if ($criteria instanceof ClassLinkQuery) {
-			return $criteria;
-		}
-		$query = new ClassLinkQuery();
-		if (null !== $modelAlias) {
-			$query->setModelAlias($modelAlias);
-		}
-		if ($criteria instanceof Criteria) {
-			$query->mergeWith($criteria);
-		}
-		return $query;
-	}
+    /**
+     * Find object by primary key
+     * <code>
+     * $obj = $c->findPk(array(12, 34), $con);
+     * </code>
+     * @param     array[$school_class_id, $link_id] $key Primary key to use for the query
+     * @param     PropelPDO $con an optional connection object
+     *
+     * @return    ClassLink|array|mixed the result, formatted by the current formatter
+     */
+    public function findPk($key, $con = null)
+    {
+        if ((null !== ($obj = ClassLinkPeer::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && $this->getFormatter()->isObjectFormatter()) {
+            // the object is alredy in the instance pool
+            return $obj;
+        } else {
+            // the object has not been requested yet, or the formatter is not an object formatter
+            $criteria = $this->isKeepQuery() ? clone $this : $this;
+            $stmt = $criteria
+                ->filterByPrimaryKey($key)
+                ->getSelectStatement($con);
+            return $criteria->getFormatter()->init($criteria)->formatOne($stmt);
+        }
+    }
 
-	/**
-	 * Find object by primary key
-	 * <code>
-	 * $obj = $c->findPk(array(12, 34), $con);
-	 * </code>
-	 * @param     array[$school_class_id, $link_id] $key Primary key to use for the query
-	 * @param     PropelPDO $con an optional connection object
-	 *
-	 * @return    ClassLink|array|mixed the result, formatted by the current formatter
-	 */
-	public function findPk($key, $con = null)
-	{
-		if ((null !== ($obj = ClassLinkPeer::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && $this->getFormatter()->isObjectFormatter()) {
-			// the object is alredy in the instance pool
-			return $obj;
-		} else {
-			// the object has not been requested yet, or the formatter is not an object formatter
-			$criteria = $this->isKeepQuery() ? clone $this : $this;
-			$stmt = $criteria
-				->filterByPrimaryKey($key)
-				->getSelectStatement($con);
-			return $criteria->getFormatter()->init($criteria)->formatOne($stmt);
-		}
-	}
+    /**
+     * Find objects by primary key
+     * <code>
+     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * </code>
+     * @param     array $keys Primary keys to use for the query
+     * @param     PropelPDO $con an optional connection object
+     *
+     * @return    PropelObjectCollection|array|mixed the list of results, formatted by the current formatter
+     */
+    public function findPks($keys, $con = null)
+    {
+        $criteria = $this->isKeepQuery() ? clone $this : $this;
+        return $this
+            ->filterByPrimaryKeys($keys)
+            ->find($con);
+    }
 
-	/**
-	 * Find objects by primary key
-	 * <code>
-	 * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
-	 * </code>
-	 * @param     array $keys Primary keys to use for the query
-	 * @param     PropelPDO $con an optional connection object
-	 *
-	 * @return    PropelObjectCollection|array|mixed the list of results, formatted by the current formatter
-	 */
-	public function findPks($keys, $con = null)
-	{	
-		$criteria = $this->isKeepQuery() ? clone $this : $this;
-		return $this
-			->filterByPrimaryKeys($keys)
-			->find($con);
-	}
+    /**
+     * Filter the query by primary key
+     *
+     * @param     mixed $key Primary key to use for the query
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function filterByPrimaryKey($key)
+    {
+        $this->addUsingAlias(ClassLinkPeer::SCHOOL_CLASS_ID, $key[0], Criteria::EQUAL);
+        $this->addUsingAlias(ClassLinkPeer::LINK_ID, $key[1], Criteria::EQUAL);
 
-	/**
-	 * Filter the query by primary key
-	 *
-	 * @param     mixed $key Primary key to use for the query
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function filterByPrimaryKey($key)
-	{
-		$this->addUsingAlias(ClassLinkPeer::SCHOOL_CLASS_ID, $key[0], Criteria::EQUAL);
-		$this->addUsingAlias(ClassLinkPeer::LINK_ID, $key[1], Criteria::EQUAL);
-		
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Filter the query by a list of primary keys
-	 *
-	 * @param     array $keys The list of primary key to use for the query
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function filterByPrimaryKeys($keys)
-	{
-		if (empty($keys)) {
-			return $this->add(null, '1<>1', Criteria::CUSTOM);
-		}
-		foreach ($keys as $key) {
-			$cton0 = $this->getNewCriterion(ClassLinkPeer::SCHOOL_CLASS_ID, $key[0], Criteria::EQUAL);
-			$cton1 = $this->getNewCriterion(ClassLinkPeer::LINK_ID, $key[1], Criteria::EQUAL);
-			$cton0->addAnd($cton1);
-			$this->addOr($cton0);
-		}
-		
-		return $this;
-	}
+    /**
+     * Filter the query by a list of primary keys
+     *
+     * @param     array $keys The list of primary key to use for the query
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function filterByPrimaryKeys($keys)
+    {
+        if (empty($keys)) {
+            return $this->add(null, '1<>1', Criteria::CUSTOM);
+        }
+        foreach ($keys as $key) {
+            $cton0 = $this->getNewCriterion(ClassLinkPeer::SCHOOL_CLASS_ID, $key[0], Criteria::EQUAL);
+            $cton1 = $this->getNewCriterion(ClassLinkPeer::LINK_ID, $key[1], Criteria::EQUAL);
+            $cton0->addAnd($cton1);
+            $this->addOr($cton0);
+        }
 
-	/**
-	 * Filter the query on the school_class_id column
-	 * 
-	 * @param     int|array $schoolClassId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function filterBySchoolClassId($schoolClassId = null, $comparison = null)
-	{
-		if (is_array($schoolClassId) && null === $comparison) {
-			$comparison = Criteria::IN;
-		}
-		return $this->addUsingAlias(ClassLinkPeer::SCHOOL_CLASS_ID, $schoolClassId, $comparison);
-	}
+        return $this;
+    }
 
-	/**
-	 * Filter the query on the link_id column
-	 * 
-	 * @param     int|array $linkId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function filterByLinkId($linkId = null, $comparison = null)
-	{
-		if (is_array($linkId) && null === $comparison) {
-			$comparison = Criteria::IN;
-		}
-		return $this->addUsingAlias(ClassLinkPeer::LINK_ID, $linkId, $comparison);
-	}
+    /**
+     * Filter the query on the school_class_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBySchoolClassId(1234); // WHERE school_class_id = 1234
+     * $query->filterBySchoolClassId(array(12, 34)); // WHERE school_class_id IN (12, 34)
+     * $query->filterBySchoolClassId(array('min' => 12)); // WHERE school_class_id > 12
+     * </code>
+     *
+     * @see       filterBySchoolClass()
+     *
+     * @param     mixed $schoolClassId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function filterBySchoolClassId($schoolClassId = null, $comparison = null)
+    {
+        if (is_array($schoolClassId) && null === $comparison) {
+            $comparison = Criteria::IN;
+        }
+        return $this->addUsingAlias(ClassLinkPeer::SCHOOL_CLASS_ID, $schoolClassId, $comparison);
+    }
 
-	/**
-	 * Filter the query on the created_at column
-	 * 
-	 * @param     string|array $createdAt The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function filterByCreatedAt($createdAt = null, $comparison = null)
-	{
-		if (is_array($createdAt)) {
-			$useMinMax = false;
-			if (isset($createdAt['min'])) {
-				$this->addUsingAlias(ClassLinkPeer::CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($createdAt['max'])) {
-				$this->addUsingAlias(ClassLinkPeer::CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(ClassLinkPeer::CREATED_AT, $createdAt, $comparison);
-	}
+    /**
+     * Filter the query on the link_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByLinkId(1234); // WHERE link_id = 1234
+     * $query->filterByLinkId(array(12, 34)); // WHERE link_id IN (12, 34)
+     * $query->filterByLinkId(array('min' => 12)); // WHERE link_id > 12
+     * </code>
+     *
+     * @see       filterByLink()
+     *
+     * @param     mixed $linkId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function filterByLinkId($linkId = null, $comparison = null)
+    {
+        if (is_array($linkId) && null === $comparison) {
+            $comparison = Criteria::IN;
+        }
+        return $this->addUsingAlias(ClassLinkPeer::LINK_ID, $linkId, $comparison);
+    }
 
-	/**
-	 * Filter the query on the updated_at column
-	 * 
-	 * @param     string|array $updatedAt The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function filterByUpdatedAt($updatedAt = null, $comparison = null)
-	{
-		if (is_array($updatedAt)) {
-			$useMinMax = false;
-			if (isset($updatedAt['min'])) {
-				$this->addUsingAlias(ClassLinkPeer::UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($updatedAt['max'])) {
-				$this->addUsingAlias(ClassLinkPeer::UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(ClassLinkPeer::UPDATED_AT, $updatedAt, $comparison);
-	}
+    /**
+     * Filter the query on the created_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
+     * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
+     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $createdAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    {
+        if (is_array($createdAt)) {
+            $useMinMax = false;
+            if (isset($createdAt['min'])) {
+                $this->addUsingAlias(ClassLinkPeer::CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($createdAt['max'])) {
+                $this->addUsingAlias(ClassLinkPeer::CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(ClassLinkPeer::CREATED_AT, $createdAt, $comparison);
+    }
 
-	/**
-	 * Filter the query on the created_by column
-	 * 
-	 * @param     int|array $createdBy The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function filterByCreatedBy($createdBy = null, $comparison = null)
-	{
-		if (is_array($createdBy)) {
-			$useMinMax = false;
-			if (isset($createdBy['min'])) {
-				$this->addUsingAlias(ClassLinkPeer::CREATED_BY, $createdBy['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($createdBy['max'])) {
-				$this->addUsingAlias(ClassLinkPeer::CREATED_BY, $createdBy['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(ClassLinkPeer::CREATED_BY, $createdBy, $comparison);
-	}
+    /**
+     * Filter the query on the updated_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
+     * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
+     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $updatedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    {
+        if (is_array($updatedAt)) {
+            $useMinMax = false;
+            if (isset($updatedAt['min'])) {
+                $this->addUsingAlias(ClassLinkPeer::UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($updatedAt['max'])) {
+                $this->addUsingAlias(ClassLinkPeer::UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(ClassLinkPeer::UPDATED_AT, $updatedAt, $comparison);
+    }
 
-	/**
-	 * Filter the query on the updated_by column
-	 * 
-	 * @param     int|array $updatedBy The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function filterByUpdatedBy($updatedBy = null, $comparison = null)
-	{
-		if (is_array($updatedBy)) {
-			$useMinMax = false;
-			if (isset($updatedBy['min'])) {
-				$this->addUsingAlias(ClassLinkPeer::UPDATED_BY, $updatedBy['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($updatedBy['max'])) {
-				$this->addUsingAlias(ClassLinkPeer::UPDATED_BY, $updatedBy['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(ClassLinkPeer::UPDATED_BY, $updatedBy, $comparison);
-	}
+    /**
+     * Filter the query on the created_by column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCreatedBy(1234); // WHERE created_by = 1234
+     * $query->filterByCreatedBy(array(12, 34)); // WHERE created_by IN (12, 34)
+     * $query->filterByCreatedBy(array('min' => 12)); // WHERE created_by > 12
+     * </code>
+     *
+     * @see       filterByUserRelatedByCreatedBy()
+     *
+     * @param     mixed $createdBy The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function filterByCreatedBy($createdBy = null, $comparison = null)
+    {
+        if (is_array($createdBy)) {
+            $useMinMax = false;
+            if (isset($createdBy['min'])) {
+                $this->addUsingAlias(ClassLinkPeer::CREATED_BY, $createdBy['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($createdBy['max'])) {
+                $this->addUsingAlias(ClassLinkPeer::CREATED_BY, $createdBy['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(ClassLinkPeer::CREATED_BY, $createdBy, $comparison);
+    }
 
-	/**
-	 * Filter the query by a related SchoolClass object
-	 *
-	 * @param     SchoolClass $schoolClass  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function filterBySchoolClass($schoolClass, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(ClassLinkPeer::SCHOOL_CLASS_ID, $schoolClass->getId(), $comparison);
-	}
+    /**
+     * Filter the query on the updated_by column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUpdatedBy(1234); // WHERE updated_by = 1234
+     * $query->filterByUpdatedBy(array(12, 34)); // WHERE updated_by IN (12, 34)
+     * $query->filterByUpdatedBy(array('min' => 12)); // WHERE updated_by > 12
+     * </code>
+     *
+     * @see       filterByUserRelatedByUpdatedBy()
+     *
+     * @param     mixed $updatedBy The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function filterByUpdatedBy($updatedBy = null, $comparison = null)
+    {
+        if (is_array($updatedBy)) {
+            $useMinMax = false;
+            if (isset($updatedBy['min'])) {
+                $this->addUsingAlias(ClassLinkPeer::UPDATED_BY, $updatedBy['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($updatedBy['max'])) {
+                $this->addUsingAlias(ClassLinkPeer::UPDATED_BY, $updatedBy['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+        return $this->addUsingAlias(ClassLinkPeer::UPDATED_BY, $updatedBy, $comparison);
+    }
 
-	/**
-	 * Adds a JOIN clause to the query using the SchoolClass relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function joinSchoolClass($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('SchoolClass');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'SchoolClass');
-		}
-		
-		return $this;
-	}
+    /**
+     * Filter the query by a related SchoolClass object
+     *
+     * @param     SchoolClass|PropelCollection $schoolClass The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function filterBySchoolClass($schoolClass, $comparison = null)
+    {
+        if ($schoolClass instanceof SchoolClass) {
+            return $this
+                ->addUsingAlias(ClassLinkPeer::SCHOOL_CLASS_ID, $schoolClass->getId(), $comparison);
+        } elseif ($schoolClass instanceof PropelCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+            return $this
+                ->addUsingAlias(ClassLinkPeer::SCHOOL_CLASS_ID, $schoolClass->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterBySchoolClass() only accepts arguments of type SchoolClass or PropelCollection');
+        }
+    }
 
-	/**
-	 * Use the SchoolClass relation SchoolClass object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    SchoolClassQuery A secondary query class using the current class as primary query
-	 */
-	public function useSchoolClassQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		return $this
-			->joinSchoolClass($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'SchoolClass', 'SchoolClassQuery');
-	}
+    /**
+     * Adds a JOIN clause to the query using the SchoolClass relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function joinSchoolClass($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('SchoolClass');
 
-	/**
-	 * Filter the query by a related Link object
-	 *
-	 * @param     Link $link  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function filterByLink($link, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(ClassLinkPeer::LINK_ID, $link->getId(), $comparison);
-	}
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
 
-	/**
-	 * Adds a JOIN clause to the query using the Link relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function joinLink($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('Link');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'Link');
-		}
-		
-		return $this;
-	}
+        // add the ModelJoin to the current object
+        if($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'SchoolClass');
+        }
 
-	/**
-	 * Use the Link relation Link object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    LinkQuery A secondary query class using the current class as primary query
-	 */
-	public function useLinkQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		return $this
-			->joinLink($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'Link', 'LinkQuery');
-	}
+        return $this;
+    }
 
-	/**
-	 * Filter the query by a related User object
-	 *
-	 * @param     User $user  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function filterByUserRelatedByCreatedBy($user, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(ClassLinkPeer::CREATED_BY, $user->getId(), $comparison);
-	}
+    /**
+     * Use the SchoolClass relation SchoolClass object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    SchoolClassQuery A secondary query class using the current class as primary query
+     */
+    public function useSchoolClassQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinSchoolClass($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'SchoolClass', 'SchoolClassQuery');
+    }
 
-	/**
-	 * Adds a JOIN clause to the query using the UserRelatedByCreatedBy relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function joinUserRelatedByCreatedBy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('UserRelatedByCreatedBy');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'UserRelatedByCreatedBy');
-		}
-		
-		return $this;
-	}
+    /**
+     * Filter the query by a related Link object
+     *
+     * @param     Link|PropelCollection $link The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function filterByLink($link, $comparison = null)
+    {
+        if ($link instanceof Link) {
+            return $this
+                ->addUsingAlias(ClassLinkPeer::LINK_ID, $link->getId(), $comparison);
+        } elseif ($link instanceof PropelCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+            return $this
+                ->addUsingAlias(ClassLinkPeer::LINK_ID, $link->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByLink() only accepts arguments of type Link or PropelCollection');
+        }
+    }
 
-	/**
-	 * Use the UserRelatedByCreatedBy relation User object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    UserQuery A secondary query class using the current class as primary query
-	 */
-	public function useUserRelatedByCreatedByQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-	{
-		return $this
-			->joinUserRelatedByCreatedBy($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'UserRelatedByCreatedBy', 'UserQuery');
-	}
+    /**
+     * Adds a JOIN clause to the query using the Link relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function joinLink($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Link');
 
-	/**
-	 * Filter the query by a related User object
-	 *
-	 * @param     User $user  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function filterByUserRelatedByUpdatedBy($user, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(ClassLinkPeer::UPDATED_BY, $user->getId(), $comparison);
-	}
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
 
-	/**
-	 * Adds a JOIN clause to the query using the UserRelatedByUpdatedBy relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function joinUserRelatedByUpdatedBy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('UserRelatedByUpdatedBy');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'UserRelatedByUpdatedBy');
-		}
-		
-		return $this;
-	}
+        // add the ModelJoin to the current object
+        if($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Link');
+        }
 
-	/**
-	 * Use the UserRelatedByUpdatedBy relation User object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    UserQuery A secondary query class using the current class as primary query
-	 */
-	public function useUserRelatedByUpdatedByQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-	{
-		return $this
-			->joinUserRelatedByUpdatedBy($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'UserRelatedByUpdatedBy', 'UserQuery');
-	}
+        return $this;
+    }
 
-	/**
-	 * Exclude object from result
-	 *
-	 * @param     ClassLink $classLink Object to remove from the list of results
-	 *
-	 * @return    ClassLinkQuery The current query, for fluid interface
-	 */
-	public function prune($classLink = null)
-	{
-		if ($classLink) {
-			$this->addCond('pruneCond0', $this->getAliasedColName(ClassLinkPeer::SCHOOL_CLASS_ID), $classLink->getSchoolClassId(), Criteria::NOT_EQUAL);
-			$this->addCond('pruneCond1', $this->getAliasedColName(ClassLinkPeer::LINK_ID), $classLink->getLinkId(), Criteria::NOT_EQUAL);
-			$this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
-	  }
-	  
-		return $this;
-	}
+    /**
+     * Use the Link relation Link object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    LinkQuery A secondary query class using the current class as primary query
+     */
+    public function useLinkQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinLink($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Link', 'LinkQuery');
+    }
+
+    /**
+     * Filter the query by a related User object
+     *
+     * @param     User|PropelCollection $user The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function filterByUserRelatedByCreatedBy($user, $comparison = null)
+    {
+        if ($user instanceof User) {
+            return $this
+                ->addUsingAlias(ClassLinkPeer::CREATED_BY, $user->getId(), $comparison);
+        } elseif ($user instanceof PropelCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+            return $this
+                ->addUsingAlias(ClassLinkPeer::CREATED_BY, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByUserRelatedByCreatedBy() only accepts arguments of type User or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the UserRelatedByCreatedBy relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function joinUserRelatedByCreatedBy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UserRelatedByCreatedBy');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UserRelatedByCreatedBy');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the UserRelatedByCreatedBy relation User object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    UserQuery A secondary query class using the current class as primary query
+     */
+    public function useUserRelatedByCreatedByQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinUserRelatedByCreatedBy($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByCreatedBy', 'UserQuery');
+    }
+
+    /**
+     * Filter the query by a related User object
+     *
+     * @param     User|PropelCollection $user The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function filterByUserRelatedByUpdatedBy($user, $comparison = null)
+    {
+        if ($user instanceof User) {
+            return $this
+                ->addUsingAlias(ClassLinkPeer::UPDATED_BY, $user->getId(), $comparison);
+        } elseif ($user instanceof PropelCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+            return $this
+                ->addUsingAlias(ClassLinkPeer::UPDATED_BY, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByUserRelatedByUpdatedBy() only accepts arguments of type User or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the UserRelatedByUpdatedBy relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function joinUserRelatedByUpdatedBy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UserRelatedByUpdatedBy');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UserRelatedByUpdatedBy');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the UserRelatedByUpdatedBy relation User object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return    UserQuery A secondary query class using the current class as primary query
+     */
+    public function useUserRelatedByUpdatedByQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinUserRelatedByUpdatedBy($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByUpdatedBy', 'UserQuery');
+    }
+
+    /**
+     * Exclude object from result
+     *
+     * @param     ClassLink $classLink Object to remove from the list of results
+     *
+     * @return    ClassLinkQuery The current query, for fluid interface
+     */
+    public function prune($classLink = null)
+    {
+        if ($classLink) {
+            $this->addCond('pruneCond0', $this->getAliasedColName(ClassLinkPeer::SCHOOL_CLASS_ID), $classLink->getSchoolClassId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond1', $this->getAliasedColName(ClassLinkPeer::LINK_ID), $classLink->getLinkId(), Criteria::NOT_EQUAL);
+            $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
+        }
+
+        return $this;
+    }
 
 	// extended_timestampable behavior
 	

@@ -620,45 +620,18 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	/**
 	 * Sets the value of [employed_since] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     TeamMember The current object (for fluent API support)
 	 */
 	public function setEmployedSince($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->employed_since !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->employed_since !== null && $tmpDt = new DateTime($this->employed_since)) ? $tmpDt->format('Y-m-d') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->employed_since = ($dt ? $dt->format('Y-m-d') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->employed_since !== null || $dt !== null) {
+			$currentDateAsString = ($this->employed_since !== null && $tmpDt = new DateTime($this->employed_since)) ? $tmpDt->format('Y-m-d') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->employed_since = $newDateAsString;
 				$this->modifiedColumns[] = TeamMemberPeer::EMPLOYED_SINCE;
 			}
 		} // if either are not null
@@ -669,45 +642,18 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	/**
 	 * Sets the value of [date_of_birth] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     TeamMember The current object (for fluent API support)
 	 */
 	public function setDateOfBirth($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->date_of_birth !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->date_of_birth !== null && $tmpDt = new DateTime($this->date_of_birth)) ? $tmpDt->format('Y-m-d') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->date_of_birth = ($dt ? $dt->format('Y-m-d') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->date_of_birth !== null || $dt !== null) {
+			$currentDateAsString = ($this->date_of_birth !== null && $tmpDt = new DateTime($this->date_of_birth)) ? $tmpDt->format('Y-m-d') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->date_of_birth = $newDateAsString;
 				$this->modifiedColumns[] = TeamMemberPeer::DATE_OF_BIRTH;
 			}
 		} // if either are not null
@@ -804,18 +750,26 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	} // setUserId()
 
 	/**
-	 * Set the value of [is_deleted] column.
+	 * Sets the value of the [is_deleted] column.
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     TeamMember The current object (for fluent API support)
 	 */
 	public function setIsDeleted($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
-		if ($this->is_deleted !== $v || $this->isNew()) {
+		if ($this->is_deleted !== $v) {
 			$this->is_deleted = $v;
 			$this->modifiedColumns[] = TeamMemberPeer::IS_DELETED;
 		}
@@ -824,18 +778,26 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	} // setIsDeleted()
 
 	/**
-	 * Set the value of [is_newly_updated] column.
+	 * Sets the value of the [is_newly_updated] column.
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     TeamMember The current object (for fluent API support)
 	 */
 	public function setIsNewlyUpdated($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
-		if ($this->is_newly_updated !== $v || $this->isNew()) {
+		if ($this->is_newly_updated !== $v) {
 			$this->is_newly_updated = $v;
 			$this->modifiedColumns[] = TeamMemberPeer::IS_NEWLY_UPDATED;
 		}
@@ -846,45 +808,18 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     TeamMember The current object (for fluent API support)
 	 */
 	public function setCreatedAt($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->created_at !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->created_at !== null || $dt !== null) {
+			$currentDateAsString = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->created_at = $newDateAsString;
 				$this->modifiedColumns[] = TeamMemberPeer::CREATED_AT;
 			}
 		} // if either are not null
@@ -895,45 +830,18 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	/**
 	 * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     TeamMember The current object (for fluent API support)
 	 */
 	public function setUpdatedAt($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->updated_at !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->updated_at !== null && $tmpDt = new DateTime($this->updated_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->updated_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->updated_at !== null || $dt !== null) {
+			$currentDateAsString = ($this->updated_at !== null && $tmpDt = new DateTime($this->updated_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->updated_at = $newDateAsString;
 				$this->modifiedColumns[] = TeamMemberPeer::UPDATED_AT;
 			}
 		} // if either are not null
@@ -1055,7 +963,7 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 18; // 18 = TeamMemberPeer::NUM_COLUMNS - TeamMemberPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 18; // 18 = TeamMemberPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating TeamMember object", $e);
@@ -1163,11 +1071,11 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 
 		$con->beginTransaction();
 		try {
+			$deleteQuery = TeamMemberQuery::create()
+				->filterByPrimaryKey($this->getPrimaryKey());
 			$ret = $this->preDelete($con);
 			if ($ret) {
-				TeamMemberQuery::create()
-					->filterByPrimaryKey($this->getPrimaryKey())
-					->delete($con);
+				$deleteQuery->delete($con);
 				$this->postDelete($con);
 				$con->commit();
 				$this->setDeleted(true);
@@ -1586,12 +1494,17 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
 	 *                    Defaults to BasePeer::TYPE_PHPNAME.
 	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
 	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
 	 *
 	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $includeForeignObjects = false)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['TeamMember'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['TeamMember'][$this->getPrimaryKey()] = true;
 		$keys = TeamMemberPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -1615,16 +1528,25 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aDocument) {
-				$result['Document'] = $this->aDocument->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['Document'] = $this->aDocument->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aUserRelatedByUserId) {
-				$result['UserRelatedByUserId'] = $this->aUserRelatedByUserId->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['UserRelatedByUserId'] = $this->aUserRelatedByUserId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aUserRelatedByCreatedBy) {
-				$result['UserRelatedByCreatedBy'] = $this->aUserRelatedByCreatedBy->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['UserRelatedByCreatedBy'] = $this->aUserRelatedByCreatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aUserRelatedByUpdatedBy) {
-				$result['UserRelatedByUpdatedBy'] = $this->aUserRelatedByUpdatedBy->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['UserRelatedByUpdatedBy'] = $this->aUserRelatedByUpdatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->collTeamMemberFunctions) {
+				$result['TeamMemberFunctions'] = $this->collTeamMemberFunctions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collClassTeachers) {
+				$result['ClassTeachers'] = $this->collClassTeachers->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collServiceMembers) {
+				$result['ServiceMembers'] = $this->collServiceMembers->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
 			}
 		}
 		return $result;
@@ -1839,27 +1761,28 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	 *
 	 * @param      object $copyObj An object of TeamMember (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-		$copyObj->setOriginalId($this->original_id);
-		$copyObj->setLastName($this->last_name);
-		$copyObj->setFirstName($this->first_name);
-		$copyObj->setSlug($this->slug);
-		$copyObj->setGenderId($this->gender_id);
-		$copyObj->setEmployedSince($this->employed_since);
-		$copyObj->setDateOfBirth($this->date_of_birth);
-		$copyObj->setProfession($this->profession);
-		$copyObj->setEmailG($this->email_g);
-		$copyObj->setPortraitId($this->portrait_id);
-		$copyObj->setUserId($this->user_id);
-		$copyObj->setIsDeleted($this->is_deleted);
-		$copyObj->setIsNewlyUpdated($this->is_newly_updated);
-		$copyObj->setCreatedAt($this->created_at);
-		$copyObj->setUpdatedAt($this->updated_at);
-		$copyObj->setCreatedBy($this->created_by);
-		$copyObj->setUpdatedBy($this->updated_by);
+		$copyObj->setOriginalId($this->getOriginalId());
+		$copyObj->setLastName($this->getLastName());
+		$copyObj->setFirstName($this->getFirstName());
+		$copyObj->setSlug($this->getSlug());
+		$copyObj->setGenderId($this->getGenderId());
+		$copyObj->setEmployedSince($this->getEmployedSince());
+		$copyObj->setDateOfBirth($this->getDateOfBirth());
+		$copyObj->setProfession($this->getProfession());
+		$copyObj->setEmailG($this->getEmailG());
+		$copyObj->setPortraitId($this->getPortraitId());
+		$copyObj->setUserId($this->getUserId());
+		$copyObj->setIsDeleted($this->getIsDeleted());
+		$copyObj->setIsNewlyUpdated($this->getIsNewlyUpdated());
+		$copyObj->setCreatedAt($this->getCreatedAt());
+		$copyObj->setUpdatedAt($this->getUpdatedAt());
+		$copyObj->setCreatedBy($this->getCreatedBy());
+		$copyObj->setUpdatedBy($this->getUpdatedBy());
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -1886,9 +1809,10 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 
 		} // if ($deepCopy)
 
-
-		$copyObj->setNew(true);
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -1968,11 +1892,11 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 		if ($this->aDocument === null && ($this->portrait_id !== null)) {
 			$this->aDocument = DocumentQuery::create()->findPk($this->portrait_id, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aDocument->addTeamMembers($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aDocument->addTeamMembers($this);
 			 */
 		}
 		return $this->aDocument;
@@ -2017,11 +1941,11 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 		if ($this->aUserRelatedByUserId === null && ($this->user_id !== null)) {
 			$this->aUserRelatedByUserId = UserQuery::create()->findPk($this->user_id, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aUserRelatedByUserId->addTeamMembersRelatedByUserId($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aUserRelatedByUserId->addTeamMembersRelatedByUserId($this);
 			 */
 		}
 		return $this->aUserRelatedByUserId;
@@ -2066,11 +1990,11 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 		if ($this->aUserRelatedByCreatedBy === null && ($this->created_by !== null)) {
 			$this->aUserRelatedByCreatedBy = UserQuery::create()->findPk($this->created_by, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aUserRelatedByCreatedBy->addTeamMembersRelatedByCreatedBy($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aUserRelatedByCreatedBy->addTeamMembersRelatedByCreatedBy($this);
 			 */
 		}
 		return $this->aUserRelatedByCreatedBy;
@@ -2115,14 +2039,36 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 		if ($this->aUserRelatedByUpdatedBy === null && ($this->updated_by !== null)) {
 			$this->aUserRelatedByUpdatedBy = UserQuery::create()->findPk($this->updated_by, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aUserRelatedByUpdatedBy->addTeamMembersRelatedByUpdatedBy($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aUserRelatedByUpdatedBy->addTeamMembersRelatedByUpdatedBy($this);
 			 */
 		}
 		return $this->aUserRelatedByUpdatedBy;
+	}
+
+
+	/**
+	 * Initializes a collection based on the name of a relation.
+	 * Avoids crafting an 'init[$relationName]s' method name
+	 * that wouldn't work when StandardEnglishPluralizer is used.
+	 *
+	 * @param      string $relationName The name of the relation to initialize
+	 * @return     void
+	 */
+	public function initRelation($relationName)
+	{
+		if ('TeamMemberFunction' == $relationName) {
+			return $this->initTeamMemberFunctions();
+		}
+		if ('ClassTeacher' == $relationName) {
+			return $this->initClassTeachers();
+		}
+		if ('ServiceMember' == $relationName) {
+			return $this->initServiceMembers();
+		}
 	}
 
 	/**
@@ -2146,10 +2092,16 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initTeamMemberFunctions()
+	public function initTeamMemberFunctions($overrideExisting = true)
 	{
+		if (null !== $this->collTeamMemberFunctions && !$overrideExisting) {
+			return;
+		}
 		$this->collTeamMemberFunctions = new PropelObjectCollection();
 		$this->collTeamMemberFunctions->setModel('TeamMemberFunction');
 	}
@@ -2220,8 +2172,7 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	 * through the TeamMemberFunction foreign key attribute.
 	 *
 	 * @param      TeamMemberFunction $l TeamMemberFunction
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     TeamMember The current object (for fluent API support)
 	 */
 	public function addTeamMemberFunction(TeamMemberFunction $l)
 	{
@@ -2232,6 +2183,8 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 			$this->collTeamMemberFunctions[]= $l;
 			$l->setTeamMember($this);
 		}
+
+		return $this;
 	}
 
 
@@ -2330,10 +2283,16 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initClassTeachers()
+	public function initClassTeachers($overrideExisting = true)
 	{
+		if (null !== $this->collClassTeachers && !$overrideExisting) {
+			return;
+		}
 		$this->collClassTeachers = new PropelObjectCollection();
 		$this->collClassTeachers->setModel('ClassTeacher');
 	}
@@ -2404,8 +2363,7 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	 * through the ClassTeacher foreign key attribute.
 	 *
 	 * @param      ClassTeacher $l ClassTeacher
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     TeamMember The current object (for fluent API support)
 	 */
 	public function addClassTeacher(ClassTeacher $l)
 	{
@@ -2416,6 +2374,8 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 			$this->collClassTeachers[]= $l;
 			$l->setTeamMember($this);
 		}
+
+		return $this;
 	}
 
 
@@ -2514,10 +2474,16 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initServiceMembers()
+	public function initServiceMembers($overrideExisting = true)
 	{
+		if (null !== $this->collServiceMembers && !$overrideExisting) {
+			return;
+		}
 		$this->collServiceMembers = new PropelObjectCollection();
 		$this->collServiceMembers->setModel('ServiceMember');
 	}
@@ -2588,8 +2554,7 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	 * through the ServiceMember foreign key attribute.
 	 *
 	 * @param      ServiceMember $l ServiceMember
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     TeamMember The current object (for fluent API support)
 	 */
 	public function addServiceMember(ServiceMember $l)
 	{
@@ -2600,6 +2565,8 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 			$this->collServiceMembers[]= $l;
 			$l->setTeamMember($this);
 		}
+
+		return $this;
 	}
 
 
@@ -2710,41 +2677,60 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 			if ($this->collTeamMemberFunctions) {
-				foreach ((array) $this->collTeamMemberFunctions as $o) {
+				foreach ($this->collTeamMemberFunctions as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collClassTeachers) {
-				foreach ((array) $this->collClassTeachers as $o) {
+				foreach ($this->collClassTeachers as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collServiceMembers) {
-				foreach ((array) $this->collServiceMembers as $o) {
+				foreach ($this->collServiceMembers as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
+		if ($this->collTeamMemberFunctions instanceof PropelCollection) {
+			$this->collTeamMemberFunctions->clearIterator();
+		}
 		$this->collTeamMemberFunctions = null;
+		if ($this->collClassTeachers instanceof PropelCollection) {
+			$this->collClassTeachers->clearIterator();
+		}
 		$this->collClassTeachers = null;
+		if ($this->collServiceMembers instanceof PropelCollection) {
+			$this->collServiceMembers->clearIterator();
+		}
 		$this->collServiceMembers = null;
 		$this->aDocument = null;
 		$this->aUserRelatedByUserId = null;
 		$this->aUserRelatedByCreatedBy = null;
 		$this->aUserRelatedByUpdatedBy = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(TeamMemberPeer::DEFAULT_STRING_FORMAT);
 	}
 
 	// extended_timestampable behavior
@@ -2809,25 +2795,6 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	{
 		$this->modifiedColumns[] = TeamMemberPeer::UPDATED_BY;
 		return $this;
-	}
-
-	/**
-	 * Catches calls to virtual methods
-	 */
-	public function __call($name, $params)
-	{
-		if (preg_match('/get(\w+)/', $name, $matches)) {
-			$virtualColumn = $matches[1];
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-			// no lcfirst in php<5.3...
-			$virtualColumn[0] = strtolower($virtualColumn[0]);
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-		}
-		return parent::__call($name, $params);
 	}
 
 } // BaseTeamMember

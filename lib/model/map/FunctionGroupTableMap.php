@@ -14,7 +14,8 @@
  *
  * @package    propel.generator.model.map
  */
-class FunctionGroupTableMap extends TableMap {
+class FunctionGroupTableMap extends TableMap
+{
 
 	/**
 	 * The (dot-path) name of this class
@@ -30,7 +31,7 @@ class FunctionGroupTableMap extends TableMap {
 	 */
 	public function initialize()
 	{
-	  // attributes
+		// attributes
 		$this->setName('function_groups');
 		$this->setPhpName('FunctionGroup');
 		$this->setClassname('FunctionGroup');
@@ -53,15 +54,15 @@ class FunctionGroupTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
-    $this->addRelation('SchoolFunction', 'SchoolFunction', RelationMap::ONE_TO_MANY, array('id' => 'function_group_id', ), 'SET NULL', null);
+		$this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('SchoolFunction', 'SchoolFunction', RelationMap::ONE_TO_MANY, array('id' => 'function_group_id', ), 'SET NULL', null, 'SchoolFunctions');
 	} // buildRelations()
 
 	/**
-	 * 
+	 *
 	 * Gets the list of behaviors registered for this table
-	 * 
+	 *
 	 * @return array Associative array (name => parameters) of behaviors
 	 */
 	public function getBehaviors()
