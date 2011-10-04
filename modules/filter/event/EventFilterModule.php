@@ -19,7 +19,12 @@ class EventFilterModule extends FilterModule {
 		if($oNavigationItem instanceof PageNavigationItem) {
 			if(isset($mIdentifier[1]) && $mIdentifier[0] === SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS)) {
 				$aData = array('event_type' => $mIdentifier[1]);
-				foreach(self::selectNames($aData, 'YEAR(DATE_START)') as $iYear) {
+				$aYears = self::selectNames($aData, 'YEAR(DATE_START)');
+				foreach($aYears as $iYear) {
+					$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE.$iYear, null, array_merge($aData, array('year' => $iYear))));
+				}
+				$aAllYears = EventPeer::getYears($mIdentifier[1]);
+				foreach(array_diff($aAllYears, $aYears) as $iYear) {
 					$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE.$iYear, null, array_merge($aData, array('year' => $iYear))));
 				}
 			}
