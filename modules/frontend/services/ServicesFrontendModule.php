@@ -132,9 +132,9 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		if(self::$SERVICE->getPhone() != null)
 			$oTemplate->replaceIdentifier('phone', self::$SERVICE->getPhone());
 		if(self::$SERVICE->getEmail() != null)
-			$oTemplate->replaceIdentifier('email', TagWriter::quickTag('a', array('href' => 'mailto:'.self::$SERVICE->getEmail()), StringUtil::truncate(self::$SERVICE->getEmail(), 30)));
+			$oTemplate->replaceIdentifier('email', TagWriter::quickTag('a', array('href' => 'mailto:'.self::$SERVICE->getEmail()), StringUtil::truncate(self::$SERVICE->getEmail(), 27)));
 		if(self::$SERVICE->getWebsite() != null)
-			$oTemplate->replaceIdentifier('website', TagWriter::quickTag('a', array('href' => self::$SERVICE->getWebsiteWithProtocol()), StringUtil::truncate(self::$SERVICE->getWebsite(), 30)));
+			$oTemplate->replaceIdentifier('website', TagWriter::quickTag('a', array('href' => self::$SERVICE->getWebsiteWithProtocol()), StringUtil::truncate(self::$SERVICE->getWebsite(), 27)));
 			
     foreach(self::$SERVICE->getServiceDocuments() as $oServiceDocument) {
 			if($oServiceDocument->getDocument()) {

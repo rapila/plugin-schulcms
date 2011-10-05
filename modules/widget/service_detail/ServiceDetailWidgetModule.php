@@ -172,7 +172,6 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 			throw new ValidationException();
 		}
 		$oService->setIsActive($aServiceData['is_active']);
-		ErrorHandler::log('service_detail', $oService->toArray());
 		return $oService->save();
 	}
 }
