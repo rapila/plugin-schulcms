@@ -138,7 +138,6 @@ Widget.types.service_detail = {
 			this.team_member_container.show();
 			
 			this.service_text.prepareWidget(function(widget) {
-				console.log('service_data.Body', service_data.Body, widget);
 				widget.set_data(service_data.Body);
 			});
 			var richtext_area = this.content.find("textarea[name='body_text']").val(service_data.Body);

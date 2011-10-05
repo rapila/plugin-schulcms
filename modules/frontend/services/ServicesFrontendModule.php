@@ -98,7 +98,7 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 						$oTemplate->replaceIdentifierMultiple('opening_hours', $mPart, null, Template::NO_NEW_CONTEXT); 
 					} 
 				} else {
-					$oTemplate->replaceIdentifierMultiple('opening_hours', $mNewLine);	
+					$oTemplate->replaceIdentifierMultiple('opening_hours', $mNewLine, null, Template::NO_NEW_CONTEXT);	
 				}
 				if($i < ($iCount-1)) {
 					$oTemplate->replaceIdentifierMultiple('opening_hours', TagWriter::quickTag('br'), null, Template::NO_NEW_CONTEXT);	
@@ -132,9 +132,9 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		if(self::$SERVICE->getPhone() != null)
 			$oTemplate->replaceIdentifier('phone', self::$SERVICE->getPhone());
 		if(self::$SERVICE->getEmail() != null)
-			$oTemplate->replaceIdentifier('email', TagWriter::quickTag('a', array('href' => 'mailto:'.self::$SERVICE->getEmail()), self::$SERVICE->getEmail()));
+			$oTemplate->replaceIdentifier('email', TagWriter::quickTag('a', array('href' => 'mailto:'.self::$SERVICE->getEmail()), StringUtil::truncate(self::$SERVICE->getEmail(), 30)));
 		if(self::$SERVICE->getWebsite() != null)
-			$oTemplate->replaceIdentifier('website', TagWriter::quickTag('a', array('href' => self::$SERVICE->getWebsiteWithProtocol()), self::$SERVICE->getWebsite()));
+			$oTemplate->replaceIdentifier('website', TagWriter::quickTag('a', array('href' => self::$SERVICE->getWebsiteWithProtocol()), StringUtil::truncate(self::$SERVICE->getWebsite(), 30)));
 			
     foreach(self::$SERVICE->getServiceDocuments() as $oServiceDocument) {
 			if($oServiceDocument->getDocument()) {

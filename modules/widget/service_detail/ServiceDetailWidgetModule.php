@@ -133,6 +133,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 		} else {
 			$oService = ServicePeer::retrieveByPK($this->iServiceId);
 		}
+		ArrayUtil::trimStringsInArray($aServiceData);
 		$oService->setName($aServiceData['name']);
 		$oService->setTeaser($aServiceData['teaser']);
 		$oService->setAddress($aServiceData['address']);
@@ -171,6 +172,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 			throw new ValidationException();
 		}
 		$oService->setIsActive($aServiceData['is_active']);
+		ErrorHandler::log('service_detail', $oService->toArray());
 		return $oService->save();
 	}
 }
