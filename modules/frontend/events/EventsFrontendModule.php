@@ -127,7 +127,7 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		
 		$oGalleryTemplate = new Template('lists/gallery');
 		$oGalleryItemTemplatePrototype = new Template('lists/gallery_item');
-		$sMaxSize = 800;
+		$sMaxSize = 1000;
 		foreach(self::$EVENT->getEventDocumentsOrdered() as $oEventDocument) {
 			if(!$oEventDocument->getDocument()) {
 				continue;

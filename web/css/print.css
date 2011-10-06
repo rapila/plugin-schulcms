@@ -2,7 +2,6 @@
 
 body > * {
   display: none;
-  display: block;
 }
 
 #content_main {

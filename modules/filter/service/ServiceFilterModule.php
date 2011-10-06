@@ -10,7 +10,11 @@ class ServiceFilterModule extends FilterModule {
 		   && (StringUtil::startsWith($oNavigationItem->getIdentifier(), self::SERVICE_REQUEST_KEY.self::SERVICE_ID_SEPARATOR) || $oNavigationItem->getIdentifier() === self::SERVICE_REQUEST_KEY))) {
 			return;
 		}
-		
+		self::handleOnChildrenRequested($oNavigationItem);
+	}
+	
+	public static function handleOnChildrenRequested($oNavigationItem) {
+
 		$oObject = LanguageObjectQuery::create()->filterByLanguageId(Session::language())->joinContentObject()->useQuery('ContentObject')->filterByPageId($oNavigationItem->getMe()->getId())->filterByContainerName('content')->filterByObjectType('services')->endUse()->findOne();
 		if(!$oObject) {
 			return;

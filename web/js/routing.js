@@ -24,8 +24,10 @@ AjaxLoader.prototype = {
 
 AjaxLoader.conf = function() {
 	var containers = jQuery.makeArray(arguments);
+	
 	return function(request) {
 		AjaxLoader.loader.showLoader();
+		
 		jQuery.post(request.path, {'ajax_containers[]': containers, ajax_title: 'true', 'ajax_navigations': ['main', 'secondary']}, function(result, code, xhr) {
 			AjaxLoader.loader.hideLoader();
 
