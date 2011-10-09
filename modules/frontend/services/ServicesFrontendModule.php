@@ -45,7 +45,7 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		}
 		$aServices = $this->listQuery()->find();
 		$oTemplate = $this->constructTemplate('list');
-		$oPage = FrontendManager::$CURRENT_PAGE;
+		$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_SERVICES));
 		$sOddEven = 'odd';
 		foreach($aServices as $oService) {
 			$oItemTemplate = $this->constructTemplate('list_item');
