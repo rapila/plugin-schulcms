@@ -1,0 +1,23 @@
+jQuery(document).ready(function() {
+	// init main content
+	AdminInterface.content.find('table.note_list').prepareWidget(function(note_list) {
+		
+		// init info_bar
+		AdminInterface.info_bar.prepareWidget(function(info_bar) {
+			info_bar.add_button('add-new-item', function() {
+				Widget.create('note_detail', function(widget) {
+					widget.open();
+					widget.save_callback = function() {
+						note_list.reload();
+					};
+				});
+			}, 'n', true).add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
+				if(note_list.setSearch(search)) {
+					note_list.reload();
+				}
+			});
+			// add row_count_info
+			info_bar.add_row_count_info_for_list(note_list);
+		});
+	});
+});

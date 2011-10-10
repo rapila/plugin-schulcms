@@ -1,0 +1,27 @@
+Widget.types.blackboard_edit = { 
+	prepare: function() {
+		var _this = this;
+		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		this._element.append(this.content);
+		
+		// display_mode
+		console.log(this.getDisplayModes());
+		this.mode_dropdown = this.content.find("select[name='display_mode']");
+		this.mode_dropdown.populate(this.getDisplayModes(), this.getDisplayMode());
+	},
+	
+	save: function(callback) {
+		this.saveData(this._element.serializeArrayKV(), callback);
+	},
+	
+	additional_buttons: [
+		{
+			text: '{{writeString=events.do_admin}}',
+			icon: 'wrench',
+			action: jQuery.openLink.bind(window, "{{writeLink=events;manager=AdminManager}}")
+		}
+	]
+};
+
+
+

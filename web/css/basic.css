@@ -46,6 +46,7 @@ ul#main_navigation.home{right:194px;margin-top:20px}
 ul#main_navigation.outside{top:5px}
 #blackboard_text{margin-top:20px;margin-left:218px;color:background-color;height:80px;vertical-align:middle}
 #blackboard_text p{color:background-color;line-height:1.2em;font-size:3em;vertical-align:middle}
+#blackboard_text a.blackboard_more_link{font-size:.6em}
 #spacer{height:75px}
 ul#secondary_navigation{margin-top:142px}
 ul#meta_navigation li a,ul#meta_navigation li span,ul#main_navigation li a,ul#main_navigation li span,ul#secondary_navigation li a,ul#secondary_navigation li span{text-transform:uppercase;letter-spacing:.08em;font-size:1.3em;line-height:1.4em;color:#fff}
@@ -138,7 +139,6 @@ a.event_teaser_classlink{margin-left:1em}
 .date{font-style:oblique}
 .wraptocenter{background:#f1f1f1;display:table-cell;text-align:center;vertical-align:middle;width:163px;height:163px}
 .wraptocenter *{vertical-align:middle}
-p em{font-size:1.05em}
 .align_right{text-align:right}
 img.service_logo{float:right;margin:0 1em 1em 2em}
 .not_found_page{border:1px solid #5e61a8;padding:1em}
