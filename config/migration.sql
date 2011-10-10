@@ -387,3 +387,18 @@ ALTER TABLE `service_members` ADD `sort` INT UNSIGNED NULL DEFAULT NULL AFTER `t
 
 #20110921.1038
 ALTER TABLE `class_teachers` ADD PRIMARY KEY ( `school_class_id` , `team_member_id` , `function_name` ) ;
+
+#20111010.1814
+CREATE TABLE IF NOT EXISTS `notes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `body` longblob,
+  `date_start` date NOT NULL,
+  `date_end` date DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `created_by` int(10) unsigned DEFAULT NULL,
+  `updated_by` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `notes_FI_1` (`created_by`),
+  KEY `notes_FI_2` (`updated_by`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
