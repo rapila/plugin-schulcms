@@ -157,6 +157,7 @@ td.status_icons.has_images{background:transparent url("../images/has_images.png"
 .link_list td:first-child a{background:url("../images/links.png") transparent 0 4px no-repeat;padding-left:0}
 .team_list td:first-child a{background:url("../images/team_members.png") transparent 0 4px no-repeat}
 .class_list td:first-child a{background:url("../images/classes.png") transparent 0 4px no-repeat}
+a.more_link,a.blackboard_more_link{font-style:oblique}
 iframe{border:0}
 #ajax_loader{display:none}
 .service_documents a{padding-top:2px}
