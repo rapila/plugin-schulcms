@@ -1,0 +1,85 @@
+Widget.types.note_detail = {
+	initialize: function() {
+		var _this = this;
+		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		
+		this.note_body = this.content.find('div.note_body');
+		
+		Widget.create('detail', function(widget) {
+			this.detail_widget = widget.set_instance(this);
+			jQuery.extend(widget.settings, {
+				title: "{{writeString=wns.note.create}}",
+				width: 880
+			});
+			_this.current_detail_id = null;
+			this.content.find("input[name^='date_']").datepicker({
+				dateFormat: 'dd.mm.yy'
+			});
+			
+			if(this.auto_open) {
+				this.open();
+			}
+			
+		}.bind(_this));
+	
+		_this.handle('saving', function(event, data) {
+			data.body = _this.note_body_editor.get_data();
+		}.bind(_this));
+	},
+	
+	open: function() {
+		if(!this.detail_widget) {
+			this.auto_open = true;
+			return false;
+		}
+		this.init_textarea();
+		this.detail_widget.open();
+	},
+	
+	fill_data: function() {
+		var _this = this;
+		this.init_textarea();
+		this.noteData(function(note_data) {
+			_this.current_detail_id = note_data.Id;
+			this.content.find("input[name='date_start']").val(note_data.DateStart);
+			this.content.find("input[name='date_end']").val(note_data.DateEnd);
+			this.content.find(".updated_info").text(note_data.UpdatedInfo);
+			this.content.find(".created_info").text(note_data.CreatedInfo);
+			this.detail_widget.set_title(this.detail_widget.settings.title = note_data.Id);
+			this.note_body.ensureWidget(function(widget) {
+				widget.set_data(note_data.NoteBody);
+			});
+		});
+	},
+	
+	init_textarea: function() {
+		var _this = this;
+		if(!this.note_body.didPrepareWidget()) {
+			this.note_body.attr('data-widget-session', this.settings.richtext_session).prepareWidget(function(rich_text_widget) {
+				_this.note_body_editor = rich_text_widget;
+				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings);
+			}, jQuery.noop);
+		}
+	},
+
+	close: function() {
+		this.detail_widget.close();
+		this.close_callback();
+	},
+	
+	save_callback: jQuery.noop,
+	close_callback: jQuery.noop,
+	
+	settings: {
+		richtext_settings: {
+			height: 250,
+			width: 550,
+			toolbar_Full: [
+				['Link','Unlink'],
+				['Undo','Redo','-','RemoveFormat'],
+				['Source']
+			]
+		}
+	}
+
+};

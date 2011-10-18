@@ -278,3 +278,10 @@
 	<column name="log" type="blob" />
 	<column name="is_executed_by_cron_job" type="boolean" required="true" default="1" />
 </table>
+
+<table name="notes" phpName="Note">
+	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+	<column name="body" type="blob" />
+	<column name="date_start" type="date" required="true"/>
+	<column name="date_end" type="date"/>
+</table>

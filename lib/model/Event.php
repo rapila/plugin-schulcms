@@ -92,7 +92,7 @@ class Event extends BaseEvent {
 	  return $this->getEventDocuments($oCriteria);
 	}
 	
-	public function getEventPageLink($oEventPage = null) {
+	public function getEventPageLink($oEventPage = null) { 
 		if($oEventPage === null) {
 			if(!isset(self::$EVENT_PAGES[$this->getEventTypeId()])) {
 				$EVENT_PAGES[$this->getEventTypeId()] = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS).'-'.$this->getEventTypeId());
@@ -100,7 +100,6 @@ class Event extends BaseEvent {
 			$oEventPage = $EVENT_PAGES[$this->getEventTypeId()];
 		}
 		$aDateStart = explode('-', $this->getDateStart('Y-n-j'));
-		
 		return array_merge($oEventPage->getFullPathArray(), array_merge($aDateStart, array($this->getTitleNormalized())));
 	}
 
