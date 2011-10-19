@@ -673,6 +673,11 @@ abstract class BaseStudent extends BaseObject  implements Persistent
 			$deleteQuery = StudentQuery::create()
 				->filterByPrimaryKey($this->getPrimaryKey());
 			$ret = $this->preDelete($con);
+			// denyable behavior
+			if(!(StudentPeer::isIgnoringRights() || $this->mayOperate("delete"))) {
+				throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "students")));
+			}
+
 			if ($ret) {
 				$deleteQuery->delete($con);
 				$this->postDelete($con);
@@ -716,6 +721,11 @@ abstract class BaseStudent extends BaseObject  implements Persistent
 			$ret = $this->preSave($con);
 			if ($isInsert) {
 				$ret = $ret && $this->preInsert($con);
+				// denyable behavior
+				if(!(StudentPeer::isIgnoringRights() || $this->mayOperate("insert"))) {
+					throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "students")));
+				}
+
 				// extended_timestampable behavior
 				if (!$this->isColumnModified(StudentPeer::CREATED_AT)) {
 					$this->setCreatedAt(time());
@@ -736,6 +746,11 @@ abstract class BaseStudent extends BaseObject  implements Persistent
 
 			} else {
 				$ret = $ret && $this->preUpdate($con);
+				// denyable behavior
+				if(!(StudentPeer::isIgnoringRights() || $this->mayOperate("update"))) {
+					throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "students")));
+				}
+
 				// extended_timestampable behavior
 				if ($this->isModified() && !$this->isColumnModified(StudentPeer::UPDATED_AT)) {
 					$this->setUpdatedAt(time());
@@ -1719,6 +1734,26 @@ abstract class BaseStudent extends BaseObject  implements Persistent
 	public function __toString()
 	{
 		return (string) $this->exportTo(StudentPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	// denyable behavior
+	public function mayOperate($sOperation, $oUser = false) {
+		if($oUser === false) {
+			$oUser = Session::getSession()->getUser();
+		}
+		if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && StudentPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
+			return true;
+		}
+		return StudentPeer::mayOperateOn($oUser, $this, $sOperation);
+	}
+	public function mayBeInserted($oUser = false) {
+		return $this->mayOperate($oUser, "insert");
+	}
+	public function mayBeUpdated($oUser = false) {
+		return $this->mayOperate($oUser, "update");
+	}
+	public function mayBeDeleted($oUser = false) {
+		return $this->mayOperate($oUser, "delete");
 	}
 
 	// extended_timestampable behavior

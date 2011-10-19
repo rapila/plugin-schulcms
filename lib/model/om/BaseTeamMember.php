@@ -1074,6 +1074,11 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 			$deleteQuery = TeamMemberQuery::create()
 				->filterByPrimaryKey($this->getPrimaryKey());
 			$ret = $this->preDelete($con);
+			// denyable behavior
+			if(!(TeamMemberPeer::isIgnoringRights() || $this->mayOperate("delete"))) {
+				throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "team_members")));
+			}
+
 			if ($ret) {
 				$deleteQuery->delete($con);
 				$this->postDelete($con);
@@ -1117,6 +1122,11 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 			$ret = $this->preSave($con);
 			if ($isInsert) {
 				$ret = $ret && $this->preInsert($con);
+				// denyable behavior
+				if(!(TeamMemberPeer::isIgnoringRights() || $this->mayOperate("insert"))) {
+					throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "team_members")));
+				}
+
 				// extended_timestampable behavior
 				if (!$this->isColumnModified(TeamMemberPeer::CREATED_AT)) {
 					$this->setCreatedAt(time());
@@ -1137,6 +1147,11 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 
 			} else {
 				$ret = $ret && $this->preUpdate($con);
+				// denyable behavior
+				if(!(TeamMemberPeer::isIgnoringRights() || $this->mayOperate("update"))) {
+					throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "team_members")));
+				}
+
 				// extended_timestampable behavior
 				if ($this->isModified() && !$this->isColumnModified(TeamMemberPeer::UPDATED_AT)) {
 					$this->setUpdatedAt(time());
@@ -2731,6 +2746,26 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	public function __toString()
 	{
 		return (string) $this->exportTo(TeamMemberPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	// denyable behavior
+	public function mayOperate($sOperation, $oUser = false) {
+		if($oUser === false) {
+			$oUser = Session::getSession()->getUser();
+		}
+		if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && TeamMemberPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
+			return true;
+		}
+		return TeamMemberPeer::mayOperateOn($oUser, $this, $sOperation);
+	}
+	public function mayBeInserted($oUser = false) {
+		return $this->mayOperate($oUser, "insert");
+	}
+	public function mayBeUpdated($oUser = false) {
+		return $this->mayOperate($oUser, "update");
+	}
+	public function mayBeDeleted($oUser = false) {
+		return $this->mayOperate($oUser, "delete");
 	}
 
 	// extended_timestampable behavior
