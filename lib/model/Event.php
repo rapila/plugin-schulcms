@@ -25,10 +25,10 @@ class Event extends BaseEvent {
 	}
 	
 	public function isPreview() {
-	  if($this->getDateEnd() !== null) {
-	    return $this->getDateEnd('dmY') >= date('dmY');
-	  }
-	  return $this->getDateStart('dmY') >= date('dmY');
+		if($this->getDateEnd() !== null) {
+			return $this->getDateEnd('dmY') >= date('dmY');
+		}
+		return $this->getDateStart('dmY') >= date('dmY');
 	}
 	
 	public function getDateFromTo($sFormat = 'd.m.Y') {
@@ -87,9 +87,9 @@ class Event extends BaseEvent {
 	}
 	
 	public function getEventDocumentsOrdered() {
-	  $oCriteria = new Criteria();
-	  $oCriteria->addAscendingOrderByColumn(EventDocumentPeer::SORT);
-	  return $this->getEventDocuments($oCriteria);
+		$oCriteria = EventDocumentQuery::create()->orderBySort();
+		$oCriteria->joinDocument()->useQuery(DocumentPeer::OM_CLASS)->filterByDocumentKind('image');
+		return $this->getEventDocuments($oCriteria);
 	}
 	
 	public function getEventPageLink($oEventPage = null) { 

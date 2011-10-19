@@ -127,14 +127,15 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		
 		$oGalleryTemplate = new Template('lists/gallery');
 		$oGalleryItemTemplatePrototype = new Template('lists/gallery_item');
-		$sMaxSize = 1000;
+		$oGalleryItemTemplatePrototype->replaceIdentifier('thumbnail_size', 140);
+		$oGalleryItemTemplatePrototype->replaceIdentifier('full_size', 1000);
 		foreach(self::$EVENT->getEventDocumentsOrdered() as $oEventDocument) {
 			if(!$oEventDocument->getDocument()) {
 				continue;
 			}
 			$oGalleryItemTemplate = clone $oGalleryItemTemplatePrototype;
 			$oGalleryItemTemplate->replaceIdentifier('event_id', self::$EVENT->getId());
-			$oEventDocument->getDocument()->renderListItem($oGalleryItemTemplate, array('max_height' => $sMaxSize, 'max_width' => $sMaxSize));
+			$oEventDocument->getDocument()->renderListItem($oGalleryItemTemplate);
 			$oGalleryTemplate->replaceIdentifierMultiple("items", $oGalleryItemTemplate);
 		}
 		$oTemplate->replaceIdentifier('gallery', $oGalleryTemplate);
