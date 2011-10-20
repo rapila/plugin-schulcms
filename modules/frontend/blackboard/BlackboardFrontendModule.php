@@ -3,7 +3,7 @@
  * @package modules.frontend
  */
 
-class BlackboardFrontendModule extends DynamicFrontendModule implements WidgetBasedFrontendModule {
+class BlackboardFrontendModule extends DynamicFrontendModule {
 	
 	public static $DISPLAY_MODES = array('event_report_or_note', 'event_report', 'note');
 	

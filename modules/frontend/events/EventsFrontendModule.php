@@ -3,7 +3,7 @@
  * @package modules.frontend
  */
 
-class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedFrontendModule {
+class EventsFrontendModule extends DynamicFrontendModule {
 	
 	public static $DISPLAY_MODES = array('list', 'detail_context');
 
