@@ -26,9 +26,9 @@ class Event extends BaseEvent {
 	
 	public function isPreview() {
 		if($this->getDateEnd() !== null) {
-			return $this->getDateEnd('dmY') >= date('dmY');
+			return $this->getDateEnd('Ymd') >= date('Ymd');
 		}
-		return $this->getDateStart('dmY') >= date('dmY');
+		return $this->getDateStart('Ymd') >= date('Ymd');
 	}
 	
 	public function getDateFromTo($sFormat = 'd.m.Y') {
