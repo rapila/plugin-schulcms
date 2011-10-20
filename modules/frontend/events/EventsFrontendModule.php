@@ -185,11 +185,10 @@ class EventsFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 		$aOptions = @unserialize($this->getData()); 
 		return $aOptions;
 	}
-	
-	public function widgetSave($mData) {
+
+	public function getSaveData($mData) {
 		$mData['event_limit'] = $mData['event_limit'] === '' ? null : $mData['event_limit']; 
-		$this->oLanguageObject->setData(serialize($mData));
-		return $this->oLanguageObject->save();
+		return parent::getSaveData($mData);
 	}
 	
 	public function getWidget() {

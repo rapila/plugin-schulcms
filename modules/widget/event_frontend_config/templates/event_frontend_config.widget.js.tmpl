@@ -1,4 +1,4 @@
-Widget.types.event_edit = { 
+Widget.types.event_frontend_config = { 
 	prepare: function() {
 		var _this = this;
 		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
@@ -62,8 +62,8 @@ Widget.types.event_edit = {
 		});
 	},
 	
-	save: function(callback) {
-		this.saveData(this._element.serializeArrayKV(), callback);
+	save: function() {
+		return this._element.serializeArrayKV();
 	},
 	
 	additional_buttons: [

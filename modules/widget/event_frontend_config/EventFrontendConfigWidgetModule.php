@@ -1,5 +1,5 @@
 <?php
-class EventEditWidgetModule extends EditWidgetModule { 
+class EventFrontendConfigWidgetModule extends FrontendConfigWidgetModule { 
 
 	public function getDisplayModes() {
 	  $aResult = array();
