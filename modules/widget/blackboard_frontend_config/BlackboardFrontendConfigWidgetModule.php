@@ -1,5 +1,5 @@
 <?php
-class BlackboardEditWidgetModule extends EditWidgetModule { 
+class BlackboardFrontendConfigWidgetModule extends EditWidgetModule { 
 
 	public function getDisplayModes() {
 		$aResult = array();

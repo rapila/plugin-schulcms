@@ -76,14 +76,9 @@ class BlackboardFrontendModule extends DynamicFrontendModule implements WidgetBa
 		return $aOptions[self::MODE_SELECT_KEY];
 	}
 	
-	public function widgetSave($mData) {
-		$this->oLanguageObject->setData(serialize($mData));
-		return $this->oLanguageObject->save();
-	}
-	
 	public function getWidget() {
 		$aOptions = @unserialize($this->getData()); 
-		$oWidget = new BlackboardEditWidgetModule(null, $this);
+		$oWidget = new BlackboardFrontendConfigWidgetModule(null, $this);
 		$oWidget->setDisplayMode($aOptions[self::MODE_SELECT_KEY]);
 		return $oWidget;
 	}

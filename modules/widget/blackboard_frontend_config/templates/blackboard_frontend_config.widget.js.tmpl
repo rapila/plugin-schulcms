@@ -1,17 +1,16 @@
-Widget.types.blackboard_edit = { 
+Widget.types.blackboard_frontend_config = { 
 	prepare: function() {
 		var _this = this;
 		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
 		this._element.append(this.content);
 		
 		// display_mode
-		console.log(this.getDisplayModes());
 		this.mode_dropdown = this.content.find("select[name='display_mode']");
 		this.mode_dropdown.populate(this.getDisplayModes(), this.getDisplayMode());
 	},
 	
-	save: function(callback) {
-		this.saveData(this._element.serializeArrayKV(), callback);
+	save: function() {
+		return this._element.serializeArrayKV();
 	},
 	
 	additional_buttons: [
