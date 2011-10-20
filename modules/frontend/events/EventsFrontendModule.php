@@ -114,12 +114,6 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		}
 
 		$oTemplate->replaceIdentifier('body', $sBody);
-		if(self::$EVENT->isPreview()) {
-			if(self::$EVENT->getLocationInfo())	 {
-				$oTemplate->replaceIdentifier('location_info', self::$EVENT->getLocationInfo());
-			}
-      $oTemplate->replaceIdentifier('time_details', self::$EVENT->getTimeDetails());
-		}
 		$oTemplate->replaceIdentifier('list_link', LinkUtil::link($oPage->getFullPathArray()));
 		$oTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
 		$oTemplate->replaceIdentifier('date', self::$EVENT->getDateFromTo());
@@ -142,8 +136,17 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		return $oTemplate;
 	}
 	
-	public function renderDetailContext() {
-		
+	public function renderDetailContext() { 
+		if(self::$EVENT === null  || (self::$EVENT->getTimeDetails() == null && self::$EVENT->getLocationInfo() == null)) {
+			return null;
+		}
+		if(self::$EVENT->isReview()) {
+			return null;
+		}
+		$oTemplate = $this->constructTemplate('detail_context');
+		$oTemplate->replaceIdentifier('location_info', self::$EVENT->getLocationInfo());
+		$oTemplate->replaceIdentifier('time_details', self::$EVENT->getTimeDetails());
+		return $oTemplate;
 	}
 	
 	public function renderDetailTeaser($oEvent = null, $sClassLink = null) {
@@ -193,7 +196,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	
 	public function getWidget() {
 		$aOptions = @unserialize($this->getData()); 
-		$oWidget = new EventEditWidgetModule(null, $this);
+		$oWidget = new EventFrontendConfigWidgetModule(null, $this);
 		$oWidget->setDisplayMode($aOptions);
 		return $oWidget;
 	}
