@@ -1,4 +1,4 @@
-Widget.types.classes_edit = {
+Widget.types.classes_frontend_config = {
 	prepare: function() {
 		var _this = this;
 		
@@ -44,9 +44,8 @@ Widget.types.classes_edit = {
 		});
 	},
 	
-	save: function(callback) {
-		var data = this.mode_dropdown.val();
-		this.saveData(data, callback);
+	save: function() {
+		return this.mode_dropdown.val();
 	},
 	
 	additional_buttons: [

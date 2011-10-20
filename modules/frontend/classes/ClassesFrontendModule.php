@@ -279,14 +279,9 @@ class ClassesFrontendModule extends DynamicFrontendModule implements WidgetBased
 		return $aOptions[self::MODE_SELECT_KEY];
 	}
 	
-	public function widgetSave($mData) {
-		$this->oLanguageObject->setData(serialize(array(self::MODE_SELECT_KEY => $mData)));
-		return $this->oLanguageObject->save();
-	}
-	
 	public function getWidget() {
 		$aOptions = @unserialize($this->getData()); 
-		$oWidget = new ClassesEditWidgetModule(null, $this);
+		$oWidget = new ClassesFrontendConfigWidgetModule(null, $this);
 		$oWidget->setDisplayMode($aOptions[self::MODE_SELECT_KEY]);
 		return $oWidget;
 	}

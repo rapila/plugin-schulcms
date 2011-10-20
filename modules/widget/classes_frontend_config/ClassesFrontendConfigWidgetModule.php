@@ -1,5 +1,5 @@
 <?php
-class ClassesEditWidgetModule extends PersistentWidgetModule {
+class ClassesFrontendConfigWidgetModule extends PersistentWidgetModule {
 	private $oFrontendModule;
 	private $sDisplayMode;
 	
@@ -39,9 +39,5 @@ class ClassesEditWidgetModule extends PersistentWidgetModule {
 			}
 		}		
 		return $aResult;
-	}
-	
-	public function saveData($mData) {
-		return $this->oFrontendModule->widgetSave($mData);
 	}
 }
