@@ -1,4 +1,4 @@
-Widget.types.school_edit = {
+Widget.types.school_frontend_config = {
 	prepare: function() {
 		var _this = this;
 		
@@ -13,8 +13,7 @@ Widget.types.school_edit = {
 		this._element.append(this.mode_dropdown);
 	},
 		
-	save: function(callback) {
-		var data = this.mode_dropdown.val();
-		this.saveData(data, callback);
+	save: function() {
+		return this.mode_dropdown.val();
 	}
 };

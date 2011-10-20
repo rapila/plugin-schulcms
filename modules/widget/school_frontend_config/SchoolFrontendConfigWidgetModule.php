@@ -1,5 +1,5 @@
 <?php
-class SchoolEditWidgetModule extends PersistentWidgetModule {
+class SchoolFrontendConfigWidgetModule extends PersistentWidgetModule {
 	private $oFrontendModule;
 	private $sDisplayMode;
 	
@@ -23,9 +23,5 @@ class SchoolEditWidgetModule extends PersistentWidgetModule {
 	    $aResult[$sDisplayMode] = StringPeer::getString('school.display_mode.'.$sDisplayMode, null, $sDisplayMode);
 	  }
 		return $aResult;
-	}
-	
-	public function saveData($mData) {
-		return $this->oFrontendModule->widgetSave($mData);
 	}
 }

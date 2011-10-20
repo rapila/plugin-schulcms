@@ -53,7 +53,7 @@ class SchoolFrontendModule extends DynamicFrontendModule implements WidgetBasedF
 	
 	public function getWidget() {
 		$aOptions = @unserialize($this->getData()); 
-		$oWidget = new SchoolEditWidgetModule(null, $this);
+		$oWidget = new SchoolFrontendConfigWidgetModule(null, $this);
 		$oWidget->setDisplayMode($aOptions[self::MODE_SELECT_KEY]);
 		return $oWidget;
 	}
