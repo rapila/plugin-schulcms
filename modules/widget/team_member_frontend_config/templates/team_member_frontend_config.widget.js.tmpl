@@ -1,4 +1,4 @@
-Widget.types.team_member_edit = {
+Widget.types.team_member_frontend_config = {
 	prepare: function() {
 		var _this = this;
 		this._element.append(jQuery.parseHTML('{{includeTemplate=edit}}'));
@@ -63,12 +63,12 @@ Widget.types.team_member_edit = {
 		return function_groups;
 	},
 	
-	save: function(callback) {
+	save: function() {
 		var data = {
 			function_groups: this.selected_groups(),
 			display_mode: this.mode_dropdown.val()
 		};
-		this.saveData(data, callback);
+		return data;
 	},
 	
 	additional_buttons: [

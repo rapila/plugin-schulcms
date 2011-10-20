@@ -120,13 +120,8 @@ class TeamMembersFrontendModule extends DynamicFrontendModule implements WidgetB
 		return $aOptions;
 	}
 	
-	public function widgetSave($mData) {
-		$this->oLanguageObject->setData(serialize($mData));
-		return $this->oLanguageObject->save();
-	}
-	
 	public function getWidget() {
-		$oWidget = new TeamMemberEditWidgetModule(null, $this);
+		$oWidget = new TeamMemberFrontendConfigWidgetModule(null, $this);
 		return $oWidget;
 	}
 }

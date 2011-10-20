@@ -1,5 +1,5 @@
 <?php
-class TeamMemberEditWidgetModule extends PersistentWidgetModule {
+class TeamMemberFrontendConfigWidgetModule extends PersistentWidgetModule {
 	private $oFrontendModule;
 	private $sDisplayMode;
 	private $aFunctionGroupIds;
@@ -42,9 +42,5 @@ class TeamMemberEditWidgetModule extends PersistentWidgetModule {
 			$aResult[$oFunctionGroup->getId()] = $oFunctionGroup->getName();
 		}
 		return $aResult;
-	}
-	
-	public function saveData($mData) {
-		return $this->oFrontendModule->widgetSave($mData);
 	}
 }
