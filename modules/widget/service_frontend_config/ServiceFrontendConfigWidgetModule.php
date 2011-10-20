@@ -1,5 +1,5 @@
 <?php
-class ServiceEditWidgetModule extends PersistentWidgetModule { 
+class ServiceFrontendConfigWidgetModule extends PersistentWidgetModule { 
 	private $oFrontendModule;
 	private $sDisplayMode;
 	private $aServiceCategoryIds;
@@ -52,9 +52,5 @@ class ServiceEditWidgetModule extends PersistentWidgetModule {
 			$aResult[$oService->getId()] = $sPrefix.$oService->getName();
 		}
 		return $aResult;
-	}
-	
-	public function saveData($mData) {
-		return $this->oFrontendModule->widgetSave($mData);
 	}
 }

@@ -203,13 +203,8 @@ class ServicesFrontendModule extends DynamicFrontendModule implements WidgetBase
 		return $aOptions;
 	}
 	
-	public function widgetSave($mData) {
-		$this->oLanguageObject->setData(serialize($mData));
-		return $this->oLanguageObject->save();
-	}
-	
 	public function getWidget() {
-		$oWidget = new ServiceEditWidgetModule(null, $this);
+		$oWidget = new ServiceFrontendConfigWidgetModule(null, $this);
 		return $oWidget;
 	}
 

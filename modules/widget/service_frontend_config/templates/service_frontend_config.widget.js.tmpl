@@ -1,4 +1,4 @@
-Widget.types.service_edit = { 
+Widget.types.service_frontend_config = { 
 	prepare: function() {
 		var _this = this;
 		this._element.append(jQuery.parseHTML('{{includeTemplate=edit}}'));
@@ -73,14 +73,14 @@ Widget.types.service_edit = {
 		return selected_service_categories;
 	},
 	
-	save: function(callback) {
+	save: function() {
 		var service_id = this.mode_dropdown.val() === 'service_liste' ? null : this.services_dropdown.val();
 		var data = {
 			service_category_id: this.selected_service_categories(),
 			display_mode: this.mode_dropdown.val(),
 			service_id: service_id
 		};
-		this.saveData(data, callback);
+		return data;
 	},
 
 	additional_buttons: [
