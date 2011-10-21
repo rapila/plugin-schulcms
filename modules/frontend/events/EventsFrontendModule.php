@@ -116,7 +116,11 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$oTemplate->replaceIdentifier('body', $sBody);
 		$oTemplate->replaceIdentifier('list_link', LinkUtil::link($oPage->getFullPathArray()));
 		$oTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
-		$oTemplate->replaceIdentifier('date', self::$EVENT->getDateFromTo());
+		if(self::$EVENT->getDateEnd() == null) {
+			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getWeekdayName().', '.self::$EVENT->getDatumWithMonthName());
+		} else {
+			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getDateFromTo());
+		}
 		$oTemplate->replaceIdentifier('teaser', self::$EVENT->getTeaser());
 		
 		$oGalleryTemplate = new Template('lists/gallery');
