@@ -45,7 +45,7 @@ Widget.types.note_detail = {
 			this.content.find("input[name='date_end']").val(note_data.DateEnd);
 			this.content.find(".updated_info").text(note_data.UpdatedInfo);
 			this.content.find(".created_info").text(note_data.CreatedInfo);
-			this.detail_widget.set_title(this.detail_widget.settings.title = note_data.Id);
+			this.detail_widget.set_title(this.detail_widget.settings.title = "{{writeString=wns.note_of}} "+note_data.DateStart);
 			this.note_body.ensureWidget(function(widget) {
 				widget.set_data(note_data.NoteBody);
 			});

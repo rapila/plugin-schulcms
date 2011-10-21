@@ -88,6 +88,10 @@ class Event extends BaseEvent {
 		return $this->countEventDocuments() > 0;
 	}
 	
+	public function getHasImages() {
+		return $this->hasImages();
+	}
+	
 	public function hasReviewText() {
 		return $this->getBodyReview() !== null;
 	}
@@ -96,6 +100,10 @@ class Event extends BaseEvent {
 		return $this->isReview() && $this->hasReviewText();
 	}
 	
+	public function getHasBericht() {
+		return $this->hasBericht();
+	}
+
 	public function getEventDocumentsOrdered() {
 		$oCriteria = EventDocumentQuery::create()->orderBySort();
 		$oCriteria->joinDocument()->useQuery(DocumentPeer::OM_CLASS)->filterByDocumentKind('image');

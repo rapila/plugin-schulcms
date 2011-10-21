@@ -48,7 +48,11 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 		} else {
 		  $oNote = NotePeer::retrieveByPK($this->iNoteId);
 		}
-		$oNote->setDateStart($aNoteData['date_start']);
+		$sDateStart = $aNoteData['date_start'];
+		if($sDateStart == '') {
+			$sDateStart = date('Y-m-d');
+		}
+		$oNote->setDateStart($sDateStart);
 		$oNote->setDateEnd($aNoteData['date_end']);
 		$this->validate($aNoteData);
 		$oNote->setBody(RichtextUtil::parseInputFromMceForStorage($aNoteData['body']));

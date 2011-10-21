@@ -5,7 +5,7 @@
 
 class BlackboardFrontendModule extends DynamicFrontendModule {
 	
-	public static $DISPLAY_MODES = array('event_report_or_note', 'event_report', 'note');
+	public static $DISPLAY_MODES = array('event_report_or_note', 'event_note_or_report', 'event_report', 'note');
 	
 	const MODE_SELECT_KEY = 'display_mode';
 	
@@ -16,6 +16,7 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 		}
 		switch($aOptions[self::MODE_SELECT_KEY]) {
 			case 'event_report_or_note': return $this->renderEventReportOrNote();
+			case 'event_note_or_report': return $this->renderNoteOrEventReport();
 			default:
 				return null;
 		}
@@ -29,6 +30,16 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 		}
 		// handle notes
 		return $this->renderNote();
+	}
+	
+	public function renderNoteOrEventReport() {
+		// handle note if exist
+		$oNote = $this->renderNote();
+		if($oNote !== null) {
+			return $oNote;
+		}
+		// handle event report
+		return $this->renderEventReport();
 	}
 	
 	public function renderNote() {
@@ -45,8 +56,8 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 	
 	public function renderEventReport() {
 		// display event if has recent report or images
-		$iDaysBack = 30;
-		$sDate = date('Y-m-d', time() - ($iDaysBack * 24 * 60 * 60));
+		$iRecentDaysBack = Settings::getSetting('school_settings', 'event_is_recent_day_count', 30);
+		$sDate = date('Y-m-d', time() - ($iRecentDaysBack * 24 * 60 * 60));
 		$oQuery = EventQuery::create()->filterByDateRangeReview()->filterbyHasImagesOrReview()->filterBySchoolClassId(null, Criteria::ISNULL)->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
 		$oEvent = $oQuery->orderByUpdatedAt(Criteria::DESC)->findOne();
 		if($oEvent === null) {

@@ -34,7 +34,7 @@ class EventListWidgetModule extends WidgetModule {
 	}
 	
 	public function getColumnIdentifiers() {
-		return array('id', 'title', 'teaser_truncated', 'date_start_formatted', 'is_class_event', 'is_service_event', 'is_active', 'show_on_frontpage', 'delete');
+		return array('id', 'title', 'teaser_truncated', 'date_start_formatted', 'is_class_event', 'is_service_event', 'is_active', 'has_bericht', 'has_images', 'delete');
 	}
 	
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -60,8 +60,13 @@ class EventListWidgetModule extends WidgetModule {
 			case 'is_active':
 				$aResult['heading'] = StringPeer::getString('wns.is_online');
 				break;
-			case 'show_on_frontpage':
-				$aResult['heading'] = StringPeer::getString('wns.event.show_on_frontpage');
+			case 'has_images':
+				$aResult['heading'] = StringPeer::getString('event.has_images');
+				$aResult['is_sortable'] = false;
+				break;
+			case 'has_bericht':
+				$aResult['heading'] = StringPeer::getString('event.has_bericht');
+				$aResult['is_sortable'] = false;
 				break;
 			case 'delete':
 				$aResult['heading'] = ' ';
