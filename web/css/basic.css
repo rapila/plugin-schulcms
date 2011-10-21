@@ -143,6 +143,7 @@ a.event_teaser_classlink{margin-left:1em}
 img.service_logo{float:right;margin:0 1em 1em 2em}
 .not_found_page{border:1px solid #5e61a8;padding:1em}
 #aktuell_container,.events a.active,#content_main li em,#content_main h2,a:hover,#content_main h1,#content_main h2,.highlight{color:#5e61a8}
+.today{padding-left:3px;border:1px solid #999}
 #sidebar_right .links{margin-top:1.5em}
 #sidebar_right .links h2{margin-bottom:.3em}
 td.status_icons,td.status_icons a{width:20px}

@@ -1,6 +1,6 @@
 <div class="detail_info">
 	<h2 style="margin-bottom:0;">Infos</h2>
-	<label>{{writeString=wns.event.when}} {{today}}</label>
+	<label>{{writeString=wns.event.when}}{{identifierContext=start;name=today}} <span class="today">{{today}}</span>{{identifierContext=end;name=today}}</label>
 	<div>{{date_info}}{{identifierContext=start;name=time_details}}<br />Zeit: {{time_details}}{{identifierContext=end;name=time_details}}</div>{{identifierContext=start;name=location_info}}
 	<label>{{writeString=wns.event.where}}</label>
 	<div>{{location_info}}</div>{{identifierContext=end;name=location_info}}

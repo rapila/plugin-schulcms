@@ -146,7 +146,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getDateFromTo());
 		}
 		if(self::$EVENT->getDateStart('Ymd') === date('Ymd')) {
-			$oTemplate->replaceIdentifier('today', '<b class="highlight">Heute!</b>', null, Template::NO_HTML_ESCAPE);
+			$oTemplate->replaceIdentifier('today', StringPeer::getString('wns.event.today'));
 		}
 		$oTemplate->replaceIdentifier('location_info', self::$EVENT->getLocationInfo());
 		$oTemplate->replaceIdentifier('time_details', self::$EVENT->getTimeDetails());
