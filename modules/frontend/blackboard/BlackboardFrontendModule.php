@@ -10,7 +10,7 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 	const MODE_SELECT_KEY = 'display_mode';
 	
 	public function renderFrontend() {
-		$aOptions = @unserialize($this->getData());
+		$aOptions = $this->widgetData();
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
 			return null;
 		}
@@ -71,16 +71,14 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 		return $oTemplate;
 	}
 	
-	public function widgetData() {
-		$aOptions = @unserialize($this->getData()); 
-		return $aOptions[self::MODE_SELECT_KEY];
-	}
-	
-	public function getWidget() {
-		$aOptions = @unserialize($this->getData()); 
-		$oWidget = new BlackboardFrontendConfigWidgetModule(null, $this);
-		$oWidget->setDisplayMode($aOptions[self::MODE_SELECT_KEY]);
-		return $oWidget;
+	public function renderBackend() {
+		$oTemplate = $this->constructTemplate('config');
+		$aOptions = array();
+		foreach(BlackboardFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
+			$aOptions[$sDisplayMode] = StringPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);
+		}
+		$oTemplate->replaceIdentifier('options', TagWriter::optionsFromArray($aOptions, null, null, null));
+		return $oTemplate;
 	}
 
 }
