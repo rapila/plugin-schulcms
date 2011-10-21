@@ -44,8 +44,8 @@ ul#meta_navigation{position:absolute;top:0;padding-top:.5em;left:188px;right:0;h
 ul#main_navigation{display:block;padding-bottom:.6em}
 ul#main_navigation.home{right:194px;margin-top:20px}
 ul#main_navigation.outside{top:5px}
-#blackboard_text{margin-top:20px;margin-left:218px;color:background-color;height:80px;vertical-align:middle}
-#blackboard_text p{color:background-color;line-height:1.2em;font-size:3em;vertical-align:middle}
+#blackboard_text{margin-top:20px;margin-left:218px;color:#e6e4cc;height:80px;vertical-align:middle}
+#blackboard_text p{color:#e6e4cc;line-height:1.2em;font-size:3em;vertical-align:middle}
 #blackboard_text a.blackboard_more_link{font-size:.6em}
 #spacer{height:75px}
 ul#secondary_navigation{margin-top:142px}
