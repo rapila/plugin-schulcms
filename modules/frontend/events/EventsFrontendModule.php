@@ -137,12 +137,8 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	}
 	
 	public function renderDetailContext() { 
-		if(self::$EVENT === null  || (self::$EVENT->getTimeDetails() == null && self::$EVENT->getLocationInfo() == null)) {
-			return null;
-		}
-		if(self::$EVENT->isReview()) {
-			return null;
-		}
+		if(self::$EVENT === null) return null;
+		if(self::$EVENT->getTimeDetails() == null && self::$EVENT->getLocationInfo() == null) return null;
 		$oTemplate = $this->constructTemplate('detail_context');
 		if(self::$EVENT->getDateEnd() == null) {
 			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getWeekdayName().', '.self::$EVENT->getDatumWithMonthName());
