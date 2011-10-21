@@ -65,7 +65,7 @@ ul#secondary_navigation li{padding:.2em 1em}
 #sidebar_right h2{margin-top:22px}
 #sidebar_right h2:first-child,#sidebar_right img:first-child + h2{margin-top:0}
 #sidebar_right .sidebar_detail{position:fixed;width:190px}
-#sidebar_right .class_info p{padding:.2em .2em;border-bottom:1px solid #c9c5b3}
+#sidebar_right .detail_info p{padding:.2em .2em;border-bottom:1px solid #c9c5b3}
 #sidebar_right h1,#sidebar_right h2{font-size:13px;border-bottom:1px solid #5a2323;background-color:#5e61a8}
 .home #sidebar_right{top:192px}
 #content_main{margin-top:170px;margin-right:194px}
@@ -106,9 +106,9 @@ table.statistics_list{margin-top:-5px}
 .row:first-child td div{border-top:none}
 a.stundenplan,#sidebar_right a.stundenplan{background:transparent url("../images/pdf.png") no-repeat center left;width:15px;padding-right:2px;float:right}
 a.stundenplan:hover{background:transparent url("../images/pdf_hover.png") no-repeat center left}
-.class_info a.stundenplan{display:inline-block}
-.class_info label,#sidebar_right h4{margin:0;padding:0;font-weight:normal;font-size:inherit;display:block;font-style:oblique;margin-top:.8em;color:#5e61a8}
-.class_info label:first-child{margin-top:0}
+.detail_info a.stundenplan{display:inline-block}
+.detail_info label,#sidebar_right h4{margin:0;padding:0;font-weight:normal;font-size:inherit;display:block;font-style:oblique;margin-top:.8em;color:#5e61a8}
+.detail_info label:first-child{margin-top:0}
 ul.class_teachers{margin-top:.3em}
 ul.class_teachers li{padding-bottom:0}
 #content_main h1,#content_main h2{margin-top:0;margin-bottom:9px}
@@ -116,12 +116,12 @@ ul.class_teachers li{padding-bottom:0}
 #aktuell_container h1,#aktuell_container h2{font-size:1.3em}
 .home #content_main .inner{max-width:440px}
 .home #aktuell_container .inner{width:auto}
-.class_info span.function{font-style:oblique;display:inline-block;font-size:.9em;margin-bottom:.3em;padding-right:0}
+.detail_info span.function{font-style:oblique;display:inline-block;font-size:.9em;margin-bottom:.3em;padding-right:0}
 img{vertical-align:bottom}
 a img{border:none}
 img.class_portrait{width:668px;margin-bottom:1em}
-img.class_portrait,.class_info span{padding-right:.5em}
-.class_info span.schedule{display:inline-block;width:70px}
+img.class_portrait,.detail_info span{padding-right:.5em}
+.detail_info span.schedule{display:inline-block;width:70px}
 .date_square span{font-family:Arial;font-size:.7em}
 .date_square div{border:none}
 .date_square{background-color:#f5f173;color:#333;font-size:15px;margin-top:0;padding:5px 0 2px;width:36px;line-height:.85em;text-align:center;border-left:1px solid #d1c4c4;border-bottom:1px solid #d1c4c4;margin-bottom:.3em}
@@ -135,14 +135,14 @@ img.class_portrait,.class_info span{padding-right:.5em}
 .gallery .gallery-canvas .gallery-item .gallery-item-holder{display:block;text-align:center}
 .gallery .gallery-canvas .gallery-item .gallery-item-holder img{margin:0 auto;vertical-align:middle}
 a.event_teaser_classlink{margin-left:1em}
-.class_info h1 a{color:#f6f6f6}
+.detail_info h1 a{color:#f6f6f6}
 .date{font-style:oblique}
 .wraptocenter{background:#f1f1f1;display:table-cell;text-align:center;vertical-align:middle;width:163px;height:163px}
 .wraptocenter *{vertical-align:middle}
 .align_right{text-align:right}
 img.service_logo{float:right;margin:0 1em 1em 2em}
 .not_found_page{border:1px solid #5e61a8;padding:1em}
-#aktuell_container,.events a.active,#content_main li em,#content_main h2,a:hover,#content_main h1,#content_main h2{color:#5e61a8}
+#aktuell_container,.events a.active,#content_main li em,#content_main h2,a:hover,#content_main h1,#content_main h2,.highlight{color:#5e61a8}
 #sidebar_right .links{margin-top:1.5em}
 #sidebar_right .links h2{margin-bottom:.3em}
 td.status_icons,td.status_icons a{width:20px}

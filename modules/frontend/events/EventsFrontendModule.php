@@ -20,9 +20,9 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$this->iEventTypeId = $aOptions[self::MODE_EVENT_TYPE_ID];
 		if(self::$EVENT === null && isset($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY])) {
 			self::$EVENT = EventPeer::retrieveByPK($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY]);
-			if(self::$EVENT) {
-				return $this->renderDetail();
-			}
+		}
+		if(self::$EVENT) {
+			return $this->renderDetail();
 		}
 		if($aOptions[self::MODE_SELECT_KEY] === 'list') {
 			return $this->renderList($aOptions[self::MODE_EVENT_LIMIT]);
@@ -144,8 +144,18 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			return null;
 		}
 		$oTemplate = $this->constructTemplate('detail_context');
+		if(self::$EVENT->getDateEnd() == null) {
+			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getWeekdayName().', '.self::$EVENT->getDatumWithMonthName());
+		} else {
+			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getDateFromTo());
+		}
+		if(self::$EVENT->getDateStart('Ymd') === date('Ymd')) {
+			$oTemplate->replaceIdentifier('today', '<b class="highlight">Heute!</b>', null, Template::NO_HTML_ESCAPE);
+		}
 		$oTemplate->replaceIdentifier('location_info', self::$EVENT->getLocationInfo());
 		$oTemplate->replaceIdentifier('time_details', self::$EVENT->getTimeDetails());
+		
+
 		return $oTemplate;
 	}
 	

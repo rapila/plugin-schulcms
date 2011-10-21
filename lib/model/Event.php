@@ -45,6 +45,16 @@ class Event extends BaseEvent {
 		return $this->getDateStart('d.').' bis '.$this->getDateEnd($sFormat);
 	}
 	
+	public function getWeekdayName() {
+		return LocaleUtil::getDayNameByWeekDay($this->getDateStart('w'));
+	}
+
+	public function getDatumWithMonthName() {
+		if($this->getDateStart() != null) {
+			return $this->getDateStart('j').'. '.LocaleUtil::getMonthNameByMonthId($this->getDateStart('n')).' '.$this->getDateStart('Y');
+		}
+	}
+	
 	public function getLastDate($sFormat = 'd.m.Y') {
 		if($this->getDateEnd()) {
 			return $this->getDateEnd($sFormat);
