@@ -51,8 +51,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		if($iLimit !== null) {
 			$oEventQuery->filterByIgnoreOnFrontpage(false);
 			$oEventQuery->limit($iLimit);
-		}
-		
+		}		
 		$sOddEven = 'odd';
 		LocaleUtil::setLocaleToLanguageId(Session::language(), LC_TIME);
 		
@@ -153,10 +152,9 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		if(self::$EVENT->getDateStart('Ymd') === date('Ymd')) {
 			$oTemplate->replaceIdentifier('today', StringPeer::getString('wns.event.today'));
 		}
-		$oTemplate->replaceIdentifier('location_info', self::$EVENT->getLocationInfo());
-		$oTemplate->replaceIdentifier('time_details', self::$EVENT->getTimeDetails());
+		$oTemplate->replaceIdentifier('location_info', self::$EVENT->getLocationInfo() == null ? null : self::$EVENT->getLocationInfo());
+		$oTemplate->replaceIdentifier('time_details', self::$EVENT->getTimeDetails() == null ? null : self::$EVENT->getTimeDetails());
 		
-
 		return $oTemplate;
 	}
 	
