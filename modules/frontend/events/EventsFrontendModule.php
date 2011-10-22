@@ -49,6 +49,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$oEventQuery->orderByDateStart();
 
 		if($iLimit !== null) {
+			$oEventQuery->filterByIgnoreOnFrontpage(false);
 			$oEventQuery->limit($iLimit);
 		}
 		
@@ -141,7 +142,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	}
 	
 	public function renderDetailContext() { 
-		if(self::$EVENT === null) return null;
+		if(self::$EVENT === null || self::$EVENT->isReview()) return null;
 		if(self::$EVENT->getTimeDetails() == null && self::$EVENT->getLocationInfo() == null) return null;
 		$oTemplate = $this->constructTemplate('detail_context');
 		if(self::$EVENT->getDateEnd() == null) {
@@ -161,7 +162,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	
 	public function renderDetailTeaser($oEvent = null, $sClassLink = null) {
 		if($oEvent === null) {
-			$oEvent = EventQuery::create()->filterByShowOnFrontpage(true)->filterByDateRangePreview()->orderByRand()->findOne();
+			$oEvent = EventQuery::create()->filterByIgnoreOnFrontpage(true)->filterByDateRangePreview()->orderByRand()->findOne();
 		}
 		if($oEvent === null) {
 			return null;
@@ -194,21 +195,8 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		}
 	}
 	
-	public function widgetData() {
-		$aOptions = @unserialize($this->getData()); 
-		return $aOptions;
-	}
-
 	public function getSaveData($mData) {
 		$mData['event_limit'] = $mData['event_limit'] === '' ? null : $mData['event_limit']; 
 		return parent::getSaveData($mData);
 	}
-	
-	public function getWidget() {
-		$aOptions = @unserialize($this->getData()); 
-		$oWidget = new EventFrontendConfigWidgetModule(null, $this);
-		$oWidget->setDisplayMode($aOptions);
-		return $oWidget;
-	}
-
 }

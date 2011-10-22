@@ -127,6 +127,7 @@ img.class_portrait,.detail_info span{padding-right:.5em}
 .date_square{background-color:#f5f173;color:#333;font-size:15px;margin-top:0;padding:5px 0 2px;width:36px;line-height:.85em;text-align:center;border-left:1px solid #d1c4c4;border-bottom:1px solid #d1c4c4;margin-bottom:.3em}
 .date_square.passed{background-color:#f7f7f7}
 .gallery .gallery-canvas{display:inline-block;position:relative;width:165px;height:165px;line-height:165px;margin-right:2px}
+.gallery{margin-top:.6em}
 .gallery .gallery-canvas .gallery-frame,.gallery .gallery-canvas .gallery-item,.gallery .gallery-canvas .gallery-item .gallery-item-holder{position:absolute;top:0;left:0;right:0;bottom:0;z-index:0}
 .gallery a,.gallery span{display:block}
 .gallery .gallery-canvas .gallery-frame{z-index:1;background:transparent url("../images/slide_frame.png") no-repeat scroll center center}
@@ -137,6 +138,7 @@ img.class_portrait,.detail_info span{padding-right:.5em}
 a.event_teaser_classlink{margin-left:1em}
 .detail_info h1 a{color:#f6f6f6}
 .date{font-style:oblique}
+.container-content .date{margin-bottom:.6em}
 .wraptocenter{background:#f1f1f1;display:table-cell;text-align:center;vertical-align:middle;width:163px;height:163px}
 .wraptocenter *{vertical-align:middle}
 .align_right{text-align:right}

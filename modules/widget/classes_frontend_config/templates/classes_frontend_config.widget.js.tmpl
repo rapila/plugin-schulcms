@@ -2,10 +2,11 @@ Widget.types.classes_frontend_config = {
 	prepare: function() {
 		var _this = this;
 		
+		var config = this.getConfigData() || {};
+		
 		this.mode_dropdown = jQuery("<select/>").addClass('ui-widget-content');
-		this.mode_dropdown.populate(this.getDisplayModes(), this.getDisplayMode());
+		this.mode_dropdown.populate(this.getDisplayModes(), config.display_mode);
 		this.mode_dropdown.change(function() {
-			_this.setDisplayMode(_this.mode_dropdown.val());
 			_this.reload_preview(_this.mode_dropdown.val());
 		});
 		
@@ -45,7 +46,7 @@ Widget.types.classes_frontend_config = {
 	},
 	
 	save: function() {
-		return this.mode_dropdown.val();
+		return {display_mode: this.mode_dropdown.val()};
 	},
 	
 	additional_buttons: [

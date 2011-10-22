@@ -114,14 +114,4 @@ class TeamMembersFrontendModule extends DynamicFrontendModule {
 		$oTeamMemberQuery->orderByLastName()->orderByFirstName();
 		return $oTeamMemberQuery;
 	}
-
-	public function widgetData() {
-		$aOptions = @unserialize($this->getData()); 
-		return $aOptions;
-	}
-	
-	public function getWidget() {
-		$oWidget = new TeamMemberFrontendConfigWidgetModule(null, $this);
-		return $oWidget;
-	}
 }

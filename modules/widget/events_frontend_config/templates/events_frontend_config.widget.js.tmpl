@@ -1,0 +1,76 @@
+Widget.types.events_frontend_config = { 
+	prepare: function() {
+		var _this = this;
+		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		this._element.append(this.content);
+		
+		this.result_list = this._element.find('ol.ui-editable-items-list');
+		this.list_options = this._element.find('div.list_option_only');
+
+		// display options
+		var options_groups = this.getDisplayModes();
+		var options_set = this.getConfigData() || {};
+		
+		// display_mode
+		this.mode_dropdown = this.content.find("select[name='display_mode']");
+		this.mode_dropdown.populate(options_groups.display_modes, options_set.display_mode);
+		this.mode_dropdown.change(function() {
+			_this.reload_preview();
+		});
+		// event_type_id
+		this.type_dropdown = this.content.find("select[name='event_type_id']");
+		this.type_dropdown.populate(options_groups.event_types, options_set.event_type_id);
+		this.type_dropdown.change(function() {
+			_this.reload_preview();
+		});
+		// event limit
+		this.limit_dropdown = this.content.find("select[name='event_limit']");
+		this.limit_dropdown.populate(options_groups.event_limits, options_set.event_limit);
+		this.limit_dropdown.change(function() {
+			_this.reload_preview();
+		});
+		this.reload_preview();
+		
+		var detail_widget;
+		Widget.create('event_detail', function(widget) {
+			_this.detail_widget = widget;
+			widget.save_callback = _this.reload_preview.bind(_this);
+		});
+
+		this.result_list.delegate('li', 'click', function() {
+			var id = jQuery(this).data('id');
+			_this.detail_widget.setEventId(id);
+			_this.detail_widget.fill_data();
+			_this.detail_widget.open();
+		});
+	},
+	
+	reload_preview: function() {
+		var display_mode = this.mode_dropdown.val();
+		var result_list = this.result_list;
+		result_list.empty();
+		if(display_mode === 'detail_context') {
+			this.list_options.hide();
+			return;
+		}
+		this.list_options.show();
+
+		this.allEvents(this.type_dropdown.val(), this.limit_dropdown.val(), function(events) {
+			jQuery.each(events, function(id, title) {
+				result_list.append(jQuery('<li/>').text(title).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', id));
+			});
+		});
+	},
+	
+	save: function() {
+		return this._element.serializeArrayKV();
+	},
+	
+	additional_buttons: [
+		{
+			text: '{{writeString=events.do_admin}}',
+			icon: 'wrench',
+			action: jQuery.openLink.bind(window, "{{writeLink=events;manager=AdminManager}}")
+		}
+	]
+};

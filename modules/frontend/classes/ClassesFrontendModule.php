@@ -273,17 +273,4 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		}
 		return $oTemplate;
 	}
-	
-	public function widgetData() {
-		$aOptions = @unserialize($this->getData()); 
-		return $aOptions[self::MODE_SELECT_KEY];
-	}
-	
-	public function getWidget() {
-		$aOptions = @unserialize($this->getData()); 
-		$oWidget = new ClassesFrontendConfigWidgetModule(null, $this);
-		$oWidget->setDisplayMode($aOptions[self::MODE_SELECT_KEY]);
-		return $oWidget;
-	}
-
 }

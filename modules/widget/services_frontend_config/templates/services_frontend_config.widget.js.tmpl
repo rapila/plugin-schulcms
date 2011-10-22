@@ -1,4 +1,4 @@
-Widget.types.service_frontend_config = { 
+Widget.types.services_frontend_config = { 
 	prepare: function() {
 		var _this = this;
 		this._element.append(jQuery.parseHTML('{{includeTemplate=edit}}'));
@@ -14,22 +14,24 @@ Widget.types.service_frontend_config = {
 		//Mode/Group finish callbacks
 		var finish = [];
 		
+		var config = this.getConfigData() || {};
+		
 		//Set Modes
 		this.displayModes(function(display_modes) {
-			this.mode_dropdown.populate(display_modes, this.getDisplayMode());
+			this.mode_dropdown.populate(display_modes, config.display_mode);
 			this.mode_dropdown.change(this.reload_preview.bind(this));
 		}.deferred(finish));
 
 		//Set Categories
 		this.serviceCategories(function(service_categories) {
-			this.categories_dropdown.populate(service_categories, this.getServiceCategoryIds());
+			this.categories_dropdown.populate(service_categories, config.service_category_id);
 			this.categories_dropdown.change(this.reload_preview.bind(this));
 		}.deferred(finish));
 		
 		//Set Services
 		this.allServices(null, function(services) {
 			this.services_dropdown.populate({'': "{{writeString=wns.service_detail.default}}"});
-			this.services_dropdown.populate(services, _this.getServiceId());
+			this.services_dropdown.populate(services, config.service_id);
 			this.services_dropdown.change(this.reload_preview.bind(this));
 		}.deferred(finish));
 

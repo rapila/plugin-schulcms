@@ -1,22 +1,5 @@
 <?php
-class ClassesFrontendConfigWidgetModule extends PersistentWidgetModule {
-	private $oFrontendModule;
-	private $sDisplayMode;
-	
-	public function __construct($sSessionKey, $oFrontendModule) {
-		parent::__construct($sSessionKey);
-		$this->oFrontendModule = $oFrontendModule;
-		$this->sDisplayMode = $this->oFrontendModule->widgetData();
-	}
-	
-	public function setDisplayMode($sDisplayMode) {
-		$this->sDisplayMode = $sDisplayMode;
-	}
-
-	public function getDisplayMode() {
-		return $this->sDisplayMode;
-	}
-	
+class ClassesFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	public function allClasses($iClassTypeId = null) {
 		$oCriteria = new Criteria;
 		$oCriteria->clearSelectColumns()->addSelectColumn(SchoolClassPeer::ID)->addSelectColumn(SchoolClassPeer::NAME);

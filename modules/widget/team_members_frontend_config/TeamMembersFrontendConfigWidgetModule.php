@@ -1,25 +1,5 @@
 <?php
-class TeamMemberFrontendConfigWidgetModule extends PersistentWidgetModule {
-	private $oFrontendModule;
-	private $sDisplayMode;
-	private $aFunctionGroupIds;
-	
-	public function __construct($sSessionKey, $oFrontendModule) {
-		parent::__construct($sSessionKey);
-		$this->oFrontendModule = $oFrontendModule;
-		$aData = $this->oFrontendModule->widgetData();
-		$this->sDisplayMode = $aData[TeamMembersFrontendModule::MODE_SELECT_KEY];
-		$this->aFunctionGroupIds = @$aData[TeamMembersFrontendModule::GROUPS_SELECT_KEY];
-	}
-	
-	public function getDisplayMode() {
-		return $this->sDisplayMode;
-	}
-	
-	public function getFunctionGroupIds() {
-		return $this->aFunctionGroupIds;
-	}
-
+class TeamMembersFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	public function allTeamMembers($aFunctionGroupIds = null) {
 		$oTeamMemberQuery = TeamMemberQuery::create()->excludeInactive();
 		if($aFunctionGroupIds !== null) {

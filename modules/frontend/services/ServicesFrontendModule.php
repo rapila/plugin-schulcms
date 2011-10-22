@@ -197,15 +197,4 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		}
 		return $oQuery;
 	}
-
-	public function widgetData() {
-		$aOptions = @unserialize($this->getData()); 
-		return $aOptions;
-	}
-	
-	public function getWidget() {
-		$oWidget = new ServiceFrontendConfigWidgetModule(null, $this);
-		return $oWidget;
-	}
-
 }
