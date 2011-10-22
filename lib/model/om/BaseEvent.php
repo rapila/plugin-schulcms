@@ -92,11 +92,11 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 	protected $is_active;
 
 	/**
-	 * The value for the show_on_frontpage field.
+	 * The value for the ignore_on_frontpage field.
 	 * Note: this column has a database default value of: false
 	 * @var        boolean
 	 */
-	protected $show_on_frontpage;
+	protected $ignore_on_frontpage;
 
 	/**
 	 * The value for the event_type_id field.
@@ -204,7 +204,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 	public function applyDefaultValues()
 	{
 		$this->is_active = false;
-		$this->show_on_frontpage = false;
+		$this->ignore_on_frontpage = false;
 	}
 
 	/**
@@ -384,13 +384,13 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Get the [show_on_frontpage] column value.
+	 * Get the [ignore_on_frontpage] column value.
 	 * 
 	 * @return     boolean
 	 */
-	public function getShowOnFrontpage()
+	public function getIgnoreOnFrontpage()
 	{
-		return $this->show_on_frontpage;
+		return $this->ignore_on_frontpage;
 	}
 
 	/**
@@ -768,7 +768,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 	} // setIsActive()
 
 	/**
-	 * Sets the value of the [show_on_frontpage] column.
+	 * Sets the value of the [ignore_on_frontpage] column.
 	 * Non-boolean arguments are converted using the following rules:
 	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
 	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -777,7 +777,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 	 * @param      boolean|integer|string $v The new value
 	 * @return     Event The current object (for fluent API support)
 	 */
-	public function setShowOnFrontpage($v)
+	public function setIgnoreOnFrontpage($v)
 	{
 		if ($v !== null) {
 			if (is_string($v)) {
@@ -787,13 +787,13 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 			}
 		}
 
-		if ($this->show_on_frontpage !== $v) {
-			$this->show_on_frontpage = $v;
-			$this->modifiedColumns[] = EventPeer::SHOW_ON_FRONTPAGE;
+		if ($this->ignore_on_frontpage !== $v) {
+			$this->ignore_on_frontpage = $v;
+			$this->modifiedColumns[] = EventPeer::IGNORE_ON_FRONTPAGE;
 		}
 
 		return $this;
-	} // setShowOnFrontpage()
+	} // setIgnoreOnFrontpage()
 
 	/**
 	 * Set the value of [event_type_id] column.
@@ -997,7 +997,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 				return false;
 			}
 
-			if ($this->show_on_frontpage !== false) {
+			if ($this->ignore_on_frontpage !== false) {
 				return false;
 			}
 
@@ -1046,7 +1046,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 			$this->date_end = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
 			$this->time_details = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
 			$this->is_active = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
-			$this->show_on_frontpage = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
+			$this->ignore_on_frontpage = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
 			$this->event_type_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
 			$this->service_id = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
 			$this->school_class_id = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
@@ -1581,7 +1581,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 				return $this->getIsActive();
 				break;
 			case 11:
-				return $this->getShowOnFrontpage();
+				return $this->getIgnoreOnFrontpage();
 				break;
 			case 12:
 				return $this->getEventTypeId();
@@ -1647,7 +1647,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 			$keys[8] => $this->getDateEnd(),
 			$keys[9] => $this->getTimeDetails(),
 			$keys[10] => $this->getIsActive(),
-			$keys[11] => $this->getShowOnFrontpage(),
+			$keys[11] => $this->getIgnoreOnFrontpage(),
 			$keys[12] => $this->getEventTypeId(),
 			$keys[13] => $this->getServiceId(),
 			$keys[14] => $this->getSchoolClassId(),
@@ -1744,7 +1744,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 				$this->setIsActive($value);
 				break;
 			case 11:
-				$this->setShowOnFrontpage($value);
+				$this->setIgnoreOnFrontpage($value);
 				break;
 			case 12:
 				$this->setEventTypeId($value);
@@ -1805,7 +1805,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 		if (array_key_exists($keys[8], $arr)) $this->setDateEnd($arr[$keys[8]]);
 		if (array_key_exists($keys[9], $arr)) $this->setTimeDetails($arr[$keys[9]]);
 		if (array_key_exists($keys[10], $arr)) $this->setIsActive($arr[$keys[10]]);
-		if (array_key_exists($keys[11], $arr)) $this->setShowOnFrontpage($arr[$keys[11]]);
+		if (array_key_exists($keys[11], $arr)) $this->setIgnoreOnFrontpage($arr[$keys[11]]);
 		if (array_key_exists($keys[12], $arr)) $this->setEventTypeId($arr[$keys[12]]);
 		if (array_key_exists($keys[13], $arr)) $this->setServiceId($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setSchoolClassId($arr[$keys[14]]);
@@ -1836,7 +1836,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 		if ($this->isColumnModified(EventPeer::DATE_END)) $criteria->add(EventPeer::DATE_END, $this->date_end);
 		if ($this->isColumnModified(EventPeer::TIME_DETAILS)) $criteria->add(EventPeer::TIME_DETAILS, $this->time_details);
 		if ($this->isColumnModified(EventPeer::IS_ACTIVE)) $criteria->add(EventPeer::IS_ACTIVE, $this->is_active);
-		if ($this->isColumnModified(EventPeer::SHOW_ON_FRONTPAGE)) $criteria->add(EventPeer::SHOW_ON_FRONTPAGE, $this->show_on_frontpage);
+		if ($this->isColumnModified(EventPeer::IGNORE_ON_FRONTPAGE)) $criteria->add(EventPeer::IGNORE_ON_FRONTPAGE, $this->ignore_on_frontpage);
 		if ($this->isColumnModified(EventPeer::EVENT_TYPE_ID)) $criteria->add(EventPeer::EVENT_TYPE_ID, $this->event_type_id);
 		if ($this->isColumnModified(EventPeer::SERVICE_ID)) $criteria->add(EventPeer::SERVICE_ID, $this->service_id);
 		if ($this->isColumnModified(EventPeer::SCHOOL_CLASS_ID)) $criteria->add(EventPeer::SCHOOL_CLASS_ID, $this->school_class_id);
@@ -1917,7 +1917,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 		$copyObj->setDateEnd($this->getDateEnd());
 		$copyObj->setTimeDetails($this->getTimeDetails());
 		$copyObj->setIsActive($this->getIsActive());
-		$copyObj->setShowOnFrontpage($this->getShowOnFrontpage());
+		$copyObj->setIgnoreOnFrontpage($this->getIgnoreOnFrontpage());
 		$copyObj->setEventTypeId($this->getEventTypeId());
 		$copyObj->setServiceId($this->getServiceId());
 		$copyObj->setSchoolClassId($this->getSchoolClassId());
@@ -2501,7 +2501,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 		$this->date_end = null;
 		$this->time_details = null;
 		$this->is_active = null;
-		$this->show_on_frontpage = null;
+		$this->ignore_on_frontpage = null;
 		$this->event_type_id = null;
 		$this->service_id = null;
 		$this->school_class_id = null;

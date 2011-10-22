@@ -49,7 +49,7 @@ class EventTableMap extends TableMap
 		$this->addColumn('DATE_END', 'DateEnd', 'DATE', false, null, null);
 		$this->addColumn('TIME_DETAILS', 'TimeDetails', 'VARCHAR', false, 255, null);
 		$this->addColumn('IS_ACTIVE', 'IsActive', 'BOOLEAN', false, 1, false);
-		$this->addColumn('SHOW_ON_FRONTPAGE', 'ShowOnFrontpage', 'BOOLEAN', false, 1, false);
+		$this->addColumn('IGNORE_ON_FRONTPAGE', 'IgnoreOnFrontpage', 'BOOLEAN', false, 1, false);
 		$this->addForeignKey('EVENT_TYPE_ID', 'EventTypeId', 'INTEGER', 'event_types', 'ID', false, null, null);
 		$this->addForeignKey('SERVICE_ID', 'ServiceId', 'INTEGER', 'services', 'ID', false, null, null);
 		$this->addForeignKey('SCHOOL_CLASS_ID', 'SchoolClassId', 'INTEGER', 'school_classes', 'ID', false, null, null);

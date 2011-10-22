@@ -17,7 +17,7 @@
  * @method     EventQuery orderByDateEnd($order = Criteria::ASC) Order by the date_end column
  * @method     EventQuery orderByTimeDetails($order = Criteria::ASC) Order by the time_details column
  * @method     EventQuery orderByIsActive($order = Criteria::ASC) Order by the is_active column
- * @method     EventQuery orderByShowOnFrontpage($order = Criteria::ASC) Order by the show_on_frontpage column
+ * @method     EventQuery orderByIgnoreOnFrontpage($order = Criteria::ASC) Order by the ignore_on_frontpage column
  * @method     EventQuery orderByEventTypeId($order = Criteria::ASC) Order by the event_type_id column
  * @method     EventQuery orderByServiceId($order = Criteria::ASC) Order by the service_id column
  * @method     EventQuery orderBySchoolClassId($order = Criteria::ASC) Order by the school_class_id column
@@ -38,7 +38,7 @@
  * @method     EventQuery groupByDateEnd() Group by the date_end column
  * @method     EventQuery groupByTimeDetails() Group by the time_details column
  * @method     EventQuery groupByIsActive() Group by the is_active column
- * @method     EventQuery groupByShowOnFrontpage() Group by the show_on_frontpage column
+ * @method     EventQuery groupByIgnoreOnFrontpage() Group by the ignore_on_frontpage column
  * @method     EventQuery groupByEventTypeId() Group by the event_type_id column
  * @method     EventQuery groupByServiceId() Group by the service_id column
  * @method     EventQuery groupBySchoolClassId() Group by the school_class_id column
@@ -94,7 +94,7 @@
  * @method     Event findOneByDateEnd(string $date_end) Return the first Event filtered by the date_end column
  * @method     Event findOneByTimeDetails(string $time_details) Return the first Event filtered by the time_details column
  * @method     Event findOneByIsActive(boolean $is_active) Return the first Event filtered by the is_active column
- * @method     Event findOneByShowOnFrontpage(boolean $show_on_frontpage) Return the first Event filtered by the show_on_frontpage column
+ * @method     Event findOneByIgnoreOnFrontpage(boolean $ignore_on_frontpage) Return the first Event filtered by the ignore_on_frontpage column
  * @method     Event findOneByEventTypeId(int $event_type_id) Return the first Event filtered by the event_type_id column
  * @method     Event findOneByServiceId(int $service_id) Return the first Event filtered by the service_id column
  * @method     Event findOneBySchoolClassId(int $school_class_id) Return the first Event filtered by the school_class_id column
@@ -115,7 +115,7 @@
  * @method     array findByDateEnd(string $date_end) Return Event objects filtered by the date_end column
  * @method     array findByTimeDetails(string $time_details) Return Event objects filtered by the time_details column
  * @method     array findByIsActive(boolean $is_active) Return Event objects filtered by the is_active column
- * @method     array findByShowOnFrontpage(boolean $show_on_frontpage) Return Event objects filtered by the show_on_frontpage column
+ * @method     array findByIgnoreOnFrontpage(boolean $ignore_on_frontpage) Return Event objects filtered by the ignore_on_frontpage column
  * @method     array findByEventTypeId(int $event_type_id) Return Event objects filtered by the event_type_id column
  * @method     array findByServiceId(int $service_id) Return Event objects filtered by the service_id column
  * @method     array findBySchoolClassId(int $school_class_id) Return Event objects filtered by the school_class_id column
@@ -536,15 +536,15 @@ abstract class BaseEventQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the show_on_frontpage column
+     * Filter the query on the ignore_on_frontpage column
      *
      * Example usage:
      * <code>
-     * $query->filterByShowOnFrontpage(true); // WHERE show_on_frontpage = true
-     * $query->filterByShowOnFrontpage('yes'); // WHERE show_on_frontpage = true
+     * $query->filterByIgnoreOnFrontpage(true); // WHERE ignore_on_frontpage = true
+     * $query->filterByIgnoreOnFrontpage('yes'); // WHERE ignore_on_frontpage = true
      * </code>
      *
-     * @param     boolean|string $showOnFrontpage The value to use as filter.
+     * @param     boolean|string $ignoreOnFrontpage The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -553,12 +553,12 @@ abstract class BaseEventQuery extends ModelCriteria
      *
      * @return    EventQuery The current query, for fluid interface
      */
-    public function filterByShowOnFrontpage($showOnFrontpage = null, $comparison = null)
+    public function filterByIgnoreOnFrontpage($ignoreOnFrontpage = null, $comparison = null)
     {
-        if (is_string($showOnFrontpage)) {
-            $show_on_frontpage = in_array(strtolower($showOnFrontpage), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        if (is_string($ignoreOnFrontpage)) {
+            $ignore_on_frontpage = in_array(strtolower($ignoreOnFrontpage), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
-        return $this->addUsingAlias(EventPeer::SHOW_ON_FRONTPAGE, $showOnFrontpage, $comparison);
+        return $this->addUsingAlias(EventPeer::IGNORE_ON_FRONTPAGE, $ignoreOnFrontpage, $comparison);
     }
 
     /**

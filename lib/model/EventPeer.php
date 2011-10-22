@@ -9,11 +9,11 @@ class EventPeer extends BaseEventPeer {
 	const EVENT_TYPE_DEFAULT = 1;
 	const EVENT_TYPE_PROJECT = 2;
 
-	public static function resetShowOnFrontpage() {
+	public static function resetIgnoreOnFrontpage() {
 		$oCriteria = new Criteria();
 		$oCriteria->add(self::SHOW_ON_FRONTPAGE, true);
 		foreach(self::doSelect($oCriteria) as $oResetEvent) {
-			$oResetEvent->setShowOnFrontpage(false);
+			$oResetEvent->setIgnoreOnFrontpage(false);
 			$oResetEvent->save();
 		}
 	}
