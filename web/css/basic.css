@@ -80,7 +80,7 @@ input::-moz-placeholder,input::-webkit-input-placeholder{color:#a5a2a1}
 .home #sidebar_right .inner{padding-top:54px}
 #content_main .inner{padding:0 5px 20px 5px}
 table{width:100%;border-collapse:collapse}
-#content_main table:first-child{margin-top:-17px}
+#content_main table.with_header{margin-top:-17px}
 table.event_list.context_list{margin-top:1.5em}
 table.list_view td{vertical-align:top}
 table.list_view tr.even td,table.list_view tr.row:nth-child(2n+1) td{background-color:#fdfdfd}
@@ -127,7 +127,7 @@ img.class_portrait,.detail_info span{padding-right:.5em}
 .date_square{background-color:#f5f173;color:#333;font-size:15px;margin-top:0;padding:5px 0 2px;width:36px;line-height:.85em;text-align:center;border-left:1px solid #d1c4c4;border-bottom:1px solid #d1c4c4;margin-bottom:.3em}
 .date_square.passed{background-color:#f7f7f7}
 .gallery .gallery-canvas{display:inline-block;position:relative;width:165px;height:165px;line-height:165px;margin-right:2px}
-.gallery{margin-top:.6em}
+.gallery{margin-top:1em}
 .gallery .gallery-canvas .gallery-frame,.gallery .gallery-canvas .gallery-item,.gallery .gallery-canvas .gallery-item .gallery-item-holder{position:absolute;top:0;left:0;right:0;bottom:0;z-index:0}
 .gallery a,.gallery span{display:block}
 .gallery .gallery-canvas .gallery-frame{z-index:1;background:transparent url("../images/slide_frame.png") no-repeat scroll center center}
