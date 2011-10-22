@@ -34,7 +34,7 @@ class EventListWidgetModule extends WidgetModule {
 	}
 	
 	public function getColumnIdentifiers() {
-		return array('id', 'title', 'teaser_truncated', 'date_start_formatted', 'is_class_event', 'is_service_event', 'is_active', 'has_bericht', 'has_images', 'delete');
+		return array('id', 'title', 'teaser_truncated', 'date_start_formatted', 'is_class_event', 'is_service_event', 'is_active', 'ignore_on_frontpage', 'has_bericht', 'has_images', 'delete');
 	}
 	
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -54,18 +54,21 @@ class EventListWidgetModule extends WidgetModule {
 				$aResult['heading_filter'] = array('boolean_input', $this->oBooleanInputFilter->getSessionKey());
 				$aResult['is_sortable'] = false;
 				break;			
+			case 'ignore_on_frontpage':
+				$aResult['heading'] = StringPeer::getString('wns.event.ignore_on_frontpage');
+				break;
 			case 'is_service_event':
 				$aResult['heading'] = StringPeer::getString('wns.event.is_service_event');
 				break;
 			case 'is_active':
-				$aResult['heading'] = StringPeer::getString('wns.is_online');
+				$aResult['heading'] = StringPeer::getString('wns.event.is_online');
 				break;
 			case 'has_images':
-				$aResult['heading'] = StringPeer::getString('event.has_images');
+				$aResult['heading'] = StringPeer::getString('event.images');
 				$aResult['is_sortable'] = false;
 				break;
 			case 'has_bericht':
-				$aResult['heading'] = StringPeer::getString('event.has_bericht');
+				$aResult['heading'] = StringPeer::getString('event.bericht');
 				$aResult['is_sortable'] = false;
 				break;
 			case 'delete':
@@ -109,11 +112,10 @@ class EventListWidgetModule extends WidgetModule {
 		return false;
 	}
 	
-  public function toggleShowOnFrontpage($aRowData) {
+  public function toggleIgnoreOnFrontpage($aRowData) {
 		$oEvent = EventPeer::retrieveByPK($aRowData['id']);
 		if($oEvent && $oEvent->getIsActive()) {
-      // EventPeer::resetShowOnFrontpage();
-			$oEvent->setShowOnFrontpage(!$oEvent->getShowOnFrontpage());
+			$oEvent->setIgnoreOnFrontpage(!$oEvent->getIgnoreOnFrontpage());
 			return $oEvent->save();
 		}
 		return false;

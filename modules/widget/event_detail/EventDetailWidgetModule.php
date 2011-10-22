@@ -146,7 +146,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		    $oEvent->addEventDocument($oEventDocument);
 		  }
 		}
-		$oEvent->setShowOnFrontpage($aEventData['show_on_frontpage']);
+		$oEvent->setIgnoreOnFrontpage($aEventData['ignore_on_frontpage']);
 		$oEvent->setIsActive($aEventData['is_active']);
 		$oEvent->save();
 		return $oEvent->getId();

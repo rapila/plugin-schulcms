@@ -93,7 +93,7 @@ Widget.types.event_detail = {
 			this.content.find("input[name='time_details']").val(event_data.TimeDetails);
 			this.content.find("input[name='location_info']").val(event_data.LocationInfo);
 			this.content.find("input[name='is_active']").attr('checked', event_data.IsActive);
-			this.content.find("input[name='show_on_frontpage']").attr('checked', event_data.ShowOnFrontpage);
+			this.content.find("input[name='ignore_on_frontpage']").attr('checked', event_data.IgnoreOnFrontpage);
 			this.content.find("select[name='service_id']").val(event_data.ServiceId || '');
 			if(!_this.settings.predefined_school_class_id) {
 				this.content.find("select[name='school_class_id']").val(event_data.SchoolClassId);
