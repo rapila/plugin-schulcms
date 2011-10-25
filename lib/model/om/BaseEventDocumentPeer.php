@@ -2069,10 +2069,10 @@ abstract class BaseEventDocumentPeer {
 		if($oUser->getIsAdmin()) {
 			return true;
 		}
-		return $oUser->hasRole("event_documents");
+		return $oUser->hasRole("events");
 	}
 	public static function mayOperateOnOwn($oUser, $mObject, $sOperation) {
-		return $oUser->hasRole("event_documents-own");
+		return $oUser->hasRole("events-own");
 	}
 
 } // BaseEventDocumentPeer

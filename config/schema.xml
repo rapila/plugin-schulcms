@@ -199,6 +199,9 @@
 	<foreign-key foreignTable="document_categories" onDelete="setnull">
 		<reference local="gallery_id" foreign="id" />
 	</foreign-key>
+	<behavior name="denyable">
+		<parameter name="role_key" value="events" />
+	</behavior>
 </table>
 
 <table name="event_types" phpName="EventType">
@@ -216,6 +219,9 @@
 		<reference local="document_id" foreign="id" />
 	</foreign-key>
 	<column name="sort" type="integer" />
+	<behavior name="denyable">
+		<parameter name="role_key" value="events" />
+	</behavior>
 </table>
 
 <table name="services" phpName="Service">
@@ -238,12 +244,18 @@
 	<foreign-key foreignTable="service_categories" onDelete="setnull">
 		<reference local="service_category_id" foreign="id" />
 	</foreign-key>
+	<behavior name="denyable">
+		<parameter name="role_key" value="services" />
+	</behavior>
 </table>
 
 <table name="service_categories" phpName="ServiceCategory">
 	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
 	<column name="name" type="varchar" size="100" />
 	<column name="name_normalized" type="varchar" size="80" />
+	<behavior name="denyable">
+		<parameter name="role_key" value="services" />
+	</behavior>
 </table>
 
 <table name="service_members" phpName="ServiceMember">
@@ -257,6 +269,9 @@
 		<reference local="team_member_id" foreign="id" />
 	</foreign-key>
 	<column name="sort" type="integer" />
+	<behavior name="denyable">
+		<parameter name="role_key" value="services" />
+	</behavior>
 </table>
 
 <table name="service_documents" phpName="ServiceDocument">
@@ -269,6 +284,9 @@
 		<reference local="document_id" foreign="id" />
 	</foreign-key>
 	<column name="sort" type="integer" />
+	<behavior name="denyable">
+		<parameter name="role_key" value="services" />
+	</behavior>
 </table>
 
 <table name="***REMOVED***_syncronisations" phpName="***REMOVED***Syncronisation">

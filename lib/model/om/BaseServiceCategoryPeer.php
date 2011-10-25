@@ -1391,10 +1391,10 @@ abstract class BaseServiceCategoryPeer {
 		if($oUser->getIsAdmin()) {
 			return true;
 		}
-		return $oUser->hasRole("service_categories");
+		return $oUser->hasRole("services");
 	}
 	public static function mayOperateOnOwn($oUser, $mObject, $sOperation) {
-		return $oUser->hasRole("service_categories-own");
+		return $oUser->hasRole("services-own");
 	}
 
 } // BaseServiceCategoryPeer

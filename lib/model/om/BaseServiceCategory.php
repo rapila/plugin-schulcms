@@ -521,7 +521,7 @@ abstract class BaseServiceCategory extends BaseObject  implements Persistent
 			$ret = $this->preDelete($con);
 			// denyable behavior
 			if(!(ServiceCategoryPeer::isIgnoringRights() || $this->mayOperate("delete"))) {
-				throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "service_categories")));
+				throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "services")));
 			}
 
 			if ($ret) {
@@ -569,7 +569,7 @@ abstract class BaseServiceCategory extends BaseObject  implements Persistent
 				$ret = $ret && $this->preInsert($con);
 				// denyable behavior
 				if(!(ServiceCategoryPeer::isIgnoringRights() || $this->mayOperate("insert"))) {
-					throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "service_categories")));
+					throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "services")));
 				}
 
 				// extended_timestampable behavior
@@ -594,7 +594,7 @@ abstract class BaseServiceCategory extends BaseObject  implements Persistent
 				$ret = $ret && $this->preUpdate($con);
 				// denyable behavior
 				if(!(ServiceCategoryPeer::isIgnoringRights() || $this->mayOperate("update"))) {
-					throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "service_categories")));
+					throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "services")));
 				}
 
 				// extended_timestampable behavior
