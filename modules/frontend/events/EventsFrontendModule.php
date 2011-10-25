@@ -123,21 +123,29 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		}
 		$oTemplate->replaceIdentifier('teaser', self::$EVENT->getTeaser());
 		
+		self::renderGallery(self::$EVENT, $oTemplate);
+		return $oTemplate;
+	}
+	
+ /**
+	* static method to be used in both event detail as class_events or service_events detail
+	* since they always look the same
+	*/
+	public static function renderGallery($oEvent, &$oDetailTemplate) {
 		$oGalleryTemplate = new Template('lists/gallery');
-		$oGalleryItemTemplatePrototype = new Template('lists/gallery_item');
-		$oGalleryItemTemplatePrototype->replaceIdentifier('thumbnail_size', 140);
-		$oGalleryItemTemplatePrototype->replaceIdentifier('full_size', 1000);
-		foreach(self::$EVENT->getEventDocumentsOrdered() as $oEventDocument) {
+		$oTemplateProtoType = new Template('lists/gallery_item');
+		$oTemplateProtoType->replaceIdentifier('thumbnail_size', 140);
+		$oTemplateProtoType->replaceIdentifier('full_size', 1000);
+		foreach($oEvent->getEventDocumentsOrdered() as $oEventDocument) {
 			if(!$oEventDocument->getDocument()) {
 				continue;
 			}
-			$oGalleryItemTemplate = clone $oGalleryItemTemplatePrototype;
-			$oGalleryItemTemplate->replaceIdentifier('event_id', self::$EVENT->getId());
-			$oEventDocument->getDocument()->renderListItem($oGalleryItemTemplate);
-			$oGalleryTemplate->replaceIdentifierMultiple("items", $oGalleryItemTemplate);
+			$oDocumentTemplate = clone $oTemplateProtoType;
+			$oDocumentTemplate->replaceIdentifier('event_id', $oEvent->getId());
+			$oEventDocument->getDocument()->renderListItem($oDocumentTemplate);
+			$oGalleryTemplate->replaceIdentifierMultiple("items", $oDocumentTemplate);
 		}
-		$oTemplate->replaceIdentifier('gallery', $oGalleryTemplate);
-		return $oTemplate;
+		$oDetailTemplate->replaceIdentifier('gallery', $oGalleryTemplate);
 	}
 	
 	public function renderDetailContext() { 

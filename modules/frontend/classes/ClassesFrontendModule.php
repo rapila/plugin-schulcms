@@ -18,7 +18,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		return array(self::DETAIL_IDENTIFIER_EVENT);
 	}
 	
-	public function renderFrontend() {
+	public function renderFrontend() { 
 		$this->oTeamPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('team'));
 		$aOptions = @unserialize($this->getData());
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
@@ -34,10 +34,10 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 	}
 
 	private function renderKlassenliste($iClassTypeId = null) {
-    // $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($iClassTypeId !== null ? $iClassTypeId.'_' : ""), DIRNAME_PRELOAD);  
-    // if($oCache->cacheFileExists()) {
-    //   return $oCache->getContentsAsVariable();
-    // }
+    $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($iClassTypeId !== null ? $iClassTypeId.'_' : ""), DIRNAME_PRELOAD);  
+    if($oCache->cacheFileExists()) {
+      return $oCache->getContentsAsVariable();
+    }
 
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$aClasses = SchoolClassPeer::getSchoolUnitsBySchool(null, $iClassTypeId);
@@ -79,7 +79,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 			}
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
-		// $oCache->setContents($oTemplate);
+		$oCache->setContents($oTemplate);
 		return $oTemplate;
 	}
 	
@@ -160,9 +160,9 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 	}
 	
 	public function renderClassEvent() {		
-		$oEventTemplate = $this->constructTemplate('class_event_detail');
-		$oEventTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
-		$oEventTemplate->replaceIdentifier('date_from_to', self::$EVENT->getDateFromTo());
+		$oTemplate = $this->constructTemplate('class_event_detail');
+		$oTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
+		$oTemplate->replaceIdentifier('date_from_to', self::$EVENT->getDateFromTo());
 		
 		$sBody = null;
 		if (self::$EVENT->hasBericht()) {
@@ -180,21 +180,10 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		if ($sBody == null) {
 			$sBody = self::$EVENT->getTeaser();
 		}
-		$oEventTemplate->replaceIdentifier('body', $sBody);
+		$oTemplate->replaceIdentifier('body', $sBody);
 		
-		$oGalleryTemplate = new Template('lists/gallery');
-		$oGalleryItemTemplatePrototype = new Template('lists/gallery_item');
-		foreach(self::$EVENT->getEventDocumentsOrdered() as $oEventDocument) {
-			if(!$oEventDocument->getDocument()) {
-				continue;
-			}
-			$oGalleryItemTemplate = clone $oGalleryItemTemplatePrototype;
-			$oGalleryItemTemplate->replaceIdentifier('event_id', self::$EVENT->getId());
-			$oEventDocument->getDocument()->renderListItem($oGalleryItemTemplate);
-			$oGalleryTemplate->replaceIdentifierMultiple("items", $oGalleryItemTemplate);
-		}
-		$oEventTemplate->replaceIdentifier('gallery', $oGalleryTemplate);
-		return $oEventTemplate;
+		EventsFrontendModule::renderGallery(self::$EVENT, $oTemplate);
+		return $oTemplate;
 	}
 	
 	public function renderKlassenKontext($bShowRandomKontext = false) {
@@ -245,8 +234,8 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 				$oTemplate->replaceIdentifierMultiple('list_item', $oEventTemplate);
 				$oEventTemplate->replaceIdentifier('detail_link_text', $oEvent->getTitle());
 				$aLinkParams = array_merge($aClassLinkParams, array(self::DETAIL_IDENTIFIER_EVENT, $oEvent->getId()));
-				$oEventTemplate->replaceIdentifier('event_detail_link', LinkUtil::link($aLinkParams));
-				$oEventTemplate->replaceIdentifier('event_detail_link_title', $oEvent->getTeaser());
+				$oEventTemplate->replaceIdentifier('detail_link', LinkUtil::link($aLinkParams));
+				$oEventTemplate->replaceIdentifier('detail_link_title', $oEvent->getTeaser());
 				
 				$oEventTempl->replaceIdentifierMultiple('list_item', $oEventTemplate);
 			}

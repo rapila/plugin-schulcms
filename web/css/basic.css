@@ -66,7 +66,7 @@ ul#secondary_navigation li{padding:.2em 1em}
 #sidebar_right h2:first-child,#sidebar_right img:first-child + h2{margin-top:0}
 #sidebar_right .sidebar_detail{position:fixed;width:190px}
 #sidebar_right .detail_info p{padding:.2em .2em;border-bottom:1px solid #c9c5b3}
-#sidebar_right h1,#sidebar_right h2{font-size:13px;border-bottom:1px solid #5a2323;background-color:#5e61a8}
+#sidebar_right h1,#sidebar_right h2{font-size:13px;background-color:#5e61a8}
 .home #sidebar_right{top:192px}
 #content_main{margin-top:170px;margin-right:194px}
 .home #content_main{margin-top:245px}
@@ -159,7 +159,9 @@ td.status_icons.has_images{background:transparent url("../images/has_images.png"
 .link_list td:first-child{width:15px}
 .link_list td:first-child a{background:url("../images/links.png") transparent 0 4px no-repeat;padding-left:0}
 .team_list td:first-child a{background:url("../images/team_members.png") transparent 0 4px no-repeat}
-.class_list td:first-child a{background:url("../images/classes.png") transparent 0 4px no-repeat}
+.class_list td:first-child a{background:url("../images/classes.png") transparent 0 2px no-repeat}
+body.klassen h1 a{padding-top:3px;display:inline-block;width:20px;background:url("../images/classes.png") transparent 0 4px no-repeat}
+body.klassen h1 a:hover{background:url("../images/back_to_list.png") transparent 0 4px no-repeat}
 a.more_link,a.blackboard_more_link{font-style:oblique}
 iframe{border:0}
 #ajax_loader{display:none}

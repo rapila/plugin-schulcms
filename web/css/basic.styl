@@ -332,7 +332,6 @@ ul#secondary_navigation li
 	
 	h1, h2
 		font-size: 13px
-		border-bottom: 1px solid #5A2323
 		background-color: school_color
 
 .home #sidebar_right
@@ -701,7 +700,6 @@ td.status_icons.has_images
 .event_list td a.detail_link:hover 
 	background: transparent url(../images/detail_link_hover.png) no-repeat 0 3px
 	
-	
 .service_list,
 .link_list,
 .team_list,
@@ -735,8 +733,16 @@ td.status_icons.has_images
 	background: url('../images/team_members.png') transparent 0px 4px no-repeat
 	
 .class_list td:first-child a
+	background: url('../images/classes.png') transparent 0px 2px no-repeat
+
+body.klassen h1 a
+	padding-top: 3px
+	display:inline-block
+	width: 20px
 	background: url('../images/classes.png') transparent 0px 4px no-repeat
-	
+body.klassen h1 a:hover
+	background: url('../images/back_to_list.png') transparent 0px 4px no-repeat
+
 a.more_link,
 a.blackboard_more_link
 	font-style: oblique
