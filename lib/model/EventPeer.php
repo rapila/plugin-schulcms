@@ -50,21 +50,17 @@ class EventPeer extends BaseEventPeer {
 		}
 		// allow all users that are team members and class teachers to handle their own events
 		$aTeamMembers = $oUser->getTeamMembersRelatedByUserId();
-		ErrorHandler::log($oUser->getFullName(), 'ist team_mitglied', isset($aTeamMembers[0]));
 		if(isset($aTeamMembers[0])) {
 			foreach($aTeamMembers[0]->getClassTeachersJoinSchoolClassesForPermissions(true) as $oClassTeacher) {
 				if($oClassTeacher->getSchoolClass()->getId() === $mObject->getSchoolClassId()) {
-					ErrorHandler::log('eigener Klassenevent', 'ja');
 					return true;
 				}
 			}
-			ErrorHandler::log('eigener Klassenevent', 'nein');
 
 			// allow all users that are team members and service members to handle their own events
 			foreach($aTeamMembers[0]->getServiceMembers() as $oServiceMember) {
 				if($oServiceMember->getServiceId() === $mObject->getServiceId()) {
 					if(ServicePeer::mayOperateOn($oUser, $mObject->getService(), $sOperation)) {
-						ErrorHandler::log('eigener Serviceevent', 'ja');
 						return true;
 					}
 				}
