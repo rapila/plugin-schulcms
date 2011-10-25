@@ -3,3 +3,4 @@ enabled: true
 aspects: 
   - dashboard
   - persistent
+allowed_roles: [classes]
