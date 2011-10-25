@@ -11,5 +11,27 @@ class ServicePeer extends BaseServicePeer {
 		$oSearchCriterion->addOr($oCriteria->getNewCriterion(self::ADDRESS, "%$sSearch%", Criteria::LIKE));
 		$oCriteria->add($oSearchCriterion);
 	}
-
+	
+	public static function mayOperateOn($oUser, $mObject, $sOperation) {
+		// allow all users with module rights
+		if(parent::mayOperateOn($oUser, $mObject, $sOperation)) {
+			return true;
+		}
+		if($oUser === null) {
+			return false;
+		}
+		// allow all users that are team members and employee of Service
+		// meaning services have to be created by users with admin rights and can then be delegated to service member
+		$aTeamMembers = $oUser->getTeamMembersRelatedByUserId();
+		if(isset($aTeamMembers[0])) {
+			foreach($aTeamMembers[0]->getServiceMembers() as $oServiceMember) {
+				if($oServiceMember->getServiceId() === $mObject->getServiceId()) {
+					if(ServicePeer::mayOperateOn($oUser, $mObject->getService(), $sOperation)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 }
