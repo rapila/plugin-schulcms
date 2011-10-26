@@ -13,7 +13,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 		if(DocumentCategoryQuery::create()->filterById($iServiceDocumentCategoryId)->count() === 0) {
 			throw new Exception('Config error: school_settings > externally_managed_document_categories > service_documents');
 		}
-		$oRichtext = WidgetModule::getWidget('rich_text', null, null, 'services');
+		$oRichtext = WidgetModule::getWidget('rich_text', null, null, SchoolPeer::PAGE_IDENTIFIER_SERVICES);
 		$oRichtext->setTemplate(PagePeer::getPageByIdentifier('services')->getTemplate());
 		$this->setSetting('richtext_session', $oRichtext->getSessionKey());
 		$this->setSetting('service_file_category_id', $iServiceDocumentCategoryId);
