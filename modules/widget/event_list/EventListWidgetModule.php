@@ -9,11 +9,12 @@ class EventListWidgetModule extends WidgetModule {
 	public $oBooleanInputFilter;
 	public $iEventTypeId;
 	public $bShowClassEvent;
+	public $bMayOnlyEditOwnedEvents;
 	
 	public function __construct() {
 		
 		/// @todo, display only entries that relate to class or service related
-		$bMayOnlyEditOwnedEvents = Session::getSession()->getUser()->mayUseAdminModule('events');
+		$this->bMayOnlyEditOwnedEvents = Session::getSession()->getUser()->mayUseAdminModule('events');
 		
 		$this->oListWidget = new ListWidgetModule();
 		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "Event", "Title", "asc");
@@ -141,8 +142,9 @@ class EventListWidgetModule extends WidgetModule {
 	
 	public function getCriteria() {
     $oQuery = EventQuery::create()->excludeExternallyManaged(!$this->bShowClassEvent);
-		if($bMayOnlyEditOwnedEvents) {
-			/// @todo check
+		if($this->bMayOnlyEditOwnedEvents) {
+			// filterBySchoolClassId()
+			// or filterByServiceId()
 		}
 		return $oQuery;
 	}
