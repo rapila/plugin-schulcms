@@ -109,13 +109,11 @@ class EventsFrontendModule extends DynamicFrontendModule {
 				$sBody = RichtextUtil::parseStorageForFrontendOutput($sContent);
 			}
 		}
-		if ($sBody == null) {
-			$sBody = self::$EVENT->getTeaser();
-		}
 
 		$oTemplate->replaceIdentifier('body', $sBody);
 		$oTemplate->replaceIdentifier('list_link', LinkUtil::link($oPage->getFullPathArray()));
 		$oTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
+		$oTemplate->replaceIdentifier('teaser', self::$EVENT->getTeaser());
 		if(self::$EVENT->getDateEnd() == null) {
 			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getWeekdayName().', '.self::$EVENT->getDatumWithMonthName());
 		} else {
