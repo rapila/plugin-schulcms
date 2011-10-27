@@ -124,8 +124,9 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$oTemplate->replaceIdentifier('teaser', self::$EVENT->getTeaser());
 		
 		if(self::$EVENT->getServiceId() !== null) {
-			$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_SERVICES));
-			$oTemplate->replaceIdentifier('service_link', TagWriter::quickTag('a', array('href' => LinkUtil::link($oPage->getLink()), 'class' => 'event_service_link', 'title' => StringPeer::getString('wns.link.to_service_detail')),self::$EVENT->getService()->getName()));
+			if($oService = self::$EVENT->getService()) {
+				$oTemplate->replaceIdentifier('service_link', TagWriter::quickTag('a', array('href' => LinkUtil::link($oService->getServiceLink()) , 'class' => 'event_service_link', 'title' => StringPeer::getString('wns.link.to_service_detail')), $oService->getName()));
+			}
 		}
 		
 		self::renderGallery(self::$EVENT, $oTemplate);
