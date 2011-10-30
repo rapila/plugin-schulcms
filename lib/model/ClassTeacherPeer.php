@@ -26,5 +26,10 @@ class ClassTeacherPeer extends BaseClassTeacherPeer {
 		}
 		return self::doSelect($oCriteria);
 	}
+	
+	public static function mayOperateOn($oUser, $mObject, $sOperation) {
+		return SchoolClassPeer::mayOperateOn($oUser, $mObject->getSchoolClass(), $sOperation);
+	}
+
 }
 
