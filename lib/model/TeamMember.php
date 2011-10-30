@@ -43,7 +43,7 @@ class TeamMember extends BaseTeamMember {
 	}
 	
 	public function getClassTeachersJoinSchoolClassesForPermissions($bIncludeOldClasses) {
-		return self::getClassTeachersJoinSchoolClass(null, null, Criteria::INNER_JOIN, $bIncludeOldClasses = false);
+		return self::getClassTeachersJoinSchoolClass(null, null, Criteria::INNER_JOIN, $bIncludeOldClasses);
 	}
 		
 	/**
