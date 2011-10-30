@@ -74,14 +74,12 @@ class SchoolClassPeer extends BaseSchoolClassPeer {
 		$aTeamMembers = $oUser->getTeamMembersRelatedByUserId();
 		if(isset($aTeamMembers[0])) {
 			foreach($aTeamMembers[0]->getClassTeachersJoinSchoolClassesForPermissions(true) as $oClassTeacher) {
-				if($oClassTeacher->getSchoolClass()->getId() === $mObject->getId()) {
+				if($oClassTeacher->getSchoolClassId() === $mObject->getId()) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-
-	
 }
 
