@@ -10,6 +10,7 @@ admin_menu:
       - module.classes
       - module.team_members
       - module.services
+      - module.notes
       - ~
       - module.strings
       - module.documents
