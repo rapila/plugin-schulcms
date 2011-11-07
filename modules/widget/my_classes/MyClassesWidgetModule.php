@@ -3,7 +3,6 @@
 class MyClassesWidgetModule extends PersistentWidgetModule {
 	
 	private $oTeamMember;
-	private static $CLASS_PAGE;
 	
 	public function __construct() {
 		$oUser = Session::getSession()->getUser();
@@ -18,9 +17,14 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 			return $aResult;
 		}
 		$oQuery = ClassTeacherQuery::create()->joinSchoolClass()->filterByTeamMemberId($this->oTeamMember->getId());
-		foreach($oQuery->filterByIsClassTeacher(true)->find() as $oClassTeacher) {
+		$oClassesPage = PageQuery::create()->filterByIdentifier(SchoolPeer::PAGE_IDENTIFIER_CLASSES)->findOne();
+		
+		$oQuery->filterByIsClassTeacher(true);
+		foreach($oQuery->find() as $oClassTeacher) {
 			$aClassInfo = array();
 			$aClassInfo['Name']		 = $oClassTeacher->getSchoolClass()->getName();
+			$aClassInfo['Year']		 = $oClassTeacher->getSchoolClass()->getYear();
+			$aClassInfo['IsCurrent']	= $oClassTeacher->getSchoolClass()->IsCurrent();
 			$aClassInfo['Type']		 = $oClassTeacher->getSchoolClass()->getClassType()->getName();
 			$aClassInfo['Id']			 = $oClassTeacher->getSchoolClassId();
 			$aClassInfo['Amount']	 = $oClassTeacher->getSchoolClass()->getCountStudents();
@@ -30,24 +34,9 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 			$aClassInfo['WeekSchedule']	 = $oClassTeacher->getSchoolClass()->getHasWeekSchedule();
 			$aClassInfo['ClassPortrait']	= $oClassTeacher->getSchoolClass()->getHasClassPortrait();
 			
-			$aClassInfo['ClassLink']	= LinkUtil::link(self::getClassPageLink($oClassTeacher->getSchoolClass()), 'FrontendManager');
+			$aClassInfo['ClassLink']	= LinkUtil::link($oClassTeacher->getSchoolClass()->getClassLink($oClassesPage), 'FrontendManager');
 			$aResult[] = $aClassInfo;
 		}
 		return $aResult;
-	}
-	
-	public static function getClassPageLink($mClass = null) {
-		$sPageIdentifier = SchoolPeer::getPageIdentifier('classes');
-		if(self::$CLASS_PAGE === null) {
-			self::$CLASS_PAGE = PageQuery::create()->filterByIdentifier($sPageIdentifier)->findOne();
-		}
-		if(self::$CLASS_PAGE === null) {
-			throw new Exception(__METHOD__.' There is no page with the identifier: '.$sPageIdentifier);
-		}
-		$mClass = $mClass instanceof SchoolClass ? $mClass->getSlug() : $mClass;
-		if($mClass) {
-			return array_merge(self::$CLASS_PAGE->getFullPathArray(), array($mClass));
-		}
-		return self::$CLASS_PAGE->getFullPathArray();
 	}
 }

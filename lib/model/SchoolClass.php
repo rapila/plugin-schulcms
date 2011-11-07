@@ -4,6 +4,7 @@
  */
 class SchoolClass extends BaseSchoolClass {
 	public static $CLASS_TYPES = array();
+	private static $CLASS_PAGE;
 	
 	public function getClassTeachersOrdered($bIsClassTeacher = true) {		
 		$oCriteria = new Criteria();
@@ -60,14 +61,16 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getClassLink($oClassesPage = null) {
-		if($oClassesPage === null) {
-			$oClassesPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_CLASSES));
+		if($oClassesPage === null && self::$CLASS_PAGE === null) {
+			self::$CLASS_PAGE = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_CLASSES));
+		} else {
+			self::$CLASS_PAGE = $oClassesPage;
 		}
 		$aParams = array($this->getSlug());
 		if(!$this->isCurrent()) {
 			array_push($aParams, $this->getYear());
 		}
-		return array_merge($oClassesPage->getFullPathArray(), $aParams);
+		return array_merge(self::$CLASS_PAGE->getFullPathArray(), $aParams);
 	}
 	
 	public function getLinkToClassSchedule() {

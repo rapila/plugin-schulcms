@@ -47,7 +47,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
     $aResult['ClassTypeName'] = $oSchoolClass->getClassType()->getName();
     $aResult['ClassTeacher'] = $oSchoolClass->getClassTeacherNames();
     $aResult['YearPeriod'] = $oSchoolClass->getYearPeriod();
-    $aResult['ClassPageUrl'] = LinkUtil::link(MyClassesWidgetModule::getClassPageLink($oSchoolClass->getSlug()), 'FrontendManager');
+    $aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getClassLink(), 'FrontendManager');
 		return $aResult;
 	}
 	
