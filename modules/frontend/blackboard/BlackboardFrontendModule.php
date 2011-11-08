@@ -79,6 +79,8 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 		$oTemplate->replaceIdentifier('event_link', LinkUtil::link($oEvent->getEventPageLink($oPage)));
 		$oTemplate->replaceIdentifier('event_title', $oEvent->getTitle());
 		$oTemplate->replaceIdentifier('event_report_prefix', StringPeer::getString('blackboard_review_prefix.'.$sMessageKey).' ');
+		$oTemplate->replaceIdentifier('event_date', LocaleUtil::localizeDate($oEvent->getDateStart()));
+		
 		return $oTemplate;
 	}
 	
