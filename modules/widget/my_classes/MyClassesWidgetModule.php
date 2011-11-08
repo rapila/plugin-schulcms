@@ -16,7 +16,7 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 		if(!$this->oTeamMember) {
 			return $aResult;
 		}
-		$oQuery = ClassTeacherQuery::create()->joinSchoolClass()->filterByTeamMemberId($this->oTeamMember->getId());
+		$oQuery = ClassTeacherQuery::create()->joinSchoolClass()->useSchoolClassQuery()->orderByYear(Criteria::DESC)->orderByUnitName()->endUse()->filterByTeamMemberId($this->oTeamMember->getId());
 		$oClassesPage = PageQuery::create()->filterByIdentifier(SchoolPeer::PAGE_IDENTIFIER_CLASSES)->findOne();
 		
 		$oQuery->filterByIsClassTeacher(true);

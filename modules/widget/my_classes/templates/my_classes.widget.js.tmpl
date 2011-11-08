@@ -4,8 +4,10 @@ Widget.types.my_classes = {
 		this._element.append(jQuery.parseHTML("{{includeTemplate=edit}}"));
 		this.list =	this._element.find('table.my_classes_list');
 		this.settings.row_prototype = jQuery.parseHTML("{{includeTemplate=class_item}}", false, 'tbody');
+		this.has_old_classes = false;
+		this.show_old_button = this._element.find('span.toggle_show_all').hide();
 		this.reload_list();
-		this._element.find('span.toggle_show_all').click(function() {
+		this.show_old_button.click(function() {
 			jQuery(this).toggleClass('closed');
 			_this.list.find('tr.is_not_current').toggleClass('hidden');
 		});
@@ -48,9 +50,13 @@ Widget.types.my_classes = {
 				});
 				if(!row_data.IsCurrent) {
 					row.addClass('is_not_current hidden');
+					_this.has_old_classes = true;
 				}
 				_this.list.append(row);
 			});
+			if(_this.has_old_classes) {
+				_this.show_old_button.show();
+			}
 		});
 	},
 	
