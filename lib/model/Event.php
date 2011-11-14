@@ -21,7 +21,7 @@ class Event extends BaseEvent {
 	}
 
 	public function getTeaserTruncated() {
-		return StringUtil::truncate($this->getTeaser(), 60);
+		return StringUtil::truncate($this->getTeaser(), 40);
 	}
 	
 	public function isPreview() {
