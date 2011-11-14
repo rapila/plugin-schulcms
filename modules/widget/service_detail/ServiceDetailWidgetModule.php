@@ -143,7 +143,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 		$oService->setPhone($aServiceData['phone']);
 		$oService->setEmail($aServiceData['email']);
 		$oService->setServiceCategoryId($aServiceData['service_category_id'] ? $aServiceData['service_category_id'] : null);
-		$oService->setBody(RichtextUtil::parseInputFromMceForStorage($aServiceData['body_text']));
+		$oService->setBody(RichtextUtil::parseInputFromEditorForStorage($aServiceData['body_text']));
 		if(!$oService->isNew()) {
 			ServiceMemberQuery::create()->filterByService($oService)->find()->delete();
 		}
