@@ -17,7 +17,7 @@ class EventListWidgetModule extends WidgetModule {
 		$this->bMayOnlyEditOwnedEvents = Session::getSession()->getUser()->mayUseAdminModule('events');
 		
 		$this->oListWidget = new ListWidgetModule();
-		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "Event", "Title", "asc");
+		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "Event", "date_start", "desc");
 		$this->oListWidget->setDelegate($this->oDelegateProxy);
 		$this->oBooleanInputFilter = WidgetModule::getWidget('boolean_input', null, true);
 		$this->oDelegateProxy->setIsClassEvent(true);
