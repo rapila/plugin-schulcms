@@ -64,7 +64,7 @@ text_module:
       - ["Bold", "Italic"]
       - ["Link", "Unlink", "-", "Image"]
       - ["NumberedList", "BulletedList"]
-      - ["Undo", "Redo"]
+      - ["Undo", "Redo", "PasteFromWord"]
       - ["Format"]
       - ["RemoveFormat", "Source", "-", "Maximize"] 
   richtext_width: 700
