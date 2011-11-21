@@ -17,6 +17,7 @@ class ServiceListWidgetModule extends WidgetModule {
 		$aTagAttributes = array('class' => 'service_list');
 		$oListTag = new TagWriter('table', $aTagAttributes);
 		$this->oListWidget->setListTag($oListTag);
+		$this->oListWidget->setSetting('initial_detail_id', isset($this->aInitialSettings['initial_detail_id']) ? $this->aInitialSettings['initial_detail_id'] : null);
 		return $this->oListWidget->doWidget();
 	}
 	

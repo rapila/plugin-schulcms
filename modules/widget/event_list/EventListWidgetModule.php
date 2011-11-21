@@ -14,8 +14,7 @@ class EventListWidgetModule extends WidgetModule {
 	public function __construct() {
 		
 		/// @todo, display only entries that relate to class or service related
-		$this->bMayOnlyEditOwnedEvents = Session::getSession()->getUser()->mayUseAdminModule('events');
-		
+		$this->bMayOnlyEditOwnedEvents = Session::getSession()->getUser()->mayUseAdminModule('events');		
 		$this->oListWidget = new ListWidgetModule();
 		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "Event", "date_start", "desc");
 		$this->oListWidget->setDelegate($this->oDelegateProxy);
@@ -35,6 +34,7 @@ class EventListWidgetModule extends WidgetModule {
 		$aTagAttributes = array('class' => 'event_list');
 		$oListTag = new TagWriter('table', $aTagAttributes);
 		$this->oListWidget->setListTag($oListTag);
+		$this->oListWidget->setSetting('initial_detail_id', isset($this->aInitialSettings['initial_detail_id']) ? $this->aInitialSettings['initial_detail_id'] : null);
 		return $this->oListWidget->doWidget();
 	}
 	

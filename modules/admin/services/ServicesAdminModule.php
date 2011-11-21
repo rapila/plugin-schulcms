@@ -9,6 +9,11 @@ class ServicesAdminModule extends AdminModule {
 	
 	public function __construct() {
 		$this->oListWidget = new ServiceListWidgetModule();
+		$iRequestedId = Manager::peekNextPathItem();
+		if($iRequestedId !== null && is_numeric($iRequestedId)) {
+			$this->oListWidget->setSetting('initial_detail_id', $iRequestedId);
+		}
+
 		$this->oSidebarWidget = new ListWidgetModule();
 		$this->oSidebarWidget->setListTag(new TagWriter('ul'));
 		$this->oSidebarWidget->setDelegate(new CriteriaListWidgetDelegate($this, 'ServiceCategory', 'name'));
