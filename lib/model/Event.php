@@ -11,6 +11,13 @@ class Event extends BaseEvent {
 		$this->setTitleNormalized(StringUtil::normalize(str_replace('-', '', $sTitle), '-', '-'));
 		return parent::setTitle($sTitle);
 	}
+	
+	/**
+	* for reference tracking only
+	*/
+	public function getDescription() {
+		return StringPeer::getString('wns.event.description', null, null, array('title' => $this->getTitle()));
+	}
 
 	public function getIsClassEvent() {
 		return $this->getSchoolClassId() !== null;
@@ -119,6 +126,10 @@ class Event extends BaseEvent {
 		}
 		$aDateStart = explode('-', $this->getDateStart('Y-n-j'));
 		return array_merge($oEventPage->getFullPathArray(), array_merge($aDateStart, array($this->getTitleNormalized())));
+	}
+	
+	public function getAdminLink() {
+		return array('events', $this->getId());
 	}
 
 }

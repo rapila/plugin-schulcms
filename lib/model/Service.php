@@ -52,6 +52,19 @@ class Service extends BaseService {
 		}
 		return null;
 	}
+	
+ /**
+	* for reference tracking only
+	*/
+	public function getDescription() {
+		return StringPeer::getString('wns.service.description', null, null, array('name' => $this->getName()));
+	}
+	
+	public function getAdminLink() {
+		return array('services', $this->getId());
+	}
+
+
 
 }
 
