@@ -133,8 +133,14 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
   		$oEvent->setServiceId($aEventData['service_id'] != null ? $aEventData['service_id'] : null);
 		  
 		}
-		$oEvent->setBodyPreview(RichtextUtil::parseInputFromEditorForStorage($aEventData['body_preview']));
-		$oEvent->setBodyReview(RichtextUtil::parseInputFromEditorForStorage($aEventData['body_review']));
+		$oRichtextUtil = new RichtextUtil();
+		$oRichtextUtil->setTrackReferences($oEvent);
+		$oEvent->setBodyPreview($oRichtextUtil->parseInputFromEditor($aEventData['body_preview']));
+		$sReview = $oRichtextUtil->parseInputFromEditor($aEventData['body_review']);
+		if(trim($sReview) == '') {
+			$sReview = null;
+		}
+		$oEvent->setBodyReview($sReview);
 		$this->validate($aEventData);
 		if(!Flash::noErrors()) {
 			throw new ValidationException();
