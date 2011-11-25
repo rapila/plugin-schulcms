@@ -352,29 +352,30 @@ ul#secondary_navigation li
 	height: 28px
 	margin-left: .3em
 	font-size: 1.4em
-	display: none
+	// display: none
+	input
+		color: black
+		background-color: #E8E6E6
+		padding: .2em .4em
+		width: 145px
+		border: 1px solid #bab6b5
+		border-top-color: #bab6b5
+		border-left-color: #bab6b5
+		border-bottom-color: #F1EFEF
+		border-right-color: #F1EFEF
+		
+	#search_button
+		background: transparent url(../images/search_icon.png) no-repeat center center
+		display: inline-block
+		padding: .1em .3em
+		border: none
+		background-color: transparent
 
-#searchbar input
-	color: black
-	background-color: #E8E6E6
-	padding: .2em .4em
-	width: 145px
-	border: 1px solid #bab6b5
-	border-top-color: #bab6b5
-	border-left-color: #bab6b5
-	border-bottom-color: #F1EFEF
-	border-right-color: #F1EFEF
+	#search_button.active
+		background: transparent url(../images/search_icon_active.png) no-repeat center center
 
 input::-moz-placeholder, input::-webkit-input-placeholder
 	color: #A5A2A1
-
-#search_button
-	background: transparent url(../images/search_icon.png) no-repeat center center
-	display: inline-block
-	padding: .1em .3em
-
-#search_button.active
-	background: transparent url(../images/search_icon_active.png) no-repeat center center
 
 .inner
 	padding-top: 75px
