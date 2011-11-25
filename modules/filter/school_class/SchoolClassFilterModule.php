@@ -7,17 +7,20 @@ class SchoolClassFilterModule extends FilterModule {
 	
 	public function onNavigationItemChildrenRequested($oNavigationItem) {
 		$aSubpagesIdentifier = Settings::getSetting('school_settings', 'subpages_classes_identifiers', array());
+		
 		if($oNavigationItem instanceof PageNavigationItem && 
 			($oNavigationItem->getIdentifier() === 'classes' || in_array($oNavigationItem->getIdentifier(), $aSubpagesIdentifier))) {
 			$oCriteria = SchoolClassQuery::create()->distinct();
 			$oCriteria->clearSelectColumns()->addSelectColumn(SchoolClassPeer::SLUG);
 			$oCriteria->filterByHasStudents()->orderByUnitName(Criteria::ASC);
+			
 			foreach(SchoolClassPeer::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_COLUMN) as $sSlug) {
 				$oClass = SchoolClassQuery::create()->filterBySlug($sSlug)->findOne();
 				$oNavItem = new HiddenVirtualNavigationItem(self::CLASS_ITEM_TYPE, $sSlug, $oClass->getUnitName(), null, null);
 				$oNavigationItem->addChild($oNavItem);
 			}
-		} else if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ITEM_TYPE) {
+		} 
+		else if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ITEM_TYPE) {
 			$sSlug = $oNavigationItem->getName();
 			$oClass = SchoolClassQuery::create()->filterBySlug($sSlug)->findOne();
 			
@@ -37,7 +40,8 @@ class SchoolClassFilterModule extends FilterModule {
 		if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ITEM_TYPE) {
 			$sSlug = $oNavigationItem->getName();
 			$oQuery = SchoolClassQuery::create()->filterByIsCurrent(true)->filterByHasStudents()->filterBySlug($sSlug);
-		} else if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ARCHIVE_ITEM_TYPE) {
+		} 
+		else if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ARCHIVE_ITEM_TYPE) {
 			list($sSlug, $iYear) = $oNavigationItem->getData();
 			$oQuery = SchoolClassQuery::create()->filterByHasStudents()->filterBySlug($sSlug);
 		}
