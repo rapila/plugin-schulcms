@@ -12,7 +12,6 @@ Widget.types.event_types_input = {
 			jQuery.each(event_types, function(id, name) {
 				option.clone().text(name).attr('value', id).appendTo(this._element);
 			}.bind(this));
-			option.text(this.settings.custom_option).val('').prependTo(this._element);
 			if(current) {
 				this._element.val(current);
 			} else {
@@ -26,7 +25,6 @@ Widget.types.event_types_input = {
 	},
 	
 	settings: {
-		initial_selection: null,
-		custom_option: '------'
+		initial_selection: null
 	}
 };
