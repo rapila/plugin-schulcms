@@ -40,7 +40,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
     }
 
 		$oPage = FrontendManager::$CURRENT_PAGE;
-		$aClasses = SchoolClassPeer::getSchoolUnitsBySchool(null, $iClassTypeId);
+		$aClasses = SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool($iClassTypeId);
 		$oTemplate = $this->constructTemplate('list');
 		$bShowClassTeachersOnly = Settings::getSetting('school_settings', 'show_class_teachers_only_in_class_list', true);
 		$oTemplate->replaceIdentifier('header_col_teachers', StringPeer::getString('wns.col_header_teachers.'.($bShowClassTeachersOnly ? 'class_teachers' : 'teachers')));
@@ -60,8 +60,8 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 				$oItemTemplate->replaceIdentifier('stundenplan', '-');
 			}
 			// get infos related to teaching unit, all classes concerned
-			$oItemTemplate->replaceIdentifier('count_students', ClassStudentPeer::countStudentsByUnitName($oClass->getUnitName()));
-			$aClassTeachers = ClassTeacherPeer::getClassTeachersByUnitName($oClass->getUnitName(), null, $bShowClassTeachersOnly);
+			$oItemTemplate->replaceIdentifier('count_students', $oClass->countStudentsByUnitName());
+			$aClassTeachers = $oClass->getTeachersByUnitName();
 			$iLimit = 3;
 			$iCountTeachers = count($aClassTeachers);
 			$iCountMax = $iCountTeachers < $iLimit ? $iCountTeachers : $iLimit;
@@ -93,17 +93,15 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		if(!isset($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY])) {
 			return null;
 		}
-		$aClasses = SchoolClassQuery::create()->filterById($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY])->find();
-		$aClassIds = array();
-		foreach($aClasses as $oClass) {
-			$aClassIds[] = $oClass->getId();
+		$aClassIds = $_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY];
+		$aClasses = SchoolClassQuery::create()->filterById($aClassIds)->find();
+		if(count($aClasses) === 0) {
+		  return null;
 		}
 		$oTemplate = $this->constructTemplate('detail');
 
 		// portrait
-		$sUnitName = null;
 		foreach($aClasses as $i => $oClass) {
-			$sUnitName = $oClass->getUnitName();
 			$oPortrait = $oClass->getDocumentRelatedByClassPortraitId();
 			if($oPortrait) {
 				$oTemplate->replaceIdentifierMultiple('portrait_display_url', $oPortrait->getDisplayUrl(array('max_width' => 670)));
@@ -115,10 +113,10 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		$oTemplate->replaceIdentifier('full_unit_name', $aClasses[0]->getFullClassName());
 
 		// students
-		$iCountStudents = ClassStudentPeer::countStudentsByUnitName($aClasses[0]->getUnitName());
+		$iCountStudents = $aClasses[0]->countStudentsByUnitName();
 		if($iCountStudents > 0) {
 			if(Settings::getSetting('school_settings', 'display_student_names', true)) {
-				foreach(ClassStudentPeer::getStudentsByUnitName($aClasses[0]->getUnitName()) as $i => $oClassStudent) {
+				foreach($aClasses[0]->getStudentsByUnitName() as $i => $oClassStudent) {
 					$aStudents[] = $oClassStudent->getStudent()->getFirstName();
 				}
 				$oTemplate->replaceIdentifier('students_names', implode(', ', $aStudents));
@@ -127,7 +125,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		}
 
 		// teachers
-		$aClassTeachersOrdered = self::getClassTeachersOrdered(ClassTeacherPeer::getClassTeachersByUnitName($sUnitName, null, false));
+		$aClassTeachersOrdered = self::getClassTeachersOrdered($aClasses[0]->getTeachersByUnitName());
 		$iCount = count($aClassTeachersOrdered);
 		
 		$oTemplate->replaceIdentifier('label_class_teacher', StringPeer::getString('wns.class.class_teachers'));
@@ -190,13 +188,10 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		if(!isset($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY])) {
 			return null;
 		}
-		$aClasses = SchoolClassQuery::create()->filterById($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY])->find();
+		$aClassIds = $_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY];
+		$aClasses = SchoolClassQuery::create()->filterById($aClassIds)->find();
 		if(count($aClasses) === 0) {
 			return null;
-		}
-		$aClassIds = array();
-		foreach($aClasses as $oClass) {
-			$aClassIds[] = $oClass->getId();
 		}
 		$oTemplate = $this->constructTemplate('detail_context');
 		// main class attributes
@@ -210,7 +205,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		if($aClasses[0]->getRoomNumber()) {
 			$oTemplate->replaceIdentifier('room_number', $aClasses[0]->getRoomNumber());
 		}
-		$oTemplate->replaceIdentifier('count_students', ClassStudentPeer::countStudentsByUnitName($aClasses[0]->getUnitName()));
+		$oTemplate->replaceIdentifier('count_students', $aClasses[0]->countStudentsByUnitName());
 		// events
 		$aPreviewEvents = EventQuery::create()->filterByDateRangePreview()->filterBySchoolClassId($aClassIds)->orderByDateStart()->find();
 		$aReview = EventQuery::create()->filterByDateRangeReview()->filterBySchoolClassId($aClassIds)->orderByDateStart(Criteria::DESC)->find();
