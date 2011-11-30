@@ -43,7 +43,7 @@ class SchoolClassFilterModule extends FilterModule {
 		} 
 		else if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ARCHIVE_ITEM_TYPE) {
 			list($sSlug, $iYear) = $oNavigationItem->getData();
-			$oQuery = SchoolClassQuery::create()->filterByHasStudents()->filterBySlug($sSlug);
+			$oQuery = SchoolClassQuery::create()->filterByYear($iYear)->filterByHasStudents()->filterBySlug($sSlug);
 		}
 		if($oQuery !== null) {
 			$oQuery->clearSelectColumns()->addSelectColumn(SchoolClassPeer::ID);
