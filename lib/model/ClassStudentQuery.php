@@ -2,14 +2,6 @@
 
 
 /**
- * Skeleton subclass for performing query and update operations on the 'classes_students' table.
- *
- * 
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- *
  * @package    propel.generator.model
  */
 class ClassStudentQuery extends BaseClassStudentQuery {
@@ -18,4 +10,17 @@ class ClassStudentQuery extends BaseClassStudentQuery {
 		$this->addAscendingOrderByColumn(StudentPeer::FIRST_NAME);
 		return $this;
 	}
-} // ClassStudentQuery
+	
+	public function filterByUnitFromClass($oClass) {
+	  $this->distinct();
+		$this->joinSchoolClass()->useQuery('SchoolClass')->filterByYear($oClass->getYear())->filterByUnitName($oClass->getUnitName())->endUse();
+    return $this;
+	}
+	
+	public function filterBySchoolYear($iYear = null) {
+	  $iYear = $iYear === null ? SchoolPeer::getSchool()->getCurrentYear() : $iYear;
+	  $this->distinct()->groupByStudentId();
+    $this->joinSchoolClass()->useQuery('SchoolClass')->filterByYear($iYear)->excludeClassTypesIfConfigured()->endUse();
+    return $this;
+	}
+}

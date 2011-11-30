@@ -5,4 +5,5 @@
  */
 class ClassEventPeer extends BaseClassEventPeer {
 
-} // ClassEventPeer
+}
+
