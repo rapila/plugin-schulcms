@@ -18,6 +18,14 @@ class TeamMembersFrontendModule extends DynamicFrontendModule {
 		parent::__construct($oLanguageObject, $aPath, $iId);
 	}
 
+	public function getWords() {
+		$aOptions = @unserialize($this->getData());
+		if($aOptions[self::MODE_SELECT_KEY] !== 'team_mitglied_detail' && self::$TEAM_MEMBER) {
+      return array();
+		}
+    return parent::getWords();
+	}
+	
 	public function renderFrontend() { 
 		$this->oClassPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('classes'));
 		$aOptions = @unserialize($this->getData());
