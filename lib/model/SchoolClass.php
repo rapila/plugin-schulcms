@@ -3,6 +3,7 @@
  * @package		 propel.generator.model
  */
 class SchoolClass extends BaseSchoolClass {
+	
 	public static $CLASS_TYPES = array();
 	private static $CLASS_PAGE;
 	
@@ -79,6 +80,22 @@ class SchoolClass extends BaseSchoolClass {
 		} else {
 			return null;
 		}
+	}
+	
+	public function countStudentsByUnitName() {
+    return ClassStudentQuery::create()->filterByUnitFromClass($this)->count();
+	}
+	
+	public function getStudentsByUnitName() {
+    return ClassStudentQuery::create()->filterByUnitFromClass($this)->find();
+	}
+	
+	public function countTeachersByUnitName($bClassTeachersOnly = false) {
+    return ClassTeacherQuery::create()->filterByUnitFromClass($this)->count();
+	}
+	
+	public function getTeachersByUnitName($bClassTeachersOnly = false) {
+    return ClassTeacherQuery::create()->filterByUnitFromClass($this)->find();
 	}
 	
 	public function getCountStudents() {

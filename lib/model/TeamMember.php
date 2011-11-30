@@ -3,6 +3,7 @@
  * @package		 propel.generator.model
  */
 class TeamMember extends BaseTeamMember {
+	
 	public static $TEAMLIST_GROUPS = array();
 	
 	public function getFullNameInverted() {
@@ -24,22 +25,21 @@ class TeamMember extends BaseTeamMember {
 	* @return PropelCollection|array ClassTeacher[] List of ClassTeacher objects
 	*/
 	public function getIsClassTeacherClasses($bGroupByUnitName = false) {
-		$oCriteria = new Criteria();
-		$oCriteria->add(ClassTeacherPeer::IS_CLASS_TEACHER, true);
+		$oQuery = ClassTeacherQuery::create()->filterByIsClassTeacher(true);
 		if($bGroupByUnitName) {
-			$oCriteria->addGroupByColumn(SchoolClassPeer::UNIT_NAME);
+			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->groupByUnitName()->endUse();
 		}
-		return $this->getClassTeachersJoinSchoolClass($oCriteria);
+		return $this->getClassTeachersJoinSchoolClass($oQuery);
 	}
 
-	public function getClassTeachersJoinSchoolClass($oCriteria = null, $oCon = null, $sJoinBehavior = Criteria::INNER_JOIN, $bIncludeOldClasses = false) {
-		if(!$oCriteria) {
-			$oCriteria = new Criteria();
+	public function getClassTeachersJoinSchoolClass($oQuery = null, $oCon = null, $sJoinBehavior = Criteria::INNER_JOIN, $bIncludeOldClasses = false) {
+		if(!$oQuery) {
+			$oQuery = ClassTeacherQuery::create();
 		}
 		if(!$bIncludeOldClasses) {
-			$oCriteria->add(SchoolClassPeer::YEAR, SchoolPeer::getCurrentYear());
+			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->filterByYear(SchoolPeer::getCurrentYear());
 		}
-		return parent::getClassTeachersJoinSchoolClass($oCriteria, $oCon, $sJoinBehavior);
+		return parent::getClassTeachersJoinSchoolClass($oQuery, $oCon, $sJoinBehavior);
 	}
 	
 	public function getClassTeachersJoinSchoolClassesForPermissions($bIncludeOldClasses) {
@@ -53,14 +53,13 @@ class TeamMember extends BaseTeamMember {
 	* @return PropelCollection|array ClassTeacher[] List of ClassTeacher objects
 	*/
 	public function getClassTeacherClasses($bGroupByUnitName = false) {
-		$oCriteria = new Criteria();
+	  $oQuery = ClassTeacherQuery::create()->joinSchoolClass();
+	  $oQuery->orderByIsClassTeacher(Criteria::DESC);
 		if($bGroupByUnitName) {
-			$oCriteria->addGroupByColumn(SchoolClassPeer::UNIT_NAME);
+			$oQuery->useQuery('SchoolClass')->excludeClassTypesIfConfigured()->groupByUnitName();
 		}
-		$oCriteria->addDescendingOrderByColumn(ClassTeacherPeer::IS_CLASS_TEACHER);
-		$oCriteria->addAscendingOrderByColumn(SchoolClassPeer::NAME);
-    SchoolClassPeer::excludeClassTypeCriteria($oCriteria);
-		return $this->getClassTeachersJoinSchoolClass($oCriteria);
+		$oQuery->orderByName()->endUse();
+		return $this->getClassTeachersJoinSchoolClass($oQuery);
 	} 
 	
 	public function getClassNames() {
@@ -169,7 +168,7 @@ class TeamMember extends BaseTeamMember {
 	
 	public function getTeamMemberLink($oTeamMemberPage = null) {
 		if($oTeamMemberPage === null) {
-			$oTeamMemberPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_TEAM));
+			$oTeamMemberPage = PageQuery::create()->filterByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_TEAM));
 		}
 		return array_merge($oTeamMemberPage->getFullPathArray(), array($this->getSlug()));
 	}

@@ -4,6 +4,7 @@
  * @package		 propel.generator.model
  */
 class TeamMemberQuery extends BaseTeamMemberQuery {
+	
 	private $oPrevCrit;
 		
 	public function orderByRand() {
@@ -72,5 +73,14 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 	public function filterByHasPortrait() {
 		return $this->add(TeamMemberPeer::PORTRAIT_ID, null, Criteria::ISNOTNULL);
 	}
+	
+	public function filterByFunctionId($iFunctionId = null) {
+		if($iFunctionId !== null) {
+			$this->joinTeamMemberFunction()->useQuery('TeamMemberFunction')->filterBySchoolFunctionId($iFunctionId)->endUse();
+		}
+		$this->orderByLastName()->orderByFirstName();
+		return $this;
+	}
+
 }
 

@@ -113,7 +113,9 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$oTemplate->replaceIdentifier('body', $sBody);
 		$oTemplate->replaceIdentifier('list_link', LinkUtil::link($oPage->getFullPathArray()));
 		$oTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
-		$oTemplate->replaceIdentifier('teaser', self::$EVENT->getTeaser());
+		if(self::$EVENT->isPreview()) {
+  		$oTemplate->replaceIdentifier('teaser', self::$EVENT->getTeaser());
+		}
 		if(self::$EVENT->getDateEnd() == null) {
 			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getWeekdayName().', '.self::$EVENT->getDatumWithMonthName());
 		} else {
@@ -177,8 +179,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		if($oEvent === null) {
 			return null;
 		}
-		$sPageIdentifier = SchoolPeer::getPageIdentifier($oEvent->getEventTypeId() === 2 ? 'projects' : 'events');
-		$oPage = PagePeer::getPageByIdentifier($sPageIdentifier);
+		$oPage = PageQuery::create()->filterByIdentifier(SchoolPeer::getPageIdentifier($oEvent->getEventTypeId() === 2 ? 'projects' : 'events'));
 		$oTemplate = $this->constructTemplate('teaser');
 		$oTemplate->replaceIdentifier('title', $oEvent->getTitle());
 		$oTemplate->replaceIdentifier('date', $oEvent->getDateFromTo());

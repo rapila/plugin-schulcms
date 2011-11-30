@@ -1,17 +1,19 @@
 <?php
 
-
 /**
- * Skeleton subclass for performing query and update operations on the 'school_functions' table.
- *
- * 
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- *
  * @package    propel.generator.model
  */
 class SchoolFunctionQuery extends BaseSchoolFunctionQuery {
+	
+	public function filterByNonTeachingFunctionGroups() {
+		return $this->filterByFunctionGroupIdAndSchoolId(SchoolPeer::getActiveFunctionGroupIds('team_members_others'));
+	}	
+	
+	public function filterByFunctionGroupIdAndSchoolId($mFunctionGroupIds, $iSchoolId = null) {
+		$this->filterByFunctionGroupId($mFunctionGroupIds);
+		$this->filterBySchoolId($iSchoolId === null ? SchoolPeer::getSchoolId() : $iSchoolId);
+		$this->joinFunctionGroup()->joinTeamMemberFunction();
+		return $this;
+	}
+}
 
-} // SchoolFunctionQuery

@@ -96,7 +96,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 	  $oServiceDocument = new ServiceDocument();
 	  $oServiceDocument->setServiceId($this->iServiceId);
 	  $oServiceDocument->setDocumentId($iDocumentId);
-	  $oServiceDocument->setSort(ServiceDocumentPeer::countDocumentsByServiceId($this->iServiceId) + 1);
+	  $oServiceDocument->setSort(ServiceDocumentQuery::create()->filterByServiceId($this->iServiceId)->count() + 1);
 	  return $oServiceDocument->save();
 	}
 	

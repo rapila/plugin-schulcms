@@ -24,10 +24,10 @@ class SchoolFrontendModule extends DynamicFrontendModule {
 	public function renderSchulStatistik() {
 		$oTemplate = $this->constructTemplate('statistics');
 		$aResult = array_merge(
-			array(StringPeer::getString('statistics_key_classes', null, 'Klassen') => SchoolClassPeer::countActiveSchoolUnitsBySchool()), 
-			array(StringPeer::getString('statistics_key_students', null, 'SchülerInnen') => ClassStudentPeer::countStudentsByUnitName()), 
-			array(StringPeer::getString('statistics_key_teachers', null, 'Lehrpersonen') => TeamMemberPeer::countLehrpersonen(SchoolPeer::getCurrentYear())),
-			array(StringPeer::getString('statistics_key_others', null, 'Andere Mitarbeiter') => TeamMemberPeer::countNonTeachingPersonel())
+			array(StringPeer::getString('statistics_key_classes', null, 'Klassen') => SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool()->count()), 
+			array(StringPeer::getString('statistics_key_students', null, 'SchülerInnen') => ClassStudentQuery::create()->filterBySchoolYear()->count()), 
+			array(StringPeer::getString('statistics_key_teachers', null, 'Lehrpersonen') => ClassTeacherQuery::create()->filterByYear(SchoolPeer::getCurrentYear())->count()),
+			array(StringPeer::getString('statistics_key_others', null, 'Andere Mitarbeiter') => SchoolFunctionQuery::create()->filterByNonTeachingFunctionGroups()->count())
 			);
 		foreach($aResult as $sName => $iCount) {
 			if($iCount === 0) {

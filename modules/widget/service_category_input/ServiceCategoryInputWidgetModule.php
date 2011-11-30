@@ -5,6 +5,6 @@
 class ServiceCategoryInputWidgetModule extends WidgetModule {
 	
 	public function getCategories() {
-		return WidgetJsonFileModule::jsonBaseObjects(ServiceCategoryPeer::getAllSorted(), array('id', 'name'));
+		return WidgetJsonFileModule::jsonBaseObjects(ServiceCategoryQuery::create()->orderByName()->find(), array('id', 'name'));
 	}
 }
