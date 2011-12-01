@@ -21,7 +21,7 @@ class EventsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 		return $aResult;
 	}
 	
-	public function allEvents($iEventTypeId = null, $bIsArchive = false) {
+	public function allEvents($iEventTypeId = null, $iLimit = null, $bIsArchive = false) {
 		$oQuery = EventQuery::create()->filterBySchoolClassId(null, Criteria::ISNULL);
 		if(is_numeric($iEventTypeId)) {
 			$oQuery->filterByEventTypeId($iEventTypeId);
@@ -30,6 +30,9 @@ class EventsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 			$oQuery->filterByDateRangePreview()->orderByDateStart();
 		} else {
 			$oQuery->filterByDateRangeReview()->orderByDateStart(Criteria::DESC);
+		}
+		if($iLimit !== null) {
+			$oQuery->limit($iLimit);
 		}
 		$aResult = array();
 		foreach($oQuery->orderByTitle()->find() as $oEvent) {

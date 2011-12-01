@@ -54,6 +54,7 @@ Widget.types.events_frontend_config = {
 			return;
 		}
 		this.list_options.show();
+		console.log(this.type_dropdown.val(), this.limit_dropdown.val());
 
 		this.allEvents(this.type_dropdown.val(), this.limit_dropdown.val(), function(events) {
 			jQuery.each(events, function(id, title) {
