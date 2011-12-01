@@ -40,7 +40,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
     }
 
 		$oPage = FrontendManager::$CURRENT_PAGE;
-		$aClasses = SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool($iClassTypeId);
+		$aClasses = SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool($iClassTypeId)->find();
 		$oTemplate = $this->constructTemplate('list');
 		$bShowClassTeachersOnly = Settings::getSetting('school_settings', 'show_class_teachers_only_in_class_list', true);
 		$oTemplate->replaceIdentifier('header_col_teachers', StringPeer::getString('wns.col_header_teachers.'.($bShowClassTeachersOnly ? 'class_teachers' : 'teachers')));
