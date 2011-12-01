@@ -120,9 +120,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getWeekdayName().', '.self::$EVENT->getDatumWithMonthName());
 		} else {
 			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getDateFromTo());
-		}
-		$oTemplate->replaceIdentifier('teaser', self::$EVENT->getTeaser());
-		
+		}		
 		if(self::$EVENT->getServiceId() !== null) {
 			if($oService = self::$EVENT->getService()) {
 				$oTemplate->replaceIdentifier('service_link', TagWriter::quickTag('a', array('href' => LinkUtil::link($oService->getServiceLink()) , 'class' => 'event_service_link', 'title' => StringPeer::getString('wns.link.to_service_detail')), $oService->getName()));
