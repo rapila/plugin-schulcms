@@ -123,9 +123,8 @@ Widget.types.event_detail = {
 	insert_thumbnail: function(document_data) {
 		var _this = this;
 		var document_id = document_data.Id;
-		var px_size = ''+this.settings.thumbnail_size+'px';
 		var doc = jQuery('<div/>').addClass('ui-widget ui-widget-content ui-image-picker-image ui-placeholder');
-		doc.css({width: px_size, height: px_size});
+		doc.css({width: ''+this.settings.thumbnail_size+'px', height: this.settings.thumbnail_size+13+'px'});
 		doc.data('document_id', document_id);
 		
 		jQuery('<span/>').addClass('ui-icon ui-icon-trash').click(function(event) {
