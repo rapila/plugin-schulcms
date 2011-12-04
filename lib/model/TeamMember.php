@@ -37,7 +37,7 @@ class TeamMember extends BaseTeamMember {
 			$oQuery = ClassTeacherQuery::create();
 		}
 		if(!$bIncludeOldClasses) {
-			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->filterByYear(SchoolPeer::getCurrentYear());
+			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->filterByYear(SchoolPeer::getCurrentYear())->endUse();
 		}
 		return parent::getClassTeachersJoinSchoolClass($oQuery, $oCon, $sJoinBehavior);
 	}
@@ -53,12 +53,13 @@ class TeamMember extends BaseTeamMember {
 	* @return PropelCollection|array ClassTeacher[] List of ClassTeacher objects
 	*/
 	public function getClassTeacherClasses($bGroupByUnitName = false) {
-	  $oQuery = ClassTeacherQuery::create()->joinSchoolClass();
-	  $oQuery->orderByIsClassTeacher(Criteria::DESC);
+	  $oQuery = ClassTeacherQuery::create();
+		$oQuery->orderByIsClassTeacher(Criteria::DESC);
 		if($bGroupByUnitName) {
-			$oQuery->useQuery('SchoolClass')->excludeClassTypesIfConfigured()->groupByUnitName();
+			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->excludeClassTypesIfConfigured()->groupByUnitName()->orderByName()->endUse();
+		} else {
+			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->orderByName()->endUse();
 		}
-		$oQuery->orderByName()->endUse();
 		return $this->getClassTeachersJoinSchoolClass($oQuery);
 	} 
 	
