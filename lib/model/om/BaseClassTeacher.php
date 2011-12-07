@@ -56,6 +56,13 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	protected $is_class_teacher;
 
 	/**
+	 * The value for the is_newly_updated field.
+	 * Note: this column has a database default value of: false
+	 * @var        boolean
+	 */
+	protected $is_newly_updated;
+
+	/**
 	 * The value for the created_at field.
 	 * @var        string
 	 */
@@ -122,6 +129,7 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	public function applyDefaultValues()
 	{
 		$this->is_class_teacher = false;
+		$this->is_newly_updated = false;
 	}
 
 	/**
@@ -182,6 +190,16 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	public function getIsClassTeacher()
 	{
 		return $this->is_class_teacher;
+	}
+
+	/**
+	 * Get the [is_newly_updated] column value.
+	 * 
+	 * @return     boolean
+	 */
+	public function getIsNewlyUpdated()
+	{
+		return $this->is_newly_updated;
 	}
 
 	/**
@@ -397,6 +415,34 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 	} // setIsClassTeacher()
 
 	/**
+	 * Sets the value of the [is_newly_updated] column.
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+	 * 
+	 * @param      boolean|integer|string $v The new value
+	 * @return     ClassTeacher The current object (for fluent API support)
+	 */
+	public function setIsNewlyUpdated($v)
+	{
+		if ($v !== null) {
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
+		}
+
+		if ($this->is_newly_updated !== $v) {
+			$this->is_newly_updated = $v;
+			$this->modifiedColumns[] = ClassTeacherPeer::IS_NEWLY_UPDATED;
+		}
+
+		return $this;
+	} // setIsNewlyUpdated()
+
+	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.
@@ -502,6 +548,10 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 				return false;
 			}
 
+			if ($this->is_newly_updated !== false) {
+				return false;
+			}
+
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -529,10 +579,11 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 			$this->function_name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
 			$this->sort_order = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->is_class_teacher = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
-			$this->created_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-			$this->updated_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-			$this->created_by = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
-			$this->updated_by = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+			$this->is_newly_updated = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
+			$this->created_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+			$this->updated_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+			$this->created_by = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+			$this->updated_by = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -541,7 +592,7 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 9; // 9 = ClassTeacherPeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 10; // 10 = ClassTeacherPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating ClassTeacher object", $e);
@@ -971,15 +1022,18 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 				return $this->getIsClassTeacher();
 				break;
 			case 5:
-				return $this->getCreatedAt();
+				return $this->getIsNewlyUpdated();
 				break;
 			case 6:
-				return $this->getUpdatedAt();
+				return $this->getCreatedAt();
 				break;
 			case 7:
-				return $this->getCreatedBy();
+				return $this->getUpdatedAt();
 				break;
 			case 8:
+				return $this->getCreatedBy();
+				break;
+			case 9:
 				return $this->getUpdatedBy();
 				break;
 			default:
@@ -1016,10 +1070,11 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 			$keys[2] => $this->getFunctionName(),
 			$keys[3] => $this->getSortOrder(),
 			$keys[4] => $this->getIsClassTeacher(),
-			$keys[5] => $this->getCreatedAt(),
-			$keys[6] => $this->getUpdatedAt(),
-			$keys[7] => $this->getCreatedBy(),
-			$keys[8] => $this->getUpdatedBy(),
+			$keys[5] => $this->getIsNewlyUpdated(),
+			$keys[6] => $this->getCreatedAt(),
+			$keys[7] => $this->getUpdatedAt(),
+			$keys[8] => $this->getCreatedBy(),
+			$keys[9] => $this->getUpdatedBy(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aSchoolClass) {
@@ -1081,15 +1136,18 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 				$this->setIsClassTeacher($value);
 				break;
 			case 5:
-				$this->setCreatedAt($value);
+				$this->setIsNewlyUpdated($value);
 				break;
 			case 6:
-				$this->setUpdatedAt($value);
+				$this->setCreatedAt($value);
 				break;
 			case 7:
-				$this->setCreatedBy($value);
+				$this->setUpdatedAt($value);
 				break;
 			case 8:
+				$this->setCreatedBy($value);
+				break;
+			case 9:
 				$this->setUpdatedBy($value);
 				break;
 		} // switch()
@@ -1121,10 +1179,11 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 		if (array_key_exists($keys[2], $arr)) $this->setFunctionName($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setSortOrder($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setIsClassTeacher($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setCreatedAt($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setUpdatedAt($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setCreatedBy($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setUpdatedBy($arr[$keys[8]]);
+		if (array_key_exists($keys[5], $arr)) $this->setIsNewlyUpdated($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setCreatedAt($arr[$keys[6]]);
+		if (array_key_exists($keys[7], $arr)) $this->setUpdatedAt($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setCreatedBy($arr[$keys[8]]);
+		if (array_key_exists($keys[9], $arr)) $this->setUpdatedBy($arr[$keys[9]]);
 	}
 
 	/**
@@ -1141,6 +1200,7 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 		if ($this->isColumnModified(ClassTeacherPeer::FUNCTION_NAME)) $criteria->add(ClassTeacherPeer::FUNCTION_NAME, $this->function_name);
 		if ($this->isColumnModified(ClassTeacherPeer::SORT_ORDER)) $criteria->add(ClassTeacherPeer::SORT_ORDER, $this->sort_order);
 		if ($this->isColumnModified(ClassTeacherPeer::IS_CLASS_TEACHER)) $criteria->add(ClassTeacherPeer::IS_CLASS_TEACHER, $this->is_class_teacher);
+		if ($this->isColumnModified(ClassTeacherPeer::IS_NEWLY_UPDATED)) $criteria->add(ClassTeacherPeer::IS_NEWLY_UPDATED, $this->is_newly_updated);
 		if ($this->isColumnModified(ClassTeacherPeer::CREATED_AT)) $criteria->add(ClassTeacherPeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(ClassTeacherPeer::UPDATED_AT)) $criteria->add(ClassTeacherPeer::UPDATED_AT, $this->updated_at);
 		if ($this->isColumnModified(ClassTeacherPeer::CREATED_BY)) $criteria->add(ClassTeacherPeer::CREATED_BY, $this->created_by);
@@ -1222,6 +1282,7 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 		$copyObj->setFunctionName($this->getFunctionName());
 		$copyObj->setSortOrder($this->getSortOrder());
 		$copyObj->setIsClassTeacher($this->getIsClassTeacher());
+		$copyObj->setIsNewlyUpdated($this->getIsNewlyUpdated());
 		$copyObj->setCreatedAt($this->getCreatedAt());
 		$copyObj->setUpdatedAt($this->getUpdatedAt());
 		$copyObj->setCreatedBy($this->getCreatedBy());
@@ -1475,6 +1536,7 @@ abstract class BaseClassTeacher extends BaseObject  implements Persistent
 		$this->function_name = null;
 		$this->sort_order = null;
 		$this->is_class_teacher = null;
+		$this->is_newly_updated = null;
 		$this->created_at = null;
 		$this->updated_at = null;
 		$this->created_by = null;

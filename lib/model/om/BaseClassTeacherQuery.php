@@ -11,6 +11,7 @@
  * @method     ClassTeacherQuery orderByFunctionName($order = Criteria::ASC) Order by the function_name column
  * @method     ClassTeacherQuery orderBySortOrder($order = Criteria::ASC) Order by the sort_order column
  * @method     ClassTeacherQuery orderByIsClassTeacher($order = Criteria::ASC) Order by the is_class_teacher column
+ * @method     ClassTeacherQuery orderByIsNewlyUpdated($order = Criteria::ASC) Order by the is_newly_updated column
  * @method     ClassTeacherQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ClassTeacherQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method     ClassTeacherQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
@@ -21,6 +22,7 @@
  * @method     ClassTeacherQuery groupByFunctionName() Group by the function_name column
  * @method     ClassTeacherQuery groupBySortOrder() Group by the sort_order column
  * @method     ClassTeacherQuery groupByIsClassTeacher() Group by the is_class_teacher column
+ * @method     ClassTeacherQuery groupByIsNewlyUpdated() Group by the is_newly_updated column
  * @method     ClassTeacherQuery groupByCreatedAt() Group by the created_at column
  * @method     ClassTeacherQuery groupByUpdatedAt() Group by the updated_at column
  * @method     ClassTeacherQuery groupByCreatedBy() Group by the created_by column
@@ -54,6 +56,7 @@
  * @method     ClassTeacher findOneByFunctionName(string $function_name) Return the first ClassTeacher filtered by the function_name column
  * @method     ClassTeacher findOneBySortOrder(int $sort_order) Return the first ClassTeacher filtered by the sort_order column
  * @method     ClassTeacher findOneByIsClassTeacher(boolean $is_class_teacher) Return the first ClassTeacher filtered by the is_class_teacher column
+ * @method     ClassTeacher findOneByIsNewlyUpdated(boolean $is_newly_updated) Return the first ClassTeacher filtered by the is_newly_updated column
  * @method     ClassTeacher findOneByCreatedAt(string $created_at) Return the first ClassTeacher filtered by the created_at column
  * @method     ClassTeacher findOneByUpdatedAt(string $updated_at) Return the first ClassTeacher filtered by the updated_at column
  * @method     ClassTeacher findOneByCreatedBy(int $created_by) Return the first ClassTeacher filtered by the created_by column
@@ -64,6 +67,7 @@
  * @method     array findByFunctionName(string $function_name) Return ClassTeacher objects filtered by the function_name column
  * @method     array findBySortOrder(int $sort_order) Return ClassTeacher objects filtered by the sort_order column
  * @method     array findByIsClassTeacher(boolean $is_class_teacher) Return ClassTeacher objects filtered by the is_class_teacher column
+ * @method     array findByIsNewlyUpdated(boolean $is_newly_updated) Return ClassTeacher objects filtered by the is_newly_updated column
  * @method     array findByCreatedAt(string $created_at) Return ClassTeacher objects filtered by the created_at column
  * @method     array findByUpdatedAt(string $updated_at) Return ClassTeacher objects filtered by the updated_at column
  * @method     array findByCreatedBy(int $created_by) Return ClassTeacher objects filtered by the created_by column
@@ -340,6 +344,32 @@ abstract class BaseClassTeacherQuery extends ModelCriteria
             $is_class_teacher = in_array(strtolower($isClassTeacher), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
         return $this->addUsingAlias(ClassTeacherPeer::IS_CLASS_TEACHER, $isClassTeacher, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_newly_updated column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsNewlyUpdated(true); // WHERE is_newly_updated = true
+     * $query->filterByIsNewlyUpdated('yes'); // WHERE is_newly_updated = true
+     * </code>
+     *
+     * @param     boolean|string $isNewlyUpdated The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    ClassTeacherQuery The current query, for fluid interface
+     */
+    public function filterByIsNewlyUpdated($isNewlyUpdated = null, $comparison = null)
+    {
+        if (is_string($isNewlyUpdated)) {
+            $is_newly_updated = in_array(strtolower($isNewlyUpdated), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+        return $this->addUsingAlias(ClassTeacherPeer::IS_NEWLY_UPDATED, $isNewlyUpdated, $comparison);
     }
 
     /**

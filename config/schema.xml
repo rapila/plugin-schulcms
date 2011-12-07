@@ -156,6 +156,7 @@
 	<column name="function_name" type="varchar" size="80" required="true" primaryKey="true" />
 	<column name="sort_order" type="integer" />
 	<column name="is_class_teacher" type="boolean" size="1" default="0" />
+	<column name="is_newly_updated" type="boolean" size="1" default="0" />
 </table>
 
 <table name="students" phpName="Student">

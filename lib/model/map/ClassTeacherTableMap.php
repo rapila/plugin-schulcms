@@ -43,6 +43,7 @@ class ClassTeacherTableMap extends TableMap
 		$this->addPrimaryKey('FUNCTION_NAME', 'FunctionName', 'VARCHAR', true, 80, null);
 		$this->addColumn('SORT_ORDER', 'SortOrder', 'INTEGER', false, null, null);
 		$this->addColumn('IS_CLASS_TEACHER', 'IsClassTeacher', 'BOOLEAN', false, 1, false);
+		$this->addColumn('IS_NEWLY_UPDATED', 'IsNewlyUpdated', 'BOOLEAN', false, 1, false);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
 		$this->addForeignKey('CREATED_BY', 'CreatedBy', 'INTEGER', 'users', 'ID', false, null, null);
