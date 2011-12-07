@@ -40,4 +40,25 @@ class ServiceFilterModule extends FilterModule {
 			ServicesFrontendModule::$SERVICE = ServiceQuery::create()->filterBySlug($oNavigationItem->getName())->findOne();
 		}
 	}	
+	
+	public function onOperationIsDenied($sOperation, $oOnObject, $oUser, $aContainer) {
+		$bIsAllowed = &$aContainer[0];
+		if(!($oOnObject instanceof Document)) {
+			return;
+		}
+		if($oOnObject->getDocumentCategoryId() !== SchoolPeer::getDocumentCategoryConfig('service_documents')) {
+			return;
+		}
+		
+		if($sOperation === 'insert') {
+			$bIsAllowed = true;
+			return;
+		}
+		$oServiceDocument = $oOnObject->getServiceDocuments();
+		if(!count($oServiceDocument)) {
+			return;
+		}
+		$bIsAllowed = $oServiceDocument[0]->mayOperate($sOperation, $oUser);
+	}
+
 }
