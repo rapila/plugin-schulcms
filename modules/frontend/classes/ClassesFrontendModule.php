@@ -199,8 +199,8 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		if($aClasses[0]->getDocumentRelatedByClassScheduleId()) {
 			$oTemplate->replaceIdentifier('stundenplan', TagWriter::quickTag('a', array('href' => $aClasses[0]->getDocumentRelatedByClassScheduleId()->getDisplayUrl(), 'class' => "stundenplan", 'title' => StringPeer::getString('wns.download_stundenplan')), ' '));
 		}
-		if($aClasses[0]->getDocumentRelatedByWeekScheduleId()) {
-			$oTemplate->replaceIdentifier('weekplan', TagWriter::quickTag('a', array('href' => $aClasses[0]->getDocumentRelatedByClassScheduleId()->getDisplayUrl(), 'class' => "stundenplan", 'title' => StringPeer::getString('wns.download_stundenplan')), ' '));
+		if($aClasses[0]->getDocumentRelatedByWeekScheduleId() !== null) {
+			$oTemplate->replaceIdentifier('weekplan', TagWriter::quickTag('a', array('href' => $aClasses[0]->getDocumentRelatedByWeekScheduleId()->getDisplayUrl(), 'class' => "stundenplan", 'title' => StringPeer::getString('wns.download_stundenplan')), ' '));
 		}
 		if($aClasses[0]->getRoomNumber()) {
 			$oTemplate->replaceIdentifier('room_number', $aClasses[0]->getRoomNumber());
