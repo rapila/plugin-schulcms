@@ -63,4 +63,24 @@ class SchoolClassFilterModule extends FilterModule {
 			}
 		}
 	}
+	
+	public function onOperationIsDenied($sOperation, $oOnObject, $oUser, $aContainer) {
+		$bIsAllowed = &$aContainer[0];
+		if(!($oOnObject instanceof Link)) {
+			return;
+		}
+		if($oOnObject->getLinkCategoryId() !== SchoolPeer::getLinkCategoryConfig('school_class_links')) {
+			return;
+		}
+		
+		if($sOperation === 'insert') {
+			$bIsAllowed = true;
+			return;
+		}
+		$oClassLink = $oOnObject->getClassLinks();
+		if(!count($oClassLink)) {
+			return;
+		}
+		$bIsAllowed = $oClassLink[0]->mayOperate($sOperation, $oUser);
+	}
 }

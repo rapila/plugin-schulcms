@@ -1591,7 +1591,12 @@ abstract class BaseSchoolBuilding extends BaseObject  implements Persistent
 		if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && SchoolBuildingPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
 			return true;
 		}
-		return SchoolBuildingPeer::mayOperateOn($oUser, $this, $sOperation);
+		if(SchoolBuildingPeer::mayOperateOn($oUser, $this, $sOperation)) {
+			return true;
+		}
+		$bIsAllowed = false;
+		FilterModule::getFilters()->handleOperationIsDenied($sOperation, $this, $oUser, array(&$bIsAllowed));
+		return $bIsAllowed;
 	}
 	public function mayBeInserted($oUser = false) {
 		return $this->mayOperate("insert", $oUser);

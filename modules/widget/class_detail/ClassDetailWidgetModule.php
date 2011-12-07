@@ -73,10 +73,11 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		return false;
 	}
 	
-	public function addClassLink($iLinkId) {
+	public function addClassLink($iLinkId = null) {
 	  if(ClassLinkPeer::retrieveByPK($this->iSchoolClassId, $iLinkId)) {
 	    return;
 	  }
+		ClassLinkPeer::ignoreRights(true);
 		$oClassLink = new ClassLink();
 		$oClassLink->setSchoolClassId($this->iSchoolClassId);
 		$oClassLink->setLinkId($iLinkId);
