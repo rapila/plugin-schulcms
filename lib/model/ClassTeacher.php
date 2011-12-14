@@ -1,15 +1,15 @@
 <?php
 
 /**
- * @package    propel.generator.model
+ * @package		 propel.generator.model
  */
 class ClassTeacher extends BaseClassTeacher {
-  
-  public function getFunctionName($bDisplayClassTeacher=false) {
-		if($bDisplayClassTeacher && $this->isClassTeacher()) {
-			return '';
+	
+	public function getFunctionName($bStripStar = false) {
+		if($bStripStar) {
+			return str_replace('*', '', parent::getFunctionName());
 		}
-    return str_replace('*', '', parent::getFunctionName());
-  }
+		return parent::getFunctionName();
+	}
 }
 
