@@ -62,12 +62,12 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 			// get infos related to teaching unit, all classes concerned
 			$oItemTemplate->replaceIdentifier('count_students', $oClass->countStudentsByUnitName());
 			$aClassTeachers = $oClass->getTeachersByUnitName();
-			$iLimit = 3;
+			$iLimit = 2;
 			$iCountTeachers = count($aClassTeachers);
 			$iCountMax = $iCountTeachers < $iLimit ? $iCountTeachers : $iLimit;
 			foreach($aClassTeachers as $i => $oClassTeacher) {
 				if($i < ($iLimit)) {
-					$sFunctionAddon = $oClassTeacher->getIsClassTeacher() ? $oClassTeacher->getTeamMember()->getClassTeacherTitle() : $oClassTeacher->getFunctionName();
+					$sFunctionAddon = $oClassTeacher->getIsClassTeacher() ? $oClassTeacher->getTeamMember()->getClassTeacherTitle() : $oClassTeacher->getFunctionName(true);
 					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => $oClassTeacher->getTeamMember()->getFullName().', '.$sFunctionAddon, 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug())))), $oClassTeacher->getTeamMember()->getFullNameShort()));
 					if($i < $iCountMax-1) {
 						$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ');
@@ -147,10 +147,10 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 			if(!isset($aClassTeachersSet[$oClassTeacher->getTeamMemberId()])) {
 				$aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['team_member'] = $oClassTeacher->getTeamMember();
 				$aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['is_class_teacher'] = $oClassTeacher->getIsClassTeacher();
-				$aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['functions'][] = $oClassTeacher->getFunctionName();
+				$aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['functions'][] = $oClassTeacher->getFunctionName(true);
 			} else {
-				if(!in_array($oClassTeacher->getFunctionName(), $aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['functions'])) {
-					$aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['functions'][] = $oClassTeacher->getFunctionName();
+				if(!in_array($oClassTeacher->getFunctionName(true), $aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['functions'])) {
+					$aClassTeachersSet[$oClassTeacher->getTeamMemberId()]['functions'][] = $oClassTeacher->getFunctionName(true);
 				}
 			}
 		}
