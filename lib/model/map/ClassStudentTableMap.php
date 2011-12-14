@@ -41,6 +41,7 @@ class ClassStudentTableMap extends TableMap
 		$this->addForeignPrimaryKey('SCHOOL_CLASS_ID', 'SchoolClassId', 'INTEGER' , 'school_classes', 'ID', true, null, null);
 		$this->addColumn('FUNCTION_NAME', 'FunctionName', 'VARCHAR', false, 80, null);
 		$this->addForeignPrimaryKey('STUDENT_ID', 'StudentId', 'INTEGER' , 'students', 'ID', true, null, null);
+		$this->addColumn('IS_NEWLY_UPDATED', 'IsNewlyUpdated', 'BOOLEAN', false, 1, false);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
 		$this->addForeignKey('CREATED_BY', 'CreatedBy', 'INTEGER', 'users', 'ID', false, null, null);

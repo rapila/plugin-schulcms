@@ -131,6 +131,7 @@
 	<foreign-key foreignTable="students" onDelete="cascade">
 		<reference local="student_id" foreign="id" />
 	</foreign-key>
+	<column name="is_newly_updated" type="boolean" size="1" default="0" />
 </table>
 
 <table name="class_links" phpName="ClassLink">

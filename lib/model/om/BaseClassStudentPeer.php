@@ -26,13 +26,13 @@ abstract class BaseClassStudentPeer {
 	const TM_CLASS = 'ClassStudentTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 7;
+	const NUM_COLUMNS = 8;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 7;
+	const NUM_HYDRATE_COLUMNS = 8;
 
 	/** the column name for the SCHOOL_CLASS_ID field */
 	const SCHOOL_CLASS_ID = 'class_students.SCHOOL_CLASS_ID';
@@ -42,6 +42,9 @@ abstract class BaseClassStudentPeer {
 
 	/** the column name for the STUDENT_ID field */
 	const STUDENT_ID = 'class_students.STUDENT_ID';
+
+	/** the column name for the IS_NEWLY_UPDATED field */
+	const IS_NEWLY_UPDATED = 'class_students.IS_NEWLY_UPDATED';
 
 	/** the column name for the CREATED_AT field */
 	const CREATED_AT = 'class_students.CREATED_AT';
@@ -76,12 +79,12 @@ abstract class BaseClassStudentPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('SchoolClassId', 'FunctionName', 'StudentId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId', 'functionName', 'studentId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-		BasePeer::TYPE_COLNAME => array (self::SCHOOL_CLASS_ID, self::FUNCTION_NAME, self::STUDENT_ID, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID', 'FUNCTION_NAME', 'STUDENT_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-		BasePeer::TYPE_FIELDNAME => array ('school_class_id', 'function_name', 'student_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+		BasePeer::TYPE_PHPNAME => array ('SchoolClassId', 'FunctionName', 'StudentId', 'IsNewlyUpdated', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId', 'functionName', 'studentId', 'isNewlyUpdated', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+		BasePeer::TYPE_COLNAME => array (self::SCHOOL_CLASS_ID, self::FUNCTION_NAME, self::STUDENT_ID, self::IS_NEWLY_UPDATED, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID', 'FUNCTION_NAME', 'STUDENT_ID', 'IS_NEWLY_UPDATED', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+		BasePeer::TYPE_FIELDNAME => array ('school_class_id', 'function_name', 'student_id', 'is_newly_updated', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
 	);
 
 	/**
@@ -91,12 +94,12 @@ abstract class BaseClassStudentPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('SchoolClassId' => 0, 'FunctionName' => 1, 'StudentId' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, 'CreatedBy' => 5, 'UpdatedBy' => 6, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId' => 0, 'functionName' => 1, 'studentId' => 2, 'createdAt' => 3, 'updatedAt' => 4, 'createdBy' => 5, 'updatedBy' => 6, ),
-		BasePeer::TYPE_COLNAME => array (self::SCHOOL_CLASS_ID => 0, self::FUNCTION_NAME => 1, self::STUDENT_ID => 2, self::CREATED_AT => 3, self::UPDATED_AT => 4, self::CREATED_BY => 5, self::UPDATED_BY => 6, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID' => 0, 'FUNCTION_NAME' => 1, 'STUDENT_ID' => 2, 'CREATED_AT' => 3, 'UPDATED_AT' => 4, 'CREATED_BY' => 5, 'UPDATED_BY' => 6, ),
-		BasePeer::TYPE_FIELDNAME => array ('school_class_id' => 0, 'function_name' => 1, 'student_id' => 2, 'created_at' => 3, 'updated_at' => 4, 'created_by' => 5, 'updated_by' => 6, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+		BasePeer::TYPE_PHPNAME => array ('SchoolClassId' => 0, 'FunctionName' => 1, 'StudentId' => 2, 'IsNewlyUpdated' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, 'CreatedBy' => 6, 'UpdatedBy' => 7, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId' => 0, 'functionName' => 1, 'studentId' => 2, 'isNewlyUpdated' => 3, 'createdAt' => 4, 'updatedAt' => 5, 'createdBy' => 6, 'updatedBy' => 7, ),
+		BasePeer::TYPE_COLNAME => array (self::SCHOOL_CLASS_ID => 0, self::FUNCTION_NAME => 1, self::STUDENT_ID => 2, self::IS_NEWLY_UPDATED => 3, self::CREATED_AT => 4, self::UPDATED_AT => 5, self::CREATED_BY => 6, self::UPDATED_BY => 7, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID' => 0, 'FUNCTION_NAME' => 1, 'STUDENT_ID' => 2, 'IS_NEWLY_UPDATED' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, 'CREATED_BY' => 6, 'UPDATED_BY' => 7, ),
+		BasePeer::TYPE_FIELDNAME => array ('school_class_id' => 0, 'function_name' => 1, 'student_id' => 2, 'is_newly_updated' => 3, 'created_at' => 4, 'updated_at' => 5, 'created_by' => 6, 'updated_by' => 7, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
 	);
 
 	/**
@@ -171,6 +174,7 @@ abstract class BaseClassStudentPeer {
 			$criteria->addSelectColumn(ClassStudentPeer::SCHOOL_CLASS_ID);
 			$criteria->addSelectColumn(ClassStudentPeer::FUNCTION_NAME);
 			$criteria->addSelectColumn(ClassStudentPeer::STUDENT_ID);
+			$criteria->addSelectColumn(ClassStudentPeer::IS_NEWLY_UPDATED);
 			$criteria->addSelectColumn(ClassStudentPeer::CREATED_AT);
 			$criteria->addSelectColumn(ClassStudentPeer::UPDATED_AT);
 			$criteria->addSelectColumn(ClassStudentPeer::CREATED_BY);
@@ -179,6 +183,7 @@ abstract class BaseClassStudentPeer {
 			$criteria->addSelectColumn($alias . '.SCHOOL_CLASS_ID');
 			$criteria->addSelectColumn($alias . '.FUNCTION_NAME');
 			$criteria->addSelectColumn($alias . '.STUDENT_ID');
+			$criteria->addSelectColumn($alias . '.IS_NEWLY_UPDATED');
 			$criteria->addSelectColumn($alias . '.CREATED_AT');
 			$criteria->addSelectColumn($alias . '.UPDATED_AT');
 			$criteria->addSelectColumn($alias . '.CREATED_BY');

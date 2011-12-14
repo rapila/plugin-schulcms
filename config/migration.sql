@@ -402,3 +402,6 @@ CREATE TABLE IF NOT EXISTS `notes` (
   KEY `notes_FI_1` (`created_by`),
   KEY `notes_FI_2` (`updated_by`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+
+ALTER TABLE `class_teachers` ADD `is_newly_updated` TINYINT UNSIGNED NOT NULL DEFAULT '0' AFTER `is_class_teacher` ;
+ALTER TABLE `class_students` ADD `is_newly_updated` TINYINT UNSIGNED NOT NULL DEFAULT '0' AFTER `student_id` ;
