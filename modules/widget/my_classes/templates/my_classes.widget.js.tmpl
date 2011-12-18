@@ -43,7 +43,7 @@ Widget.types.my_classes = {
 						widget.setSchoolClassId(row_data.Id);
 						widget.fill_data();
 						widget.open();
-						widget.save_callback = function(event_id) {
+						widget.save_callback = function() {
 							_this.reload_list();
 						};
 					});
