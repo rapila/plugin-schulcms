@@ -59,6 +59,7 @@ class ClassListWidgetModule extends WidgetModule {
 				break;			
 			case 'class_teacher_names':
 				$aResult['heading'] = StringPeer::getString('wns.class.class_teacher');
+				$aResult['is_sortable'] = false;
 				break;
 			case 'room_number':
 				$aResult['heading'] = StringPeer::getString('wns.class.room_number');
