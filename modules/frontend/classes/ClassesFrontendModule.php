@@ -251,7 +251,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 			$oLinksTempl = $this->constructTemplate('links');
 			$oLinksTempl->replaceIdentifier('link_title', 'Links');
 			foreach($aLinks as $i => $oClassLink) {
-				$oLinksTempl->replaceIdentifierMultiple('link_items', TagWriter::quickTag('a', array('href' => $oClassLink->getLink()->getUrl()), $oClassLink->getLink()->getName()));
+				$oLinksTempl->replaceIdentifierMultiple('link_items', TagWriter::quickTag('a', array('title' => $oClassLink->getLink()->getDescription(),'href' => $oClassLink->getLink()->getUrl()), $oClassLink->getLink()->getName()));
 			}
 			$oTemplate->replaceIdentifier('link_section', $oLinksTempl);
 		}
