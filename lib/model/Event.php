@@ -117,6 +117,12 @@ class Event extends BaseEvent {
 		return $this->getEventDocuments($oCriteria);
 	}
 	
+	public function getFirstImage() {
+		$oCriteria = EventDocumentQuery::create()->filterByEventId($this->getId())->orderBySort();
+		$oCriteria->joinDocument()->useQuery(DocumentPeer::OM_CLASS)->filterByDocumentKind('image');
+		return $oCriteria->findOne();
+	}
+	
 	public function getEventPageLink($oEventPage = null) { 
 		if($oEventPage === null) {
 			if(!isset(self::$EVENT_PAGES[$this->getEventTypeId()])) {

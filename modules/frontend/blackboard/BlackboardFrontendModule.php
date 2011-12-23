@@ -63,20 +63,27 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 		if($oEvent === null) {
 			return;
 		}
+		// message string key
 		$sMessageKey = '';
 		if($oEvent->hasReviewText()) {
 			$sMessageKey .= 'review';
 		}
+		// event type id
+		$iEventTypeId = $oEvent->getEventTypeId() == null ? 1 : $oEvent->getEventTypeId();
+		$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$iEventTypeId));
+		$oEventLink = LinkUtil::link($oEvent->getEventPageLink($oPage));
+		$oTemplate = $this->constructTemplate('report');
 		if($oEvent->hasImages()) {
 			if($sMessageKey === 'review') {
 				$sMessageKey .= '_and_';
 			}
 			$sMessageKey .= 'images';
+			$oImage = $oEvent->getFirstImage()->getDocument();
+			$oImageTag = TagWriter::quickTag('img', array('class' => 'blackboard_image', 'src' => $oImage->getDisplayUrl(array('max_width' => 195)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle()));
+			
+			$oTemplate->replaceIdentifier('image', TagWriter::quickTag('a', array('href' => $oEventLink, 'title' => $oEvent->getTitle()), $oImageTag));
 		}		
-		$iEventTypeId = $oEvent->getEventTypeId() == null ? 1 : $oEvent->getEventTypeId();
-		$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$iEventTypeId));
-		$oTemplate = $this->constructTemplate('report');
-		$oTemplate->replaceIdentifier('event_link', LinkUtil::link($oEvent->getEventPageLink($oPage)));
+		$oTemplate->replaceIdentifier('event_link', $oEventLink);
 		$oTemplate->replaceIdentifier('event_title', $oEvent->getTitle());
 		$oTemplate->replaceIdentifier('event_report_prefix', StringPeer::getString('blackboard_review_prefix.'.$sMessageKey).' ');
 		$oTemplate->replaceIdentifier('event_date', LocaleUtil::localizeDate($oEvent->getDateStart()));
