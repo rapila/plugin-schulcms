@@ -255,6 +255,11 @@ ul#main_navigation.outside
 #blackboard_text a.blackboard_more_link
 	font-size: .6em
 	
+img.blackboard_image
+	float: right
+	width: 194px
+	margin: -20px 0 0 10px
+	
 #spacer
 	height: 75px
 
@@ -305,13 +310,11 @@ ul#secondary_navigation li
 	bottom: 0
 	right: 0
 	background-color: #E7D9D9
-	padding: 0 2px
-	width: sidebar_right_width - 4px
+	padding: 0
+	width: sidebar_right_width
 	background-color: sidebar_right_color
 
-	h2, img, table, .date_square
-		margin 0 -2px
-	h2, table td
+	h1, h2, table td
 		padding-left 2px
 		padding-right 2px
 	
@@ -395,12 +398,15 @@ input::-moz-placeholder, input::-webkit-input-placeholder
 table
 	width: 100%
 	border-collapse: collapse
+	
+#sidebar_right table
+	width: sidebar_right_width !important
+	
+#sidebar_right p
+	padding-left: 2px
 
 #content_main table.with_header
 	margin-top: -17px
-	
-table.event_list.context_list
-	margin-top: 1.5em
 
 table.list_view td
 	vertical-align: top
@@ -422,7 +428,7 @@ td, th
 table.context_list tr td
 	border-bottom: 1px solid sidebar_right_line_color
 
-td.datum
+td.datum, #sidebar_right td.datum
 	padding-left: 0
 	padding-right: 0em
 	width: 25px
@@ -432,6 +438,9 @@ table tr.even td.datum
 
 td, th, td a
 	line-height: 24px
+
+td, th
+	padding-right: 3px
 
 td p
 	line-height: 16px
@@ -454,6 +463,9 @@ td p
 	padding-top: 4px
 	padding-bottom: 3px
 	display: block
+
+td.event_title
+	padding-left:3px
 
 td a
 	display: inline-block
@@ -683,6 +695,9 @@ img.service_logo
 	
 #sidebar_right .links h2
 	margin-bottom: .3em
+	
+#sidebar_right h2.list_header
+	margin-bottom: 0 !important
 
 td.status_icons, td.status_icons a
 	width: 20px
@@ -717,10 +732,16 @@ a.event_service_link
 	line-height: 22px
 	background: url('../images/services.png') transparent 0px 2px no-repeat
 
-#sidebar_right .links a
+#sidebar_right .links a,
+#sidebar_right .service_documents a
 	display: block
 	padding-left: 18px
+	padding-bottom: 2px
+	border-bottom: 1px solid sidebar_right_line_color
 	background: url('../images/links_context.png') transparent 0px 2px no-repeat
+
+#sidebar_right .links a
+	line-height: 20px
 
 .link_list,
 .service_list,

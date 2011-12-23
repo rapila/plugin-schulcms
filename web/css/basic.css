@@ -47,6 +47,7 @@ ul#main_navigation.outside{top:5px}
 #blackboard_text{margin-top:20px;margin-left:218px;color:#e6e4cc;height:80px;vertical-align:middle}
 #blackboard_text p{color:#e6e4cc;line-height:1.2em;font-size:3em;vertical-align:middle}
 #blackboard_text a.blackboard_more_link{font-size:.6em}
+img.blackboard_image{float:right;width:194px;margin:-20px 0 0 10px}
 #spacer{height:75px}
 ul#secondary_navigation{margin-top:142px}
 ul#meta_navigation li a,ul#meta_navigation li span,ul#main_navigation li a,ul#main_navigation li span,ul#secondary_navigation li a,ul#secondary_navigation li span{text-transform:uppercase;letter-spacing:.08em;font-size:1.3em;line-height:1.4em;color:#fff}
@@ -59,9 +60,8 @@ ul#main_navigation li:first-child{padding:0 2.5em 0 .7em}
 ul#meta_navigation li{float:right;padding:0 0 0 2em}
 ul#meta_navigation li a{color:#817f7d}
 ul#secondary_navigation li{padding:.2em 1em}
-#sidebar_right{position:absolute;top:170px;bottom:0;right:0;background-color:#e7d9d9;padding:0 2px;width:190px;background-color:#d3d1b8;}
-#sidebar_right h2,#sidebar_right img,#sidebar_right table,#sidebar_right .date_square{margin:0 -2px}
-#sidebar_right h2,#sidebar_right table td{padding-left:2px;padding-right:2px}
+#sidebar_right{position:absolute;top:170px;bottom:0;right:0;background-color:#e7d9d9;padding:0;width:194px;background-color:#d3d1b8;}
+#sidebar_right h1,#sidebar_right h2,#sidebar_right table td{padding-left:2px;padding-right:2px}
 #sidebar_right h2{margin-top:22px}
 #sidebar_right h2:first-child,#sidebar_right img:first-child + h2{margin-top:0}
 #sidebar_right .sidebar_detail{position:fixed;width:190px}
@@ -80,22 +80,25 @@ input::-moz-placeholder,input::-webkit-input-placeholder{color:#a5a2a1}
 .home #sidebar_right .inner{padding-top:54px}
 #content_main .inner{padding:0 5px 20px 5px}
 table{width:100%;border-collapse:collapse}
+#sidebar_right table{width:194px !important}
+#sidebar_right p{padding-left:2px}
 #content_main table.with_header{margin-top:-17px}
-table.event_list.context_list{margin-top:1.5em}
 table.list_view td{vertical-align:top}
 table.list_view tr.even td,table.list_view tr.row:nth-child(2n+1) td{background-color:#fdfdfd}
 td,th{padding:0 .3em;vertical-align:top;border-bottom:1px solid #f9f9f9}
 .even td{border-bottom:1px solid #eeefee}
 .event_list.odd td{border-bottom:1px solid #efefef}
 table.context_list tr td{border-bottom:1px solid #c9c5b3}
-td.datum{padding-left:0;padding-right:0;width:25px}
+td.datum,#sidebar_right td.datum{padding-left:0;padding-right:0;width:25px}
 table tr.even td.datum{background-color:transparent}
 td,th,td a{line-height:24px}
+td,th{padding-right:3px}
 td p{line-height:16px;margin:0;padding:0}
 .event_list td p{line-height:16px;padding:2px 0;margin-bottom:.8em}
 .context_list.event_list td p{margin-bottom:.4em}
 .event_list td,.event_list td a{line-height:22px}
 .event_list.context_list .event_title a{line-height:17px;padding-top:4px;padding-bottom:3px;display:block}
+td.event_title{padding-left:3px}
 td a{display:inline-block}
 th{text-align:left;font-weight:normal;font-size:.9em;font-style:oblique;line-height:18px;color:#999}
 .row.active td,.row.active td a{color:#5e61a8;height:100%}
@@ -148,6 +151,7 @@ img.service_logo{float:right;margin:0 1em 1em 2em}
 .today{padding-left:3px;border:1px solid #999}
 #sidebar_right .links{margin-top:1.5em}
 #sidebar_right .links h2{margin-bottom:.3em}
+#sidebar_right h2.list_header{margin-bottom:0 !important}
 td.status_icons,td.status_icons a{width:20px}
 td.status_icons.has_bericht{background:transparent url("../images/has_bericht.png") no-repeat 0 3px}
 td.status_icons.has_images{background:transparent url("../images/has_images.png") no-repeat 0 3px}
@@ -155,7 +159,8 @@ td.status_icons.has_images{background:transparent url("../images/has_images.png"
 .event_list td a.detail_link:hover{background:transparent url("../images/detail_link_hover.png") no-repeat 0 3px}
 .service_list td:first-child a,.link_list td:first-child a,.team_list td:first-child a,.class_list td:first-child a{display:block;padding-left:22px;background:url("../images/services.png") transparent 0 4px no-repeat}
 a.event_service_link{margin:.5em 0;display:block;padding-left:19px;line-height:22px;background:url("../images/services.png") transparent 0 2px no-repeat}
-#sidebar_right .links a{display:block;padding-left:18px;background:url("../images/links_context.png") transparent 0 2px no-repeat}
+#sidebar_right .links a,#sidebar_right .service_documents a{display:block;padding-left:18px;padding-bottom:2px;border-bottom:1px solid #c9c5b3;background:url("../images/links_context.png") transparent 0 2px no-repeat}
+#sidebar_right .links a{line-height:20px}
 .link_list td:first-child,.service_list td:first-child,.team_list td:first-child,.class_list td:first-child,.link_list th:first-child,.service_list th:first-child,.team_list th:first-child,.class_list th:first-child{padding-left:0}
 .link_list td:first-child{width:15px}
 .link_list td:first-child a{background:url("../images/links.png") transparent 0 4px no-repeat;padding-left:0}
