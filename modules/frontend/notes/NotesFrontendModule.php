@@ -22,7 +22,7 @@ class NotesFrontendModule extends DynamicFrontendModule {
 	}
 
 	public function renderCurrentNote($iNoteTypeId = null) {
-		$oQuery = NoteQuery::create();
+		$oQuery = NoteQuery::create()->filterByIsInactive(false);
 		if($iNoteTypeId !== null) {
 			$oQuery->filterByNoteTypeId($iNoteTypeId);
 		}
