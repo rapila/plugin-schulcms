@@ -11,6 +11,7 @@
  * @method     NoteQuery orderByBody($order = Criteria::ASC) Order by the body column
  * @method     NoteQuery orderByDateStart($order = Criteria::ASC) Order by the date_start column
  * @method     NoteQuery orderByDateEnd($order = Criteria::ASC) Order by the date_end column
+ * @method     NoteQuery orderByIsInactive($order = Criteria::ASC) Order by the is_inactive column
  * @method     NoteQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     NoteQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method     NoteQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
@@ -21,6 +22,7 @@
  * @method     NoteQuery groupByBody() Group by the body column
  * @method     NoteQuery groupByDateStart() Group by the date_start column
  * @method     NoteQuery groupByDateEnd() Group by the date_end column
+ * @method     NoteQuery groupByIsInactive() Group by the is_inactive column
  * @method     NoteQuery groupByCreatedAt() Group by the created_at column
  * @method     NoteQuery groupByUpdatedAt() Group by the updated_at column
  * @method     NoteQuery groupByCreatedBy() Group by the created_by column
@@ -50,6 +52,7 @@
  * @method     Note findOneByBody(resource $body) Return the first Note filtered by the body column
  * @method     Note findOneByDateStart(string $date_start) Return the first Note filtered by the date_start column
  * @method     Note findOneByDateEnd(string $date_end) Return the first Note filtered by the date_end column
+ * @method     Note findOneByIsInactive(boolean $is_inactive) Return the first Note filtered by the is_inactive column
  * @method     Note findOneByCreatedAt(string $created_at) Return the first Note filtered by the created_at column
  * @method     Note findOneByUpdatedAt(string $updated_at) Return the first Note filtered by the updated_at column
  * @method     Note findOneByCreatedBy(int $created_by) Return the first Note filtered by the created_by column
@@ -60,6 +63,7 @@
  * @method     array findByBody(resource $body) Return Note objects filtered by the body column
  * @method     array findByDateStart(string $date_start) Return Note objects filtered by the date_start column
  * @method     array findByDateEnd(string $date_end) Return Note objects filtered by the date_end column
+ * @method     array findByIsInactive(boolean $is_inactive) Return Note objects filtered by the is_inactive column
  * @method     array findByCreatedAt(string $created_at) Return Note objects filtered by the created_at column
  * @method     array findByUpdatedAt(string $updated_at) Return Note objects filtered by the updated_at column
  * @method     array findByCreatedBy(int $created_by) Return Note objects filtered by the created_by column
@@ -336,6 +340,32 @@ abstract class BaseNoteQuery extends ModelCriteria
             }
         }
         return $this->addUsingAlias(NotePeer::DATE_END, $dateEnd, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_inactive column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsInactive(true); // WHERE is_inactive = true
+     * $query->filterByIsInactive('yes'); // WHERE is_inactive = true
+     * </code>
+     *
+     * @param     boolean|string $isInactive The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return    NoteQuery The current query, for fluid interface
+     */
+    public function filterByIsInactive($isInactive = null, $comparison = null)
+    {
+        if (is_string($isInactive)) {
+            $is_inactive = in_array(strtolower($isInactive), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+        return $this->addUsingAlias(NotePeer::IS_INACTIVE, $isInactive, $comparison);
     }
 
     /**

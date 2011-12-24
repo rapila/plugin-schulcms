@@ -405,3 +405,6 @@ CREATE TABLE IF NOT EXISTS `notes` (
 
 ALTER TABLE `class_teachers` ADD `is_newly_updated` TINYINT UNSIGNED NOT NULL DEFAULT '0' AFTER `is_class_teacher` ;
 ALTER TABLE `class_students` ADD `is_newly_updated` TINYINT UNSIGNED NOT NULL DEFAULT '0' AFTER `student_id` ;
+
+#20111224.1359
+ALTER TABLE `notes` ADD `is_inactive` TINYINT UNSIGNED NOT NULL DEFAULT '0' AFTER `date_end` 

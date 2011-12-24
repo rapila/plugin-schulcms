@@ -13,7 +13,7 @@ Widget.types.note_detail = {
 			});
 			_this.current_detail_id = null;
 			this.content.find("select[name='note_type_id']").prepareWidget(function(note_type_input_widget) {
-				note_type_input_widget.settings.initial_selection = _this.settings.initial_category_id;
+				note_type_input_widget.settings.initial_selection = _this.settings.initial_type_id;
 				note_type_input_widget.settings.disabled = !!_this.settings.predefined_note_type_id;
 			}, function(note_type_input_widget) {
 				if(_this.settings.predefined_note_type_id) { 
@@ -27,7 +27,6 @@ Widget.types.note_detail = {
 			if(this.auto_open) {
 				this.open();
 			}
-			
 		}.bind(_this));
 	
 		_this.handle('saving', function(event, data) {
@@ -50,8 +49,9 @@ Widget.types.note_detail = {
 		this.noteData(function(note_data) {
 			_this.current_detail_id = note_data.Id;
 			if(!_this.settings.predefined_note_type) {
-				this.content.find("select[name='note_type']").val(note_data.NoteTypeId);
+				this.content.find("select[name='note_type_id']").val(note_data.NoteTypeId);
 			}
+			this.content.find("input[name='is_inactive']").prop('checked', note_data.IsInactive);
 			this.content.find("input[name='date_start']").val(note_data.DateStart);
 			this.content.find("input[name='date_end']").val(note_data.DateEnd);
 			this.content.find(".updated_info").text(note_data.UpdatedInfo);

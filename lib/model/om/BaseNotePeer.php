@@ -26,13 +26,13 @@ abstract class BaseNotePeer {
 	const TM_CLASS = 'NoteTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 9;
+	const NUM_COLUMNS = 10;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 9;
+	const NUM_HYDRATE_COLUMNS = 10;
 
 	/** the column name for the ID field */
 	const ID = 'notes.ID';
@@ -48,6 +48,9 @@ abstract class BaseNotePeer {
 
 	/** the column name for the DATE_END field */
 	const DATE_END = 'notes.DATE_END';
+
+	/** the column name for the IS_INACTIVE field */
+	const IS_INACTIVE = 'notes.IS_INACTIVE';
 
 	/** the column name for the CREATED_AT field */
 	const CREATED_AT = 'notes.CREATED_AT';
@@ -82,12 +85,12 @@ abstract class BaseNotePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'NoteTypeId', 'Body', 'DateStart', 'DateEnd', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'noteTypeId', 'body', 'dateStart', 'dateEnd', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::NOTE_TYPE_ID, self::BODY, self::DATE_START, self::DATE_END, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NOTE_TYPE_ID', 'BODY', 'DATE_START', 'DATE_END', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'note_type_id', 'body', 'date_start', 'date_end', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'NoteTypeId', 'Body', 'DateStart', 'DateEnd', 'IsInactive', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'noteTypeId', 'body', 'dateStart', 'dateEnd', 'isInactive', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::NOTE_TYPE_ID, self::BODY, self::DATE_START, self::DATE_END, self::IS_INACTIVE, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NOTE_TYPE_ID', 'BODY', 'DATE_START', 'DATE_END', 'IS_INACTIVE', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'note_type_id', 'body', 'date_start', 'date_end', 'is_inactive', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
 	);
 
 	/**
@@ -97,12 +100,12 @@ abstract class BaseNotePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'NoteTypeId' => 1, 'Body' => 2, 'DateStart' => 3, 'DateEnd' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'CreatedBy' => 7, 'UpdatedBy' => 8, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'noteTypeId' => 1, 'body' => 2, 'dateStart' => 3, 'dateEnd' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'createdBy' => 7, 'updatedBy' => 8, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NOTE_TYPE_ID => 1, self::BODY => 2, self::DATE_START => 3, self::DATE_END => 4, self::CREATED_AT => 5, self::UPDATED_AT => 6, self::CREATED_BY => 7, self::UPDATED_BY => 8, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NOTE_TYPE_ID' => 1, 'BODY' => 2, 'DATE_START' => 3, 'DATE_END' => 4, 'CREATED_AT' => 5, 'UPDATED_AT' => 6, 'CREATED_BY' => 7, 'UPDATED_BY' => 8, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'note_type_id' => 1, 'body' => 2, 'date_start' => 3, 'date_end' => 4, 'created_at' => 5, 'updated_at' => 6, 'created_by' => 7, 'updated_by' => 8, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'NoteTypeId' => 1, 'Body' => 2, 'DateStart' => 3, 'DateEnd' => 4, 'IsInactive' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, 'CreatedBy' => 8, 'UpdatedBy' => 9, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'noteTypeId' => 1, 'body' => 2, 'dateStart' => 3, 'dateEnd' => 4, 'isInactive' => 5, 'createdAt' => 6, 'updatedAt' => 7, 'createdBy' => 8, 'updatedBy' => 9, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NOTE_TYPE_ID => 1, self::BODY => 2, self::DATE_START => 3, self::DATE_END => 4, self::IS_INACTIVE => 5, self::CREATED_AT => 6, self::UPDATED_AT => 7, self::CREATED_BY => 8, self::UPDATED_BY => 9, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NOTE_TYPE_ID' => 1, 'BODY' => 2, 'DATE_START' => 3, 'DATE_END' => 4, 'IS_INACTIVE' => 5, 'CREATED_AT' => 6, 'UPDATED_AT' => 7, 'CREATED_BY' => 8, 'UPDATED_BY' => 9, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'note_type_id' => 1, 'body' => 2, 'date_start' => 3, 'date_end' => 4, 'is_inactive' => 5, 'created_at' => 6, 'updated_at' => 7, 'created_by' => 8, 'updated_by' => 9, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
 	);
 
 	/**
@@ -179,6 +182,7 @@ abstract class BaseNotePeer {
 			$criteria->addSelectColumn(NotePeer::BODY);
 			$criteria->addSelectColumn(NotePeer::DATE_START);
 			$criteria->addSelectColumn(NotePeer::DATE_END);
+			$criteria->addSelectColumn(NotePeer::IS_INACTIVE);
 			$criteria->addSelectColumn(NotePeer::CREATED_AT);
 			$criteria->addSelectColumn(NotePeer::UPDATED_AT);
 			$criteria->addSelectColumn(NotePeer::CREATED_BY);
@@ -189,6 +193,7 @@ abstract class BaseNotePeer {
 			$criteria->addSelectColumn($alias . '.BODY');
 			$criteria->addSelectColumn($alias . '.DATE_START');
 			$criteria->addSelectColumn($alias . '.DATE_END');
+			$criteria->addSelectColumn($alias . '.IS_INACTIVE');
 			$criteria->addSelectColumn($alias . '.CREATED_AT');
 			$criteria->addSelectColumn($alias . '.UPDATED_AT');
 			$criteria->addSelectColumn($alias . '.CREATED_BY');

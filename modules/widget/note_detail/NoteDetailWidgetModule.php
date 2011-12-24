@@ -23,6 +23,8 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 			return array();
 		}
 		$aResult = array();
+		$aResult['NoteTypeId'] = $oNote->getNoteTypeId();
+		$aResult['IsInactive'] = $oNote->getIsInactive();
 		$aResult['DateStart'] = $oNote->getDateStart('d.m.Y');
 		$aResult['DateEnd'] = $oNote->getDateEnd('d.m.Y');
 		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oNote);
@@ -38,7 +40,7 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 	private function validate($aNoteData) {
 		$oFlash = Flash::getFlash();
 		$oFlash->setArrayToCheck($aNoteData);
-		$oFlash->checkForValue('body', 'body_required');
+		$oFlash->checkForValue('body', 'note.body_required');
 		$oFlash->finishReporting();
 	}
 
@@ -56,6 +58,7 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 		$oNote->setDateEnd($aNoteData['date_end']);
 		$this->validate($aNoteData);
 		$oNote->setNoteTypeId($aNoteData['note_type_id'] == null ? null : $aNoteData['note_type_id']);
+		$oNote->setIsInactive($aNoteData['is_inactive']);
 		$oNote->setBody(RichtextUtil::parseInputFromEditorForStorage($aNoteData['body']));
 		if(!Flash::noErrors()) {
 			throw new ValidationException();

@@ -308,6 +308,7 @@
 	<column name="body" type="blob" />
 	<column name="date_start" type="date" required="true"/>
 	<column name="date_end" type="date"/>
+	<column name="is_inactive" type="boolean" size="1" default="0" />
 </table>
 
 <table name="note_types" phpName="NoteType">

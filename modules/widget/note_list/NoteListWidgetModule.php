@@ -21,7 +21,7 @@ class NoteListWidgetModule extends WidgetModule {
 	}
 	
 	public function getColumnIdentifiers() {
-		return array('id', 'date_start_formatted', 'date_end_formatted', 'body_truncated', 'note_type_name', 'delete');
+		return array('id', 'date_start_formatted', 'date_end_formatted', 'body_truncated', 'note_type_name', 'is_inactive', 'delete');
 	}
 	
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -40,6 +40,10 @@ class NoteListWidgetModule extends WidgetModule {
 				break;
 			case 'note_type_name':
 				$aResult['heading'] = StringPeer::getString('wns.note.type');
+				break;
+			case 'is_inactive':
+				$aResult['heading'] = StringPeer::getString('wns.note.is_inactive');
+				$aResult['sortable'] = true;
 				break;
 			case 'delete':
 				$aResult['heading'] = ' ';

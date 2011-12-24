@@ -43,6 +43,7 @@ class NoteTableMap extends TableMap
 		$this->addColumn('BODY', 'Body', 'BLOB', false, null, null);
 		$this->addColumn('DATE_START', 'DateStart', 'DATE', true, null, null);
 		$this->addColumn('DATE_END', 'DateEnd', 'DATE', false, null, null);
+		$this->addColumn('IS_INACTIVE', 'IsInactive', 'BOOLEAN', false, 1, false);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
 		$this->addForeignKey('CREATED_BY', 'CreatedBy', 'INTEGER', 'users', 'ID', false, null, null);

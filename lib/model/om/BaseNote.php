@@ -55,6 +55,13 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	protected $date_end;
 
 	/**
+	 * The value for the is_inactive field.
+	 * Note: this column has a database default value of: false
+	 * @var        boolean
+	 */
+	protected $is_inactive;
+
+	/**
 	 * The value for the created_at field.
 	 * @var        string
 	 */
@@ -106,6 +113,27 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
+
+	/**
+	 * Applies default values to this object.
+	 * This method should be called from the object's constructor (or
+	 * equivalent initialization method).
+	 * @see        __construct()
+	 */
+	public function applyDefaultValues()
+	{
+		$this->is_inactive = false;
+	}
+
+	/**
+	 * Initializes internal state of BaseNote object.
+	 * @see        applyDefaults()
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		$this->applyDefaultValues();
+	}
 
 	/**
 	 * Get the [id] column value.
@@ -211,6 +239,16 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		} else {
 			return $dt->format($format);
 		}
+	}
+
+	/**
+	 * Get the [is_inactive] column value.
+	 * 
+	 * @return     boolean
+	 */
+	public function getIsInactive()
+	{
+		return $this->is_inactive;
 	}
 
 	/**
@@ -421,6 +459,34 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	} // setDateEnd()
 
 	/**
+	 * Sets the value of the [is_inactive] column.
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+	 * 
+	 * @param      boolean|integer|string $v The new value
+	 * @return     Note The current object (for fluent API support)
+	 */
+	public function setIsInactive($v)
+	{
+		if ($v !== null) {
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
+		}
+
+		if ($this->is_inactive !== $v) {
+			$this->is_inactive = $v;
+			$this->modifiedColumns[] = NotePeer::IS_INACTIVE;
+		}
+
+		return $this;
+	} // setIsInactive()
+
+	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.
@@ -522,6 +588,10 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 */
 	public function hasOnlyDefaultValues()
 	{
+			if ($this->is_inactive !== false) {
+				return false;
+			}
+
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -555,10 +625,11 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			}
 			$this->date_start = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->date_end = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-			$this->created_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-			$this->updated_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-			$this->created_by = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
-			$this->updated_by = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+			$this->is_inactive = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
+			$this->created_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+			$this->updated_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+			$this->created_by = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+			$this->updated_by = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -567,7 +638,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 9; // 9 = NotePeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 10; // 10 = NotePeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Note object", $e);
@@ -993,15 +1064,18 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				return $this->getDateEnd();
 				break;
 			case 5:
-				return $this->getCreatedAt();
+				return $this->getIsInactive();
 				break;
 			case 6:
-				return $this->getUpdatedAt();
+				return $this->getCreatedAt();
 				break;
 			case 7:
-				return $this->getCreatedBy();
+				return $this->getUpdatedAt();
 				break;
 			case 8:
+				return $this->getCreatedBy();
+				break;
+			case 9:
 				return $this->getUpdatedBy();
 				break;
 			default:
@@ -1038,10 +1112,11 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			$keys[2] => $this->getBody(),
 			$keys[3] => $this->getDateStart(),
 			$keys[4] => $this->getDateEnd(),
-			$keys[5] => $this->getCreatedAt(),
-			$keys[6] => $this->getUpdatedAt(),
-			$keys[7] => $this->getCreatedBy(),
-			$keys[8] => $this->getUpdatedBy(),
+			$keys[5] => $this->getIsInactive(),
+			$keys[6] => $this->getCreatedAt(),
+			$keys[7] => $this->getUpdatedAt(),
+			$keys[8] => $this->getCreatedBy(),
+			$keys[9] => $this->getUpdatedBy(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aNoteType) {
@@ -1100,15 +1175,18 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				$this->setDateEnd($value);
 				break;
 			case 5:
-				$this->setCreatedAt($value);
+				$this->setIsInactive($value);
 				break;
 			case 6:
-				$this->setUpdatedAt($value);
+				$this->setCreatedAt($value);
 				break;
 			case 7:
-				$this->setCreatedBy($value);
+				$this->setUpdatedAt($value);
 				break;
 			case 8:
+				$this->setCreatedBy($value);
+				break;
+			case 9:
 				$this->setUpdatedBy($value);
 				break;
 		} // switch()
@@ -1140,10 +1218,11 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		if (array_key_exists($keys[2], $arr)) $this->setBody($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setDateStart($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setDateEnd($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setCreatedAt($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setUpdatedAt($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setCreatedBy($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setUpdatedBy($arr[$keys[8]]);
+		if (array_key_exists($keys[5], $arr)) $this->setIsInactive($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setCreatedAt($arr[$keys[6]]);
+		if (array_key_exists($keys[7], $arr)) $this->setUpdatedAt($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setCreatedBy($arr[$keys[8]]);
+		if (array_key_exists($keys[9], $arr)) $this->setUpdatedBy($arr[$keys[9]]);
 	}
 
 	/**
@@ -1160,6 +1239,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		if ($this->isColumnModified(NotePeer::BODY)) $criteria->add(NotePeer::BODY, $this->body);
 		if ($this->isColumnModified(NotePeer::DATE_START)) $criteria->add(NotePeer::DATE_START, $this->date_start);
 		if ($this->isColumnModified(NotePeer::DATE_END)) $criteria->add(NotePeer::DATE_END, $this->date_end);
+		if ($this->isColumnModified(NotePeer::IS_INACTIVE)) $criteria->add(NotePeer::IS_INACTIVE, $this->is_inactive);
 		if ($this->isColumnModified(NotePeer::CREATED_AT)) $criteria->add(NotePeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(NotePeer::UPDATED_AT)) $criteria->add(NotePeer::UPDATED_AT, $this->updated_at);
 		if ($this->isColumnModified(NotePeer::CREATED_BY)) $criteria->add(NotePeer::CREATED_BY, $this->created_by);
@@ -1230,6 +1310,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		$copyObj->setBody($this->getBody());
 		$copyObj->setDateStart($this->getDateStart());
 		$copyObj->setDateEnd($this->getDateEnd());
+		$copyObj->setIsInactive($this->getIsInactive());
 		$copyObj->setCreatedAt($this->getCreatedAt());
 		$copyObj->setUpdatedAt($this->getUpdatedAt());
 		$copyObj->setCreatedBy($this->getCreatedBy());
@@ -1435,6 +1516,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		$this->body = null;
 		$this->date_start = null;
 		$this->date_end = null;
+		$this->is_inactive = null;
 		$this->created_at = null;
 		$this->updated_at = null;
 		$this->created_by = null;
@@ -1442,6 +1524,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		$this->alreadyInSave = false;
 		$this->alreadyInValidation = false;
 		$this->clearAllReferences();
+		$this->applyDefaultValues();
 		$this->resetModified();
 		$this->setNew(true);
 		$this->setDeleted(false);
