@@ -55,6 +55,7 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 		$oNote->setDateStart($sDateStart);
 		$oNote->setDateEnd($aNoteData['date_end']);
 		$this->validate($aNoteData);
+		$oNote->setNoteTypeId($aNoteData['note_type_id'] == null ? null : $aNoteData['note_type_id']);
 		$oNote->setBody(RichtextUtil::parseInputFromEditorForStorage($aNoteData['body']));
 		if(!Flash::noErrors()) {
 			throw new ValidationException();

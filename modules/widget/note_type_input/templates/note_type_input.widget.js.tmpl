@@ -1,0 +1,34 @@
+Widget.types.note_type_input = {
+	prepare: function() {
+		this.reload();
+		Widget.handle('rapila-note_type_changed', this.reload.bind(this));
+	},
+	
+	reload: function() {
+		var _this = this;
+		var current = this._element.val();
+		this._element.empty();
+		var option = jQuery('<option/>');
+		var types = this.getNoteTypes();
+		jQuery.each(types, function(i, type) {
+			option.clone().text(type.name).attr('value', type.id).appendTo(this._element);
+		}.bind(this));
+		option.text('----').val('').prependTo(this._element);
+		if(current) {
+			this.val(current);
+		} else {
+			this.val(_this.settings.initial_selection);
+		}
+		if(this.settings.disabled) {
+			this._element.attr('disabled', true);
+		}
+	},
+	
+	val: function(val) {
+		return this._element.val(val);
+	},
+	
+	settings: {
+		initial_selection: null
+	}
+};

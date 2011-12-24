@@ -21,7 +21,7 @@ class NoteListWidgetModule extends WidgetModule {
 	}
 	
 	public function getColumnIdentifiers() {
-		return array('id', 'date_start_formatted', 'date_end_formatted', 'body_truncated', 'delete');
+		return array('id', 'date_start_formatted', 'date_end_formatted', 'body_truncated', 'note_type_name', 'delete');
 	}
 	
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -38,6 +38,9 @@ class NoteListWidgetModule extends WidgetModule {
 			case 'body_truncated':
 				$aResult['heading'] = StringPeer::getString('wns.note.body');
 				break;
+			case 'note_type_name':
+				$aResult['heading'] = StringPeer::getString('wns.note.type');
+				break;
 			case 'delete':
 				$aResult['heading'] = ' ';
 				$aResult['display_type'] = ListWidgetModule::DISPLAY_TYPE_ICON;
@@ -46,4 +49,17 @@ class NoteListWidgetModule extends WidgetModule {
 		}
 		return $aResult;
 	}
+	
+	public function typeHasNotes($iNoteTypeId) {
+		return NotesQuery::create()->filterByNoteTypeId($iNoteTypeId)->count() > 0;
+	}
+
+	
+	public function getFilterTypeForColumn($sColumnIdentifier) {
+		if($sColumnIdentifier === 'note_type_id') {
+			return CriteriaListWidgetDelegate::FILTER_TYPE_IS;
+		}
+		return null;
+	}
+
 }

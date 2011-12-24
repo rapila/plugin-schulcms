@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'notes' table.
+ * This class defines the structure of the 'note_types' table.
  *
  *
  *
@@ -14,13 +14,13 @@
  *
  * @package    propel.generator.model.map
  */
-class NoteTableMap extends TableMap
+class NoteTypeTableMap extends TableMap
 {
 
 	/**
 	 * The (dot-path) name of this class
 	 */
-	const CLASS_NAME = 'model.map.NoteTableMap';
+	const CLASS_NAME = 'model.map.NoteTypeTableMap';
 
 	/**
 	 * Initialize the table attributes, columns and validators
@@ -32,17 +32,14 @@ class NoteTableMap extends TableMap
 	public function initialize()
 	{
 		// attributes
-		$this->setName('notes');
-		$this->setPhpName('Note');
-		$this->setClassname('Note');
+		$this->setName('note_types');
+		$this->setPhpName('NoteType');
+		$this->setClassname('NoteType');
 		$this->setPackage('model');
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
-		$this->addForeignKey('NOTE_TYPE_ID', 'NoteTypeId', 'TINYINT', 'note_types', 'ID', false, null, null);
-		$this->addColumn('BODY', 'Body', 'BLOB', false, null, null);
-		$this->addColumn('DATE_START', 'DateStart', 'DATE', true, null, null);
-		$this->addColumn('DATE_END', 'DateEnd', 'DATE', false, null, null);
+		$this->addColumn('NAME', 'Name', 'VARCHAR', false, 100, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
 		$this->addForeignKey('CREATED_BY', 'CreatedBy', 'INTEGER', 'users', 'ID', false, null, null);
@@ -55,9 +52,9 @@ class NoteTableMap extends TableMap
 	 */
 	public function buildRelations()
 	{
-		$this->addRelation('NoteType', 'NoteType', RelationMap::MANY_TO_ONE, array('note_type_id' => 'id', ), 'SET NULL', null);
 		$this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
 		$this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
+		$this->addRelation('Note', 'Note', RelationMap::ONE_TO_MANY, array('id' => 'note_type_id', ), 'SET NULL', null, 'Notes');
 	} // buildRelations()
 
 	/**
@@ -69,10 +66,10 @@ class NoteTableMap extends TableMap
 	public function getBehaviors()
 	{
 		return array(
-			'denyable' => array('mode' => 'by_role', 'role_key' => '', 'owner_allowed' => '', ),
+			'denyable' => array('mode' => '', 'role_key' => 'notes', 'owner_allowed' => '', ),
 			'extended_timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', ),
 			'attributable' => array('create_column' => 'created_by', 'update_column' => 'updated_by', ),
 		);
 	} // getBehaviors()
 
-} // NoteTableMap
+} // NoteTypeTableMap

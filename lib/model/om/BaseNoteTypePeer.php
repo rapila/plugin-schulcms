@@ -2,73 +2,64 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'notes' table.
+ * Base static class for performing query and update operations on the 'note_types' table.
  *
  * 
  *
  * @package    propel.generator.model.om
  */
-abstract class BaseNotePeer {
+abstract class BaseNoteTypePeer {
 
 	/** the default database name for this class */
 	const DATABASE_NAME = 'rapila';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'notes';
+	const TABLE_NAME = 'note_types';
 
 	/** the related Propel class for this table */
-	const OM_CLASS = 'Note';
+	const OM_CLASS = 'NoteType';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'model.Note';
+	const CLASS_DEFAULT = 'model.NoteType';
 
 	/** the related TableMap class for this table */
-	const TM_CLASS = 'NoteTableMap';
+	const TM_CLASS = 'NoteTypeTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 9;
+	const NUM_COLUMNS = 6;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 9;
+	const NUM_HYDRATE_COLUMNS = 6;
 
 	/** the column name for the ID field */
-	const ID = 'notes.ID';
+	const ID = 'note_types.ID';
 
-	/** the column name for the NOTE_TYPE_ID field */
-	const NOTE_TYPE_ID = 'notes.NOTE_TYPE_ID';
-
-	/** the column name for the BODY field */
-	const BODY = 'notes.BODY';
-
-	/** the column name for the DATE_START field */
-	const DATE_START = 'notes.DATE_START';
-
-	/** the column name for the DATE_END field */
-	const DATE_END = 'notes.DATE_END';
+	/** the column name for the NAME field */
+	const NAME = 'note_types.NAME';
 
 	/** the column name for the CREATED_AT field */
-	const CREATED_AT = 'notes.CREATED_AT';
+	const CREATED_AT = 'note_types.CREATED_AT';
 
 	/** the column name for the UPDATED_AT field */
-	const UPDATED_AT = 'notes.UPDATED_AT';
+	const UPDATED_AT = 'note_types.UPDATED_AT';
 
 	/** the column name for the CREATED_BY field */
-	const CREATED_BY = 'notes.CREATED_BY';
+	const CREATED_BY = 'note_types.CREATED_BY';
 
 	/** the column name for the UPDATED_BY field */
-	const UPDATED_BY = 'notes.UPDATED_BY';
+	const UPDATED_BY = 'note_types.UPDATED_BY';
 
 	/** The default string format for model objects of the related table **/
 	const DEFAULT_STRING_FORMAT = 'YAML';
 
 	/**
-	 * An identiy map to hold any loaded instances of Note objects.
+	 * An identiy map to hold any loaded instances of NoteType objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
 	 * queries.
-	 * @var        array Note[]
+	 * @var        array NoteType[]
 	 */
 	public static $instances = array();
 
@@ -82,12 +73,12 @@ abstract class BaseNotePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'NoteTypeId', 'Body', 'DateStart', 'DateEnd', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'noteTypeId', 'body', 'dateStart', 'dateEnd', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::NOTE_TYPE_ID, self::BODY, self::DATE_START, self::DATE_END, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NOTE_TYPE_ID', 'BODY', 'DATE_START', 'DATE_END', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'note_type_id', 'body', 'date_start', 'date_end', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::NAME, self::CREATED_AT, self::UPDATED_AT, self::CREATED_BY, self::UPDATED_BY, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
 	);
 
 	/**
@@ -97,12 +88,12 @@ abstract class BaseNotePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'NoteTypeId' => 1, 'Body' => 2, 'DateStart' => 3, 'DateEnd' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'CreatedBy' => 7, 'UpdatedBy' => 8, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'noteTypeId' => 1, 'body' => 2, 'dateStart' => 3, 'dateEnd' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'createdBy' => 7, 'updatedBy' => 8, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NOTE_TYPE_ID => 1, self::BODY => 2, self::DATE_START => 3, self::DATE_END => 4, self::CREATED_AT => 5, self::UPDATED_AT => 6, self::CREATED_BY => 7, self::UPDATED_BY => 8, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NOTE_TYPE_ID' => 1, 'BODY' => 2, 'DATE_START' => 3, 'DATE_END' => 4, 'CREATED_AT' => 5, 'UPDATED_AT' => 6, 'CREATED_BY' => 7, 'UPDATED_BY' => 8, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'note_type_id' => 1, 'body' => 2, 'date_start' => 3, 'date_end' => 4, 'created_at' => 5, 'updated_at' => 6, 'created_by' => 7, 'updated_by' => 8, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, 'CreatedBy' => 4, 'UpdatedBy' => 5, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'createdAt' => 2, 'updatedAt' => 3, 'createdBy' => 4, 'updatedBy' => 5, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NAME => 1, self::CREATED_AT => 2, self::UPDATED_AT => 3, self::CREATED_BY => 4, self::UPDATED_BY => 5, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'CREATED_AT' => 2, 'UPDATED_AT' => 3, 'CREATED_BY' => 4, 'UPDATED_BY' => 5, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'created_at' => 2, 'updated_at' => 3, 'created_by' => 4, 'updated_by' => 5, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
 	);
 
 	/**
@@ -151,12 +142,12 @@ abstract class BaseNotePeer {
 	 *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
 	 * </code>
 	 * @param      string $alias The alias for the current table.
-	 * @param      string $column The column name for current table. (i.e. NotePeer::COLUMN_NAME).
+	 * @param      string $column The column name for current table. (i.e. NoteTypePeer::COLUMN_NAME).
 	 * @return     string
 	 */
 	public static function alias($alias, $column)
 	{
-		return str_replace(NotePeer::TABLE_NAME.'.', $alias.'.', $column);
+		return str_replace(NoteTypePeer::TABLE_NAME.'.', $alias.'.', $column);
 	}
 
 	/**
@@ -174,21 +165,15 @@ abstract class BaseNotePeer {
 	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
 		if (null === $alias) {
-			$criteria->addSelectColumn(NotePeer::ID);
-			$criteria->addSelectColumn(NotePeer::NOTE_TYPE_ID);
-			$criteria->addSelectColumn(NotePeer::BODY);
-			$criteria->addSelectColumn(NotePeer::DATE_START);
-			$criteria->addSelectColumn(NotePeer::DATE_END);
-			$criteria->addSelectColumn(NotePeer::CREATED_AT);
-			$criteria->addSelectColumn(NotePeer::UPDATED_AT);
-			$criteria->addSelectColumn(NotePeer::CREATED_BY);
-			$criteria->addSelectColumn(NotePeer::UPDATED_BY);
+			$criteria->addSelectColumn(NoteTypePeer::ID);
+			$criteria->addSelectColumn(NoteTypePeer::NAME);
+			$criteria->addSelectColumn(NoteTypePeer::CREATED_AT);
+			$criteria->addSelectColumn(NoteTypePeer::UPDATED_AT);
+			$criteria->addSelectColumn(NoteTypePeer::CREATED_BY);
+			$criteria->addSelectColumn(NoteTypePeer::UPDATED_BY);
 		} else {
 			$criteria->addSelectColumn($alias . '.ID');
-			$criteria->addSelectColumn($alias . '.NOTE_TYPE_ID');
-			$criteria->addSelectColumn($alias . '.BODY');
-			$criteria->addSelectColumn($alias . '.DATE_START');
-			$criteria->addSelectColumn($alias . '.DATE_END');
+			$criteria->addSelectColumn($alias . '.NAME');
 			$criteria->addSelectColumn($alias . '.CREATED_AT');
 			$criteria->addSelectColumn($alias . '.UPDATED_AT');
 			$criteria->addSelectColumn($alias . '.CREATED_BY');
@@ -212,21 +197,21 @@ abstract class BaseNotePeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(NotePeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(NoteTypePeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			NotePeer::addSelectColumns($criteria);
+			NoteTypePeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 		$criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
 
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 		// BasePeer returns a PDOStatement
 		$stmt = BasePeer::doCount($criteria, $con);
@@ -244,7 +229,7 @@ abstract class BaseNotePeer {
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
-	 * @return     Note
+	 * @return     NoteType
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -252,7 +237,7 @@ abstract class BaseNotePeer {
 	{
 		$critcopy = clone $criteria;
 		$critcopy->setLimit(1);
-		$objects = NotePeer::doSelect($critcopy, $con);
+		$objects = NoteTypePeer::doSelect($critcopy, $con);
 		if ($objects) {
 			return $objects[0];
 		}
@@ -269,7 +254,7 @@ abstract class BaseNotePeer {
 	 */
 	public static function doSelect(Criteria $criteria, PropelPDO $con = null)
 	{
-		return NotePeer::populateObjects(NotePeer::doSelectStmt($criteria, $con));
+		return NoteTypePeer::populateObjects(NoteTypePeer::doSelectStmt($criteria, $con));
 	}
 	/**
 	 * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -287,12 +272,12 @@ abstract class BaseNotePeer {
 	public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		if (!$criteria->hasSelectClause()) {
 			$criteria = clone $criteria;
-			NotePeer::addSelectColumns($criteria);
+			NoteTypePeer::addSelectColumns($criteria);
 		}
 
 		// Set the correct dbName
@@ -310,7 +295,7 @@ abstract class BaseNotePeer {
 	 * to the cache in order to ensure that the same objects are always returned by doSelect*()
 	 * and retrieveByPK*() calls.
 	 *
-	 * @param      Note $value A Note object.
+	 * @param      NoteType $value A NoteType object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
 	public static function addInstanceToPool($obj, $key = null)
@@ -331,18 +316,18 @@ abstract class BaseNotePeer {
 	 * methods in your stub classes -- you may need to explicitly remove objects
 	 * from the cache in order to prevent returning objects that no longer exist.
 	 *
-	 * @param      mixed $value A Note object or a primary key value.
+	 * @param      mixed $value A NoteType object or a primary key value.
 	 */
 	public static function removeInstanceFromPool($value)
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
-			if (is_object($value) && $value instanceof Note) {
+			if (is_object($value) && $value instanceof NoteType) {
 				$key = (string) $value->getId();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
 			} else {
-				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Note object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or NoteType object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
 			}
 
@@ -357,7 +342,7 @@ abstract class BaseNotePeer {
 	 * a multi-column primary key, a serialize()d version of the primary key will be returned.
 	 *
 	 * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-	 * @return     Note Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+	 * @return     NoteType Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
 	 * @see        getPrimaryKeyHash()
 	 */
 	public static function getInstanceFromPool($key)
@@ -381,11 +366,14 @@ abstract class BaseNotePeer {
 	}
 	
 	/**
-	 * Method to invalidate the instance pool of all tables related to notes
+	 * Method to invalidate the instance pool of all tables related to note_types
 	 * by a foreign key with ON DELETE CASCADE
 	 */
 	public static function clearRelatedInstancePool()
 	{
+		// Invalidate objects in NotePeer instance pool,
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NotePeer::clearInstancePool();
 	}
 
 	/**
@@ -433,11 +421,11 @@ abstract class BaseNotePeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NotePeer::getOMClass(false);
+		$cls = NoteTypePeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key = NotePeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj = NotePeer::getInstanceFromPool($key))) {
+			$key = NoteTypePeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj = NoteTypePeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
@@ -446,7 +434,7 @@ abstract class BaseNotePeer {
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
-				NotePeer::addInstanceToPool($obj, $key);
+				NoteTypePeer::addInstanceToPool($obj, $key);
 			} // if key exists
 		}
 		$stmt->closeCursor();
@@ -459,73 +447,23 @@ abstract class BaseNotePeer {
 	 * @param      int $startcol The 0-based offset for reading from the resultset row.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
-	 * @return     array (Note object, last column rank)
+	 * @return     array (NoteType object, last column rank)
 	 */
 	public static function populateObject($row, $startcol = 0)
 	{
-		$key = NotePeer::getPrimaryKeyHashFromRow($row, $startcol);
-		if (null !== ($obj = NotePeer::getInstanceFromPool($key))) {
+		$key = NoteTypePeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NoteTypePeer::getInstanceFromPool($key))) {
 			// We no longer rehydrate the object, since this can cause data loss.
 			// See http://www.propelorm.org/ticket/509
 			// $obj->hydrate($row, $startcol, true); // rehydrate
-			$col = $startcol + NotePeer::NUM_HYDRATE_COLUMNS;
+			$col = $startcol + NoteTypePeer::NUM_HYDRATE_COLUMNS;
 		} else {
-			$cls = NotePeer::OM_CLASS;
+			$cls = NoteTypePeer::OM_CLASS;
 			$obj = new $cls();
 			$col = $obj->hydrate($row, $startcol);
-			NotePeer::addInstanceToPool($obj, $key);
+			NoteTypePeer::addInstanceToPool($obj, $key);
 		}
 		return array($obj, $col);
-	}
-
-
-	/**
-	 * Returns the number of rows matching criteria, joining the related NoteType table
-	 *
-	 * @param      Criteria $criteria
-	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     int Number of matching rows.
-	 */
-	public static function doCountJoinNoteType(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		// we're going to modify criteria, so copy it first
-		$criteria = clone $criteria;
-
-		// We need to set the primary table name, since in the case that there are no WHERE columns
-		// it will be impossible for the BasePeer::createSelectSql() method to determine which
-		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(NotePeer::TABLE_NAME);
-
-		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-			$criteria->setDistinct();
-		}
-
-		if (!$criteria->hasSelectClause()) {
-			NotePeer::addSelectColumns($criteria);
-		}
-
-		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-
-		// Set the correct dbName
-		$criteria->setDbName(self::DATABASE_NAME);
-
-		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
-		}
-
-		$criteria->addJoin(NotePeer::NOTE_TYPE_ID, NoteTypePeer::ID, $join_behavior);
-
-		$stmt = BasePeer::doCount($criteria, $con);
-
-		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$count = (int) $row[0];
-		} else {
-			$count = 0; // no rows returned; we infer that means 0 matches.
-		}
-		$stmt->closeCursor();
-		return $count;
 	}
 
 
@@ -546,14 +484,14 @@ abstract class BaseNotePeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(NotePeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(NoteTypePeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			NotePeer::addSelectColumns($criteria);
+			NoteTypePeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -562,10 +500,10 @@ abstract class BaseNotePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(NotePeer::CREATED_BY, UserPeer::ID, $join_behavior);
+		$criteria->addJoin(NoteTypePeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
 		$stmt = BasePeer::doCount($criteria, $con);
 
@@ -596,14 +534,14 @@ abstract class BaseNotePeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(NotePeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(NoteTypePeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			NotePeer::addSelectColumns($criteria);
+			NoteTypePeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -612,10 +550,10 @@ abstract class BaseNotePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(NotePeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+		$criteria->addJoin(NoteTypePeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
 		$stmt = BasePeer::doCount($criteria, $con);
 
@@ -630,77 +568,11 @@ abstract class BaseNotePeer {
 
 
 	/**
-	 * Selects a collection of Note objects pre-filled with their NoteType objects.
+	 * Selects a collection of NoteType objects pre-filled with their User objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Note objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinNoteType(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		NotePeer::addSelectColumns($criteria);
-		$startcol = NotePeer::NUM_HYDRATE_COLUMNS;
-		NoteTypePeer::addSelectColumns($criteria);
-
-		$criteria->addJoin(NotePeer::NOTE_TYPE_ID, NoteTypePeer::ID, $join_behavior);
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = NotePeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = NotePeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://www.propelorm.org/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-
-				$cls = NotePeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				NotePeer::addInstanceToPool($obj1, $key1);
-			} // if $obj1 already loaded
-
-			$key2 = NoteTypePeer::getPrimaryKeyHashFromRow($row, $startcol);
-			if ($key2 !== null) {
-				$obj2 = NoteTypePeer::getInstanceFromPool($key2);
-				if (!$obj2) {
-
-					$cls = NoteTypePeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol);
-					NoteTypePeer::addInstanceToPool($obj2, $key2);
-				} // if obj2 already loaded
-
-				// Add the $obj1 (Note) to $obj2 (NoteType)
-				$obj2->addNote($obj1);
-
-			} // if joined row was not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Note objects pre-filled with their User objects.
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Note objects.
+	 * @return     array Array of NoteType objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -713,28 +585,28 @@ abstract class BaseNotePeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NotePeer::addSelectColumns($criteria);
-		$startcol = NotePeer::NUM_HYDRATE_COLUMNS;
+		NoteTypePeer::addSelectColumns($criteria);
+		$startcol = NoteTypePeer::NUM_HYDRATE_COLUMNS;
 		UserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(NotePeer::CREATED_BY, UserPeer::ID, $join_behavior);
+		$criteria->addJoin(NoteTypePeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
 		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = NotePeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = NotePeer::getInstanceFromPool($key1))) {
+			$key1 = NoteTypePeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = NoteTypePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$cls = NotePeer::getOMClass(false);
+				$cls = NoteTypePeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				NotePeer::addInstanceToPool($obj1, $key1);
+				NoteTypePeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
 			$key2 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -749,8 +621,8 @@ abstract class BaseNotePeer {
 					UserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 
-				// Add the $obj1 (Note) to $obj2 (User)
-				$obj2->addNoteRelatedByCreatedBy($obj1);
+				// Add the $obj1 (NoteType) to $obj2 (User)
+				$obj2->addNoteTypeRelatedByCreatedBy($obj1);
 
 			} // if joined row was not null
 
@@ -762,11 +634,11 @@ abstract class BaseNotePeer {
 
 
 	/**
-	 * Selects a collection of Note objects pre-filled with their User objects.
+	 * Selects a collection of NoteType objects pre-filled with their User objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Note objects.
+	 * @return     array Array of NoteType objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -779,28 +651,28 @@ abstract class BaseNotePeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NotePeer::addSelectColumns($criteria);
-		$startcol = NotePeer::NUM_HYDRATE_COLUMNS;
+		NoteTypePeer::addSelectColumns($criteria);
+		$startcol = NoteTypePeer::NUM_HYDRATE_COLUMNS;
 		UserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(NotePeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+		$criteria->addJoin(NoteTypePeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
 		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = NotePeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = NotePeer::getInstanceFromPool($key1))) {
+			$key1 = NoteTypePeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = NoteTypePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$cls = NotePeer::getOMClass(false);
+				$cls = NoteTypePeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				NotePeer::addInstanceToPool($obj1, $key1);
+				NoteTypePeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
 			$key2 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -815,8 +687,8 @@ abstract class BaseNotePeer {
 					UserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 
-				// Add the $obj1 (Note) to $obj2 (User)
-				$obj2->addNoteRelatedByUpdatedBy($obj1);
+				// Add the $obj1 (NoteType) to $obj2 (User)
+				$obj2->addNoteTypeRelatedByUpdatedBy($obj1);
 
 			} // if joined row was not null
 
@@ -844,14 +716,14 @@ abstract class BaseNotePeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(NotePeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(NoteTypePeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			NotePeer::addSelectColumns($criteria);
+			NoteTypePeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -860,14 +732,12 @@ abstract class BaseNotePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(NotePeer::NOTE_TYPE_ID, NoteTypePeer::ID, $join_behavior);
+		$criteria->addJoin(NoteTypePeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
-		$criteria->addJoin(NotePeer::CREATED_BY, UserPeer::ID, $join_behavior);
-
-		$criteria->addJoin(NotePeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+		$criteria->addJoin(NoteTypePeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
 		$stmt = BasePeer::doCount($criteria, $con);
 
@@ -881,12 +751,12 @@ abstract class BaseNotePeer {
 	}
 
 	/**
-	 * Selects a collection of Note objects pre-filled with all related objects.
+	 * Selects a collection of NoteType objects pre-filled with all related objects.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Note objects.
+	 * @return     array Array of NoteType objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -899,57 +769,52 @@ abstract class BaseNotePeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NotePeer::addSelectColumns($criteria);
-		$startcol2 = NotePeer::NUM_HYDRATE_COLUMNS;
-
 		NoteTypePeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + NoteTypePeer::NUM_HYDRATE_COLUMNS;
+		$startcol2 = NoteTypePeer::NUM_HYDRATE_COLUMNS;
+
+		UserPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + UserPeer::NUM_HYDRATE_COLUMNS;
 
 		UserPeer::addSelectColumns($criteria);
 		$startcol4 = $startcol3 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-		UserPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
+		$criteria->addJoin(NoteTypePeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
-		$criteria->addJoin(NotePeer::NOTE_TYPE_ID, NoteTypePeer::ID, $join_behavior);
-
-		$criteria->addJoin(NotePeer::CREATED_BY, UserPeer::ID, $join_behavior);
-
-		$criteria->addJoin(NotePeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+		$criteria->addJoin(NoteTypePeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
 		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = NotePeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = NotePeer::getInstanceFromPool($key1))) {
+			$key1 = NoteTypePeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = NoteTypePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$cls = NotePeer::getOMClass(false);
+				$cls = NoteTypePeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				NotePeer::addInstanceToPool($obj1, $key1);
+				NoteTypePeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined NoteType rows
+			// Add objects for joined User rows
 
-			$key2 = NoteTypePeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = NoteTypePeer::getInstanceFromPool($key2);
+				$obj2 = UserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = NoteTypePeer::getOMClass(false);
+					$cls = UserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					NoteTypePeer::addInstanceToPool($obj2, $key2);
+					UserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (Note) to the collection in $obj2 (NoteType)
-				$obj2->addNote($obj1);
+				// Add the $obj1 (NoteType) to the collection in $obj2 (User)
+				$obj2->addNoteTypeRelatedByCreatedBy($obj1);
 			} // if joined row not null
 
 			// Add objects for joined User rows
@@ -966,84 +831,14 @@ abstract class BaseNotePeer {
 					UserPeer::addInstanceToPool($obj3, $key3);
 				} // if obj3 loaded
 
-				// Add the $obj1 (Note) to the collection in $obj3 (User)
-				$obj3->addNoteRelatedByCreatedBy($obj1);
-			} // if joined row not null
-
-			// Add objects for joined User rows
-
-			$key4 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-			if ($key4 !== null) {
-				$obj4 = UserPeer::getInstanceFromPool($key4);
-				if (!$obj4) {
-
-					$cls = UserPeer::getOMClass(false);
-
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					UserPeer::addInstanceToPool($obj4, $key4);
-				} // if obj4 loaded
-
-				// Add the $obj1 (Note) to the collection in $obj4 (User)
-				$obj4->addNoteRelatedByUpdatedBy($obj1);
+				// Add the $obj1 (NoteType) to the collection in $obj3 (User)
+				$obj3->addNoteTypeRelatedByUpdatedBy($obj1);
 			} // if joined row not null
 
 			$results[] = $obj1;
 		}
 		$stmt->closeCursor();
 		return $results;
-	}
-
-
-	/**
-	 * Returns the number of rows matching criteria, joining the related NoteType table
-	 *
-	 * @param      Criteria $criteria
-	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     int Number of matching rows.
-	 */
-	public static function doCountJoinAllExceptNoteType(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		// we're going to modify criteria, so copy it first
-		$criteria = clone $criteria;
-
-		// We need to set the primary table name, since in the case that there are no WHERE columns
-		// it will be impossible for the BasePeer::createSelectSql() method to determine which
-		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(NotePeer::TABLE_NAME);
-
-		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-			$criteria->setDistinct();
-		}
-
-		if (!$criteria->hasSelectClause()) {
-			NotePeer::addSelectColumns($criteria);
-		}
-
-		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-
-		// Set the correct dbName
-		$criteria->setDbName(self::DATABASE_NAME);
-
-		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
-		}
-	
-		$criteria->addJoin(NotePeer::CREATED_BY, UserPeer::ID, $join_behavior);
-
-		$criteria->addJoin(NotePeer::UPDATED_BY, UserPeer::ID, $join_behavior);
-
-		$stmt = BasePeer::doCount($criteria, $con);
-
-		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$count = (int) $row[0];
-		} else {
-			$count = 0; // no rows returned; we infer that means 0 matches.
-		}
-		$stmt->closeCursor();
-		return $count;
 	}
 
 
@@ -1064,14 +859,14 @@ abstract class BaseNotePeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(NotePeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(NoteTypePeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			NotePeer::addSelectColumns($criteria);
+			NoteTypePeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
@@ -1080,11 +875,9 @@ abstract class BaseNotePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-		$criteria->addJoin(NotePeer::NOTE_TYPE_ID, NoteTypePeer::ID, $join_behavior);
-
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1114,14 +907,14 @@ abstract class BaseNotePeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(NotePeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(NoteTypePeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			NotePeer::addSelectColumns($criteria);
+			NoteTypePeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
@@ -1130,11 +923,9 @@ abstract class BaseNotePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-		$criteria->addJoin(NotePeer::NOTE_TYPE_ID, NoteTypePeer::ID, $join_behavior);
-
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1148,109 +939,12 @@ abstract class BaseNotePeer {
 
 
 	/**
-	 * Selects a collection of Note objects pre-filled with all related objects except NoteType.
+	 * Selects a collection of NoteType objects pre-filled with all related objects except UserRelatedByCreatedBy.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Note objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAllExceptNoteType(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		// $criteria->getDbName() will return the same object if not set to another value
-		// so == check is okay and faster
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		NotePeer::addSelectColumns($criteria);
-		$startcol2 = NotePeer::NUM_HYDRATE_COLUMNS;
-
-		UserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + UserPeer::NUM_HYDRATE_COLUMNS;
-
-		UserPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + UserPeer::NUM_HYDRATE_COLUMNS;
-
-		$criteria->addJoin(NotePeer::CREATED_BY, UserPeer::ID, $join_behavior);
-
-		$criteria->addJoin(NotePeer::UPDATED_BY, UserPeer::ID, $join_behavior);
-
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = NotePeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = NotePeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://www.propelorm.org/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$cls = NotePeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				NotePeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-				// Add objects for joined User rows
-
-				$key2 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = UserPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = UserPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					UserPeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Note) to the collection in $obj2 (User)
-				$obj2->addNoteRelatedByCreatedBy($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined User rows
-
-				$key3 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = UserPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = UserPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					UserPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Note) to the collection in $obj3 (User)
-				$obj3->addNoteRelatedByUpdatedBy($obj1);
-
-			} // if joined row is not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Note objects pre-filled with all related objects except UserRelatedByCreatedBy.
-	 *
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Note objects.
+	 * @return     array Array of NoteType objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -1265,50 +959,26 @@ abstract class BaseNotePeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NotePeer::addSelectColumns($criteria);
-		$startcol2 = NotePeer::NUM_HYDRATE_COLUMNS;
-
 		NoteTypePeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + NoteTypePeer::NUM_HYDRATE_COLUMNS;
-
-		$criteria->addJoin(NotePeer::NOTE_TYPE_ID, NoteTypePeer::ID, $join_behavior);
+		$startcol2 = NoteTypePeer::NUM_HYDRATE_COLUMNS;
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = NotePeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = NotePeer::getInstanceFromPool($key1))) {
+			$key1 = NoteTypePeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = NoteTypePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$cls = NotePeer::getOMClass(false);
+				$cls = NoteTypePeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				NotePeer::addInstanceToPool($obj1, $key1);
+				NoteTypePeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
-
-				// Add objects for joined NoteType rows
-
-				$key2 = NoteTypePeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = NoteTypePeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = NoteTypePeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					NoteTypePeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Note) to the collection in $obj2 (NoteType)
-				$obj2->addNote($obj1);
-
-			} // if joined row is not null
 
 			$results[] = $obj1;
 		}
@@ -1318,12 +988,12 @@ abstract class BaseNotePeer {
 
 
 	/**
-	 * Selects a collection of Note objects pre-filled with all related objects except UserRelatedByUpdatedBy.
+	 * Selects a collection of NoteType objects pre-filled with all related objects except UserRelatedByUpdatedBy.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Note objects.
+	 * @return     array Array of NoteType objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -1338,50 +1008,26 @@ abstract class BaseNotePeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NotePeer::addSelectColumns($criteria);
-		$startcol2 = NotePeer::NUM_HYDRATE_COLUMNS;
-
 		NoteTypePeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + NoteTypePeer::NUM_HYDRATE_COLUMNS;
-
-		$criteria->addJoin(NotePeer::NOTE_TYPE_ID, NoteTypePeer::ID, $join_behavior);
+		$startcol2 = NoteTypePeer::NUM_HYDRATE_COLUMNS;
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = NotePeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = NotePeer::getInstanceFromPool($key1))) {
+			$key1 = NoteTypePeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = NoteTypePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$cls = NotePeer::getOMClass(false);
+				$cls = NoteTypePeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				NotePeer::addInstanceToPool($obj1, $key1);
+				NoteTypePeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
-
-				// Add objects for joined NoteType rows
-
-				$key2 = NoteTypePeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = NoteTypePeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = NoteTypePeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					NoteTypePeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Note) to the collection in $obj2 (NoteType)
-				$obj2->addNote($obj1);
-
-			} // if joined row is not null
 
 			$results[] = $obj1;
 		}
@@ -1406,10 +1052,10 @@ abstract class BaseNotePeer {
 	 */
 	public static function buildTableMap()
 	{
-	  $dbMap = Propel::getDatabaseMap(BaseNotePeer::DATABASE_NAME);
-	  if (!$dbMap->hasTable(BaseNotePeer::TABLE_NAME))
+	  $dbMap = Propel::getDatabaseMap(BaseNoteTypePeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNoteTypePeer::TABLE_NAME))
 	  {
-	    $dbMap->addTableObject(new NoteTableMap());
+	    $dbMap->addTableObject(new NoteTypeTableMap());
 	  }
 	}
 
@@ -1426,13 +1072,13 @@ abstract class BaseNotePeer {
 	 */
 	public static function getOMClass($withPrefix = true)
 	{
-		return $withPrefix ? NotePeer::CLASS_DEFAULT : NotePeer::OM_CLASS;
+		return $withPrefix ? NoteTypePeer::CLASS_DEFAULT : NoteTypePeer::OM_CLASS;
 	}
 
 	/**
-	 * Performs an INSERT on the database, given a Note or Criteria object.
+	 * Performs an INSERT on the database, given a NoteType or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or Note object containing data that is used to create the INSERT statement.
+	 * @param      mixed $values Criteria or NoteType object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
 	 * @return     mixed The new primary key.
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -1441,17 +1087,17 @@ abstract class BaseNotePeer {
 	public static function doInsert($values, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 		} else {
-			$criteria = $values->buildCriteria(); // build Criteria from Note object
+			$criteria = $values->buildCriteria(); // build Criteria from NoteType object
 		}
 
-		if ($criteria->containsKey(NotePeer::ID) && $criteria->keyContainsValue(NotePeer::ID) ) {
-			throw new PropelException('Cannot insert a value for auto-increment primary key ('.NotePeer::ID.')');
+		if ($criteria->containsKey(NoteTypePeer::ID) && $criteria->keyContainsValue(NoteTypePeer::ID) ) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key ('.NoteTypePeer::ID.')');
 		}
 
 
@@ -1473,9 +1119,9 @@ abstract class BaseNotePeer {
 	}
 
 	/**
-	 * Performs an UPDATE on the database, given a Note or Criteria object.
+	 * Performs an UPDATE on the database, given a NoteType or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or Note object containing data that is used to create the UPDATE statement.
+	 * @param      mixed $values Criteria or NoteType object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -1484,7 +1130,7 @@ abstract class BaseNotePeer {
 	public static function doUpdate($values, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$selectCriteria = new Criteria(self::DATABASE_NAME);
@@ -1492,15 +1138,15 @@ abstract class BaseNotePeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(NotePeer::ID);
-			$value = $criteria->remove(NotePeer::ID);
+			$comparison = $criteria->getComparison(NoteTypePeer::ID);
+			$value = $criteria->remove(NoteTypePeer::ID);
 			if ($value) {
-				$selectCriteria->add(NotePeer::ID, $value, $comparison);
+				$selectCriteria->add(NoteTypePeer::ID, $value, $comparison);
 			} else {
-				$selectCriteria->setPrimaryTableName(NotePeer::TABLE_NAME);
+				$selectCriteria->setPrimaryTableName(NoteTypePeer::TABLE_NAME);
 			}
 
-		} else { // $values is Note object
+		} else { // $values is NoteType object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
 		}
@@ -1512,7 +1158,7 @@ abstract class BaseNotePeer {
 	}
 
 	/**
-	 * Deletes all rows from the notes table.
+	 * Deletes all rows from the note_types table.
 	 *
 	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
@@ -1520,19 +1166,20 @@ abstract class BaseNotePeer {
 	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		$affectedRows = 0; // initialize var to track total num of affected rows
 		try {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(NotePeer::TABLE_NAME, $con, NotePeer::DATABASE_NAME);
+			NoteTypePeer::doOnDeleteSetNull(new Criteria(NoteTypePeer::DATABASE_NAME), $con);
+			$affectedRows += BasePeer::doDeleteAll(NoteTypePeer::TABLE_NAME, $con, NoteTypePeer::DATABASE_NAME);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
 			// instances get re-added by the select statement contained therein).
-			NotePeer::clearInstancePool();
-			NotePeer::clearRelatedInstancePool();
+			NoteTypePeer::clearInstancePool();
+			NoteTypePeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1542,9 +1189,9 @@ abstract class BaseNotePeer {
 	}
 
 	/**
-	 * Performs a DELETE on the database, given a Note or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NoteType or Criteria object OR a primary key value.
 	 *
-	 * @param      mixed $values Criteria or Note object or primary key or array of primary keys
+	 * @param      mixed $values Criteria or NoteType object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
 	 * @param      PropelPDO $con the connection to use
 	 * @return     int 	The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -1555,28 +1202,18 @@ abstract class BaseNotePeer {
 	 public static function doDelete($values, PropelPDO $con = null)
 	 {
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
-			// invalidate the cache for all objects of this type, since we have no
-			// way of knowing (without running a query) what objects should be invalidated
-			// from the cache based on this Criteria.
-			NotePeer::clearInstancePool();
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof Note) { // it's a model object
-			// invalidate the cache for this single object
-			NotePeer::removeInstanceFromPool($values);
+		} elseif ($values instanceof NoteType) { // it's a model object
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(NotePeer::ID, (array) $values, Criteria::IN);
-			// invalidate the cache for this object(s)
-			foreach ((array) $values as $singleval) {
-				NotePeer::removeInstanceFromPool($singleval);
-			}
+			$criteria->add(NoteTypePeer::ID, (array) $values, Criteria::IN);
 		}
 
 		// Set the correct dbName
@@ -1589,8 +1226,25 @@ abstract class BaseNotePeer {
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
 			
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			NoteTypePeer::doOnDeleteSetNull($c, $con);
+			
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			if ($values instanceof Criteria) {
+				NoteTypePeer::clearInstancePool();
+			} elseif ($values instanceof NoteType) { // it's a model object
+				NoteTypePeer::removeInstanceFromPool($values);
+			} else { // it's a primary key, or an array of pks
+				foreach ((array) $values as $singleval) {
+					NoteTypePeer::removeInstanceFromPool($singleval);
+				}
+			}
+			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-			NotePeer::clearRelatedInstancePool();
+			NoteTypePeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1600,13 +1254,44 @@ abstract class BaseNotePeer {
 	}
 
 	/**
-	 * Validates all modified columns of given Note object.
+	 * This is a method for emulating ON DELETE SET NULL DBs that don't support this
+	 * feature (like MySQL or SQLite).
+	 *
+	 * This method is not very speedy because it must perform a query first to get
+	 * the implicated records and then perform the deletes by calling those Peer classes.
+	 *
+	 * This method should be used within a transaction if possible.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      PropelPDO $con
+	 * @return     void
+	 */
+	protected static function doOnDeleteSetNull(Criteria $criteria, PropelPDO $con)
+	{
+
+		// first find the objects that are implicated by the $criteria
+		$objects = NoteTypePeer::doSelect($criteria, $con);
+		foreach ($objects as $obj) {
+
+			// set fkey col in related Note rows to NULL
+			$selectCriteria = new Criteria(NoteTypePeer::DATABASE_NAME);
+			$updateValues = new Criteria(NoteTypePeer::DATABASE_NAME);
+			$selectCriteria->add(NotePeer::NOTE_TYPE_ID, $obj->getId());
+			$updateValues->add(NotePeer::NOTE_TYPE_ID, null);
+
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+
+		}
+	}
+
+	/**
+	 * Validates all modified columns of given NoteType object.
 	 * If parameter $columns is either a single column name or an array of column names
 	 * than only those columns are validated.
 	 *
 	 * NOTICE: This does not apply to primary or foreign keys for now.
 	 *
-	 * @param      Note $obj The object to validate.
+	 * @param      NoteType $obj The object to validate.
 	 * @param      mixed $cols Column name or array of column names.
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -1616,8 +1301,8 @@ abstract class BaseNotePeer {
 		$columns = array();
 
 		if ($cols) {
-			$dbMap = Propel::getDatabaseMap(NotePeer::DATABASE_NAME);
-			$tableMap = $dbMap->getTable(NotePeer::TABLE_NAME);
+			$dbMap = Propel::getDatabaseMap(NoteTypePeer::DATABASE_NAME);
+			$tableMap = $dbMap->getTable(NoteTypePeer::TABLE_NAME);
 
 			if (! is_array($cols)) {
 				$cols = array($cols);
@@ -1633,7 +1318,7 @@ abstract class BaseNotePeer {
 
 		}
 
-		return BasePeer::doValidate(NotePeer::DATABASE_NAME, NotePeer::TABLE_NAME, $columns);
+		return BasePeer::doValidate(NoteTypePeer::DATABASE_NAME, NoteTypePeer::TABLE_NAME, $columns);
 	}
 
 	/**
@@ -1641,23 +1326,23 @@ abstract class BaseNotePeer {
 	 *
 	 * @param      int $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
-	 * @return     Note
+	 * @return     NoteType
 	 */
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
 
-		if (null !== ($obj = NotePeer::getInstanceFromPool((string) $pk))) {
+		if (null !== ($obj = NoteTypePeer::getInstanceFromPool((string) $pk))) {
 			return $obj;
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria = new Criteria(NotePeer::DATABASE_NAME);
-		$criteria->add(NotePeer::ID, $pk);
+		$criteria = new Criteria(NoteTypePeer::DATABASE_NAME);
+		$criteria->add(NoteTypePeer::ID, $pk);
 
-		$v = NotePeer::doSelect($criteria, $con);
+		$v = NoteTypePeer::doSelect($criteria, $con);
 
 		return !empty($v) > 0 ? $v[0] : null;
 	}
@@ -1673,16 +1358,16 @@ abstract class BaseNotePeer {
 	public static function retrieveByPKs($pks, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		$objs = null;
 		if (empty($pks)) {
 			$objs = array();
 		} else {
-			$criteria = new Criteria(NotePeer::DATABASE_NAME);
-			$criteria->add(NotePeer::ID, $pks, Criteria::IN);
-			$objs = NotePeer::doSelect($criteria, $con);
+			$criteria = new Criteria(NoteTypePeer::DATABASE_NAME);
+			$criteria->add(NoteTypePeer::ID, $pks, Criteria::IN);
+			$objs = NoteTypePeer::doSelect($criteria, $con);
 		}
 		return $objs;
 	}
@@ -1707,9 +1392,9 @@ abstract class BaseNotePeer {
 		return $oUser->hasRole("notes-own");
 	}
 
-} // BaseNotePeer
+} // BaseNoteTypePeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseNotePeer::buildTableMap();
+BaseNoteTypePeer::buildTableMap();
 

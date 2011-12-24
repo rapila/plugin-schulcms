@@ -1,0 +1,42 @@
+Widget.types.note_type_detail = {
+	initialize: function() {
+		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		Widget.create('detail', function(widget) {
+			widget.set_instance(this);
+			jQuery.extend(widget.settings, {
+				title: "{{writeString=wns.note_type.create}}",
+				width: 530
+			});
+			if(this.auto_open) {
+				this.open();
+			}
+		}.bind(this));
+	},
+	
+	open: function() {
+		if(!this.detail_widget) {
+			this.auto_open = true;
+			return false;
+		}
+		this.detail_widget.open();
+		this.detail_widget.content.find('input[name=name]').focus();
+	},
+	
+	fill_data: function() {
+		this.getNoteTypeData(function(note_type_data) {
+			this.content.find("input[name='name']").val(note_type_data.Name);
+			this.content.find(".updated_info").text(note_type_data.UpdatedInfo);
+			this.content.find(".created_info").text(note_type_data.CreatedInfo);
+			this.content.find("span[class='detail_id']").text(note_type_data.Id);
+			this.detail_widget.set_title(this.detail_widget.settings.title = note_type_data.Name);
+		});
+	},
+
+	close: function() {
+		this.detail_widget.close();
+		this.close_callback();
+	},
+	
+	save_callback: jQuery.noop,
+	close_callback: jQuery.noop
+};

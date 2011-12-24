@@ -2,25 +2,25 @@
 
 
 /**
- * Base class that represents a row from the 'notes' table.
+ * Base class that represents a row from the 'note_types' table.
  *
  * 
  *
  * @package    propel.generator.model.om
  */
-abstract class BaseNote extends BaseObject  implements Persistent
+abstract class BaseNoteType extends BaseObject  implements Persistent
 {
 
 	/**
 	 * Peer class name
 	 */
-	const PEER = 'NotePeer';
+	const PEER = 'NoteTypePeer';
 
 	/**
 	 * The Peer class.
 	 * Instance provides a convenient way of calling static methods on a class
 	 * that calling code may not be able to identify.
-	 * @var        NotePeer
+	 * @var        NoteTypePeer
 	 */
 	protected static $peer;
 
@@ -31,28 +31,10 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	protected $id;
 
 	/**
-	 * The value for the note_type_id field.
-	 * @var        int
-	 */
-	protected $note_type_id;
-
-	/**
-	 * The value for the body field.
-	 * @var        resource
-	 */
-	protected $body;
-
-	/**
-	 * The value for the date_start field.
+	 * The value for the name field.
 	 * @var        string
 	 */
-	protected $date_start;
-
-	/**
-	 * The value for the date_end field.
-	 * @var        string
-	 */
-	protected $date_end;
+	protected $name;
 
 	/**
 	 * The value for the created_at field.
@@ -79,11 +61,6 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	protected $updated_by;
 
 	/**
-	 * @var        NoteType
-	 */
-	protected $aNoteType;
-
-	/**
 	 * @var        User
 	 */
 	protected $aUserRelatedByCreatedBy;
@@ -92,6 +69,11 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 * @var        User
 	 */
 	protected $aUserRelatedByUpdatedBy;
+
+	/**
+	 * @var        array Note[] Collection to store aggregation of Note objects.
+	 */
+	protected $collNotes;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -118,99 +100,13 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Get the [note_type_id] column value.
+	 * Get the [name] column value.
 	 * 
-	 * @return     int
+	 * @return     string
 	 */
-	public function getNoteTypeId()
+	public function getName()
 	{
-		return $this->note_type_id;
-	}
-
-	/**
-	 * Get the [body] column value.
-	 * 
-	 * @return     resource
-	 */
-	public function getBody()
-	{
-		return $this->body;
-	}
-
-	/**
-	 * Get the [optionally formatted] temporal [date_start] column value.
-	 * 
-	 *
-	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
-	 *							If format is NULL, then the raw DateTime object will be returned.
-	 * @return     mixed Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00
-	 * @throws     PropelException - if unable to parse/validate the date/time value.
-	 */
-	public function getDateStart($format = '%x')
-	{
-		if ($this->date_start === null) {
-			return null;
-		}
-
-
-		if ($this->date_start === '0000-00-00') {
-			// while technically this is not a default value of NULL,
-			// this seems to be closest in meaning.
-			return null;
-		} else {
-			try {
-				$dt = new DateTime($this->date_start);
-			} catch (Exception $x) {
-				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->date_start, true), $x);
-			}
-		}
-
-		if ($format === null) {
-			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
-			return $dt;
-		} elseif (strpos($format, '%') !== false) {
-			return strftime($format, $dt->format('U'));
-		} else {
-			return $dt->format($format);
-		}
-	}
-
-	/**
-	 * Get the [optionally formatted] temporal [date_end] column value.
-	 * 
-	 *
-	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
-	 *							If format is NULL, then the raw DateTime object will be returned.
-	 * @return     mixed Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00
-	 * @throws     PropelException - if unable to parse/validate the date/time value.
-	 */
-	public function getDateEnd($format = '%x')
-	{
-		if ($this->date_end === null) {
-			return null;
-		}
-
-
-		if ($this->date_end === '0000-00-00') {
-			// while technically this is not a default value of NULL,
-			// this seems to be closest in meaning.
-			return null;
-		} else {
-			try {
-				$dt = new DateTime($this->date_end);
-			} catch (Exception $x) {
-				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->date_end, true), $x);
-			}
-		}
-
-		if ($format === null) {
-			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
-			return $dt;
-		} elseif (strpos($format, '%') !== false) {
-			return strftime($format, $dt->format('U'));
-		} else {
-			return $dt->format($format);
-		}
+		return $this->name;
 	}
 
 	/**
@@ -313,7 +209,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     Note The current object (for fluent API support)
+	 * @return     NoteType The current object (for fluent API support)
 	 */
 	public function setId($v)
 	{
@@ -323,109 +219,38 @@ abstract class BaseNote extends BaseObject  implements Persistent
 
 		if ($this->id !== $v) {
 			$this->id = $v;
-			$this->modifiedColumns[] = NotePeer::ID;
+			$this->modifiedColumns[] = NoteTypePeer::ID;
 		}
 
 		return $this;
 	} // setId()
 
 	/**
-	 * Set the value of [note_type_id] column.
+	 * Set the value of [name] column.
 	 * 
-	 * @param      int $v new value
-	 * @return     Note The current object (for fluent API support)
+	 * @param      string $v new value
+	 * @return     NoteType The current object (for fluent API support)
 	 */
-	public function setNoteTypeId($v)
+	public function setName($v)
 	{
 		if ($v !== null) {
-			$v = (int) $v;
+			$v = (string) $v;
 		}
 
-		if ($this->note_type_id !== $v) {
-			$this->note_type_id = $v;
-			$this->modifiedColumns[] = NotePeer::NOTE_TYPE_ID;
-		}
-
-		if ($this->aNoteType !== null && $this->aNoteType->getId() !== $v) {
-			$this->aNoteType = null;
+		if ($this->name !== $v) {
+			$this->name = $v;
+			$this->modifiedColumns[] = NoteTypePeer::NAME;
 		}
 
 		return $this;
-	} // setNoteTypeId()
-
-	/**
-	 * Set the value of [body] column.
-	 * 
-	 * @param      resource $v new value
-	 * @return     Note The current object (for fluent API support)
-	 */
-	public function setBody($v)
-	{
-		// Because BLOB columns are streams in PDO we have to assume that they are
-		// always modified when a new value is passed in.  For example, the contents
-		// of the stream itself may have changed externally.
-		if (!is_resource($v) && $v !== null) {
-			$this->body = fopen('php://memory', 'r+');
-			fwrite($this->body, $v);
-			rewind($this->body);
-		} else { // it's already a stream
-			$this->body = $v;
-		}
-		$this->modifiedColumns[] = NotePeer::BODY;
-
-		return $this;
-	} // setBody()
-
-	/**
-	 * Sets the value of [date_start] column to a normalized version of the date/time value specified.
-	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.
-	 *               Empty strings are treated as NULL.
-	 * @return     Note The current object (for fluent API support)
-	 */
-	public function setDateStart($v)
-	{
-		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
-		if ($this->date_start !== null || $dt !== null) {
-			$currentDateAsString = ($this->date_start !== null && $tmpDt = new DateTime($this->date_start)) ? $tmpDt->format('Y-m-d') : null;
-			$newDateAsString = $dt ? $dt->format('Y-m-d') : null;
-			if ($currentDateAsString !== $newDateAsString) {
-				$this->date_start = $newDateAsString;
-				$this->modifiedColumns[] = NotePeer::DATE_START;
-			}
-		} // if either are not null
-
-		return $this;
-	} // setDateStart()
-
-	/**
-	 * Sets the value of [date_end] column to a normalized version of the date/time value specified.
-	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.
-	 *               Empty strings are treated as NULL.
-	 * @return     Note The current object (for fluent API support)
-	 */
-	public function setDateEnd($v)
-	{
-		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
-		if ($this->date_end !== null || $dt !== null) {
-			$currentDateAsString = ($this->date_end !== null && $tmpDt = new DateTime($this->date_end)) ? $tmpDt->format('Y-m-d') : null;
-			$newDateAsString = $dt ? $dt->format('Y-m-d') : null;
-			if ($currentDateAsString !== $newDateAsString) {
-				$this->date_end = $newDateAsString;
-				$this->modifiedColumns[] = NotePeer::DATE_END;
-			}
-		} // if either are not null
-
-		return $this;
-	} // setDateEnd()
+	} // setName()
 
 	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.
 	 *               Empty strings are treated as NULL.
-	 * @return     Note The current object (for fluent API support)
+	 * @return     NoteType The current object (for fluent API support)
 	 */
 	public function setCreatedAt($v)
 	{
@@ -435,7 +260,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
 			if ($currentDateAsString !== $newDateAsString) {
 				$this->created_at = $newDateAsString;
-				$this->modifiedColumns[] = NotePeer::CREATED_AT;
+				$this->modifiedColumns[] = NoteTypePeer::CREATED_AT;
 			}
 		} // if either are not null
 
@@ -447,7 +272,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.
 	 *               Empty strings are treated as NULL.
-	 * @return     Note The current object (for fluent API support)
+	 * @return     NoteType The current object (for fluent API support)
 	 */
 	public function setUpdatedAt($v)
 	{
@@ -457,7 +282,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
 			if ($currentDateAsString !== $newDateAsString) {
 				$this->updated_at = $newDateAsString;
-				$this->modifiedColumns[] = NotePeer::UPDATED_AT;
+				$this->modifiedColumns[] = NoteTypePeer::UPDATED_AT;
 			}
 		} // if either are not null
 
@@ -468,7 +293,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 * Set the value of [created_by] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     Note The current object (for fluent API support)
+	 * @return     NoteType The current object (for fluent API support)
 	 */
 	public function setCreatedBy($v)
 	{
@@ -478,7 +303,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 
 		if ($this->created_by !== $v) {
 			$this->created_by = $v;
-			$this->modifiedColumns[] = NotePeer::CREATED_BY;
+			$this->modifiedColumns[] = NoteTypePeer::CREATED_BY;
 		}
 
 		if ($this->aUserRelatedByCreatedBy !== null && $this->aUserRelatedByCreatedBy->getId() !== $v) {
@@ -492,7 +317,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 * Set the value of [updated_by] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     Note The current object (for fluent API support)
+	 * @return     NoteType The current object (for fluent API support)
 	 */
 	public function setUpdatedBy($v)
 	{
@@ -502,7 +327,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 
 		if ($this->updated_by !== $v) {
 			$this->updated_by = $v;
-			$this->modifiedColumns[] = NotePeer::UPDATED_BY;
+			$this->modifiedColumns[] = NoteTypePeer::UPDATED_BY;
 		}
 
 		if ($this->aUserRelatedByUpdatedBy !== null && $this->aUserRelatedByUpdatedBy->getId() !== $v) {
@@ -545,20 +370,11 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		try {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->note_type_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-			if ($row[$startcol + 2] !== null) {
-				$this->body = fopen('php://memory', 'r+');
-				fwrite($this->body, $row[$startcol + 2]);
-				rewind($this->body);
-			} else {
-				$this->body = null;
-			}
-			$this->date_start = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-			$this->date_end = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-			$this->created_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-			$this->updated_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-			$this->created_by = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
-			$this->updated_by = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+			$this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+			$this->created_at = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+			$this->updated_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+			$this->created_by = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+			$this->updated_by = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -567,10 +383,10 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 9; // 9 = NotePeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 6; // 6 = NoteTypePeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
-			throw new PropelException("Error populating Note object", $e);
+			throw new PropelException("Error populating NoteType object", $e);
 		}
 	}
 
@@ -590,9 +406,6 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	public function ensureConsistency()
 	{
 
-		if ($this->aNoteType !== null && $this->note_type_id !== $this->aNoteType->getId()) {
-			$this->aNoteType = null;
-		}
 		if ($this->aUserRelatedByCreatedBy !== null && $this->created_by !== $this->aUserRelatedByCreatedBy->getId()) {
 			$this->aUserRelatedByCreatedBy = null;
 		}
@@ -622,13 +435,13 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		// We don't need to alter the object instance pool; we're just modifying this instance
 		// already in the pool.
 
-		$stmt = NotePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+		$stmt = NoteTypePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
 		$row = $stmt->fetch(PDO::FETCH_NUM);
 		$stmt->closeCursor();
 		if (!$row) {
@@ -638,9 +451,10 @@ abstract class BaseNote extends BaseObject  implements Persistent
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->aNoteType = null;
 			$this->aUserRelatedByCreatedBy = null;
 			$this->aUserRelatedByUpdatedBy = null;
+			$this->collNotes = null;
+
 		} // if (deep)
 	}
 
@@ -660,16 +474,16 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$con->beginTransaction();
 		try {
-			$deleteQuery = NoteQuery::create()
+			$deleteQuery = NoteTypeQuery::create()
 				->filterByPrimaryKey($this->getPrimaryKey());
 			$ret = $this->preDelete($con);
 			// denyable behavior
-			if(!(NotePeer::isIgnoringRights() || $this->mayOperate("delete"))) {
+			if(!(NoteTypePeer::isIgnoringRights() || $this->mayOperate("delete"))) {
 				throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "notes")));
 			}
 
@@ -707,7 +521,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(NoteTypePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$con->beginTransaction();
@@ -717,24 +531,24 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			if ($isInsert) {
 				$ret = $ret && $this->preInsert($con);
 				// denyable behavior
-				if(!(NotePeer::isIgnoringRights() || $this->mayOperate("insert"))) {
+				if(!(NoteTypePeer::isIgnoringRights() || $this->mayOperate("insert"))) {
 					throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "notes")));
 				}
 
 				// extended_timestampable behavior
-				if (!$this->isColumnModified(NotePeer::CREATED_AT)) {
+				if (!$this->isColumnModified(NoteTypePeer::CREATED_AT)) {
 					$this->setCreatedAt(time());
 				}
-				if (!$this->isColumnModified(NotePeer::UPDATED_AT)) {
+				if (!$this->isColumnModified(NoteTypePeer::UPDATED_AT)) {
 					$this->setUpdatedAt(time());
 				}
 				// attributable behavior
 				
 				if(Session::getSession()->isAuthenticated()) {
-					if (!$this->isColumnModified(NotePeer::CREATED_BY)) {
+					if (!$this->isColumnModified(NoteTypePeer::CREATED_BY)) {
 						$this->setCreatedBy(Session::getSession()->getUser()->getId());
 					}
-					if (!$this->isColumnModified(NotePeer::UPDATED_BY)) {
+					if (!$this->isColumnModified(NoteTypePeer::UPDATED_BY)) {
 						$this->setUpdatedBy(Session::getSession()->getUser()->getId());
 					}
 				}
@@ -742,18 +556,18 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			} else {
 				$ret = $ret && $this->preUpdate($con);
 				// denyable behavior
-				if(!(NotePeer::isIgnoringRights() || $this->mayOperate("update"))) {
+				if(!(NoteTypePeer::isIgnoringRights() || $this->mayOperate("update"))) {
 					throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "notes")));
 				}
 
 				// extended_timestampable behavior
-				if ($this->isModified() && !$this->isColumnModified(NotePeer::UPDATED_AT)) {
+				if ($this->isModified() && !$this->isColumnModified(NoteTypePeer::UPDATED_AT)) {
 					$this->setUpdatedAt(time());
 				}
 				// attributable behavior
 				
 				if(Session::getSession()->isAuthenticated()) {
-					if ($this->isModified() && !$this->isColumnModified(NotePeer::UPDATED_BY)) {
+					if ($this->isModified() && !$this->isColumnModified(NoteTypePeer::UPDATED_BY)) {
 						$this->setUpdatedBy(Session::getSession()->getUser()->getId());
 					}
 				}
@@ -766,7 +580,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 					$this->postUpdate($con);
 				}
 				$this->postSave($con);
-				NotePeer::addInstanceToPool($this);
+				NoteTypePeer::addInstanceToPool($this);
 			} else {
 				$affectedRows = 0;
 			}
@@ -800,13 +614,6 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->aNoteType !== null) {
-				if ($this->aNoteType->isModified() || $this->aNoteType->isNew()) {
-					$affectedRows += $this->aNoteType->save($con);
-				}
-				$this->setNoteType($this->aNoteType);
-			}
-
 			if ($this->aUserRelatedByCreatedBy !== null) {
 				if ($this->aUserRelatedByCreatedBy->isModified() || $this->aUserRelatedByCreatedBy->isNew()) {
 					$affectedRows += $this->aUserRelatedByCreatedBy->save($con);
@@ -822,15 +629,15 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			}
 
 			if ($this->isNew() ) {
-				$this->modifiedColumns[] = NotePeer::ID;
+				$this->modifiedColumns[] = NoteTypePeer::ID;
 			}
 
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
 					$criteria = $this->buildCriteria();
-					if ($criteria->keyContainsValue(NotePeer::ID) ) {
-						throw new PropelException('Cannot insert a value for auto-increment primary key ('.NotePeer::ID.')');
+					if ($criteria->keyContainsValue(NoteTypePeer::ID) ) {
+						throw new PropelException('Cannot insert a value for auto-increment primary key ('.NoteTypePeer::ID.')');
 					}
 
 					$pk = BasePeer::doInsert($criteria, $con);
@@ -838,15 +645,18 @@ abstract class BaseNote extends BaseObject  implements Persistent
 					$this->setId($pk);  //[IMV] update autoincrement primary key
 					$this->setNew(false);
 				} else {
-					$affectedRows += NotePeer::doUpdate($this, $con);
-				}
-
-				// Rewind the body LOB column, since PDO does not rewind after inserting value.
-				if ($this->body !== null && is_resource($this->body)) {
-					rewind($this->body);
+					$affectedRows += NoteTypePeer::doUpdate($this, $con);
 				}
 
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
+			}
+
+			if ($this->collNotes !== null) {
+				foreach ($this->collNotes as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
 			}
 
 			$this->alreadyInSave = false;
@@ -920,12 +730,6 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->aNoteType !== null) {
-				if (!$this->aNoteType->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->aNoteType->getValidationFailures());
-				}
-			}
-
 			if ($this->aUserRelatedByCreatedBy !== null) {
 				if (!$this->aUserRelatedByCreatedBy->validate($columns)) {
 					$failureMap = array_merge($failureMap, $this->aUserRelatedByCreatedBy->getValidationFailures());
@@ -939,10 +743,18 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			}
 
 
-			if (($retval = NotePeer::doValidate($this, $columns)) !== true) {
+			if (($retval = NoteTypePeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
+
+				if ($this->collNotes !== null) {
+					foreach ($this->collNotes as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
 
 
 			$this->alreadyInValidation = false;
@@ -962,7 +774,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = NotePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = NoteTypePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		$field = $this->getByPosition($pos);
 		return $field;
 	}
@@ -981,27 +793,18 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				return $this->getId();
 				break;
 			case 1:
-				return $this->getNoteTypeId();
+				return $this->getName();
 				break;
 			case 2:
-				return $this->getBody();
-				break;
-			case 3:
-				return $this->getDateStart();
-				break;
-			case 4:
-				return $this->getDateEnd();
-				break;
-			case 5:
 				return $this->getCreatedAt();
 				break;
-			case 6:
+			case 3:
 				return $this->getUpdatedAt();
 				break;
-			case 7:
+			case 4:
 				return $this->getCreatedBy();
 				break;
-			case 8:
+			case 5:
 				return $this->getUpdatedBy();
 				break;
 			default:
@@ -1027,31 +830,28 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
-		if (isset($alreadyDumpedObjects['Note'][$this->getPrimaryKey()])) {
+		if (isset($alreadyDumpedObjects['NoteType'][$this->getPrimaryKey()])) {
 			return '*RECURSION*';
 		}
-		$alreadyDumpedObjects['Note'][$this->getPrimaryKey()] = true;
-		$keys = NotePeer::getFieldNames($keyType);
+		$alreadyDumpedObjects['NoteType'][$this->getPrimaryKey()] = true;
+		$keys = NoteTypePeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
-			$keys[1] => $this->getNoteTypeId(),
-			$keys[2] => $this->getBody(),
-			$keys[3] => $this->getDateStart(),
-			$keys[4] => $this->getDateEnd(),
-			$keys[5] => $this->getCreatedAt(),
-			$keys[6] => $this->getUpdatedAt(),
-			$keys[7] => $this->getCreatedBy(),
-			$keys[8] => $this->getUpdatedBy(),
+			$keys[1] => $this->getName(),
+			$keys[2] => $this->getCreatedAt(),
+			$keys[3] => $this->getUpdatedAt(),
+			$keys[4] => $this->getCreatedBy(),
+			$keys[5] => $this->getUpdatedBy(),
 		);
 		if ($includeForeignObjects) {
-			if (null !== $this->aNoteType) {
-				$result['NoteType'] = $this->aNoteType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-			}
 			if (null !== $this->aUserRelatedByCreatedBy) {
 				$result['UserRelatedByCreatedBy'] = $this->aUserRelatedByCreatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aUserRelatedByUpdatedBy) {
 				$result['UserRelatedByUpdatedBy'] = $this->aUserRelatedByUpdatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->collNotes) {
+				$result['Notes'] = $this->collNotes->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
 			}
 		}
 		return $result;
@@ -1069,7 +869,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 */
 	public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = NotePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = NoteTypePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->setByPosition($pos, $value);
 	}
 
@@ -1088,27 +888,18 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				$this->setId($value);
 				break;
 			case 1:
-				$this->setNoteTypeId($value);
+				$this->setName($value);
 				break;
 			case 2:
-				$this->setBody($value);
-				break;
-			case 3:
-				$this->setDateStart($value);
-				break;
-			case 4:
-				$this->setDateEnd($value);
-				break;
-			case 5:
 				$this->setCreatedAt($value);
 				break;
-			case 6:
+			case 3:
 				$this->setUpdatedAt($value);
 				break;
-			case 7:
+			case 4:
 				$this->setCreatedBy($value);
 				break;
-			case 8:
+			case 5:
 				$this->setUpdatedBy($value);
 				break;
 		} // switch()
@@ -1133,17 +924,14 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 */
 	public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
 	{
-		$keys = NotePeer::getFieldNames($keyType);
+		$keys = NoteTypePeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setNoteTypeId($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setBody($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setDateStart($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setDateEnd($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setCreatedAt($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setUpdatedAt($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setCreatedBy($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setUpdatedBy($arr[$keys[8]]);
+		if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
+		if (array_key_exists($keys[2], $arr)) $this->setCreatedAt($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setUpdatedAt($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setCreatedBy($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setUpdatedBy($arr[$keys[5]]);
 	}
 
 	/**
@@ -1153,17 +941,14 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 */
 	public function buildCriteria()
 	{
-		$criteria = new Criteria(NotePeer::DATABASE_NAME);
+		$criteria = new Criteria(NoteTypePeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(NotePeer::ID)) $criteria->add(NotePeer::ID, $this->id);
-		if ($this->isColumnModified(NotePeer::NOTE_TYPE_ID)) $criteria->add(NotePeer::NOTE_TYPE_ID, $this->note_type_id);
-		if ($this->isColumnModified(NotePeer::BODY)) $criteria->add(NotePeer::BODY, $this->body);
-		if ($this->isColumnModified(NotePeer::DATE_START)) $criteria->add(NotePeer::DATE_START, $this->date_start);
-		if ($this->isColumnModified(NotePeer::DATE_END)) $criteria->add(NotePeer::DATE_END, $this->date_end);
-		if ($this->isColumnModified(NotePeer::CREATED_AT)) $criteria->add(NotePeer::CREATED_AT, $this->created_at);
-		if ($this->isColumnModified(NotePeer::UPDATED_AT)) $criteria->add(NotePeer::UPDATED_AT, $this->updated_at);
-		if ($this->isColumnModified(NotePeer::CREATED_BY)) $criteria->add(NotePeer::CREATED_BY, $this->created_by);
-		if ($this->isColumnModified(NotePeer::UPDATED_BY)) $criteria->add(NotePeer::UPDATED_BY, $this->updated_by);
+		if ($this->isColumnModified(NoteTypePeer::ID)) $criteria->add(NoteTypePeer::ID, $this->id);
+		if ($this->isColumnModified(NoteTypePeer::NAME)) $criteria->add(NoteTypePeer::NAME, $this->name);
+		if ($this->isColumnModified(NoteTypePeer::CREATED_AT)) $criteria->add(NoteTypePeer::CREATED_AT, $this->created_at);
+		if ($this->isColumnModified(NoteTypePeer::UPDATED_AT)) $criteria->add(NoteTypePeer::UPDATED_AT, $this->updated_at);
+		if ($this->isColumnModified(NoteTypePeer::CREATED_BY)) $criteria->add(NoteTypePeer::CREATED_BY, $this->created_by);
+		if ($this->isColumnModified(NoteTypePeer::UPDATED_BY)) $criteria->add(NoteTypePeer::UPDATED_BY, $this->updated_by);
 
 		return $criteria;
 	}
@@ -1178,8 +963,8 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 */
 	public function buildPkeyCriteria()
 	{
-		$criteria = new Criteria(NotePeer::DATABASE_NAME);
-		$criteria->add(NotePeer::ID, $this->id);
+		$criteria = new Criteria(NoteTypePeer::DATABASE_NAME);
+		$criteria->add(NoteTypePeer::ID, $this->id);
 
 		return $criteria;
 	}
@@ -1219,21 +1004,32 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 * If desired, this method can also make copies of all associated (fkey referrers)
 	 * objects.
 	 *
-	 * @param      object $copyObj An object of Note (or compatible) type.
+	 * @param      object $copyObj An object of NoteType (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
 	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
 	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-		$copyObj->setNoteTypeId($this->getNoteTypeId());
-		$copyObj->setBody($this->getBody());
-		$copyObj->setDateStart($this->getDateStart());
-		$copyObj->setDateEnd($this->getDateEnd());
+		$copyObj->setName($this->getName());
 		$copyObj->setCreatedAt($this->getCreatedAt());
 		$copyObj->setUpdatedAt($this->getUpdatedAt());
 		$copyObj->setCreatedBy($this->getCreatedBy());
 		$copyObj->setUpdatedBy($this->getUpdatedBy());
+
+		if ($deepCopy) {
+			// important: temporarily setNew(false) because this affects the behavior of
+			// the getter/setter methods for fkey referrer objects.
+			$copyObj->setNew(false);
+
+			foreach ($this->getNotes() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addNote($relObj->copy($deepCopy));
+				}
+			}
+
+		} // if ($deepCopy)
+
 		if ($makeNew) {
 			$copyObj->setNew(true);
 			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1249,7 +1045,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 * objects.
 	 *
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-	 * @return     Note Clone of current object.
+	 * @return     NoteType Clone of current object.
 	 * @throws     PropelException
 	 */
 	public function copy($deepCopy = false)
@@ -1268,70 +1064,21 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 * same instance for all member of this class. The method could therefore
 	 * be static, but this would prevent one from overriding the behavior.
 	 *
-	 * @return     NotePeer
+	 * @return     NoteTypePeer
 	 */
 	public function getPeer()
 	{
 		if (self::$peer === null) {
-			self::$peer = new NotePeer();
+			self::$peer = new NoteTypePeer();
 		}
 		return self::$peer;
-	}
-
-	/**
-	 * Declares an association between this object and a NoteType object.
-	 *
-	 * @param      NoteType $v
-	 * @return     Note The current object (for fluent API support)
-	 * @throws     PropelException
-	 */
-	public function setNoteType(NoteType $v = null)
-	{
-		if ($v === null) {
-			$this->setNoteTypeId(NULL);
-		} else {
-			$this->setNoteTypeId($v->getId());
-		}
-
-		$this->aNoteType = $v;
-
-		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the NoteType object, it will not be re-added.
-		if ($v !== null) {
-			$v->addNote($this);
-		}
-
-		return $this;
-	}
-
-
-	/**
-	 * Get the associated NoteType object
-	 *
-	 * @param      PropelPDO Optional Connection object.
-	 * @return     NoteType The associated NoteType object.
-	 * @throws     PropelException
-	 */
-	public function getNoteType(PropelPDO $con = null)
-	{
-		if ($this->aNoteType === null && ($this->note_type_id !== null)) {
-			$this->aNoteType = NoteTypeQuery::create()->findPk($this->note_type_id, $con);
-			/* The following can be used additionally to
-				guarantee the related object contains a reference
-				to this object.  This level of coupling may, however, be
-				undesirable since it could result in an only partially populated collection
-				in the referenced object.
-				$this->aNoteType->addNotes($this);
-			 */
-		}
-		return $this->aNoteType;
 	}
 
 	/**
 	 * Declares an association between this object and a User object.
 	 *
 	 * @param      User $v
-	 * @return     Note The current object (for fluent API support)
+	 * @return     NoteType The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
 	public function setUserRelatedByCreatedBy(User $v = null)
@@ -1347,7 +1094,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		// Add binding for other direction of this n:n relationship.
 		// If this object has already been added to the User object, it will not be re-added.
 		if ($v !== null) {
-			$v->addNoteRelatedByCreatedBy($this);
+			$v->addNoteTypeRelatedByCreatedBy($this);
 		}
 
 		return $this;
@@ -1370,7 +1117,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				to this object.  This level of coupling may, however, be
 				undesirable since it could result in an only partially populated collection
 				in the referenced object.
-				$this->aUserRelatedByCreatedBy->addNotesRelatedByCreatedBy($this);
+				$this->aUserRelatedByCreatedBy->addNoteTypesRelatedByCreatedBy($this);
 			 */
 		}
 		return $this->aUserRelatedByCreatedBy;
@@ -1380,7 +1127,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 * Declares an association between this object and a User object.
 	 *
 	 * @param      User $v
-	 * @return     Note The current object (for fluent API support)
+	 * @return     NoteType The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
 	public function setUserRelatedByUpdatedBy(User $v = null)
@@ -1396,7 +1143,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		// Add binding for other direction of this n:n relationship.
 		// If this object has already been added to the User object, it will not be re-added.
 		if ($v !== null) {
-			$v->addNoteRelatedByUpdatedBy($this);
+			$v->addNoteTypeRelatedByUpdatedBy($this);
 		}
 
 		return $this;
@@ -1419,10 +1166,192 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				to this object.  This level of coupling may, however, be
 				undesirable since it could result in an only partially populated collection
 				in the referenced object.
-				$this->aUserRelatedByUpdatedBy->addNotesRelatedByUpdatedBy($this);
+				$this->aUserRelatedByUpdatedBy->addNoteTypesRelatedByUpdatedBy($this);
 			 */
 		}
 		return $this->aUserRelatedByUpdatedBy;
+	}
+
+
+	/**
+	 * Initializes a collection based on the name of a relation.
+	 * Avoids crafting an 'init[$relationName]s' method name
+	 * that wouldn't work when StandardEnglishPluralizer is used.
+	 *
+	 * @param      string $relationName The name of the relation to initialize
+	 * @return     void
+	 */
+	public function initRelation($relationName)
+	{
+		if ('Note' == $relationName) {
+			return $this->initNotes();
+		}
+	}
+
+	/**
+	 * Clears out the collNotes collection
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addNotes()
+	 */
+	public function clearNotes()
+	{
+		$this->collNotes = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collNotes collection.
+	 *
+	 * By default this just sets the collNotes collection to an empty array (like clearcollNotes());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
+	 * @return     void
+	 */
+	public function initNotes($overrideExisting = true)
+	{
+		if (null !== $this->collNotes && !$overrideExisting) {
+			return;
+		}
+		$this->collNotes = new PropelObjectCollection();
+		$this->collNotes->setModel('Note');
+	}
+
+	/**
+	 * Gets an array of Note objects which contain a foreign key that references this object.
+	 *
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NoteType is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array Note[] List of Note objects
+	 * @throws     PropelException
+	 */
+	public function getNotes($criteria = null, PropelPDO $con = null)
+	{
+		if(null === $this->collNotes || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNotes) {
+				// return empty collection
+				$this->initNotes();
+			} else {
+				$collNotes = NoteQuery::create(null, $criteria)
+					->filterByNoteType($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNotes;
+				}
+				$this->collNotes = $collNotes;
+			}
+		}
+		return $this->collNotes;
+	}
+
+	/**
+	 * Returns the number of related Note objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related Note objects.
+	 * @throws     PropelException
+	 */
+	public function countNotes(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if(null === $this->collNotes || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNotes) {
+				return 0;
+			} else {
+				$query = NoteQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
+				}
+				return $query
+					->filterByNoteType($this)
+					->count($con);
+			}
+		} else {
+			return count($this->collNotes);
+		}
+	}
+
+	/**
+	 * Method called to associate a Note object to this object
+	 * through the Note foreign key attribute.
+	 *
+	 * @param      Note $l Note
+	 * @return     NoteType The current object (for fluent API support)
+	 */
+	public function addNote(Note $l)
+	{
+		if ($this->collNotes === null) {
+			$this->initNotes();
+		}
+		if (!$this->collNotes->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNotes[]= $l;
+			$l->setNoteType($this);
+		}
+
+		return $this;
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this NoteType is new, it will return
+	 * an empty collection; or if this NoteType has previously
+	 * been saved, it will retrieve related Notes from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in NoteType.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array Note[] List of Note objects
+	 */
+	public function getNotesJoinUserRelatedByCreatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = NoteQuery::create(null, $criteria);
+		$query->joinWith('UserRelatedByCreatedBy', $join_behavior);
+
+		return $this->getNotes($query, $con);
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this NoteType is new, it will return
+	 * an empty collection; or if this NoteType has previously
+	 * been saved, it will retrieve related Notes from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in NoteType.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array Note[] List of Note objects
+	 */
+	public function getNotesJoinUserRelatedByUpdatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = NoteQuery::create(null, $criteria);
+		$query->joinWith('UserRelatedByUpdatedBy', $join_behavior);
+
+		return $this->getNotes($query, $con);
 	}
 
 	/**
@@ -1431,10 +1360,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	public function clear()
 	{
 		$this->id = null;
-		$this->note_type_id = null;
-		$this->body = null;
-		$this->date_start = null;
-		$this->date_end = null;
+		$this->name = null;
 		$this->created_at = null;
 		$this->updated_at = null;
 		$this->created_by = null;
@@ -1459,9 +1385,17 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
+			if ($this->collNotes) {
+				foreach ($this->collNotes as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 		} // if ($deep)
 
-		$this->aNoteType = null;
+		if ($this->collNotes instanceof PropelCollection) {
+			$this->collNotes->clearIterator();
+		}
+		$this->collNotes = null;
 		$this->aUserRelatedByCreatedBy = null;
 		$this->aUserRelatedByUpdatedBy = null;
 	}
@@ -1473,7 +1407,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 */
 	public function __toString()
 	{
-		return (string) $this->exportTo(NotePeer::DEFAULT_STRING_FORMAT);
+		return (string) $this->exportTo(NoteTypePeer::DEFAULT_STRING_FORMAT);
 	}
 
 	// denyable behavior
@@ -1481,10 +1415,10 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		if($oUser === false) {
 			$oUser = Session::getSession()->getUser();
 		}
-		if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && NotePeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
+		if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && NoteTypePeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
 			return true;
 		}
-		if(NotePeer::mayOperateOn($oUser, $this, $sOperation)) {
+		if(NoteTypePeer::mayOperateOn($oUser, $this, $sOperation)) {
 			return true;
 		}
 		$bIsAllowed = false;
@@ -1506,11 +1440,11 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	/**
 	 * Mark the current object so that the update date doesn't get updated during next save
 	 *
-	 * @return     Note The current object (for fluent API support)
+	 * @return     NoteType The current object (for fluent API support)
 	 */
 	public function keepUpdateDateUnchanged()
 	{
-		$this->modifiedColumns[] = NotePeer::UPDATED_AT;
+		$this->modifiedColumns[] = NoteTypePeer::UPDATED_AT;
 		return $this;
 	}
 	
@@ -1557,12 +1491,12 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	/**
 	 * Mark the current object so that the updated user doesn't get updated during next save
 	 *
-	 * @return     Note The current object (for fluent API support)
+	 * @return     NoteType The current object (for fluent API support)
 	 */
 	public function keepUpdateUserUnchanged()
 	{
-		$this->modifiedColumns[] = NotePeer::UPDATED_BY;
+		$this->modifiedColumns[] = NoteTypePeer::UPDATED_BY;
 		return $this;
 	}
 
-} // BaseNote
+} // BaseNoteType

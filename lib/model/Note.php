@@ -4,6 +4,8 @@
  * @package    propel.generator.model
  */
 class Note extends BaseNote {
+	
+	private static $NOTE_TYPES = array();
 
 	public function getDateStartFormatted($sFormat = 'Y.m.d') {
 		return $this->getDateStart($sFormat);
@@ -20,5 +22,15 @@ class Note extends BaseNote {
 			$sText = strip_tags($sText);
  		}
 		return $sText;
+	}
+	
+	public function getNoteTypeName() {
+		if($this->getNoteTypeId() === null) {
+			return null;
+		}
+		if(!isset(self::$NOTE_TYPES[$this->getNoteTypeId()])) {
+			self::$NOTE_TYPES[$this->getNoteTypeId()] = $this->getNoteType();
+		}
+		return self::$NOTE_TYPES[$this->getNoteTypeId()]->getName();
 	}
 }
