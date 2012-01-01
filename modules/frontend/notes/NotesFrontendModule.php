@@ -52,5 +52,4 @@ class NotesFrontendModule extends DynamicFrontendModule {
 		$oTemplate->replaceIdentifier('type_options', TagWriter::optionsFromObjects(NoteTypeQuery::create()->orderByName()->find(), 'getId', 'getName', null, array('' => StringPeer::getString('wns.notes.all_note_types'))));
 		return $oTemplate;
 	}
-
 }

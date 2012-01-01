@@ -3,6 +3,7 @@
  * @package modules.admin
  */
 class NotesAdminModule extends AdminModule {
+	
 	private $oListWidget;
 	private $oSidebarWidget;
 	private $oInputWidget;
@@ -61,7 +62,6 @@ class NotesAdminModule extends AdminModule {
 		return array();
 	}
 
-	
 	public function usedWidgets() {
 		return array($this->oListWidget, $this->oSidebarWidget, $this->oInputWidget);
 	}
