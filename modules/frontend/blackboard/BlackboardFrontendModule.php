@@ -43,7 +43,7 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 	}
 	
 	public function renderNote() {
-		$oQuery = NoteQuery::create()->filterByDate()->orderByDateStart();
+		$oQuery = NoteQuery::create()->filterByIsInactive(false)->filterByDate()->orderByDateStart();
 		$oNote = $oQuery->findOne();
 		if($oNote && is_resource($oNote->getBody())) {
 			$sContent = stream_get_contents($oNote->getBody());
