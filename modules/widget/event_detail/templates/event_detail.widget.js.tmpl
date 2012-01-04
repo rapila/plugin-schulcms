@@ -2,7 +2,7 @@ Widget.types.event_detail = {
 	initialize: function() {
 		var _this = this;
 		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
-		
+		this.no_images_upload_info = jQuery('<div/>').html("{{writeString=wns.event.no_images_and_upload_info}}").addClass('no_images_placeholder');
 		this.uploader = Widget.create('file_upload');
 		this.preview_text = this.content.find('div.event_preview');
 		this.review_text = this.content.find('div.event_review');
@@ -114,6 +114,10 @@ Widget.types.event_detail = {
 		var _this = this;
 		this.droppable_area.empty();
 		this.allDocuments(_this.settings.thumbnail_size, function(documents) {
+			if(documents.length === 0) {
+				
+				this.droppable_area.append(_this.no_images_upload_info);
+			}
 			jQuery.each(documents, function(i, document_data) {
 				_this.insert_thumbnail(document_data);
 			});
@@ -133,6 +137,9 @@ Widget.types.event_detail = {
 				if(confirmed) {
 					_this.deleteDocument( document_id, function(result) {
 						jQuery(doc).remove();
+						if(_this.droppable_area.find('div.ui-image-picker-image').length === 0) {
+							_this.droppable_area.empty().append(_this.no_images_upload_info);
+						}
 					});
 				}
 			});
@@ -149,6 +156,7 @@ Widget.types.event_detail = {
 			});
 		});
 		doc.append(document_object);
+		this.droppable_area.find('div.no_images_placeholder').remove();
 		this.droppable_area.append(doc);
 	},
 	
