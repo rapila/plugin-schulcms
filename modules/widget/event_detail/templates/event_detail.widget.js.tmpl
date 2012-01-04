@@ -115,7 +115,6 @@ Widget.types.event_detail = {
 		this.droppable_area.empty();
 		this.allDocuments(_this.settings.thumbnail_size, function(documents) {
 			if(documents.length === 0) {
-				
 				this.droppable_area.append(_this.no_images_upload_info);
 			}
 			jQuery.each(documents, function(i, document_data) {
