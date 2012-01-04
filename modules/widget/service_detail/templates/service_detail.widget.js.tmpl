@@ -4,7 +4,7 @@ Widget.types.service_detail = {
 		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
 		this.document_prototype = jQuery.parseHTML("{{includeTemplate=document}}");
 		this.content.find('div.hide_if_not_saved').hide();
-
+		this.no_documents_placeholder = jQuery('<li/>').html("{{writeString=wns.service.no_document_and_upload_info}}").addClass('no_documents_placeholder');
 		this.team_member_container = this.content.find('tbody.team_member_container');
 		this.team_member_container.sortable({});
 
@@ -159,6 +159,9 @@ Widget.types.service_detail = {
 		var _this = this;
 		this.droppable_area.empty();
 		this.allDocuments(function(documents) {
+			if(documents.length === 0) {
+				this.droppable_area.append(_this.no_documents_placeholder);
+			}
 			jQuery.each(documents, function(i, document_data) {
 				_this.insert_document(document_data);
 			});
@@ -170,6 +173,7 @@ Widget.types.service_detail = {
 		var document_id = document_data.Id;
 		var document_item = this.document_prototype.clone();
 		document_item.data('document_id', document_id);
+		this.droppable_area.find('li.no_documents_placeholder').remove();
 		this.droppable_area.append(document_item);
 		document_item.find('span.delete_doc').click(function(event) {
 			var delete_message = AdminInterface.strings.get_string('wns.document.delete_warning', { document_name: document_data.Name});
@@ -177,6 +181,9 @@ Widget.types.service_detail = {
 				if(confirmed) {
 					_this.deleteDocument( document_id, function(result) {
 						jQuery(document_item).remove();
+						if(_this.droppable_area.find('li.preview_edit').length === 0) {
+							_this.droppable_area.empty().append(_this.no_documents_placeholder);
+						}
 					});
 				}
 			});

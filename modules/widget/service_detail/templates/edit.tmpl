@@ -10,15 +10,14 @@
 				<label for="website">{{writeString=wns.service.website}}</label>
 				<input type="text" name="website" class="ui-widget-content"/><br />
 				<div class="group_fields">
-					<label for="is_active">{{writeString=wns.is_online}}</label><br />
-					<input type="checkbox" name="is_active" />
-				</div>
-				<div class="group_fields" style="margin-left:4px;">
 					<label for="service_category_id">{{writeString=wns.service.service_category}}</label><br />
 					<select name="service_category_id" class="ui-widget-content" style="width: 170px;" data-widget-type="service_category_input">
 					</select>
+				</div>				
+				<div class="group_fields">
+					<label for="is_active">{{writeString=wns.is_online}}</label><br />
+					<input type="checkbox" name="is_active" style="padding-left:-2px;" />
 				</div>
-
 				<div class="hide_if_not_saved">
 		  		<label>{{writeString=wns.created_info}}:</label><span class="created_info status"></span><br />
 		  		<label>{{writeString=wns.updated.info}}:</label><span class="updated_info status"></span><br />
