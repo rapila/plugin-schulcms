@@ -24,6 +24,10 @@ class Note extends BaseNote {
 		return $sText;
 	}
 	
+	public function getHasImage() {
+		return $this->getImageId() !== null;
+	}
+	
 	public function getNoteTypeName() {
 		if($this->getNoteTypeId() === null) {
 			return null;

@@ -16,3 +16,7 @@ CREATE TABLE IF NOT EXISTS `note_types` (
   `updated_by` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+#20120108.1030
+ALTER TABLE `notes` ADD `image_id` INT UNSIGNED NULL DEFAULT NULL AFTER `date_end` ,
+ADD INDEX ( `image_id` );

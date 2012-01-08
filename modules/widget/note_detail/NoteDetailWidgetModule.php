@@ -8,6 +8,11 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 	
 	public function __construct($sWidgetId) {
 		parent::__construct($sWidgetId);
+		$iNoteImagesCategory = SchoolPeer::getDocumentCategoryConfig('note_images');
+		if(DocumentCategoryQuery::create()->filterById($iNoteImagesCategory)->count() === 0) {
+			throw new Exception('Config error: school_settings > externally_managed_document_categories > note_images');
+		}
+		$this->setSetting('note_image_category_id', $iNoteImagesCategory);
 		$oRichtext = WidgetModule::getWidget('rich_text', null, null, 'notes');
 		$oRichtext->setTemplate(PagePeer::getRootPage()->getTemplate());
 		$this->setSetting('richtext_session', $oRichtext->getSessionKey());
@@ -24,6 +29,7 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 		}
 		$aResult = array();
 		$aResult['NoteTypeId'] = $oNote->getNoteTypeId();
+		$aResult['ImageId'] = $oNote->getImageId();
 		$aResult['IsInactive'] = $oNote->getIsInactive();
 		$aResult['DateStart'] = $oNote->getDateStart('d.m.Y');
 		$aResult['DateEnd'] = $oNote->getDateEnd('d.m.Y');
@@ -37,10 +43,11 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 		return $aResult;
 	}
 	
-	private function validate($aNoteData) {
+	private function validate($aNoteData, $oNote) {
 		$oFlash = Flash::getFlash();
 		$oFlash->setArrayToCheck($aNoteData);
 		$oFlash->checkForValue('body', 'note.body_required');
+		$oFlash->checkForValue('note_type_id', 'note_type_required');
 		$oFlash->finishReporting();
 	}
 
@@ -56,10 +63,14 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 		}
 		$oNote->setDateStart($sDateStart);
 		$oNote->setDateEnd($aNoteData['date_end']);
-		$this->validate($aNoteData);
 		$oNote->setNoteTypeId($aNoteData['note_type_id'] == null ? null : $aNoteData['note_type_id']);
 		$oNote->setIsInactive($aNoteData['is_inactive']);
 		$oNote->setBody(RichtextUtil::parseInputFromEditorForStorage($aNoteData['body']));
+		$oNote->setImageId($aNoteData['image_id']);
+		if($aNoteData['image_id'] == null && $oNote->getDocument()) {
+			$oNote->getDocument()->delete();
+		}
+		$this->validate($aNoteData, $oNote);
 		if(!Flash::noErrors()) {
 			throw new ValidationException();
 		}

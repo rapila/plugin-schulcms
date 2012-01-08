@@ -19,6 +19,7 @@ school_settings:
   externally_managed_document_categories:
     event_documents: 14
     service_documents: 18
+    note_images: 15
     team_member_portraits: 10
     school_class_portraits: 11
     school_class_schedules: 12

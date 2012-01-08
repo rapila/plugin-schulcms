@@ -62,6 +62,12 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	protected $is_inactive;
 
 	/**
+	 * The value for the image_id field.
+	 * @var        int
+	 */
+	protected $image_id;
+
+	/**
 	 * The value for the created_at field.
 	 * @var        string
 	 */
@@ -89,6 +95,11 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	 * @var        NoteType
 	 */
 	protected $aNoteType;
+
+	/**
+	 * @var        Document
+	 */
+	protected $aDocument;
 
 	/**
 	 * @var        User
@@ -249,6 +260,16 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	public function getIsInactive()
 	{
 		return $this->is_inactive;
+	}
+
+	/**
+	 * Get the [image_id] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getImageId()
+	{
+		return $this->image_id;
 	}
 
 	/**
@@ -487,6 +508,30 @@ abstract class BaseNote extends BaseObject  implements Persistent
 	} // setIsInactive()
 
 	/**
+	 * Set the value of [image_id] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Note The current object (for fluent API support)
+	 */
+	public function setImageId($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->image_id !== $v) {
+			$this->image_id = $v;
+			$this->modifiedColumns[] = NotePeer::IMAGE_ID;
+		}
+
+		if ($this->aDocument !== null && $this->aDocument->getId() !== $v) {
+			$this->aDocument = null;
+		}
+
+		return $this;
+	} // setImageId()
+
+	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.
@@ -626,10 +671,11 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			$this->date_start = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->date_end = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
 			$this->is_inactive = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
-			$this->created_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-			$this->updated_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-			$this->created_by = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
-			$this->updated_by = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
+			$this->image_id = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+			$this->created_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+			$this->updated_at = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+			$this->created_by = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
+			$this->updated_by = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -638,7 +684,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 10; // 10 = NotePeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 11; // 11 = NotePeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Note object", $e);
@@ -663,6 +709,9 @@ abstract class BaseNote extends BaseObject  implements Persistent
 
 		if ($this->aNoteType !== null && $this->note_type_id !== $this->aNoteType->getId()) {
 			$this->aNoteType = null;
+		}
+		if ($this->aDocument !== null && $this->image_id !== $this->aDocument->getId()) {
+			$this->aDocument = null;
 		}
 		if ($this->aUserRelatedByCreatedBy !== null && $this->created_by !== $this->aUserRelatedByCreatedBy->getId()) {
 			$this->aUserRelatedByCreatedBy = null;
@@ -710,6 +759,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		if ($deep) {  // also de-associate any related objects?
 
 			$this->aNoteType = null;
+			$this->aDocument = null;
 			$this->aUserRelatedByCreatedBy = null;
 			$this->aUserRelatedByUpdatedBy = null;
 		} // if (deep)
@@ -878,6 +928,13 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				$this->setNoteType($this->aNoteType);
 			}
 
+			if ($this->aDocument !== null) {
+				if ($this->aDocument->isModified() || $this->aDocument->isNew()) {
+					$affectedRows += $this->aDocument->save($con);
+				}
+				$this->setDocument($this->aDocument);
+			}
+
 			if ($this->aUserRelatedByCreatedBy !== null) {
 				if ($this->aUserRelatedByCreatedBy->isModified() || $this->aUserRelatedByCreatedBy->isNew()) {
 					$affectedRows += $this->aUserRelatedByCreatedBy->save($con);
@@ -997,6 +1054,12 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				}
 			}
 
+			if ($this->aDocument !== null) {
+				if (!$this->aDocument->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->aDocument->getValidationFailures());
+				}
+			}
+
 			if ($this->aUserRelatedByCreatedBy !== null) {
 				if (!$this->aUserRelatedByCreatedBy->validate($columns)) {
 					$failureMap = array_merge($failureMap, $this->aUserRelatedByCreatedBy->getValidationFailures());
@@ -1067,15 +1130,18 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				return $this->getIsInactive();
 				break;
 			case 6:
-				return $this->getCreatedAt();
+				return $this->getImageId();
 				break;
 			case 7:
-				return $this->getUpdatedAt();
+				return $this->getCreatedAt();
 				break;
 			case 8:
-				return $this->getCreatedBy();
+				return $this->getUpdatedAt();
 				break;
 			case 9:
+				return $this->getCreatedBy();
+				break;
+			case 10:
 				return $this->getUpdatedBy();
 				break;
 			default:
@@ -1113,14 +1179,18 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			$keys[3] => $this->getDateStart(),
 			$keys[4] => $this->getDateEnd(),
 			$keys[5] => $this->getIsInactive(),
-			$keys[6] => $this->getCreatedAt(),
-			$keys[7] => $this->getUpdatedAt(),
-			$keys[8] => $this->getCreatedBy(),
-			$keys[9] => $this->getUpdatedBy(),
+			$keys[6] => $this->getImageId(),
+			$keys[7] => $this->getCreatedAt(),
+			$keys[8] => $this->getUpdatedAt(),
+			$keys[9] => $this->getCreatedBy(),
+			$keys[10] => $this->getUpdatedBy(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aNoteType) {
 				$result['NoteType'] = $this->aNoteType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aDocument) {
+				$result['Document'] = $this->aDocument->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aUserRelatedByCreatedBy) {
 				$result['UserRelatedByCreatedBy'] = $this->aUserRelatedByCreatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -1178,15 +1248,18 @@ abstract class BaseNote extends BaseObject  implements Persistent
 				$this->setIsInactive($value);
 				break;
 			case 6:
-				$this->setCreatedAt($value);
+				$this->setImageId($value);
 				break;
 			case 7:
-				$this->setUpdatedAt($value);
+				$this->setCreatedAt($value);
 				break;
 			case 8:
-				$this->setCreatedBy($value);
+				$this->setUpdatedAt($value);
 				break;
 			case 9:
+				$this->setCreatedBy($value);
+				break;
+			case 10:
 				$this->setUpdatedBy($value);
 				break;
 		} // switch()
@@ -1219,10 +1292,11 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		if (array_key_exists($keys[3], $arr)) $this->setDateStart($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setDateEnd($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setIsInactive($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setCreatedAt($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setUpdatedAt($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setCreatedBy($arr[$keys[8]]);
-		if (array_key_exists($keys[9], $arr)) $this->setUpdatedBy($arr[$keys[9]]);
+		if (array_key_exists($keys[6], $arr)) $this->setImageId($arr[$keys[6]]);
+		if (array_key_exists($keys[7], $arr)) $this->setCreatedAt($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setUpdatedAt($arr[$keys[8]]);
+		if (array_key_exists($keys[9], $arr)) $this->setCreatedBy($arr[$keys[9]]);
+		if (array_key_exists($keys[10], $arr)) $this->setUpdatedBy($arr[$keys[10]]);
 	}
 
 	/**
@@ -1240,6 +1314,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		if ($this->isColumnModified(NotePeer::DATE_START)) $criteria->add(NotePeer::DATE_START, $this->date_start);
 		if ($this->isColumnModified(NotePeer::DATE_END)) $criteria->add(NotePeer::DATE_END, $this->date_end);
 		if ($this->isColumnModified(NotePeer::IS_INACTIVE)) $criteria->add(NotePeer::IS_INACTIVE, $this->is_inactive);
+		if ($this->isColumnModified(NotePeer::IMAGE_ID)) $criteria->add(NotePeer::IMAGE_ID, $this->image_id);
 		if ($this->isColumnModified(NotePeer::CREATED_AT)) $criteria->add(NotePeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(NotePeer::UPDATED_AT)) $criteria->add(NotePeer::UPDATED_AT, $this->updated_at);
 		if ($this->isColumnModified(NotePeer::CREATED_BY)) $criteria->add(NotePeer::CREATED_BY, $this->created_by);
@@ -1311,6 +1386,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		$copyObj->setDateStart($this->getDateStart());
 		$copyObj->setDateEnd($this->getDateEnd());
 		$copyObj->setIsInactive($this->getIsInactive());
+		$copyObj->setImageId($this->getImageId());
 		$copyObj->setCreatedAt($this->getCreatedAt());
 		$copyObj->setUpdatedAt($this->getUpdatedAt());
 		$copyObj->setCreatedBy($this->getCreatedBy());
@@ -1406,6 +1482,55 @@ abstract class BaseNote extends BaseObject  implements Persistent
 			 */
 		}
 		return $this->aNoteType;
+	}
+
+	/**
+	 * Declares an association between this object and a Document object.
+	 *
+	 * @param      Document $v
+	 * @return     Note The current object (for fluent API support)
+	 * @throws     PropelException
+	 */
+	public function setDocument(Document $v = null)
+	{
+		if ($v === null) {
+			$this->setImageId(NULL);
+		} else {
+			$this->setImageId($v->getId());
+		}
+
+		$this->aDocument = $v;
+
+		// Add binding for other direction of this n:n relationship.
+		// If this object has already been added to the Document object, it will not be re-added.
+		if ($v !== null) {
+			$v->addNote($this);
+		}
+
+		return $this;
+	}
+
+
+	/**
+	 * Get the associated Document object
+	 *
+	 * @param      PropelPDO Optional Connection object.
+	 * @return     Document The associated Document object.
+	 * @throws     PropelException
+	 */
+	public function getDocument(PropelPDO $con = null)
+	{
+		if ($this->aDocument === null && ($this->image_id !== null)) {
+			$this->aDocument = DocumentQuery::create()->findPk($this->image_id, $con);
+			/* The following can be used additionally to
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aDocument->addNotes($this);
+			 */
+		}
+		return $this->aDocument;
 	}
 
 	/**
@@ -1517,6 +1642,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		$this->date_start = null;
 		$this->date_end = null;
 		$this->is_inactive = null;
+		$this->image_id = null;
 		$this->created_at = null;
 		$this->updated_at = null;
 		$this->created_by = null;
@@ -1545,6 +1671,7 @@ abstract class BaseNote extends BaseObject  implements Persistent
 		} // if ($deep)
 
 		$this->aNoteType = null;
+		$this->aDocument = null;
 		$this->aUserRelatedByCreatedBy = null;
 		$this->aUserRelatedByUpdatedBy = null;
 	}

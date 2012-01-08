@@ -44,6 +44,7 @@ class NoteTableMap extends TableMap
 		$this->addColumn('DATE_START', 'DateStart', 'DATE', true, null, null);
 		$this->addColumn('DATE_END', 'DateEnd', 'DATE', false, null, null);
 		$this->addColumn('IS_INACTIVE', 'IsInactive', 'BOOLEAN', false, 1, false);
+		$this->addForeignKey('IMAGE_ID', 'ImageId', 'INTEGER', 'documents', 'ID', false, null, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
 		$this->addForeignKey('CREATED_BY', 'CreatedBy', 'INTEGER', 'users', 'ID', false, null, null);
@@ -57,6 +58,7 @@ class NoteTableMap extends TableMap
 	public function buildRelations()
 	{
 		$this->addRelation('NoteType', 'NoteType', RelationMap::MANY_TO_ONE, array('note_type_id' => 'id', ), 'SET NULL', null);
+		$this->addRelation('Document', 'Document', RelationMap::MANY_TO_ONE, array('image_id' => 'id', ), 'SET NULL', null);
 		$this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
 		$this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
 	} // buildRelations()
@@ -70,7 +72,7 @@ class NoteTableMap extends TableMap
 	public function getBehaviors()
 	{
 		return array(
-			'denyable' => array('mode' => 'by_role', 'role_key' => '', 'owner_allowed' => '', ),
+			'denyable' => array('mode' => '', 'role_key' => 'notes', 'owner_allowed' => '', ),
 			'extended_timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', ),
 			'attributable' => array('create_column' => 'created_by', 'update_column' => 'updated_by', ),
 		);
