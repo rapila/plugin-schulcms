@@ -13,6 +13,8 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 			throw new Exception('Config error: school_settings > externally_managed_document_categories > note_images');
 		}
 		$this->setSetting('note_image_category_id', $iNoteImagesCategory);
+		$mBlackboardNoteTypeId = Settings::getSetting("school_settings", 'blackboard_note_type_id', null);
+		$this->setSetting('blackboard_note_type_id', $mBlackboardNoteTypeId !== null ? (string) $mBlackboardNoteTypeId : null);
 		$oRichtext = WidgetModule::getWidget('rich_text', null, null, 'notes');
 		$oRichtext->setTemplate(PagePeer::getRootPage()->getTemplate());
 		$this->setSetting('richtext_session', $oRichtext->getSessionKey());

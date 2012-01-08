@@ -4,7 +4,6 @@
 			<span class="description">Bild<span title="{{writeString=wns.note.remove_image}}" class="remove"> ✘</span></span>
 			<div class="note_image"></div>
 		</div>
-		<input type="checkbox" name="is_inactive" /><label for="is_inactive">{{writeString=wns.is_inactive}}</label><br />
 		<div class="hide_if_not_saved">
   		<label>{{writeString=wns.created_info}}:</label><span class="created_info status"></span><br />
   		<label>{{writeString=wns.updated.info}}:</label><span class="updated_info status"></span><br />
@@ -22,6 +21,10 @@
 		<div class="group_fields">
 			<label for="note_type_id" class="validate-note_type_required">{{writeString=wns.note.type}}*</label>
 			<select name="note_type_id" class="ui-widget-content autowidth" data-widget-type="note_type_input"></select><br />
+		</div>
+		<div class="group_fields">
+			<label for="is_inactive">{{writeString=wns.is_inactive}}</label>
+			<input type="checkbox" name="is_inactive" /><br />
 		</div>
 	</div>
 	<label for="body" class="validate-body_required">{{writeString=wns.note.body}}*</label>

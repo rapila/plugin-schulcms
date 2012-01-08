@@ -5,18 +5,22 @@
 
 class BlackboardFrontendModule extends DynamicFrontendModule {
 	
-	public static $DISPLAY_MODES = array('event_report_or_note', 'event_note_or_report', 'event_report', 'note');
+	private $iBlackboardNoteTypeId = null;
+	public static $DISPLAY_MODES = array('event_report_or_note', 'event_report', 'note');
 	
 	const MODE_SELECT_KEY = 'display_mode';
 	
 	public function renderFrontend() {
+		$this->iBlackboardNoteTypeId = Settings::getSetting("school_settings", 'blackboard_note_type_id', null);
+
 		$aOptions = $this->widgetData();
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
 			return null;
 		}
 		switch($aOptions[self::MODE_SELECT_KEY]) {
 			case 'event_report_or_note': return $this->renderEventReportOrNote();
-			case 'event_note_or_report': return $this->renderNoteOrEventReport();
+			case 'event_report': return $this->renderEventReport();
+			case 'note': return $this->renderNote();
 			default:
 				return null;
 		}
@@ -30,28 +34,6 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 		}
 		// handle notes
 		return $this->renderNote();
-	}
-	
-	public function renderNoteOrEventReport() {
-		// handle note if exist
-		$oNote = $this->renderNote();
-		if($oNote !== null) {
-			return $oNote;
-		}
-		// handle event report
-		return $this->renderEventReport();
-	}
-	
-	public function renderNote() {
-		$oQuery = NoteQuery::create()->filterByIsInactive(false)->filterByDate()->orderByDateStart();
-		$oNote = $oQuery->findOne();
-		if($oNote && is_resource($oNote->getBody())) {
-			$sContent = stream_get_contents($oNote->getBody());
-			if($sContent != '') {
-				return RichtextUtil::parseStorageForFrontendOutput($sContent);			
-			}
-		}
-		return null;
 	}
 	
 	public function renderEventReport() {
@@ -91,10 +73,36 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 		return $oTemplate;
 	}
 	
+	public function renderNote() {
+		if($this->iBlackboardNoteTypeId === null) {
+			return null;
+		}
+		$oQuery = NoteQuery::create()->filterByNoteTypeId($this->iBlackboardNoteTypeId)->filterByIsInactive(false)->filterByDate()->orderByDateStart();
+		$oNote = $oQuery->findOne();
+		$oTemplate = $this->constructTemplate('note');
+		if($oNote) {
+			if(is_resource($oNote->getBody())) {
+				$sContent = stream_get_contents($oNote->getBody());
+				if($sContent != '') {
+					$oTemplate->replaceIdentifier('contents', RichtextUtil::parseStorageForFrontendOutput($sContent));
+				}
+			}
+			if($oImage = $oNote->getDocument()) {			
+				$oTemplate->replaceIdentifier('image', TagWriter::quickTag('img', array('class' => 'blackboard_image', 'src' => $oImage->getDisplayUrl(array('max_width' => 195)), 'alt' => $oImage->getDescription())));
+			}
+			return $oTemplate;
+		}
+		return null;
+	}
+	
 	public function renderBackend() {
 		$oTemplate = $this->constructTemplate('config');
 		$aOptions = array();
 		foreach(BlackboardFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
+			if($sDisplayMode !== 'event_report' && 
+				(Settings::getSetting("school_settings", 'blackboard_note_type_id', null) === null)) {
+				continue;
+			}
 			$aOptions[$sDisplayMode] = StringPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);
 		}
 		$oTemplate->replaceIdentifier('options', TagWriter::optionsFromArray($aOptions, null, null, null));

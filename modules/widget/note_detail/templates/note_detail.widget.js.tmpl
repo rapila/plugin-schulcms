@@ -2,9 +2,19 @@ Widget.types.note_detail = {
 	initialize: function() {
 		var _this = this;
 		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
-		
+		this.image_area = this.content.find('div.image_area').hide();
+		this.note_type = this.content.find('select[name="note_type_id"]');
+		this.note_type.change(function() {
+			if(_this.settings.blackboard_note_type_id !== null 
+				&& (jQuery(this).val() === _this.settings.blackboard_note_type_id)) {
+				_this.image_area.show();
+			} else {
+				_this.image_area.hide();
+			}
+		});
 		this.uploader = Widget.create('file_upload');
 		this.note_body = this.content.find('div.note_body');
+		
 		
 		Widget.create('detail', function(widget) {
 			this.detail_widget = widget.set_instance(this);
@@ -82,7 +92,8 @@ Widget.types.note_detail = {
 		this.init_textarea();
 		this.noteData(function(note_data) {
 			if(!_this.settings.predefined_note_type) {
-				this.content.find("select[name='note_type_id']").val(note_data.NoteTypeId);
+				this.note_type.val(note_data.NoteTypeId);
+				this.note_type.change();
 			}
 			this.content.find("input[name='is_inactive']").prop('checked', note_data.IsInactive);
 			this.content.find("input[name='date_start']").val(note_data.DateStart);
@@ -136,6 +147,7 @@ Widget.types.note_detail = {
 	settings: {
 		initial_type_id: null,
 		predefined_note_type_id: null,
+		blackboard_note_type_id: null,
 		richtext_settings: {
 			height: 250,
 			width: 550,
