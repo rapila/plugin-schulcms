@@ -223,6 +223,13 @@ Widget.types.class_detail = {
 		});
 	},
 	
+	truncate: function(string, length) {
+		if(string.length <= length) {
+			return string;
+		}
+		return string.substring(0, length-3)+"…";
+	},	
+	
 	reload_links: function(class_id) {
 		var _this = this;
 		this.link_list.empty();	
@@ -231,7 +238,7 @@ Widget.types.class_detail = {
 			jQuery.each(links, function(link_id, link_data) {
 				var link_item = _this.link_prototype.clone();
 				link_item.find('.link_title').text(link_data.Name);
-				link_item.find('.link_url').text(link_data.Url);
+				link_item.find('td.link_url').html(jQuery('<a/>').text(_this.truncate(link_data.Url, 40)).attr('href', link_data.Url));
 				link_item.find('.delete_link').click(function() {
 					var delete_message = AdminInterface.strings.get_string('wns.link.delete_warning', { link_name: link_data.Name});
 					Widget.confirm("{{writeString=wns.delete_warning_title}}", delete_message, function(confirmed) {

@@ -22,6 +22,10 @@ Widget.types.my_classes = {
 			}
 			jQuery.each(result, function(class_id, row_data) {
 				var row = _this.settings.row_prototype.clone();
+				if(!row_data.IsCurrent) {
+					row.addClass('is_not_current hidden');
+					_this.has_old_classes = true;
+				}
 				row.find('.name').text(row_data.Name);
 				row.find('.type').text(row_data.Type);
 				row.find('.period').text(row_data.Year);
@@ -48,10 +52,6 @@ Widget.types.my_classes = {
 						};
 					});
 				});
-				if(!row_data.IsCurrent) {
-					row.addClass('is_not_current hidden');
-					_this.has_old_classes = true;
-				}
 				_this.list.append(row);
 			});
 			if(_this.has_old_classes) {
