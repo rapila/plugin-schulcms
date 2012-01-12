@@ -203,11 +203,11 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		$oTemplate = $this->constructTemplate('detail_context');
 		// main class attributes
 
-		if($aClasses[0]->getDocumentRelatedByClassScheduleId()) {
-			$oTemplate->replaceIdentifier('stundenplan', TagWriter::quickTag('a', array('href' => $aClasses[0]->getDocumentRelatedByClassScheduleId()->getDisplayUrl(), 'class' => "stundenplan", 'title' => StringPeer::getString('wns.download_stundenplan')), ' '));
+		if($oStundenplan = $aClasses[0]->getDocumentRelatedByClassScheduleId()) {
+			$oTemplate->replaceIdentifier('stundenplan', TagWriter::quickTag('a', array('href' => $oStundenplan->getDisplayUrl(), 'class' => 'stundenplan', 'title' => StringPeer::getString('wns.download_stundenplan')), ' '));
 		}
-		if($aClasses[0]->getDocumentRelatedByWeekScheduleId() !== null) {
-			$oTemplate->replaceIdentifier('weekplan', TagWriter::quickTag('a', array('href' => $aClasses[0]->getDocumentRelatedByWeekScheduleId()->getDisplayUrl(), 'class' => "stundenplan", 'title' => StringPeer::getString('wns.download_stundenplan')), ' '));
+		if($oWochenplan = $aClasses[0]->getDocumentRelatedByWeekScheduleId() !== null) {
+			$oTemplate->replaceIdentifier('weekplan', TagWriter::quickTag('a', array('href' => $oWochenplan->getDisplayUrl(), 'class' => 'stundenplan', 'title' => StringPeer::getString('wns.download_wochenplan')), ' '));
 		}
 		if($aClasses[0]->getRoomNumber()) {
 			$oTemplate->replaceIdentifier('room_number', $aClasses[0]->getRoomNumber());
