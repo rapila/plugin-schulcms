@@ -34,10 +34,10 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 	}
 
 	private function renderKlassenliste($iClassTypeId = null) {
-    $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($iClassTypeId !== null ? $iClassTypeId.'_' : ""), DIRNAME_PRELOAD);  
-    if($oCache->cacheFileExists()) {
-      return $oCache->getContentsAsVariable();
-    }
+    // $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($iClassTypeId !== null ? $iClassTypeId.'_' : ""), DIRNAME_PRELOAD);  
+    // if($oCache->cacheFileExists()) {
+    //   return $oCache->getContentsAsVariable();
+    // }
 
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$aClasses = SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool($iClassTypeId)->find();
@@ -48,6 +48,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		foreach($aClasses as $i => $oClass) {
 			$oItemTemplate = $this->constructTemplate('list_item');
 			$oItemTemplate->replaceIdentifier('oddeven', $sOddEven = $sOddEven === 'even' ? 'odd' : 'even');
+			
 			// get all infos that are independent of teaching unit
 			$oItemTemplate->replaceIdentifier('name', $oClass->getUnitName());
 			$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassTypeName());
@@ -61,25 +62,31 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 			}
 			// get infos related to teaching unit, all classes concerned
 			$oItemTemplate->replaceIdentifier('count_students', $oClass->countStudentsByUnitName());
-			$aClassTeachers = $oClass->getTeachersByUnitName();
 			$iLimit = 2;
+			// get one more in case there are 3 class teachers, to be just ;=)
+			$aClassTeachers = $oClass->getTeachersByUnitName(true, $iLimit+1);
 			$iCountTeachers = count($aClassTeachers);
 			$iCountMax = $iCountTeachers < $iLimit ? $iCountTeachers : $iLimit;
+			$iPreviousTeamMemberId = null;
 			foreach($aClassTeachers as $i => $oClassTeacher) {
-				if($i < ($iLimit)) {
-					$sFunctionAddon = $oClassTeacher->getIsClassTeacher() ? $oClassTeacher->getTeamMember()->getClassTeacherTitle() : $oClassTeacher->getFunctionName(true);
-					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => $oClassTeacher->getTeamMember()->getFullName().', '.$sFunctionAddon, 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug())))), $oClassTeacher->getTeamMember()->getFullNameShort()));
-					if($i < $iCountMax-1) {
-						$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ');
-					}
-				}
+			  if($i < $iLimit) {
+    				$sFunctionAddon = $oClassTeacher->getIsClassTeacher() ? $oClassTeacher->getTeamMember()->getClassTeacherTitle() : $oClassTeacher->getFunctionName(true);
+    				if($sFunctionAddon != ''){
+    				  $sFunctionAddon = ', '. $sFunctionAddon;
+    				}
+    				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => $oClassTeacher->getTeamMember()->getFullName().$sFunctionAddon, 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug())))), $oClassTeacher->getTeamMember()->getFullNameShort()));
+    				if($i < $iCountMax-1) {
+    					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ');
+    				}
+			  }
+			  $iPreviousTeamMemberId = $oClassTeacher->getTeamMemberId();
 			}
 			if(count($aClassTeachers) > $iLimit) {
-				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', '.StringPeer::getString('wns.word.etc'));
+				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ' '.StringPeer::getString('wns.word.and_others'));
 			}
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
-		$oCache->setContents($oTemplate);
+    // $oCache->setContents($oTemplate);
 		return $oTemplate;
 	}
 	
@@ -104,7 +111,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		foreach($aClasses as $i => $oClass) {
 			$oPortrait = $oClass->getDocumentRelatedByClassPortraitId();
 			if($oPortrait) {
-				$oTemplate->replaceIdentifierMultiple('portrait_display_url', $oPortrait->getDisplayUrl(array('max_width' => 670)));
+				$oTemplate->replaceIdentifierMultiple('portrait_display_url', $oPortrait->getDisplayUrl(array('max_width' => 668)));
 				$oTemplate->replaceIdentifierMultiple('portrait_alt', "Portrait von ". $aClasses[0]->getUnitName());
 			}
 		}

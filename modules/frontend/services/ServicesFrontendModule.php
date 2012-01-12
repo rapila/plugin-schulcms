@@ -46,6 +46,10 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		$aServices = $this->listQuery()->find();
 		$oTemplate = $this->constructTemplate('list');
 		$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_SERVICES));
+		if(FrontendManager::$CURRENT_PAGE->getParent() && (FrontendManager::$CURRENT_PAGE->getParent()->getId() === $oPage->getId())) {
+		  $oPage = FrontendManager::$CURRENT_PAGE;
+		}
+		
 		$sOddEven = 'odd';
 		foreach($aServices as $oService) {
 			$oItemTemplate = $this->constructTemplate('list_item');

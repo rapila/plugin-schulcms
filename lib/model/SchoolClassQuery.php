@@ -30,7 +30,7 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 			throw new Exception(__METHOD__.' valid school object required. Please check ***REMOVED*** configuration or ***REMOVED***Sync');
 		}
 		$iYear = $iYear === null ? $oSchool->getCurrentYear() : $iYear;
-		$this->filterBySchool($oSchool)->distinct()->excludeClassTypesIfConfigured()->filterByYear($iYear);
+		$this->filterBySchool($oSchool)->distinct()->orderByName()->excludeClassTypesIfConfigured()->filterByYear($iYear);
 		if($iClassTypeId) {
 		  $this->filterByClassTypeId($iClassTypeId);
 		}
