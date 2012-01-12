@@ -206,7 +206,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		if($oStundenplan = $aClasses[0]->getDocumentRelatedByClassScheduleId()) {
 			$oTemplate->replaceIdentifier('stundenplan', TagWriter::quickTag('a', array('href' => $oStundenplan->getDisplayUrl(), 'class' => 'stundenplan', 'title' => StringPeer::getString('wns.download_stundenplan')), ' '));
 		}
-		if($oWochenplan = $aClasses[0]->getDocumentRelatedByWeekScheduleId() !== null) {
+		if($oWochenplan = $aClasses[0]->getDocumentRelatedByWeekScheduleId()) {
 			$oTemplate->replaceIdentifier('weekplan', TagWriter::quickTag('a', array('href' => $oWochenplan->getDisplayUrl(), 'class' => 'stundenplan', 'title' => StringPeer::getString('wns.download_wochenplan')), ' '));
 		}
 		if($aClasses[0]->getRoomNumber()) {
