@@ -42,7 +42,7 @@ a#***REMOVED***_logo{background-color:#d3d1b8;display:block;width:188px;padding-
 #***REMOVED***_logo img{padding:4px 3px}
 ul#meta_navigation{position:absolute;top:0;padding-top:.5em;left:188px;right:0;height:100%;background-color:#e6e4cc;display:block}
 ul#main_navigation{display:block;padding-bottom:.6em}
-ul#main_navigation.home{right:194px;margin-top:20px}
+ul#main_navigation.home{margin-right:194px;margin-top:20px}
 ul#main_navigation.outside{top:5px}
 #blackboard_text{margin-top:20px;margin-left:218px;color:#e6e4cc;height:80px;vertical-align:middle}
 #blackboard_text p{color:#e6e4cc;line-height:1.2em;font-size:2.6em;vertical-align:middle}
@@ -55,8 +55,7 @@ body.default ul#main_navigation li a,body.default ul#main_navigation li span{col
 ul#secondary_navigation li a,ul#secondary_navigation li span{color:#6f6f6e}
 body.default ul#main_navigation li span,body.default ul#main_navigation li a.active,body.default ul#main_navigation li a.current,ul#secondary_navigation li a.current,ul#secondary_navigation li a.active,ul#secondary_navigation li span,ul#meta_navigation li span,ul#secondary_navigation li a.active{color:#5e61a8}
 body.default ul#main_navigation li a:hover,ul#meta_navigation li a:hover,ul#secondary_navigation li a:hover{color:#000}
-ul#main_navigation li{float:left;padding:0 2.5em 0 3em}
-ul#main_navigation li:first-child{padding:0 2.5em 0 .7em}
+ul#main_navigation li:first-child{padding-left:.5em}
 ul#meta_navigation li{float:right;padding:0 0 0 2em}
 ul#meta_navigation li a{color:#817f7d}
 ul#secondary_navigation li{padding:.2em 1em}
