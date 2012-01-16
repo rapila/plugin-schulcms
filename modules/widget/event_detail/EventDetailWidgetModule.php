@@ -135,7 +135,12 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		}
 		$oRichtextUtil = new RichtextUtil();
 		$oRichtextUtil->setTrackReferences($oEvent);
-		$oEvent->setBodyPreview($oRichtextUtil->parseInputFromEditor($aEventData['body_preview']));
+		
+		// Text Hinweis
+		$sPreview = $oRichtextUtil->parseInputFromEditor($aEventData['body_preview']);
+		$oEvent->setBodyPreview($sPreview);
+		
+		// Text Bericht
 		$sReview = $oRichtextUtil->parseInputFromEditor($aEventData['body_review']);
 		if(trim($sReview) == '') {
 			$sReview = null;
