@@ -326,21 +326,3 @@
 	</behavior>
 </table>
 
-<!-- <table name="faqs" phpName="Faq">
-	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-	<column name="question" type="varchar" size="255" />
-	<column name="answer" type="blob" required="true" />
-	<column name="faq_category_id" type="tinyint" />
-	<foreign-key foreignTable="faq_categories" onDelete="setnull">
-		<reference local="faq_category_id" foreign="id" />
-	</foreign-key>
-	<column name="language_id" type="varchar" size="3" />
-	<foreign-key foreignTable="languages">
-		<reference local="language_id" foreign="id" />
-	</foreign-key>
-	<column name="is_inactive" type="boolean" size="1" default="0" />
-	<behavior name="denyable">
-		<parameter name="role_key" value="faqs" />
-	</behavior>
-	<behavior name="taggable" />
-</table> -->
