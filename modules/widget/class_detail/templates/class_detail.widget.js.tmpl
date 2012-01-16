@@ -29,6 +29,7 @@ Widget.types.class_detail = {
 			var portrait_area = _this.content.find('.portrait_area');
 			portrait_area.find('.remove').click(function() {
 				_this.class_portrait_id = null;
+				_this.save(true);
 			});
 			
 			_this.uploader.allow_drag_to(portrait_area, null, function(target, file) {
@@ -63,6 +64,7 @@ Widget.types.class_detail = {
 			var stundenplan = _this.content.find('.stundenplan');
 			stundenplan.find('.remove').click(function() {
 				_this.class_schedule_id = null;
+				_this.save(true);
 			});
 			
 			_this.uploader.allow_drag_to(stundenplan, null, function(target, file) {
@@ -95,6 +97,7 @@ Widget.types.class_detail = {
 			var wochenplan = _this.content.find('.wochenplan');
 			wochenplan.find('.remove').click(function() {
 				_this.week_schedule_id = null;
+				_this.save(true);
 			});
 			_this.uploader.allow_drag_to(wochenplan, null, function(target, file) {
 				if(file.type !== 'application/pdf') {
