@@ -27,7 +27,7 @@ a.close_detail:hover{border:1px solid #5e61a8}
 #top_right_area{top:0;height:50px;background-color:#d3d1b8}
 #main_right_area{background-color:#fff;top:0;min-height:100%}
 #header_main,#blackboard_area{background:transparent url("../images/blackboard.jpg") no-repeat top right;position:absolute;top:50px;height:120px}
-#blackboard_text,#content_main h1,#content_main h2,body.editing h1,body.editing h2{font-family:"Architects Daughter",Courier,Serif;line-height:1em;padding-bottom:.1em}
+#blackboard_text,#content_main h1,#content_main h2,body.editing h1,body.editing h2{font-family:'Architects Daughter',Courier,Serif;line-height:1em;padding-bottom:.1em}
 .home #header_main,.home #blackboard_area{height:142px}
 #blackboard_area{top:0}
 .document_list a.pdf,#sidebar_right .inner a.pdf,a.document_link.pdf,.document_list a.doc,#sidebar_right .inner a.doc,.document_list a.docx,#sidebar_right .inner a.docx{padding-left:1.6em;background:transparent url("../images/pdf.png") no-repeat 1px 1px;display:inline-block;vertical-align:top}
@@ -63,7 +63,7 @@ ul#secondary_navigation li{padding:.2em 1em}
 #sidebar_right h1,#sidebar_right h2,#sidebar_right table td{padding-left:2px;padding-right:2px}
 #sidebar_right h2{margin-top:22px}
 #sidebar_right h2:first-child,#sidebar_right img:first-child + h2{margin-top:0}
-#sidebar_right .sidebar_detail{position:fixed;width:190px}
+#sidebar_right .sidebar_detail{position:fixed}
 #sidebar_right .detail_info p{padding:.2em .2em;border-bottom:1px solid #c9c5b3}
 #sidebar_right h1,#sidebar_right h2{font-size:13px;background-color:#5e61a8}
 .home #sidebar_right{top:192px}
