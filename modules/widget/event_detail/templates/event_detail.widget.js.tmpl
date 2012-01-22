@@ -81,6 +81,7 @@ Widget.types.event_detail = {
 	
 	fill_data: function() {
 		var _this = this;
+		// this.detail_widget.disable();
 		this.init_textareas();
 		this.eventData(function(event_data) {
 			_this.current_detail_id = event_data.Id;
@@ -107,6 +108,7 @@ Widget.types.event_detail = {
 				widget.set_data(event_data.BodyReview);
 			});
 			_this.update_documents();
+			// this.detail_widget.enable();
 		});
 	},
 	
