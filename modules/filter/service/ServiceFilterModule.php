@@ -14,7 +14,6 @@ class ServiceFilterModule extends FilterModule {
 	}
 	
 	public static function handleOnChildrenRequested($oNavigationItem) {
-
 		$oObject = LanguageObjectQuery::create()->filterByLanguageId(Session::language())->joinContentObject()->useQuery('ContentObject')->filterByPageId($oNavigationItem->getMe()->getId())->filterByContainerName('content')->filterByObjectType('services')->endUse()->findOne();
 		if(!$oObject) {
 			return;
@@ -37,6 +36,7 @@ class ServiceFilterModule extends FilterModule {
 				return;
 		}
 		if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::SERVICE_ITEM_TYPE) {
+			$_REQUEST[self::SERVICE_REQUEST_KEY] = $oNavigationItem->getName();
 			ServicesFrontendModule::$SERVICE = ServiceQuery::create()->filterBySlug($oNavigationItem->getName())->findOne();
 		}
 	}	
