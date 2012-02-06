@@ -1,7 +1,7 @@
 jQuery(document).ready(function() {
-	// init main content
 	AdminInterface.content.find('table.event_list').prepareWidget(function(event_list) {
 
+		// Sidebar
 		var sidebar;
 		AdminInterface.sidebar.find('.ui-list').prepareWidget(function(widget) {
 			sidebar = widget;
@@ -11,7 +11,8 @@ jQuery(document).ready(function() {
 				event_list.reload();
 			});
 		});
-		// init info_bar
+		
+		// Add info_bar elements
 		AdminInterface.info_bar.prepareWidget(function(info_bar) {
 			info_bar.add_button('add-new-item', function() {
 				Widget.create('event_detail', function(widget) {
@@ -25,9 +26,7 @@ jQuery(document).ready(function() {
 				if(event_list.setSearch(search)) {
 					event_list.reload();
 				}
-			});
-			// add row_count_info
-			info_bar.add_row_count_info_for_list(event_list);
+			}).add_row_count_info_for_list(event_list);
 		});
 	});
 });

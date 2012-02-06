@@ -9,24 +9,16 @@
 				<input type="text" name="email" class="ui-widget-content"/><br />
 				<label for="website">{{writeString=wns.service.website}}</label>
 				<input type="text" name="website" class="ui-widget-content"/><br />
-				<div class="group_fields">
-					<label for="service_category_id">{{writeString=wns.service.service_category}}</label><br />
-					<select name="service_category_id" class="ui-widget-content" style="width: 170px;" data-widget-type="service_category_input">
-					</select>
-				</div>				
-				<div class="group_fields">
-					<label for="is_active">{{writeString=wns.is_online}}</label><br />
-					<input type="checkbox" name="is_active" style="padding-left:-2px;" />
-				</div>
+				<div class="logo_area" style="clear:left;">
+					<span class="description">{{writeString=wns.draganddrop}} Logo<span title="{{writeString=wns.service.remove_logo}}" class="remove"> ✘</span></span>
+					<div class="service_logo"></div>
+				</div>			
 				<div class="hide_if_not_saved">
 		  		<label>{{writeString=wns.created_info}}:</label><span class="created_info status"></span><br />
 		  		<label>{{writeString=wns.updated.info}}:</label><span class="updated_info status"></span><br />
+					<label>ID:</label><span class="detail_id"></span>
 				</div>
-				<br style="clear:left;" />
-				<div class="logo_area">
-					<span class="description">{{writeString=wns.draganddrop}} Logo<span title="{{writeString=wns.service.remove_logo}}" class="remove"> ✘</span></span>
-					<div class="service_logo"></div>
-				</div>			</div>
+			</div>
 			<div class="main_content">
 				<label for="name" class="validate-name_required">{{writeString=wns.service.name}}</label>
 				<input type="text" name="name" class="ui-widget-content"/><br />
@@ -40,6 +32,15 @@
 					<label for="opening_hours">{{writeString=wns.service.opening_hours}}</label>
 					<textarea class="ui-widget-content" name="opening_hours" rows="3" cols="20"></textarea><br />
 				</div><br />
+				<div class="group_fields">
+					<label for="service_category_id">{{writeString=wns.service.service_category}}</label>
+					<select name="service_category_id" class="ui-widget-content" style="width: 170px;" data-widget-type="service_category_input">
+					</select>
+				</div>				
+				<div class="group_fields">
+					<label for="is_active">{{writeString=wns.is_online}}</label>
+					<input type="checkbox" name="is_active" style="padding-left:-2px;" />
+				</div>
 			</div><br style="clear:right;" />
 			<fieldset><legend class="validate-duplicate_team_member">{{writeString=wns.service.legend_team_members}}</legend>
 				<table>
@@ -51,7 +52,7 @@
 							<th> </th>
 						</tr>
 					</thead>
-					<tbody class="team_member_container">
+					<tbody class="team_member_container ui-editable-items-list">
 					</tbody>
 				</table>
 			</fieldset>

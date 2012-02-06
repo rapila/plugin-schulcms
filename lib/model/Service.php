@@ -63,6 +63,15 @@ class Service extends BaseService {
 	public function getAdminLink() {
 		return array('services', $this->getId());
 	}
+	
+	public function delete(PropelPDO $oConnection = null) {
+		$oImage = $this->getDocument();
+		if($oImage) {
+			$oImage->delete();
+		}
+		ServiceDocumentQuery::create()->filterByServiceId($this->getId())->delete();
+		return parent::delete($oConnection);
+	}
 
 
 

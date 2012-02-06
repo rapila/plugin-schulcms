@@ -12,7 +12,7 @@ class NoteTypeDetailWidgetModule extends PersistentWidgetModule {
 	
 	public function getNoteTypeData() {
 		$oNoteType = NoteTypePeer::retrieveByPK($this->iNoteTypeId);
-		$aResult = $oNoteType->toArray();
+		$aResult = $oNoteType->toArray(BasePeer::TYPE_PHPNAME, false);
 		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oNoteType);
 		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oNoteType);
     return $aResult;

@@ -29,10 +29,7 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 		if($oNote === null) {
 			return array();
 		}
-		$aResult = array();
-		$aResult['NoteTypeId'] = $oNote->getNoteTypeId();
-		$aResult['ImageId'] = $oNote->getImageId();
-		$aResult['IsInactive'] = $oNote->getIsInactive();
+		$aResult = $oNote->toArray(BasePeer::TYPE_PHPNAME, false);
 		$aResult['DateStart'] = $oNote->getDateStart('d.m.Y');
 		$aResult['DateEnd'] = $oNote->getDateEnd('d.m.Y');
 		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oNote);
@@ -41,7 +38,7 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 		if(is_resource($oNote->getBody())) {
 			$sBody = RichtextUtil::parseStorageForBackendOutput(stream_get_contents($oNote->getBody()))->render();
 		}
-		$aResult['NoteBody'] = $sBody;
+		$aResult['Body'] = $sBody;
 		return $aResult;
 	}
 	

@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
 	
 	jQuery.when.apply(jQuery, handlers).then(function() {
 		
-		// add new Service
+		// Add info_bar elements
 		info_bar.add_button('add-new-item', function() {
 			Widget.create('service_detail', function(widget) {
 				widget.settings.initial_category_id = sidebar.active_row().data('service_category_id');
@@ -27,18 +27,32 @@ jQuery(document).ready(function() {
 					content_list.reload();
 				};
 			});
-		}, 'n', true);
-		
-		// add new ServiceCategory
-		info_bar.add_button('add-new-item', function() {
+		}, 'n', true).add_button('add-new-item', function() {
 			Widget.create('sidebar_input', function(widget) {
 				widget.add_new_sidebar_input("{{writeString=wns.service_category.default_name}}", 'ServiceCategory', sidebar, 'rapila-services_categories_changed');
-			});
-		});
+			})
+		}).add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
+			if(content_list.setSearch(search)) {
+				content_list.reload();
+			}
+		}).add_row_count_info_for_list(content_list);
 
-		/// @todo remove and edit buttons, only show if has permission
+		// Sidebar
 		var remove_item = info_bar.add_button('remove-item', function() {
-			sidebar.delete_row(sidebar.active_row());
+			var rowData = sidebar.collect_row_data(sidebar.active_row());
+			if(rowData.service_category_id) {
+				content_list.getOption('categoryHasServices', rowData.service_category_id, function(result) {
+					if(!result) {
+						return sidebar.delete_row(sidebar.active_row());
+					}
+					var delete_message = "{{writeString=wns.service_category.delete_information}}";
+					Widget.confirm("{{writeString=wns.rapila_alert.information}}", delete_message, function(confirmed) {
+						if(confirmed) {
+							sidebar.delete_row(sidebar.active_row());
+						}
+					}.bind(this));
+				});
+			}
 		}).disable();
 		
 		var edit_item = info_bar.add_button('edit-item', function() {
@@ -53,17 +67,7 @@ jQuery(document).ready(function() {
 			});
 		}).disable();
 
-		// add search input
-		info_bar.add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
-			if(content_list.setSearch(search)) {
-				content_list.reload();
-			}
-		});
-		
-		// add row_count_info
-		info_bar.add_row_count_info_for_list(content_list);
-		
-		// list-selection_changed
+		sidebar.settings.row_click_active_mode = 'activate';
 		sidebar.handle('list-selection_changed', function(event, selection) {
 			var service_category_id = selection[0] && selection[0].service_category_id;
 			var has_detail = selection.length === 1 && service_category_id.constructor === Number;
@@ -72,7 +76,5 @@ jQuery(document).ready(function() {
 			content_list.setOption('service_category_id', service_category_id);
 			content_list.reload();
 		});
-	
-		sidebar.settings.row_click_active_mode = 'activate';
 	});
 });

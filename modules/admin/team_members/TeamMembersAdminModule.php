@@ -10,10 +10,10 @@ class TeamMembersAdminModule extends AdminModule {
 		if(isset($_REQUEST['function_group_id'])) {
 			$this->oListWidget->oDelegateProxy->setFunctionGroupId($_REQUEST['function_group_id']);
 		}
-		$this->addResourceParameter(ResourceIncluder::RESOURCE_TYPE_JS, 'function_group_id', $this->oListWidget->oDelegateProxy->getFunctionGroupId());
 		$this->oSidebarWidget = new ListWidgetModule();
 		$this->oSidebarWidget->setListTag(new TagWriter('ul'));
 		$this->oSidebarWidget->setDelegate(new CriteriaListWidgetDelegate($this, 'FunctionGroup', 'name'));
+		$this->oSidebarWidget->setSetting('initial_selection', array('function_group_id' => $this->oListWidget->oDelegateProxy->getFunctionGroupId()));
 	}
 	
 	public function mainContent() {

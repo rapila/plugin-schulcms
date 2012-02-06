@@ -57,11 +57,10 @@ class NoteListWidgetModule extends WidgetModule {
 		return $aResult;
 	}
 	
-	public function typeHasNotes($iNoteTypeId) {
-		return NotesQuery::create()->filterByNoteTypeId($iNoteTypeId)->count() > 0;
+	public function getTypeHasNotes($iNoteTypeId) {
+		return NoteQuery::create()->filterByNoteTypeId($iNoteTypeId)->count() > 0;
 	}
 
-	
 	public function getFilterTypeForColumn($sColumnIdentifier) {
 		if($sColumnIdentifier === 'note_type_id') {
 			return CriteriaListWidgetDelegate::FILTER_TYPE_IS;

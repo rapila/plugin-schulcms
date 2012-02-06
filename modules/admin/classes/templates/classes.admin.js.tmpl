@@ -1,27 +1,24 @@
 jQuery(document).ready(function() {
-	// init main content
 	AdminInterface.content.find('table.class_list').prepareWidget(function(class_list) {
-		// init infobar
+		
+		// Add info_bar elements
 		var sidebar;
 		AdminInterface.sidebar.find('.ui-list').prepareWidget(function(widget) {
 			sidebar = widget;
 			sidebar.settings.row_click_active_mode = 'activate';
-			
 			sidebar.handle('list-selection_changed', function(event, selection) {
 				class_list.setOption('class_type_id', selection[0] && selection[0].class_type_id);
 				class_list.reload();
 			});
 		});
 
+		// Sidebar
 		AdminInterface.info_bar.prepareWidget(function(info_bar) {
 			info_bar.add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
 				if(class_list.setSearch(search)) {
 					class_list.reload();
 				}
-			});;
-	
-			// add row_count_info
-			info_bar.add_row_count_info_for_list(class_list);
+			}).add_row_count_info_for_list(class_list);
 		});
 	});
 });

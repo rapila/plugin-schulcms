@@ -1,8 +1,7 @@
 jQuery(document).ready(function() {
-	// init main content
 	AdminInterface.content.find('table.service_category_list').prepareWidget(function(service_category_list) {
 		
-		// init info_bar
+		// Add info_bar elements
 		AdminInterface.info_bar.prepareWidget(function(info_bar) {
 			info_bar.add_button('add-new-item', function() {
 				Widget.create('service_detail', function(widget) {
@@ -15,9 +14,7 @@ jQuery(document).ready(function() {
 				if(service_category_list.setSearch(search)) {
 					service_category_list.reload();
 				}
-			});
-			// add row_count_info
-			info_bar.add_row_count_info_for_list(service_category_list);
+			}).add_row_count_info_for_list(service_category_list);
 		});
 	});
 });

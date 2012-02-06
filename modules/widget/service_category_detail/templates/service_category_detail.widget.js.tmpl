@@ -3,42 +3,26 @@ Widget.types.service_category_detail = {
 		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
 		this.content.find('div.hide_if_not_saved').hide();
 		
-		Widget.create('detail', function(widget) {
-			this.detail_widget = widget.set_instance(this);
-			jQuery.extend(widget.settings, {
-				title: "{{writeString=wns.service_category.create}}",
-				width: 600
-			});
-			if(this.auto_open) {
-				this.open();
-			}
-		}.bind(this));
-	},
-	
-	open: function() {
-		if(!this.detail_widget) {
-			this.auto_open = true;
-			return false;
-		}
-		this.detail_widget.open();
-		this.detail_widget.content.find('input[name=name]').focus();
+		Widget.callStatic('detail', 'create_for_instance', this);
 	},
 	
 	fill_data: function() {
+		this.detail_widget.disable();		
 		this.serviceCategoryData(function(service_category_data) {
 			this.content.find("input[name='name']").val(service_category_data.Name);
+			this.content.find(".detail_id").text(service_category_data.Id);
 			this.content.find(".updated_info").text(service_category_data.UpdatedInfo);
 			this.content.find(".created_info").text(service_category_data.CreatedInfo);
 			this.content.find('div.hide_if_not_saved').show();
 			this.detail_widget.set_title(this.detail_widget.settings.title = service_category_data.Name);
+			this.detail_widget.enable();		
 		});
 	},
-
-	close: function() {
-		this.detail_widget.close();
-		this.close_callback();
-	},
 	
-	save_callback: jQuery.noop,
-	close_callback: jQuery.noop
+	settings: {
+		detail_widget: {
+			title: "{{writeString=wns.service_category.create}}",
+			width: 530
+		}
+	}
 };

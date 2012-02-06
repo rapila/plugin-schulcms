@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
 
 	jQuery.when.apply(jQuery, handlers).then(function() {
 
-		// init info_bar
+		// Add info_bar elements
 		info_bar.add_button('add-new-item', function() {
 			Widget.create('note_detail', function(widget) {
 				widget.settings.initial_type_id = sidebar.active_row().data('note_type_id');
@@ -36,12 +36,15 @@ jQuery(document).ready(function() {
 			if(content_list.setSearch(search)) {
 				content_list.reload();
 			}
-		});
+		}).add_row_count_info_for_list(content_list);
 		
 		var remove_item = info_bar.add_button('remove-item', function() {
 			var rowData = sidebar.collect_row_data(sidebar.active_row());
 			if(rowData.note_type_id) {
-				content_list.typeHasNotes(rowData.note_type_id, function(result) {
+				content_list.getOption('typeHasNotes', rowData.note_type_id, function(result) {
+					if(!result) {
+						return sidebar.delete_row(sidebar.active_row());
+					}
 					var delete_message = "{{writeString=wns.note_type.delete_information}}";
 					Widget.confirm("{{writeString=wns.rapila_alert.information}}", delete_message, function(confirmed) {
 						if(confirmed) {
@@ -62,11 +65,9 @@ jQuery(document).ready(function() {
 				};
 			});
 		}).disable();
-	
-		// add row_count_info
-		info_bar.add_row_count_info_for_list(content_list);
-		
-		// sidebar selection changed
+
+		// Sidebar
+		sidebar.settings.row_click_active_mode = 'activate';
 		sidebar.handle('list-selection_changed', function(event, selection) {
 			var note_type_id = selection[0] && selection[0].note_type_id;
 			var has_detail = selection.length === 1 && note_type_id.constructor === Number;
@@ -75,9 +76,6 @@ jQuery(document).ready(function() {
 			content_list.setOption('note_type_id', note_type_id);
 			content_list.reload();
 		});
-		
-		// init sidebar
-		sidebar.settings.row_click_active_mode = 'activate';
 	});
 });
 

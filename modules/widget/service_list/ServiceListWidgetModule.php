@@ -79,6 +79,10 @@ class ServiceListWidgetModule extends WidgetModule {
 		return false;
 	}
 	
+	public function getCategoryHasServices($iServiceCategoryId) {
+		return ServiceQuery::create()->filterByServiceCategoryId($iServiceCategoryId)->count() > 0;
+	}
+	
 	public function getServiceCategoryName() {
 		if($this->oDelegateProxy->getServiceCategoryId() !== CriteriaListWidgetDelegate::SELECT_ALL) {
 			$oServiceCategory = ServiceCategoryPeer::retrieveByPK($this->oDelegateProxy->getServiceCategoryId());

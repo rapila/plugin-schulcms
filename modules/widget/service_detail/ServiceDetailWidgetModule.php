@@ -4,6 +4,7 @@
  */
 class ServiceDetailWidgetModule extends PersistentWidgetModule {
 	private $iServiceId = null;
+	private $aUnsavedDocuments = array();
 
 	public function __construct($sWidgetId) {
 		parent::__construct($sWidgetId);
@@ -24,7 +25,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function serviceData() {
-		$oService = ServicePeer::retrieveByPK($this->iServiceId);
+		$oService = ServiceQuery::create()->findPk($this->iServiceId);
 		if($oService === null) {
 			return array();
 		}
@@ -63,7 +64,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function getSingleDocument($iDocumentId) {
-		$oDokument = DocumentPeer::retrieveByPK($iDocumentId);
+		$oDokument = DocumentQuery::create()->findPk($iDocumentId);
 		if($oDokument) {
 			return $this->rowData($oDokument);
 		}
@@ -71,7 +72,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function deleteDocument($iDocumentId) {
-		$oDocument = DocumentPeer::retrieveByPK($iDocumentId);
+		$oDocument = DocumentQuery::create()->findPk($iDocumentId);
 		if($oDocument && ServiceDocumentQuery::create()->filterByDocument($oDocument)->filterByServiceId($this->iServiceId)->findOne()) {
 			return $oDocument->delete();
 		}
@@ -79,7 +80,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 	
 	public function reorderDocuments($aDocumentIds) {
 		foreach($aDocumentIds as $iCount => $iDocumentId) {
-			$oDocument = ServiceDocumentPeer::retrieveByPK($this->iServiceId, $iDocumentId);
+			$oDocument = ServiceDocumentQuery::create()->findPk(array($this->iServiceId, $iDocumentId));
 			$oDocument->setSort($iCount+1);
 			$oDocument->save();
 		}
@@ -90,7 +91,8 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 	    $this->aUnsavedDocuments[] = $iDocumentId;
 	    return;
 	  }
-	  if(ServiceDocumentPeer::retrieveByPK($this->iServiceId, $iDocumentId)) {
+		ErrorHandler::log('addServiceDocument', $this->iServiceId, $iDocumentId);
+	  if(ServiceDocumentQuery::create()->findPk(array($this->iServiceId, $iDocumentId))) {
 	    return;
 	  }
 	  $oServiceDocument = new ServiceDocument();
@@ -118,8 +120,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 					continue;
 				}
 				if(isset($aSetTeamMemberIds[$iTeamMemberId])) {
-					$oFlash->addMessage('duplicate_team_member');
-					break;
+					continue;
 				}
 				$aSetTeamMemberIds[$iTeamMemberId] = true;
 			}
@@ -131,7 +132,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 		if($this->iServiceId === null) {
 			$oService = new Service();
 		} else {
-			$oService = ServicePeer::retrieveByPK($this->iServiceId);
+			$oService = ServiceQuery::create()->findPk($this->iServiceId);
 		}
 		ArrayUtil::trimStringsInArray($aServiceData);
 		$oService->setName($aServiceData['name']);
@@ -150,7 +151,16 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 		
 		if(!$oService->isNew()) {
 			ServiceMemberQuery::create()->filterByService($oService)->find()->delete();
+		} else {
+		  foreach($this->aUnsavedDocuments as $i => $iDocumentId) {
+			  $oServiceDocument = new ServiceDocument();
+			  $oServiceDocument->setServiceId($this->iServiceId);
+			  $oServiceDocument->setDocumentId($iDocumentId);
+			  $oServiceDocument->setSort($i+1);
+			  $oService->addServiceDocument($oServiceDocument);
+		  }
 		}
+
 		if(isset($aServiceData['team_member_id'])) {
 			$aServiceMembers = array();
 			foreach($aServiceData['team_member_id'] as $iCounter => $iTeamMemberId) {
@@ -176,6 +186,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 			throw new ValidationException();
 		}
 		$oService->setIsActive($aServiceData['is_active']);
-		return $oService->save();
+		$oService->save();
+		return $oService->getId();
 	}
 }

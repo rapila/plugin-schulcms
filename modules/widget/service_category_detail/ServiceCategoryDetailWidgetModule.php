@@ -12,7 +12,7 @@ class ServiceCategoryDetailWidgetModule extends PersistentWidgetModule {
 	
 	public function serviceCategoryData() {
 		$oServiceCategory = ServiceCategoryPeer::retrieveByPK($this->iCategoryId);
-		$aResult = $oServiceCategory->toArray();
+		$aResult = $oServiceCategory->toArray(BasePeer::TYPE_PHPNAME, false);
 		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oServiceCategory);
 		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oServiceCategory);
     return $aResult;

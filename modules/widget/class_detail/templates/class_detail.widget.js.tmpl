@@ -13,118 +13,111 @@ Widget.types.class_detail = {
 		
 		this.current_detail_id = null;
 		this.uploader = Widget.create('file_upload');
+		
+		Widget.callStatic('detail', 'create_for_instance', this);
+		
+		this.handle('opened', function() { 
+			this.accordion = jQuery(this.detail_widget.content.find('div.accordion')).accordion({active: this.settings.accordion_active, autoHeight: false, clearStyle: true, collapsible:false});
+		});
 
-		Widget.create('detail', function(widget) {
-			_this.detail_widget = widget.set_instance(_this);
-			jQuery.extend(widget.settings, {
-				title: "{{writeString=create}}",
-				width: 600
-			});
-			this.accordion = jQuery(widget.content.find('div.accordion')).accordion({active: _this.settings.accordion_active, autoHeight: false, clearStyle: true, collapsible:false});
-			if(_this.auto_open) {
-				_this.open();
+		// portrait
+		var portrait_area = this.content.find('.portrait_area');
+		portrait_area.find('.remove').click(function() {
+			_this.class_portrait_id = null;
+			_this.save(true);
+		});
+		
+		this.uploader.allow_drag_to(portrait_area, null, function(target, file) {
+			if(file.type.indexOf('image/') !== 0) {
+				Widget.notifyUser('alert', 'Das Portrait muss ein Bild sein (Datei vom Typ «JPG», «PNG»)');
+				return false;
 			}
-			
-			// portrait
-			var portrait_area = _this.content.find('.portrait_area');
-			portrait_area.find('.remove').click(function() {
-				_this.class_portrait_id = null;
-				_this.save(true);
-			});
-			
-			_this.uploader.allow_drag_to(portrait_area, null, function(target, file) {
-				if(file.type.indexOf('image/') !== 0) {
-					Widget.notifyUser('alert', 'Das Portrait muss ein Bild sein (Datei vom Typ «JPG», «PNG»)');
-					return false;
+			return {document_kind: 'image', document_id: _this.class_portrait_id, document_category_id: _this.settings.class_portrait_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this), class_document_type: 'portrait'};
+		}, true);
+		
+		var class_portrait_id = null;
+		Object.defineProperty(_this, 'class_portrait_id', {
+			get: function() {
+				return class_portrait_id;
+			},
+			set: function(class_portrait) {
+				class_portrait_id = class_portrait;
+				var remove_link = portrait_area.find('.remove');
+				if(class_portrait_id === null) {
+					portrait_area.find('.class_portrait').empty();
+					remove_link.hide();
+				} else {
+					remove_link.show();
+					Widget.callStatic('document_detail', 'documentPreview', class_portrait_id, 250, function(html) {
+						portrait_area.find('.class_portrait').html(html);
+					});
 				}
-				return {document_kind: 'image', document_id: _this.class_portrait_id, document_category_id: _this.settings.class_portrait_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this), class_document_type: 'portrait'};
-			}, true);
-			
-			var class_portrait_id = null;
-			Object.defineProperty(_this, 'class_portrait_id', {
-				get: function() {
-					return class_portrait_id;
-				},
-				set: function(class_portrait) {
-					class_portrait_id = class_portrait;
-					var remove_link = portrait_area.find('.remove');
-					if(class_portrait_id === null) {
-						portrait_area.find('.class_portrait').empty();
-						remove_link.hide();
-					} else {
-						remove_link.show();
-						Widget.callStatic('document_detail', 'documentPreview', class_portrait_id, 250, function(html) {
-							portrait_area.find('.class_portrait').html(html);
-						});
-					}
+			}
+		});
+		
+		// stundenplan		
+		var stundenplan = this.content.find('.stundenplan');
+		stundenplan.find('.remove').click(function() {
+			_this.class_schedule_id = null;
+			_this.save(true);
+		});
+		
+		this.uploader.allow_drag_to(stundenplan, null, function(target, file) {
+			if(file.type !== 'application/pdf' && file.fileName.lastIndexOf('.pdf') !== (file.fileName.length-4)) {
+				Widget.notifyUser(Widget.logSeverity.ALERT, 'Der Stundenplan muss eine Datei vom Typ «PDF» sein');
+				return false;
+			}
+			return {document_kind: 'application', document_id: _this.class_schedule_id, document_category_id: _this.settings.class_schedule_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this), class_document_type: 'schedule'};
+		}, true);
+		
+		var class_schedule_id = null;
+		Object.defineProperty(_this, 'class_schedule_id', {
+			get: function() {
+				return class_schedule_id;
+			},
+			set: function(class_schedule) {
+				class_schedule_id = class_schedule;
+				var remove_link = stundenplan.find('.remove');
+				if(class_schedule_id === null) {
+					stundenplan.find('.class_schedule').empty();
+					remove_link.hide();
+				} else {
+					remove_link.show();
+					stundenplan.find('.class_schedule').html('<a class="pdf" href="'+FILE_PREFIX+'/display_document/'+class_schedule_id+'">Stundenplan</a>');
 				}
-			});
-			
-			// stundenplan		
-			var stundenplan = _this.content.find('.stundenplan');
-			stundenplan.find('.remove').click(function() {
-				_this.class_schedule_id = null;
-				_this.save(true);
-			});
-			
-			_this.uploader.allow_drag_to(stundenplan, null, function(target, file) {
-				if(file.type !== 'application/pdf' && file.fileName.lastIndexOf('.pdf') !== (file.fileName.length-4)) {
-					Widget.notifyUser(Widget.logSeverity.ALERT, 'Der Stundenplan muss eine Datei vom Typ «PDF» sein');
-					return false;
+			}
+		});
+		
+		// wochenplan		
+		var wochenplan = this.content.find('.wochenplan');
+		wochenplan.find('.remove').click(function() {
+			_this.week_schedule_id = null;
+			_this.save(true);
+		});
+		this.uploader.allow_drag_to(wochenplan, null, function(target, file) {
+			if(file.type !== 'application/pdf') {
+				Widget.notifyUser(Widget.logSeverity.ALERT, 'Der Wochenplan muss eine Datei vom Typ «PDF» sein');
+				return false;
+			}
+			return {document_kind: 'application', document_id: _this.week_schedule_id, document_category_id: _this.settings.week_plan_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this), class_document_type: 'week_schedule'};
+		}, true);
+		
+		var week_schedule_id = null;
+		Object.defineProperty(_this, 'week_schedule_id', {
+			get: function() {
+				return week_schedule_id;
+			},
+			set: function(week_schedule) {
+				week_schedule_id = week_schedule;
+				var remove_link = wochenplan.find('.remove');
+				if(week_schedule_id === null) {
+					wochenplan.find('.week_schedule').empty();
+					remove_link.hide();
+				} else {
+					remove_link.show();
+					wochenplan.find('.week_schedule').html('<a class="pdf" href="'+FILE_PREFIX+'/display_document/'+week_schedule_id+'">Wochenplan</a>');
 				}
-				return {document_kind: 'application', document_id: _this.class_schedule_id, document_category_id: _this.settings.class_schedule_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this), class_document_type: 'schedule'};
-			}, true);
-			
-			var class_schedule_id = null;
-			Object.defineProperty(_this, 'class_schedule_id', {
-				get: function() {
-					return class_schedule_id;
-				},
-				set: function(class_schedule) {
-					class_schedule_id = class_schedule;
-					var remove_link = stundenplan.find('.remove');
-					if(class_schedule_id === null) {
-						stundenplan.find('.class_schedule').empty();
-						remove_link.hide();
-					} else {
-						remove_link.show();
-						stundenplan.find('.class_schedule').html('<a class="pdf" href="'+FILE_PREFIX+'/display_document/'+class_schedule_id+'">Stundenplan</a>');
-					}
-				}
-			});
-			
-			// wochenplan		
-			var wochenplan = _this.content.find('.wochenplan');
-			wochenplan.find('.remove').click(function() {
-				_this.week_schedule_id = null;
-				_this.save(true);
-			});
-			_this.uploader.allow_drag_to(wochenplan, null, function(target, file) {
-				if(file.type !== 'application/pdf') {
-					Widget.notifyUser(Widget.logSeverity.ALERT, 'Der Wochenplan muss eine Datei vom Typ «PDF» sein');
-					return false;
-				}
-				return {document_kind: 'application', document_id: _this.week_schedule_id, document_category_id: _this.settings.week_plan_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this), class_document_type: 'week_schedule'};
-			}, true);
-			
-			
-			var week_schedule_id = null;
-			Object.defineProperty(_this, 'week_schedule_id', {
-				get: function() {
-					return week_schedule_id;
-				},
-				set: function(week_schedule) {
-					week_schedule_id = week_schedule;
-					var remove_link = wochenplan.find('.remove');
-					if(week_schedule_id === null) {
-						wochenplan.find('.week_schedule').empty();
-						remove_link.hide();
-					} else {
-						remove_link.show();
-						wochenplan.find('.week_schedule').html('<a class="pdf" href="'+FILE_PREFIX+'/display_document/'+week_schedule_id+'">Wochenplan</a>');
-					}
-				}
-			});
+			}
 		});
 		
 		this.handle('saving', function(event, data) {
@@ -148,15 +141,8 @@ Widget.types.class_detail = {
 	upload_error: function(error) {
 	},
 	
-	open: function() {
-		if(!this.detail_widget) {
-			this.auto_open = true;
-			return false;
-		}
-		this.detail_widget.open();
-	},
-	
 	fill_data: function() {
+		this.detail_widget.disable();		
 		this.schoolClassData(function(class_data) {
 			if(class_data.LinkCategoryId === null) {
 				class_data.LinkCategoryId = '';
@@ -174,6 +160,7 @@ Widget.types.class_detail = {
 			this.reload_links(class_data.Id);
 			this.current_detail_id = class_data.Id;
 			this.detail_widget.set_title(this.detail_widget.settings.title = class_data.ClassTypeName+' '+class_data.Name);
+			this.detail_widget.enable();		
 		});
 	},
 	
@@ -282,11 +269,6 @@ Widget.types.class_detail = {
 			_this.add_link_button.removeClass('ui-loading-add');
 		});
 	},
-
-	close: function() {
-		this.detail_widget.close();
-		this.close_callback();
-	},
 	
 	save: function(should_remain_open) {
 		if(should_remain_open) {
@@ -299,6 +281,10 @@ Widget.types.class_detail = {
 	},
 	
 	settings: {
+		detail_widget: {
+			title: "{{writeString=create}}",
+			width: 600
+		},
 		accordion_active: 0
 	},
 

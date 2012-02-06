@@ -2,96 +2,85 @@ Widget.types.note_detail = {
 	initialize: function() {
 		var _this = this;
 		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		this.content.find('div.hide_if_not_saved').hide();
 		this.image_area = this.content.find('div.image_area').hide();
+		this.note_body = this.content.find('div.note_body');
 		this.note_type = this.content.find('select[name="note_type_id"]');
+		this.image_id = null;
 		this.note_type.change(function() {
-			if(_this.settings.blackboard_note_type_id !== null 
-				&& (jQuery(this).val() === _this.settings.blackboard_note_type_id)) {
-				_this.image_area.show();
-			} else {
-				_this.image_area.hide();
+			_this.image_area.toggle(_this.image_id || (_this.settings.blackboard_note_type_id !== null && (jQuery(this).val() === _this.settings.blackboard_note_type_id)));
+		});
+		
+		Widget.callStatic('detail', 'create_for_instance', this);
+		this.current_detail_id = null;
+			
+		this.content.find("input[name^='date_']").datepicker({
+			dateFormat: 'dd.mm.yy'
+		});
+
+		this.content.find("select[name='note_type_id']").prepareWidget(function(note_type_input_widget) {
+			note_type_input_widget.settings.initial_selection = _this.settings.initial_type_id;
+			note_type_input_widget.settings.disabled = !!_this.settings.predefined_note_type_id;
+		}, function(note_type_input_widget) {
+			if(_this.settings.predefined_note_type_id) { 
+				note_type_input_widget._element.val(_this.settings.predefined_note_type_id);
 			}
 		});
+		
+		// Upload image		
 		this.uploader = Widget.create('file_upload');
-		this.note_body = this.content.find('div.note_body');
-		
-		
-		Widget.create('detail', function(widget) {
-			this.detail_widget = widget.set_instance(this);
-			jQuery.extend(widget.settings, {
-				title: "{{writeString=wns.note.create}}",
-				width: 830
-			});
-			
-			this.content.find("input[name^='date_']").datepicker({
-				dateFormat: 'dd.mm.yy'
-			});
-
-			this.content.find("select[name='note_type_id']").prepareWidget(function(note_type_input_widget) {
-				note_type_input_widget.settings.initial_selection = _this.settings.initial_type_id;
-				note_type_input_widget.settings.disabled = !!_this.settings.predefined_note_type_id;
-			}, function(note_type_input_widget) {
-				if(_this.settings.predefined_note_type_id) { 
-					note_type_input_widget._element.val(_this.settings.predefined_note_type_id);
-				}
-			});
-						// note image		
-			var image_area = _this.content.find('.image_area');
-			image_area.find('.remove').click(function() {
-				_this.image_id = null;
-			});
-			_this.uploader.allow_drag_to(image_area, null, function(target, file) {
-				if(file.type.indexOf('image/') !== 0) {
-					Widget.notifyUser('alert', 'Muss ein Bild sein (Datei vom Typ «JPG», «PNG»)');
-					return false;
-				}
-				return {document_kind: 'image', document_id: _this.image_id, document_category_id: _this.settings.note_image_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
-			}, true);
-			
-			var image_id = null;
-			Object.defineProperty(_this, 'image_id', {
-				get: function() {
-					return image_id;
-				},
-				set: function(note_image) {
-					image_id = note_image;
-					var remove_link = image_area.find('.remove');
-					if(image_id) {
-						remove_link.show();
-						Widget.callStatic('document_detail', 'documentPreview', image_id, 180, function(html) {
-							image_area.find('.note_image').html(html);
-						});
-					} else {
-						image_area.find('.note_image').empty();
-						remove_link.hide();
-					}
-				}
-			});
-
-			if(this.auto_open) {
-				this.open();
+		var image_area = _this.content.find('.image_area');
+		image_area.find('.remove').click(function() {
+			_this.image_id = null;
+		});
+		this.uploader.allow_drag_to(image_area, null, function(target, file) {
+			if(file.type.indexOf('image/') !== 0) {
+				Widget.notifyUser('alert', 'Muss ein Bild sein (Datei vom Typ «JPG», «PNG»)');
+				return false;
 			}
-		}.bind(_this));
-	
-		_this.handle('saving', function(event, data) {
+			return {document_kind: 'image', document_id: _this.image_id, document_category_id: _this.settings.note_image_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
+		}, true);
+		
+		var image_id = null;
+		Object.defineProperty(_this, 'image_id', {
+			get: function() {
+				return image_id;
+			},
+			set: function(note_image) {
+				image_id = note_image;
+				var remove_link = image_area.find('.remove');
+				if(image_id) {
+					remove_link.show();
+					Widget.callStatic('document_detail', 'documentPreview', image_id, 180, function(html) {
+						image_area.find('.note_image').html(html);
+					});
+				} else {
+					image_area.find('.note_image').empty();
+					remove_link.hide();
+				}
+			}
+		});
+		
+		// Handlers
+		this.handle('opened', function() { 
+			this.init_textarea();
+		});
+		this.handle('saving', function(event, data) {
 			data.image_id = _this.image_id;
 			data.body = _this.note_body_editor.get_data();
 		}.bind(_this));
-	},
-	
-	open: function() {
-		if(!this.detail_widget) {
-			this.auto_open = true;
-			return false;
-		}
-		this.init_textarea();
-		this.detail_widget.open();
+		this.handle('saved', function(event, id) {
+			this.setNoteId(id);
+			this.current_detail_id = id;
+		});
 	},
 	
 	fill_data: function() {
+		this.detail_widget.disable();		
 		var _this = this;
 		this.init_textarea();
 		this.noteData(function(note_data) {
+			this.current_detail_id = note_data.Id;
 			if(!_this.settings.predefined_note_type) {
 				this.note_type.val(note_data.NoteTypeId);
 				this.note_type.change();
@@ -102,10 +91,13 @@ Widget.types.note_detail = {
 			this.image_id = note_data.ImageId;
 			this.content.find(".updated_info").text(note_data.UpdatedInfo);
 			this.content.find(".created_info").text(note_data.CreatedInfo);
+			this.content.find(".detail_id").text(note_data.Id);
 			this.detail_widget.set_title(this.detail_widget.settings.title = "{{writeString=wns.note_of}} "+note_data.DateStart);
 			this.note_body.ensureWidget(function(widget) {
-				widget.set_data(note_data.NoteBody);
+				widget.set_data(note_data.Body);
 			});
+			this.content.find('div.hide_if_not_saved').show();
+			this.detail_widget.enable();		
 		});
 	},
 	
@@ -136,16 +128,12 @@ Widget.types.note_detail = {
 			}, jQuery.noop);
 		}
 	},
-
-	close: function() {
-		this.detail_widget.close();
-		this.close_callback();
-	},
-	
-	save_callback: jQuery.noop,
-	close_callback: jQuery.noop,
 	
 	settings: {
+		detail_widget: {
+			title: "{{writeString=wns.note.create}}",
+			width: 830
+		},
 		initial_type_id: null,
 		predefined_note_type_id: null,
 		blackboard_note_type_id: null,

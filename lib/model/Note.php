@@ -37,4 +37,12 @@ class Note extends BaseNote {
 		}
 		return self::$NOTE_TYPES[$this->getNoteTypeId()]->getName();
 	}
+	
+  public function delete(PropelPDO $oConnection = null) {
+		if($this->getDocument()) {
+			$this->getDocument()->delete();
+		}
+		return parent::delete($oConnection);
+	}
+
 }
