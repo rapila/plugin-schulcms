@@ -3,7 +3,7 @@
  * @package modules.frontend
  */
 
-class SchoolFrontendModule extends DynamicFrontendModule {
+class SchoolFrontendModule extends FrontendModule {
 	
 	public static $DISPLAY_MODES = array('schul_statistik');
 	

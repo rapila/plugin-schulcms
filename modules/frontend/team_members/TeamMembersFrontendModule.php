@@ -3,7 +3,7 @@
  * @package modules.frontend
  */
 
-class TeamMembersFrontendModule extends DynamicFrontendModule {
+class TeamMembersFrontendModule extends FrontendModule {
 	
 	public static $DISPLAY_MODES = array('team_liste', 'team_mitglied_detail');
 	public static $TEAM_MEMBER;

@@ -3,7 +3,7 @@
  * @package modules.frontend
  */
 
-class ServicesFrontendModule extends DynamicFrontendModule {
+class ServicesFrontendModule extends FrontendModule {
 	
 	public static $DISPLAY_MODES = array('service_liste', 'service_detail', 'service_intern_detail', 'service_teaser', 'team_member_portraits');
 	public static $SERVICE;
