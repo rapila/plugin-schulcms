@@ -52,6 +52,9 @@ Widget.types.service_detail = {
 				Widget.notifyUser('alert', 'Das Logo muss ein Bild sein (Datei vom Typ «PNG», «GIF», «JPG»)');
 				return false;
 			}
+			
+			this.settings.remains_open = true;
+			
 			return {document_kind: 'image', document_id: _this.service_logo_id, document_category_id: _this.settings.service_file_category_id, callback: _this.logo_upload_success.bind(_this), error: _this.upload_error.bind(_this) };
 		}, true);
 		
@@ -190,7 +193,7 @@ Widget.types.service_detail = {
 		document_name.text(document_data.Name+'.'+document_data.Extension);
 		document_name.addClass('pointer '+document_data.Extension).attr('title', '{{writeString=wns.edit_file.dblclick}}').dblclick(function() {
 			Widget.create('document_detail', function(detail) {
-				detail.settings.hide_inputs_if_called_externally = true;
+				detail.settings.is_called_externally = true;
 				detail.auto_open = true;
 			}, function(detail) {
 				detail.setDocumentId(document_id);
@@ -214,21 +217,12 @@ Widget.types.service_detail = {
 	logo_upload_success: function(logo_id) {
 		this.service_logo_id = logo_id;
 		this.save(true);
+		this.settings.remains_open = false;
 	},
 	
 	upload_error: function(error) {
 	},
-	
-	save: function(should_remain_open) {
-		if(should_remain_open) {
-			this.settings.remains_open = true;
-		}
-		this.detail_widget.settings.save_callback();
-		if(should_remain_open) {
-			this.settings.remains_open = false;
-		}
-	},
-	
+
 	settings: {
 		detail_widget: {
 			title: "{{writeString=wns.service.create}}",

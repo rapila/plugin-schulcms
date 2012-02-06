@@ -3,7 +3,7 @@ Widget.types.class_detail = {
 		var _this = this;
 		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
 		// class events and links
-		this.event_prototype = jQuery.parseHTML("{{includeTemplate=class_event}}", false, 'table');
+		this.event_prototype = jQuery.parseHTML("{{includeTemplate=class_event}}", false, 'tbody');
 		this.link_prototype = jQuery.parseHTML("{{includeTemplate=class_link}}", false, 'table');
 		this.event_list = this.content.find('.event_list');
 		this.link_list = this.content.find('.link_list');
@@ -173,6 +173,10 @@ Widget.types.class_detail = {
 				var event_item = _this.event_prototype.clone();
 				event_item.find('.event_date').text(data.Date);
 				event_item.find('.event_title').text(data.Title);
+				var bericht = event_item.find('.has_bericht').text('  ');
+				if(data.HasBericht) { bericht.addClass('status_icons'); }
+				var images = event_item.find('.has_images').text('  '); 
+				if(data.HasImages) { images.addClass('status_icons'); }
 				event_item.find('.delete_event').click(function() {
 					var delete_message = AdminInterface.strings.get_string('wns.event.delete_warning', { title: data.Title });
 					Widget.confirm("{{writeString=wns.delete_warning_title}}", delete_message, function(confirmed) {

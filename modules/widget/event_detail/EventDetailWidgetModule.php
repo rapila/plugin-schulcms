@@ -41,7 +41,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function getSingleDocument($iDocumentId, $iThumbnailSize) {
-		$oDokument = DocumentPeer::retrieveByPK($iDocumentId);
+		$oDokument = DocumentQuery::create()->findPk($iDocumentId);
 		if($oDokument) {
 			return $this->rowData($oDokument, $iThumbnailSize);
 		}
@@ -49,7 +49,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function deleteDocument($iDocumentId) {
-		$oDocument = DocumentPeer::retrieveByPK($iDocumentId);
+		$oDocument = DocumentQuery::create()->findPk($iDocumentId);
 		if($oDocument && EventDocumentQuery::create()->filterByDocument($oDocument)->filterByEventId($this->iEventId)->findOne()) {
 			return $oDocument->delete();
 		}
@@ -57,14 +57,14 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 	
 	public function reorderDocuments($aDocumentIds) {
 		foreach($aDocumentIds as $iCount => $iDocumentId) {
-			$oDocument = EventDocumentPeer::retrieveByPK($this->iEventId, $iDocumentId);
+			$oDocument = EventDocumentQuery::create()->findPk(array($this->iEventId, $iDocumentId));
 			$oDocument->setSort($iCount+1);
 			$oDocument->save();
 		}
 	}
 	
 	public function eventData() {
-		$oEvent = EventPeer::retrieveByPK($this->iEventId);
+		$oEvent = EventQuery::create()->findPk($this->iEventId);
 		if($oEvent === null) {
 			return array();
 		}
@@ -73,7 +73,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['DateEnd'] = $oEvent->getDateEnd('d.m.Y');
 		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oEvent);
 		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oEvent);
-		$oEventType = EventTypePeer::retrieveByPK($oEvent->getEventTypeId() ? $oEvent->getEventTypeId() : 1);
+		$oEventType = EventTypeQuery::create()->findPk($oEvent->getEventTypeId() ? $oEvent->getEventTypeId() : 1);
 		$aResult['AnlassTyp'] = $oEventType ? $oEventType->getName() : '';
     $sBodyPreview = '';
 		if(is_resource($oEvent->getBodyPreview())) {
@@ -93,7 +93,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 	    $this->aUnsavedDocuments[] = $iDocumentId;
 	    return;
 	  }
-	  if(EventDocumentPeer::retrieveByPK($this->iEventId, $iDocumentId)) {
+	  if(EventDocumentQuery::create()->findPk(array($this->iEventId, $iDocumentId))) {
 	    return;
 	  }
 	  $oEventDocument = new EventDocument();
@@ -119,7 +119,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		if($this->iEventId === null) {
 			$oEvent = new Event();
 		} else {
-		  $oEvent = EventPeer::retrieveByPK($this->iEventId);
+		  $oEvent = EventQuery::create()->findPk($this->iEventId);
 		}
 		$oEvent->setTitle($aEventData['title']);
 		$oEvent->setTeaser($aEventData['teaser']);

@@ -2,10 +2,14 @@ Widget.types.event_detail = {
 	initialize: function() {
 		var _this = this;
 		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
-		this.no_images_upload_info = jQuery('<div/>').html("{{writeString=wns.event.no_images_and_upload_info}}").addClass('no_images_placeholder');
-		this.uploader = Widget.create('file_upload');
+		this.content.find('div.hide_if_not_saved').hide();
+		this.current_detail_id = null;
+		
 		this.preview_text = this.content.find('div.event_preview');
 		this.review_text = this.content.find('div.event_review');
+
+		this.no_images_upload_info = jQuery('<div/>').html("{{writeString=wns.event.no_images_and_upload_info}}").addClass('no_images_placeholder');
+		this.uploader = Widget.create('file_upload');
 		this.droppable_area = _this.content.find('.droppable_area');
 		this.droppable_area.sortable({
 			update: function(document, ui) {
@@ -19,69 +23,51 @@ Widget.types.event_detail = {
 			}
 		});
 
-		Widget.create('detail', function(widget) {
-			this.detail_widget = widget.set_instance(this);
-			jQuery.extend(widget.settings, {
-				title: "{{writeString=wns.event.create}}",
-				width: 720
-			});
-			_this.current_detail_id = null;
-			this.content.find("input[name^='date_']").datepicker({
-				dateFormat: 'dd.mm.yy'
-			});
-			this.content.find("select[name='event_type_id']").prepareWidget();
-			this.content.find("select[name='service_id']").prepareWidget(function(services_input_widget) {
-				if(jQuery(services_input_widget._element).find('option').length == (services_input_widget.settings.default_value_label ? 1 : 0)) {
-					_this.content.find('.service_select_items').each(function() {
-						jQuery(this).hide();
-					});
-				}
-			});
-			
-			var school_class_select = this.content.find("select[name='school_class_id']");
-			school_class_select.prepareWidget(function(classes_input_widget) {
-				jQuery(school_class_select).val(_this.settings.predefined_school_class_id);
-				classes_input_widget.settings.disabled = !!_this.settings.predefined_school_class_id;
-			}, function(classes_input_widget) {
-				if(_this.settings.predefined_school_class_id) {
-					classes_input_widget._element.val(_this.settings.predefined_school_class_id);
-					_this.content.find('.service_select_items').each(function() {
-						jQuery(this).hide();
-					});
-				}
-			});
-			
-			_this.uploader.allow_drag_to(_this.droppable_area, null, function(target, file) {
-				return { document_category_id: _this.settings.events_document_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
-			});
-		
-			// this.richtext 
-			if(this.auto_open) {
-				this.open();
+		this.uploader.allow_drag_to(_this.droppable_area, null, function(target, file) {
+			return { document_category_id: _this.settings.events_document_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
+		});
+		this.content.find("input[name^='date_']").datepicker({
+			dateFormat: 'dd.mm.yy'
+		});
+		this.content.find("select[name='event_type_id']").prepareWidget();
+		this.content.find("select[name='service_id']").prepareWidget(function(services_input_widget) {
+			if(jQuery(services_input_widget._element).find('option').length == (services_input_widget.settings.default_value_label ? 1 : 0)) {
+				_this.content.find('.service_select_items').each(function() {
+					jQuery(this).hide();
+				});
 			}
-			
-			_this.content.find('div.accordion').accordion({active: 0, autoHeight: false, clearStyle: true, collapsible:false});
-		}.bind(_this));
-	
-		_this.handle('saving', function(event, data) {
+		});
+		
+		var school_class_select = this.content.find("select[name='school_class_id']");
+		school_class_select.prepareWidget(function(classes_input_widget) {
+			jQuery(school_class_select).val(_this.settings.predefined_school_class_id);
+			classes_input_widget.settings.disabled = !!_this.settings.predefined_school_class_id;
+		}, function(classes_input_widget) {
+			if(_this.settings.predefined_school_class_id) {
+				classes_input_widget._element.val(_this.settings.predefined_school_class_id);
+				_this.content.find('.service_select_items').each(function() {
+					jQuery(this).hide();
+				});
+			}
+		});
+		
+		// Instance
+		Widget.callStatic('detail', 'create_for_instance', this);
+		
+		// Handlers
+		this.handle('opened', function() { 
+			this.init_textareas();
+			this.content.find('div.accordion').accordion({active: 0, autoHeight: false, clearStyle: true, collapsible:false});
+		});
+		this.handle('saving', function(event, data) {
 			data.body_preview = _this.event_preview_editor.get_data();
 			data.body_review = _this.event_review_editor.get_data();
 		}.bind(_this));
 	},
 	
-	open: function() {
-		if(!this.detail_widget) {
-			this.auto_open = true;
-			return false;
-		}
-		this.init_textareas();
-		this.detail_widget.open();
-		this.detail_widget.content.find("input[name='title']").focus();
-	},
-	
 	fill_data: function() {
+		this.detail_widget.disable();
 		var _this = this;
-		// this.detail_widget.disable();
 		this.eventData(function(event_data) {
 			_this.current_detail_id = event_data.Id;
 			this.content.find("input[name='title']").val(event_data.Title);
@@ -99,6 +85,7 @@ Widget.types.event_detail = {
 			this.content.find("select[name='event_type_id']").val(event_data.EventTypeId);
 			this.content.find(".updated_info").text(event_data.UpdatedInfo);
 			this.content.find(".created_info").text(event_data.CreatedInfo);
+			this.content.find(".detail_id").text(event_data.Id);
 			this.detail_widget.set_title(this.detail_widget.settings.title = event_data.Title);
 			this.preview_text.ensureWidget(function(widget) {
 				widget.set_data(event_data.BodyPreview);
@@ -107,7 +94,8 @@ Widget.types.event_detail = {
 				widget.set_data(event_data.BodyReview);
 			});
 			_this.update_documents();
-			// this.detail_widget.enable();
+			this.content.find('div.hide_if_not_saved').show();
+			this.detail_widget.enable();
 		});
 	},
 	
@@ -148,7 +136,7 @@ Widget.types.event_detail = {
 		var document_object = jQuery.parseHTML(document_data.Preview);
 		doc.addClass('pointer').attr('title', '{{writeString=wns.edit_file.dblclick}}').dblclick(function() {
 			Widget.create('document_detail', function(detail) {
-				detail.settings.hide_inputs_if_called_externally = true;
+				detail.settings.is_called_externally = true;
 				detail.auto_open = true;
 			}, function(detail) {
 				detail.setDocumentId(document_id);
@@ -187,16 +175,12 @@ Widget.types.event_detail = {
 			}, jQuery.noop);
 		}
 	},
-
-	close: function() {
-		this.detail_widget.close();
-		this.close_callback();
-	},
-	
-	save_callback: jQuery.noop,
-	close_callback: jQuery.noop,
 	
 	settings: {
+		detail_widget: {
+			title: "{{writeString=wns.event.create}}",
+			width: 720
+		},
 		thumbnail_size: 180,
 		initial_type_id: 1,
 		predefined_school_class_id: null

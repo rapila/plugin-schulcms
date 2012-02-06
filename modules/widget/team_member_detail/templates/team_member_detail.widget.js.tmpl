@@ -10,54 +10,44 @@ Widget.types.team_member_detail = {
 			});
 		});
 		this.uploader = Widget.create('file_upload');
-		
-		Widget.create('detail', function(widget) {
-			_this.detail_widget = widget.set_instance(_this);
-			jQuery.extend(widget.settings, {
-				title: "{{writeString=wns.team_member.create}}",
-				width: 600,
-				minHeight: 500
-			});
-			if(_this.auto_open) {
-				_this.open();
-			}
 			
-			var portrait_area = _this.content.find('.portrait_area');
-			portrait_area.find('.remove').click(function() {
-				_this.portrait_id = null;
-			});
-			
-			_this.uploader.allow_drag_to(portrait_area, null, function(target, file) {
-				if(file.type.indexOf('image/') !== 0) {
-					Widget.notifyUser('alert', 'Das Portrait muss ein Bild sein (Datei vom Typ «JPG», «PNG»)');
-					return false;
-				}
-				_this.settings.remains_open = true;
-
-				return {document_kind: 'image', document_id: _this.portrait_id, document_category_id: _this.settings.portrait_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
-			}, true);
-			
-			// Portrait setter/getter
-			var portrait_id = null;
-			Object.defineProperty(_this, 'portrait_id', {
-				get: function() {
-					return portrait_id;
-				},
-				set: function(portrait) {
-					portrait_id = portrait;
-					var remove_link = portrait_area.find('.remove');
-					if(portrait_id === null) {
-						portrait_area.find('.portrait').empty();
-						remove_link.hide();
-					} else {
-						remove_link.show();
-						Widget.callStatic('document_detail', 'documentPreview', portrait_id, 194, function(html) {
-							portrait_area.find('.portrait').html(html);
-						});
-					}
-				}
-			});
+		var portrait_area = _this.content.find('.portrait_area');
+		portrait_area.find('.remove').click(function() {
+			_this.portrait_id = null;
 		});
+		
+		this.uploader.allow_drag_to(portrait_area, null, function(target, file) {
+			if(file.type.indexOf('image/') !== 0) {
+				Widget.notifyUser('alert', 'Das Portrait muss ein Bild sein (Datei vom Typ «JPG», «PNG»)');
+				return false;
+			}
+			_this.settings.remains_open = true;
+
+			return {document_kind: 'image', document_id: _this.portrait_id, document_category_id: _this.settings.portrait_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
+		}, true);
+		
+		// Portrait setter/getter
+		var portrait_id = null;
+		Object.defineProperty(_this, 'portrait_id', {
+			get: function() {
+				return portrait_id;
+			},
+			set: function(portrait) {
+				portrait_id = portrait;
+				var remove_link = portrait_area.find('.remove');
+				if(portrait_id === null) {
+					portrait_area.find('.portrait').empty();
+					remove_link.hide();
+				} else {
+					remove_link.show();
+					Widget.callStatic('document_detail', 'documentPreview', portrait_id, 194, function(html) {
+						portrait_area.find('.portrait').html(html);
+					});
+				}
+			}
+		});
+		
+		Widget.callStatic('detail', 'create_for_instance', this);
 		
 		this.handle('saving', function(event, data) {
 			data.portrait_id = _this.portrait_id;
@@ -71,18 +61,10 @@ Widget.types.team_member_detail = {
 	},
 	
 	upload_error: function(error) {
-		
-	},
-
-	open: function() {
-		if(!this.detail_widget) {
-			this.auto_open = true;
-			return false;
-		}
-		this.detail_widget.open();
 	},
 	
 	fill_data: function() {
+		this.detail_widget.disable();		
 		this.invite_button.button('disable');
 		this.teamMemberData(function(team_member_data) {
 			this.content.find("span.last_name").text(team_member_data.LastName || "");
@@ -94,6 +76,7 @@ Widget.types.team_member_detail = {
 			this.content.find("span.original_id").text(team_member_data.OriginalId || "");
 			this.content.find("span.e_mail_g").text(team_member_data.EmailG || "");
 			this.content.find("span.e_mail_p").text(team_member_data.EmailP || "");
+			this.content.find(".updated_info").text(team_member_data.UpdatedInfo);
 
 			this.portrait_id = team_member_data.PortraitId;
 			this.content.find('div.hide_if_not_saved').show();
@@ -101,17 +84,15 @@ Widget.types.team_member_detail = {
 			if(team_member_data.EmailP) {
 				this.invite_button.button('enable');
 			}
+			this.detail_widget.enable();		
 		});
 	},
 	
-	close: function() {
-		this.detail_widget.close();
-		this.close_callback();
-	},
-
-	save: function(callback) {
-		this.detail_widget.settings.save_callback();
-	},
-
-	close_callback: jQuery.noop
+	settings: {
+		detail_widget: {
+			title: "{{writeString=wns.team_member.create}}",
+			width: 550,
+			minHeight: 500
+		}
+	}
 };

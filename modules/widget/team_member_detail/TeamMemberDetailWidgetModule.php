@@ -27,6 +27,7 @@ class TeamMemberDetailWidgetModule extends PersistentWidgetModule {
 		$aResult = $oTeamMember->toArray(BasePeer::TYPE_PHPNAME, false);
 		$aResult['DateOfBirthFormatted'] = $oTeamMember->getDateOfBirthFormatted();
 		$aResult['EmployedSinceFormatted'] = $oTeamMember->getEmployedSinceFormatted();
+		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oTeamMember);
 		if($oTeamMember->getUserRelatedByUserId()) {
 			$aResult['EmailP'] = $oTeamMember->getUserRelatedByUserId()->getEmail();
 		}

@@ -137,6 +137,12 @@ class Event extends BaseEvent {
 	public function getAdminLink() {
 		return array('events', $this->getId());
 	}
+	
+  public function delete(PropelPDO $oConnection = null) {
+		EventDocumentQuery::create()->filterByEventId($this->getId())->delete();
+		return parent::delete($oConnection);
+	}
+
 
 }
 
