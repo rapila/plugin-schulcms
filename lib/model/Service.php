@@ -13,6 +13,10 @@ class Service extends BaseService {
 	public function getTeamCount() {
 		return $this->countServiceMembers();
 	}
+	
+	public function getDocumentCount() {
+		return $this->countServiceDocuments();
+	}
 
 	public function getOpeningHoursFormatted($sSeparator = ':') {
 		$aLines = explode("\n", $this->getOpeningHours());

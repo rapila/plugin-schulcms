@@ -191,7 +191,7 @@ Widget.types.service_detail = {
 		document_name.text(document_data.Name+'.'+document_data.Extension);
 		document_name.addClass('pointer '+document_data.Extension).attr('title', '{{writeString=wns.edit_file.dblclick}}').dblclick(function() {
 			Widget.create('document_detail', function(detail) {
-				detail.settings.hide_inputs_if_called_externally = true;
+				detail.settings.is_called_externally = true;
 				detail.auto_open = true;
 			}, function(detail) {
 				detail.setDocumentId(document_id);
