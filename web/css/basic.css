@@ -81,7 +81,7 @@ input::-moz-placeholder,input::-webkit-input-placeholder{color:#a5a2a1}
 table{width:100%;border-collapse:collapse}
 #sidebar_right table{width:194px !important}
 #sidebar_right p{padding-left:2px}
-#content_main table.with_header{margin-top:-17px}
+#content_main table.with_header:first-child{margin-top:-17px}
 table.list_view td{vertical-align:top}
 table.list_view tr.even td,table.list_view tr.row:nth-child(2n+1) td{background-color:#fdfdfd}
 td,th{padding:0 .3em;vertical-align:top;border-bottom:1px solid #f9f9f9}

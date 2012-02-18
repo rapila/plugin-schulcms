@@ -39,8 +39,14 @@ dashboard:
     - 
       config: 
         text: |
-          <p>
-          Hier werden die Klassen angezeigt, deren KlassenlehrerIn du bist.</p>
+        <h2>Willkommen in deinem Dashboard!</h2>
+<p>
+	&nbsp;</p>
+<p>
+	Das <em>Dashboard</em> ist etwas ähnliches wie das <strong>Armaturenbrett</strong> in deinem Administrations-Führerstand.</p>
+<p>
+	Hier kannst du dir kleine <em>Helfer-Programme</em> einrichten, so ähnlich wie die Anzeigeinstrumente in einem Cockpit. Diese kleinen Helferchen nennen wir <strong>Widgets</strong></p><p>
+          Hier werden zum Beispiel deine Klassen angezeigt, wenn du KlassenlehrerIn bist.</p>
           <p>
           Für diese Klassen kannst du</p>
           <ul>
