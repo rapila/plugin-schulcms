@@ -214,8 +214,8 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		}
 		$oTemplate->replaceIdentifier('count_students', $aClasses[0]->countStudentsByUnitName());
 		// events
-		$aPreviewEvents = EventQuery::create()->filterByDateRangePreview()->filterBySchoolClassId($aClassIds)->orderByDateStart()->find();
-		$aReview = EventQuery::create()->filterByDateRangeReview()->filterBySchoolClassId($aClassIds)->orderByDateStart(Criteria::DESC)->find();
+		$aPreviewEvents = EventQuery::create()->filterByIsActive(true)->filterByDateRangePreview()->filterBySchoolClassId($aClassIds)->orderByDateStart()->find();
+		$aReview = EventQuery::create()->filterByIsActive(true)->filterByDateRangeReview()->filterBySchoolClassId($aClassIds)->orderByDateStart(Criteria::DESC)->find();
 		$aAllEvents = array_merge($aPreviewEvents->getData(), $aReview->getData());
 		$bRequiresBackToLink = false;
 		$oDateTmpl = $this->constructTemplate('date');

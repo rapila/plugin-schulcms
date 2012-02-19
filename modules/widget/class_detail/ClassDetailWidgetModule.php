@@ -90,6 +90,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		foreach($oSchoolClass->getEvents() as $oEvent) {
 			$aResult[$oEvent->getId()]['Date'] = $oEvent->getDateStart('d.m.Y');
 			$aResult[$oEvent->getId()]['Title'] = $oEvent->getTitle();
+			$aResult[$oEvent->getId()]['IsActive'] = $oEvent->getIsActive();
 			$aResult[$oEvent->getId()]['HasBericht'] = $oEvent->getHasBericht();
 			$aResult[$oEvent->getId()]['HasImages'] = $oEvent->getHasImages();
 		}

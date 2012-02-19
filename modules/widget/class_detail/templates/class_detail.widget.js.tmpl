@@ -177,6 +177,7 @@ Widget.types.class_detail = {
 				if(data.HasBericht) { bericht.addClass('status_icons'); }
 				var images = event_item.find('.has_images').text('  '); 
 				if(data.HasImages) { images.addClass('status_icons'); }
+				if(data.IsActive) { event_item.find('.is_active').text('✔'); }
 				event_item.find('.delete_event').click(function() {
 					var delete_message = AdminInterface.strings.get_string('wns.event.delete_warning', { title: data.Title });
 					Widget.confirm("{{writeString=wns.delete_warning_title}}", delete_message, function(confirmed) {
