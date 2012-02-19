@@ -4,7 +4,7 @@ Widget.types.class_detail = {
 		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
 		// class events and links
 		this.event_prototype = jQuery.parseHTML("{{includeTemplate=class_event}}", false, 'tbody');
-		this.link_prototype = jQuery.parseHTML("{{includeTemplate=class_link}}", false, 'table');
+		this.link_prototype = jQuery.parseHTML("{{includeTemplate=class_link}}", false, 'tbody');
 		this.event_list = this.content.find('.event_list');
 		this.link_list = this.content.find('.link_list');
 		this.content.find('.add_entry').hide();
