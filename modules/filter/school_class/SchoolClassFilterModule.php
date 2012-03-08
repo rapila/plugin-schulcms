@@ -4,6 +4,7 @@ class SchoolClassFilterModule extends FilterModule {
 	const CLASS_ITEM_TYPE = 'class';
 	const CLASS_ARCHIVE_ITEM_TYPE = 'class_with_year';
 	const CLASSES_REQUEST_KEY = 'classes';
+	const EVENT_FEED_ITEM = 'event-feed';
 	
 	public function onNavigationItemChildrenRequested($oNavigationItem) {
 		$aSubpagesIdentifier = Settings::getSetting('school_settings', 'subpages_classes_identifiers', array());
@@ -18,6 +19,10 @@ class SchoolClassFilterModule extends FilterModule {
 				$oClass = SchoolClassQuery::create()->filterBySlug($sSlug)->findOne();
 				$oNavItem = new HiddenVirtualNavigationItem(self::CLASS_ITEM_TYPE, $sSlug, $oClass->getUnitName(), null, null);
 				$oNavigationItem->addChild($oNavItem);
+				
+				$oFeedItem = new HiddenVirtualNavigationItem(self::EVENT_FEED_ITEM, 'feed', StringPeer::getString('wns.school_class.feed', null, 'feed'), null, $sSlug);
+				$oFeedItem->bIsIndexed = false; //Don’t index the feed item or else you’ll be exit()-ed before finishing the index
+				$oNavItem->addChild($oFeedItem);
 			}
 		} 
 		else if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ITEM_TYPE) {
@@ -37,8 +42,8 @@ class SchoolClassFilterModule extends FilterModule {
 	
 	public function onPageHasBeenSet($oPage, $bIsNotFound, $oNavigationItem) {
 		$oQuery = null;
-		if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ITEM_TYPE) {
-			$sSlug = $oNavigationItem->getName();
+		if($oNavigationItem instanceof VirtualNavigationItem && ($oNavigationItem->getType() === self::CLASS_ITEM_TYPE || $oNavigationItem->getType() === self::EVENT_FEED_ITEM)) {
+			$sSlug = $oNavigationItem->getType() === self::CLASS_ITEM_TYPE ? $oNavigationItem->getName() : $oNavigationItem->getData();
 			$oQuery = SchoolClassQuery::create()->filterByIsCurrent(true)->filterByHasStudents()->filterBySlug($sSlug);
 		} 
 		else if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ARCHIVE_ITEM_TYPE) {
@@ -48,7 +53,20 @@ class SchoolClassFilterModule extends FilterModule {
 		if($oQuery !== null) {
 			$oQuery->clearSelectColumns()->addSelectColumn(SchoolClassPeer::ID);
 			$_REQUEST[self::CLASSES_REQUEST_KEY] = SchoolClassPeer::doSelectStmt($oQuery)->fetchAll(PDO::FETCH_COLUMN);
+  		$this->handleNewsFeed($oPage, $_REQUEST[self::CLASSES_REQUEST_KEY], $oNavigationItem);
 		}
+	}
+	
+	public function handleNewsFeed($oPage, $aClassIds, $oNavigationItem) {	
+		if($oNavigationItem->getType() === self::EVENT_FEED_ITEM) {
+	    $oFeed = new EventsFileModule($oPage, $aClassIds, $oNavigationItem);
+	    $oFeed->renderFile();exit;
+			$aLink = $oNavigationItem->getLink();
+		} else {
+			$aLink = array_merge($oNavigationItem->getLink(), array('feed'));
+		}
+		//Add the feed include
+    ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'location' => LinkUtil::link($aLink)));
 	}
 	
 	public function onPageNotFoundDetectionComplete($bIsNotFound, $oPage, $oNavigationItem, $aNotFound) {
