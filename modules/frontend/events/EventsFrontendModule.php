@@ -144,9 +144,13 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			if(!$oEventDocument->getDocument()) {
 				continue;
 			}
-			$oDocumentTemplate = clone $oTemplateProtoType;
-			$oDocumentTemplate->replaceIdentifier('event_id', $oEvent->getId());
-			$oEventDocument->getDocument()->renderListItem($oDocumentTemplate);
+			if($oEventDocument->getDocument()->isImage()) {
+  			$oDocumentTemplate = clone $oTemplateProtoType;
+  			$oDocumentTemplate->replaceIdentifier('event_id', $oEvent->getId());
+			} else {
+			  $oDocumentTemplate = new Template('lists/document_list_item');
+			}
+  		$oEventDocument->getDocument()->renderListItem($oDocumentTemplate);
 			$oGalleryTemplate->replaceIdentifierMultiple("items", $oDocumentTemplate);
 		}
 		$oDetailTemplate->replaceIdentifier('gallery', $oGalleryTemplate);
