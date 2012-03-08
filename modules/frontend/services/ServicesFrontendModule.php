@@ -201,4 +201,15 @@ class ServicesFrontendModule extends FrontendModule {
 		}
 		return $oQuery;
 	}
+	
+  public function getJsForFrontend() {
+		if(Settings::getSetting("frontend", "protect_email_addresses", false)) {
+			$oResourceIncluder = ResourceIncluder::defaultIncluder();
+			$oResourceIncluder->startDependencies();
+			$oResourceIncluder->addJavaScriptLibrary('jquery', 1);
+			$oResourceIncluder->addResourceEndingDependency('e-mail-defuscate.js');
+		}
+		return null;
+	}
+
 }
