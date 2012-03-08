@@ -25,6 +25,12 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 	protected static $peer;
 
 	/**
+	 * The flag var to prevent infinit loop in deep copy
+	 * @var       boolean
+	 */
+	protected $startCopy = false;
+
+	/**
 	 * The value for the id field.
 	 * @var        int
 	 */
@@ -194,6 +200,12 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $eventDocumentsScheduledForDeletion = null;
 
 	/**
 	 * Applies default values to this object.
@@ -1191,7 +1203,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 			} else {
 				$con->commit();
 			}
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -1282,7 +1294,7 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 			}
 			$con->commit();
 			return $affectedRows;
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -1352,26 +1364,14 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 				$this->setUserRelatedByUpdatedBy($this->aUserRelatedByUpdatedBy);
 			}
 
-			if ($this->isNew() ) {
-				$this->modifiedColumns[] = EventPeer::ID;
-			}
-
-			// If this object has been modified, then save it to the database.
-			if ($this->isModified()) {
+			if ($this->isNew() || $this->isModified()) {
+				// persist changes
 				if ($this->isNew()) {
-					$criteria = $this->buildCriteria();
-					if ($criteria->keyContainsValue(EventPeer::ID) ) {
-						throw new PropelException('Cannot insert a value for auto-increment primary key ('.EventPeer::ID.')');
-					}
-
-					$pk = BasePeer::doInsert($criteria, $con);
-					$affectedRows += 1;
-					$this->setId($pk);  //[IMV] update autoincrement primary key
-					$this->setNew(false);
+					$this->doInsert($con);
 				} else {
-					$affectedRows += EventPeer::doUpdate($this, $con);
+					$this->doUpdate($con);
 				}
-
+				$affectedRows += 1;
 				// Rewind the body_preview LOB column, since PDO does not rewind after inserting value.
 				if ($this->body_preview !== null && is_resource($this->body_preview)) {
 					rewind($this->body_preview);
@@ -1382,7 +1382,16 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 					rewind($this->body_review);
 				}
 
-				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
+				$this->resetModified();
+			}
+
+			if ($this->eventDocumentsScheduledForDeletion !== null) {
+				if (!$this->eventDocumentsScheduledForDeletion->isEmpty()) {
+					EventDocumentQuery::create()
+						->filterByPrimaryKeys($this->eventDocumentsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->eventDocumentsScheduledForDeletion = null;
+				}
 			}
 
 			if ($this->collEventDocuments !== null) {
@@ -1398,6 +1407,194 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 		}
 		return $affectedRows;
 	} // doSave()
+
+	/**
+	 * Insert the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @throws     PropelException
+	 * @see        doSave()
+	 */
+	protected function doInsert(PropelPDO $con)
+	{
+		$modifiedColumns = array();
+		$index = 0;
+
+		$this->modifiedColumns[] = EventPeer::ID;
+		if (null !== $this->id) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key (' . EventPeer::ID . ')');
+		}
+
+		 // check the columns in natural order for more readable SQL queries
+		if ($this->isColumnModified(EventPeer::ID)) {
+			$modifiedColumns[':p' . $index++]  = '`ID`';
+		}
+		if ($this->isColumnModified(EventPeer::TITLE)) {
+			$modifiedColumns[':p' . $index++]  = '`TITLE`';
+		}
+		if ($this->isColumnModified(EventPeer::TITLE_NORMALIZED)) {
+			$modifiedColumns[':p' . $index++]  = '`TITLE_NORMALIZED`';
+		}
+		if ($this->isColumnModified(EventPeer::TEASER)) {
+			$modifiedColumns[':p' . $index++]  = '`TEASER`';
+		}
+		if ($this->isColumnModified(EventPeer::BODY_PREVIEW)) {
+			$modifiedColumns[':p' . $index++]  = '`BODY_PREVIEW`';
+		}
+		if ($this->isColumnModified(EventPeer::BODY_REVIEW)) {
+			$modifiedColumns[':p' . $index++]  = '`BODY_REVIEW`';
+		}
+		if ($this->isColumnModified(EventPeer::LOCATION_INFO)) {
+			$modifiedColumns[':p' . $index++]  = '`LOCATION_INFO`';
+		}
+		if ($this->isColumnModified(EventPeer::DATE_START)) {
+			$modifiedColumns[':p' . $index++]  = '`DATE_START`';
+		}
+		if ($this->isColumnModified(EventPeer::DATE_END)) {
+			$modifiedColumns[':p' . $index++]  = '`DATE_END`';
+		}
+		if ($this->isColumnModified(EventPeer::TIME_DETAILS)) {
+			$modifiedColumns[':p' . $index++]  = '`TIME_DETAILS`';
+		}
+		if ($this->isColumnModified(EventPeer::IS_ACTIVE)) {
+			$modifiedColumns[':p' . $index++]  = '`IS_ACTIVE`';
+		}
+		if ($this->isColumnModified(EventPeer::IGNORE_ON_FRONTPAGE)) {
+			$modifiedColumns[':p' . $index++]  = '`IGNORE_ON_FRONTPAGE`';
+		}
+		if ($this->isColumnModified(EventPeer::EVENT_TYPE_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`EVENT_TYPE_ID`';
+		}
+		if ($this->isColumnModified(EventPeer::SERVICE_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`SERVICE_ID`';
+		}
+		if ($this->isColumnModified(EventPeer::SCHOOL_CLASS_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`SCHOOL_CLASS_ID`';
+		}
+		if ($this->isColumnModified(EventPeer::GALLERY_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`GALLERY_ID`';
+		}
+		if ($this->isColumnModified(EventPeer::CREATED_AT)) {
+			$modifiedColumns[':p' . $index++]  = '`CREATED_AT`';
+		}
+		if ($this->isColumnModified(EventPeer::UPDATED_AT)) {
+			$modifiedColumns[':p' . $index++]  = '`UPDATED_AT`';
+		}
+		if ($this->isColumnModified(EventPeer::CREATED_BY)) {
+			$modifiedColumns[':p' . $index++]  = '`CREATED_BY`';
+		}
+		if ($this->isColumnModified(EventPeer::UPDATED_BY)) {
+			$modifiedColumns[':p' . $index++]  = '`UPDATED_BY`';
+		}
+
+		$sql = sprintf(
+			'INSERT INTO `events` (%s) VALUES (%s)',
+			implode(', ', $modifiedColumns),
+			implode(', ', array_keys($modifiedColumns))
+		);
+
+		try {
+			$stmt = $con->prepare($sql);
+			foreach ($modifiedColumns as $identifier => $columnName) {
+				switch ($columnName) {
+					case '`ID`':
+						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+						break;
+					case '`TITLE`':
+						$stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
+						break;
+					case '`TITLE_NORMALIZED`':
+						$stmt->bindValue($identifier, $this->title_normalized, PDO::PARAM_STR);
+						break;
+					case '`TEASER`':
+						$stmt->bindValue($identifier, $this->teaser, PDO::PARAM_STR);
+						break;
+					case '`BODY_PREVIEW`':
+						if (is_resource($this->body_preview)) {
+							rewind($this->body_preview);
+						}
+						$stmt->bindValue($identifier, $this->body_preview, PDO::PARAM_LOB);
+						break;
+					case '`BODY_REVIEW`':
+						if (is_resource($this->body_review)) {
+							rewind($this->body_review);
+						}
+						$stmt->bindValue($identifier, $this->body_review, PDO::PARAM_LOB);
+						break;
+					case '`LOCATION_INFO`':
+						$stmt->bindValue($identifier, $this->location_info, PDO::PARAM_STR);
+						break;
+					case '`DATE_START`':
+						$stmt->bindValue($identifier, $this->date_start, PDO::PARAM_STR);
+						break;
+					case '`DATE_END`':
+						$stmt->bindValue($identifier, $this->date_end, PDO::PARAM_STR);
+						break;
+					case '`TIME_DETAILS`':
+						$stmt->bindValue($identifier, $this->time_details, PDO::PARAM_STR);
+						break;
+					case '`IS_ACTIVE`':
+						$stmt->bindValue($identifier, (int) $this->is_active, PDO::PARAM_INT);
+						break;
+					case '`IGNORE_ON_FRONTPAGE`':
+						$stmt->bindValue($identifier, (int) $this->ignore_on_frontpage, PDO::PARAM_INT);
+						break;
+					case '`EVENT_TYPE_ID`':
+						$stmt->bindValue($identifier, $this->event_type_id, PDO::PARAM_INT);
+						break;
+					case '`SERVICE_ID`':
+						$stmt->bindValue($identifier, $this->service_id, PDO::PARAM_INT);
+						break;
+					case '`SCHOOL_CLASS_ID`':
+						$stmt->bindValue($identifier, $this->school_class_id, PDO::PARAM_INT);
+						break;
+					case '`GALLERY_ID`':
+						$stmt->bindValue($identifier, $this->gallery_id, PDO::PARAM_INT);
+						break;
+					case '`CREATED_AT`':
+						$stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
+						break;
+					case '`UPDATED_AT`':
+						$stmt->bindValue($identifier, $this->updated_at, PDO::PARAM_STR);
+						break;
+					case '`CREATED_BY`':
+						$stmt->bindValue($identifier, $this->created_by, PDO::PARAM_INT);
+						break;
+					case '`UPDATED_BY`':
+						$stmt->bindValue($identifier, $this->updated_by, PDO::PARAM_INT);
+						break;
+				}
+			}
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
+		}
+
+		try {
+			$pk = $con->lastInsertId();
+		} catch (Exception $e) {
+			throw new PropelException('Unable to get autoincrement id.', $e);
+		}
+		$this->setId($pk);
+
+		$this->setNew(false);
+	}
+
+	/**
+	 * Update the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @see        doSave()
+	 */
+	protected function doUpdate(PropelPDO $con)
+	{
+		$selectCriteria = $this->buildPkeyCriteria();
+		$valuesCriteria = $this->buildCriteria();
+		BasePeer::doUpdate($selectCriteria, $valuesCriteria, $con);
+	}
 
 	/**
 	 * Array of ValidationFailed objects.
@@ -1927,10 +2124,12 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 		$copyObj->setCreatedBy($this->getCreatedBy());
 		$copyObj->setUpdatedBy($this->getUpdatedBy());
 
-		if ($deepCopy) {
+		if ($deepCopy && !$this->startCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
 			// the getter/setter methods for fkey referrer objects.
 			$copyObj->setNew(false);
+			// store object hash to prevent cycle
+			$this->startCopy = true;
 
 			foreach ($this->getEventDocuments() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -1938,6 +2137,8 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 				}
 			}
 
+			//unflag object copy
+			$this->startCopy = false;
 		} // if ($deepCopy)
 
 		if ($makeNew) {
@@ -2363,6 +2564,30 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of EventDocument objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $eventDocuments A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setEventDocuments(PropelCollection $eventDocuments, PropelPDO $con = null)
+	{
+		$this->eventDocumentsScheduledForDeletion = $this->getEventDocuments(new Criteria(), $con)->diff($eventDocuments);
+
+		foreach ($eventDocuments as $eventDocument) {
+			// Fix issue with collection modified by reference
+			if ($eventDocument->isNew()) {
+				$eventDocument->setEvent($this);
+			}
+			$this->addEventDocument($eventDocument);
+		}
+
+		$this->collEventDocuments = $eventDocuments;
+	}
+
+	/**
 	 * Returns the number of related EventDocument objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2403,11 +2628,19 @@ abstract class BaseEvent extends BaseObject  implements Persistent
 			$this->initEventDocuments();
 		}
 		if (!$this->collEventDocuments->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collEventDocuments[]= $l;
-			$l->setEvent($this);
+			$this->doAddEventDocument($l);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param	EventDocument $eventDocument The eventDocument object to add.
+	 */
+	protected function doAddEventDocument($eventDocument)
+	{
+		$this->collEventDocuments[]= $eventDocument;
+		$eventDocument->setEvent($this);
 	}
 
 

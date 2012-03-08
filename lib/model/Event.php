@@ -143,6 +143,5 @@ class Event extends BaseEvent {
 		return parent::delete($oConnection);
 	}
 
-
 }
 

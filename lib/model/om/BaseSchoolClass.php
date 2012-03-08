@@ -25,6 +25,12 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 	protected static $peer;
 
 	/**
+	 * The flag var to prevent infinit loop in deep copy
+	 * @var       boolean
+	 */
+	protected $startCopy = false;
+
+	/**
 	 * The value for the id field.
 	 * @var        int
 	 */
@@ -211,6 +217,30 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $classStudentsScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $classLinksScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $classTeachersScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $eventsScheduledForDeletion = null;
 
 	/**
 	 * Get the [id] column value.
@@ -1075,7 +1105,7 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 			} else {
 				$con->commit();
 			}
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -1166,7 +1196,7 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 			}
 			$con->commit();
 			return $affectedRows;
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -1250,27 +1280,24 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 				$this->setUserRelatedByUpdatedBy($this->aUserRelatedByUpdatedBy);
 			}
 
-			if ($this->isNew() ) {
-				$this->modifiedColumns[] = SchoolClassPeer::ID;
+			if ($this->isNew() || $this->isModified()) {
+				// persist changes
+				if ($this->isNew()) {
+					$this->doInsert($con);
+				} else {
+					$this->doUpdate($con);
+				}
+				$affectedRows += 1;
+				$this->resetModified();
 			}
 
-			// If this object has been modified, then save it to the database.
-			if ($this->isModified()) {
-				if ($this->isNew()) {
-					$criteria = $this->buildCriteria();
-					if ($criteria->keyContainsValue(SchoolClassPeer::ID) ) {
-						throw new PropelException('Cannot insert a value for auto-increment primary key ('.SchoolClassPeer::ID.')');
-					}
-
-					$pk = BasePeer::doInsert($criteria, $con);
-					$affectedRows += 1;
-					$this->setId($pk);  //[IMV] update autoincrement primary key
-					$this->setNew(false);
-				} else {
-					$affectedRows += SchoolClassPeer::doUpdate($this, $con);
+			if ($this->classStudentsScheduledForDeletion !== null) {
+				if (!$this->classStudentsScheduledForDeletion->isEmpty()) {
+					ClassStudentQuery::create()
+						->filterByPrimaryKeys($this->classStudentsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->classStudentsScheduledForDeletion = null;
 				}
-
-				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
 			}
 
 			if ($this->collClassStudents !== null) {
@@ -1278,6 +1305,15 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
+				}
+			}
+
+			if ($this->classLinksScheduledForDeletion !== null) {
+				if (!$this->classLinksScheduledForDeletion->isEmpty()) {
+					ClassLinkQuery::create()
+						->filterByPrimaryKeys($this->classLinksScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->classLinksScheduledForDeletion = null;
 				}
 			}
 
@@ -1289,11 +1325,29 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 				}
 			}
 
+			if ($this->classTeachersScheduledForDeletion !== null) {
+				if (!$this->classTeachersScheduledForDeletion->isEmpty()) {
+					ClassTeacherQuery::create()
+						->filterByPrimaryKeys($this->classTeachersScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->classTeachersScheduledForDeletion = null;
+				}
+			}
+
 			if ($this->collClassTeachers !== null) {
 				foreach ($this->collClassTeachers as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
+				}
+			}
+
+			if ($this->eventsScheduledForDeletion !== null) {
+				if (!$this->eventsScheduledForDeletion->isEmpty()) {
+					EventQuery::create()
+						->filterByPrimaryKeys($this->eventsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->eventsScheduledForDeletion = null;
 				}
 			}
 
@@ -1310,6 +1364,182 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 		}
 		return $affectedRows;
 	} // doSave()
+
+	/**
+	 * Insert the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @throws     PropelException
+	 * @see        doSave()
+	 */
+	protected function doInsert(PropelPDO $con)
+	{
+		$modifiedColumns = array();
+		$index = 0;
+
+		$this->modifiedColumns[] = SchoolClassPeer::ID;
+		if (null !== $this->id) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key (' . SchoolClassPeer::ID . ')');
+		}
+
+		 // check the columns in natural order for more readable SQL queries
+		if ($this->isColumnModified(SchoolClassPeer::ID)) {
+			$modifiedColumns[':p' . $index++]  = '`ID`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::ORIGINAL_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`ORIGINAL_ID`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::NAME)) {
+			$modifiedColumns[':p' . $index++]  = '`NAME`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::UNIT_NAME)) {
+			$modifiedColumns[':p' . $index++]  = '`UNIT_NAME`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::SLUG)) {
+			$modifiedColumns[':p' . $index++]  = '`SLUG`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::YEAR)) {
+			$modifiedColumns[':p' . $index++]  = '`YEAR`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::LEVEL)) {
+			$modifiedColumns[':p' . $index++]  = '`LEVEL`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::ROOM_NUMBER)) {
+			$modifiedColumns[':p' . $index++]  = '`ROOM_NUMBER`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::TEACHING_UNIT)) {
+			$modifiedColumns[':p' . $index++]  = '`TEACHING_UNIT`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::CLASS_PORTRAIT_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`CLASS_PORTRAIT_ID`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::CLASS_TYPE_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`CLASS_TYPE_ID`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::CLASS_SCHEDULE_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`CLASS_SCHEDULE_ID`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::WEEK_SCHEDULE_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`WEEK_SCHEDULE_ID`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::SCHOOL_BUILDING_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`SCHOOL_BUILDING_ID`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::SCHOOL_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`SCHOOL_ID`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::CREATED_AT)) {
+			$modifiedColumns[':p' . $index++]  = '`CREATED_AT`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::UPDATED_AT)) {
+			$modifiedColumns[':p' . $index++]  = '`UPDATED_AT`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::CREATED_BY)) {
+			$modifiedColumns[':p' . $index++]  = '`CREATED_BY`';
+		}
+		if ($this->isColumnModified(SchoolClassPeer::UPDATED_BY)) {
+			$modifiedColumns[':p' . $index++]  = '`UPDATED_BY`';
+		}
+
+		$sql = sprintf(
+			'INSERT INTO `school_classes` (%s) VALUES (%s)',
+			implode(', ', $modifiedColumns),
+			implode(', ', array_keys($modifiedColumns))
+		);
+
+		try {
+			$stmt = $con->prepare($sql);
+			foreach ($modifiedColumns as $identifier => $columnName) {
+				switch ($columnName) {
+					case '`ID`':
+						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+						break;
+					case '`ORIGINAL_ID`':
+						$stmt->bindValue($identifier, $this->original_id, PDO::PARAM_INT);
+						break;
+					case '`NAME`':
+						$stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+						break;
+					case '`UNIT_NAME`':
+						$stmt->bindValue($identifier, $this->unit_name, PDO::PARAM_STR);
+						break;
+					case '`SLUG`':
+						$stmt->bindValue($identifier, $this->slug, PDO::PARAM_STR);
+						break;
+					case '`YEAR`':
+						$stmt->bindValue($identifier, $this->year, PDO::PARAM_INT);
+						break;
+					case '`LEVEL`':
+						$stmt->bindValue($identifier, $this->level, PDO::PARAM_INT);
+						break;
+					case '`ROOM_NUMBER`':
+						$stmt->bindValue($identifier, $this->room_number, PDO::PARAM_STR);
+						break;
+					case '`TEACHING_UNIT`':
+						$stmt->bindValue($identifier, $this->teaching_unit, PDO::PARAM_STR);
+						break;
+					case '`CLASS_PORTRAIT_ID`':
+						$stmt->bindValue($identifier, $this->class_portrait_id, PDO::PARAM_INT);
+						break;
+					case '`CLASS_TYPE_ID`':
+						$stmt->bindValue($identifier, $this->class_type_id, PDO::PARAM_INT);
+						break;
+					case '`CLASS_SCHEDULE_ID`':
+						$stmt->bindValue($identifier, $this->class_schedule_id, PDO::PARAM_INT);
+						break;
+					case '`WEEK_SCHEDULE_ID`':
+						$stmt->bindValue($identifier, $this->week_schedule_id, PDO::PARAM_INT);
+						break;
+					case '`SCHOOL_BUILDING_ID`':
+						$stmt->bindValue($identifier, $this->school_building_id, PDO::PARAM_INT);
+						break;
+					case '`SCHOOL_ID`':
+						$stmt->bindValue($identifier, $this->school_id, PDO::PARAM_INT);
+						break;
+					case '`CREATED_AT`':
+						$stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
+						break;
+					case '`UPDATED_AT`':
+						$stmt->bindValue($identifier, $this->updated_at, PDO::PARAM_STR);
+						break;
+					case '`CREATED_BY`':
+						$stmt->bindValue($identifier, $this->created_by, PDO::PARAM_INT);
+						break;
+					case '`UPDATED_BY`':
+						$stmt->bindValue($identifier, $this->updated_by, PDO::PARAM_INT);
+						break;
+				}
+			}
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
+		}
+
+		try {
+			$pk = $con->lastInsertId();
+		} catch (Exception $e) {
+			throw new PropelException('Unable to get autoincrement id.', $e);
+		}
+		$this->setId($pk);
+
+		$this->setNew(false);
+	}
+
+	/**
+	 * Update the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @see        doSave()
+	 */
+	protected function doUpdate(PropelPDO $con)
+	{
+		$selectCriteria = $this->buildPkeyCriteria();
+		$valuesCriteria = $this->buildCriteria();
+		BasePeer::doUpdate($selectCriteria, $valuesCriteria, $con);
+	}
 
 	/**
 	 * Array of ValidationFailed objects.
@@ -1880,10 +2110,12 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 		$copyObj->setCreatedBy($this->getCreatedBy());
 		$copyObj->setUpdatedBy($this->getUpdatedBy());
 
-		if ($deepCopy) {
+		if ($deepCopy && !$this->startCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
 			// the getter/setter methods for fkey referrer objects.
 			$copyObj->setNew(false);
+			// store object hash to prevent cycle
+			$this->startCopy = true;
 
 			foreach ($this->getClassStudents() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -1909,6 +2141,8 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 				}
 			}
 
+			//unflag object copy
+			$this->startCopy = false;
 		} // if ($deepCopy)
 
 		if ($makeNew) {
@@ -2441,6 +2675,30 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of ClassStudent objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $classStudents A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setClassStudents(PropelCollection $classStudents, PropelPDO $con = null)
+	{
+		$this->classStudentsScheduledForDeletion = $this->getClassStudents(new Criteria(), $con)->diff($classStudents);
+
+		foreach ($classStudents as $classStudent) {
+			// Fix issue with collection modified by reference
+			if ($classStudent->isNew()) {
+				$classStudent->setSchoolClass($this);
+			}
+			$this->addClassStudent($classStudent);
+		}
+
+		$this->collClassStudents = $classStudents;
+	}
+
+	/**
 	 * Returns the number of related ClassStudent objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2481,11 +2739,19 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 			$this->initClassStudents();
 		}
 		if (!$this->collClassStudents->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collClassStudents[]= $l;
-			$l->setSchoolClass($this);
+			$this->doAddClassStudent($l);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param	ClassStudent $classStudent The classStudent object to add.
+	 */
+	protected function doAddClassStudent($classStudent)
+	{
+		$this->collClassStudents[]= $classStudent;
+		$classStudent->setSchoolClass($this);
 	}
 
 
@@ -2632,6 +2898,30 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of ClassLink objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $classLinks A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setClassLinks(PropelCollection $classLinks, PropelPDO $con = null)
+	{
+		$this->classLinksScheduledForDeletion = $this->getClassLinks(new Criteria(), $con)->diff($classLinks);
+
+		foreach ($classLinks as $classLink) {
+			// Fix issue with collection modified by reference
+			if ($classLink->isNew()) {
+				$classLink->setSchoolClass($this);
+			}
+			$this->addClassLink($classLink);
+		}
+
+		$this->collClassLinks = $classLinks;
+	}
+
+	/**
 	 * Returns the number of related ClassLink objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2672,11 +2962,19 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 			$this->initClassLinks();
 		}
 		if (!$this->collClassLinks->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collClassLinks[]= $l;
-			$l->setSchoolClass($this);
+			$this->doAddClassLink($l);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param	ClassLink $classLink The classLink object to add.
+	 */
+	protected function doAddClassLink($classLink)
+	{
+		$this->collClassLinks[]= $classLink;
+		$classLink->setSchoolClass($this);
 	}
 
 
@@ -2823,6 +3121,30 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of ClassTeacher objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $classTeachers A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setClassTeachers(PropelCollection $classTeachers, PropelPDO $con = null)
+	{
+		$this->classTeachersScheduledForDeletion = $this->getClassTeachers(new Criteria(), $con)->diff($classTeachers);
+
+		foreach ($classTeachers as $classTeacher) {
+			// Fix issue with collection modified by reference
+			if ($classTeacher->isNew()) {
+				$classTeacher->setSchoolClass($this);
+			}
+			$this->addClassTeacher($classTeacher);
+		}
+
+		$this->collClassTeachers = $classTeachers;
+	}
+
+	/**
 	 * Returns the number of related ClassTeacher objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2863,11 +3185,19 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 			$this->initClassTeachers();
 		}
 		if (!$this->collClassTeachers->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collClassTeachers[]= $l;
-			$l->setSchoolClass($this);
+			$this->doAddClassTeacher($l);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param	ClassTeacher $classTeacher The classTeacher object to add.
+	 */
+	protected function doAddClassTeacher($classTeacher)
+	{
+		$this->collClassTeachers[]= $classTeacher;
+		$classTeacher->setSchoolClass($this);
 	}
 
 
@@ -3014,6 +3344,30 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of Event objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $events A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setEvents(PropelCollection $events, PropelPDO $con = null)
+	{
+		$this->eventsScheduledForDeletion = $this->getEvents(new Criteria(), $con)->diff($events);
+
+		foreach ($events as $event) {
+			// Fix issue with collection modified by reference
+			if ($event->isNew()) {
+				$event->setSchoolClass($this);
+			}
+			$this->addEvent($event);
+		}
+
+		$this->collEvents = $events;
+	}
+
+	/**
 	 * Returns the number of related Event objects.
 	 *
 	 * @param      Criteria $criteria
@@ -3054,11 +3408,19 @@ abstract class BaseSchoolClass extends BaseObject  implements Persistent
 			$this->initEvents();
 		}
 		if (!$this->collEvents->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collEvents[]= $l;
-			$l->setSchoolClass($this);
+			$this->doAddEvent($l);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param	Event $event The event object to add.
+	 */
+	protected function doAddEvent($event)
+	{
+		$this->collEvents[]= $event;
+		$event->setSchoolClass($this);
 	}
 
 

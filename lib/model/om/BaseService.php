@@ -25,6 +25,12 @@ abstract class BaseService extends BaseObject  implements Persistent
 	protected static $peer;
 
 	/**
+	 * The flag var to prevent infinit loop in deep copy
+	 * @var       boolean
+	 */
+	protected $startCopy = false;
+
+	/**
 	 * The value for the id field.
 	 * @var        int
 	 */
@@ -175,6 +181,24 @@ abstract class BaseService extends BaseObject  implements Persistent
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $eventsScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $serviceMembersScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $serviceDocumentsScheduledForDeletion = null;
 
 	/**
 	 * Applies default values to this object.
@@ -985,7 +1009,7 @@ abstract class BaseService extends BaseObject  implements Persistent
 			} else {
 				$con->commit();
 			}
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -1076,7 +1100,7 @@ abstract class BaseService extends BaseObject  implements Persistent
 			}
 			$con->commit();
 			return $affectedRows;
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -1132,32 +1156,29 @@ abstract class BaseService extends BaseObject  implements Persistent
 				$this->setUserRelatedByUpdatedBy($this->aUserRelatedByUpdatedBy);
 			}
 
-			if ($this->isNew() ) {
-				$this->modifiedColumns[] = ServicePeer::ID;
-			}
-
-			// If this object has been modified, then save it to the database.
-			if ($this->isModified()) {
+			if ($this->isNew() || $this->isModified()) {
+				// persist changes
 				if ($this->isNew()) {
-					$criteria = $this->buildCriteria();
-					if ($criteria->keyContainsValue(ServicePeer::ID) ) {
-						throw new PropelException('Cannot insert a value for auto-increment primary key ('.ServicePeer::ID.')');
-					}
-
-					$pk = BasePeer::doInsert($criteria, $con);
-					$affectedRows += 1;
-					$this->setId($pk);  //[IMV] update autoincrement primary key
-					$this->setNew(false);
+					$this->doInsert($con);
 				} else {
-					$affectedRows += ServicePeer::doUpdate($this, $con);
+					$this->doUpdate($con);
 				}
-
+				$affectedRows += 1;
 				// Rewind the body LOB column, since PDO does not rewind after inserting value.
 				if ($this->body !== null && is_resource($this->body)) {
 					rewind($this->body);
 				}
 
-				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
+				$this->resetModified();
+			}
+
+			if ($this->eventsScheduledForDeletion !== null) {
+				if (!$this->eventsScheduledForDeletion->isEmpty()) {
+					EventQuery::create()
+						->filterByPrimaryKeys($this->eventsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->eventsScheduledForDeletion = null;
+				}
 			}
 
 			if ($this->collEvents !== null) {
@@ -1168,11 +1189,29 @@ abstract class BaseService extends BaseObject  implements Persistent
 				}
 			}
 
+			if ($this->serviceMembersScheduledForDeletion !== null) {
+				if (!$this->serviceMembersScheduledForDeletion->isEmpty()) {
+					ServiceMemberQuery::create()
+						->filterByPrimaryKeys($this->serviceMembersScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->serviceMembersScheduledForDeletion = null;
+				}
+			}
+
 			if ($this->collServiceMembers !== null) {
 				foreach ($this->collServiceMembers as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
+				}
+			}
+
+			if ($this->serviceDocumentsScheduledForDeletion !== null) {
+				if (!$this->serviceDocumentsScheduledForDeletion->isEmpty()) {
+					ServiceDocumentQuery::create()
+						->filterByPrimaryKeys($this->serviceDocumentsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->serviceDocumentsScheduledForDeletion = null;
 				}
 			}
 
@@ -1189,6 +1228,173 @@ abstract class BaseService extends BaseObject  implements Persistent
 		}
 		return $affectedRows;
 	} // doSave()
+
+	/**
+	 * Insert the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @throws     PropelException
+	 * @see        doSave()
+	 */
+	protected function doInsert(PropelPDO $con)
+	{
+		$modifiedColumns = array();
+		$index = 0;
+
+		$this->modifiedColumns[] = ServicePeer::ID;
+		if (null !== $this->id) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key (' . ServicePeer::ID . ')');
+		}
+
+		 // check the columns in natural order for more readable SQL queries
+		if ($this->isColumnModified(ServicePeer::ID)) {
+			$modifiedColumns[':p' . $index++]  = '`ID`';
+		}
+		if ($this->isColumnModified(ServicePeer::NAME)) {
+			$modifiedColumns[':p' . $index++]  = '`NAME`';
+		}
+		if ($this->isColumnModified(ServicePeer::SLUG)) {
+			$modifiedColumns[':p' . $index++]  = '`SLUG`';
+		}
+		if ($this->isColumnModified(ServicePeer::TEASER)) {
+			$modifiedColumns[':p' . $index++]  = '`TEASER`';
+		}
+		if ($this->isColumnModified(ServicePeer::ADDRESS)) {
+			$modifiedColumns[':p' . $index++]  = '`ADDRESS`';
+		}
+		if ($this->isColumnModified(ServicePeer::OPENING_HOURS)) {
+			$modifiedColumns[':p' . $index++]  = '`OPENING_HOURS`';
+		}
+		if ($this->isColumnModified(ServicePeer::PHONE)) {
+			$modifiedColumns[':p' . $index++]  = '`PHONE`';
+		}
+		if ($this->isColumnModified(ServicePeer::EMAIL)) {
+			$modifiedColumns[':p' . $index++]  = '`EMAIL`';
+		}
+		if ($this->isColumnModified(ServicePeer::WEBSITE)) {
+			$modifiedColumns[':p' . $index++]  = '`WEBSITE`';
+		}
+		if ($this->isColumnModified(ServicePeer::BODY)) {
+			$modifiedColumns[':p' . $index++]  = '`BODY`';
+		}
+		if ($this->isColumnModified(ServicePeer::IS_ACTIVE)) {
+			$modifiedColumns[':p' . $index++]  = '`IS_ACTIVE`';
+		}
+		if ($this->isColumnModified(ServicePeer::LOGO_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`LOGO_ID`';
+		}
+		if ($this->isColumnModified(ServicePeer::SERVICE_CATEGORY_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`SERVICE_CATEGORY_ID`';
+		}
+		if ($this->isColumnModified(ServicePeer::CREATED_AT)) {
+			$modifiedColumns[':p' . $index++]  = '`CREATED_AT`';
+		}
+		if ($this->isColumnModified(ServicePeer::UPDATED_AT)) {
+			$modifiedColumns[':p' . $index++]  = '`UPDATED_AT`';
+		}
+		if ($this->isColumnModified(ServicePeer::CREATED_BY)) {
+			$modifiedColumns[':p' . $index++]  = '`CREATED_BY`';
+		}
+		if ($this->isColumnModified(ServicePeer::UPDATED_BY)) {
+			$modifiedColumns[':p' . $index++]  = '`UPDATED_BY`';
+		}
+
+		$sql = sprintf(
+			'INSERT INTO `services` (%s) VALUES (%s)',
+			implode(', ', $modifiedColumns),
+			implode(', ', array_keys($modifiedColumns))
+		);
+
+		try {
+			$stmt = $con->prepare($sql);
+			foreach ($modifiedColumns as $identifier => $columnName) {
+				switch ($columnName) {
+					case '`ID`':
+						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+						break;
+					case '`NAME`':
+						$stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+						break;
+					case '`SLUG`':
+						$stmt->bindValue($identifier, $this->slug, PDO::PARAM_STR);
+						break;
+					case '`TEASER`':
+						$stmt->bindValue($identifier, $this->teaser, PDO::PARAM_STR);
+						break;
+					case '`ADDRESS`':
+						$stmt->bindValue($identifier, $this->address, PDO::PARAM_STR);
+						break;
+					case '`OPENING_HOURS`':
+						$stmt->bindValue($identifier, $this->opening_hours, PDO::PARAM_STR);
+						break;
+					case '`PHONE`':
+						$stmt->bindValue($identifier, $this->phone, PDO::PARAM_STR);
+						break;
+					case '`EMAIL`':
+						$stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
+						break;
+					case '`WEBSITE`':
+						$stmt->bindValue($identifier, $this->website, PDO::PARAM_STR);
+						break;
+					case '`BODY`':
+						if (is_resource($this->body)) {
+							rewind($this->body);
+						}
+						$stmt->bindValue($identifier, $this->body, PDO::PARAM_LOB);
+						break;
+					case '`IS_ACTIVE`':
+						$stmt->bindValue($identifier, (int) $this->is_active, PDO::PARAM_INT);
+						break;
+					case '`LOGO_ID`':
+						$stmt->bindValue($identifier, $this->logo_id, PDO::PARAM_INT);
+						break;
+					case '`SERVICE_CATEGORY_ID`':
+						$stmt->bindValue($identifier, $this->service_category_id, PDO::PARAM_INT);
+						break;
+					case '`CREATED_AT`':
+						$stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
+						break;
+					case '`UPDATED_AT`':
+						$stmt->bindValue($identifier, $this->updated_at, PDO::PARAM_STR);
+						break;
+					case '`CREATED_BY`':
+						$stmt->bindValue($identifier, $this->created_by, PDO::PARAM_INT);
+						break;
+					case '`UPDATED_BY`':
+						$stmt->bindValue($identifier, $this->updated_by, PDO::PARAM_INT);
+						break;
+				}
+			}
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
+		}
+
+		try {
+			$pk = $con->lastInsertId();
+		} catch (Exception $e) {
+			throw new PropelException('Unable to get autoincrement id.', $e);
+		}
+		$this->setId($pk);
+
+		$this->setNew(false);
+	}
+
+	/**
+	 * Update the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @see        doSave()
+	 */
+	protected function doUpdate(PropelPDO $con)
+	{
+		$selectCriteria = $this->buildPkeyCriteria();
+		$valuesCriteria = $this->buildCriteria();
+		BasePeer::doUpdate($selectCriteria, $valuesCriteria, $con);
+	}
 
 	/**
 	 * Array of ValidationFailed objects.
@@ -1692,10 +1898,12 @@ abstract class BaseService extends BaseObject  implements Persistent
 		$copyObj->setCreatedBy($this->getCreatedBy());
 		$copyObj->setUpdatedBy($this->getUpdatedBy());
 
-		if ($deepCopy) {
+		if ($deepCopy && !$this->startCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
 			// the getter/setter methods for fkey referrer objects.
 			$copyObj->setNew(false);
+			// store object hash to prevent cycle
+			$this->startCopy = true;
 
 			foreach ($this->getEvents() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -1715,6 +1923,8 @@ abstract class BaseService extends BaseObject  implements Persistent
 				}
 			}
 
+			//unflag object copy
+			$this->startCopy = false;
 		} // if ($deepCopy)
 
 		if ($makeNew) {
@@ -2048,6 +2258,30 @@ abstract class BaseService extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of Event objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $events A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setEvents(PropelCollection $events, PropelPDO $con = null)
+	{
+		$this->eventsScheduledForDeletion = $this->getEvents(new Criteria(), $con)->diff($events);
+
+		foreach ($events as $event) {
+			// Fix issue with collection modified by reference
+			if ($event->isNew()) {
+				$event->setService($this);
+			}
+			$this->addEvent($event);
+		}
+
+		$this->collEvents = $events;
+	}
+
+	/**
 	 * Returns the number of related Event objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2088,11 +2322,19 @@ abstract class BaseService extends BaseObject  implements Persistent
 			$this->initEvents();
 		}
 		if (!$this->collEvents->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collEvents[]= $l;
-			$l->setService($this);
+			$this->doAddEvent($l);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param	Event $event The event object to add.
+	 */
+	protected function doAddEvent($event)
+	{
+		$this->collEvents[]= $event;
+		$event->setService($this);
 	}
 
 
@@ -2289,6 +2531,30 @@ abstract class BaseService extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of ServiceMember objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $serviceMembers A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setServiceMembers(PropelCollection $serviceMembers, PropelPDO $con = null)
+	{
+		$this->serviceMembersScheduledForDeletion = $this->getServiceMembers(new Criteria(), $con)->diff($serviceMembers);
+
+		foreach ($serviceMembers as $serviceMember) {
+			// Fix issue with collection modified by reference
+			if ($serviceMember->isNew()) {
+				$serviceMember->setService($this);
+			}
+			$this->addServiceMember($serviceMember);
+		}
+
+		$this->collServiceMembers = $serviceMembers;
+	}
+
+	/**
 	 * Returns the number of related ServiceMember objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2329,11 +2595,19 @@ abstract class BaseService extends BaseObject  implements Persistent
 			$this->initServiceMembers();
 		}
 		if (!$this->collServiceMembers->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collServiceMembers[]= $l;
-			$l->setService($this);
+			$this->doAddServiceMember($l);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param	ServiceMember $serviceMember The serviceMember object to add.
+	 */
+	protected function doAddServiceMember($serviceMember)
+	{
+		$this->collServiceMembers[]= $serviceMember;
+		$serviceMember->setService($this);
 	}
 
 
@@ -2480,6 +2754,30 @@ abstract class BaseService extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of ServiceDocument objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $serviceDocuments A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setServiceDocuments(PropelCollection $serviceDocuments, PropelPDO $con = null)
+	{
+		$this->serviceDocumentsScheduledForDeletion = $this->getServiceDocuments(new Criteria(), $con)->diff($serviceDocuments);
+
+		foreach ($serviceDocuments as $serviceDocument) {
+			// Fix issue with collection modified by reference
+			if ($serviceDocument->isNew()) {
+				$serviceDocument->setService($this);
+			}
+			$this->addServiceDocument($serviceDocument);
+		}
+
+		$this->collServiceDocuments = $serviceDocuments;
+	}
+
+	/**
 	 * Returns the number of related ServiceDocument objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2520,11 +2818,19 @@ abstract class BaseService extends BaseObject  implements Persistent
 			$this->initServiceDocuments();
 		}
 		if (!$this->collServiceDocuments->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collServiceDocuments[]= $l;
-			$l->setService($this);
+			$this->doAddServiceDocument($l);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param	ServiceDocument $serviceDocument The serviceDocument object to add.
+	 */
+	protected function doAddServiceDocument($serviceDocument)
+	{
+		$this->collServiceDocuments[]= $serviceDocument;
+		$serviceDocument->setService($this);
 	}
 
 

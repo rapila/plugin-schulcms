@@ -25,6 +25,12 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	protected static $peer;
 
 	/**
+	 * The flag var to prevent infinit loop in deep copy
+	 * @var       boolean
+	 */
+	protected $startCopy = false;
+
+	/**
 	 * The value for the id field.
 	 * @var        int
 	 */
@@ -182,6 +188,24 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $teamMemberFunctionsScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $classTeachersScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $serviceMembersScheduledForDeletion = null;
 
 	/**
 	 * Applies default values to this object.
@@ -1087,7 +1111,7 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 			} else {
 				$con->commit();
 			}
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -1178,7 +1202,7 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 			}
 			$con->commit();
 			return $affectedRows;
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -1234,27 +1258,24 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 				$this->setUserRelatedByUpdatedBy($this->aUserRelatedByUpdatedBy);
 			}
 
-			if ($this->isNew() ) {
-				$this->modifiedColumns[] = TeamMemberPeer::ID;
+			if ($this->isNew() || $this->isModified()) {
+				// persist changes
+				if ($this->isNew()) {
+					$this->doInsert($con);
+				} else {
+					$this->doUpdate($con);
+				}
+				$affectedRows += 1;
+				$this->resetModified();
 			}
 
-			// If this object has been modified, then save it to the database.
-			if ($this->isModified()) {
-				if ($this->isNew()) {
-					$criteria = $this->buildCriteria();
-					if ($criteria->keyContainsValue(TeamMemberPeer::ID) ) {
-						throw new PropelException('Cannot insert a value for auto-increment primary key ('.TeamMemberPeer::ID.')');
-					}
-
-					$pk = BasePeer::doInsert($criteria, $con);
-					$affectedRows += 1;
-					$this->setId($pk);  //[IMV] update autoincrement primary key
-					$this->setNew(false);
-				} else {
-					$affectedRows += TeamMemberPeer::doUpdate($this, $con);
+			if ($this->teamMemberFunctionsScheduledForDeletion !== null) {
+				if (!$this->teamMemberFunctionsScheduledForDeletion->isEmpty()) {
+					TeamMemberFunctionQuery::create()
+						->filterByPrimaryKeys($this->teamMemberFunctionsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->teamMemberFunctionsScheduledForDeletion = null;
 				}
-
-				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
 			}
 
 			if ($this->collTeamMemberFunctions !== null) {
@@ -1265,11 +1286,29 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 				}
 			}
 
+			if ($this->classTeachersScheduledForDeletion !== null) {
+				if (!$this->classTeachersScheduledForDeletion->isEmpty()) {
+					ClassTeacherQuery::create()
+						->filterByPrimaryKeys($this->classTeachersScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->classTeachersScheduledForDeletion = null;
+				}
+			}
+
 			if ($this->collClassTeachers !== null) {
 				foreach ($this->collClassTeachers as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
+				}
+			}
+
+			if ($this->serviceMembersScheduledForDeletion !== null) {
+				if (!$this->serviceMembersScheduledForDeletion->isEmpty()) {
+					ServiceMemberQuery::create()
+						->filterByPrimaryKeys($this->serviceMembersScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->serviceMembersScheduledForDeletion = null;
 				}
 			}
 
@@ -1286,6 +1325,176 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 		}
 		return $affectedRows;
 	} // doSave()
+
+	/**
+	 * Insert the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @throws     PropelException
+	 * @see        doSave()
+	 */
+	protected function doInsert(PropelPDO $con)
+	{
+		$modifiedColumns = array();
+		$index = 0;
+
+		$this->modifiedColumns[] = TeamMemberPeer::ID;
+		if (null !== $this->id) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key (' . TeamMemberPeer::ID . ')');
+		}
+
+		 // check the columns in natural order for more readable SQL queries
+		if ($this->isColumnModified(TeamMemberPeer::ID)) {
+			$modifiedColumns[':p' . $index++]  = '`ID`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::ORIGINAL_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`ORIGINAL_ID`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::LAST_NAME)) {
+			$modifiedColumns[':p' . $index++]  = '`LAST_NAME`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::FIRST_NAME)) {
+			$modifiedColumns[':p' . $index++]  = '`FIRST_NAME`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::SLUG)) {
+			$modifiedColumns[':p' . $index++]  = '`SLUG`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::GENDER_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`GENDER_ID`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::EMPLOYED_SINCE)) {
+			$modifiedColumns[':p' . $index++]  = '`EMPLOYED_SINCE`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::DATE_OF_BIRTH)) {
+			$modifiedColumns[':p' . $index++]  = '`DATE_OF_BIRTH`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::PROFESSION)) {
+			$modifiedColumns[':p' . $index++]  = '`PROFESSION`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::EMAIL_G)) {
+			$modifiedColumns[':p' . $index++]  = '`EMAIL_G`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::PORTRAIT_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`PORTRAIT_ID`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::USER_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`USER_ID`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::IS_DELETED)) {
+			$modifiedColumns[':p' . $index++]  = '`IS_DELETED`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::IS_NEWLY_UPDATED)) {
+			$modifiedColumns[':p' . $index++]  = '`IS_NEWLY_UPDATED`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::CREATED_AT)) {
+			$modifiedColumns[':p' . $index++]  = '`CREATED_AT`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::UPDATED_AT)) {
+			$modifiedColumns[':p' . $index++]  = '`UPDATED_AT`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::CREATED_BY)) {
+			$modifiedColumns[':p' . $index++]  = '`CREATED_BY`';
+		}
+		if ($this->isColumnModified(TeamMemberPeer::UPDATED_BY)) {
+			$modifiedColumns[':p' . $index++]  = '`UPDATED_BY`';
+		}
+
+		$sql = sprintf(
+			'INSERT INTO `team_members` (%s) VALUES (%s)',
+			implode(', ', $modifiedColumns),
+			implode(', ', array_keys($modifiedColumns))
+		);
+
+		try {
+			$stmt = $con->prepare($sql);
+			foreach ($modifiedColumns as $identifier => $columnName) {
+				switch ($columnName) {
+					case '`ID`':
+						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+						break;
+					case '`ORIGINAL_ID`':
+						$stmt->bindValue($identifier, $this->original_id, PDO::PARAM_INT);
+						break;
+					case '`LAST_NAME`':
+						$stmt->bindValue($identifier, $this->last_name, PDO::PARAM_STR);
+						break;
+					case '`FIRST_NAME`':
+						$stmt->bindValue($identifier, $this->first_name, PDO::PARAM_STR);
+						break;
+					case '`SLUG`':
+						$stmt->bindValue($identifier, $this->slug, PDO::PARAM_STR);
+						break;
+					case '`GENDER_ID`':
+						$stmt->bindValue($identifier, $this->gender_id, PDO::PARAM_STR);
+						break;
+					case '`EMPLOYED_SINCE`':
+						$stmt->bindValue($identifier, $this->employed_since, PDO::PARAM_STR);
+						break;
+					case '`DATE_OF_BIRTH`':
+						$stmt->bindValue($identifier, $this->date_of_birth, PDO::PARAM_STR);
+						break;
+					case '`PROFESSION`':
+						$stmt->bindValue($identifier, $this->profession, PDO::PARAM_STR);
+						break;
+					case '`EMAIL_G`':
+						$stmt->bindValue($identifier, $this->email_g, PDO::PARAM_STR);
+						break;
+					case '`PORTRAIT_ID`':
+						$stmt->bindValue($identifier, $this->portrait_id, PDO::PARAM_INT);
+						break;
+					case '`USER_ID`':
+						$stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+						break;
+					case '`IS_DELETED`':
+						$stmt->bindValue($identifier, (int) $this->is_deleted, PDO::PARAM_INT);
+						break;
+					case '`IS_NEWLY_UPDATED`':
+						$stmt->bindValue($identifier, (int) $this->is_newly_updated, PDO::PARAM_INT);
+						break;
+					case '`CREATED_AT`':
+						$stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
+						break;
+					case '`UPDATED_AT`':
+						$stmt->bindValue($identifier, $this->updated_at, PDO::PARAM_STR);
+						break;
+					case '`CREATED_BY`':
+						$stmt->bindValue($identifier, $this->created_by, PDO::PARAM_INT);
+						break;
+					case '`UPDATED_BY`':
+						$stmt->bindValue($identifier, $this->updated_by, PDO::PARAM_INT);
+						break;
+				}
+			}
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
+		}
+
+		try {
+			$pk = $con->lastInsertId();
+		} catch (Exception $e) {
+			throw new PropelException('Unable to get autoincrement id.', $e);
+		}
+		$this->setId($pk);
+
+		$this->setNew(false);
+	}
+
+	/**
+	 * Update the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @see        doSave()
+	 */
+	protected function doUpdate(PropelPDO $con)
+	{
+		$selectCriteria = $this->buildPkeyCriteria();
+		$valuesCriteria = $this->buildCriteria();
+		BasePeer::doUpdate($selectCriteria, $valuesCriteria, $con);
+	}
 
 	/**
 	 * Array of ValidationFailed objects.
@@ -1799,10 +2008,12 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 		$copyObj->setCreatedBy($this->getCreatedBy());
 		$copyObj->setUpdatedBy($this->getUpdatedBy());
 
-		if ($deepCopy) {
+		if ($deepCopy && !$this->startCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
 			// the getter/setter methods for fkey referrer objects.
 			$copyObj->setNew(false);
+			// store object hash to prevent cycle
+			$this->startCopy = true;
 
 			foreach ($this->getTeamMemberFunctions() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -1822,6 +2033,8 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 				}
 			}
 
+			//unflag object copy
+			$this->startCopy = false;
 		} // if ($deepCopy)
 
 		if ($makeNew) {
@@ -2155,6 +2368,30 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of TeamMemberFunction objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $teamMemberFunctions A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setTeamMemberFunctions(PropelCollection $teamMemberFunctions, PropelPDO $con = null)
+	{
+		$this->teamMemberFunctionsScheduledForDeletion = $this->getTeamMemberFunctions(new Criteria(), $con)->diff($teamMemberFunctions);
+
+		foreach ($teamMemberFunctions as $teamMemberFunction) {
+			// Fix issue with collection modified by reference
+			if ($teamMemberFunction->isNew()) {
+				$teamMemberFunction->setTeamMember($this);
+			}
+			$this->addTeamMemberFunction($teamMemberFunction);
+		}
+
+		$this->collTeamMemberFunctions = $teamMemberFunctions;
+	}
+
+	/**
 	 * Returns the number of related TeamMemberFunction objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2195,11 +2432,19 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 			$this->initTeamMemberFunctions();
 		}
 		if (!$this->collTeamMemberFunctions->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collTeamMemberFunctions[]= $l;
-			$l->setTeamMember($this);
+			$this->doAddTeamMemberFunction($l);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param	TeamMemberFunction $teamMemberFunction The teamMemberFunction object to add.
+	 */
+	protected function doAddTeamMemberFunction($teamMemberFunction)
+	{
+		$this->collTeamMemberFunctions[]= $teamMemberFunction;
+		$teamMemberFunction->setTeamMember($this);
 	}
 
 
@@ -2346,6 +2591,30 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of ClassTeacher objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $classTeachers A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setClassTeachers(PropelCollection $classTeachers, PropelPDO $con = null)
+	{
+		$this->classTeachersScheduledForDeletion = $this->getClassTeachers(new Criteria(), $con)->diff($classTeachers);
+
+		foreach ($classTeachers as $classTeacher) {
+			// Fix issue with collection modified by reference
+			if ($classTeacher->isNew()) {
+				$classTeacher->setTeamMember($this);
+			}
+			$this->addClassTeacher($classTeacher);
+		}
+
+		$this->collClassTeachers = $classTeachers;
+	}
+
+	/**
 	 * Returns the number of related ClassTeacher objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2386,11 +2655,19 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 			$this->initClassTeachers();
 		}
 		if (!$this->collClassTeachers->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collClassTeachers[]= $l;
-			$l->setTeamMember($this);
+			$this->doAddClassTeacher($l);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param	ClassTeacher $classTeacher The classTeacher object to add.
+	 */
+	protected function doAddClassTeacher($classTeacher)
+	{
+		$this->collClassTeachers[]= $classTeacher;
+		$classTeacher->setTeamMember($this);
 	}
 
 
@@ -2537,6 +2814,30 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of ServiceMember objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $serviceMembers A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setServiceMembers(PropelCollection $serviceMembers, PropelPDO $con = null)
+	{
+		$this->serviceMembersScheduledForDeletion = $this->getServiceMembers(new Criteria(), $con)->diff($serviceMembers);
+
+		foreach ($serviceMembers as $serviceMember) {
+			// Fix issue with collection modified by reference
+			if ($serviceMember->isNew()) {
+				$serviceMember->setTeamMember($this);
+			}
+			$this->addServiceMember($serviceMember);
+		}
+
+		$this->collServiceMembers = $serviceMembers;
+	}
+
+	/**
 	 * Returns the number of related ServiceMember objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2577,11 +2878,19 @@ abstract class BaseTeamMember extends BaseObject  implements Persistent
 			$this->initServiceMembers();
 		}
 		if (!$this->collServiceMembers->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collServiceMembers[]= $l;
-			$l->setTeamMember($this);
+			$this->doAddServiceMember($l);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param	ServiceMember $serviceMember The serviceMember object to add.
+	 */
+	protected function doAddServiceMember($serviceMember)
+	{
+		$this->collServiceMembers[]= $serviceMember;
+		$serviceMember->setTeamMember($this);
 	}
 
 
