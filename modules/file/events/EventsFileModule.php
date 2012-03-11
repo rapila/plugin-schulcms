@@ -1,19 +1,21 @@
 <?php
 class EventsFileModule extends FileModule {
 	
-	private $oEventPage = null;
-	private $oNavigationItem = null;
-	private $aClassesIds = null;
+	private $oBaseNavigationItem = null;
+	private $oQuery = null;
 	
-	public function __construct($oPage, $aClassIds = null, $oNavigationItem = null) {
+	public function __construct($aRequestPath = null, $oNavigationItem = null, $oQuery = null) {
+		parent::__construct($aRequestPath);
 		if($oNavigationItem !== null) {
-			$this->oNavigationItem = $oNavigationItem;
+			$this->oBaseNavigationItem = $oNavigationItem->getParent();
 		} else {
 			$this->oEventPage = $oPage;
 		}
-		if($aClassIds !== null) {
-			$this->aClassesIds = $aClassIds;
-		}		
+		if($oQuery) {
+			$this->oQuery = $oQuery;
+		} else {
+			$this->oQuery = EventQuery::create()->filterBySchoolClassId(null, Criteria::ISNULL);
+		}
 		header("Content-Type: application/rss+xml;charset=".Settings::getSetting('encoding', 'db', 'utf-8'));
 		RichtextUtil::$USE_ABSOLUTE_LINKS = true;
 	}
@@ -24,16 +26,9 @@ class EventsFileModule extends FileModule {
 		$oRoot->setAttribute('version', "2.0");
 		$oDocument->appendChild($oRoot);
 		$oChannel = $oDocument->createElement("channel");
-		if($this->oEventPage) {
-			self::addSimpleAttribute($oDocument, $oChannel, 'title', $this->oEventPage->getPageTitle());
-			self::addSimpleAttribute($oDocument, $oChannel, 'description', $this->oEventPage->getDescription());
-			$aLink = $this->oEventPage->getLink();
-		} else {
-			self::addSimpleAttribute($oDocument, $oChannel, 'title', 'Anlässe Klasse '. $this->oNavigationItem->getData());
-			self::addSimpleAttribute($oDocument, $oChannel, 'description', 'Anlässe Klasse '. $this->oNavigationItem->getData());
-			$aLink = $this->oNavigationItem->getLink();
-		}
-		self::addSimpleAttribute($oDocument, $oChannel, 'link', LinkUtil::absoluteLink(LinkUtil::link($aLink, 'FrontendManager')));
+		self::addSimpleAttribute($oDocument, $oChannel, 'title', $this->oBaseNavigationItem->getTitle());
+		self::addSimpleAttribute($oDocument, $oChannel, 'description', $this->oBaseNavigationItem->getDescription());
+		self::addSimpleAttribute($oDocument, $oChannel, 'link', LinkUtil::absoluteLink(LinkUtil::link($this->oBaseNavigationItem->getLink(), 'FrontendManager')));
 		self::addSimpleAttribute($oDocument, $oChannel, 'language', Session::language());
 		self::addSimpleAttribute($oDocument, $oChannel, 'ttl', "15");
 		$oRoot->appendChild($oChannel);
@@ -42,19 +37,15 @@ class EventsFileModule extends FileModule {
 		// update past events with recent bericht and/or images
 		$iPeriod = 14;
 		$sDateAhead = mktime(0, 0, 0, date("m"), date("d")+$iPeriod, date("y"));
-		$oQuery = EventQuery::create()->filterByDateRangePreview()->filterByDateStart($sDateAhead, Criteria::LESS_EQUAL);
 		
 		// get events related to classes or others
-		if($this->aClassesIds !== null) {
-			$oQuery->filterBySchoolClassId($this->aClassesIds);
-		} else {
-			$oQuery->filterBySchoolClassId(null, Criteria::ISNULL);
-		}
-		$aEvents = $oQuery->filterByIsActive(true)->find();
+		//FIXME: add reasonable period…
+		$aEvents = $this->oQuery->filterByDateRangePreview()->filterByIsActive(true)->find();
+		// Util::dumpAll($aEvents);
 
 		foreach($aEvents as $oEvent) {
 			$oItem = $oDocument->createElement('item');
-			foreach(self::getRssAttributes($oEvent) as $sAttributeName => $mAttributeValue) {
+			foreach($oEvent->getRssAttributes(false, $this->oBaseNavigationItem) as $sAttributeName => $mAttributeValue) {
 				if(is_array($mAttributeValue)) {
 					if(ArrayUtil::arrayIsAssociative($mAttributeValue)) {
 						//Add one elements with attributes
@@ -76,29 +67,6 @@ class EventsFileModule extends FileModule {
 			$oChannel->appendChild($oItem);
 		}
 		print $oDocument->saveXML();
-	}
-	
-	public static function getRssAttributes($oEvent, $bForReview = false) {
-		$aResult = array();
-		$aResult['title'] = $oEvent->getTitle();
-		$aLink = array();
-		if($this->oNavigationItem) {
-			$aLink = array_merge($this->oNavigationItem->getLink(), array(ClassesFrontendModule::DETAIL_IDENTIFIER_EVENT, $oEvent->getId()));
-		} else {
-			$aLink = $oEvent->getEventPageLink($this->oEventPage);
-		}
-		$aResult['link'] = LinkUtil::absoluteLink(LinkUtil::link($aLink), 'FrontendManager');
-		if($bForReview) {
-			// if there is a bericht, display bericht hier
-			// show images also <image>
-		} else {
-			$aResult['description'] = RichtextUtil::parseStorageForFrontendOutput($this->getText())->render();
-		}
-		$aResult['author'] = $this->getUserRelatedByCreatedBy()->getEmail().' ('.$this->getUserRelatedByCreatedBy()->getFullName().')';
-		$aResult['guid'] = $aResult['link'];
-		$aResult['pubDate'] = date(DATE_RSS, (int)$this->getUpdatedAtTimestamp());
-		$aResult['category'] = $oEvent->getEventType()->getName();
-		return $aResult;
 	}
 
 	private static function addSimpleAttribute($oDocument, $oChannel, $sAttributeName, $sAttributeValue, $sNamespace = null) {

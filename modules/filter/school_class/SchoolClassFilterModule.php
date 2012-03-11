@@ -59,7 +59,7 @@ class SchoolClassFilterModule extends FilterModule {
 	
 	public function handleNewsFeed($oPage, $aClassIds, $oNavigationItem) {	
 		if($oNavigationItem->getType() === self::EVENT_FEED_ITEM) {
-	    $oFeed = new EventsFileModule($oPage, $aClassIds, $oNavigationItem);
+	    $oFeed = new EventsFileModule(null, $oNavigationItem, EventQuery::create()->filterBySchoolClassId($aClassIds));
 	    $oFeed->renderFile();exit;
 			$aLink = $oNavigationItem->getLink();
 		} else {

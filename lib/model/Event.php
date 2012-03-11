@@ -138,10 +138,32 @@ class Event extends BaseEvent {
 		return array('events', $this->getId());
 	}
 	
-  public function delete(PropelPDO $oConnection = null) {
+	public function delete(PropelPDO $oConnection = null) {
 		EventDocumentQuery::create()->filterByEventId($this->getId())->delete();
 		return parent::delete($oConnection);
 	}
+	
+	public function getRssAttributes($bForReview = false, $oBaseNavigationItem = null) {
+		$aResult = array();
+		$aResult['title'] = $this->getTitle();
+		$aLink = array();
+		if($oBaseNavigationItem) {
+			$aLink = array_merge($oBaseNavigationItem->getLink(), array(ClassesFrontendModule::DETAIL_IDENTIFIER_EVENT, $this->getId()));
+		} else {
+			$aLink = $this->getEventPageLink();
+		}
+		$aResult['link'] = LinkUtil::absoluteLink(LinkUtil::link($aLink), 'FrontendManager');
+		if($bForReview) {
+			// if there is a bericht, display bericht hier
+			// show images also <image>
+		} else {
+			$aResult['description'] = $this->getTeaser();
+		}
+		$aResult['author'] = $this->getUserRelatedByCreatedBy()->getEmail().' ('.$this->getUserRelatedByCreatedBy()->getFullName().')';
+		$aResult['guid'] = $aResult['link'];
+		$aResult['pubDate'] = date(DATE_RSS, (int)$this->getUpdatedAtTimestamp());
+		$aResult['category'] = $this->getEventType()->getName();
+		return $aResult;
+	}
 
 }
-
