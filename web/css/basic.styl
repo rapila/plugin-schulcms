@@ -56,11 +56,24 @@ a.close_detail, a.close_detail:hover
 	background: none
 	padding-right: 0px
 
-p, h1, h2, ul
+p, h1, h2, h3, ul
 	margin: 0
-	padding: 0
 
-#content_main .inner h2:first-child
+h1
+	margin-bottom 1em
+	margin-top 0
+	font-size 22px
+	
+h1.teaser
+	// font-size 19px
+
+h2, h3, h4
+	margin-top 1em
+	
+#aktuell_container h2
+	margin-top 0
+
+h2:first-child, h1:first-child, h3:first-child
 	margin-top: 0
 
 ul, li
@@ -80,13 +93,7 @@ ul, li
 	padding-left: 0
 
 p, ul
-	padding-bottom: .5em
-
-#content_main h1, #content_main h2
-	font-size: 19px
-	line-height: 1em
-	font-weight: normal
-	padding-bottom: .5em
+	padding-bottom: 1em
 
 #sidebar_right h1, #sidebar_right h2
 	margin-bottom: .5em
@@ -145,11 +152,12 @@ a.close_detail:hover
 	position: absolute
 	top: top_area_height
 	height: header_main_height
-
+	
 #blackboard_text, #content_main h1, #content_main h2,
 body.editing h1, body.editing h2
 	font-family: 'Architects Daughter', Courier, Serif
 	line-height: 1em
+	font-weight: normal
 	padding-bottom: .1em
 	
 .home #header_main, .home #blackboard_area
@@ -444,7 +452,7 @@ td, th
 	padding-right: 3px
 
 td p
-	line-height: 16px
+	line-height: 20px
 	margin: 0
 	padding: 0
 
@@ -532,10 +540,6 @@ ul.class_teachers
 
 ul.class_teachers li
 	padding-bottom: 0
-
-#content_main h1, #content_main h2
-	margin-top: 0
-	margin-bottom: 9px
 
 #aktuell_container
 	float: right
@@ -653,9 +657,6 @@ a.event_teaser_classlink
 .detail_info h1 a
 	color: #f6f6f6
 
-.detail_info h1 a:hover
-	// background: url("../images/link_icon.gif") no-repeat scroll right center transparent
-
 .date
 	font-style: oblique
 
@@ -684,7 +685,7 @@ img.service_logo
 	border: 1px solid school_color
 	padding: 1em
 
-#aktuell_container, .events a.active, #content_main li em, #content_main h2, a:hover, #content_main h1, #content_main h2, .highlight
+#aktuell_container, .events a.active, #content_main h2, a:hover, #content_main h1, #content_main h2, .highlight
 	color: school_color
 	
 .today 
@@ -770,6 +771,7 @@ body.klassen h1 a
 	display:inline-block
 	width: 20px
 	background: url('../images/classes.png') transparent 0px 4px no-repeat
+	
 body.klassen h1 a:hover
 	background: url('../images/back_to_list.png') transparent 0px 4px no-repeat
 

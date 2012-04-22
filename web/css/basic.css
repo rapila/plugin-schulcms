@@ -7,14 +7,16 @@ a{text-decoration:none;color:#666}
 a.close_detail,a.close_detail:hover{float:right;z-index:5000;border:1px solid #b8abaa;background:rgba(255,255,255,0.70) url("../images/close_detail.png") no-repeat right center;margin-top:1px;padding:0;display:block;width:22px;height:22px}
 .klassen a.close_detail,.klassen a.close_detail:hover{margin-top:-26.5em;font-size:18.7167px;z-index:100;color:#fff;border:1px solid #fff}
 .datum a{display:block;background:none;padding-right:0}
-p,h1,h2,ul{margin:0;padding:0}
-#content_main .inner h2:first-child{margin-top:0}
+p,h1,h2,h3,ul{margin:0}
+h1{margin-bottom:1em;margin-top:0;font-size:22px}
+h2,h3,h4{margin-top:1em}
+#aktuell_container h2{margin-top:0}
+h2:first-child,h1:first-child,h3:first-child{margin-top:0}
 ul,li{list-style:none;margin:0;padding:0}
 .inner ul,body.editing ul{margin-left:1.3em}
 .inner ul,.inner li,body.editing ul,body.editing li{list-style-image:url("../images/list-bg-img.png");list-style-position:outside;padding-bottom:.3em}
 .inner li,body.editing li{padding-left:0}
-p,ul{padding-bottom:.5em}
-#content_main h1,#content_main h2{font-size:19px;line-height:1em;font-weight:normal;padding-bottom:.5em}
+p,ul{padding-bottom:1em}
 #sidebar_right h1,#sidebar_right h2{margin-bottom:.5em;color:#fff;line-height:24px}
 a.close_detail:hover{border:1px solid #5e61a8;background:rgba(255,255,255,0.70) url("../images/close_detail_hover.png") no-repeat right center}
 a.close_detail:hover{border:1px solid #5e61a8}
@@ -27,7 +29,7 @@ a.close_detail:hover{border:1px solid #5e61a8}
 #top_right_area{top:0;height:50px;background-color:#d3d1b8}
 #main_right_area{background-color:#fff;top:0;min-height:100%}
 #header_main,#blackboard_area{background:transparent url("../images/blackboard.jpg") no-repeat top right;position:absolute;top:50px;height:120px}
-#blackboard_text,#content_main h1,#content_main h2,body.editing h1,body.editing h2{font-family:'Architects Daughter',Courier,Serif;line-height:1em;padding-bottom:.1em}
+#blackboard_text,#content_main h1,#content_main h2,body.editing h1,body.editing h2{font-family:'Architects Daughter',Courier,Serif;line-height:1em;font-weight:normal;padding-bottom:.1em}
 .home #header_main,.home #blackboard_area{height:142px}
 #blackboard_area{top:0}
 .document_list a.pdf,#sidebar_right .inner a.pdf,a.document_link.pdf,.document_list a.doc,#sidebar_right .inner a.doc,.document_list a.docx,#sidebar_right .inner a.docx{padding-left:1.6em;background:transparent url("../images/pdf.png") no-repeat 1px 1px;display:inline-block;vertical-align:top}
@@ -92,7 +94,7 @@ td.datum,#sidebar_right td.datum{padding-left:0;padding-right:0;width:25px}
 table tr.even td.datum{background-color:transparent}
 td,th,td a{line-height:24px}
 td,th{padding-right:3px}
-td p{line-height:16px;margin:0;padding:0}
+td p{line-height:20px;margin:0;padding:0}
 .event_list td p{line-height:16px;padding:2px 0;margin-bottom:.8em}
 .context_list.event_list td p{margin-bottom:.4em}
 .event_list td,.event_list td a{line-height:22px}
@@ -113,7 +115,6 @@ a.stundenplan:hover{background:transparent url("../images/pdf_hover.png") no-rep
 .detail_info label:first-child{margin-top:0}
 ul.class_teachers{margin-top:.3em}
 ul.class_teachers li{padding-bottom:0}
-#content_main h1,#content_main h2{margin-top:0;margin-bottom:9px}
 #aktuell_container{float:right;width:230px;margin-left:14px;padding:0 10px;font-style:oblique;}
 #aktuell_container h1,#aktuell_container h2{font-size:1.3em}
 .home #content_main .inner{max-width:440px}
@@ -146,7 +147,7 @@ a.event_teaser_classlink{margin-left:1em}
 .align_right{text-align:right}
 img.service_logo{float:right;margin:0 1em 1em 2em}
 .not_found_page{border:1px solid #5e61a8;padding:1em}
-#aktuell_container,.events a.active,#content_main li em,#content_main h2,a:hover,#content_main h1,#content_main h2,.highlight{color:#5e61a8}
+#aktuell_container,.events a.active,#content_main h2,a:hover,#content_main h1,#content_main h2,.highlight{color:#5e61a8}
 .today{padding-left:3px;border:1px solid #999}
 #sidebar_right .links{margin-top:1.5em}
 #sidebar_right .links h2{margin-bottom:.3em}
