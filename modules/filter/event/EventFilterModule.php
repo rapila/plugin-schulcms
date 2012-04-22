@@ -10,6 +10,8 @@ class EventFilterModule extends FilterModule {
 	
 	const EVENT_REQUEST_KEY = 'event_detail';
 	const NAV_TITLE = "Alle ";
+	
+	const EVENT_FEED_ITEM = 'event-feed';
 
 	public function onNavigationItemChildrenRequested(NavigationItem $oNavigationItem) {
 		$mIdentifier = $oNavigationItem->getIdentifier();
@@ -17,6 +19,7 @@ class EventFilterModule extends FilterModule {
 			$mIdentifier = explode(self::EVENT_TYPE_SEPARATOR, $mIdentifier);
 		}
 		if($oNavigationItem instanceof PageNavigationItem) {
+			// if page identifier suffix is «events»
 			if(isset($mIdentifier[1]) && $mIdentifier[0] === SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS)) {
 				$aData = array('event_type' => $mIdentifier[1]);
 				$aYears = self::selectNames($aData, 'YEAR(DATE_START)');
@@ -27,21 +30,26 @@ class EventFilterModule extends FilterModule {
 				foreach(array_diff($aAllYears, $aYears) as $iYear) {
 					$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE.$iYear, null, array_merge($aData, array('year' => $iYear))));
 				}
+				
+				// add feed
+				$oFeedItem = new HiddenVirtualNavigationItem(self::EVENT_FEED_ITEM, 'feed', StringPeer::getString('wns.events.feed', null, 'Feed').' '.$oNavigationItem->getLinkText(), null, $mIdentifier[1]);
+				$oFeedItem->bIsIndexed = false; //Don’t index the feed item or else you’ll be exit()-ed before finishing the index
+				$oNavigationItem->addChild($oFeedItem);
 			}
 		} else if($oNavigationItem instanceof VirtualNavigationItem
-		          && $oNavigationItem->getType() === self::ITEM_EVENT_YEAR) {
+							&& $oNavigationItem->getType() === self::ITEM_EVENT_YEAR) {
 			$aData = $oNavigationItem->getData();
 			foreach(self::selectNames($aData, 'MONTH(DATE_START)') as $iMonth) {
 				$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_MONTH, $iMonth, $iMonth, null, array_merge($aData, array('month' => $iMonth))));
 			}
 		} else if($oNavigationItem instanceof VirtualNavigationItem
-		          && $oNavigationItem->getType() === self::ITEM_EVENT_MONTH) {
+							&& $oNavigationItem->getType() === self::ITEM_EVENT_MONTH) {
 			$aData = $oNavigationItem->getData();
 			foreach(self::selectNames($aData, 'DAY(DATE_START)') as $iDay) {
 				$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_DAY, $iDay, $iDay, null, array_merge($aData, array('day' => $iDay))));
 			}
 		} else if($oNavigationItem instanceof VirtualNavigationItem
-		          && $oNavigationItem->getType() === self::ITEM_EVENT_DAY) {
+							&& $oNavigationItem->getType() === self::ITEM_EVENT_DAY) {
 			$aData = $oNavigationItem->getData();
 			foreach(self::selectNames($aData, array(EventPeer::TITLE_NORMALIZED, EventPeer::TITLE)) as $oNames) {
 				$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT, $oNames->TITLE_NORMALIZED, $oNames->TITLE, null, array_merge($aData, array('title_normalized' => $oNames->TITLE_NORMALIZED))));
@@ -50,12 +58,31 @@ class EventFilterModule extends FilterModule {
 	}
 
 	public function onPageHasBeenSet($oPage, $bIsNotFound, $oNavigationItem) {
-		if($oNavigationItem instanceof VirtualNavigationItem && in_array($oNavigationItem->getType(), array(self::ITEM_EVENT_YEAR, self::ITEM_EVENT_MONTH, self::ITEM_EVENT_DAY, self::ITEM_EVENT))) {
-			if(self::selectNames($oNavigationItem->getData()) === 1) {
-				$aId = self::selectNames($oNavigationItem->getData(), EventPeer::ID);
-				$_REQUEST[self::EVENT_REQUEST_KEY] = (int) $aId[0];
+		$mIdentifier = $oPage->getIdentifier();
+		if($mIdentifier !== null) {
+			$mIdentifier = explode(self::EVENT_TYPE_SEPARATOR, $mIdentifier);
+		}
+		if(!isset($mIdentifier[1]) || $mIdentifier[0] !== SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS)) {
+			//Not a valid event page — return
+			return;
+		}
+		if($oNavigationItem instanceof VirtualNavigationItem) {
+			if($oNavigationItem->getType() === self::EVENT_FEED_ITEM) {
+				$oFeed = new EventsFileModule(null, $oNavigationItem, EventQuery::create()->filterBySchoolClassId(null)->filterByEventTypeId($oNavigationItem->getData()));
+				$oFeed->renderFile();exit;
+			} else {
+				if(self::selectNames($oNavigationItem->getData()) === 1) {
+					$aId = self::selectNames($oNavigationItem->getData(), EventPeer::ID);
+					$_REQUEST[self::EVENT_REQUEST_KEY] = (int) $aId[0];
+				}
 			}
 		}
+		$this->handleNewsFeed($oPage);
+	}
+	
+	public function handleNewsFeed($oPage) { 
+		$aLink = array_merge($oPage->getLink(), array('feed'));
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'location' => LinkUtil::link($aLink)));
 	}
 	
 	private static function selectNames($aData, $sColumn = null) {
