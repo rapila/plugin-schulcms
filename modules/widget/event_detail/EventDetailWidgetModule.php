@@ -102,7 +102,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 	  return $oEventDocument->save();
 	}
 	
-	private function validate($aEventData) {
+	private function validate($aEventData, $oEvent) {
 		$oFlash = Flash::getFlash();
 		$oFlash->setArrayToCheck($aEventData);
 		$oFlash->checkForValue('title', 'title_required');
@@ -112,8 +112,16 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		if($aEventData['is_active'] && $aEventData['date_start'] == null) {
 		  $oFlash->addMessage("date_start_required");
 		}
+		if($oExistingEvent = EventQuery::create()->filterByTitleNormalized($oEvent->getTitleNormalized())->findOne()) {
+		  if($oExistingEvent !== $oEvent
+		    && $oExistingEvent->getEventTypeId() === $oEvent->getEventTypeId()
+		    && $oExistingEvent->getDateStart('Y-m-d') === $oEvent->getDateStart('Y-m-d')) {
+		    $oFlash->addMessage("same_identity_not_permitted");
+		  }
+		}
 		$oFlash->finishReporting();
 	}
+	
 
 	public function saveData($aEventData) {
 		if($this->iEventId === null) {
@@ -121,18 +129,14 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		} else {
 		  $oEvent = EventQuery::create()->findPk($this->iEventId);
 		}
-		$oEvent->setTitle($aEventData['title']);
-		$oEvent->setTeaser($aEventData['teaser']);
-		$oEvent->setDateStart($aEventData['date_start']);
-		$oEvent->setEventTypeId($aEventData['event_type_id']);
-		$oEvent->setDateEnd($aEventData['date_end']);
-		$oEvent->setTimeDetails($aEventData['time_details']);
-		$oEvent->setLocationInfo($aEventData['location_info']);
+		ArrayUtil::trimStringsInArray($aEventData);
+		$oEvent->fromArray($aEventData, BasePeer::TYPE_FIELDNAME);
+		
 		$oEvent->setSchoolClassId($aEventData['school_class_id'] != null ? $aEventData['school_class_id'] : null);
 		if(isset($aEventData['service_id'])) {
   		$oEvent->setServiceId($aEventData['service_id'] != null ? $aEventData['service_id'] : null);
-		  
 		}
+		// track page, document and link references
 		$oRichtextUtil = new RichtextUtil();
 		$oRichtextUtil->setTrackReferences($oEvent);
 		
@@ -146,7 +150,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 			$sReview = null;
 		}
 		$oEvent->setBodyReview($sReview);
-		$this->validate($aEventData);
+		$this->validate($aEventData, $oEvent);
 		if(!Flash::noErrors()) {
 			throw new ValidationException();
 		}
