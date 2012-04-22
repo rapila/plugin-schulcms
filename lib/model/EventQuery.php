@@ -79,8 +79,8 @@ class EventQuery extends BaseEventQuery {
 	
 	public function filterbyHasImagesOrReview() {
 		$this->addJoin(EventPeer::ID, EventDocumentPeer::EVENT_ID, Criteria::LEFT_JOIN);
-		$oOrCriteria = $this->getNewCriterion(EventDocumentPeer::DOCUMENT_ID, NULL, Criteria::ISNOTNULL);
-		$oOrCriteria->addOr($this->getNewCriterion(EventPeer::BODY_REVIEW, null, Criteria::ISNOTNULL));
+		$oOrCriteria = $this->getNewCriterion(EventPeer::BODY_REVIEW, null, Criteria::ISNOTNULL);
+		$oOrCriteria->addOr($this->getNewCriterion(EventDocumentPeer::DOCUMENT_ID, NULL, Criteria::ISNOTNULL));
 		$this->add($oOrCriteria);
 		return $this;
 	}
