@@ -135,14 +135,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 			$oService = ServiceQuery::create()->findPk($this->iServiceId);
 		}
 		ArrayUtil::trimStringsInArray($aServiceData);
-		$oService->setName($aServiceData['name']);
-		$oService->setTeaser($aServiceData['teaser']);
-		$oService->setAddress($aServiceData['address']);
-		$oService->setWebsite($aServiceData['website']);
-		$oService->setLogoId($aServiceData['logo_id']);
-		$oService->setOpeningHours($aServiceData['opening_hours']);
-		$oService->setPhone($aServiceData['phone']);
-		$oService->setEmail($aServiceData['email']);
+		$oService->fromArray($aServiceData, BasePeer::TYPE_FIELDNAME);
 		$oService->setServiceCategoryId($aServiceData['service_category_id'] ? $aServiceData['service_category_id'] : null);
 		
 		$oRichtextUtil = new RichtextUtil();
