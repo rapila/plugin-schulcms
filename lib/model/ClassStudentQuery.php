@@ -20,7 +20,7 @@ class ClassStudentQuery extends BaseClassStudentQuery {
 	public function filterBySchoolYear($iYear = null) {
 	  $iYear = $iYear === null ? SchoolPeer::getSchool()->getCurrentYear() : $iYear;
 	  $this->distinct()->groupByStudentId();
-    $this->joinSchoolClass()->useQuery('SchoolClass')->filterByYear($iYear)->excludeClassTypesIfConfigured()->endUse();
+    $this->joinSchoolClass()->useQuery('SchoolClass')->filterByYear($iYear)->includeClassTypesIfConfigured()->endUse();
     return $this;
 	}
 }
