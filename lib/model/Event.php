@@ -72,10 +72,6 @@ class Event extends BaseEvent {
 	public function getDateStartFormatted($sFormat = 'Y.m.d') {
 		return $this->getDateStart($sFormat);
 	}
-	
-	public function getDateStartTimeStamp() {
-		return $this->date_start;
-	}
 
 	public function isEventDocument($iDocumentId) {
 		$iDocumentId = (int) $iDocumentId;
@@ -161,9 +157,16 @@ class Event extends BaseEvent {
 		}
 		$aResult['author'] = $this->getUserRelatedByCreatedBy()->getEmail().' ('.$this->getUserRelatedByCreatedBy()->getFullName().')';
 		$aResult['guid'] = $aResult['link'];
-		$aResult['pubDate'] = date(DATE_RSS, (int)$this->getUpdatedAtTimestamp());
+		$aResult['pubDate'] = date(DATE_RSS, (int)$this->getDateStartTimeStamp());
 		$aResult['category'] = $this->getEventType()->getName();
 		return $aResult;
 	}
+	
+	public function getDateStartTimeStamp() {
+		return (int)$this->getDateStart('U');
+		// why not return $this->date_start;
+	}
+	
+	
 
 }
