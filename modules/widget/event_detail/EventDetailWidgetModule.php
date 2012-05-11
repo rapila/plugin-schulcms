@@ -121,7 +121,6 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		}
 		$oFlash->finishReporting();
 	}
-	
 
 	public function saveData($aEventData) {
 		if($this->iEventId === null) {
@@ -142,6 +141,9 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		
 		// Text Hinweis
 		$sPreview = $oRichtextUtil->parseInputFromEditor($aEventData['body_preview']);
+		if(trim($sPreview) == '') {
+		  $sPreview = null;
+		}
 		$oEvent->setBodyPreview($sPreview);
 		
 		// Text Bericht
