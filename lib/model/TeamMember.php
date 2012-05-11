@@ -56,7 +56,7 @@ class TeamMember extends BaseTeamMember {
 	  $oQuery = ClassTeacherQuery::create();
 		$oQuery->orderByIsClassTeacher(Criteria::DESC);
 		if($bGroupByUnitName) {
-			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->excludeClassTypesIfConfigured()->groupByUnitName()->orderByName()->endUse();
+			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->includeClassTypesIfConfigured()->groupByUnitName()->orderByName()->endUse();
 		} else {
 			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->orderByName()->endUse();
 		}
