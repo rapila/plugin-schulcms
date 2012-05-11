@@ -2,7 +2,7 @@
 
 
 /**
- * @package    propel.generator.model
+ * @package		 propel.generator.model
  */
 class SchoolClassQuery extends BaseSchoolClassQuery {
 	
@@ -15,11 +15,11 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 		return $this->distinct();
 	}
 	
-	public function excludeClassTypesIfConfigured() {
-    $mExcludeClassTypes = Settings::getSetting("school_settings", 'exclude_class_types', null);
-    if($mExcludeClassTypes !== null) {
-		  $ExcludeClassTypes = is_array($mExcludeClassTypes) ? $mExcludeClassTypes : array($mExcludeClassTypes);
-		  $this->filterByClassTypeId($ExcludeClassTypes, Criteria::NOT_IN);
+	public function includeClassTypesIfConfigured() {
+		$mIncludeClassTypes = Settings::getSetting("school_settings", 'include_class_types', null);
+		if($mIncludeClassTypes !== null) {
+			$mIncludeClassTypes = is_array($mIncludeClassTypes) ? $mIncludeClassTypes : array($mIncludeClassTypes);
+			$this->filterByClassTypeId($mIncludeClassTypes, Criteria::IN);
 		}
 		return $this;
 	}
@@ -30,9 +30,9 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 			throw new Exception(__METHOD__.' valid school object required. Please check ***REMOVED*** configuration or ***REMOVED***Sync');
 		}
 		$iYear = $iYear === null ? $oSchool->getCurrentYear() : $iYear;
-		$this->filterBySchool($oSchool)->distinct()->orderByName()->excludeClassTypesIfConfigured()->filterByYear($iYear);
+		$this->filterBySchool($oSchool)->distinct()->orderByName()->includeClassTypesIfConfigured()->filterByYear($iYear);
 		if($iClassTypeId) {
-		  $this->filterByClassTypeId($iClassTypeId);
+			$this->filterByClassTypeId($iClassTypeId);
 		}
 		$this->groupByUnitName()->joinClassStudent();
 		return $this;
