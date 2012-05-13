@@ -82,9 +82,7 @@ class ServicesFrontendModule extends FrontendModule {
 			$oTemplate->replaceIdentifier('body', RichtextUtil::parseStorageForFrontendOutput(stream_get_contents(self::$SERVICE->getBody())));
 		}
 		$oTemplate->replaceIdentifier('list_link', $oPage->getFullPathArray());
-		$oPortraitTemplate = $this->constructTemplate('portraits');
-		$this->setPortraits($oPortraitTemplate);
-		$oTemplate->replaceIdentifier('portraits', $oPortraitTemplate);
+		$oTemplate->replaceIdentifier('portraits', $this->addPortraits());
 		return $oTemplate;
 	}
 	
@@ -170,15 +168,22 @@ class ServicesFrontendModule extends FrontendModule {
 			return;
 		}
 		$oTemplate = $this->constructTemplate('portraits');
-		$this->setPortraits($oTemplate);
+		$this->addPortraits($oTemplate);
 		return $oTemplate;
 	}
 	
-	private function setPortraits($oTemplate, $iWidth = 150) {
+	private function addPortraits($oTemplate=null, $iWidth = 150) {
 		$oCriteria = new Criteria();
 		$oCriteria->addJoin(ServiceMemberPeer::TEAM_MEMBER_ID, TeamMemberPeer::ID, Criteria::INNER_JOIN);
 		$oCriteria->add(TeamMemberPeer::PORTRAIT_ID, null, Criteria::ISNOTNULL);
 		$oCriteria->addAscendingOrderByColumn(ServiceMemberPeer::SORT);
+		$aServiceMembers = self::$SERVICE->getServiceMembers($oCriteria);
+		if(count($aServiceMembers) === 0) {
+		  return $oTemplate;
+		}
+		if($oTemplate === null) {
+		  $oTemplate = $this->constructTemplate('portraits');
+		}
 		foreach(self::$SERVICE->getServiceMembers($oCriteria) as $oServiceMember) {
 			if($oServiceMember->getTeamMember()->getDocument()) {
 				$oPortraitTemplate = $this->constructTemplate('portrait_item');
@@ -188,6 +193,7 @@ class ServicesFrontendModule extends FrontendModule {
 				$oTemplate->replaceIdentifierMultiple('portrait', $oPortraitTemplate);
 			}
 		}
+		return $oTemplate;
 	}
 	
 	public function listQuery() {
