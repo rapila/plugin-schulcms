@@ -49,7 +49,7 @@ ul#main_navigation.outside{top:5px}
 #blackboard_text{margin-top:20px;margin-left:218px;color:#e6e4cc;height:80px;vertical-align:middle}
 #blackboard_text p{color:#e6e4cc;line-height:1.2em;font-size:2.6em;vertical-align:middle}
 #blackboard_text a.blackboard_more_link{font-size:.6em}
-img.blackboard_image{float:right;width:194px;margin:-20px 0 0 10px}
+img.blackboard_image{float:right;width:194px;margin:-20px 0 0 10px;min-height:142px}
 #spacer{height:75px}
 ul#secondary_navigation{margin-top:142px}
 ul#meta_navigation li a,ul#meta_navigation li span,ul#main_navigation li a,ul#main_navigation li span,ul#secondary_navigation li a,ul#secondary_navigation li span{text-transform:uppercase;letter-spacing:.08em;font-size:1.3em;line-height:1.4em;color:#fff}
