@@ -25,15 +25,13 @@ class NoteListWidgetModule extends WidgetModule {
 	}
 	
 	public function getMetadataForColumn($sColumnIdentifier) {
-	  $aResult = array();
+		$aResult = array('is_sortable' => true);
 		switch($sColumnIdentifier) {
 			case 'date_start_formatted':
 				$aResult['heading'] = StringPeer::getString('wns.note.date');
-				$aResult['sortable'] = true;
 				break;			
 			case 'date_end_formatted':
 				$aResult['heading'] = StringPeer::getString('wns.note.date_to');
-				$aResult['sortable'] = true;
 				break;
 			case 'body_truncated':
 				$aResult['heading'] = StringPeer::getString('wns.note.body');
@@ -44,14 +42,15 @@ class NoteListWidgetModule extends WidgetModule {
 			case 'has_image':
 				$aResult['heading'] = StringPeer::getString('wns.note.has_image');
 				break;
+				$aResult['is_sortable'] = false;
 			case 'is_inactive':
 				$aResult['heading'] = StringPeer::getString('wns.note.is_inactive');
-				$aResult['sortable'] = true;
 				break;
 			case 'delete':
 				$aResult['heading'] = ' ';
 				$aResult['display_type'] = ListWidgetModule::DISPLAY_TYPE_ICON;
 				$aResult['field_name'] = 'trash';
+				$aResult['is_sortable'] = false;
 				break;
 		}
 		return $aResult;
@@ -60,6 +59,30 @@ class NoteListWidgetModule extends WidgetModule {
 	public function getTypeHasNotes($iNoteTypeId) {
 		return NoteQuery::create()->filterByNoteTypeId($iNoteTypeId)->count() > 0;
 	}
+	
+	public function getNoteTypeName() {
+		$oNoteType = NoteTypeQuery::create()->findPk($this->oDelegateProxy->getNoteTypeId());
+		if($oNoteType) {
+			return $oNoteType->getName();
+		}
+		if($this->oDelegateProxy->getNoteTypeId() === CriteriaListWidgetDelegate::SELECT_WITHOUT) {
+			return StringPeer::getString('wns.notes.without_note_type');
+		}
+		return $this->oDelegateProxy->getNoteTypeId();
+	}
+	
+	public function getDatabaseColumnForColumn($sColumnIdentifier) {
+		if($sColumnIdentifier === 'body_truncated') {
+			return NotePeer::BODY;
+		}		
+		if($sColumnIdentifier === 'has_image') {
+			return NotePeer::IMAGE_ID;
+		}		
+		if($sColumnIdentifier === 'note_type_name') {
+			return NoteTypePeer::NAME;
+		}
+		return null;
+	}
 
 	public function getFilterTypeForColumn($sColumnIdentifier) {
 		if($sColumnIdentifier === 'note_type_id') {
@@ -67,5 +90,4 @@ class NoteListWidgetModule extends WidgetModule {
 		}
 		return null;
 	}
-
 }
