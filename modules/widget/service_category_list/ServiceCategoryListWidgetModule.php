@@ -29,7 +29,7 @@ class ServiceCategoryListWidgetModule extends WidgetModule {
 		switch($sColumnIdentifier) {
 			case 'name':
 				$aResult['heading'] = StringPeer::getString('wns.name');
-				$aResult['sortable'] = true;
+				$aResult['is_sortable'] = true;
 				break;
 			case 'link_to_services':
 				$aResult['heading'] = StringPeer::getString('wns.service_category.services');
