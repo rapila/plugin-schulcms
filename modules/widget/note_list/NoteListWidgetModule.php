@@ -32,12 +32,14 @@ class NoteListWidgetModule extends WidgetModule {
 				break;			
 			case 'date_end_formatted':
 				$aResult['heading'] = StringPeer::getString('wns.note.date_to');
+				$aResult['is_sortable'] = false;
 				break;
 			case 'body_truncated':
 				$aResult['heading'] = StringPeer::getString('wns.note.body');
 				break;
 			case 'note_type_name':
 				$aResult['heading'] = StringPeer::getString('wns.note.type');
+				$aResult['is_sortable'] = false;
 				break;
 			case 'has_image':
 				$aResult['heading'] = StringPeer::getString('wns.note.has_image');
@@ -72,14 +74,14 @@ class NoteListWidgetModule extends WidgetModule {
 	}
 	
 	public function getDatabaseColumnForColumn($sColumnIdentifier) {
+		if($sColumnIdentifier === 'date_start_formatted') {
+			return NotePeer::DATE_START;
+		}			
 		if($sColumnIdentifier === 'body_truncated') {
 			return NotePeer::BODY;
 		}		
 		if($sColumnIdentifier === 'has_image') {
 			return NotePeer::IMAGE_ID;
-		}		
-		if($sColumnIdentifier === 'note_type_name') {
-			return NoteTypePeer::NAME;
 		}
 		return null;
 	}
