@@ -147,6 +147,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			if($oEventDocument->getDocument()->isImage()) {
   			$oDocumentTemplate = clone $oTemplateProtoType;
   			$oDocumentTemplate->replaceIdentifier('event_id', $oEvent->getId());
+  			$oDocumentTemplate->replaceIdentifier('description', $oEventDocument->getDocument()->getDescription());
 			} else {
 			  $oDocumentTemplate = new Template('lists/document_list_item');
 			}

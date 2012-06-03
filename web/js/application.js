@@ -4,10 +4,13 @@ jQuery(document).ready(function(){
 		this.href = this.href.replace('&', '&amp;');
 	}).prettyPhoto({
 		social_tools: false,
-		deeplinking: false,
+		deeplinking: true,
+		opacity: 0.60,
 		showTitle: true,
-		theme: 'facebook',
+		/* 'pp_default' / light_rounded / dark_rounded / light_square / dark_square / facebook */
+		theme: 'pp_default',
 		overlay_gallery: false,
-		allowresize: true
+		allow_resize: true
 	});
 });
+
