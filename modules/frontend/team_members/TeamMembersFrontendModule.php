@@ -59,10 +59,10 @@ class TeamMembersFrontendModule extends FrontendModule {
 			if(count($aClassTeachers) > 0) {
 				foreach($aClassTeachers as $i => $oClassTeacher) {
 					if($i > 0) {
-						$oItemTemplate->replaceIdentifierMultiple('school_class', ', ');
+						$oItemTemplate->replaceIdentifierMultiple('school_class', ', ', null, Template::NO_NEWLINE);
 					}
 					$aLink = $oClassTeacher->getSchoolClass()->getClassLink($this->oClassPage);
-					$oItemTemplate->replaceIdentifierMultiple('school_class', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.class.link_title_prefix').$oClassTeacher->getSchoolClass()->getName(), 'href' => LinkUtil::link($aLink)), $oClassTeacher->getSchoolClass()->getName()));
+					$oItemTemplate->replaceIdentifierMultiple('school_class', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.class.link_title_prefix').$oClassTeacher->getSchoolClass()->getName(), 'href' => LinkUtil::link($aLink)), $oClassTeacher->getSchoolClass()->getName()), null, Template::NO_NEWLINE);
 				}
 			} else {
 				$oItemTemplate->replaceIdentifier('school_class', '-');
