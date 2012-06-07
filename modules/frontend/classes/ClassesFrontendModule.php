@@ -76,7 +76,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
     				}
     				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => $oClassTeacher->getTeamMember()->getFullName().$sFunctionAddon, 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug())))), $oClassTeacher->getTeamMember()->getFullNameShort()));
     				if($i < $iCountMax-1) {
-    					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ');
+    					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ', null, Template::NO_NEWLINE);
     				}
 			  }
 			  $iPreviousTeamMemberId = $oClassTeacher->getTeamMemberId();

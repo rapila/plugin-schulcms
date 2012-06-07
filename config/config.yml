@@ -48,6 +48,9 @@ school_settings:
     
   # optional subpage identifiers used in SchoolFilter for the virtual navigation items
   subpages_classes_identifiers: []
+  
+  # display image name allows to hide meaningless names from automatic upload
+  gallery_display_image_name: true
 
 
 # example navigation like in pilote project ***REMOVED***
