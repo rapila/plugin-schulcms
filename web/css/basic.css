@@ -170,8 +170,8 @@ a.event_service_link{margin:.5em 0;display:block;padding-left:19px;line-height:2
 body.klassen h1 a{padding-top:3px;display:inline-block;width:20px;background:url("../images/classes.png") transparent 0 4px no-repeat}
 body.klassen h1 a:hover{background:url("../images/back_to_list.png") transparent 0 4px no-repeat}
 a.more_link,a.blackboard_more_link{font-style:oblique}
-a.more_link{display:inline-block;line-height:inherit;min-width:22px;height:15px;background:transparent url("../images/more_icon.png") no-repeat left 0}
-a.more_link:hover{background-position:left -18px}
+a.more_link{display:inline-block;line-height:inherit;min-width:27px;height:15px;background:transparent url("../images/more_icon.png") no-repeat 3px 0}
+a.more_link:hover{background-position:3px -18px}
 iframe{border:0}
 #ajax_loader{display:none}
 .service_documents a{padding-top:2px}
