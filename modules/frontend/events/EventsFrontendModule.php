@@ -153,12 +153,13 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			if($oEventDocument->getDocument()->isImage()) {
   			$oDocumentTemplate = clone $oTemplateProtoType;
   			$oDocumentTemplate->replaceIdentifier('event_id', $oEvent->getId());
+				$mDescription = null;
 				if($oEventDocument->getDocument()->getDescription() != null) {
-					$oDescription = $oEventDocument->getDocument()->getDescription();
+					$mDescription = $oEventDocument->getDocument()->getDescription();
 				} elseif(Settings::getSetting('school_settings', 'gallery_display_image_name', true)) {
-					$oDescription = $oEventDocument->getDocument()->getName();
+					$mDescription = $oEventDocument->getDocument()->getName();
 				}
-  			$oDocumentTemplate->replaceIdentifier('description', $oDescription);
+  			$oDocumentTemplate->replaceIdentifier('description', $mDescription);
 			} else {
 			  $oDocumentTemplate = new Template('lists/document_list_item');
 			}
