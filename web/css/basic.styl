@@ -25,12 +25,13 @@ a
 	background: none
 	padding-right: 0
 
-#sidebar_right .inner h2 a, #sidebar_right .inner h2 a:hover
-	color: #FFFFFF
+#sidebar_right h2 a.class_home, #sidebar_right h2 a.class_home:hover
 	display: block
 	background: url('../images/home_context.png') transparent right center no-repeat
+#sidebar_right h2 a
+	color: #FFFFFF
 
-#sidebar_right .inner h2 a:hover
+#sidebar_right h2 a.class_home:hover
 	background: url('../images/home_context_hover.png') transparent right center no-repeat
 
 a.close_detail, a.close_detail:hover
@@ -463,16 +464,15 @@ td p
 	margin-bottom: .8em
 
 .context_list.event_list td p
-	margin-bottom: .4em
+	margin-bottom: .8em
 
 .event_list td, .event_list td a
-	line-height: 22px
+	line-height: 18px
 	
 .event_list.context_list .event_title a
 	line-height: 17px
-	padding-top: 4px
+	padding-top: 3px
 	padding-bottom: 3px
-	display: block
 
 td.event_title
 	padding-left:3px
@@ -523,7 +523,8 @@ a.stundenplan:hover
 .detail_info a.stundenplan
 	display: inline-block
 
-.detail_info label, #sidebar_right h4
+.detail_info label, 
+#sidebar_right h4
 	margin: 0
 	padding: 0
 	font-weight: normal
@@ -779,6 +780,15 @@ body.klassen h1 a:hover
 a.more_link,
 a.blackboard_more_link
 	font-style: oblique
+	
+a.more_link
+	display inline-block
+	line-height inherit
+	min-width 22px
+	height 15px
+	background transparent url(../images/more_icon.png) no-repeat left 0px
+a.more_link:hover
+	background-position left -18px
 
 iframe
 	border: 0

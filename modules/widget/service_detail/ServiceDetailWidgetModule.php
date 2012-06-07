@@ -91,7 +91,6 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 	    $this->aUnsavedDocuments[] = $iDocumentId;
 	    return;
 	  }
-		ErrorHandler::log('addServiceDocument', $this->iServiceId, $iDocumentId);
 	  if(ServiceDocumentQuery::create()->findPk(array($this->iServiceId, $iDocumentId))) {
 	    return;
 	  }

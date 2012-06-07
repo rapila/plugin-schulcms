@@ -44,6 +44,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			}
 			$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$this->iEventTypeId));
 			$oTemplate = $this->constructTemplate('list_context');
+			$oTemplate->replaceIdentifier('event_link', LinkUtil::link($oPage->getLink()));
 			$oItemTempl = $this->constructTemplate('list_item_context');
 		}
 		$oEventQuery->orderByDateStart();
@@ -96,6 +97,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$oTemplate = $this->constructTemplate('detail');
 		
+		// display body depending on context
 		$sBody = null;
 		if (self::$EVENT->hasBericht()) {
 			$sReviewContent = stream_get_contents(self::$EVENT->getBodyReview());
@@ -103,6 +105,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 				$sBody = RichtextUtil::parseStorageForFrontendOutput($sReviewContent);			
 			}
 		} 
+		// if no bericht, get body preview
 		if ($sBody === null && self::$EVENT->getBodyPreview()) {
 			$sContent = stream_get_contents(self::$EVENT->getBodyPreview());
 			if($sContent != '') {
@@ -110,12 +113,15 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			}
 		}
 
-		$oTemplate->replaceIdentifier('body', $sBody);
 		$oTemplate->replaceIdentifier('list_link', LinkUtil::link($oPage->getFullPathArray()));
 		$oTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
 		if(self::$EVENT->isPreview()) {
   		$oTemplate->replaceIdentifier('teaser', self::$EVENT->getTeaser());
+		} else if($sBody == null) {
+			// if no body is given, display teaser
+			$sBody = self::$EVENT->getTeaser();
 		}
+		$oTemplate->replaceIdentifier('body', $sBody);
 		if(self::$EVENT->getDateEnd() == null) {
 			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getWeekdayName().', '.self::$EVENT->getDatumWithMonthName());
 		} else {
@@ -149,7 +155,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
   			$oDocumentTemplate->replaceIdentifier('event_id', $oEvent->getId());
 				if($oEventDocument->getDocument()->getDescription() != null) {
 					$oDescription = $oEventDocument->getDocument()->getDescription();
-				} else {
+				} elseif(Settings::getSetting('school_settings', 'gallery_display_image_name', true)) {
 					$oDescription = $oEventDocument->getDocument()->getName();
 				}
   			$oDocumentTemplate->replaceIdentifier('description', $oDescription);

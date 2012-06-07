@@ -104,6 +104,7 @@ class TeamMembersFrontendModule extends FrontendModule {
 			}
 		}
 		$aTeamMemberFunctions = self::$TEAM_MEMBER->getTeamMemberFunctions();
+
 		if(count($aTeamMemberFunctions) > 0) {
 			foreach($aTeamMemberFunctions as $oTeamMemberFunction) {
 				$oItemTemplate = $this->constructTemplate('function_item');
