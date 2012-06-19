@@ -25,10 +25,8 @@ class ServicePeer extends BaseServicePeer {
 		$aTeamMembers = $oUser->getTeamMembersRelatedByUserId();
 		if(isset($aTeamMembers[0])) {
 			foreach($aTeamMembers[0]->getServiceMembers() as $oServiceMember) {
-				if($oServiceMember->getServiceId() === $mObject->getServiceId()) {
-					if(ServicePeer::mayOperateOn($oUser, $mObject->getService(), $sOperation)) {
-						return true;
-					}
+				if($oServiceMember->getServiceId() === $mObject->getId()) {
+					return true;
 				}
 			}
 		}
