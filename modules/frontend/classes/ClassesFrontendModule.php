@@ -92,7 +92,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 	
 	public function renderKlassenDetail() {
 		if(isset($_REQUEST[self::DETAIL_IDENTIFIER_EVENT])) {
-			self::$EVENT = EventPeer::retrieveByPK($_REQUEST[self::DETAIL_IDENTIFIER_EVENT]);
+			self::$EVENT = EventQuery::create()->findPk($_REQUEST[self::DETAIL_IDENTIFIER_EVENT]);
 			if(self::$EVENT) {
 				return $this->renderClassEvent();
 			}

@@ -11,7 +11,7 @@ class ServiceCategoryDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function serviceCategoryData() {
-		$oServiceCategory = ServiceCategoryPeer::retrieveByPK($this->iCategoryId);
+		$oServiceCategory = ServiceCategoryQuery::create()->findPk($this->iCategoryId);
 		$aResult = $oServiceCategory->toArray(BasePeer::TYPE_PHPNAME, false);
 		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oServiceCategory);
 		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oServiceCategory);
@@ -29,7 +29,7 @@ class ServiceCategoryDetailWidgetModule extends PersistentWidgetModule {
 		if($this->iCategoryId === null) {
 			$oCategory = new ServiceCategoryData();
 		} else {
-			$oCategory = ServiceCategoryPeer::retrieveByPK($this->iCategoryId);
+			$oCategory = ServiceCategoryQuery::create()->findPk($this->iCategoryId);
 		}
 		$oCategory->setName($aServiceCategoryData['name']);
     $this->validate($aServiceCategoryData);

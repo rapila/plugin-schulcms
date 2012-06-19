@@ -90,7 +90,7 @@ class TeamMemberListWidgetModule extends WidgetModule {
 
 	public function getFunctionGroupName() {
 		if($this->iFunctionGroupId !== CriteriaListWidgetDelegate::SELECT_ALL) {
-			$oFunctionGroup = FunctionGroupPeer::retrieveByPK($this->iFunctionGroupId);
+			$oFunctionGroup = FunctionGroupQuery::create()->findPk($this->iFunctionGroupId);
 			if($oFunctionGroup) {
 				return $oFunctionGroup->getName();
 			}

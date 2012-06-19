@@ -109,7 +109,7 @@ class EventListWidgetModule extends WidgetModule {
 	}
 	
   public function toggleIsActive($aRowData) {
-		$oService = EventPeer::retrieveByPK($aRowData['id']);
+		$oService = EventQuery::create()->findPk($aRowData['id']);
 		if($oService) {
 			$oService->setIsActive(!$oService->getIsActive());
 			return $oService->save();
@@ -118,7 +118,7 @@ class EventListWidgetModule extends WidgetModule {
 	}
 	
   public function toggleIgnoreOnFrontpage($aRowData) {
-		$oEvent = EventPeer::retrieveByPK($aRowData['id']);
+		$oEvent = EventQuery::create()->findPk($aRowData['id']);
 		if($oEvent && $oEvent->getIsActive()) {
 			$oEvent->setIgnoreOnFrontpage(!$oEvent->getIgnoreOnFrontpage());
 			return $oEvent->save();
@@ -128,7 +128,7 @@ class EventListWidgetModule extends WidgetModule {
 	
 	public function getEventTypeName() {
 		if($this->oDelegateProxy->getEventTypeId() !== CriteriaListWidgetDelegate::SELECT_ALL) {
-			$oEventType = EventTypePeer::retrieveByPK($this->oDelegateProxy->getEventTypeId());
+			$oEventType = EventTypeQuery::create()->findPk($this->oDelegateProxy->getEventTypeId());
 			if($oEventType) {
 				return $oEventType->getName();
 			}

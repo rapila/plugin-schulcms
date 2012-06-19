@@ -124,7 +124,7 @@ class ClassListWidgetModule extends WidgetModule {
 		if($this->oDelegateProxy->getClassTypeId() === CriteriaListWidgetDelegate::SELECT_ALL) {
 			return null;
 		}
-		$oClassType = ClassTypePeer::retrieveByPK($this->oDelegateProxy->getClassTypeId());
+		$oClassType = ClassTypeQuery::create()->findPk($this->oDelegateProxy->getClassTypeId());
 		return $oClassType->getName();
 	}
 

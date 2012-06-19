@@ -11,7 +11,7 @@ class NoteTypeDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function getNoteTypeData() {
-		$oNoteType = NoteTypePeer::retrieveByPK($this->iNoteTypeId);
+		$oNoteType = NoteTypeQuery::create()->findPk($this->iNoteTypeId);
 		$aResult = $oNoteType->toArray(BasePeer::TYPE_PHPNAME, false);
 		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oNoteType);
 		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oNoteType);
@@ -29,7 +29,7 @@ class NoteTypeDetailWidgetModule extends PersistentWidgetModule {
 		if($this->iNoteTypeId === null) {
 			$oNoteType = new NoteType();
 		} else {
-			$oNoteType = NoteTypePeer::retrieveByPK($this->iNoteTypeId);
+			$oNoteType = NoteTypeQuery::create()->findPk($this->iNoteTypeId);
 		}
 		$oNoteType->setName($aNoteTypeData['name']);
     $this->validate($aNoteTypeData);

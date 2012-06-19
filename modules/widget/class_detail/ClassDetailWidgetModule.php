@@ -39,7 +39,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function schoolClassData() {
-		$oSchoolClass = SchoolClassPeer::retrieveByPK($this->iSchoolClassId);
+		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
 		if($oSchoolClass === null) {
 			return array();
 		}
@@ -52,9 +52,9 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function removeEvent($iEventId) {
-		$oSchoolClass = SchoolClassPeer::retrieveByPK($this->iSchoolClassId);
+		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
 		if($oSchoolClass->isClassEvent($iEventId)) {
-			$oEvent = EventPeer::retrieveByPK($iEventId);
+			$oEvent = EventQuery::create()->findPk($iEventId);
 			if($oEvent) {
 				return $oEvent->delete();
 			}
@@ -63,9 +63,9 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function removeLink($iLinkId) {
-		$oSchoolClass = SchoolClassPeer::retrieveByPK($this->iSchoolClassId);
+		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
 		if($oSchoolClass->isClassLink($iLinkId)) {
-			$oLink = LinkPeer::retrieveByPK($iLinkId);
+			$oLink = LinkQuery::create()->findPk($iLinkId);
 			if($oLink) {
 				return $oLink->delete();
 			}
@@ -74,7 +74,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function addClassLink($iLinkId = null) {
-	  if(ClassLinkPeer::retrieveByPK($this->iSchoolClassId, $iLinkId)) {
+	  if(ClassLinkQuery::create()->findPk(array($this->iSchoolClassId, $iLinkId))) {
 	    return;
 	  }
 		ClassLinkPeer::ignoreRights(true);
@@ -86,7 +86,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 	
 	public function listEvents() {
 		$aResult = array();
-		$oSchoolClass = SchoolClassPeer::retrieveByPK($this->iSchoolClassId);
+		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
 		foreach($oSchoolClass->getEvents() as $oEvent) {
 			$aResult[$oEvent->getId()]['Date'] = $oEvent->getDateStart('d.m.Y');
 			$aResult[$oEvent->getId()]['Title'] = $oEvent->getTitle();
@@ -98,7 +98,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function listLinks() {
-		$oSchoolClass = SchoolClassPeer::retrieveByPK($this->iSchoolClassId);
+		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
 		$oCriteria = new Criteria();
 		$oCriteria->addAscendingOrderByColumn(LinkPeer::NAME);
 		$aResult = array();
@@ -110,7 +110,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function saveData($aSchoolClassData) {
-		$oSchoolClass = SchoolClassPeer::retrieveByPK($this->iSchoolClassId);
+		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
 		$oSchoolClass->setClassPortraitId($aSchoolClassData['class_portrait_id']);
 		$oSchoolClass->setClassScheduleId($aSchoolClassData['class_schedule_id']);
 		$oSchoolClass->setWeekScheduleId($aSchoolClassData['week_schedule_id']);

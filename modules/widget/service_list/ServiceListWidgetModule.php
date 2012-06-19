@@ -74,7 +74,7 @@ class ServiceListWidgetModule extends WidgetModule {
 	}
 	
   public function toggleIsActive($aRowData) {
-		$oService = ServicePeer::retrieveByPK($aRowData['id']);
+		$oService = ServiceQuery::create()->findPk($aRowData['id']);
 		if($oService) {
 			$oService->setIsActive(!$oService->getIsActive());
 			return $oService->save();
@@ -88,7 +88,7 @@ class ServiceListWidgetModule extends WidgetModule {
 	
 	public function getServiceCategoryName() {
 		if($this->oDelegateProxy->getServiceCategoryId() !== CriteriaListWidgetDelegate::SELECT_ALL) {
-			$oServiceCategory = ServiceCategoryPeer::retrieveByPK($this->oDelegateProxy->getServiceCategoryId());
+			$oServiceCategory = ServiceCategoryQuery::create()->findPk($this->oDelegateProxy->getServiceCategoryId());
 			if($oServiceCategory !== null) {
 				return $oServiceCategory->getName();
 			}

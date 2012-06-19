@@ -25,7 +25,7 @@ class ServicesFrontendModule extends FrontendModule {
 		$this->aServiceCategoryIds = @$aOptions[self::SERVICE_CATEGORY_IDS];
 		$iServiceId = @$aOptions['service_id'];
 		if($iServiceId) {
-			self::$SERVICE = ServicePeer::retrieveByPK($iServiceId);
+			self::$SERVICE = ServiceQuery::create()->findPk($iServiceId);
 		}
 
 		switch($aOptions[self::MODE_SELECT_KEY]) {

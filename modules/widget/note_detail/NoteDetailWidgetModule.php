@@ -25,7 +25,7 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function noteData() {
-		$oNote = NotePeer::retrieveByPK($this->iNoteId);
+		$oNote = NoteQuery::create()->findPk($this->iNoteId);
 		if($oNote === null) {
 			return array();
 		}
@@ -54,7 +54,7 @@ class NoteDetailWidgetModule extends PersistentWidgetModule {
 		if($this->iNoteId === null) {
 			$oNote = new Note();
 		} else {
-		  $oNote = NotePeer::retrieveByPK($this->iNoteId);
+		  $oNote = NoteQuery::create()->findPk($this->iNoteId);
 		}
 		$sDateStart = $aNoteData['date_start'];
 		if($sDateStart == '') {

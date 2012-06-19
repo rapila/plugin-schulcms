@@ -20,7 +20,7 @@ class TeamMemberDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function teamMemberData() {
-		$oTeamMember = TeamMemberPeer::retrieveByPK($this->iTeamMemberId);
+		$oTeamMember = TeamMemberQuery::create()->findPk($this->iTeamMemberId);
 		if($oTeamMember === null) {
 			return array();
 		}
@@ -36,7 +36,7 @@ class TeamMemberDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function inviteUser() {
-		$oTeamMember = TeamMemberPeer::retrieveByPK($this->iTeamMemberId);
+		$oTeamMember = TeamMemberQuery::create()->findPk($this->iTeamMemberId);
 		$oUser = $oTeamMember->getUserRelatedByUserId();
 		$sEmail = $oUser->getEmail();
 		$sPassword = PasswordHash::generatePassword();
@@ -58,7 +58,7 @@ class TeamMemberDetailWidgetModule extends PersistentWidgetModule {
 	}
 	
 	public function saveData($aTeamMemberData) {
-		$oTeamMember = TeamMemberPeer::retrieveByPK($this->iTeamMemberId);
+		$oTeamMember = TeamMemberQuery::create()->findPk($this->iTeamMemberId);
 		$oTeamMember->setPortraitId($aTeamMemberData['portrait_id']);
 		return $oTeamMember->save();
 	}
