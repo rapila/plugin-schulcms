@@ -80,9 +80,9 @@ class SchoolClassFilterModule extends FilterModule {
 		}
 	}
 	
-	public function onOperationIsDenied($sOperation, $oOnObject, $oUser, $aContainer) {
+	public function onLinkOperationCheck($sOperation, $oOnObject, $oUser, $aContainer) {
 		$bIsAllowed = &$aContainer[0];
-		if(!($oOnObject instanceof Link)) {
+		if($bIsAllowed) {
 			return;
 		}
 		if($oOnObject->getLinkCategoryId() !== SchoolPeer::getLinkCategoryConfig('school_class_links')) {

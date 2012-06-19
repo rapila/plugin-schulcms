@@ -41,9 +41,9 @@ class ServiceFilterModule extends FilterModule {
 		}
 	}	
 	
-	public function onOperationIsDenied($sOperation, $oOnObject, $oUser, $aContainer) {
+	public function onDocumentOperationCheck($sOperation, $oOnObject, $oUser, $aContainer) {
 		$bIsAllowed = &$aContainer[0];
-		if(!($oOnObject instanceof Document)) {
+		if($bIsAllowed) {
 			return;
 		}
 		if($oOnObject->getDocumentCategoryId() !== SchoolPeer::getDocumentCategoryConfig('service_documents')) {
@@ -60,5 +60,4 @@ class ServiceFilterModule extends FilterModule {
 		}
 		$bIsAllowed = $oServiceDocument[0]->mayOperate($sOperation, $oUser);
 	}
-
 }
