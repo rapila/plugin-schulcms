@@ -20,7 +20,7 @@ class EventPeer extends BaseEventPeer {
 			$oCriteria->add(self::EVENT_TYPE_ID, $iEventType);
 		}
 		$oCriteria->addSelectColumn('YEAR(' . self::DATE_START . ') AS Year');
-		$oCriteria->addAscendingOrderByColumn('year');
+		$oCriteria->addDescendingOrderByColumn('year');
 		$aYears = array();
 		foreach(self::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_CLASS) as $aParams) {
 			$aYears[] = $aParams->Year;

@@ -156,7 +156,7 @@ img.service_logo{float:right;margin:0 1em 1em 2em}
 #sidebar_right .links{margin-top:1.5em}
 #sidebar_right .links h2{margin-bottom:.3em}
 #sidebar_right h2.list_header{margin-bottom:0 !important}
-.status_icons,.status_icons a{width:20px}
+.status_icons,.status_icons a{width:16px}
 .status_icons.has_bericht{background:transparent url("../images/has_bericht.png") no-repeat 0 3px}
 .status_icons.has_images{background:transparent url("../images/has_images.png") no-repeat 0 3px}
 .event_list td a.detail_link{display:block;width:20px;background:transparent url("../images/detail_link.png") no-repeat 0 3px}

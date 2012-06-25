@@ -33,6 +33,12 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	}
 	
 	private function renderRecentEventReportTeaser() {
+		// only show if aktuell list is shown
+		$oNavigationItem = FrontendManager::$CURRENT_NAVIGATION_ITEM;
+		if(!$oNavigationItem instanceof PageNavigationItem) {
+			return;
+		}
+
 		$sDate = date('Y-m-d', time() - (180 * 24 * 60 * 60));
 		$oQuery = EventQuery::create()->filterByDateRangeReview()->filterbyHasImagesOrReview()->filterBySchoolClassId(null, Criteria::ISNULL)->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
 		$oEvent = $oQuery->orderByUpdatedAt(Criteria::DESC)->findOne();
@@ -44,19 +50,21 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$oTemplate->replaceIdentifier('detail_link', $sEventLink);
 		$oTemplate->replaceIdentifier('detail_link_title', 'Zu den Details');		
 		$oTemplate->replaceIdentifier('event_title', $oEvent->getTitle());
-		$iMessageKey = null;
-		if($oEvent->hasReviewText()) {
+		$oTemplate->replaceIdentifier('date_start', $oEvent->getDateStart('j.m.Y'));
+
+		$sMessageKey = '';
+		if($oEvent->hasBericht()) {
 			$sMessageKey = 'review';
 		}
 		if($oEvent->hasImages()) {
 			if($sMessageKey === 'review') {
-				$sMessageKey .= '_and_';
+				$sMessageKey = $sMessageKey . '_and_'; 
 			}
-			$sMessageKey .= 'images';
+			$sMessageKey = $sMessageKey . 'images';
 			$oImage = $oEvent->getFirstImage()->getDocument();
 			$oImageTag = TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => 194)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle()));
 			$oTemplate->replaceIdentifier('image', TagWriter::quickTag('a', array('class' => 'recent_event_image_link', 'href' => $sEventLink, 'title' => $oEvent->getTitle()), $oImageTag));
-		}		
+		}			
 		$oTemplate->replaceIdentifier('event_report_prefix', StringPeer::getString('event_review_prefix.'.$sMessageKey).' ');
 
 		return $oTemplate;
@@ -95,7 +103,18 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		
 		$oDate = $this->constructTemplate('date');
 		if($bIsAktuelleListe) {
-			$oTemplate->replaceIdentifier('report_and_images_teaser_message', StringPeer::getString('report_and_images_teaser_message'));
+			$aYears = EventPeer::getYears($this->iEventTypeId);
+			$iCountYears = count($aYears);
+			if($iCountYears > 0) {
+				$oTemplate->replaceIdentifier('report_and_images_teaser_message', StringPeer::getString('report_and_images_teaser_message'));
+				foreach($aYears as $i => $sYear) {
+					$oLink = TagWriter::quickTag('a', array('rel' => 'internal', 'href' => LinkUtil::link(array_merge($oPage->getLink(), array($sYear)))), $sYear);
+					$oTemplate->replaceIdentifierMultiple('year_link', $oLink, null, Template::NO_NEW_CONTEXT);
+					if($i < ($iCountYears-1)) {
+						$oTemplate->replaceIdentifierMultiple('year_link', ', ', null, Template::NO_NEW_CONTEXT);
+					}
+				}
+			}
 		}
 		$aEvents = $oEventQuery->find();
 		if(count($aEvents) === 0) {
