@@ -8,6 +8,8 @@ school_settings:
   
   # display recent event with report or image gallery
   event_is_recent_day_count: 60
+  # display recently added report or images to event
+  event_is_recent_report_day_count: 120
   
   # exclude "internally" used services and category from displaying
   internally_used_service_category: null

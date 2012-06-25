@@ -15,11 +15,18 @@ class EventQuery extends BaseEventQuery {
 		return $this;
 	}	
 	
-	public function filterByDateRangeReview() {
+	public function filterByDateRangeReview($sDate = null) {
 		$sDateToday = date('Y-m-d');
 		$oDateStart = $this->getNewCriterion(EventPeer::DATE_START, $sDateToday, Criteria::LESS_THAN);
 		$oDateEnd = $this->getNewCriterion(EventPeer::DATE_END, null, Criteria::ISNULL);
-		$oDateEnd->addOr($this->getNewCriterion(EventPeer::DATE_END, $sDateToday, Criteria::LESS_THAN));
+		$oDateEndOr = $this->getNewCriterion(EventPeer::DATE_END, $sDateToday, Criteria::LESS_THAN);
+		// if this date is given then reduce selection
+		// @todo consider this to be the updated at instead of the event date?
+		if($sDate !== null) {
+			$oDateStart->addAnd($this->getNewCriterion(EventPeer::DATE_START, $sDate, Criteria::GREATER_THAN));
+			$oDateEndOr->addAnd($this->getNewCriterion(EventPeer::DATE_END, $sDate, Criteria::GREATER_THAN));
+		}
+		$oDateEnd->addOr($oDateEndOr);
 		$oDateStart->addAnd($oDateEnd);
 		$this->add($oDateStart);
 		return $this;
