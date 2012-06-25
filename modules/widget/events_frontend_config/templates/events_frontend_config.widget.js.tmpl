@@ -6,6 +6,7 @@ Widget.types.events_frontend_config = {
 		
 		this.result_list = this._element.find('ol.ui-editable-items-list');
 		this.list_options = this._element.find('div.list_option_only');
+		this.limit_options = this._element.find('div.list_option_only.limit_options');
 
 		// display options
 		var options_groups = this.getDisplayModes();
@@ -54,7 +55,12 @@ Widget.types.events_frontend_config = {
 			return;
 		}
 		this.list_options.show();
-
+		if(display_mode === 'recent_event_report_teaser') {
+			this.limit_options.hide();
+			return;
+		} else {
+			this.limit_options.show();
+		}
 		this.allEvents(this.type_dropdown.val(), this.limit_dropdown.val(), function(events) {
 			jQuery.each(events, function(id, title) {
 				result_list.append(jQuery('<li/>').text(title).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', id));
