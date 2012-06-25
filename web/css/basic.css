@@ -103,6 +103,9 @@ td p{line-height:20px;margin:0;padding:0}
 td.event_title{padding-left:3px}
 td a{display:inline-block}
 th{text-align:left;font-weight:normal;font-size:.9em;font-style:oblique;line-height:18px;color:#999}
+.recent_event_image_link{display:block;margin-top:-7px;}
+.recent_event_image_link img{width:194px}
+.report_and_images_teaser{font-size:.9em;line-height:20px;color:#666;margin-top:2em}
 .row.active td,.row.active td a{color:#5e61a8;height:100%}
 table.statistics_list{margin-top:-5px}
 .statistics_list td{border-bottom:1px solid #c9c5b3;line-height:22px;font-size:12px}
@@ -153,9 +156,9 @@ img.service_logo{float:right;margin:0 1em 1em 2em}
 #sidebar_right .links{margin-top:1.5em}
 #sidebar_right .links h2{margin-bottom:.3em}
 #sidebar_right h2.list_header{margin-bottom:0 !important}
-td.status_icons,td.status_icons a{width:20px}
-td.status_icons.has_bericht{background:transparent url("../images/has_bericht.png") no-repeat 0 3px}
-td.status_icons.has_images{background:transparent url("../images/has_images.png") no-repeat 0 3px}
+.status_icons,.status_icons a{width:20px}
+.status_icons.has_bericht{background:transparent url("../images/has_bericht.png") no-repeat 0 3px}
+.status_icons.has_images{background:transparent url("../images/has_images.png") no-repeat 0 3px}
 .event_list td a.detail_link{display:block;width:20px;background:transparent url("../images/detail_link.png") no-repeat 0 3px}
 .event_list td a.detail_link:hover{background:transparent url("../images/detail_link_hover.png") no-repeat 0 3px}
 .service_list td:first-child a,.link_list td:first-child a,.team_list td:first-child a,.class_list td:first-child a{display:block;padding-left:22px;background:url("../images/services.png") transparent 0 4px no-repeat}

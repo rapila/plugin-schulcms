@@ -5,7 +5,7 @@
 
 class EventsFrontendModule extends DynamicFrontendModule {
 	
-	public static $DISPLAY_MODES = array('list', 'detail_context');
+	public static $DISPLAY_MODES = array('list', 'detail_context', 'recent_event_report_teaser');
 
 	public static $EVENT;
 	public $iEventTypeId;
@@ -26,14 +26,51 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		}
 		if($aOptions[self::MODE_SELECT_KEY] === 'list') {
 			return $this->renderList($aOptions[self::MODE_EVENT_LIMIT]);
+		} else if($aOptions[self::MODE_SELECT_KEY] === 'recent_event_report_teaser') {
+			return $this->renderRecentEventReportTeaser($aOptions[self::MODE_EVENT_LIMIT]);
 		}
 		return '';
 	}
 	
+	private function renderRecentEventReportTeaser() {
+		$sDate = date('Y-m-d', time() - (180 * 24 * 60 * 60));
+		$oQuery = EventQuery::create()->filterByDateRangeReview()->filterbyHasImagesOrReview()->filterBySchoolClassId(null, Criteria::ISNULL)->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
+		$oEvent = $oQuery->orderByUpdatedAt(Criteria::DESC)->findOne();
+		if($oEvent === null) {
+			return;
+		}
+		$oTemplate = $this->constructTemplate('recent_report_teaser');
+		$sEventLink = LinkUtil::link($oEvent->getEventPageLink(FrontendManager::$CURRENT_PAGE));
+		$oTemplate->replaceIdentifier('detail_link', $sEventLink);
+		$oTemplate->replaceIdentifier('detail_link_title', 'Zu den Details');		
+		$oTemplate->replaceIdentifier('event_title', $oEvent->getTitle());
+		$iMessageKey = null;
+		if($oEvent->hasReviewText()) {
+			$sMessageKey = 'review';
+		}
+		if($oEvent->hasImages()) {
+			if($sMessageKey === 'review') {
+				$sMessageKey .= '_and_';
+			}
+			$sMessageKey .= 'images';
+			$oImage = $oEvent->getFirstImage()->getDocument();
+			$oImageTag = TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => 194)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle()));
+			$oTemplate->replaceIdentifier('image', TagWriter::quickTag('a', array('class' => 'recent_event_image_link', 'href' => $sEventLink, 'title' => $oEvent->getTitle()), $oImageTag));
+		}		
+		$oTemplate->replaceIdentifier('event_report_prefix', StringPeer::getString('event_review_prefix.'.$sMessageKey).' ');
+
+		return $oTemplate;
+	}
+	
 	private function renderList($iLimit=null) {
 		$oEventQuery = EventQuery::create();
+		$bIsAktuelleListe = false;
 		if($this->oLanguageObject->getContentObject()->getContainerName() !== 'context') {
-			$oEventQuery = EventQuery::create()->filterByIsActive(true)->filterBySchoolClassId(null, Criteria::ISNULL)->filterByNavigationItem();
+			$oNavigationItem = FrontendManager::$CURRENT_NAVIGATION_ITEM;
+			if($oNavigationItem instanceof PageNavigationItem) {
+				$bIsAktuelleListe = true;
+			}
+			$oEventQuery = EventQuery::create()->filterByIsActive(true)->filterBySchoolClassId(null, Criteria::ISNULL)->filterByNavigationItem($oNavigationItem);
 			$oPage = FrontendManager::$CURRENT_PAGE;
 			$oTemplate = $this->constructTemplate('list');
 			$oItemTempl = $this->constructTemplate('list_item');
@@ -57,6 +94,9 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		LocaleUtil::setLocaleToLanguageId(Session::language(), LC_TIME);
 		
 		$oDate = $this->constructTemplate('date');
+		if($bIsAktuelleListe) {
+			$oTemplate->replaceIdentifier('report_and_images_teaser_message', StringPeer::getString('report_and_images_teaser_message'));
+		}
 		$aEvents = $oEventQuery->find();
 		if(count($aEvents) === 0) {
 			$oItemTemplate = $this->constructTemplate('no_entries');
