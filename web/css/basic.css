@@ -105,7 +105,8 @@ td a{display:inline-block}
 th{text-align:left;font-weight:normal;font-size:.9em;font-style:oblique;line-height:18px;color:#999}
 .recent_event_image_link{display:block;margin-top:-7px;}
 .recent_event_image_link img{width:194px}
-.report_and_images_teaser{font-size:.9em;line-height:20px;color:#666;margin-top:2em}
+.report_and_images_teaser{font-size:.9em;line-height:20px;color:#666;margin-top:2em;}
+.report_and_images_teaser a{text-decoration:underline}
 .row.active td,.row.active td a{color:#5e61a8;height:100%}
 table.statistics_list{margin-top:-5px}
 .statistics_list td{border-bottom:1px solid #c9c5b3;line-height:22px;font-size:12px}

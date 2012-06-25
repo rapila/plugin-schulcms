@@ -102,19 +102,23 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		LocaleUtil::setLocaleToLanguageId(Session::language(), LC_TIME);
 		
 		$oDate = $this->constructTemplate('date');
+		// Display hint to consult year links for recent events with reports and images
 		if($bIsAktuelleListe) {
 			$aYears = EventPeer::getYears($this->iEventTypeId);
 			$iCountYears = count($aYears);
 			if($iCountYears > 0) {
 				$oTemplate->replaceIdentifier('report_and_images_teaser_message', StringPeer::getString('report_and_images_teaser_message'));
 				foreach($aYears as $i => $sYear) {
-					$oLink = TagWriter::quickTag('a', array('rel' => 'internal', 'href' => LinkUtil::link(array_merge($oPage->getLink(), array($sYear)))), $sYear);
+					$oLink = TagWriter::quickTag('a', array('rel' => 'internal', 'href' => LinkUtil::link(array_merge($oPage->getLink(), array($sYear)))), 'Alle '.$sYear);
 					$oTemplate->replaceIdentifierMultiple('year_link', $oLink, null, Template::NO_NEW_CONTEXT);
 					if($i < ($iCountYears-1)) {
 						$oTemplate->replaceIdentifierMultiple('year_link', ', ', null, Template::NO_NEW_CONTEXT);
 					}
 				}
 			}
+		} else {
+			// display legend that explain the list icons for bericht and images
+			$oTemplate->replaceIdentifier('display_icon_info', $this->constructTemplate('icon_info'));
 		}
 		$aEvents = $oEventQuery->find();
 		if(count($aEvents) === 0) {
