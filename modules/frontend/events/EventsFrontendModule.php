@@ -190,7 +190,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		}
 		
 		// Fallback: if is review and no body is given, display teaser
-		if(!self::$EVENT->isPreview()) {
+		if(!self::$EVENT->isPreview() && $sBody === null) {
 			$sBody = self::$EVENT->getTeaser();
 		} else if($sBody == null) {
   		$oTemplate->replaceIdentifier('teaser', self::$EVENT->getTeaser());
