@@ -29,7 +29,9 @@ Widget.types.event_detail = {
 		this.content.find("input[name^='date_']").datepicker({
 			dateFormat: 'dd.mm.yy'
 		});
-		this.content.find("select[name='event_type_id']").prepareWidget();
+		this.content.find("select[name='event_type_id']").prepareWidget(function(event_input) {
+			event_input.settings.initial_selection = _this.settings.initial_type_id;
+		}, jQuery.noop);
 		this.content.find("select[name='service_id']").prepareWidget(function(services_input_widget) {
 			if(jQuery(services_input_widget._element).find('option').length == (services_input_widget.settings.default_value_label ? 1 : 0)) {
 				_this.content.find('.service_select_items').each(function() {
@@ -182,7 +184,7 @@ Widget.types.event_detail = {
 			width: 720
 		},
 		thumbnail_size: 180,
-		initial_type_id: 1,
+		initial_type_id: null,
 		predefined_school_class_id: null
 	}
 };
