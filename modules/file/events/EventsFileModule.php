@@ -41,7 +41,7 @@ class EventsFileModule extends FileModule {
 		$sDateAhead = mktime(0, 0, 0, date("m"), date("d")+$iPeriod, date("y"));
 		
 		// get events related to classes or others
-		$oQuery = $this->oQuery->filterByDateRangePreview()->filterByDateStart($sDateAhead, Criteria::LESS_EQUAL)->filterByIsActive(true);
+		$oQuery = $this->oQuery->upcomingOrOngoing()->filterByDateStart($sDateAhead, Criteria::LESS_EQUAL)->filterByIsActive(true);
 		$aEvents = $oQuery->find();
 
 		foreach($aEvents as $oEvent) {

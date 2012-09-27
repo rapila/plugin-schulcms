@@ -1,7 +1,7 @@
 Widget.types.services_frontend_config = { 
 	prepare: function() {
 		var _this = this;
-		this._element.append(jQuery.parseHTML('{{includeTemplate=edit}}'));
+		this._element.append(Widget.parseHTML('{{includeTemplate=edit}}'));
 
 		//Elements
 		this.mode_dropdown = this._element.find('select[name=display_mode]');

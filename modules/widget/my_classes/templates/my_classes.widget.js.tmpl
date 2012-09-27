@@ -1,9 +1,9 @@
 Widget.types.my_classes = {
 	prepare: function() {
 		var _this = this;
-		this._element.append(jQuery.parseHTML("{{includeTemplate=edit}}"));
+		this._element.append(Widget.parseHTML("{{includeTemplate=edit}}"));
 		this.list =	this._element.find('table.my_classes_list');
-		this.settings.row_prototype = jQuery.parseHTML("{{includeTemplate=class_item}}", false, 'tbody');
+		this.settings.row_prototype = Widget.parseHTML("{{includeTemplate=class_item}}", false, 'tbody');
 		this.has_old_classes = false;
 		this.show_old_button = this._element.find('span.toggle_show_all').hide();
 		this.reload_list();

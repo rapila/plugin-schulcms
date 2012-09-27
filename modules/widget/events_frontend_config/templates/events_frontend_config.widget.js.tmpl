@@ -1,7 +1,7 @@
 Widget.types.events_frontend_config = { 
 	prepare: function() {
 		var _this = this;
-		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		this.content = Widget.parseHTML("{{includeTemplate=edit}}");
 		this._element.append(this.content);
 		
 		this.result_list = this._element.find('ol.ui-editable-items-list');

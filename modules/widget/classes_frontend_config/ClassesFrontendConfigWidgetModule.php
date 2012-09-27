@@ -1,13 +1,7 @@
 <?php
 class ClassesFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	public function allClasses($iClassTypeId = null) {
-		$oCriteria = new Criteria;
-		$oCriteria->clearSelectColumns()->addSelectColumn(SchoolClassPeer::ID)->addSelectColumn(SchoolClassPeer::NAME);
-		if($iClassTypeId) {
-			$oCriteria->add(SchoolClassPeer::CLASS_TYPE_ID, $iClassTypeId);
-		}
-    $oCriteria->addAscendingOrderByColumn(SchoolClassPeer::NAME);
-		return SchoolClassPeer::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_ASSOC);
+		return SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool($iClassTypeId)->orderByName()->find()->toKeyValue('Id', 'Name');
 	}
 	
 	public function getDisplayModes() {

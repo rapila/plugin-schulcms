@@ -1,6 +1,6 @@
 Widget.types.note_type_detail = {
 	initialize: function() {
-		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		this.content = Widget.parseHTML("{{includeTemplate=edit}}");
 		Widget.create('detail', function(widget) {
 			widget.set_instance(this);
 			jQuery.extend(widget.settings, {
