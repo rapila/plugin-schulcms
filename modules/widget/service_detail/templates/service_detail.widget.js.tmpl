@@ -1,7 +1,7 @@
 Widget.types.service_detail = {
 	initialize: function() {
 		var _this = this;
-		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		this.content = Widget.parseHTML("{{includeTemplate=edit}}");
 		this.content.find('div.hide_if_not_saved').hide();
 		this.service_text = this.content.find('div.service_text');
 		this.current_detail_id = null;
@@ -9,7 +9,7 @@ Widget.types.service_detail = {
 		// team members
 		this.team_member_container = this.content.find('tbody.team_member_container');
 		this.team_member_container.sortable({});
-		this.team_member_content = jQuery.parseHTML("{{includeTemplate=team_member}}", true, 'tbody');
+		this.team_member_content = Widget.parseHTML("{{includeTemplate=team_member}}", true, 'tbody');
 		var add_new_team_member_button = jQuery('<a/>').addClass('add-new-item add_entry').text(' ');
 		add_new_team_member_button.click(function() {
 			_this.team_member_content.clone().appendTo(_this.team_member_container);
@@ -20,7 +20,7 @@ Widget.types.service_detail = {
 		});
 
 		// service documents and upload
-		this.document_prototype = jQuery.parseHTML("{{includeTemplate=document}}");
+		this.document_prototype = Widget.parseHTML("{{includeTemplate=document}}");
 		this.no_documents_placeholder = jQuery('<li/>').html("{{writeString=wns.service.no_document_and_upload_info}}").addClass('no_documents_placeholder');
 		
 		this.uploader = Widget.create('file_upload');

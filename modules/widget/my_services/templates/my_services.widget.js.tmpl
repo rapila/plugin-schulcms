@@ -1,9 +1,9 @@
 Widget.types.my_services = {
 	prepare: function() {
 		var _this = this;
-		this._element.append(jQuery.parseHTML("{{includeTemplate=services}}"));
+		this._element.append(Widget.parseHTML("{{includeTemplate=services}}"));
 		this.list =	this._element.find('table.my_services_list');
-		this.settings.row_prototype = jQuery.parseHTML("{{includeTemplate=service_item}}", false, 'tbody');
+		this.settings.row_prototype = Widget.parseHTML("{{includeTemplate=service_item}}", false, 'tbody');
 		this.reload_list();
 	},
 	

@@ -33,9 +33,9 @@ class EventsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 			$oQuery->filterByEventTypeId($iEventTypeId);
 		}
 		if(!$bIsArchive) {
-			$oQuery->filterByDateRangePreview()->orderByDateStart();
+			$oQuery->upcomingOrOngoing()->orderByDateStart();
 		} else {
-			$oQuery->filterByDateRangeReview()->orderByDateStart(Criteria::DESC);
+			$oQuery->past()->orderByDateStart(Criteria::DESC);
 		}
 		if($iLimit !== null) {
 			$oQuery->limit($iLimit);

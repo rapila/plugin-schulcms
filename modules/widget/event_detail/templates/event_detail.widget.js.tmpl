@@ -1,7 +1,7 @@
 Widget.types.event_detail = {
 	initialize: function() {
 		var _this = this;
-		this.content = jQuery.parseHTML("{{includeTemplate=edit}}");
+		this.content = Widget.parseHTML("{{includeTemplate=edit}}");
 		this.content.find('div.hide_if_not_saved').hide();
 		this.current_detail_id = null;
 		
@@ -135,7 +135,7 @@ Widget.types.event_detail = {
 			});
 			return false;
 		}).appendTo(doc);
-		var document_object = jQuery.parseHTML(document_data.Preview);
+		var document_object = Widget.parseHTML(document_data.Preview);
 		doc.addClass('pointer').attr('title', '{{writeString=wns.edit_file.dblclick}}').dblclick(function() {
 			Widget.create('document_detail', function(detail) {
 				detail.settings.is_called_externally = true;

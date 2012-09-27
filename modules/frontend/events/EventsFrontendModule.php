@@ -48,7 +48,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		
 		$iRecentReportDaysBack = Settings::getSetting('school_settings', 'event_is_recent_report_day_count', 60);
 		$sDate = date('Y-m-d', time() - ($iRecentReportDaysBack * 24 * 60 * 60));
-		$oQuery = EventQuery::create()->filterByDateRangeReview($sDate)->filterbyHasImagesOrReview()->filterBySchoolClassId(null, Criteria::ISNULL)->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
+		$oQuery = EventQuery::create()->past($sDate)->filterbyHasImagesOrReview()->filterBySchoolClassId(null, Criteria::ISNULL)->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
 		$oEvent = $oQuery->orderByUpdatedAt(Criteria::DESC)->findOne();
 		if($oEvent === null) {
 			return;
@@ -92,7 +92,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oTemplate = $this->constructTemplate('list');
 			$oItemTempl = $this->constructTemplate('list_item');
 		} else {
-			$oEventQuery = EventQuery::create()->filterByIsActive(true)->filterBySchoolClassId(null, Criteria::ISNULL)->filterByDateRangePreview();
+			$oEventQuery = EventQuery::create()->filterByIsActive(true)->filterBySchoolClassId(null, Criteria::ISNULL)->upcomingOrOngoing();
 			if($this->iEventTypeId !== null) {
 				$oEventQuery->filterByEventTypeId($this->iEventTypeId);
 			}
@@ -277,7 +277,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		if(self::$EVENT !== null && isset($_REQUEST[self::DETAIL_IDENTIFIER])) {
 			return null;
 		}
-		$oEvent = EventQuery::create()->filterBySchoolClassId(null, Criteria::ISNOTNULL)->filterByDateRangePreview()->orderByDateStart(Criteria::DESC)->findOne();
+		$oEvent = EventQuery::create()->filterBySchoolClassId(null, Criteria::ISNOTNULL)->upcomingOrOngoing()->orderByDateStart(Criteria::DESC)->findOne();
 		if($oEvent === null) {
 			return null;
 		}

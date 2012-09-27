@@ -40,7 +40,7 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 		// display event if has recent report or images
 		$iRecentDaysBack = Settings::getSetting('school_settings', 'event_is_recent_day_count', 30);
 		$sDate = date('Y-m-d', time() - ($iRecentDaysBack * 24 * 60 * 60));
-		$oQuery = EventQuery::create()->filterByDateRangeReview()->filterbyHasImagesOrReview()->filterBySchoolClassId(null, Criteria::ISNULL)->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
+		$oQuery = EventQuery::create()->past()->filterbyHasImagesOrReview()->filterBySchoolClassId(null, Criteria::ISNULL)->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
 		$oEvent = $oQuery->orderByUpdatedAt(Criteria::DESC)->findOne();
 		if($oEvent === null) {
 			return;
