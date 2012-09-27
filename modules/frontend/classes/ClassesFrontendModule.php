@@ -234,6 +234,9 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 				$oDateTemplate->replaceIdentifier('class_passed', $oEvent->isReview() ? ' passed' : '');
 				$oDateTemplate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
 				$oEventTemplate->replaceIdentifier('date_from_to', $oDateTemplate);
+				if($oEvent->isMultiDay()) {
+					$oEventTemplate->replaceIdentifier('date_from_to_addon', $oEvent->getDateFromTo());
+				}
 				$oTemplate->replaceIdentifierMultiple('list_item', $oEventTemplate);
 				$oEventTemplate->replaceIdentifier('detail_link_text', $oEvent->getTitle());
 				$aLinkParams = array_merge($aClassLinkParams, array(self::DETAIL_IDENTIFIER_EVENT, $oEvent->getId()));

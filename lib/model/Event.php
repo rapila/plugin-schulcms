@@ -38,6 +38,10 @@ class Event extends BaseEvent {
 		return $this->getDateStart('Ymd') >= date('Ymd');
 	}
 	
+	public function isMultiDay() {
+		return $this->getDateEnd() > $this->getDateStart();
+	}
+	
 	public function getDateFromTo($sFormat = 'd.m.Y') {
 		$aResult = array();
 		if($this->getDateEnd() === null) {
