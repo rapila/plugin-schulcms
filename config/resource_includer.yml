@@ -1,4 +1,0 @@
-libraries:
-  davis:
-    url: 'davis/dist/davis-${version}.min.js'
-    url_uncompressed: 'davis/dist/davis-${version}.js'

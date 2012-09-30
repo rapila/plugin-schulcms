@@ -5,9 +5,9 @@
  * @package    propel.generator.model
  */
 class ClassStudentQuery extends BaseClassStudentQuery {
+	
 	public function orderByFirstName() {
-		$this->joinStudent();
-		$this->addAscendingOrderByColumn(StudentPeer::FIRST_NAME);
+		$this->joinStudent()->useQuery('Student')->orderByFirstName()->endUse();
 		return $this;
 	}
 	

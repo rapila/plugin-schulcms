@@ -6,8 +6,7 @@
 class ClassTeacherQuery extends BaseClassTeacherQuery {
 	
 	public function orderByLastName() {
-		$this->joinTeamMember();
-		$this->addAscendingOrderByColumn(TeamMemberPeer::LAST_NAME);
+		$this->joinTeamMember()->useQuery('TeamMember')->orderByLastName()->endUse();
 		return $this;
 	}
 	
@@ -18,7 +17,7 @@ class ClassTeacherQuery extends BaseClassTeacherQuery {
 		  $this->groupByTeamMemberId()->filterByIsClassTeacher(true);
 		}
 		$this->orderByIsClassTeacher(Criteria::DESC)->orderBySortOrder();
-		$this->joinTeamMember()->useQuery('TeamMember')->orderByLastName()->orderByFirstName();
+		$this->joinTeamMember()->useQuery('TeamMember')->orderByLastName()->orderByFirstName()->endUse();
     return $this;
 	}	
 	
