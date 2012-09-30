@@ -8,7 +8,8 @@ class Event extends BaseEvent {
 	private static $EVENT_PAGES = array();
 	
 	public function setTitle($sTitle) {
-		$this->setTitleNormalized(StringUtil::normalize(str_replace('-', '', $sTitle), '-', '-'));
+		$sNameNormalized = StringUtil::normalizePath($sTitle);
+		$this->setTitleNormalized($sNameNormalized);
 		return parent::setTitle($sTitle);
 	}
 	
