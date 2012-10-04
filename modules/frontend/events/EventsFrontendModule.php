@@ -148,7 +148,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oItemTemplate->replaceIdentifier('has_images_title', $oEvent->hasImages() ?  ' title="'.StringPeer::getString('event.has_images').'"' : '', null, Template::NO_HTML_ESCAPE);
 			$oItemTemplate->replaceIdentifier('has_bericht_class', $oEvent->hasBericht() ? ' has_bericht' : '');
 			$oItemTemplate->replaceIdentifier('has_bericht_title', $oEvent->hasImages() ? ' title="'.StringPeer::getString('event.has_bericht').'"' : '', null, Template::NO_HTML_ESCAPE);
-			$oItemTemplate->replaceIdentifier('teaser', $oEvent->getTeaser());
+			$oItemTemplate->replaceIdentifier('teaser', StringUtil::truncate($oEvent->getTeaser(), 60));
 			
 			// Add date square
 			$oDateTemplate = clone $oDate;

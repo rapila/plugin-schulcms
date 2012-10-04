@@ -58,7 +58,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 			$oItemTemplate->replaceIdentifier('detail_link_text', $oService->getName());
 			$oItemTemplate->replaceIdentifier('detail_link_title', 'Details von '.$oService->getName());			
 			$oItemTemplate->replaceIdentifier('phone', $oService->getPhone());
-			$oItemTemplate->replaceIdentifier('teaser', $oService->getTeaser());
+			$oItemTemplate->replaceIdentifier('teaser', StringUtil::truncate($oService->getTeaser(), 130));
 			$oItemTemplate->replaceIdentifier('website', $oService->getWebsiteWithProtocol());
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
