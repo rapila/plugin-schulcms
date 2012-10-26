@@ -6,20 +6,16 @@
 class EventQuery extends BaseEventQuery {
 	
 	public function upcomingOrOngoing() {
-		$sDateToday = date('Y-m-d');
-		// Either a one day event
-		$oOneDayCriterion = $this->getNewCriterion(EventPeer::DATE_START, $sDateToday, Criteria::GREATER_EQUAL);
-		$oOneDayCriterion->addAnd($this->getNewCriterion(EventPeer::DATE_END, null, Criteria::ISNULL));
-		// Or a future multiple day event
-		$oMultiDayFuture = $this->getNewCriterion(EventPeer::DATE_END, $sDateToday, Criteria::GREATER_EQUAL);
-		$oMultiDayFuture->addAnd($this->getNewCriterion(EventPeer::DATE_END, null, Criteria::ISNOTNULL));
-		// Or a past but still ongoing event
-		$oMultiDayOngoing = $this->getNewCriterion(EventPeer::DATE_START, $sDateToday, Criteria::LESS_EQUAL);
-		$oMultiDayOngoing->addAnd($this->getNewCriterion(EventPeer::DATE_END, $sDateToday, Criteria::GREATER_EQUAL));
-		// Add the combined criterions to the criteria
-		$this->add($oOneDayCriterion->addOr($oMultiDayFuture)->addOr($oMultiDayOngoing));
-		return $this;
-	} 
+		return $this->isUpcoming()->_or()->isOngoing();
+	}
+	
+	public function isUpcoming() {
+		return $this->filterByDateStart(date('Y-m-d'), Criteria::GREATER_EQUAL);
+	}
+	
+	public function isOngoing() {
+		return $this->filterByDateEnd(null, Criteria::ISNOTNULL)->_and()->filterByDateEnd(date('Y-m-d'), Criteria::GREATER_EQUAL);
+	}
 	
 	public function past($sDate = null) {
 		$sDateToday = date('Y-m-d');
