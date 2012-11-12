@@ -96,8 +96,10 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			if($this->iEventTypeId !== null) {
 				$oEventQuery->filterByEventTypeId($this->iEventTypeId);
 			}
-			$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$this->iEventTypeId));
 			$oTemplate = $this->constructTemplate('list_context');
+			if($oPage !== null) {
+				$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$this->iEventTypeId));
+			}
 			$oTemplate->replaceIdentifier('event_link', LinkUtil::link($oPage->getLink()));
 			$oItemTempl = $this->constructTemplate('list_item_context');
 		}

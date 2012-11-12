@@ -47,7 +47,10 @@ class Service extends BaseService {
 		if($oServicePage === null) {
 			$oServicePage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_SERVICES));
 		}
-		return array_merge($oServicePage->getFullPathArray(), array($this->getSlug()));
+		if($oServicePage !== null) {
+			return array_merge($oServicePage->getFullPathArray(), array($this->getSlug()));
+		}
+		return null;
 	}
 	
 	public function getServiceCategoryName() {
