@@ -6,14 +6,14 @@
 class EventQuery extends BaseEventQuery {
 	
 	public function upcomingOrOngoing() {
-		return $this->isUpcoming()->_or()->isOngoing();
+		return $this->upcoming()->_or()->ongoing();
 	}
 	
-	public function isUpcoming() {
+	public function upcoming() {
 		return $this->filterByDateStart(date('Y-m-d'), Criteria::GREATER_EQUAL);
 	}
 	
-	public function isOngoing() {
+	public function ongoing() {
 		return $this->filterByDateEnd(null, Criteria::ISNOTNULL)->_and()->filterByDateEnd(date('Y-m-d'), Criteria::GREATER_EQUAL);
 	}
 	
@@ -22,7 +22,7 @@ class EventQuery extends BaseEventQuery {
 		$oDateStart = $this->getNewCriterion(EventPeer::DATE_START, $sDateToday, Criteria::LESS_THAN);
 		$oDateEnd = $this->getNewCriterion(EventPeer::DATE_END, null, Criteria::ISNULL);
 		$oDateEndOr = $this->getNewCriterion(EventPeer::DATE_END, $sDateToday, Criteria::LESS_THAN);
-		// if this date is given then reduce selection
+		// if this date is given then restrict selection to date range
 		// @todo consider this to be the updated at instead of the event date?
 		if($sDate !== null) {
 			$oDateStart->addAnd($this->getNewCriterion(EventPeer::DATE_START, $sDate, Criteria::GREATER_THAN));
