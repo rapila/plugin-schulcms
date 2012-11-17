@@ -98,9 +98,9 @@ td,th,td a{line-height:24px}
 td,th{padding-right:3px}
 td p{line-height:20px;margin:0;padding:0}
 .event_list td p{line-height:16px;padding:2px 0;margin-bottom:.8em}
-.context_list.event_list td p{margin-bottom:.8em}
+.context_list.event_list td p{padding-top:0;margin-bottom:.8em}
 .event_list td,.event_list td a{line-height:18px}
-.event_list.context_list .event_title a{line-height:17px;padding-top:3px;padding-bottom:3px;max-width:150px}
+.event_list.context_list .event_title a{line-height:17px;padding-top:3px;padding-bottom:0;max-width:150px}
 td.event_title{padding-left:3px}
 td a{display:inline-block}
 th{text-align:left;font-weight:normal;font-size:.9em;font-style:oblique;line-height:18px;color:#999}
