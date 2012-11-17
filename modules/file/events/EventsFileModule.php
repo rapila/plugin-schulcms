@@ -14,7 +14,7 @@ class EventsFileModule extends FileModule {
 		if($oQuery) {
 			$this->oQuery = $oQuery;
 		} else {
-			$this->oQuery = EventQuery::create()->filterBySchoolClassId(null, Criteria::ISNULL);
+			$this->oQuery = FrontendEventQuery::create()->filterBySchoolClassId(null, Criteria::ISNULL);
 		}
 		header("Content-Type: application/rss+xml;charset=".Settings::getSetting('encoding', 'db', 'utf-8'));
 		RichtextUtil::$USE_ABSOLUTE_LINKS = true;

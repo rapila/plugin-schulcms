@@ -11,6 +11,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	public $iEventTypeId;
 	
 	const DETAIL_IDENTIFIER = 'id';
+	const SESSION_BACK_TO_LIST_LINK = 'back_to_list_link';
 	const MODE_SELECT_KEY = 'display_mode';
 	const MODE_EVENT_TYPE_ID = 'event_type_id';
 	const MODE_EVENT_LIMIT = 'event_limit';
@@ -39,16 +40,8 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	* @return $oTemplate / null
 	*/
 	private function renderRecentEventReportTeaser() {
-		
-		// Only show if aktuell list is shown
-		$oNavigationItem = FrontendManager::$CURRENT_NAVIGATION_ITEM;
-		if(!$oNavigationItem instanceof PageNavigationItem) {
-			return;
-		}
-		
-		$iRecentReportDaysBack = Settings::getSetting('school_settings', 'event_is_recent_report_day_count', 60);
-		$sDate = date('Y-m-d', time() - ($iRecentReportDaysBack * 24 * 60 * 60));
-		$oQuery = EventQuery::create()->past($sDate)->filterbyHasImagesOrReview()->filterBySchoolClassId(null, Criteria::ISNULL)->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
+		$sDate = date('Y-m-d', time() - (Settings::getSetting('school_settings', 'event_is_recent_report_day_count', 60) * 24 * 60 * 60));
+		$oQuery = FrontendEventQuery::create()->past($sDate)->filterbyHasImagesOrReview()->filterBySchoolClassId(null, Criteria::ISNULL)->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
 		$oEvent = $oQuery->orderByUpdatedAt(Criteria::DESC)->findOne();
 		if($oEvent === null) {
 			return;
@@ -79,70 +72,62 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		return $oTemplate;
 	}
 	
-	private function renderList($iLimit=null) {
-		$oEventQuery = EventQuery::create();
+	private function renderList($iLimit=null) {		
+		// Get basic query
+		$oEventQuery = FrontendEventQuery::create()->filterBySchoolClassId(null, Criteria::ISNULL)->orderByDateStart();
+		
+		// Get link page if current page is not a event page
+		$oPage = FrontendManager::$CURRENT_PAGE;
 		$bIsAktuelleListe = false;
-		if($this->oLanguageObject->getContentObject()->getContainerName() !== 'context') {
+		
+		// If it is not an event page
+		if(!StringUtil::startsWith($oPage->getIdentifier(), SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-')) {
+			
+			$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$this->iEventTypeId));
+			$oEventQuery->upcomingOrOngoing()->filterByIgnoreOnFrontpage(false);
+			Session::getSession()->setAttribute(self::SESSION_BACK_TO_LIST_LINK, null);
+		} else {
 			$oNavigationItem = FrontendManager::$CURRENT_NAVIGATION_ITEM;
 			if($oNavigationItem instanceof PageNavigationItem) {
 				$bIsAktuelleListe = true;
+				$oEventQuery->upcomingOrOngoing();
+				if($this->iEventTypeId !== null) {
+					$oEventQuery->filterByEventTypeId($this->iEventTypeId);
+				}
+			} else {
+				$oEventQuery->filterByNavigationItem($oNavigationItem);
 			}
-			$oEventQuery = EventQuery::create()->filterByIsActive(true)->filterBySchoolClassId(null, Criteria::ISNULL)->filterByNavigationItem($oNavigationItem);
-			$oPage = FrontendManager::$CURRENT_PAGE;
+			Session::getSession()->setAttribute(self::SESSION_BACK_TO_LIST_LINK, $oNavigationItem->getLink());
+		}
+		if($iLimit !== null) {
+			$oEventQuery->limit($iLimit);
+		}
+		
+		// Create template depending on container
+		if($this->oLanguageObject->getContentObject()->getContainerName() !== 'context') {
 			$oTemplate = $this->constructTemplate('list');
 			$oItemTempl = $this->constructTemplate('list_item');
 		} else {
-			$oEventQuery = EventQuery::create()->filterByIsActive(true)->filterBySchoolClassId(null, Criteria::ISNULL)->upcomingOrOngoing();
-			if($this->iEventTypeId !== null) {
-				$oEventQuery->filterByEventTypeId($this->iEventTypeId);
-			}
 			$oTemplate = $this->constructTemplate('list_context');
-			if($oPage !== null) {
-				$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$this->iEventTypeId));
-			}
-			$oTemplate->replaceIdentifier('event_link', LinkUtil::link($oPage->getLink()));
+			$oTemplate->replaceIdentifier('event_page_link', LinkUtil::link($oPage->getLink()));
 			$oItemTempl = $this->constructTemplate('list_item_context');
 		}
-		$oEventQuery->orderByDateStart();
 
-		if($iLimit !== null) {
-			$oEventQuery->filterByIgnoreOnFrontpage(false);
-			$oEventQuery->limit($iLimit);
-		}		
-		$sOddEven = 'odd';
-		LocaleUtil::setLocaleToLanguageId(Session::language(), LC_TIME);
-		
-		$oDate = $this->constructTemplate('date');
-		
-		// Display hint to consult year links for recent events with reports and images
-		if($bIsAktuelleListe) {
-			$aYears = EventPeer::getYears($this->iEventTypeId);
-			$iCountYears = count($aYears);
-			if($iCountYears > 0) {
-				$oTemplate->replaceIdentifier('report_and_images_teaser_message', StringPeer::getString('report_and_images_teaser_message'));
-				foreach($aYears as $i => $sYear) {
-					$oLink = TagWriter::quickTag('a', array('rel' => 'internal', 'href' => LinkUtil::link(array_merge($oPage->getLink(), array($sYear)))), 'Alle '.$sYear);
-					$oTemplate->replaceIdentifierMultiple('year_link', $oLink, null, Template::NO_NEW_CONTEXT);
-					if($i < ($iCountYears-1)) {
-						$oTemplate->replaceIdentifierMultiple('year_link', ', ', null, Template::NO_NEW_CONTEXT);
-					}
-				}
-			}
-		} else {
-			// Display legend that explain the list icons for bericht and images
-			$oTemplate->replaceIdentifier('display_icon_info', $this->constructTemplate('icon_info'));
-		}
-		
 		$aEvents = $oEventQuery->find();
+		
+		// Display not found message
 		if(count($aEvents) === 0) {
 			$oItemTemplate = $this->constructTemplate('no_entries');
 			$oItemTemplate->replaceIdentifier('no_entries_text', StringPeer::getString('wns.event.no_entries'));
 			$oTemplate->replaceIdentifier('list_item', $oItemTemplate);
 			return $oTemplate;
 		}
+		
+		// Display list
+		LocaleUtil::setLocaleToLanguageId(Session::language(), LC_TIME);
+		$oDatePrototype = $this->constructTemplate('date');
 		foreach($aEvents as $oEvent) {
 			$oItemTemplate = clone $oItemTempl;
-			$oItemTemplate->replaceIdentifier('oddeven', $sOddEven = $sOddEven === 'even' ? 'odd' : 'even');
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getEventPageLink($oPage)));
 			$oItemTemplate->replaceIdentifier('detail_link_text', $oEvent->getTitle());
 			$oItemTemplate->replaceIdentifier('detail_link_title', 'Details von '.$oEvent->getTitle());		
@@ -153,25 +138,42 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oItemTemplate->replaceIdentifier('teaser', StringUtil::truncate($oEvent->getTeaser(), 60));
 			
 			// Add date square
-			$oDateTemplate = clone $oDate;
+			$oDateTemplate = clone $oDatePrototype;
 			$oDateTemplate->replaceIdentifier('date_day', strftime("%d",$oEvent->getDateStart('U')));
 			$oDateTemplate->replaceIdentifier('class_passed', $oEvent->isReview() ? ' passed' : '');
 			$oDateTemplate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
 			$oItemTemplate->replaceIdentifier('date_from_to', $oDateTemplate);
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
+
+		// Display info depending on context - archive hints or icon information
+		if($bIsAktuelleListe) {
+			$this->renderArchiveInfo($oTemplate, $oPage);
+		} else {
+			$oTemplate->replaceIdentifier('display_icon_info', $this->constructTemplate('display_icon_info'));
+		}
 		return $oTemplate;
 	}
-
-	public function getEvent() {
-		return self::$EVENT;
+	
+	private function renderArchiveInfo($oTemplate, $oPage) {
+		$aYears = EventPeer::getYears($this->iEventTypeId);
+		$iCountYears = count($aYears);
+		if($iCountYears > 0) {
+			$oTemplate->replaceIdentifier('report_and_images_teaser_message', StringPeer::getString('report_and_images_teaser_message'));
+			foreach($aYears as $i => $sYear) {
+				$oLink = TagWriter::quickTag('a', array('rel' => 'internal', 'href' => LinkUtil::link($oPage->getFullPathArray(array($sYear)))), 'Alle '.$sYear);
+				$oTemplate->replaceIdentifierMultiple('year_link', $oLink, null, Template::NO_NEW_CONTEXT);
+				if($i < ($iCountYears-1)) {
+					$oTemplate->replaceIdentifierMultiple('year_link', ', ', null, Template::NO_NEW_CONTEXT);
+				}
+			}
+		}
 	}
 	
 	public function renderDetail() {
 		if($this->oLanguageObject->getContentObject()->getContainerName() === 'context') {
 			return $this->renderDetailContext();
 		}
-		$oPage = FrontendManager::$CURRENT_PAGE;
 		$oTemplate = $this->constructTemplate('detail');
 		
 		// Display body depending on context
@@ -197,8 +199,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		} else if($sBody == null) {
   		$oTemplate->replaceIdentifier('teaser', self::$EVENT->getTeaser());
 		}
-
-		$oTemplate->replaceIdentifier('list_link', LinkUtil::link($oPage->getFullPathArray()));
+		
 		$oTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
 		$oTemplate->replaceIdentifier('body', $sBody);
 		if(self::$EVENT->getDateEnd() == null) {
@@ -214,6 +215,17 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			}
 		}
 		
+
+		
+		// Back to list link
+		if($oTemplate->hasIdentifier('back_to_list_link')) {
+			$aBackToListLink = Session::getSession()->getAttribute(self::SESSION_BACK_TO_LIST_LINK);
+			if(!is_array($aBackToListLink)) {
+				$aBackToListLink = FrontendManager::$CURRENT_PAGE->getFullPathArray();
+			}
+			$oTemplate->replaceIdentifier('back_to_list_link', LinkUtil::link($aBackToListLink));
+		}
+		
 		// Display image gallery
 		self::renderGallery(self::$EVENT, $oTemplate);
 		return $oTemplate;
@@ -224,11 +236,15 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	* since they always look the same
 	*/
 	public static function renderGallery($oEvent, &$oDetailTemplate) {
+		$aEventDocuments = $oEvent->getEventDocumentsOrdered();
+		if(empty($aEventDocuments)) {
+			return;
+		}
 		$oGalleryTemplate = new Template('lists/gallery');
 		$oTemplateProtoType = new Template('lists/gallery_item');
 		$oTemplateProtoType->replaceIdentifier('thumbnail_size', 140);
 		$oTemplateProtoType->replaceIdentifier('full_size', 1000);
-		foreach($oEvent->getEventDocumentsOrdered() as $oEventDocument) {
+		foreach($aEventDocuments as $oEventDocument) {
 			if(!$oEventDocument->getDocument()) {
 				continue;
 			}
@@ -279,7 +295,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		if(self::$EVENT !== null && isset($_REQUEST[self::DETAIL_IDENTIFIER])) {
 			return null;
 		}
-		$oEvent = EventQuery::create()->filterBySchoolClassId(null, Criteria::ISNOTNULL)->upcomingOrOngoing()->orderByDateStart(Criteria::DESC)->findOne();
+		$oEvent = FrontendEventQuery::create()->filterBySchoolClassId(null, Criteria::ISNOTNULL)->upcomingOrOngoing()->orderByDateStart(Criteria::DESC)->findOne();
 		if($oEvent === null) {
 			return null;
 		}

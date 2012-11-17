@@ -109,7 +109,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 			$oFlash->checkForEmail('email', 'valid_email');
 		}
 		if($aServiceData['is_active'] && $aServiceData['teaser'] == null) {
-			$oFlash->addMessage("is_activ_teaser_required");
+			$oFlash->addMessage("is_active_teaser_required");
 		}
 		$aSetTeamMemberIds = array();
 		if(isset($aServiceData['team_member_id'])) {
