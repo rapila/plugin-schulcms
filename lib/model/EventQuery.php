@@ -6,17 +6,13 @@
 class EventQuery extends BaseEventQuery {
 	
 	public function upcomingOrOngoing() {
-		return $this->upcoming()->_or()->ongoing();
+		return $this->upcoming()->_or()->filterByDateEnd(null, Criteria::ISNOTNULL)->_and()->filterByDateEnd(date('Y-m-d'), Criteria::GREATER_EQUAL);
 	}
 	
 	public function upcoming() {
 		return $this->filterByDateStart(date('Y-m-d'), Criteria::GREATER_EQUAL);
 	}
-	
-	public function ongoing() {
-		return $this->filterByDateEnd(null, Criteria::ISNOTNULL)->_and()->filterByDateEnd(date('Y-m-d'), Criteria::GREATER_EQUAL);
-	}
-	
+		
 	public function past($sDate = null) {
 		$sDateToday = date('Y-m-d');
 		$oDateStart = $this->getNewCriterion(EventPeer::DATE_START, $sDateToday, Criteria::LESS_THAN);
@@ -55,13 +51,7 @@ class EventQuery extends BaseEventQuery {
 		if(isset($aData['year'])) {
 			$this->add('YEAR(DATE_START)', $aData['year']);
 		} else {
-			$sDateToday = date('Y-m-d');
-			$oDateStart = $this->getNewCriterion(EventPeer::DATE_START, $sDateToday, Criteria::GREATER_EQUAL);
-			$oDateEnd = $this->getNewCriterion(EventPeer::DATE_END, null, Criteria::ISNULL);
-			$oDateEnd->addOr($this->getNewCriterion(EventPeer::DATE_END, $sDateToday, Criteria::GREATER_EQUAL));
-			$oDateStart->addAnd($oDateEnd);
-			$this->add($oDateStart);
-			return $this;
+			return $this->upcomingOrOngoing();
 		}
 		if(isset($aData['month'])) {
 			$this->add('MONTH(DATE_START)', $aData['month']);
@@ -87,11 +77,7 @@ class EventQuery extends BaseEventQuery {
 	}
 	
 	public function filterbyHasImagesOrReview() {
-		$this->addJoin(EventPeer::ID, EventDocumentPeer::EVENT_ID, Criteria::LEFT_JOIN);
-		$oOrCriteria = $this->getNewCriterion(EventPeer::BODY_REVIEW, null, Criteria::ISNOTNULL);
-		$oOrCriteria->addOr($this->getNewCriterion(EventDocumentPeer::DOCUMENT_ID, NULL, Criteria::ISNOTNULL));
-		$this->add($oOrCriteria);
-		return $this;
+		return $this->joinEventDocument()->_or()->filterByBodyReview(null, Criteria::ISNOTNULL);
 	}
 }
 
