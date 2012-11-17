@@ -42,9 +42,10 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		
 		// Only show if aktuell list is shown
 		$oNavigationItem = FrontendManager::$CURRENT_NAVIGATION_ITEM;
-		if(!$oNavigationItem instanceof PageNavigationItem) {
-			return;
-		}
+		// show this teaser on all subpages
+		// 	  if(!$oNavigationItem instanceof PageNavigationItem) {
+		// 	return;
+		// }
 		
 		$iRecentReportDaysBack = Settings::getSetting('school_settings', 'event_is_recent_report_day_count', 60);
 		$sDate = date('Y-m-d', time() - ($iRecentReportDaysBack * 24 * 60 * 60));
