@@ -82,7 +82,7 @@ input::-moz-placeholder,input::-webkit-input-placeholder{color:#a5a2a1}
 #sidebar_right .inner{line-height:1.4em}
 .home #sidebar_right .inner{padding-top:54px}
 table{width:100%;border-collapse:collapse}
-#content_main table.with_header:first-child{margin-top:-17px}
+#content_main table.with_header:first-child{margin-top:-23px}
 table.list_view td{vertical-align:top}
 table.list_view tr.row:nth-child(2n+1) td{background-color:#fdfdfd}
 th{text-align:left;font-weight:normal;font-size:.9em;font-style:oblique;line-height:18px;color:#999}
