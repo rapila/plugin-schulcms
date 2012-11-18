@@ -106,9 +106,12 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$oFlash = Flash::getFlash();
 		$oFlash->setArrayToCheck($aEventData);
 		$oFlash->checkForValue('title', 'title_required');
-		if($aEventData['is_active'] && $aEventData['teaser'] == null) {
-		  $oFlash->addMessage("is_activ_teaser_required");
+		if($aEventData['teaser'] != null) {
+			// $oFlash->checkForLength('teaser', null, 514, 'teaser_max_length');
+		} else if($aEventData['is_active']) {
+		  $oFlash->addMessage("is_active_teaser_required");
 		}
+		
 		if($aEventData['is_active'] && $aEventData['date_start'] == null) {
 		  $oFlash->addMessage("date_start_required");
 		}

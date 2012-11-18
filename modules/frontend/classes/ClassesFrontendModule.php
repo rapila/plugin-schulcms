@@ -34,21 +34,13 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 	}
 
 	private function renderKlassenliste($iClassTypeId = null) {
-    $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($iClassTypeId !== null ? $iClassTypeId.'_' : ""), DIRNAME_PRELOAD);  
-    if($oCache->cacheFileExists()) {
-      return $oCache->getContentsAsVariable();
-    }
-
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$aClasses = SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool($iClassTypeId)->find();
 		$oTemplate = $this->constructTemplate('list');
 		$bShowClassTeachersOnly = Settings::getSetting('school_settings', 'show_class_teachers_only_in_class_list', true);
 		$oTemplate->replaceIdentifier('header_col_teachers', StringPeer::getString('wns.col_header_teachers.'.($bShowClassTeachersOnly ? 'class_teachers' : 'teachers')));
-		$sOddEven = 'odd';
 		foreach($aClasses as $i => $oClass) {
 			$oItemTemplate = $this->constructTemplate('list_item');
-			$oItemTemplate->replaceIdentifier('oddeven', $sOddEven = $sOddEven === 'even' ? 'odd' : 'even');
-			
 			// get all infos that are independent of teaching unit
 			$oItemTemplate->replaceIdentifier('name', $oClass->getUnitName());
 			$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassTypeName());
@@ -86,7 +78,6 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 			}
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
-    $oCache->setContents($oTemplate);
 		return $oTemplate;
 	}
 	
@@ -215,8 +206,8 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		}
 		$oTemplate->replaceIdentifier('count_students', $aClasses[0]->countStudentsByUnitName());
 		// events
-		$aPreviewEvents = EventQuery::create()->filterByIsActive(true)->upcomingOrOngoing()->filterBySchoolClassId($aClassIds)->orderByDateStart()->find();
-		$aReview = EventQuery::create()->filterByIsActive(true)->past()->filterBySchoolClassId($aClassIds)->orderByDateStart(Criteria::DESC)->find();
+		$aPreviewEvents = FrontendEventQuery::create()->upcomingOrOngoing()->filterBySchoolClassId($aClassIds)->orderByDateStart()->find();
+		$aReview = FrontendEventQuery::create()->past()->filterBySchoolClassId($aClassIds)->orderByDateStart(Criteria::DESC)->find();
 		$aAllEvents = array_merge($aPreviewEvents->getData(), $aReview->getData());
 		$bRequiresBackToLink = false;
 		$oDateTmpl = $this->constructTemplate('date');

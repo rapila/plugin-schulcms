@@ -6,27 +6,19 @@
 class EventQuery extends BaseEventQuery {
 	
 	public function upcomingOrOngoing() {
-		$sDateToday = date('Y-m-d');
-		// Either a one day event
-		$oOneDayCriterion = $this->getNewCriterion(EventPeer::DATE_START, $sDateToday, Criteria::GREATER_EQUAL);
-		$oOneDayCriterion->addAnd($this->getNewCriterion(EventPeer::DATE_END, null, Criteria::ISNULL));
-		// Or a future multiple day event
-		$oMultiDayFuture = $this->getNewCriterion(EventPeer::DATE_END, $sDateToday, Criteria::GREATER_EQUAL);
-		$oMultiDayFuture->addAnd($this->getNewCriterion(EventPeer::DATE_END, null, Criteria::ISNOTNULL));
-		// Or a past but still ongoing event
-		$oMultiDayOngoing = $this->getNewCriterion(EventPeer::DATE_START, $sDateToday, Criteria::LESS_EQUAL);
-		$oMultiDayOngoing->addAnd($this->getNewCriterion(EventPeer::DATE_END, $sDateToday, Criteria::GREATER_EQUAL));
-		// Add the combined criterions to the criteria
-		$this->add($oOneDayCriterion->addOr($oMultiDayFuture)->addOr($oMultiDayOngoing));
-		return $this;
-	} 
+		return $this->upcoming()->_or()->filterByDateEnd(null, Criteria::ISNOTNULL)->_and()->filterByDateEnd(date('Y-m-d'), Criteria::GREATER_EQUAL);
+	}
 	
+	public function upcoming() {
+		return $this->filterByDateStart(date('Y-m-d'), Criteria::GREATER_EQUAL);
+	}
+		
 	public function past($sDate = null) {
 		$sDateToday = date('Y-m-d');
 		$oDateStart = $this->getNewCriterion(EventPeer::DATE_START, $sDateToday, Criteria::LESS_THAN);
 		$oDateEnd = $this->getNewCriterion(EventPeer::DATE_END, null, Criteria::ISNULL);
 		$oDateEndOr = $this->getNewCriterion(EventPeer::DATE_END, $sDateToday, Criteria::LESS_THAN);
-		// if this date is given then reduce selection
+		// if this date is given then restrict selection to date range
 		// @todo consider this to be the updated at instead of the event date?
 		if($sDate !== null) {
 			$oDateStart->addAnd($this->getNewCriterion(EventPeer::DATE_START, $sDate, Criteria::GREATER_THAN));
@@ -59,13 +51,7 @@ class EventQuery extends BaseEventQuery {
 		if(isset($aData['year'])) {
 			$this->add('YEAR(DATE_START)', $aData['year']);
 		} else {
-			$sDateToday = date('Y-m-d');
-			$oDateStart = $this->getNewCriterion(EventPeer::DATE_START, $sDateToday, Criteria::GREATER_EQUAL);
-			$oDateEnd = $this->getNewCriterion(EventPeer::DATE_END, null, Criteria::ISNULL);
-			$oDateEnd->addOr($this->getNewCriterion(EventPeer::DATE_END, $sDateToday, Criteria::GREATER_EQUAL));
-			$oDateStart->addAnd($oDateEnd);
-			$this->add($oDateStart);
-			return $this;
+			return $this->upcomingOrOngoing();
 		}
 		if(isset($aData['month'])) {
 			$this->add('MONTH(DATE_START)', $aData['month']);
@@ -91,11 +77,7 @@ class EventQuery extends BaseEventQuery {
 	}
 	
 	public function filterbyHasImagesOrReview() {
-		$this->addJoin(EventPeer::ID, EventDocumentPeer::EVENT_ID, Criteria::LEFT_JOIN);
-		$oOrCriteria = $this->getNewCriterion(EventPeer::BODY_REVIEW, null, Criteria::ISNOTNULL);
-		$oOrCriteria->addOr($this->getNewCriterion(EventDocumentPeer::DOCUMENT_ID, NULL, Criteria::ISNOTNULL));
-		$this->add($oOrCriteria);
-		return $this;
+		return $this->joinEventDocument()->_or()->filterByBodyReview(null, Criteria::ISNOTNULL);
 	}
 }
 

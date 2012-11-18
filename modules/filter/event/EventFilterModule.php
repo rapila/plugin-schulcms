@@ -86,7 +86,7 @@ class EventFilterModule extends FilterModule {
 	}
 	
 	private static function selectNames($aData, $sColumn = null) {
-		$oQuery = EventQuery::create()->distinct()->filterByNavigationItem($aData);
+		$oQuery = FrontendEventQuery::create()->distinct()->filterByNavigationItem($aData);
 		if(is_string($sColumn)) {
 			$oQuery->clearSelectColumns()->addSelectColumn($sColumn);
 			return EventPeer::doSelectStmt($oQuery)->fetchAll(PDO::FETCH_COLUMN);

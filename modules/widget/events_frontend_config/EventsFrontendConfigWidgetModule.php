@@ -28,7 +28,7 @@ class EventsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	}
 	
 	public function allEvents($iEventTypeId = null, $iLimit = null, $bIsArchive = false) {
-		$oQuery = EventQuery::create()->filterBySchoolClassId(null, Criteria::ISNULL);
+		$oQuery = FrontendEventQuery::create()->filterBySchoolClassId(null, Criteria::ISNULL);
 		if(is_numeric($iEventTypeId)) {
 			$oQuery->filterByEventTypeId($iEventTypeId);
 		}
