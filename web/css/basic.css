@@ -127,9 +127,9 @@ ul.class_teachers li{padding-bottom:0}
 img{vertical-align:bottom;}
 img.class_portrait{width:668px;margin-bottom:1em}
 a img{border:none}
-.date_square{background-color:#f5f173;color:#333;font-size:15px;margin-top:0;padding:5px 0 2px;width:36px;line-height:.85em;text-align:center;border-left:1px solid #d1c4c4;border-bottom:1px solid #d1c4c4;margin-bottom:.3em;}
+.date_square{border-radius:1px;background-color:#f5f173;color:#333;font-size:15px;margin-top:0;padding:2px 0 3px;width:36px;line-height:.85em;text-align:center;border-left:1px solid #d1c4c4;border-bottom:1px solid #d1c4c4;margin-bottom:.3em;}
 .date_square.passed{background-color:#f7f7f7}
-.date_square span{font-family:Arial;font-size:.7em}
+.date_square span{display:block;margin-bottom:2px;font-family:Arial;font-size:.7em}
 .date_square div{border:none}
 .gallery{margin-top:1em;}
 .gallery .gallery-canvas{display:inline-block;position:relative;width:165px;height:165px;line-height:165px;margin-right:2px;}
