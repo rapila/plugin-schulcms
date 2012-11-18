@@ -6,7 +6,7 @@
 class EventQuery extends BaseEventQuery {
 	
 	public function upcomingOrOngoing() {
-		return $this->upcoming()->_or()->filterByDateEnd(null, Criteria::ISNOTNULL)->_and()->filterByDateEnd(date('Y-m-d'), Criteria::GREATER_EQUAL);
+		return $this->upcoming()->_and()->filterByDateEnd(null, Criteria::ISNULL)->_or()->filterByDateEnd(date('Y-m-d'), Criteria::GREATER_EQUAL);
 	}
 	
 	public function upcoming() {
