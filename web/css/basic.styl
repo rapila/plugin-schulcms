@@ -197,18 +197,20 @@ body.default ul#main_navigation li
 	a, span
 		color #666
 
-ul#secondary_navigation li 
-	a, span
-		color #6F6F6E
+ul#secondary_navigation 
+	li
+		padding 0.2em 1em
+		a
+			color #6F6F6E
+			&.active, &.current
+				color school_color
+		span
+			color school_color
 
 body.default ul#main_navigation 
 	li 
 		span,	a.active, a.current
 			color school_color
-ul#secondary_navigation li 
-	padding 0.2em 1em
-	a.current, li a.active, span, 
-		color school_color
 ul#meta_navigation li span
 	color school_color
 
@@ -259,7 +261,8 @@ ul#meta_navigation li
 				background url('../images/home_context.png') transparent right center no-repeat
 			&.class_home:hover
 				background url('../images/home_context_hover.png') transparent right center no-repeat
-	h2:first-child,
+		&:first-child
+			margin-top 0
 	table
 		width sidebar_right_width !important
 		td.event_title span
@@ -597,7 +600,12 @@ img.service_logo
 	border 1px solid school_color
 	padding 1em
 
-#aktuell_container, .events a.active, #content_main h2, a:hover, #content_main h1, #content_main h2, .highlight
+#aktuell_container, 
+.events a.active, 
+#content_main h2,
+#content_main h1, 
+a:hover,  
+.highlight
 	color school_color
 	
 .today 

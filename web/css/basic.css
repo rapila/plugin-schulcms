@@ -40,10 +40,11 @@ img.blackboard_image{float:right;width:194px;margin:-20px 0 0 10px;min-height:14
 ul#secondary_navigation{margin-top:142px}
 ul#meta_navigation li a,ul#meta_navigation li span,ul#main_navigation li a,ul#main_navigation li span,ul#secondary_navigation li a,ul#secondary_navigation li span{text-transform:uppercase;letter-spacing:.08em;font-size:1.3em;line-height:1.4em;color:#fff}
 body.default ul#main_navigation li a,body.default ul#main_navigation li span{color:#666}
-ul#secondary_navigation li a,ul#secondary_navigation li span{color:#6f6f6e}
-body.default ul#main_navigation li span,body.default ul#main_navigation li a.active,body.default ul#main_navigation li a.current{color:#5e61a8}
 ul#secondary_navigation li{padding:.2em 1em;}
-ul#secondary_navigation li a.current,ul#secondary_navigation li li a.active,ul#secondary_navigation li span,ul#secondary_navigation li{color:#5e61a8}
+ul#secondary_navigation li a{color:#6f6f6e;}
+ul#secondary_navigation li a.active,ul#secondary_navigation li a.current{color:#5e61a8}
+ul#secondary_navigation li span{color:#5e61a8}
+body.default ul#main_navigation li span,body.default ul#main_navigation li a.active,body.default ul#main_navigation li a.current{color:#5e61a8}
 ul#meta_navigation li span{color:#5e61a8}
 body.default ul#main_navigation li a:hover,ul#meta_navigation li a:hover,ul#secondary_navigation li a:hover{color:#000}
 ul#main_navigation li:first-child{padding-left:.5em}
@@ -59,8 +60,9 @@ ul#meta_navigation li a{color:#817f7d}
 #sidebar_right h2 a.class_home,#sidebar_right h2 a.class_home:hover{display:block}
 #sidebar_right h2 a.class_home{background:url("../images/home_context.png") transparent right center no-repeat}
 #sidebar_right h2 a.class_home:hover{background:url("../images/home_context_hover.png") transparent right center no-repeat}
-#sidebar_right h2:first-child,#sidebar_right table{width:194px !important;}
-#sidebar_right h2:first-child td.event_title span,#sidebar_right table td.event_title span{font-size:.9em;display:block;margin-top:-4px}
+#sidebar_right h2:first-child{margin-top:0}
+#sidebar_right table{width:194px !important;}
+#sidebar_right table td.event_title span{font-size:.9em;display:block;margin-top:-4px}
 #sidebar_right img:first-child + h2{margin-top:0}
 #sidebar_right .sidebar_detail{position:fixed;width:194px}
 #sidebar_right .detail_info p{padding:.2em .2em;border-bottom:1px solid #c9c5b3}
@@ -145,7 +147,7 @@ a.event_teaser_classlink{margin-left:1em}
 .align_right{text-align:right}
 img.service_logo{float:right;margin:0 1em 1em 2em}
 .not_found_page{border:1px solid #5e61a8;padding:1em}
-#aktuell_container,.events a.active,#content_main h2,a:hover,#content_main h1,#content_main h2,.highlight{color:#5e61a8}
+#aktuell_container,.events a.active,#content_main h2,#content_main h1,a:hover,.highlight{color:#5e61a8}
 .today{padding-left:3px;border:1px solid #999}
 .status_icons{width:16px;}
 .status_icons.has_bericht{background:transparent url("../images/has_bericht.png") no-repeat 0 3px}
