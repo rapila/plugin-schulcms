@@ -34,11 +34,6 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 	}
 
 	private function renderKlassenliste($iClassTypeId = null) {
-    $oCache = new Cache(self::CACHE_KEY.Session::language().'_'. ($iClassTypeId !== null ? $iClassTypeId.'_' : ""), DIRNAME_PRELOAD);  
-    if($oCache->cacheFileExists()) {
-      return $oCache->getContentsAsVariable();
-    }
-
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$aClasses = SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool($iClassTypeId)->find();
 		$oTemplate = $this->constructTemplate('list');
@@ -83,7 +78,6 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 			}
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
-    $oCache->setContents($oTemplate);
 		return $oTemplate;
 	}
 	
