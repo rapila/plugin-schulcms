@@ -22,8 +22,8 @@ p,ul{padding-bottom:1em}
 #blackboard_text p a.blackboard_more_link{font-size:.6em}
 #blackboard_text,#content_main h1,#content_main h2,body.editing h1,body.editing h2{font-family:'Architects Daughter',Courier,Serif;line-height:1em;font-weight:normal;padding-bottom:.1em}
 .home #header_main,.home #blackboard_area{height:142px}
-a.pdf,a.doc,a.docx{padding-left:1.6em;background:transparent url("../images/pdf.png") no-repeat 1px 1px;display:inline-block;vertical-align:top}
-a.doc,a.docx{padding-left:1.6em;background:transparent url("../images/doc.png") no-repeat 1px 1px}
+a.pdf,a.doc,a.docx{padding-left:1.6em;background:transparent url("../images/pdf.png") no-repeat 1px 2px;display:inline-block;vertical-align:top}
+a.doc,a.docx{padding-left:1.6em;background:transparent url("../images/doc.png") no-repeat 1px 2px}
 .document_list td:first-child span{display:block;padding-left:22px}
 .service_portraits{float:right;width:150px;margin:0 0 20px 20px}
 .portrait_item span{display:block;font-size:.95em;margin-bottom:.8em;font-style:oblique}
@@ -88,6 +88,7 @@ table.list_view tr.row:nth-child(2n+1) td{background-color:#fdfdfd}
 th{text-align:left;font-weight:normal;font-size:.9em;font-style:oblique;line-height:18px;color:#999}
 td,th{padding:0 3px;vertical-align:top;border-bottom:1px solid #f9f9f9;line-height:24px;}
 td a,th a{line-height:24px}
+#sidebar_right td,#sidebar_right th{line-height:22px}
 td p{line-height:20px;margin:0;padding:0}
 table.context_list tr td{border-bottom:1px solid #c9c5b3}
 td.datum,#sidebar_right td.datum{padding-left:0;padding-right:0;width:25px}
@@ -95,8 +96,8 @@ td.datum,#sidebar_right td.datum{padding-left:0;padding-right:0;width:25px}
 .event_list td a.detail_link{display:block;width:20px;background:transparent url("../images/detail_link.png") no-repeat 0 3px;}
 .event_list td a.detail_link:hover{background:transparent url("../images/detail_link_hover.png") no-repeat 0 3px}
 .event_list td p{line-height:16px;padding:2px 0;margin-bottom:.8em}
-.event_list.context_list td p{margin-bottom:.8em}
-.event_list.context_list .event_title a{line-height:17px;padding-top:3px;padding-bottom:3px;max-width:150px}
+.event_list.context_list td p{margin-bottom:.5em}
+.event_list.context_list .event_title a{line-height:17px;padding-top:3px;max-width:150px}
 td.event_title{padding-left:3px}
 td a{display:inline-block}
 .recent_event_image_link{display:block;margin-top:-7px;}

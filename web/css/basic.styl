@@ -111,14 +111,14 @@ a.pdf,
 a.doc, 
 a.docx
 	padding-left 1.6em
-	background transparent url(../images/pdf.png) no-repeat 1px 1px
+	background transparent url(../images/pdf.png) no-repeat 1px 2px
 	display inline-block
 	vertical-align top
 	
 a.doc, 
 a.docx
 	padding-left 1.6em
-	background transparent url(../images/doc.png) no-repeat 1px 1px
+	background transparent url(../images/doc.png) no-repeat 1px 2px
 
 .document_list td:first-child span
 	display:block
@@ -367,7 +367,9 @@ td, th
 	line-height 24px
 	a
 		line-height 24px
-
+#sidebar_right
+	td, th
+		line-height 22px
 td p
 	line-height 20px
 	margin 0
@@ -396,12 +398,11 @@ td.datum, #sidebar_right td.datum
 			margin-bottom .8em
 	&.context_list
 		td p
-			margin-bottom .8em
+			margin-bottom .5em
 		.event_title 
 			a
 				line-height 17px
 				padding-top 3px
-				padding-bottom 3px
 				max-width sidebar_right_link_width
 				
 td.event_title
