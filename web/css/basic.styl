@@ -265,10 +265,11 @@ ul#meta_navigation li
 			margin-top 0
 	table
 		width sidebar_right_width !important
-		td.event_title span
-			font-size 0.9em
-			display block
-			margin-top -4px
+		td.event_title 
+			span
+				font-size 0.9em
+				display block
+				margin-top -4px
 	img:first-child + h2
 		margin-top 0
 	.sidebar_detail
@@ -403,10 +404,8 @@ td.datum, #sidebar_right td.datum
 			a
 				line-height 17px
 				padding-top 3px
+				padding-left 3px
 				max-width sidebar_right_link_width
-				
-td.event_title
-	padding-left:3px
 
 td a
 	display inline-block
@@ -498,7 +497,8 @@ ul.class_teachers
 	padding 0 10px
 	font-style oblique
 	h1, h2
-		font-size:1.3em
+		font-size 1.3em
+		font-family "Trebuchet MS", Georgia, Arial, Helvetica, sans-serif
 
 .home 
 	#content_main .inner
@@ -609,7 +609,8 @@ img.service_logo
 #content_main h2,
 #content_main h1, 
 a:hover,  
-.highlight
+.highlight,
+a.active
 	color school_color
 	
 .today 

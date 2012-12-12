@@ -97,8 +97,7 @@ td.datum,#sidebar_right td.datum{padding-left:0;padding-right:0;width:25px}
 .event_list td a.detail_link:hover{background:transparent url("../images/detail_link_hover.png") no-repeat 0 3px}
 .event_list td p{line-height:16px;padding:2px 0;margin-bottom:.8em}
 .event_list.context_list td p{margin-bottom:.5em}
-.event_list.context_list .event_title a{line-height:17px;padding-top:3px;max-width:150px}
-td.event_title{padding-left:3px}
+.event_list.context_list .event_title a{line-height:17px;padding-top:3px;padding-left:3px;max-width:150px}
 td a{display:inline-block}
 .recent_event_image_link{display:block;margin-top:-7px;}
 .recent_event_image_link img{width:194px}
@@ -121,7 +120,7 @@ a.stundenplan:hover{background:transparent url("../images/pdf_hover.png") no-rep
 ul.class_teachers{margin-top:.3em;}
 ul.class_teachers li{padding-bottom:0}
 #aktuell_container{float:right;width:230px;margin-left:14px;padding:0 10px;font-style:oblique;}
-#aktuell_container h1,#aktuell_container h2{font-size:1.3em}
+#aktuell_container h1,#aktuell_container h2{font-size:1.3em;font-family:"Trebuchet MS",Georgia,Arial,Helvetica,sans-serif}
 .home #content_main .inner{max-width:440px}
 .home #aktuell_container .inner{width:auto}
 img{vertical-align:bottom;}
@@ -148,7 +147,7 @@ a.event_teaser_classlink{margin-left:1em}
 .align_right{text-align:right}
 img.service_logo{float:right;margin:0 1em 1em 2em}
 .not_found_page{border:1px solid #5e61a8;padding:1em}
-#aktuell_container,.events a.active,#content_main h2,#content_main h1,a:hover,.highlight{color:#5e61a8}
+#aktuell_container,.events a.active,#content_main h2,#content_main h1,a:hover,.highlight,a.active{color:#5e61a8}
 .today{padding-left:3px;border:1px solid #999}
 .status_icons{width:16px;}
 .status_icons.has_bericht{background:transparent url("../images/has_bericht.png") no-repeat 0 3px}
