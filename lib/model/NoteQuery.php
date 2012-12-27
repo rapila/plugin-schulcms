@@ -7,11 +7,7 @@ class NoteQuery extends BaseNoteQuery {
 	
 	public function filterByDate() {
 		$sDateToday = date('Y-m-d');
-		$oDateStart = $this->getNewCriterion(NotePeer::DATE_START, $sDateToday, Criteria::LESS_EQUAL);
-		$oDateEnd = $this->getNewCriterion(NotePeer::DATE_END, null, Criteria::ISNULL);
-		$oDateEnd->addOr($this->getNewCriterion(NotePeer::DATE_END, $sDateToday, Criteria::GREATER_EQUAL));
-		$oDateStart->addAnd($oDateEnd);
-		$this->add($oDateStart);
+		$this->filterByDateStart($sDateToday, Criteria::LESS_EQUAL)->_and()->filterByDateEnd($sDateToday, Criteria::GREATER_EQUAL)->_or()->filterByDateEnd(null, Criteria::ISNULL);
 		return $this;
 	}
 }

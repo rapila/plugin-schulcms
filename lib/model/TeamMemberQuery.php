@@ -71,7 +71,7 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 	}
 	
 	public function filterByHasPortrait() {
-		return $this->add(TeamMemberPeer::PORTRAIT_ID, null, Criteria::ISNOTNULL);
+		return $this->filterByPortraitId(null, Criteria::ISNOTNULL);
 	}
 	
 	public function filterByFunctionId($iFunctionId = null) {
