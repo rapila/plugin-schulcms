@@ -51,7 +51,8 @@ class TeamMembersFrontendModule extends FrontendModule {
 				$oItemTemplate->replaceIdentifier('is_active_class', ' active');
 				$oItemTemplate->replaceIdentifier('show_active', '➜');
 			}
-			$oItemTemplate->replaceIdentifier('detail_link_name', TagWriter::quickTag('a', array('href' => LinkUtil::link($oTeamMember->getTeamMemberLink($oPage))),$oTeamMember->getFullNameInverted()));
+			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oTeamMember->getTeamMemberLink($oPage)));
+			$oItemTemplate->replaceIdentifier('name', $oTeamMember->getFullNameInverted());
 			$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.team_member.link_title_prefix').$oTeamMember->getFullName());
 			$oItemTemplate->replaceIdentifier('first_function_name', $oTeamMember->getFirstTeamMemberFunctionName());
 
