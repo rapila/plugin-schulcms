@@ -398,18 +398,19 @@ td.datum, #sidebar_right td.datum
 			padding 2px 0
 			margin-bottom .8em
 	&.context_list
-		td p
-			margin-bottom .5em
+		tr
+			&:hover td
+				background-color rgba(#fff, 0.3)
+			td p
+				margin-bottom .5em
+				a.teaser_link
+					color inherit
 		.event_title 
 			a
 				line-height 17px
 				padding-top 3px
 				padding-left 3px
 				max-width sidebar_right_link_width
-
-td a
-	display inline-block
-
 	
 .recent_event_image_link
 	display block
@@ -610,7 +611,8 @@ img.service_logo
 #content_main h1, 
 a:hover,  
 .highlight,
-a.active
+a.active,
+tr:hover a
 	color school_color
 	
 .today 
