@@ -79,5 +79,13 @@ class EventQuery extends BaseEventQuery {
 	public function filterbyHasImagesOrReview() {
 		return $this->joinEventDocument()->_or()->filterByBodyReview(null, Criteria::ISNOTNULL);
 	}
+	
+	public static function findYearsByEventTypeId($iEventType = null) {
+		$oQuery = FrontendEventQuery::create()->distinct()->withColumn('YEAR(events.DateStart)', 'Year');
+		if(is_numeric($iEventType)) {
+			$oQuery->filterByEventTypeId($iEventType);
+		}
+		return $oQuery->orderBy('Year')->select(array('Year'))->find()->toArray();
+	}
 }
 

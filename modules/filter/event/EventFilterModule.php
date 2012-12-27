@@ -24,9 +24,12 @@ class EventFilterModule extends FilterModule {
 				$aData = array('event_type' => $mIdentifier[1]);
 				$aYears = self::selectNames($aData, 'YEAR(DATE_START)');
 				foreach($aYears as $iYear) {
-					$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE.$iYear, null, array_merge($aData, array('year' => $iYear))));
+					if($iYear != null) {
+						$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE.$iYear, null, array_merge($aData, array('year' => $iYear))));
+						
+					}
 				}
-				$aAllYears = EventPeer::getYears($mIdentifier[1]);
+				$aAllYears = FrontendEventQuery::findYearsByEventTypeId($mIdentifier[1]);
 				foreach(array_diff($aAllYears, $aYears) as $iYear) {
 					$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE.$iYear, null, array_merge($aData, array('year' => $iYear))));
 				}

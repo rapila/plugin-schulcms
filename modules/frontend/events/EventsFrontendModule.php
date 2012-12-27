@@ -156,7 +156,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	}
 	
 	private function renderArchiveInfo($oTemplate, $oPage) {
-		$aYears = EventPeer::getYears($this->iEventTypeId);
+		$aYears = FrontendEventQuery::findYearsByEventTypeId($this->iEventTypeId);
 		$iCountYears = count($aYears);
 		if($iCountYears > 0) {
 			$oTemplate->replaceIdentifier('report_and_images_teaser_message', StringPeer::getString('report_and_images_teaser_message'));

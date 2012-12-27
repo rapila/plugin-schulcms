@@ -14,20 +14,15 @@ class EventPeer extends BaseEventPeer {
 		$oCriteria->add($oSearchCriterion);
 	}
 	
+	/**
+	* @deprecated use EventQuery::findYearsByEventTypeId();
+	*/
 	public static function getYears($iEventType = null) {
-		$oCriteria = new Criteria();
-		$oCriteria->clearSelectColumns()->clearOrderByColumns()->clearGroupByColumns();
-		$oCriteria->setDistinct();
+		$oQuery = FrontendEventQuery::create()->distinct()->withColumn('YEAR(' . self::DATE_START . ')', 'Year');
 		if(is_numeric($iEventType)) {
-			$oCriteria->add(self::EVENT_TYPE_ID, $iEventType);
+			$oQuery->filterByEventTypeId($iEventType);
 		}
-		$oCriteria->addSelectColumn('YEAR(' . self::DATE_START . ') AS Year');
-		$oCriteria->addDescendingOrderByColumn('year');
-		$aYears = array();
-		foreach(self::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_CLASS) as $aParams) {
-			$aYears[] = $aParams->Year;
-		}
-		return $aYears;
+		return $oQuery->orderBy('Year')->select(array('Year'))->find()->toArray();
 	}
 	
 	public static function mayOperateOn($oUser, $mObject, $sOperation) {
