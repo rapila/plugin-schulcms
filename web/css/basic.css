@@ -98,8 +98,8 @@ td.datum,#sidebar_right td.datum{padding-left:0;padding-right:0;width:25px}
 .event_list td p{line-height:16px;padding:2px 0;margin-bottom:.8em}
 .event_list.context_list tr:hover td{background-color:rgba(255,255,255,0.30)}
 .event_list.context_list tr td p{margin-bottom:.5em;}
-.event_list.context_list tr td p a.teaser_link{color:inherit}
-.event_list.context_list .event_title a{line-height:17px;padding-top:3px;padding-left:3px;max-width:150px}
+.event_list.context_list tr td p a.teaser_link{color:#333}
+.event_list.context_list .event_title a{line-height:10px;padding-top:3px;padding-left:3px;max-width:150px}
 .recent_event_image_link{display:block;margin-top:-7px;}
 .recent_event_image_link img{width:194px}
 .report_and_images_teaser{font-size:.9em;line-height:20px;color:#666;margin-top:2em;}
