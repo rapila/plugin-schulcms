@@ -51,7 +51,7 @@ ul#main_navigation li:first-child{padding-left:.5em}
 ul#meta_navigation li{float:right;padding:0 0 0 2em;}
 ul#meta_navigation li a{color:#817f7d}
 #sidebar_right{position:absolute;top:170px;bottom:0;right:0;background-color:#e7d9d9;padding:0;width:194px;background-color:#d3d1b8;}
-#sidebar_right .inner > p{padding-left:2px}
+#sidebar_right p{padding-left:2px}
 #sidebar_right h1,#sidebar_right h2{margin-bottom:.5em;color:#fff;line-height:24px;font-size:13px;background-color:#5e61a8}
 #sidebar_right h1,#sidebar_right h2,#sidebar_right table td{padding-left:2px;padding-right:2px}
 #sidebar_right h2{margin-top:22px;margin-bottom:.3em;}
@@ -98,14 +98,9 @@ td.datum,#sidebar_right td.datum{padding-left:0;padding-right:0;width:25px}
 .event_list td p{line-height:16px;padding:2px 0;margin-bottom:.8em}
 .event_list.context_list tr:hover td{background-color:rgba(255,255,255,0.30)}
 .event_list.context_list tr td p{margin-bottom:.5em;}
-<<<<<<< Updated upstream
 .event_list.context_list tr td p a.teaser_link{color:#333}
-.event_list.context_list .event_title a{line-height:10px;padding-top:3px;padding-left:3px;max-width:150px}
-=======
-.event_list.context_list tr td p a.teaser_link{color:inherit}
-.event_list.context_list td.event_title a{line-height:12px}
-.event_list.context_list td.event_title a{padding-top:3px;max-width:150px}
->>>>>>> Stashed changes
+.event_list.context_list .event_title a{line-height:10px;padding-top:3px;padding-left:3px;max-width:150px;}
+.event_list.context_list .event_title a.more_link{background:transparent url("../images/more_icon.png") no-repeat -1px -2px}
 .recent_event_image_link{display:block;margin-top:-7px;}
 .recent_event_image_link img{width:194px}
 .report_and_images_teaser{font-size:.9em;line-height:20px;color:#666;margin-top:2em;}

@@ -237,7 +237,7 @@ ul#meta_navigation li
 	padding 0
 	width sidebar_right_width
 	background-color sidebar_right_color
-	.inner > p
+	p
 		padding-left 2px
 	h1, h2
 		margin-bottom .5em
@@ -411,7 +411,9 @@ td.datum, #sidebar_right td.datum
 				padding-top 3px
 				padding-left 3px
 				max-width sidebar_right_link_width
-
+				&.more_link
+					background transparent url(../images/more_icon.png) no-repeat -1px -2px
+	
 .recent_event_image_link
 	display block
 	margin-top -7px
