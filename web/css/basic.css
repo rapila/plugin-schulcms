@@ -99,7 +99,7 @@ td.datum,#sidebar_right td.datum{padding-left:0;padding-right:0;width:25px}
 .event_list.context_list tr:hover td{background-color:rgba(255,255,255,0.30)}
 .event_list.context_list tr td p{margin-bottom:.5em;}
 .event_list.context_list tr td p a.teaser_link{color:#333}
-.event_list.context_list .event_title a{line-height:10px;padding-top:3px;padding-left:3px;max-width:150px;}
+.event_list.context_list .event_title a{line-height:10px;padding-top:3px;max-width:150px;}
 .event_list.context_list .event_title a.more_link{background:transparent url("../images/more_icon.png") no-repeat -1px -2px}
 .recent_event_image_link{display:block;margin-top:-7px;}
 .recent_event_image_link img{width:194px}
