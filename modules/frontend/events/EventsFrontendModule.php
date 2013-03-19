@@ -72,7 +72,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		return $oTemplate;
 	}
 	
-	private function renderList($iLimit=null) {		
+	private function renderList($iLimit=null) {
 		// Get basic query
 		$oEventQuery = FrontendEventQuery::create()->filterBySchoolClassId(null, Criteria::ISNULL)->orderByDateStart();
 		
@@ -102,7 +102,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		if($iLimit !== null) {
 			$oEventQuery->limit($iLimit);
 		}
-		
+
 		// Create template depending on container
 		if($this->oLanguageObject->getContentObject()->getContainerName() !== 'context') {
 			$oTemplate = $this->constructTemplate('list');
@@ -201,7 +201,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		}
 		
 		$oTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
-		$oTemplate->replaceIdentifier('body', $sBody);
+		$oTemplate->replaceIdentifier('body', $sBody, null, Template::NO_HTML_ESCAPE);
 		if(self::$EVENT->getDateEnd() == null) {
 			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getWeekdayName().', '.self::$EVENT->getDatumWithMonthName());
 		} else {

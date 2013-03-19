@@ -142,6 +142,10 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$oRichtextUtil = new RichtextUtil();
 		$oRichtextUtil->setTrackReferences($oEvent);
 		
+		if($oEvent->getDateEnd() !== null && $oEvent->getDateEnd() < $oEvent->getDateStart()) {
+			$oEvent->setDateEnd(null);
+		}
+		
 		// Text Hinweis
 		$sPreview = $oRichtextUtil->parseInputFromEditor($aEventData['body_preview']);
 		if(trim($sPreview) == '') {
