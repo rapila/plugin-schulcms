@@ -266,10 +266,15 @@ ul#meta_navigation li
 	table
 		width sidebar_right_width !important
 		td.event_title 
+			> a
+				display block
+				margin 8px 0 7px
 			span
 				font-size 0.9em
 				display block
 				margin-top -4px
+			p
+				padding-left 0
 	img:first-child + h2
 		margin-top 0
 	.sidebar_detail
@@ -371,6 +376,9 @@ td, th
 #sidebar_right
 	td, th
 		line-height 22px
+	.event_list
+		td
+			line-height 16px
 td p
 	line-height 20px
 	margin 0

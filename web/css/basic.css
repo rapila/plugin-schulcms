@@ -62,7 +62,9 @@ ul#meta_navigation li a{color:#817f7d}
 #sidebar_right h2 a.class_home:hover{background:url("../images/home_context_hover.png") transparent right center no-repeat}
 #sidebar_right h2:first-child{margin-top:0}
 #sidebar_right table{width:194px !important;}
+#sidebar_right table td.event_title > a{display:block;margin:8px 0 7px}
 #sidebar_right table td.event_title span{font-size:.9em;display:block;margin-top:-4px}
+#sidebar_right table td.event_title p{padding-left:0}
 #sidebar_right img:first-child + h2{margin-top:0}
 #sidebar_right .sidebar_detail{position:fixed;width:194px}
 #sidebar_right .detail_info p{padding:.2em .2em;border-bottom:1px solid #c9c5b3}
@@ -89,6 +91,7 @@ th{text-align:left;font-weight:normal;font-size:.9em;font-style:oblique;line-hei
 td,th{padding:0 3px;vertical-align:top;border-bottom:1px solid #f9f9f9;line-height:24px;}
 td a,th a{line-height:24px}
 #sidebar_right td,#sidebar_right th{line-height:22px}
+#sidebar_right .event_list td{line-height:16px}
 td p{line-height:20px;margin:0;padding:0}
 table.context_list tr td{border-bottom:1px solid #c9c5b3}
 td.datum,#sidebar_right td.datum{padding-left:0;padding-right:0;width:25px}
