@@ -63,7 +63,7 @@ Widget.types.class_detail = {
 		});
 		
 		this.uploader.allow_drag_to(stundenplan, null, function(target, file) {
-			if(file.type !== 'application/pdf' && file.fileName.lastIndexOf('.pdf') !== (file.fileName.length-4)) {
+			if(file.type !== 'application/pdf' && file.name.lastIndexOf('.pdf') !== (file.name.length-4)) {
 				Widget.notifyUser(Widget.logSeverity.ALERT, 'Der Stundenplan muss eine Datei vom Typ «PDF» sein');
 				return false;
 			}
