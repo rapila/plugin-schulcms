@@ -6,9 +6,9 @@ class ActiveTeamMemberInputWidgetModule extends WidgetModule {
 	
 	private $bShowActiveMembersOnly;
 	
-	public function __construct($sSessionKey, $sDefaultSelection = true) {
-		parent::__construct($sSessionKey);
-		$this->bShowActiveMembersOnly = $sDefaultSelection;
+	public function __construct($bDefaultSelection = true) {
+		parent::__construct();
+		$this->bShowActiveMembersOnly = $bDefaultSelection;
 	}
 	
 	public function getElementType() {
