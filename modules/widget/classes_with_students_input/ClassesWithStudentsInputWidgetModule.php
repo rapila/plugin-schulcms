@@ -6,8 +6,8 @@ class ClassesWithStudentsInputWidgetModule extends WidgetModule {
 	
 	private $bShowWithStudentsOnly;
 	
-	public function __construct($sSessionKey, $sDefaultSelection = true) {
-		parent::__construct($sSessionKey);
+	public function __construct($sDefaultSelection = true) {
+		parent::__construct();
 		$this->bShowWithStudentsOnly = $sDefaultSelection;
 	}
 	
