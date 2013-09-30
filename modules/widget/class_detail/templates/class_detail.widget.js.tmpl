@@ -208,8 +208,10 @@ Widget.types.class_detail = {
 		Widget.create('event_detail', function(widget) {
 			widget.settings.predefined_school_class_id = _this.current_detail_id;
 		}, function(widget) {
-			widget.setEventId(event_id);
-			widget.fill_data();
+			if(event_id) {
+				widget.setEventId(event_id);
+				widget.fill_data();
+			}
 			widget.open();
 			widget.save_callback = function(event_id) {
 				_this.reload_events();
@@ -264,9 +266,11 @@ Widget.types.class_detail = {
 		Widget.create('link_detail', function(widget) {
 			widget.settings.predefined_link_category_id = _this.settings.link_category_id;
 		}, function(widget) {
-			widget.setLinkId(link_id);
+			if(link_id) {
+				widget.setLinkId(link_id);
+				widget.fill_data();
+			}
 			widget.open();
-			widget.fill_data();
 			widget.save_callback = function(link_id) {
 				_this.addClassLink(link_id);
 				_this.reload_links();
