@@ -47,7 +47,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			return;
 		}
 		$oTemplate = $this->constructTemplate('recent_report_teaser');
-		$sEventLink = LinkUtil::link($oEvent->getEventPageLink(FrontendManager::$CURRENT_PAGE));
+		$sEventLink = LinkUtil::link($oEvent->getEventPageLink());
 		$oTemplate->replaceIdentifier('detail_link', $sEventLink);
 		$oTemplate->replaceIdentifier('detail_link_title', 'Zu den Details');		
 		$oTemplate->replaceIdentifier('event_title', $oEvent->getTitle());
