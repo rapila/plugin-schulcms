@@ -125,7 +125,8 @@ a.stundenplan:hover{background:transparent url("../images/pdf_hover.png") no-rep
 ul.class_teachers{margin-top:.3em;}
 ul.class_teachers li{padding-bottom:0}
 #aktuell_container{float:right;width:230px;margin-left:14px;padding:0 10px;font-style:oblique;}
-#aktuell_container h1,#aktuell_container h2{font-size:1.3em;font-family:"Trebuchet MS",Georgia,Arial,Helvetica,sans-serif}
+#aktuell_container h1,#aktuell_container h2{font-size:1.3em;font-family:"Trebuchet MS",Georgia,Arial,Helvetica,sans-serif;}
+#aktuell_container h1 span,#aktuell_container h2 span{display:block;font-size:.85em;margin-bottom:2px}
 .home #content_main .inner{max-width:440px}
 .home #aktuell_container .inner{width:auto}
 img{vertical-align:bottom;}
