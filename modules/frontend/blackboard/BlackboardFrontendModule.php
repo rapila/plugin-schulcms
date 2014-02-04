@@ -36,12 +36,13 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 		return $this->renderNote();
 	}
 	
-	public function renderEventReport() {
+	public function renderEventReport() { 
 		// display event if has recent report or images
-		$iRecentDaysBack = Settings::getSetting('school_settings', 'event_is_recent_day_count', 30);
+		$iRecentDaysBack = Settings::getSetting('school_settings', 'event_is_recent_day_count', 60);
 		$sDate = date('Y-m-d', time() - ($iRecentDaysBack * 24 * 60 * 60));
 		$oQuery = FrontendEventQuery::create()->past()->filterbyHasImagesOrReview()->filterBySchoolClassId(null, Criteria::ISNULL)->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
 		$oEvent = $oQuery->orderByUpdatedAt(Criteria::DESC)->findOne();
+
 		if($oEvent === null) {
 			return;
 		}
