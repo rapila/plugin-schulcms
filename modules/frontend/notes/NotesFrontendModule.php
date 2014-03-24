@@ -26,7 +26,7 @@ class NotesFrontendModule extends DynamicFrontendModule {
 		if($iNoteTypeId !== null) {
 			$oQuery->filterByNoteTypeId($iNoteTypeId);
 		}
-		$oQuery->filterByDate()->orderByDateStart();
+		$oQuery->filterByDate()->orderByDate();
 		if($iLimit) {
 			$oQuery->limit($iLimit);
 		}
@@ -45,27 +45,5 @@ class NotesFrontendModule extends DynamicFrontendModule {
 			}
 		}
 		return null;
-	}
-	
-	public function renderBackend() {
-		$oTemplate = $this->constructTemplate('config');
-
-		// display option
-		$aDisplayOptions = array();
-		foreach(self::$DISPLAY_MODES as $sDisplayMode) {
-			$aDisplayOptions[$sDisplayMode] = StringPeer::getString('notes.display_option.'.$sDisplayMode, null, StringUtil::makeReadableName($sDisplayMode));
-		}
-		$oTemplate->replaceIdentifier('display_options', TagWriter::optionsFromArray($aDisplayOptions, null, null, null));
-
-		// note_type option
-		$oTemplate->replaceIdentifier('type_options', TagWriter::optionsFromObjects(NoteTypeQuery::create()->orderByName()->find(), 'getId', 'getName', null, array('' => StringPeer::getString('wns.notes.all_note_types'))));
-		
-		// display limit
-		$aLimitOptions = array();
-		foreach(range(1,3) as $iLimit) {
-			$aLimitOptions[$iLimit] = $iLimit;
-		}
-		$oTemplate->replaceIdentifier('limit_options', TagWriter::optionsFromArray($aLimitOptions, null, null, array('' => StringPeer::getString('wns.note.limit_none'))));
-		return $oTemplate;
 	}
 }
