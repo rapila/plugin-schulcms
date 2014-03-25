@@ -1,6 +1,6 @@
 ---
 aspects:
-- frontend_config
-- persistent
+  - frontend_config
+  - persistent
 enabled: true
 #<File:0x007f9f23395548>
