@@ -1,6 +1,6 @@
 <?php
 class SchulhausParser extends SAXParser {
-	protected static $URL = 'http://***REMOVED***.***REMOVED***.ch/websiteobjects/get_schulhausInfo.asp';
+	protected static $URL = 'https://***REMOVED***.***REMOVED***.ch/webservice/websiteobjects/get_schulhausInfo.asp';
 
 	protected function gotElement($sElementName, $aAttributes) {
 		if($sElementName === 'Bezeichnung') $this->expectCharacters();

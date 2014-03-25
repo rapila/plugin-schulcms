@@ -1,6 +1,6 @@
 <?php
 class LehrerParser extends SAXParser {
-	protected static $URL = 'http://***REMOVED***.***REMOVED***.ch/websiteobjects/get_lehrerInfo.asp';
+	protected static $URL = 'https://***REMOVED***.***REMOVED***.ch/webservice/websiteobjects/get_lehrerInfo.asp';
 
 	protected function gotElement($sElementName, $aAttributes) {
 		if($sElementName === 'AngestelltSeit') {

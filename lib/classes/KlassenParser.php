@@ -1,6 +1,6 @@
 <?php
 class KlassenParser extends SAXParser {
-	protected static $URL = 'http://***REMOVED***.***REMOVED***.ch/websiteobjects/get_klasseInfo.asp';
+	protected static $URL = 'https://***REMOVED***.***REMOVED***.ch/webservice/websiteobjects/get_klasseInfo.asp';
 
 	protected function gotElement($sElementName, $aAttributes) {
 		if($sElementName === 'Jahrgang') $this->expectCharacters();

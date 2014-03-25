@@ -10,7 +10,7 @@ class PersonParser extends SAXParser {
 		'EmailP' => 'email_p'
 	);
 	
-	protected static $URL = 'http://***REMOVED***.***REMOVED***.ch/websiteobjects/get_personInfo.asp';
+	protected static $URL = 'https://***REMOVED***.***REMOVED***.ch/webservice/websiteobjects/get_personInfo.asp';
 
 	protected function gotElement($sElementName, $aAttributes) {
 		if(isset(self::$MAPPING[$sElementName])) {

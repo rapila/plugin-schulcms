@@ -1,6 +1,6 @@
 <?php
 class LehrerZuKlasseParser extends SAXParser {
-	protected static $URL = 'http://***REMOVED***.***REMOVED***.ch/websiteobjects/get_lezuklInfo.asp';
+	protected static $URL = 'https://***REMOVED***.***REMOVED***.ch/webservice/websiteobjects/get_lezuklInfo.asp';
 
 	protected function gotElement($sElementName, $aAttributes) {
 		if($sElementName === 'IstKlassenlehrer') $this->expectCharacters();
