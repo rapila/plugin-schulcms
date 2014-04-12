@@ -34,7 +34,7 @@ class ServicesAdminModule extends AdminModule {
   public function getColumnIdentifiers() {
 		return array('service_category_id', 'name', 'magic_column');
 	}
-	
+
 	public function getMetadataForColumn($sColumnIdentifier) {
 		$aResult = array();
 		switch($sColumnIdentifier) {
@@ -54,16 +54,18 @@ class ServicesAdminModule extends AdminModule {
 	}
 	
 	public function getCustomListElements() {
-		return array(
-			array('service_category_id' => CriteriaListWidgetDelegate::SELECT_ALL,
-						'name' => StringPeer::getString('wns.sidebar.select_all'),
-						'magic_column' => 'all'),
-			array('service_category_id' => CriteriaListWidgetDelegate::SELECT_WITHOUT,
-						'name' => StringPeer::getString('wns.services.select_without_title'),
-						'magic_column' => 'all')
-						);
+		if(ServiceCategoryQuery::create()->count() > 0) {
+			return array(
+				array('service_category_id' => CriteriaListWidgetDelegate::SELECT_ALL,
+							'name' => StringPeer::getString('wns.sidebar.select_all'),
+							'magic_column' => 'all'),
+				array('service_category_id' => CriteriaListWidgetDelegate::SELECT_WITHOUT,
+							'name' => StringPeer::getString('wns.services.select_without_title'),
+							'magic_column' => 'without'));
+		}
+		return array();
 	}
-	
+
 	public function usedWidgets() {
 		return array($this->oListWidget, $this->oSidebarWidget);
 	}
