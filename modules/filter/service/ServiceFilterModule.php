@@ -26,7 +26,7 @@ class ServiceFilterModule extends FilterModule {
 		$oCriteria->clearSelectColumns()->addSelectColumn(ServicePeer::SLUG)->addSelectColumn(ServicePeer::NAME);
 		
 		foreach(ServicePeer::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_CLASS) as $aParams) {
-			$oNavItem = new HiddenVirtualNavigationItem(self::SERVICE_ITEM_TYPE, $aParams->SLUG, $aParams->NAME, null, null);
+			$oNavItem = new HiddenVirtualNavigationItem(self::SERVICE_ITEM_TYPE, $aParams->slug, $aParams->name, null, null);
 			$oNavigationItem->addChild($oNavItem);
 		}
 	}

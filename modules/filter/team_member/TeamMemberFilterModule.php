@@ -25,7 +25,7 @@ class TeamMemberFilterModule extends FilterModule {
 			->addSelectColumn(TeamMemberPeer::FIRST_NAME);
 		
 		foreach(TeamMemberPeer::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_CLASS) as $aParams) {
-			$oNavItem = new HiddenVirtualNavigationItem(self::TEAM_MEMBER_ITEM_TYPE, $aParams->SLUG, $aParams->LAST_NAME.', '.$aParams->FIRST_NAME, null, null);
+			$oNavItem = new HiddenVirtualNavigationItem(self::TEAM_MEMBER_ITEM_TYPE, $aParams->slug, $aParams->last_name.', '.$aParams->first_name, null, null);
 			$oNavigationItem->addChild($oNavItem);
 		}
 	}
