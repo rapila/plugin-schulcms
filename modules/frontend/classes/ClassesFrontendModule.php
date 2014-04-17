@@ -123,12 +123,9 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		}
 
 		// teachers
-		$aClassTeachersOrdered = self::getClassTeachersOrdered($aClasses[0]->getTeachersByUnitName());
-		$iCount = count($aClassTeachersOrdered);
-		
 		$oTemplate->replaceIdentifier('label_class_teacher', StringPeer::getString('wns.class.class_teachers'));
 		$oClassTeacherTempl = $this->constructTemplate('class_teacher');
-		foreach($aClassTeachersOrdered as $iTeamMemberId => $aParams) {
+		foreach(self::getClassTeachersOrdered($aClasses[0]->getTeachersByUnitName()) as $iTeamMemberId => $aParams) {
 			$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aParams['team_member']->getTeamMemberLink($this->oTeamPage))), $aParams['team_member']->getFullName());
 			$oClassTeacherTemplate = clone $oClassTeacherTempl;
 			$oClassTeacherTemplate->replaceIdentifier('class_teacher_name', $oTeacherLink);
