@@ -4,10 +4,6 @@ class NotesFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 		parent::__construct($sSessionKey, $oFrontendModule);
 	}
 	
-	public function updatePreview($oPreviewData) {
-		return TagWriter::quickTag()->render();
-	}
-	
 	public function options() {
 		$aData['display_options'] = $this->getDisplayOptions();
 		$aData['note_type_options'] = $this->getNoteTypeOptions();
