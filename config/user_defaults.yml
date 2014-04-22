@@ -2,8 +2,6 @@ admin_menu:
   left:
     - preview
     - edit
-    - module.dashboard
-    - ~
     -
       - ~
       - module.events
@@ -17,6 +15,7 @@ admin_menu:
       - module.links
       - ~
       - module.users
+    - module.dashboard
   right:
     - activity
     - ~
@@ -39,33 +38,23 @@ dashboard:
       config: 
         text: |
         <h2>Willkommen in deinem Dashboard!</h2>
-<p>
-	&nbsp;</p>
-<p>
-	Das <em>Dashboard</em> ist etwas ähnliches wie das <strong>Armaturenbrett</strong> in deinem Administrations-Führerstand.</p>
-<p>
-	Hier kannst du dir kleine <em>Helfer-Programme</em> einrichten, so ähnlich wie die Anzeigeinstrumente in einem Cockpit. Diese kleinen Helferchen nennen wir <strong>Widgets</strong></p><p>
-          Hier werden zum Beispiel deine Klassen angezeigt, wenn du KlassenlehrerIn bist.</p>
-          <p>
-          Für diese Klassen kannst du</p>
-          <ul>
-          <li>
-          das Klassenfoto hochladen</li>
-          <li>
-          den Stundenplan hochladen</li>
-          <li>
-          den Wochenplan hochladen</li>
-          <li>
-          Anlässe, Galerien, Berichte erstellen</li>
-          <li>
-          Links erstellen</li>
-          </ul>
-          <p>
-          Wenn du Fragen hast oder Hilfe brauchst, so wende dich bitte an die Administratoren oder Superuser, von denen es in jeder Schule mindestens ein(e) gibt.</p>
-          <p>
-          Viel Vergnügen.</p>
-          <p>
-          &nbsp;</p>
+        <p>&nbsp;</p>
+        <p>Das <em>Dashboard</em> ist etwas ähnliches wie das <strong>Armaturenbrett</strong> in deinem Administrations-Führerstand.</p>
+        <p>Hier kannst du dir kleine 
+          <em>Helfer-Programme</em> einrichten, so ähnlich wie die Anzeigeinstrumente in einem Cockpit. Diese kleinen Helferchen nennen wir <strong>Widgets</strong>
+        </p>
+        <p>Hier werden zum Beispiel deine Klassen angezeigt, wenn du KlassenlehrerIn bist.</p>
+        <p>Für diese Klassen kannst du</p>
+        <ul>
+          <li>das Klassenfoto hochladen</li>
+          <li>den Stundenplan hochladen</li>
+          <li>den Wochenplan hochladen</li>
+          <li>Anlässe, Galerien, Berichte erstellen</li>
+          <li>Links erstellen</li>
+        </ul>
+        <p>Wenn du Fragen hast oder Hilfe brauchst, so wende dich bitte an die Administratoren oder Superuser, von denen es in jeder Schule mindestens ein(e) gibt.</p>
+        <p>Viel Vergnügen.</p>
+        <p>&nbsp;</p>
           
       color: 'rgb(141, 193, 0)'
       contrastColor: 'black'
