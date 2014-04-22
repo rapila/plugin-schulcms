@@ -24,7 +24,7 @@ INSERT INTO `document_categories` (`id`, `name`, `sort`, `max_width`, `is_extern
 (17, 'Beispiel Dokumentenliste', NULL, NULL, 0, 0, '2011-06-24 09:10:12', '2011-06-24 09:10:12', 1, 1),
 (18, 'Angebotsdocuments', NULL, NULL, 1, 0, '2011-07-06 21:39:56', '2011-07-06 21:39:56', 1, 1);
 
-# link_categories defined in default config section school_settings_externally_managed_link_categories
+# link_categories defined in default config section school_settings externally_managed_link_categories
 CREATE TABLE IF NOT EXISTS `link_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(80) NOT NULL,
