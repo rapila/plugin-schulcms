@@ -19,8 +19,12 @@ class TeamMembersFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	public function functionGroups() {
 		$aResult = array();
 		foreach(FunctionGroupQuery::create()->orderByName()->filterbyId(FunctionGroupPeer::getFunctionGroupIdsForTeamlist(), Criteria::IN)->find() as $oFunctionGroup) {
-			$aResult[$oFunctionGroup->getId()] = $oFunctionGroup->getName();
+			$aGroup = new stdClass();
+			$aGroup->id = $oFunctionGroup->getId();
+			$aGroup->name = $oFunctionGroup->getName();
+			$aResult[] = $aGroup;
 		}
 		return $aResult;
 	}
+
 }

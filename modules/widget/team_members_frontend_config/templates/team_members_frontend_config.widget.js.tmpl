@@ -11,9 +11,9 @@ Widget.types.team_members_frontend_config = {
 
 		//Mode/Group finish callbacks
 		var finish = [];
-		
+
 		var config = this.getConfigData() || {};
-		
+
 		//Set Modes
 		this.displayModes(function(display_modes) {
 			this.mode_dropdown.populate(display_modes, config.display_mode);
@@ -21,8 +21,12 @@ Widget.types.team_members_frontend_config = {
 		}.deferred(finish));
 
 		//Set Groups
+		var option = jQuery('<option/>');
 		this.functionGroups(function(function_groups) {
-			this.groups_dropdown.populate(function_groups, config.function_groups);
+			jQuery.each(function_groups, function(i, data) {
+				option.clone().text(data.name).attr('value', data.id).appendTo(_this.groups_dropdown);
+			})
+			this.groups_dropdown.val(config.function_groups);
 			this.groups_dropdown.change(this.reload_preview.bind(this));
 		}.deferred(finish));
 
@@ -43,7 +47,7 @@ Widget.types.team_members_frontend_config = {
 			_this.detail_widget.open();
 		});
 	},
-	
+
 	reload_preview: function() {
 		var result_list = this.result_list;
 		result_list.empty();
@@ -63,7 +67,7 @@ Widget.types.team_members_frontend_config = {
 		var function_groups = this.groups_dropdown.val();
 		return function_groups;
 	},
-	
+
 	save: function() {
 		var data = {
 			function_groups: this.selected_groups(),
@@ -71,7 +75,7 @@ Widget.types.team_members_frontend_config = {
 		};
 		return data;
 	},
-	
+
 	additional_buttons: [
 		{
 			text: '{{writeString=team_members.do_admin}}',
