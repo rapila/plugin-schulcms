@@ -37,7 +37,7 @@ class SchoolPeer extends BaseSchoolPeer {
 		if(isset(self::$EXTERNALLY_MANAGED_LINK_CATEGORIES[$sKey])) {
 			return self::$EXTERNALLY_MANAGED_LINK_CATEGORIES[$sKey];
 		}
-		throw new Exception(__METHOD__.': Please check your externally externally_managed_link_categories in config section school_settings');
+		throw new Exception(__METHOD__.': Please check your externally_managed_link_categories in config section school_settings');
 	}
 	
 	public static function getPageIdentifier($sKey) {
