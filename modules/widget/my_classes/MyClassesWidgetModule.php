@@ -22,19 +22,19 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 		$oQuery->filterByIsClassTeacher(true);
 		foreach($oQuery->find() as $oClassTeacher) {
 			$aClassInfo = array();
-			$aClassInfo['Name']		 = $oClassTeacher->getSchoolClass()->getName();
-			$aClassInfo['Year']		 = $oClassTeacher->getSchoolClass()->getYear();
-			$aClassInfo['IsCurrent']	= $oClassTeacher->getSchoolClass()->IsCurrent();
-			$aClassInfo['Type']		 = $oClassTeacher->getSchoolClass()->getClassType()->getName();
-			$aClassInfo['Id']			 = $oClassTeacher->getSchoolClassId();
-			$aClassInfo['Amount']	 = $oClassTeacher->getSchoolClass()->getCountStudents();
-			$aClassInfo['Events']	 = $oClassTeacher->getSchoolClass()->countEvents();
-			$aClassInfo['Links']	= $oClassTeacher->getSchoolClass()->countClassLinks();
-			$aClassInfo['ClassSchedule']	= $oClassTeacher->getSchoolClass()->getHasClassSchedule();
-			$aClassInfo['WeekSchedule']	 = $oClassTeacher->getSchoolClass()->getHasWeekSchedule();
-			$aClassInfo['ClassPortrait']	= $oClassTeacher->getSchoolClass()->getHasClassPortrait();
+			$aClassInfo['Name'] = $oClassTeacher->getSchoolClass()->getName();
+			$aClassInfo['Year'] = $oClassTeacher->getSchoolClass()->getYear();
+			$aClassInfo['IsCurrent'] = $oClassTeacher->getSchoolClass()->IsCurrent();
+			$aClassInfo['Type'] = $oClassTeacher->getSchoolClass()->getClassType()->getName();
+			$aClassInfo['Id'] = $oClassTeacher->getSchoolClassId();
+			$aClassInfo['Amount'] = $oClassTeacher->getSchoolClass()->getCountStudents();
+			$aClassInfo['Events'] = $oClassTeacher->getSchoolClass()->countEvents();
+			$aClassInfo['Links'] = $oClassTeacher->getSchoolClass()->countClassLinks();
+			$aClassInfo['ClassSchedule'] = $oClassTeacher->getSchoolClass()->getHasClassSchedule();
+			$aClassInfo['WeekSchedule'] = $oClassTeacher->getSchoolClass()->getHasWeekSchedule();
+			$aClassInfo['ClassPortrait'] = $oClassTeacher->getSchoolClass()->getHasClassPortrait();
 
-			$aClassInfo['ClassLink']	= LinkUtil::link($oClassTeacher->getSchoolClass()->getClassLink($oClassesPage), 'FrontendManager');
+			$aClassInfo['ClassLink'] = LinkUtil::link($oClassTeacher->getSchoolClass()->getClassLink($oClassesPage), 'FrontendManager');
 			$aResult[] = $aClassInfo;
 		}
 		return $aResult;
