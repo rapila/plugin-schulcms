@@ -28,6 +28,7 @@ school_settings:
     school_class_portraits: 11
     school_class_schedules: 12
     school_class_weekplans: 13
+    school_class_documents: null
 
   # registry for externally used links, are not displayed by default in admin module "links"
   externally_managed_link_categories:

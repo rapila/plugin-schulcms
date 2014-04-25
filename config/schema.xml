@@ -145,6 +145,17 @@
 	</foreign-key>
 </table>
 
+<table name="class_documents" phpName="ClassDocument">
+	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="school_classes" onDelete="cascade">
+		<reference local="school_class_id" foreign="id" />
+	</foreign-key>	
+	<column name="document_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="documents" onDelete="cascade">
+		<reference local="document_id" foreign="id" />
+	</foreign-key>
+</table>
+
 <table name="class_teachers" phpName="ClassTeacher">
 	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="school_classes" onDelete="cascade">

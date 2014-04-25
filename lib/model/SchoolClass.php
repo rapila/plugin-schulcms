@@ -137,6 +137,16 @@ class SchoolClass extends BaseSchoolClass {
 		return false;
 	}
 	
+	public function isClassDocument($iDocumentId) {
+		$iDocumentId = (int) $iDocumentId;
+		foreach($this->getDocuments() as $oDocument) {
+			if($oDocument->getId() === $iDocumentId) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public function isCurrent() {
 		return $this->getYear() === SchoolPeer::getCurrentYear();
 	}

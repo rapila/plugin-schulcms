@@ -73,7 +73,7 @@ class ClassListWidgetModule extends WidgetModule {
 				$aResult['is_sortable'] = false;
 				break;
 			case 'count_events':
-				$aResult['heading'] = StringPeer::getString('wns.class.events_short');
+				$aResult['heading'] = StringPeer::getString('wns.class.events');
 				$aResult['is_sortable'] = false;
 				break;				
 			case 'count_links':
