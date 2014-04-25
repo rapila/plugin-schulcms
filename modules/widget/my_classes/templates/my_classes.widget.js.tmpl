@@ -12,7 +12,7 @@ Widget.types.my_classes = {
 			_this.list.find('tr.is_not_current').toggleClass('hidden');
 		});
 	},
-	
+
 	reload_list: function() {
 		var _this = this;
 		this.list.empty();
@@ -42,7 +42,7 @@ Widget.types.my_classes = {
 					Widget.create('class_detail', function(widget) {
 						if(jQuery(event.target).hasClass('events') || jQuery(event.target).hasClass('links')) {
 							widget.settings.accordion_active = 1;
-						} 
+						}
 					}, function(widget) {
 						widget.setSchoolClassId(row_data.Id);
 						widget.fill_data();
@@ -59,7 +59,7 @@ Widget.types.my_classes = {
 			}
 		});
 	},
-	
+
 	fill_count: function(number, name, element) {
 		if(number === 0) {
 			element.addClass('no-entry');
