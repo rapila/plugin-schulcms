@@ -16,7 +16,7 @@ Widget.types.my_classes = {
 	reload_list: function() {
 		var _this = this;
 		this.list.empty();
-		this.listClasses(this.settings.dashboard, function(result) {
+		this.listClasses(function(result) {
 			if(result.length === 0) {
 				_this.list.append(jQuery('<tr/>').addClass('ui-list-row').append(jQuery('<td/>').attr('colspan', 4).text('{{writeString=wns.no_results}}')));
 			}

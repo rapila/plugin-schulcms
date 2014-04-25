@@ -11,7 +11,7 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 		}
 	}
 
-	public function listClasses($aSettings) {
+	public function listClasses() {
 		$aResult = array();
 		if(!$this->oTeamMember) {
 			return $aResult;
