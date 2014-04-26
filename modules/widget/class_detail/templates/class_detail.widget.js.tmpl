@@ -320,15 +320,16 @@ Widget.types.class_detail = {
 			_this.add_document_button.addClass('ui-loading-add');
 		}
 		Widget.create('document_detail', function(widget) {
-			widget.settings.predefined_document_category_id = _this.settings.document_category_id;
+			widget.settings.initial_category_id = _this.settings.class_document_category_id;
+			// widget.settings.is_called_externally = true;
 		}, function(widget) {
 			if(document_id) {
-				widget.setLinkId(document_id);
+				widget.setDocumentId(document_id);
 				widget.fill_data();
 			}
 			widget.open();
 			widget.save_callback = function(document_id) {
-				_this.addClassLink(document_id);
+				_this.addClassDocument(document_id);
 				_this.reload_documents();
 			};
 			_this.add_document_button.removeClass('ui-loading-add');
@@ -348,7 +349,7 @@ Widget.types.class_detail = {
 	settings: {
 		detail_widget: {
 			title: "{{writeString=create}}",
-			width: 600
+			width: 650
 		},
 		accordion_active: 0
 	},
