@@ -321,7 +321,7 @@ Widget.types.class_detail = {
 		}
 		Widget.create('document_detail', function(widget) {
 			widget.settings.initial_category_id = _this.settings.class_document_category_id;
-			// widget.settings.is_called_externally = true;
+			widget.settings.is_called_externally = true;
 		}, function(widget) {
 			if(document_id) {
 				widget.setDocumentId(document_id);
