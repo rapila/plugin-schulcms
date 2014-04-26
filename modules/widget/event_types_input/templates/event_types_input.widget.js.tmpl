@@ -3,7 +3,7 @@ Widget.types.event_types_input = {
 		var _this = this;
 		this.reload();
 	},
-	
+
 	reload: function() {
 		var current = this._element.val();
 		this._element.empty();
@@ -13,17 +13,22 @@ Widget.types.event_types_input = {
 				option.clone().text(name).attr('value', id).appendTo(this._element);
 			}.bind(this));
 			if(current) {
-				this._element.val(current);
+				this.val(current);
 			} else {
-				this._element.val(this.settings.initial_selection || '');
+				this.val(this.settings.initial_selection || '');
 			}
 		});
 	},
-		
-	val: function() {
+
+	val: function(value) {
+		if(arguments.length) {
+			this._element.val(value);
+			this.settings.initial_selection = value;
+			return;
+		}
 		return this._element.val();
 	},
-	
+
 	settings: {
 		initial_selection: null
 	}
