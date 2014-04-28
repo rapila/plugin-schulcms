@@ -21,9 +21,9 @@ class TeamMembersFrontendModule extends FrontendModule {
 	public function getWords() {
 		$aOptions = @unserialize($this->getData());
 		if($aOptions[self::MODE_SELECT_KEY] !== 'team_mitglied_detail' && self::$TEAM_MEMBER) {
-      return array();
+			return array();
 		}
-    return parent::getWords();
+		return parent::getWords();
 	}
 	
 	public function renderFrontend() { 
@@ -72,7 +72,7 @@ class TeamMembersFrontendModule extends FrontendModule {
 			$oItemTemplate->replaceIdentifier('profession', $oTeamMember->getProfession());
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
-    return $oTemplate;
+		return $oTemplate;
 	}
 	
 	public function renderDetail() {
