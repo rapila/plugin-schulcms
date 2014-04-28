@@ -1,7 +1,11 @@
 <?php
 class ClassesFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	public function allClasses($iClassTypeId = null) {
-		return SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool($iClassTypeId)->orderByName()->find()->toKeyValue('Id', 'Name');
+		$aResult = array();
+		foreach(SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool($iClassTypeId)->orderByName()->find() as $oSchoolClass) {
+			$aResult[$oSchoolClass->getId()] = $oSchoolClass->getClassTypeName().' '.$oSchoolClass->getUnitName();
+		}
+		return $aResult;
 	}
 	
 	public function getDisplayModes() {
