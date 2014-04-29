@@ -132,6 +132,9 @@ class Event extends BaseEvent {
 			$oEventPage = $EVENT_PAGES[$this->getEventTypeId()];
 		}
 		$aDateStart = explode('-', $this->getDateStart('Y-n-j'));
+		if(!$oEventPage) {
+			throw new Exception("Error: Your current event page requires a page-identifier SchoolPeer::PAGE_IDENTIFIER_EVENTS");
+		}
 		return array_merge($oEventPage->getFullPathArray(), array_merge($aDateStart, array($this->getTitleNormalized())));
 	}
 	

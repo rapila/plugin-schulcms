@@ -55,7 +55,7 @@ class EventFilterModule extends FilterModule {
 							&& $oNavigationItem->getType() === self::ITEM_EVENT_DAY) {
 			$aData = $oNavigationItem->getData();
 			foreach(self::selectNames($aData, array(EventPeer::TITLE_NORMALIZED, EventPeer::TITLE)) as $oNames) {
-				$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT, $oNames->TITLE_NORMALIZED, $oNames->TITLE, null, array_merge($aData, array('title_normalized' => $oNames->TITLE_NORMALIZED))));
+				$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT, $oNames->title_normalized, $oNames->title, null, array_merge($aData, array('title_normalized' => $oNames->title_normalized))));
 			}
 		}
 	}
