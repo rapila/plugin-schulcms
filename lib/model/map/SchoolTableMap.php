@@ -89,6 +89,9 @@ class SchoolTableMap extends TableMap
   'create_column' => 'created_by',
   'update_column' => 'updated_by',
 ),
+            'extended_keyable' =>  array (
+  'key_separator' => '_',
+),
         );
     } // getBehaviors()
 

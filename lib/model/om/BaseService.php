@@ -24,7 +24,7 @@ abstract class BaseService extends BaseObject implements Persistent
     protected static $peer;
 
     /**
-     * The flag var to prevent infinit loop in deep copy
+     * The flag var to prevent infinite loop in deep copy
      * @var       boolean
      */
     protected $startCopy = false;
@@ -236,6 +236,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getId()
     {
+
         return $this->id;
     }
 
@@ -246,6 +247,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getName()
     {
+
         return $this->name;
     }
 
@@ -256,6 +258,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getSlug()
     {
+
         return $this->slug;
     }
 
@@ -266,6 +269,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getTeaser()
     {
+
         return $this->teaser;
     }
 
@@ -276,6 +280,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getAddress()
     {
+
         return $this->address;
     }
 
@@ -286,6 +291,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getOpeningHours()
     {
+
         return $this->opening_hours;
     }
 
@@ -296,6 +302,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getPhone()
     {
+
         return $this->phone;
     }
 
@@ -306,6 +313,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getEmail()
     {
+
         return $this->email;
     }
 
@@ -316,6 +324,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getWebsite()
     {
+
         return $this->website;
     }
 
@@ -326,6 +335,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getBody()
     {
+
         return $this->body;
     }
 
@@ -336,6 +346,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getIsActive()
     {
+
         return $this->is_active;
     }
 
@@ -346,6 +357,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getLogoId()
     {
+
         return $this->logo_id;
     }
 
@@ -356,6 +368,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getServiceCategoryId()
     {
+
         return $this->service_category_id;
     }
 
@@ -446,6 +459,7 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getCreatedBy()
     {
+
         return $this->created_by;
     }
 
@@ -456,13 +470,14 @@ abstract class BaseService extends BaseObject implements Persistent
      */
     public function getUpdatedBy()
     {
+
         return $this->updated_by;
     }
 
     /**
      * Set the value of [id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setId($v)
@@ -483,12 +498,12 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [name] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setName($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -504,12 +519,12 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [slug] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setSlug($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -525,12 +540,12 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [teaser] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setTeaser($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -546,12 +561,12 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [address] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setAddress($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -567,12 +582,12 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [opening_hours] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setOpeningHours($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -588,12 +603,12 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [phone] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setPhone($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -609,12 +624,12 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [email] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setEmail($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -630,12 +645,12 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [website] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setWebsite($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -651,7 +666,7 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [body] column.
      *
-     * @param resource $v new value
+     * @param  resource $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setBody($v)
@@ -704,7 +719,7 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [logo_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setLogoId($v)
@@ -729,7 +744,7 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [service_category_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setServiceCategoryId($v)
@@ -800,7 +815,7 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [created_by] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setCreatedBy($v)
@@ -825,7 +840,7 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Set the value of [updated_by] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Service The current object (for fluent API support)
      */
     public function setUpdatedBy($v)
@@ -874,7 +889,7 @@ abstract class BaseService extends BaseObject implements Persistent
      * more tables.
      *
      * @param array $row The row returned by PDOStatement->fetch(PDO::FETCH_NUM)
-     * @param int $startcol 0-based offset column which indicates which restultset column to start with.
+     * @param int $startcol 0-based offset column which indicates which resultset column to start with.
      * @param boolean $rehydrate Whether this object is being re-hydrated from the database.
      * @return int             next starting column
      * @throws PropelException - Any caught Exception will be rewrapped as a PropelException.
@@ -914,6 +929,7 @@ abstract class BaseService extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
+
             return $startcol + 17; // 17 = ServicePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
@@ -1156,7 +1172,7 @@ abstract class BaseService extends BaseObject implements Persistent
             $this->alreadyInSave = true;
 
             // We call the save method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -1206,10 +1222,9 @@ abstract class BaseService extends BaseObject implements Persistent
 
             if ($this->eventsScheduledForDeletion !== null) {
                 if (!$this->eventsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->eventsScheduledForDeletion as $event) {
-                        // need to save related object because we set the relation to null
-                        $event->save($con);
-                    }
+                    EventQuery::create()
+                        ->filterByPrimaryKeys($this->eventsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->eventsScheduledForDeletion = null;
                 }
             }
@@ -1478,10 +1493,10 @@ abstract class BaseService extends BaseObject implements Persistent
      *
      * In addition to checking the current object, all related objects will
      * also be validated.  If all pass then <code>true</code> is returned; otherwise
-     * an aggreagated array of ValidationFailed objects will be returned.
+     * an aggregated array of ValidationFailed objects will be returned.
      *
      * @param array $columns Array of column names to validate.
-     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objets otherwise.
+     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objects otherwise.
      */
     protected function doValidate($columns = null)
     {
@@ -1493,7 +1508,7 @@ abstract class BaseService extends BaseObject implements Persistent
 
 
             // We call the validate method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -1684,6 +1699,11 @@ abstract class BaseService extends BaseObject implements Persistent
             $keys[15] => $this->getCreatedBy(),
             $keys[16] => $this->getUpdatedBy(),
         );
+        $virtualColumns = $this->virtualColumns;
+        foreach ($virtualColumns as $key => $virtualColumn) {
+            $result[$key] = $virtualColumn;
+        }
+
         if ($includeForeignObjects) {
             if (null !== $this->aDocument) {
                 $result['Document'] = $this->aDocument->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -2018,7 +2038,7 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a Document object.
      *
-     * @param             Document $v
+     * @param                  Document $v
      * @return Service The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2070,7 +2090,7 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a ServiceCategory object.
      *
-     * @param             ServiceCategory $v
+     * @param                  ServiceCategory $v
      * @return Service The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2122,7 +2142,7 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a User object.
      *
-     * @param             User $v
+     * @param                  User $v
      * @return Service The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2174,7 +2194,7 @@ abstract class BaseService extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a User object.
      *
-     * @param             User $v
+     * @param                  User $v
      * @return Service The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2322,7 +2342,7 @@ abstract class BaseService extends BaseObject implements Persistent
                     if (false !== $this->collEventsPartial && count($collEvents)) {
                       $this->initEvents(false);
 
-                      foreach($collEvents as $obj) {
+                      foreach ($collEvents as $obj) {
                         if (false == $this->collEvents->contains($obj)) {
                           $this->collEvents->append($obj);
                         }
@@ -2332,12 +2352,13 @@ abstract class BaseService extends BaseObject implements Persistent
                     }
 
                     $collEvents->getInternalIterator()->rewind();
+
                     return $collEvents;
                 }
 
-                if($partial && $this->collEvents) {
-                    foreach($this->collEvents as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collEvents) {
+                    foreach ($this->collEvents as $obj) {
+                        if ($obj->isNew()) {
                             $collEvents[] = $obj;
                         }
                     }
@@ -2365,7 +2386,8 @@ abstract class BaseService extends BaseObject implements Persistent
     {
         $eventsToDelete = $this->getEvents(new Criteria(), $con)->diff($events);
 
-        $this->eventsScheduledForDeletion = unserialize(serialize($eventsToDelete));
+
+        $this->eventsScheduledForDeletion = $eventsToDelete;
 
         foreach ($eventsToDelete as $eventRemoved) {
             $eventRemoved->setService(null);
@@ -2399,7 +2421,7 @@ abstract class BaseService extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getEvents());
             }
             $query = EventQuery::create(null, $criteria);
@@ -2428,8 +2450,13 @@ abstract class BaseService extends BaseObject implements Persistent
             $this->initEvents();
             $this->collEventsPartial = true;
         }
+
         if (!in_array($l, $this->collEvents->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddEvent($l);
+
+            if ($this->eventsScheduledForDeletion and $this->eventsScheduledForDeletion->contains($l)) {
+                $this->eventsScheduledForDeletion->remove($this->eventsScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -2665,7 +2692,7 @@ abstract class BaseService extends BaseObject implements Persistent
                     if (false !== $this->collServiceMembersPartial && count($collServiceMembers)) {
                       $this->initServiceMembers(false);
 
-                      foreach($collServiceMembers as $obj) {
+                      foreach ($collServiceMembers as $obj) {
                         if (false == $this->collServiceMembers->contains($obj)) {
                           $this->collServiceMembers->append($obj);
                         }
@@ -2675,12 +2702,13 @@ abstract class BaseService extends BaseObject implements Persistent
                     }
 
                     $collServiceMembers->getInternalIterator()->rewind();
+
                     return $collServiceMembers;
                 }
 
-                if($partial && $this->collServiceMembers) {
-                    foreach($this->collServiceMembers as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collServiceMembers) {
+                    foreach ($this->collServiceMembers as $obj) {
+                        if ($obj->isNew()) {
                             $collServiceMembers[] = $obj;
                         }
                     }
@@ -2708,7 +2736,11 @@ abstract class BaseService extends BaseObject implements Persistent
     {
         $serviceMembersToDelete = $this->getServiceMembers(new Criteria(), $con)->diff($serviceMembers);
 
-        $this->serviceMembersScheduledForDeletion = unserialize(serialize($serviceMembersToDelete));
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->serviceMembersScheduledForDeletion = clone $serviceMembersToDelete;
 
         foreach ($serviceMembersToDelete as $serviceMemberRemoved) {
             $serviceMemberRemoved->setService(null);
@@ -2742,7 +2774,7 @@ abstract class BaseService extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getServiceMembers());
             }
             $query = ServiceMemberQuery::create(null, $criteria);
@@ -2771,8 +2803,13 @@ abstract class BaseService extends BaseObject implements Persistent
             $this->initServiceMembers();
             $this->collServiceMembersPartial = true;
         }
+
         if (!in_array($l, $this->collServiceMembers->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddServiceMember($l);
+
+            if ($this->serviceMembersScheduledForDeletion and $this->serviceMembersScheduledForDeletion->contains($l)) {
+                $this->serviceMembersScheduledForDeletion->remove($this->serviceMembersScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -2958,7 +2995,7 @@ abstract class BaseService extends BaseObject implements Persistent
                     if (false !== $this->collServiceDocumentsPartial && count($collServiceDocuments)) {
                       $this->initServiceDocuments(false);
 
-                      foreach($collServiceDocuments as $obj) {
+                      foreach ($collServiceDocuments as $obj) {
                         if (false == $this->collServiceDocuments->contains($obj)) {
                           $this->collServiceDocuments->append($obj);
                         }
@@ -2968,12 +3005,13 @@ abstract class BaseService extends BaseObject implements Persistent
                     }
 
                     $collServiceDocuments->getInternalIterator()->rewind();
+
                     return $collServiceDocuments;
                 }
 
-                if($partial && $this->collServiceDocuments) {
-                    foreach($this->collServiceDocuments as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collServiceDocuments) {
+                    foreach ($this->collServiceDocuments as $obj) {
+                        if ($obj->isNew()) {
                             $collServiceDocuments[] = $obj;
                         }
                     }
@@ -3001,7 +3039,11 @@ abstract class BaseService extends BaseObject implements Persistent
     {
         $serviceDocumentsToDelete = $this->getServiceDocuments(new Criteria(), $con)->diff($serviceDocuments);
 
-        $this->serviceDocumentsScheduledForDeletion = unserialize(serialize($serviceDocumentsToDelete));
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->serviceDocumentsScheduledForDeletion = clone $serviceDocumentsToDelete;
 
         foreach ($serviceDocumentsToDelete as $serviceDocumentRemoved) {
             $serviceDocumentRemoved->setService(null);
@@ -3035,7 +3077,7 @@ abstract class BaseService extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getServiceDocuments());
             }
             $query = ServiceDocumentQuery::create(null, $criteria);
@@ -3064,8 +3106,13 @@ abstract class BaseService extends BaseObject implements Persistent
             $this->initServiceDocuments();
             $this->collServiceDocumentsPartial = true;
         }
+
         if (!in_array($l, $this->collServiceDocuments->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddServiceDocument($l);
+
+            if ($this->serviceDocumentsScheduledForDeletion and $this->serviceDocumentsScheduledForDeletion->contains($l)) {
+                $this->serviceDocumentsScheduledForDeletion->remove($this->serviceDocumentsScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -3211,7 +3258,7 @@ abstract class BaseService extends BaseObject implements Persistent
      *
      * This method is a user-space workaround for PHP's inability to garbage collect
      * objects with circular references (even in PHP 5.3). This is currently necessary
-     * when using Propel in certain daemon or large-volumne/high-memory operations.
+     * when using Propel in certain daemon or large-volume/high-memory operations.
      *
      * @param boolean $deep Whether to also clear the references on all referrer objects.
      */
@@ -3375,6 +3422,24 @@ abstract class BaseService extends BaseObject implements Persistent
     {
         $this->modifiedColumns[] = ServicePeer::UPDATED_BY;
         return $this;
+    }
+
+    // extended_keyable behavior
+
+    /**
+     * @return the primary key as an array (even for non-composite keys)
+     */
+    public function getPKArray()
+    {
+        return array($this->getPrimaryKey());
+    }
+
+    /**
+     * @return the composite primary key as a string, separated by _
+     */
+    public function getPKString()
+    {
+        return implode("", $this->getPKArray());
     }
 
 }

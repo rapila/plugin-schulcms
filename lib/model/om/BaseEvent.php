@@ -24,7 +24,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     protected static $peer;
 
     /**
-     * The flag var to prevent infinit loop in deep copy
+     * The flag var to prevent infinite loop in deep copy
      * @var       boolean
      */
     protected $startCopy = false;
@@ -242,6 +242,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getId()
     {
+
         return $this->id;
     }
 
@@ -252,6 +253,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getTitle()
     {
+
         return $this->title;
     }
 
@@ -262,6 +264,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getTitleNormalized()
     {
+
         return $this->title_normalized;
     }
 
@@ -272,6 +275,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getTeaser()
     {
+
         return $this->teaser;
     }
 
@@ -282,6 +286,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getBodyPreview()
     {
+
         return $this->body_preview;
     }
 
@@ -292,6 +297,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getBodyReview()
     {
+
         return $this->body_review;
     }
 
@@ -302,6 +308,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getLocationInfo()
     {
+
         return $this->location_info;
     }
 
@@ -392,6 +399,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getTimeDetails()
     {
+
         return $this->time_details;
     }
 
@@ -402,6 +410,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getIsActive()
     {
+
         return $this->is_active;
     }
 
@@ -412,6 +421,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getIgnoreOnFrontpage()
     {
+
         return $this->ignore_on_frontpage;
     }
 
@@ -422,6 +432,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getEventTypeId()
     {
+
         return $this->event_type_id;
     }
 
@@ -432,6 +443,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getServiceId()
     {
+
         return $this->service_id;
     }
 
@@ -442,6 +454,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getSchoolClassId()
     {
+
         return $this->school_class_id;
     }
 
@@ -452,6 +465,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getGalleryId()
     {
+
         return $this->gallery_id;
     }
 
@@ -542,6 +556,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getCreatedBy()
     {
+
         return $this->created_by;
     }
 
@@ -552,13 +567,14 @@ abstract class BaseEvent extends BaseObject implements Persistent
      */
     public function getUpdatedBy()
     {
+
         return $this->updated_by;
     }
 
     /**
      * Set the value of [id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setId($v)
@@ -579,12 +595,12 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [title] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setTitle($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -600,12 +616,12 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [title_normalized] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setTitleNormalized($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -621,12 +637,12 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [teaser] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setTeaser($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -642,7 +658,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [body_preview] column.
      *
-     * @param resource $v new value
+     * @param  resource $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setBodyPreview($v)
@@ -666,7 +682,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [body_review] column.
      *
-     * @param resource $v new value
+     * @param  resource $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setBodyReview($v)
@@ -690,12 +706,12 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [location_info] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setLocationInfo($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -757,12 +773,12 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [time_details] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setTimeDetails($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -836,7 +852,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [event_type_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setEventTypeId($v)
@@ -861,7 +877,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [service_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setServiceId($v)
@@ -886,7 +902,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [school_class_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setSchoolClassId($v)
@@ -911,7 +927,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [gallery_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setGalleryId($v)
@@ -982,7 +998,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [created_by] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setCreatedBy($v)
@@ -1007,7 +1023,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Set the value of [updated_by] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Event The current object (for fluent API support)
      */
     public function setUpdatedBy($v)
@@ -1060,7 +1076,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      * more tables.
      *
      * @param array $row The row returned by PDOStatement->fetch(PDO::FETCH_NUM)
-     * @param int $startcol 0-based offset column which indicates which restultset column to start with.
+     * @param int $startcol 0-based offset column which indicates which resultset column to start with.
      * @param boolean $rehydrate Whether this object is being re-hydrated from the database.
      * @return int             next starting column
      * @throws PropelException - Any caught Exception will be rewrapped as a PropelException.
@@ -1109,6 +1125,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
+
             return $startcol + 20; // 20 = EventPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
@@ -1355,7 +1372,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
             $this->alreadyInSave = true;
 
             // We call the save method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -1682,10 +1699,10 @@ abstract class BaseEvent extends BaseObject implements Persistent
      *
      * In addition to checking the current object, all related objects will
      * also be validated.  If all pass then <code>true</code> is returned; otherwise
-     * an aggreagated array of ValidationFailed objects will be returned.
+     * an aggregated array of ValidationFailed objects will be returned.
      *
      * @param array $columns Array of column names to validate.
-     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objets otherwise.
+     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objects otherwise.
      */
     protected function doValidate($columns = null)
     {
@@ -1697,7 +1714,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
 
 
             // We call the validate method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -1896,6 +1913,11 @@ abstract class BaseEvent extends BaseObject implements Persistent
             $keys[18] => $this->getCreatedBy(),
             $keys[19] => $this->getUpdatedBy(),
         );
+        $virtualColumns = $this->virtualColumns;
+        foreach ($virtualColumns as $key => $virtualColumn) {
+            $result[$key] = $virtualColumn;
+        }
+
         if ($includeForeignObjects) {
             if (null !== $this->aEventType) {
                 $result['EventType'] = $this->aEventType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -2236,7 +2258,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a EventType object.
      *
-     * @param             EventType $v
+     * @param                  EventType $v
      * @return Event The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2288,7 +2310,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a Service object.
      *
-     * @param             Service $v
+     * @param                  Service $v
      * @return Event The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2340,7 +2362,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a SchoolClass object.
      *
-     * @param             SchoolClass $v
+     * @param                  SchoolClass $v
      * @return Event The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2392,7 +2414,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a DocumentCategory object.
      *
-     * @param             DocumentCategory $v
+     * @param                  DocumentCategory $v
      * @return Event The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2444,7 +2466,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a User object.
      *
-     * @param             User $v
+     * @param                  User $v
      * @return Event The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2496,7 +2518,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a User object.
      *
-     * @param             User $v
+     * @param                  User $v
      * @return Event The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2638,7 +2660,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
                     if (false !== $this->collEventDocumentsPartial && count($collEventDocuments)) {
                       $this->initEventDocuments(false);
 
-                      foreach($collEventDocuments as $obj) {
+                      foreach ($collEventDocuments as $obj) {
                         if (false == $this->collEventDocuments->contains($obj)) {
                           $this->collEventDocuments->append($obj);
                         }
@@ -2648,12 +2670,13 @@ abstract class BaseEvent extends BaseObject implements Persistent
                     }
 
                     $collEventDocuments->getInternalIterator()->rewind();
+
                     return $collEventDocuments;
                 }
 
-                if($partial && $this->collEventDocuments) {
-                    foreach($this->collEventDocuments as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collEventDocuments) {
+                    foreach ($this->collEventDocuments as $obj) {
+                        if ($obj->isNew()) {
                             $collEventDocuments[] = $obj;
                         }
                     }
@@ -2681,7 +2704,11 @@ abstract class BaseEvent extends BaseObject implements Persistent
     {
         $eventDocumentsToDelete = $this->getEventDocuments(new Criteria(), $con)->diff($eventDocuments);
 
-        $this->eventDocumentsScheduledForDeletion = unserialize(serialize($eventDocumentsToDelete));
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->eventDocumentsScheduledForDeletion = clone $eventDocumentsToDelete;
 
         foreach ($eventDocumentsToDelete as $eventDocumentRemoved) {
             $eventDocumentRemoved->setEvent(null);
@@ -2715,7 +2742,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getEventDocuments());
             }
             $query = EventDocumentQuery::create(null, $criteria);
@@ -2744,8 +2771,13 @@ abstract class BaseEvent extends BaseObject implements Persistent
             $this->initEventDocuments();
             $this->collEventDocumentsPartial = true;
         }
+
         if (!in_array($l, $this->collEventDocuments->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddEventDocument($l);
+
+            if ($this->eventDocumentsScheduledForDeletion and $this->eventDocumentsScheduledForDeletion->contains($l)) {
+                $this->eventDocumentsScheduledForDeletion->remove($this->eventDocumentsScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -2894,7 +2926,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      *
      * This method is a user-space workaround for PHP's inability to garbage collect
      * objects with circular references (even in PHP 5.3). This is currently necessary
-     * when using Propel in certain daemon or large-volumne/high-memory operations.
+     * when using Propel in certain daemon or large-volume/high-memory operations.
      *
      * @param boolean $deep Whether to also clear the references on all referrer objects.
      */
@@ -3048,6 +3080,24 @@ abstract class BaseEvent extends BaseObject implements Persistent
     {
         $this->modifiedColumns[] = EventPeer::UPDATED_BY;
         return $this;
+    }
+
+    // extended_keyable behavior
+
+    /**
+     * @return the primary key as an array (even for non-composite keys)
+     */
+    public function getPKArray()
+    {
+        return array($this->getPrimaryKey());
+    }
+
+    /**
+     * @return the composite primary key as a string, separated by _
+     */
+    public function getPKString()
+    {
+        return implode("", $this->getPKArray());
     }
 
 }

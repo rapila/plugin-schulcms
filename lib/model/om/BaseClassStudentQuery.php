@@ -76,8 +76,14 @@ abstract class BaseClassStudentQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'rapila', $modelName = 'ClassStudent', $modelAlias = null)
+    public function __construct($dbName = null, $modelName = null, $modelAlias = null)
     {
+        if (null === $dbName) {
+            $dbName = 'rapila';
+        }
+        if (null === $modelName) {
+            $modelName = 'ClassStudent';
+        }
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
@@ -94,10 +100,8 @@ abstract class BaseClassStudentQuery extends ModelCriteria
         if ($criteria instanceof ClassStudentQuery) {
             return $criteria;
         }
-        $query = new ClassStudentQuery();
-        if (null !== $modelAlias) {
-            $query->setModelAlias($modelAlias);
-        }
+        $query = new ClassStudentQuery(null, null, $modelAlias);
+
         if ($criteria instanceof Criteria) {
             $query->mergeWith($criteria);
         }
@@ -126,7 +130,7 @@ abstract class BaseClassStudentQuery extends ModelCriteria
             return null;
         }
         if ((null !== ($obj = ClassStudentPeer::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && !$this->formatter) {
-            // the object is alredy in the instance pool
+            // the object is already in the instance pool
             return $obj;
         }
         if ($con === null) {
@@ -406,7 +410,7 @@ abstract class BaseClassStudentQuery extends ModelCriteria
      * <code>
      * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
      * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
-     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
+     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at < '2011-03-13'
      * </code>
      *
      * @param     mixed $createdAt The value to use as filter.
@@ -449,7 +453,7 @@ abstract class BaseClassStudentQuery extends ModelCriteria
      * <code>
      * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
      * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
-     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
+     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at < '2011-03-13'
      * </code>
      *
      * @param     mixed $updatedAt The value to use as filter.
@@ -960,4 +964,14 @@ abstract class BaseClassStudentQuery extends ModelCriteria
     {
         return $this->addAscendingOrderByColumn(ClassStudentPeer::CREATED_AT);
     }
+    // extended_keyable behavior
+
+    public function filterByPKArray($pkArray) {
+        return $this->filterByPrimaryKey($pkArray);
+    }
+
+    public function filterByPKString($pkString) {
+        return $this->filterByPrimaryKey(explode("_", $pkString));
+    }
+
 }

@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'class_links' table.
+ * This class defines the structure of the 'class_documents' table.
  *
  *
  *
@@ -14,13 +14,13 @@
  *
  * @package    propel.generator.model.map
  */
-class ClassLinkTableMap extends TableMap
+class ClassDocumentTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'model.map.ClassLinkTableMap';
+    const CLASS_NAME = 'model.map.ClassDocumentTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -32,14 +32,14 @@ class ClassLinkTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('class_links');
-        $this->setPhpName('ClassLink');
-        $this->setClassname('ClassLink');
+        $this->setName('class_documents');
+        $this->setPhpName('ClassDocument');
+        $this->setClassname('ClassDocument');
         $this->setPackage('model');
         $this->setUseIdGenerator(false);
         // columns
         $this->addForeignPrimaryKey('school_class_id', 'SchoolClassId', 'INTEGER' , 'school_classes', 'id', true, null, null);
-        $this->addForeignPrimaryKey('link_id', 'LinkId', 'INTEGER' , 'links', 'id', true, null, null);
+        $this->addForeignPrimaryKey('document_id', 'DocumentId', 'INTEGER' , 'documents', 'id', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addForeignKey('created_by', 'CreatedBy', 'INTEGER', 'users', 'id', false, null, null);
@@ -53,7 +53,7 @@ class ClassLinkTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('SchoolClass', 'SchoolClass', RelationMap::MANY_TO_ONE, array('school_class_id' => 'id', ), 'CASCADE', null);
-        $this->addRelation('Link', 'Link', RelationMap::MANY_TO_ONE, array('link_id' => 'id', ), 'CASCADE', null);
+        $this->addRelation('Document', 'Document', RelationMap::MANY_TO_ONE, array('document_id' => 'id', ), 'CASCADE', null);
         $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
         $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
     } // buildRelations()
@@ -87,4 +87,4 @@ class ClassLinkTableMap extends TableMap
         );
     } // getBehaviors()
 
-} // ClassLinkTableMap
+} // ClassDocumentTableMap

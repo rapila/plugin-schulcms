@@ -72,8 +72,14 @@ abstract class BaseEventDocumentQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'rapila', $modelName = 'EventDocument', $modelAlias = null)
+    public function __construct($dbName = null, $modelName = null, $modelAlias = null)
     {
+        if (null === $dbName) {
+            $dbName = 'rapila';
+        }
+        if (null === $modelName) {
+            $modelName = 'EventDocument';
+        }
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
@@ -90,10 +96,8 @@ abstract class BaseEventDocumentQuery extends ModelCriteria
         if ($criteria instanceof EventDocumentQuery) {
             return $criteria;
         }
-        $query = new EventDocumentQuery();
-        if (null !== $modelAlias) {
-            $query->setModelAlias($modelAlias);
-        }
+        $query = new EventDocumentQuery(null, null, $modelAlias);
+
         if ($criteria instanceof Criteria) {
             $query->mergeWith($criteria);
         }
@@ -122,7 +126,7 @@ abstract class BaseEventDocumentQuery extends ModelCriteria
             return null;
         }
         if ((null !== ($obj = EventDocumentPeer::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && !$this->formatter) {
-            // the object is alredy in the instance pool
+            // the object is already in the instance pool
             return $obj;
         }
         if ($con === null) {
@@ -388,7 +392,7 @@ abstract class BaseEventDocumentQuery extends ModelCriteria
      * <code>
      * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
      * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
-     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
+     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at < '2011-03-13'
      * </code>
      *
      * @param     mixed $createdAt The value to use as filter.
@@ -431,7 +435,7 @@ abstract class BaseEventDocumentQuery extends ModelCriteria
      * <code>
      * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
      * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
-     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
+     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at < '2011-03-13'
      * </code>
      *
      * @param     mixed $updatedAt The value to use as filter.
@@ -942,4 +946,14 @@ abstract class BaseEventDocumentQuery extends ModelCriteria
     {
         return $this->addAscendingOrderByColumn(EventDocumentPeer::CREATED_AT);
     }
+    // extended_keyable behavior
+
+    public function filterByPKArray($pkArray) {
+        return $this->filterByPrimaryKey($pkArray);
+    }
+
+    public function filterByPKString($pkString) {
+        return $this->filterByPrimaryKey(explode("_", $pkString));
+    }
+
 }

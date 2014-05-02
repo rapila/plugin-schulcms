@@ -2,86 +2,67 @@
 
 
 /**
- * Base class that represents a query for the 'notes' table.
+ * Base class that represents a query for the 'class_documents' table.
  *
  *
  *
- * @method NoteQuery orderById($order = Criteria::ASC) Order by the id column
- * @method NoteQuery orderByNoteTypeId($order = Criteria::ASC) Order by the note_type_id column
- * @method NoteQuery orderByBody($order = Criteria::ASC) Order by the body column
- * @method NoteQuery orderByDateStart($order = Criteria::ASC) Order by the date_start column
- * @method NoteQuery orderByDateEnd($order = Criteria::ASC) Order by the date_end column
- * @method NoteQuery orderByIsInactive($order = Criteria::ASC) Order by the is_inactive column
- * @method NoteQuery orderByImageId($order = Criteria::ASC) Order by the image_id column
- * @method NoteQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
- * @method NoteQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
- * @method NoteQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
- * @method NoteQuery orderByUpdatedBy($order = Criteria::ASC) Order by the updated_by column
+ * @method ClassDocumentQuery orderBySchoolClassId($order = Criteria::ASC) Order by the school_class_id column
+ * @method ClassDocumentQuery orderByDocumentId($order = Criteria::ASC) Order by the document_id column
+ * @method ClassDocumentQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
+ * @method ClassDocumentQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
+ * @method ClassDocumentQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
+ * @method ClassDocumentQuery orderByUpdatedBy($order = Criteria::ASC) Order by the updated_by column
  *
- * @method NoteQuery groupById() Group by the id column
- * @method NoteQuery groupByNoteTypeId() Group by the note_type_id column
- * @method NoteQuery groupByBody() Group by the body column
- * @method NoteQuery groupByDateStart() Group by the date_start column
- * @method NoteQuery groupByDateEnd() Group by the date_end column
- * @method NoteQuery groupByIsInactive() Group by the is_inactive column
- * @method NoteQuery groupByImageId() Group by the image_id column
- * @method NoteQuery groupByCreatedAt() Group by the created_at column
- * @method NoteQuery groupByUpdatedAt() Group by the updated_at column
- * @method NoteQuery groupByCreatedBy() Group by the created_by column
- * @method NoteQuery groupByUpdatedBy() Group by the updated_by column
+ * @method ClassDocumentQuery groupBySchoolClassId() Group by the school_class_id column
+ * @method ClassDocumentQuery groupByDocumentId() Group by the document_id column
+ * @method ClassDocumentQuery groupByCreatedAt() Group by the created_at column
+ * @method ClassDocumentQuery groupByUpdatedAt() Group by the updated_at column
+ * @method ClassDocumentQuery groupByCreatedBy() Group by the created_by column
+ * @method ClassDocumentQuery groupByUpdatedBy() Group by the updated_by column
  *
- * @method NoteQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method NoteQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method NoteQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ClassDocumentQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ClassDocumentQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ClassDocumentQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method NoteQuery leftJoinNoteType($relationAlias = null) Adds a LEFT JOIN clause to the query using the NoteType relation
- * @method NoteQuery rightJoinNoteType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the NoteType relation
- * @method NoteQuery innerJoinNoteType($relationAlias = null) Adds a INNER JOIN clause to the query using the NoteType relation
+ * @method ClassDocumentQuery leftJoinSchoolClass($relationAlias = null) Adds a LEFT JOIN clause to the query using the SchoolClass relation
+ * @method ClassDocumentQuery rightJoinSchoolClass($relationAlias = null) Adds a RIGHT JOIN clause to the query using the SchoolClass relation
+ * @method ClassDocumentQuery innerJoinSchoolClass($relationAlias = null) Adds a INNER JOIN clause to the query using the SchoolClass relation
  *
- * @method NoteQuery leftJoinDocument($relationAlias = null) Adds a LEFT JOIN clause to the query using the Document relation
- * @method NoteQuery rightJoinDocument($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Document relation
- * @method NoteQuery innerJoinDocument($relationAlias = null) Adds a INNER JOIN clause to the query using the Document relation
+ * @method ClassDocumentQuery leftJoinDocument($relationAlias = null) Adds a LEFT JOIN clause to the query using the Document relation
+ * @method ClassDocumentQuery rightJoinDocument($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Document relation
+ * @method ClassDocumentQuery innerJoinDocument($relationAlias = null) Adds a INNER JOIN clause to the query using the Document relation
  *
- * @method NoteQuery leftJoinUserRelatedByCreatedBy($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByCreatedBy relation
- * @method NoteQuery rightJoinUserRelatedByCreatedBy($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByCreatedBy relation
- * @method NoteQuery innerJoinUserRelatedByCreatedBy($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByCreatedBy relation
+ * @method ClassDocumentQuery leftJoinUserRelatedByCreatedBy($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByCreatedBy relation
+ * @method ClassDocumentQuery rightJoinUserRelatedByCreatedBy($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByCreatedBy relation
+ * @method ClassDocumentQuery innerJoinUserRelatedByCreatedBy($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByCreatedBy relation
  *
- * @method NoteQuery leftJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByUpdatedBy relation
- * @method NoteQuery rightJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByUpdatedBy relation
- * @method NoteQuery innerJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByUpdatedBy relation
+ * @method ClassDocumentQuery leftJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByUpdatedBy relation
+ * @method ClassDocumentQuery rightJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByUpdatedBy relation
+ * @method ClassDocumentQuery innerJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByUpdatedBy relation
  *
- * @method Note findOne(PropelPDO $con = null) Return the first Note matching the query
- * @method Note findOneOrCreate(PropelPDO $con = null) Return the first Note matching the query, or a new Note object populated from the query conditions when no match is found
+ * @method ClassDocument findOne(PropelPDO $con = null) Return the first ClassDocument matching the query
+ * @method ClassDocument findOneOrCreate(PropelPDO $con = null) Return the first ClassDocument matching the query, or a new ClassDocument object populated from the query conditions when no match is found
  *
- * @method Note findOneByNoteTypeId(int $note_type_id) Return the first Note filtered by the note_type_id column
- * @method Note findOneByBody(resource $body) Return the first Note filtered by the body column
- * @method Note findOneByDateStart(string $date_start) Return the first Note filtered by the date_start column
- * @method Note findOneByDateEnd(string $date_end) Return the first Note filtered by the date_end column
- * @method Note findOneByIsInactive(boolean $is_inactive) Return the first Note filtered by the is_inactive column
- * @method Note findOneByImageId(int $image_id) Return the first Note filtered by the image_id column
- * @method Note findOneByCreatedAt(string $created_at) Return the first Note filtered by the created_at column
- * @method Note findOneByUpdatedAt(string $updated_at) Return the first Note filtered by the updated_at column
- * @method Note findOneByCreatedBy(int $created_by) Return the first Note filtered by the created_by column
- * @method Note findOneByUpdatedBy(int $updated_by) Return the first Note filtered by the updated_by column
+ * @method ClassDocument findOneBySchoolClassId(int $school_class_id) Return the first ClassDocument filtered by the school_class_id column
+ * @method ClassDocument findOneByDocumentId(int $document_id) Return the first ClassDocument filtered by the document_id column
+ * @method ClassDocument findOneByCreatedAt(string $created_at) Return the first ClassDocument filtered by the created_at column
+ * @method ClassDocument findOneByUpdatedAt(string $updated_at) Return the first ClassDocument filtered by the updated_at column
+ * @method ClassDocument findOneByCreatedBy(int $created_by) Return the first ClassDocument filtered by the created_by column
+ * @method ClassDocument findOneByUpdatedBy(int $updated_by) Return the first ClassDocument filtered by the updated_by column
  *
- * @method array findById(int $id) Return Note objects filtered by the id column
- * @method array findByNoteTypeId(int $note_type_id) Return Note objects filtered by the note_type_id column
- * @method array findByBody(resource $body) Return Note objects filtered by the body column
- * @method array findByDateStart(string $date_start) Return Note objects filtered by the date_start column
- * @method array findByDateEnd(string $date_end) Return Note objects filtered by the date_end column
- * @method array findByIsInactive(boolean $is_inactive) Return Note objects filtered by the is_inactive column
- * @method array findByImageId(int $image_id) Return Note objects filtered by the image_id column
- * @method array findByCreatedAt(string $created_at) Return Note objects filtered by the created_at column
- * @method array findByUpdatedAt(string $updated_at) Return Note objects filtered by the updated_at column
- * @method array findByCreatedBy(int $created_by) Return Note objects filtered by the created_by column
- * @method array findByUpdatedBy(int $updated_by) Return Note objects filtered by the updated_by column
+ * @method array findBySchoolClassId(int $school_class_id) Return ClassDocument objects filtered by the school_class_id column
+ * @method array findByDocumentId(int $document_id) Return ClassDocument objects filtered by the document_id column
+ * @method array findByCreatedAt(string $created_at) Return ClassDocument objects filtered by the created_at column
+ * @method array findByUpdatedAt(string $updated_at) Return ClassDocument objects filtered by the updated_at column
+ * @method array findByCreatedBy(int $created_by) Return ClassDocument objects filtered by the created_by column
+ * @method array findByUpdatedBy(int $updated_by) Return ClassDocument objects filtered by the updated_by column
  *
  * @package    propel.generator.model.om
  */
-abstract class BaseNoteQuery extends ModelCriteria
+abstract class BaseClassDocumentQuery extends ModelCriteria
 {
     /**
-     * Initializes internal state of BaseNoteQuery object.
+     * Initializes internal state of BaseClassDocumentQuery object.
      *
      * @param     string $dbName The dabase name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
@@ -93,25 +74,25 @@ abstract class BaseNoteQuery extends ModelCriteria
             $dbName = 'rapila';
         }
         if (null === $modelName) {
-            $modelName = 'Note';
+            $modelName = 'ClassDocument';
         }
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new NoteQuery object.
+     * Returns a new ClassDocumentQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
-     * @param   NoteQuery|Criteria $criteria Optional Criteria to build the query from
+     * @param   ClassDocumentQuery|Criteria $criteria Optional Criteria to build the query from
      *
-     * @return NoteQuery
+     * @return ClassDocumentQuery
      */
     public static function create($modelAlias = null, $criteria = null)
     {
-        if ($criteria instanceof NoteQuery) {
+        if ($criteria instanceof ClassDocumentQuery) {
             return $criteria;
         }
-        $query = new NoteQuery(null, null, $modelAlias);
+        $query = new ClassDocumentQuery(null, null, $modelAlias);
 
         if ($criteria instanceof Criteria) {
             $query->mergeWith($criteria);
@@ -126,25 +107,26 @@ abstract class BaseNoteQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj  = $c->findPk(12, $con);
+     * $obj = $c->findPk(array(12, 34), $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param array $key Primary key to use for the query
+                         A Primary key composition: [$school_class_id, $document_id]
      * @param     PropelPDO $con an optional connection object
      *
-     * @return   Note|Note[]|mixed the result, formatted by the current formatter
+     * @return   ClassDocument|ClassDocument[]|mixed the result, formatted by the current formatter
      */
     public function findPk($key, $con = null)
     {
         if ($key === null) {
             return null;
         }
-        if ((null !== ($obj = NotePeer::getInstanceFromPool((string) $key))) && !$this->formatter) {
+        if ((null !== ($obj = ClassDocumentPeer::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && !$this->formatter) {
             // the object is already in the instance pool
             return $obj;
         }
         if ($con === null) {
-            $con = Propel::getConnection(NotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
         $this->basePreSelect($con);
         if ($this->formatter || $this->modelAlias || $this->with || $this->select
@@ -157,35 +139,22 @@ abstract class BaseNoteQuery extends ModelCriteria
     }
 
     /**
-     * Alias of findPk to use instance pooling
-     *
-     * @param     mixed $key Primary key to use for the query
-     * @param     PropelPDO $con A connection object
-     *
-     * @return                 Note A model object, or null if the key is not found
-     * @throws PropelException
-     */
-     public function findOneById($key, $con = null)
-     {
-        return $this->findPk($key, $con);
-     }
-
-    /**
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
      * @param     mixed $key Primary key to use for the query
      * @param     PropelPDO $con A connection object
      *
-     * @return                 Note A model object, or null if the key is not found
+     * @return                 ClassDocument A model object, or null if the key is not found
      * @throws PropelException
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `note_type_id`, `body`, `date_start`, `date_end`, `is_inactive`, `image_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `notes` WHERE `id` = :p0';
+        $sql = 'SELECT `school_class_id`, `document_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `class_documents` WHERE `school_class_id` = :p0 AND `document_id` = :p1';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
+            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -193,9 +162,9 @@ abstract class BaseNoteQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $obj = new Note();
+            $obj = new ClassDocument();
             $obj->hydrate($row);
-            NotePeer::addInstanceToPool($obj, (string) $key);
+            ClassDocumentPeer::addInstanceToPool($obj, serialize(array((string) $key[0], (string) $key[1])));
         }
         $stmt->closeCursor();
 
@@ -208,7 +177,7 @@ abstract class BaseNoteQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     PropelPDO $con A connection object
      *
-     * @return Note|Note[]|mixed the result, formatted by the current formatter
+     * @return ClassDocument|ClassDocument[]|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, $con)
     {
@@ -224,12 +193,12 @@ abstract class BaseNoteQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(12, 56, 832), $con);
+     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     PropelPDO $con an optional connection object
      *
-     * @return PropelObjectCollection|Note[]|mixed the list of results, formatted by the current formatter
+     * @return PropelObjectCollection|ClassDocument[]|mixed the list of results, formatted by the current formatter
      */
     public function findPks($keys, $con = null)
     {
@@ -250,12 +219,14 @@ abstract class BaseNoteQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
+        $this->addUsingAlias(ClassDocumentPeer::SCHOOL_CLASS_ID, $key[0], Criteria::EQUAL);
+        $this->addUsingAlias(ClassDocumentPeer::DOCUMENT_ID, $key[1], Criteria::EQUAL);
 
-        return $this->addUsingAlias(NotePeer::ID, $key, Criteria::EQUAL);
+        return $this;
     }
 
     /**
@@ -263,43 +234,54 @@ abstract class BaseNoteQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
+        if (empty($keys)) {
+            return $this->add(null, '1<>1', Criteria::CUSTOM);
+        }
+        foreach ($keys as $key) {
+            $cton0 = $this->getNewCriterion(ClassDocumentPeer::SCHOOL_CLASS_ID, $key[0], Criteria::EQUAL);
+            $cton1 = $this->getNewCriterion(ClassDocumentPeer::DOCUMENT_ID, $key[1], Criteria::EQUAL);
+            $cton0->addAnd($cton1);
+            $this->addOr($cton0);
+        }
 
-        return $this->addUsingAlias(NotePeer::ID, $keys, Criteria::IN);
+        return $this;
     }
 
     /**
-     * Filter the query on the id column
+     * Filter the query on the school_class_id column
      *
      * Example usage:
      * <code>
-     * $query->filterById(1234); // WHERE id = 1234
-     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE id >= 12
-     * $query->filterById(array('max' => 12)); // WHERE id <= 12
+     * $query->filterBySchoolClassId(1234); // WHERE school_class_id = 1234
+     * $query->filterBySchoolClassId(array(12, 34)); // WHERE school_class_id IN (12, 34)
+     * $query->filterBySchoolClassId(array('min' => 12)); // WHERE school_class_id >= 12
+     * $query->filterBySchoolClassId(array('max' => 12)); // WHERE school_class_id <= 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @see       filterBySchoolClass()
+     *
+     * @param     mixed $schoolClassId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterBySchoolClassId($schoolClassId = null, $comparison = null)
     {
-        if (is_array($id)) {
+        if (is_array($schoolClassId)) {
             $useMinMax = false;
-            if (isset($id['min'])) {
-                $this->addUsingAlias(NotePeer::ID, $id['min'], Criteria::GREATER_EQUAL);
+            if (isset($schoolClassId['min'])) {
+                $this->addUsingAlias(ClassDocumentPeer::SCHOOL_CLASS_ID, $schoolClassId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($id['max'])) {
-                $this->addUsingAlias(NotePeer::ID, $id['max'], Criteria::LESS_EQUAL);
+            if (isset($schoolClassId['max'])) {
+                $this->addUsingAlias(ClassDocumentPeer::SCHOOL_CLASS_ID, $schoolClassId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -310,211 +292,40 @@ abstract class BaseNoteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(NotePeer::ID, $id, $comparison);
+        return $this->addUsingAlias(ClassDocumentPeer::SCHOOL_CLASS_ID, $schoolClassId, $comparison);
     }
 
     /**
-     * Filter the query on the note_type_id column
+     * Filter the query on the document_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByNoteTypeId(1234); // WHERE note_type_id = 1234
-     * $query->filterByNoteTypeId(array(12, 34)); // WHERE note_type_id IN (12, 34)
-     * $query->filterByNoteTypeId(array('min' => 12)); // WHERE note_type_id >= 12
-     * $query->filterByNoteTypeId(array('max' => 12)); // WHERE note_type_id <= 12
-     * </code>
-     *
-     * @see       filterByNoteType()
-     *
-     * @param     mixed $noteTypeId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return NoteQuery The current query, for fluid interface
-     */
-    public function filterByNoteTypeId($noteTypeId = null, $comparison = null)
-    {
-        if (is_array($noteTypeId)) {
-            $useMinMax = false;
-            if (isset($noteTypeId['min'])) {
-                $this->addUsingAlias(NotePeer::NOTE_TYPE_ID, $noteTypeId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($noteTypeId['max'])) {
-                $this->addUsingAlias(NotePeer::NOTE_TYPE_ID, $noteTypeId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(NotePeer::NOTE_TYPE_ID, $noteTypeId, $comparison);
-    }
-
-    /**
-     * Filter the query on the body column
-     *
-     * @param     mixed $body The value to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return NoteQuery The current query, for fluid interface
-     */
-    public function filterByBody($body = null, $comparison = null)
-    {
-
-        return $this->addUsingAlias(NotePeer::BODY, $body, $comparison);
-    }
-
-    /**
-     * Filter the query on the date_start column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDateStart('2011-03-14'); // WHERE date_start = '2011-03-14'
-     * $query->filterByDateStart('now'); // WHERE date_start = '2011-03-14'
-     * $query->filterByDateStart(array('max' => 'yesterday')); // WHERE date_start < '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $dateStart The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return NoteQuery The current query, for fluid interface
-     */
-    public function filterByDateStart($dateStart = null, $comparison = null)
-    {
-        if (is_array($dateStart)) {
-            $useMinMax = false;
-            if (isset($dateStart['min'])) {
-                $this->addUsingAlias(NotePeer::DATE_START, $dateStart['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($dateStart['max'])) {
-                $this->addUsingAlias(NotePeer::DATE_START, $dateStart['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(NotePeer::DATE_START, $dateStart, $comparison);
-    }
-
-    /**
-     * Filter the query on the date_end column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDateEnd('2011-03-14'); // WHERE date_end = '2011-03-14'
-     * $query->filterByDateEnd('now'); // WHERE date_end = '2011-03-14'
-     * $query->filterByDateEnd(array('max' => 'yesterday')); // WHERE date_end < '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $dateEnd The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return NoteQuery The current query, for fluid interface
-     */
-    public function filterByDateEnd($dateEnd = null, $comparison = null)
-    {
-        if (is_array($dateEnd)) {
-            $useMinMax = false;
-            if (isset($dateEnd['min'])) {
-                $this->addUsingAlias(NotePeer::DATE_END, $dateEnd['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($dateEnd['max'])) {
-                $this->addUsingAlias(NotePeer::DATE_END, $dateEnd['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(NotePeer::DATE_END, $dateEnd, $comparison);
-    }
-
-    /**
-     * Filter the query on the is_inactive column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByIsInactive(true); // WHERE is_inactive = true
-     * $query->filterByIsInactive('yes'); // WHERE is_inactive = true
-     * </code>
-     *
-     * @param     boolean|string $isInactive The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return NoteQuery The current query, for fluid interface
-     */
-    public function filterByIsInactive($isInactive = null, $comparison = null)
-    {
-        if (is_string($isInactive)) {
-            $isInactive = in_array(strtolower($isInactive), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-        }
-
-        return $this->addUsingAlias(NotePeer::IS_INACTIVE, $isInactive, $comparison);
-    }
-
-    /**
-     * Filter the query on the image_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByImageId(1234); // WHERE image_id = 1234
-     * $query->filterByImageId(array(12, 34)); // WHERE image_id IN (12, 34)
-     * $query->filterByImageId(array('min' => 12)); // WHERE image_id >= 12
-     * $query->filterByImageId(array('max' => 12)); // WHERE image_id <= 12
+     * $query->filterByDocumentId(1234); // WHERE document_id = 1234
+     * $query->filterByDocumentId(array(12, 34)); // WHERE document_id IN (12, 34)
+     * $query->filterByDocumentId(array('min' => 12)); // WHERE document_id >= 12
+     * $query->filterByDocumentId(array('max' => 12)); // WHERE document_id <= 12
      * </code>
      *
      * @see       filterByDocument()
      *
-     * @param     mixed $imageId The value to use as filter.
+     * @param     mixed $documentId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
-    public function filterByImageId($imageId = null, $comparison = null)
+    public function filterByDocumentId($documentId = null, $comparison = null)
     {
-        if (is_array($imageId)) {
+        if (is_array($documentId)) {
             $useMinMax = false;
-            if (isset($imageId['min'])) {
-                $this->addUsingAlias(NotePeer::IMAGE_ID, $imageId['min'], Criteria::GREATER_EQUAL);
+            if (isset($documentId['min'])) {
+                $this->addUsingAlias(ClassDocumentPeer::DOCUMENT_ID, $documentId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($imageId['max'])) {
-                $this->addUsingAlias(NotePeer::IMAGE_ID, $imageId['max'], Criteria::LESS_EQUAL);
+            if (isset($documentId['max'])) {
+                $this->addUsingAlias(ClassDocumentPeer::DOCUMENT_ID, $documentId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -525,7 +336,7 @@ abstract class BaseNoteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(NotePeer::IMAGE_ID, $imageId, $comparison);
+        return $this->addUsingAlias(ClassDocumentPeer::DOCUMENT_ID, $documentId, $comparison);
     }
 
     /**
@@ -546,18 +357,18 @@ abstract class BaseNoteQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
     public function filterByCreatedAt($createdAt = null, $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
             if (isset($createdAt['min'])) {
-                $this->addUsingAlias(NotePeer::CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ClassDocumentPeer::CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($createdAt['max'])) {
-                $this->addUsingAlias(NotePeer::CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ClassDocumentPeer::CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -568,7 +379,7 @@ abstract class BaseNoteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(NotePeer::CREATED_AT, $createdAt, $comparison);
+        return $this->addUsingAlias(ClassDocumentPeer::CREATED_AT, $createdAt, $comparison);
     }
 
     /**
@@ -589,18 +400,18 @@ abstract class BaseNoteQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
     public function filterByUpdatedAt($updatedAt = null, $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
             if (isset($updatedAt['min'])) {
-                $this->addUsingAlias(NotePeer::UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ClassDocumentPeer::UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($updatedAt['max'])) {
-                $this->addUsingAlias(NotePeer::UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ClassDocumentPeer::UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -611,7 +422,7 @@ abstract class BaseNoteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(NotePeer::UPDATED_AT, $updatedAt, $comparison);
+        return $this->addUsingAlias(ClassDocumentPeer::UPDATED_AT, $updatedAt, $comparison);
     }
 
     /**
@@ -633,18 +444,18 @@ abstract class BaseNoteQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
     public function filterByCreatedBy($createdBy = null, $comparison = null)
     {
         if (is_array($createdBy)) {
             $useMinMax = false;
             if (isset($createdBy['min'])) {
-                $this->addUsingAlias(NotePeer::CREATED_BY, $createdBy['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ClassDocumentPeer::CREATED_BY, $createdBy['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($createdBy['max'])) {
-                $this->addUsingAlias(NotePeer::CREATED_BY, $createdBy['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ClassDocumentPeer::CREATED_BY, $createdBy['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -655,7 +466,7 @@ abstract class BaseNoteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(NotePeer::CREATED_BY, $createdBy, $comparison);
+        return $this->addUsingAlias(ClassDocumentPeer::CREATED_BY, $createdBy, $comparison);
     }
 
     /**
@@ -677,18 +488,18 @@ abstract class BaseNoteQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
     public function filterByUpdatedBy($updatedBy = null, $comparison = null)
     {
         if (is_array($updatedBy)) {
             $useMinMax = false;
             if (isset($updatedBy['min'])) {
-                $this->addUsingAlias(NotePeer::UPDATED_BY, $updatedBy['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ClassDocumentPeer::UPDATED_BY, $updatedBy['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($updatedBy['max'])) {
-                $this->addUsingAlias(NotePeer::UPDATED_BY, $updatedBy['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ClassDocumentPeer::UPDATED_BY, $updatedBy['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -699,47 +510,47 @@ abstract class BaseNoteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(NotePeer::UPDATED_BY, $updatedBy, $comparison);
+        return $this->addUsingAlias(ClassDocumentPeer::UPDATED_BY, $updatedBy, $comparison);
     }
 
     /**
-     * Filter the query by a related NoteType object
+     * Filter the query by a related SchoolClass object
      *
-     * @param   NoteType|PropelObjectCollection $noteType The related object(s) to use as filter
+     * @param   SchoolClass|PropelObjectCollection $schoolClass The related object(s) to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return                 NoteQuery The current query, for fluid interface
+     * @return                 ClassDocumentQuery The current query, for fluid interface
      * @throws PropelException - if the provided filter is invalid.
      */
-    public function filterByNoteType($noteType, $comparison = null)
+    public function filterBySchoolClass($schoolClass, $comparison = null)
     {
-        if ($noteType instanceof NoteType) {
+        if ($schoolClass instanceof SchoolClass) {
             return $this
-                ->addUsingAlias(NotePeer::NOTE_TYPE_ID, $noteType->getId(), $comparison);
-        } elseif ($noteType instanceof PropelObjectCollection) {
+                ->addUsingAlias(ClassDocumentPeer::SCHOOL_CLASS_ID, $schoolClass->getId(), $comparison);
+        } elseif ($schoolClass instanceof PropelObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(NotePeer::NOTE_TYPE_ID, $noteType->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(ClassDocumentPeer::SCHOOL_CLASS_ID, $schoolClass->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByNoteType() only accepts arguments of type NoteType or PropelCollection');
+            throw new PropelException('filterBySchoolClass() only accepts arguments of type SchoolClass or PropelCollection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the NoteType relation
+     * Adds a JOIN clause to the query using the SchoolClass relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
-    public function joinNoteType($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinSchoolClass($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('NoteType');
+        $relationMap = $tableMap->getRelation('SchoolClass');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -754,14 +565,14 @@ abstract class BaseNoteQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'NoteType');
+            $this->addJoinObject($join, 'SchoolClass');
         }
 
         return $this;
     }
 
     /**
-     * Use the NoteType relation NoteType object
+     * Use the SchoolClass relation SchoolClass object
      *
      * @see       useQuery()
      *
@@ -769,13 +580,13 @@ abstract class BaseNoteQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   NoteTypeQuery A secondary query class using the current class as primary query
+     * @return   SchoolClassQuery A secondary query class using the current class as primary query
      */
-    public function useNoteTypeQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useSchoolClassQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinNoteType($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'NoteType', 'NoteTypeQuery');
+            ->joinSchoolClass($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'SchoolClass', 'SchoolClassQuery');
     }
 
     /**
@@ -784,21 +595,21 @@ abstract class BaseNoteQuery extends ModelCriteria
      * @param   Document|PropelObjectCollection $document The related object(s) to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return                 NoteQuery The current query, for fluid interface
+     * @return                 ClassDocumentQuery The current query, for fluid interface
      * @throws PropelException - if the provided filter is invalid.
      */
     public function filterByDocument($document, $comparison = null)
     {
         if ($document instanceof Document) {
             return $this
-                ->addUsingAlias(NotePeer::IMAGE_ID, $document->getId(), $comparison);
+                ->addUsingAlias(ClassDocumentPeer::DOCUMENT_ID, $document->getId(), $comparison);
         } elseif ($document instanceof PropelObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(NotePeer::IMAGE_ID, $document->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(ClassDocumentPeer::DOCUMENT_ID, $document->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByDocument() only accepts arguments of type Document or PropelCollection');
         }
@@ -810,9 +621,9 @@ abstract class BaseNoteQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
-    public function joinDocument($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinDocument($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Document');
@@ -847,7 +658,7 @@ abstract class BaseNoteQuery extends ModelCriteria
      *
      * @return   DocumentQuery A secondary query class using the current class as primary query
      */
-    public function useDocumentQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useDocumentQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinDocument($relationAlias, $joinType)
@@ -860,21 +671,21 @@ abstract class BaseNoteQuery extends ModelCriteria
      * @param   User|PropelObjectCollection $user The related object(s) to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return                 NoteQuery The current query, for fluid interface
+     * @return                 ClassDocumentQuery The current query, for fluid interface
      * @throws PropelException - if the provided filter is invalid.
      */
     public function filterByUserRelatedByCreatedBy($user, $comparison = null)
     {
         if ($user instanceof User) {
             return $this
-                ->addUsingAlias(NotePeer::CREATED_BY, $user->getId(), $comparison);
+                ->addUsingAlias(ClassDocumentPeer::CREATED_BY, $user->getId(), $comparison);
         } elseif ($user instanceof PropelObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(NotePeer::CREATED_BY, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(ClassDocumentPeer::CREATED_BY, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByUserRelatedByCreatedBy() only accepts arguments of type User or PropelCollection');
         }
@@ -886,7 +697,7 @@ abstract class BaseNoteQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
     public function joinUserRelatedByCreatedBy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
@@ -936,21 +747,21 @@ abstract class BaseNoteQuery extends ModelCriteria
      * @param   User|PropelObjectCollection $user The related object(s) to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return                 NoteQuery The current query, for fluid interface
+     * @return                 ClassDocumentQuery The current query, for fluid interface
      * @throws PropelException - if the provided filter is invalid.
      */
     public function filterByUserRelatedByUpdatedBy($user, $comparison = null)
     {
         if ($user instanceof User) {
             return $this
-                ->addUsingAlias(NotePeer::UPDATED_BY, $user->getId(), $comparison);
+                ->addUsingAlias(ClassDocumentPeer::UPDATED_BY, $user->getId(), $comparison);
         } elseif ($user instanceof PropelObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(NotePeer::UPDATED_BY, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(ClassDocumentPeer::UPDATED_BY, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByUserRelatedByUpdatedBy() only accepts arguments of type User or PropelCollection');
         }
@@ -962,7 +773,7 @@ abstract class BaseNoteQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
     public function joinUserRelatedByUpdatedBy($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
@@ -1009,14 +820,16 @@ abstract class BaseNoteQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   Note $note Object to remove from the list of results
+     * @param   ClassDocument $classDocument Object to remove from the list of results
      *
-     * @return NoteQuery The current query, for fluid interface
+     * @return ClassDocumentQuery The current query, for fluid interface
      */
-    public function prune($note = null)
+    public function prune($classDocument = null)
     {
-        if ($note) {
-            $this->addUsingAlias(NotePeer::ID, $note->getId(), Criteria::NOT_EQUAL);
+        if ($classDocument) {
+            $this->addCond('pruneCond0', $this->getAliasedColName(ClassDocumentPeer::SCHOOL_CLASS_ID), $classDocument->getSchoolClassId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond1', $this->getAliasedColName(ClassDocumentPeer::DOCUMENT_ID), $classDocument->getDocumentId(), Criteria::NOT_EQUAL);
+            $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
         }
 
         return $this;
@@ -1029,31 +842,31 @@ abstract class BaseNoteQuery extends ModelCriteria
      *
      * @param      int $nbDays Maximum age of the latest update in days
      *
-     * @return     NoteQuery The current query, for fluid interface
+     * @return     ClassDocumentQuery The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(NotePeer::UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        return $this->addUsingAlias(ClassDocumentPeer::UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
     }
 
     /**
      * Order by update date desc
      *
-     * @return     NoteQuery The current query, for fluid interface
+     * @return     ClassDocumentQuery The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(NotePeer::UPDATED_AT);
+        return $this->addDescendingOrderByColumn(ClassDocumentPeer::UPDATED_AT);
     }
 
     /**
      * Order by update date asc
      *
-     * @return     NoteQuery The current query, for fluid interface
+     * @return     ClassDocumentQuery The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(NotePeer::UPDATED_AT);
+        return $this->addAscendingOrderByColumn(ClassDocumentPeer::UPDATED_AT);
     }
 
     /**
@@ -1061,40 +874,40 @@ abstract class BaseNoteQuery extends ModelCriteria
      *
      * @param      int $nbDays Maximum age of in days
      *
-     * @return     NoteQuery The current query, for fluid interface
+     * @return     ClassDocumentQuery The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(NotePeer::CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        return $this->addUsingAlias(ClassDocumentPeer::CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
     }
 
     /**
      * Order by create date desc
      *
-     * @return     NoteQuery The current query, for fluid interface
+     * @return     ClassDocumentQuery The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(NotePeer::CREATED_AT);
+        return $this->addDescendingOrderByColumn(ClassDocumentPeer::CREATED_AT);
     }
 
     /**
      * Order by create date asc
      *
-     * @return     NoteQuery The current query, for fluid interface
+     * @return     ClassDocumentQuery The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(NotePeer::CREATED_AT);
+        return $this->addAscendingOrderByColumn(ClassDocumentPeer::CREATED_AT);
     }
     // extended_keyable behavior
 
     public function filterByPKArray($pkArray) {
-            return $this->filterByPrimaryKey($pkArray[0]);
+        return $this->filterByPrimaryKey($pkArray);
     }
 
     public function filterByPKString($pkString) {
-        return $this->filterByPrimaryKey($pkString);
+        return $this->filterByPrimaryKey(explode("_", $pkString));
     }
 
 }

@@ -24,7 +24,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
     protected static $peer;
 
     /**
-     * The flag var to prevent infinit loop in deep copy
+     * The flag var to prevent infinite loop in deep copy
      * @var       boolean
      */
     protected $startCopy = false;
@@ -120,6 +120,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
      */
     public function getId()
     {
+
         return $this->id;
     }
 
@@ -130,6 +131,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
      */
     public function getName()
     {
+
         return $this->name;
     }
 
@@ -140,6 +142,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
      */
     public function getNameNormalized()
     {
+
         return $this->name_normalized;
     }
 
@@ -230,6 +233,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
      */
     public function getCreatedBy()
     {
+
         return $this->created_by;
     }
 
@@ -240,13 +244,14 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
      */
     public function getUpdatedBy()
     {
+
         return $this->updated_by;
     }
 
     /**
      * Set the value of [id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return ServiceCategory The current object (for fluent API support)
      */
     public function setId($v)
@@ -267,12 +272,12 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
     /**
      * Set the value of [name] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return ServiceCategory The current object (for fluent API support)
      */
     public function setName($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -288,12 +293,12 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
     /**
      * Set the value of [name_normalized] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return ServiceCategory The current object (for fluent API support)
      */
     public function setNameNormalized($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -355,7 +360,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
     /**
      * Set the value of [created_by] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return ServiceCategory The current object (for fluent API support)
      */
     public function setCreatedBy($v)
@@ -380,7 +385,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
     /**
      * Set the value of [updated_by] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return ServiceCategory The current object (for fluent API support)
      */
     public function setUpdatedBy($v)
@@ -425,7 +430,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
      * more tables.
      *
      * @param array $row The row returned by PDOStatement->fetch(PDO::FETCH_NUM)
-     * @param int $startcol 0-based offset column which indicates which restultset column to start with.
+     * @param int $startcol 0-based offset column which indicates which resultset column to start with.
      * @param boolean $rehydrate Whether this object is being re-hydrated from the database.
      * @return int             next starting column
      * @throws PropelException - Any caught Exception will be rewrapped as a PropelException.
@@ -449,6 +454,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
+
             return $startcol + 7; // 7 = ServiceCategoryPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
@@ -679,7 +685,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
             $this->alreadyInSave = true;
 
             // We call the save method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -885,10 +891,10 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
      *
      * In addition to checking the current object, all related objects will
      * also be validated.  If all pass then <code>true</code> is returned; otherwise
-     * an aggreagated array of ValidationFailed objects will be returned.
+     * an aggregated array of ValidationFailed objects will be returned.
      *
      * @param array $columns Array of column names to validate.
-     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objets otherwise.
+     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objects otherwise.
      */
     protected function doValidate($columns = null)
     {
@@ -900,7 +906,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
 
 
             // We call the validate method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -1023,6 +1029,11 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
             $keys[5] => $this->getCreatedBy(),
             $keys[6] => $this->getUpdatedBy(),
         );
+        $virtualColumns = $this->virtualColumns;
+        foreach ($virtualColumns as $key => $virtualColumn) {
+            $result[$key] = $virtualColumn;
+        }
+
         if ($includeForeignObjects) {
             if (null !== $this->aUserRelatedByCreatedBy) {
                 $result['UserRelatedByCreatedBy'] = $this->aUserRelatedByCreatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -1273,7 +1284,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a User object.
      *
-     * @param             User $v
+     * @param                  User $v
      * @return ServiceCategory The current object (for fluent API support)
      * @throws PropelException
      */
@@ -1325,7 +1336,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a User object.
      *
-     * @param             User $v
+     * @param                  User $v
      * @return ServiceCategory The current object (for fluent API support)
      * @throws PropelException
      */
@@ -1467,7 +1478,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
                     if (false !== $this->collServicesPartial && count($collServices)) {
                       $this->initServices(false);
 
-                      foreach($collServices as $obj) {
+                      foreach ($collServices as $obj) {
                         if (false == $this->collServices->contains($obj)) {
                           $this->collServices->append($obj);
                         }
@@ -1477,12 +1488,13 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
                     }
 
                     $collServices->getInternalIterator()->rewind();
+
                     return $collServices;
                 }
 
-                if($partial && $this->collServices) {
-                    foreach($this->collServices as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collServices) {
+                    foreach ($this->collServices as $obj) {
+                        if ($obj->isNew()) {
                             $collServices[] = $obj;
                         }
                     }
@@ -1510,7 +1522,8 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
     {
         $servicesToDelete = $this->getServices(new Criteria(), $con)->diff($services);
 
-        $this->servicesScheduledForDeletion = unserialize(serialize($servicesToDelete));
+
+        $this->servicesScheduledForDeletion = $servicesToDelete;
 
         foreach ($servicesToDelete as $serviceRemoved) {
             $serviceRemoved->setServiceCategory(null);
@@ -1544,7 +1557,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getServices());
             }
             $query = ServiceQuery::create(null, $criteria);
@@ -1573,8 +1586,13 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
             $this->initServices();
             $this->collServicesPartial = true;
         }
+
         if (!in_array($l, $this->collServices->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddService($l);
+
+            if ($this->servicesScheduledForDeletion and $this->servicesScheduledForDeletion->contains($l)) {
+                $this->servicesScheduledForDeletion->remove($this->servicesScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -1709,7 +1727,7 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
      *
      * This method is a user-space workaround for PHP's inability to garbage collect
      * objects with circular references (even in PHP 5.3). This is currently necessary
-     * when using Propel in certain daemon or large-volumne/high-memory operations.
+     * when using Propel in certain daemon or large-volume/high-memory operations.
      *
      * @param boolean $deep Whether to also clear the references on all referrer objects.
      */
@@ -1847,6 +1865,24 @@ abstract class BaseServiceCategory extends BaseObject implements Persistent
     {
         $this->modifiedColumns[] = ServiceCategoryPeer::UPDATED_BY;
         return $this;
+    }
+
+    // extended_keyable behavior
+
+    /**
+     * @return the primary key as an array (even for non-composite keys)
+     */
+    public function getPKArray()
+    {
+        return array($this->getPrimaryKey());
+    }
+
+    /**
+     * @return the composite primary key as a string, separated by _
+     */
+    public function getPKString()
+    {
+        return implode("", $this->getPKArray());
     }
 
 }

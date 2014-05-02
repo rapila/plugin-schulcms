@@ -127,8 +127,14 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'rapila', $modelName = 'TeamMember', $modelAlias = null)
+    public function __construct($dbName = null, $modelName = null, $modelAlias = null)
     {
+        if (null === $dbName) {
+            $dbName = 'rapila';
+        }
+        if (null === $modelName) {
+            $modelName = 'TeamMember';
+        }
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
@@ -145,10 +151,8 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
         if ($criteria instanceof TeamMemberQuery) {
             return $criteria;
         }
-        $query = new TeamMemberQuery();
-        if (null !== $modelAlias) {
-            $query->setModelAlias($modelAlias);
-        }
+        $query = new TeamMemberQuery(null, null, $modelAlias);
+
         if ($criteria instanceof Criteria) {
             $query->mergeWith($criteria);
         }
@@ -176,7 +180,7 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
             return null;
         }
         if ((null !== ($obj = TeamMemberPeer::getInstanceFromPool((string) $key))) && !$this->formatter) {
-            // the object is alredy in the instance pool
+            // the object is already in the instance pool
             return $obj;
         }
         if ($con === null) {
@@ -514,7 +518,7 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
      * <code>
      * $query->filterByEmployedSince('2011-03-14'); // WHERE employed_since = '2011-03-14'
      * $query->filterByEmployedSince('now'); // WHERE employed_since = '2011-03-14'
-     * $query->filterByEmployedSince(array('max' => 'yesterday')); // WHERE employed_since > '2011-03-13'
+     * $query->filterByEmployedSince(array('max' => 'yesterday')); // WHERE employed_since < '2011-03-13'
      * </code>
      *
      * @param     mixed $employedSince The value to use as filter.
@@ -557,7 +561,7 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
      * <code>
      * $query->filterByDateOfBirth('2011-03-14'); // WHERE date_of_birth = '2011-03-14'
      * $query->filterByDateOfBirth('now'); // WHERE date_of_birth = '2011-03-14'
-     * $query->filterByDateOfBirth(array('max' => 'yesterday')); // WHERE date_of_birth > '2011-03-13'
+     * $query->filterByDateOfBirth(array('max' => 'yesterday')); // WHERE date_of_birth < '2011-03-13'
      * </code>
      *
      * @param     mixed $dateOfBirth The value to use as filter.
@@ -800,7 +804,7 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
      * <code>
      * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
      * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
-     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
+     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at < '2011-03-13'
      * </code>
      *
      * @param     mixed $createdAt The value to use as filter.
@@ -843,7 +847,7 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
      * <code>
      * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
      * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
-     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
+     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at < '2011-03-13'
      * </code>
      *
      * @param     mixed $updatedAt The value to use as filter.
@@ -1574,4 +1578,14 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
     {
         return $this->addAscendingOrderByColumn(TeamMemberPeer::CREATED_AT);
     }
+    // extended_keyable behavior
+
+    public function filterByPKArray($pkArray) {
+            return $this->filterByPrimaryKey($pkArray[0]);
+    }
+
+    public function filterByPKString($pkString) {
+        return $this->filterByPrimaryKey($pkString);
+    }
+
 }

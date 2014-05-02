@@ -2,26 +2,26 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'class_links' table.
+ * Base static class for performing query and update operations on the 'class_documents' table.
  *
  *
  *
  * @package propel.generator.model.om
  */
-abstract class BaseClassLinkPeer
+abstract class BaseClassDocumentPeer
 {
 
     /** the default database name for this class */
     const DATABASE_NAME = 'rapila';
 
     /** the table name for this class */
-    const TABLE_NAME = 'class_links';
+    const TABLE_NAME = 'class_documents';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'ClassLink';
+    const OM_CLASS = 'ClassDocument';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'ClassLinkTableMap';
+    const TM_CLASS = 'ClassDocumentTableMap';
 
     /** The total number of columns. */
     const NUM_COLUMNS = 6;
@@ -33,31 +33,31 @@ abstract class BaseClassLinkPeer
     const NUM_HYDRATE_COLUMNS = 6;
 
     /** the column name for the school_class_id field */
-    const SCHOOL_CLASS_ID = 'class_links.school_class_id';
+    const SCHOOL_CLASS_ID = 'class_documents.school_class_id';
 
-    /** the column name for the link_id field */
-    const LINK_ID = 'class_links.link_id';
+    /** the column name for the document_id field */
+    const DOCUMENT_ID = 'class_documents.document_id';
 
     /** the column name for the created_at field */
-    const CREATED_AT = 'class_links.created_at';
+    const CREATED_AT = 'class_documents.created_at';
 
     /** the column name for the updated_at field */
-    const UPDATED_AT = 'class_links.updated_at';
+    const UPDATED_AT = 'class_documents.updated_at';
 
     /** the column name for the created_by field */
-    const CREATED_BY = 'class_links.created_by';
+    const CREATED_BY = 'class_documents.created_by';
 
     /** the column name for the updated_by field */
-    const UPDATED_BY = 'class_links.updated_by';
+    const UPDATED_BY = 'class_documents.updated_by';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identity map to hold any loaded instances of ClassLink objects.
+     * An identity map to hold any loaded instances of ClassDocument objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
-     * @var        array ClassLink[]
+     * @var        array ClassDocument[]
      */
     public static $instances = array();
 
@@ -68,14 +68,14 @@ abstract class BaseClassLinkPeer
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
-     * e.g. ClassLinkPeer::$fieldNames[ClassLinkPeer::TYPE_PHPNAME][0] = 'Id'
+     * e.g. ClassDocumentPeer::$fieldNames[ClassDocumentPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('SchoolClassId', 'LinkId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId', 'linkId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-        BasePeer::TYPE_COLNAME => array (ClassLinkPeer::SCHOOL_CLASS_ID, ClassLinkPeer::LINK_ID, ClassLinkPeer::CREATED_AT, ClassLinkPeer::UPDATED_AT, ClassLinkPeer::CREATED_BY, ClassLinkPeer::UPDATED_BY, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID', 'LINK_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-        BasePeer::TYPE_FIELDNAME => array ('school_class_id', 'link_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+        BasePeer::TYPE_PHPNAME => array ('SchoolClassId', 'DocumentId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId', 'documentId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+        BasePeer::TYPE_COLNAME => array (ClassDocumentPeer::SCHOOL_CLASS_ID, ClassDocumentPeer::DOCUMENT_ID, ClassDocumentPeer::CREATED_AT, ClassDocumentPeer::UPDATED_AT, ClassDocumentPeer::CREATED_BY, ClassDocumentPeer::UPDATED_BY, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID', 'DOCUMENT_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+        BasePeer::TYPE_FIELDNAME => array ('school_class_id', 'document_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
@@ -83,14 +83,14 @@ abstract class BaseClassLinkPeer
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
-     * e.g. ClassLinkPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
+     * e.g. ClassDocumentPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('SchoolClassId' => 0, 'LinkId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, 'CreatedBy' => 4, 'UpdatedBy' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId' => 0, 'linkId' => 1, 'createdAt' => 2, 'updatedAt' => 3, 'createdBy' => 4, 'updatedBy' => 5, ),
-        BasePeer::TYPE_COLNAME => array (ClassLinkPeer::SCHOOL_CLASS_ID => 0, ClassLinkPeer::LINK_ID => 1, ClassLinkPeer::CREATED_AT => 2, ClassLinkPeer::UPDATED_AT => 3, ClassLinkPeer::CREATED_BY => 4, ClassLinkPeer::UPDATED_BY => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID' => 0, 'LINK_ID' => 1, 'CREATED_AT' => 2, 'UPDATED_AT' => 3, 'CREATED_BY' => 4, 'UPDATED_BY' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('school_class_id' => 0, 'link_id' => 1, 'created_at' => 2, 'updated_at' => 3, 'created_by' => 4, 'updated_by' => 5, ),
+        BasePeer::TYPE_PHPNAME => array ('SchoolClassId' => 0, 'DocumentId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, 'CreatedBy' => 4, 'UpdatedBy' => 5, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId' => 0, 'documentId' => 1, 'createdAt' => 2, 'updatedAt' => 3, 'createdBy' => 4, 'updatedBy' => 5, ),
+        BasePeer::TYPE_COLNAME => array (ClassDocumentPeer::SCHOOL_CLASS_ID => 0, ClassDocumentPeer::DOCUMENT_ID => 1, ClassDocumentPeer::CREATED_AT => 2, ClassDocumentPeer::UPDATED_AT => 3, ClassDocumentPeer::CREATED_BY => 4, ClassDocumentPeer::UPDATED_BY => 5, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID' => 0, 'DOCUMENT_ID' => 1, 'CREATED_AT' => 2, 'UPDATED_AT' => 3, 'CREATED_BY' => 4, 'UPDATED_BY' => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('school_class_id' => 0, 'document_id' => 1, 'created_at' => 2, 'updated_at' => 3, 'created_by' => 4, 'updated_by' => 5, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
@@ -106,10 +106,10 @@ abstract class BaseClassLinkPeer
      */
     public static function translateFieldName($name, $fromType, $toType)
     {
-        $toNames = ClassLinkPeer::getFieldNames($toType);
-        $key = isset(ClassLinkPeer::$fieldKeys[$fromType][$name]) ? ClassLinkPeer::$fieldKeys[$fromType][$name] : null;
+        $toNames = ClassDocumentPeer::getFieldNames($toType);
+        $key = isset(ClassDocumentPeer::$fieldKeys[$fromType][$name]) ? ClassDocumentPeer::$fieldKeys[$fromType][$name] : null;
         if ($key === null) {
-            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(ClassLinkPeer::$fieldKeys[$fromType], true));
+            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(ClassDocumentPeer::$fieldKeys[$fromType], true));
         }
 
         return $toNames[$key];
@@ -126,11 +126,11 @@ abstract class BaseClassLinkPeer
      */
     public static function getFieldNames($type = BasePeer::TYPE_PHPNAME)
     {
-        if (!array_key_exists($type, ClassLinkPeer::$fieldNames)) {
+        if (!array_key_exists($type, ClassDocumentPeer::$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter $type to be one of the class constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME, BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. ' . $type . ' was given.');
         }
 
-        return ClassLinkPeer::$fieldNames[$type];
+        return ClassDocumentPeer::$fieldNames[$type];
     }
 
     /**
@@ -142,12 +142,12 @@ abstract class BaseClassLinkPeer
      *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
      * </code>
      * @param      string $alias The alias for the current table.
-     * @param      string $column The column name for current table. (i.e. ClassLinkPeer::COLUMN_NAME).
+     * @param      string $column The column name for current table. (i.e. ClassDocumentPeer::COLUMN_NAME).
      * @return string
      */
     public static function alias($alias, $column)
     {
-        return str_replace(ClassLinkPeer::TABLE_NAME.'.', $alias.'.', $column);
+        return str_replace(ClassDocumentPeer::TABLE_NAME.'.', $alias.'.', $column);
     }
 
     /**
@@ -165,15 +165,15 @@ abstract class BaseClassLinkPeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(ClassLinkPeer::SCHOOL_CLASS_ID);
-            $criteria->addSelectColumn(ClassLinkPeer::LINK_ID);
-            $criteria->addSelectColumn(ClassLinkPeer::CREATED_AT);
-            $criteria->addSelectColumn(ClassLinkPeer::UPDATED_AT);
-            $criteria->addSelectColumn(ClassLinkPeer::CREATED_BY);
-            $criteria->addSelectColumn(ClassLinkPeer::UPDATED_BY);
+            $criteria->addSelectColumn(ClassDocumentPeer::SCHOOL_CLASS_ID);
+            $criteria->addSelectColumn(ClassDocumentPeer::DOCUMENT_ID);
+            $criteria->addSelectColumn(ClassDocumentPeer::CREATED_AT);
+            $criteria->addSelectColumn(ClassDocumentPeer::UPDATED_AT);
+            $criteria->addSelectColumn(ClassDocumentPeer::CREATED_BY);
+            $criteria->addSelectColumn(ClassDocumentPeer::UPDATED_BY);
         } else {
             $criteria->addSelectColumn($alias . '.school_class_id');
-            $criteria->addSelectColumn($alias . '.link_id');
+            $criteria->addSelectColumn($alias . '.document_id');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
             $criteria->addSelectColumn($alias . '.created_by');
@@ -197,21 +197,21 @@ abstract class BaseClassLinkPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(ClassLinkPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassDocumentPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            ClassLinkPeer::addSelectColumns($criteria);
+            ClassDocumentPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME); // Set the correct dbName
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME); // Set the correct dbName
 
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
         // BasePeer returns a PDOStatement
         $stmt = BasePeer::doCount($criteria, $con);
@@ -230,7 +230,7 @@ abstract class BaseClassLinkPeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return ClassLink
+     * @return ClassDocument
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -238,7 +238,7 @@ abstract class BaseClassLinkPeer
     {
         $critcopy = clone $criteria;
         $critcopy->setLimit(1);
-        $objects = ClassLinkPeer::doSelect($critcopy, $con);
+        $objects = ClassDocumentPeer::doSelect($critcopy, $con);
         if ($objects) {
             return $objects[0];
         }
@@ -256,7 +256,7 @@ abstract class BaseClassLinkPeer
      */
     public static function doSelect(Criteria $criteria, PropelPDO $con = null)
     {
-        return ClassLinkPeer::populateObjects(ClassLinkPeer::doSelectStmt($criteria, $con));
+        return ClassDocumentPeer::populateObjects(ClassDocumentPeer::doSelectStmt($criteria, $con));
     }
     /**
      * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -274,16 +274,16 @@ abstract class BaseClassLinkPeer
     public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         if (!$criteria->hasSelectClause()) {
             $criteria = clone $criteria;
-            ClassLinkPeer::addSelectColumns($criteria);
+            ClassDocumentPeer::addSelectColumns($criteria);
         }
 
         // Set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         // BasePeer returns a PDOStatement
         return BasePeer::doSelect($criteria, $con);
@@ -297,16 +297,16 @@ abstract class BaseClassLinkPeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param ClassLink $obj A ClassLink object.
+     * @param ClassDocument $obj A ClassDocument object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = serialize(array((string) $obj->getSchoolClassId(), (string) $obj->getLinkId()));
+                $key = serialize(array((string) $obj->getSchoolClassId(), (string) $obj->getDocumentId()));
             } // if key === null
-            ClassLinkPeer::$instances[$key] = $obj;
+            ClassDocumentPeer::$instances[$key] = $obj;
         }
     }
 
@@ -318,7 +318,7 @@ abstract class BaseClassLinkPeer
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param      mixed $value A ClassLink object or a primary key value.
+     * @param      mixed $value A ClassDocument object or a primary key value.
      *
      * @return void
      * @throws PropelException - if the value is invalid.
@@ -326,17 +326,17 @@ abstract class BaseClassLinkPeer
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
-            if (is_object($value) && $value instanceof ClassLink) {
-                $key = serialize(array((string) $value->getSchoolClassId(), (string) $value->getLinkId()));
+            if (is_object($value) && $value instanceof ClassDocument) {
+                $key = serialize(array((string) $value->getSchoolClassId(), (string) $value->getDocumentId()));
             } elseif (is_array($value) && count($value) === 2) {
                 // assume we've been passed a primary key
                 $key = serialize(array((string) $value[0], (string) $value[1]));
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or ClassLink object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or ClassDocument object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
                 throw $e;
             }
 
-            unset(ClassLinkPeer::$instances[$key]);
+            unset(ClassDocumentPeer::$instances[$key]);
         }
     } // removeInstanceFromPool()
 
@@ -347,14 +347,14 @@ abstract class BaseClassLinkPeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return ClassLink Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return ClassDocument Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
     {
         if (Propel::isInstancePoolingEnabled()) {
-            if (isset(ClassLinkPeer::$instances[$key])) {
-                return ClassLinkPeer::$instances[$key];
+            if (isset(ClassDocumentPeer::$instances[$key])) {
+                return ClassDocumentPeer::$instances[$key];
             }
         }
 
@@ -369,15 +369,15 @@ abstract class BaseClassLinkPeer
     public static function clearInstancePool($and_clear_all_references = false)
     {
       if ($and_clear_all_references) {
-        foreach (ClassLinkPeer::$instances as $instance) {
+        foreach (ClassDocumentPeer::$instances as $instance) {
           $instance->clearAllReferences(true);
         }
       }
-        ClassLinkPeer::$instances = array();
+        ClassDocumentPeer::$instances = array();
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to class_links
+     * Method to invalidate the instance pool of all tables related to class_documents
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -431,11 +431,11 @@ abstract class BaseClassLinkPeer
         $results = array();
 
         // set the class once to avoid overhead in the loop
-        $cls = ClassLinkPeer::getOMClass();
+        $cls = ClassDocumentPeer::getOMClass();
         // populate the object(s)
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key = ClassLinkPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj = ClassLinkPeer::getInstanceFromPool($key))) {
+            $key = ClassDocumentPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj = ClassDocumentPeer::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
@@ -444,7 +444,7 @@ abstract class BaseClassLinkPeer
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                ClassLinkPeer::addInstanceToPool($obj, $key);
+                ClassDocumentPeer::addInstanceToPool($obj, $key);
             } // if key exists
         }
         $stmt->closeCursor();
@@ -458,21 +458,21 @@ abstract class BaseClassLinkPeer
      * @param      int $startcol The 0-based offset for reading from the resultset row.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
-     * @return array (ClassLink object, last column rank)
+     * @return array (ClassDocument object, last column rank)
      */
     public static function populateObject($row, $startcol = 0)
     {
-        $key = ClassLinkPeer::getPrimaryKeyHashFromRow($row, $startcol);
-        if (null !== ($obj = ClassLinkPeer::getInstanceFromPool($key))) {
+        $key = ClassDocumentPeer::getPrimaryKeyHashFromRow($row, $startcol);
+        if (null !== ($obj = ClassDocumentPeer::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $startcol, true); // rehydrate
-            $col = $startcol + ClassLinkPeer::NUM_HYDRATE_COLUMNS;
+            $col = $startcol + ClassDocumentPeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = ClassLinkPeer::OM_CLASS;
+            $cls = ClassDocumentPeer::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
-            ClassLinkPeer::addInstanceToPool($obj, $key);
+            ClassDocumentPeer::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -496,26 +496,26 @@ abstract class BaseClassLinkPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(ClassLinkPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassDocumentPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            ClassLinkPeer::addSelectColumns($criteria);
+            ClassDocumentPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(ClassLinkPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -531,7 +531,7 @@ abstract class BaseClassLinkPeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related Link table
+     * Returns the number of rows matching criteria, joining the related Document table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -539,7 +539,7 @@ abstract class BaseClassLinkPeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinLink(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinDocument(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -547,26 +547,26 @@ abstract class BaseClassLinkPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(ClassLinkPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassDocumentPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            ClassLinkPeer::addSelectColumns($criteria);
+            ClassDocumentPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(ClassLinkPeer::LINK_ID, LinkPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::DOCUMENT_ID, DocumentPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -598,26 +598,26 @@ abstract class BaseClassLinkPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(ClassLinkPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassDocumentPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            ClassLinkPeer::addSelectColumns($criteria);
+            ClassDocumentPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(ClassLinkPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -649,26 +649,26 @@ abstract class BaseClassLinkPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(ClassLinkPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassDocumentPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            ClassLinkPeer::addSelectColumns($criteria);
+            ClassDocumentPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(ClassLinkPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -684,11 +684,11 @@ abstract class BaseClassLinkPeer
 
 
     /**
-     * Selects a collection of ClassLink objects pre-filled with their SchoolClass objects.
+     * Selects a collection of ClassDocument objects pre-filled with their SchoolClass objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of ClassLink objects.
+     * @return array           Array of ClassDocument objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -698,31 +698,31 @@ abstract class BaseClassLinkPeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
         }
 
-        ClassLinkPeer::addSelectColumns($criteria);
-        $startcol = ClassLinkPeer::NUM_HYDRATE_COLUMNS;
+        ClassDocumentPeer::addSelectColumns($criteria);
+        $startcol = ClassDocumentPeer::NUM_HYDRATE_COLUMNS;
         SchoolClassPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(ClassLinkPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = ClassLinkPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = ClassLinkPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassDocumentPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassDocumentPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = ClassLinkPeer::getOMClass();
+                $cls = ClassDocumentPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                ClassLinkPeer::addInstanceToPool($obj1, $key1);
+                ClassDocumentPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
             $key2 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -737,8 +737,8 @@ abstract class BaseClassLinkPeer
                     SchoolClassPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (ClassLink) to $obj2 (SchoolClass)
-                $obj2->addClassLink($obj1);
+                // Add the $obj1 (ClassDocument) to $obj2 (SchoolClass)
+                $obj2->addClassDocument($obj1);
 
             } // if joined row was not null
 
@@ -751,61 +751,61 @@ abstract class BaseClassLinkPeer
 
 
     /**
-     * Selects a collection of ClassLink objects pre-filled with their Link objects.
+     * Selects a collection of ClassDocument objects pre-filled with their Document objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of ClassLink objects.
+     * @return array           Array of ClassDocument objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinLink(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinDocument(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
         }
 
-        ClassLinkPeer::addSelectColumns($criteria);
-        $startcol = ClassLinkPeer::NUM_HYDRATE_COLUMNS;
-        LinkPeer::addSelectColumns($criteria);
+        ClassDocumentPeer::addSelectColumns($criteria);
+        $startcol = ClassDocumentPeer::NUM_HYDRATE_COLUMNS;
+        DocumentPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(ClassLinkPeer::LINK_ID, LinkPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::DOCUMENT_ID, DocumentPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = ClassLinkPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = ClassLinkPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassDocumentPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassDocumentPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = ClassLinkPeer::getOMClass();
+                $cls = ClassDocumentPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                ClassLinkPeer::addInstanceToPool($obj1, $key1);
+                ClassDocumentPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
-            $key2 = LinkPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            $key2 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol);
             if ($key2 !== null) {
-                $obj2 = LinkPeer::getInstanceFromPool($key2);
+                $obj2 = DocumentPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = LinkPeer::getOMClass();
+                    $cls = DocumentPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol);
-                    LinkPeer::addInstanceToPool($obj2, $key2);
+                    DocumentPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (ClassLink) to $obj2 (Link)
-                $obj2->addClassLink($obj1);
+                // Add the $obj1 (ClassDocument) to $obj2 (Document)
+                $obj2->addClassDocument($obj1);
 
             } // if joined row was not null
 
@@ -818,11 +818,11 @@ abstract class BaseClassLinkPeer
 
 
     /**
-     * Selects a collection of ClassLink objects pre-filled with their User objects.
+     * Selects a collection of ClassDocument objects pre-filled with their User objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of ClassLink objects.
+     * @return array           Array of ClassDocument objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -832,31 +832,31 @@ abstract class BaseClassLinkPeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
         }
 
-        ClassLinkPeer::addSelectColumns($criteria);
-        $startcol = ClassLinkPeer::NUM_HYDRATE_COLUMNS;
+        ClassDocumentPeer::addSelectColumns($criteria);
+        $startcol = ClassDocumentPeer::NUM_HYDRATE_COLUMNS;
         UserPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(ClassLinkPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = ClassLinkPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = ClassLinkPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassDocumentPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassDocumentPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = ClassLinkPeer::getOMClass();
+                $cls = ClassDocumentPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                ClassLinkPeer::addInstanceToPool($obj1, $key1);
+                ClassDocumentPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
             $key2 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -871,8 +871,8 @@ abstract class BaseClassLinkPeer
                     UserPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (ClassLink) to $obj2 (User)
-                $obj2->addClassLinkRelatedByCreatedBy($obj1);
+                // Add the $obj1 (ClassDocument) to $obj2 (User)
+                $obj2->addClassDocumentRelatedByCreatedBy($obj1);
 
             } // if joined row was not null
 
@@ -885,11 +885,11 @@ abstract class BaseClassLinkPeer
 
 
     /**
-     * Selects a collection of ClassLink objects pre-filled with their User objects.
+     * Selects a collection of ClassDocument objects pre-filled with their User objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of ClassLink objects.
+     * @return array           Array of ClassDocument objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -899,31 +899,31 @@ abstract class BaseClassLinkPeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
         }
 
-        ClassLinkPeer::addSelectColumns($criteria);
-        $startcol = ClassLinkPeer::NUM_HYDRATE_COLUMNS;
+        ClassDocumentPeer::addSelectColumns($criteria);
+        $startcol = ClassDocumentPeer::NUM_HYDRATE_COLUMNS;
         UserPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(ClassLinkPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = ClassLinkPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = ClassLinkPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassDocumentPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassDocumentPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = ClassLinkPeer::getOMClass();
+                $cls = ClassDocumentPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                ClassLinkPeer::addInstanceToPool($obj1, $key1);
+                ClassDocumentPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
             $key2 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -938,8 +938,8 @@ abstract class BaseClassLinkPeer
                     UserPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (ClassLink) to $obj2 (User)
-                $obj2->addClassLinkRelatedByUpdatedBy($obj1);
+                // Add the $obj1 (ClassDocument) to $obj2 (User)
+                $obj2->addClassDocumentRelatedByUpdatedBy($obj1);
 
             } // if joined row was not null
 
@@ -968,32 +968,32 @@ abstract class BaseClassLinkPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(ClassLinkPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassDocumentPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            ClassLinkPeer::addSelectColumns($criteria);
+            ClassDocumentPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(ClassLinkPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::LINK_ID, LinkPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::DOCUMENT_ID, DocumentPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1008,12 +1008,12 @@ abstract class BaseClassLinkPeer
     }
 
     /**
-     * Selects a collection of ClassLink objects pre-filled with all related objects.
+     * Selects a collection of ClassDocument objects pre-filled with all related objects.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of ClassLink objects.
+     * @return array           Array of ClassDocument objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -1023,17 +1023,17 @@ abstract class BaseClassLinkPeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
         }
 
-        ClassLinkPeer::addSelectColumns($criteria);
-        $startcol2 = ClassLinkPeer::NUM_HYDRATE_COLUMNS;
+        ClassDocumentPeer::addSelectColumns($criteria);
+        $startcol2 = ClassDocumentPeer::NUM_HYDRATE_COLUMNS;
 
         SchoolClassPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
-        LinkPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + LinkPeer::NUM_HYDRATE_COLUMNS;
+        DocumentPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
@@ -1041,29 +1041,29 @@ abstract class BaseClassLinkPeer
         UserPeer::addSelectColumns($criteria);
         $startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(ClassLinkPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::LINK_ID, LinkPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::DOCUMENT_ID, DocumentPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = ClassLinkPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = ClassLinkPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassDocumentPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassDocumentPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = ClassLinkPeer::getOMClass();
+                $cls = ClassDocumentPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                ClassLinkPeer::addInstanceToPool($obj1, $key1);
+                ClassDocumentPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
             // Add objects for joined SchoolClass rows
@@ -1080,26 +1080,26 @@ abstract class BaseClassLinkPeer
                     SchoolClassPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj2 (SchoolClass)
-                $obj2->addClassLink($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj2 (SchoolClass)
+                $obj2->addClassDocument($obj1);
             } // if joined row not null
 
-            // Add objects for joined Link rows
+            // Add objects for joined Document rows
 
-            $key3 = LinkPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            $key3 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol3);
             if ($key3 !== null) {
-                $obj3 = LinkPeer::getInstanceFromPool($key3);
+                $obj3 = DocumentPeer::getInstanceFromPool($key3);
                 if (!$obj3) {
 
-                    $cls = LinkPeer::getOMClass();
+                    $cls = DocumentPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    LinkPeer::addInstanceToPool($obj3, $key3);
+                    DocumentPeer::addInstanceToPool($obj3, $key3);
                 } // if obj3 loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj3 (Link)
-                $obj3->addClassLink($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj3 (Document)
+                $obj3->addClassDocument($obj1);
             } // if joined row not null
 
             // Add objects for joined User rows
@@ -1116,8 +1116,8 @@ abstract class BaseClassLinkPeer
                     UserPeer::addInstanceToPool($obj4, $key4);
                 } // if obj4 loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj4 (User)
-                $obj4->addClassLinkRelatedByCreatedBy($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj4 (User)
+                $obj4->addClassDocumentRelatedByCreatedBy($obj1);
             } // if joined row not null
 
             // Add objects for joined User rows
@@ -1134,8 +1134,8 @@ abstract class BaseClassLinkPeer
                     UserPeer::addInstanceToPool($obj5, $key5);
                 } // if obj5 loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj5 (User)
-                $obj5->addClassLinkRelatedByUpdatedBy($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj5 (User)
+                $obj5->addClassDocumentRelatedByUpdatedBy($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -1163,30 +1163,30 @@ abstract class BaseClassLinkPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(ClassLinkPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassDocumentPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            ClassLinkPeer::addSelectColumns($criteria);
+            ClassDocumentPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(ClassLinkPeer::LINK_ID, LinkPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::DOCUMENT_ID, DocumentPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1202,7 +1202,7 @@ abstract class BaseClassLinkPeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related Link table
+     * Returns the number of rows matching criteria, joining the related Document table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1210,7 +1210,7 @@ abstract class BaseClassLinkPeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinAllExceptLink(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinAllExceptDocument(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -1218,30 +1218,30 @@ abstract class BaseClassLinkPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(ClassLinkPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassDocumentPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            ClassLinkPeer::addSelectColumns($criteria);
+            ClassDocumentPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(ClassLinkPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1273,28 +1273,28 @@ abstract class BaseClassLinkPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(ClassLinkPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassDocumentPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            ClassLinkPeer::addSelectColumns($criteria);
+            ClassDocumentPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(ClassLinkPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::LINK_ID, LinkPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::DOCUMENT_ID, DocumentPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1326,28 +1326,28 @@ abstract class BaseClassLinkPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(ClassLinkPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassDocumentPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            ClassLinkPeer::addSelectColumns($criteria);
+            ClassDocumentPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(ClassLinkPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::LINK_ID, LinkPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::DOCUMENT_ID, DocumentPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1363,12 +1363,12 @@ abstract class BaseClassLinkPeer
 
 
     /**
-     * Selects a collection of ClassLink objects pre-filled with all related objects except SchoolClass.
+     * Selects a collection of ClassDocument objects pre-filled with all related objects except SchoolClass.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of ClassLink objects.
+     * @return array           Array of ClassDocument objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -1380,14 +1380,14 @@ abstract class BaseClassLinkPeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
         }
 
-        ClassLinkPeer::addSelectColumns($criteria);
-        $startcol2 = ClassLinkPeer::NUM_HYDRATE_COLUMNS;
+        ClassDocumentPeer::addSelectColumns($criteria);
+        $startcol2 = ClassDocumentPeer::NUM_HYDRATE_COLUMNS;
 
-        LinkPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + LinkPeer::NUM_HYDRATE_COLUMNS;
+        DocumentPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + UserPeer::NUM_HYDRATE_COLUMNS;
@@ -1395,46 +1395,46 @@ abstract class BaseClassLinkPeer
         UserPeer::addSelectColumns($criteria);
         $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(ClassLinkPeer::LINK_ID, LinkPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::DOCUMENT_ID, DocumentPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = ClassLinkPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = ClassLinkPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassDocumentPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassDocumentPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = ClassLinkPeer::getOMClass();
+                $cls = ClassDocumentPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                ClassLinkPeer::addInstanceToPool($obj1, $key1);
+                ClassDocumentPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-                // Add objects for joined Link rows
+                // Add objects for joined Document rows
 
-                $key2 = LinkPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                $key2 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol2);
                 if ($key2 !== null) {
-                    $obj2 = LinkPeer::getInstanceFromPool($key2);
+                    $obj2 = DocumentPeer::getInstanceFromPool($key2);
                     if (!$obj2) {
 
-                        $cls = LinkPeer::getOMClass();
+                        $cls = DocumentPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    LinkPeer::addInstanceToPool($obj2, $key2);
+                    DocumentPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj2 (Link)
-                $obj2->addClassLink($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj2 (Document)
+                $obj2->addClassDocument($obj1);
 
             } // if joined row is not null
 
@@ -1452,8 +1452,8 @@ abstract class BaseClassLinkPeer
                     UserPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj3 (User)
-                $obj3->addClassLinkRelatedByCreatedBy($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj3 (User)
+                $obj3->addClassDocumentRelatedByCreatedBy($obj1);
 
             } // if joined row is not null
 
@@ -1471,8 +1471,8 @@ abstract class BaseClassLinkPeer
                     UserPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj4 (User)
-                $obj4->addClassLinkRelatedByUpdatedBy($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj4 (User)
+                $obj4->addClassDocumentRelatedByUpdatedBy($obj1);
 
             } // if joined row is not null
 
@@ -1485,16 +1485,16 @@ abstract class BaseClassLinkPeer
 
 
     /**
-     * Selects a collection of ClassLink objects pre-filled with all related objects except Link.
+     * Selects a collection of ClassDocument objects pre-filled with all related objects except Document.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of ClassLink objects.
+     * @return array           Array of ClassDocument objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptLink(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptDocument(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -1502,11 +1502,11 @@ abstract class BaseClassLinkPeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
         }
 
-        ClassLinkPeer::addSelectColumns($criteria);
-        $startcol2 = ClassLinkPeer::NUM_HYDRATE_COLUMNS;
+        ClassDocumentPeer::addSelectColumns($criteria);
+        $startcol2 = ClassDocumentPeer::NUM_HYDRATE_COLUMNS;
 
         SchoolClassPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
@@ -1517,28 +1517,28 @@ abstract class BaseClassLinkPeer
         UserPeer::addSelectColumns($criteria);
         $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(ClassLinkPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = ClassLinkPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = ClassLinkPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassDocumentPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassDocumentPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = ClassLinkPeer::getOMClass();
+                $cls = ClassDocumentPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                ClassLinkPeer::addInstanceToPool($obj1, $key1);
+                ClassDocumentPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
                 // Add objects for joined SchoolClass rows
@@ -1555,8 +1555,8 @@ abstract class BaseClassLinkPeer
                     SchoolClassPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj2 (SchoolClass)
-                $obj2->addClassLink($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj2 (SchoolClass)
+                $obj2->addClassDocument($obj1);
 
             } // if joined row is not null
 
@@ -1574,8 +1574,8 @@ abstract class BaseClassLinkPeer
                     UserPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj3 (User)
-                $obj3->addClassLinkRelatedByCreatedBy($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj3 (User)
+                $obj3->addClassDocumentRelatedByCreatedBy($obj1);
 
             } // if joined row is not null
 
@@ -1593,8 +1593,8 @@ abstract class BaseClassLinkPeer
                     UserPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj4 (User)
-                $obj4->addClassLinkRelatedByUpdatedBy($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj4 (User)
+                $obj4->addClassDocumentRelatedByUpdatedBy($obj1);
 
             } // if joined row is not null
 
@@ -1607,12 +1607,12 @@ abstract class BaseClassLinkPeer
 
 
     /**
-     * Selects a collection of ClassLink objects pre-filled with all related objects except UserRelatedByCreatedBy.
+     * Selects a collection of ClassDocument objects pre-filled with all related objects except UserRelatedByCreatedBy.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of ClassLink objects.
+     * @return array           Array of ClassDocument objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -1624,38 +1624,38 @@ abstract class BaseClassLinkPeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
         }
 
-        ClassLinkPeer::addSelectColumns($criteria);
-        $startcol2 = ClassLinkPeer::NUM_HYDRATE_COLUMNS;
+        ClassDocumentPeer::addSelectColumns($criteria);
+        $startcol2 = ClassDocumentPeer::NUM_HYDRATE_COLUMNS;
 
         SchoolClassPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
-        LinkPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + LinkPeer::NUM_HYDRATE_COLUMNS;
+        DocumentPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(ClassLinkPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::LINK_ID, LinkPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::DOCUMENT_ID, DocumentPeer::ID, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = ClassLinkPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = ClassLinkPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassDocumentPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassDocumentPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = ClassLinkPeer::getOMClass();
+                $cls = ClassDocumentPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                ClassLinkPeer::addInstanceToPool($obj1, $key1);
+                ClassDocumentPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
                 // Add objects for joined SchoolClass rows
@@ -1672,27 +1672,27 @@ abstract class BaseClassLinkPeer
                     SchoolClassPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj2 (SchoolClass)
-                $obj2->addClassLink($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj2 (SchoolClass)
+                $obj2->addClassDocument($obj1);
 
             } // if joined row is not null
 
-                // Add objects for joined Link rows
+                // Add objects for joined Document rows
 
-                $key3 = LinkPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                $key3 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol3);
                 if ($key3 !== null) {
-                    $obj3 = LinkPeer::getInstanceFromPool($key3);
+                    $obj3 = DocumentPeer::getInstanceFromPool($key3);
                     if (!$obj3) {
 
-                        $cls = LinkPeer::getOMClass();
+                        $cls = DocumentPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    LinkPeer::addInstanceToPool($obj3, $key3);
+                    DocumentPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj3 (Link)
-                $obj3->addClassLink($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj3 (Document)
+                $obj3->addClassDocument($obj1);
 
             } // if joined row is not null
 
@@ -1705,12 +1705,12 @@ abstract class BaseClassLinkPeer
 
 
     /**
-     * Selects a collection of ClassLink objects pre-filled with all related objects except UserRelatedByUpdatedBy.
+     * Selects a collection of ClassDocument objects pre-filled with all related objects except UserRelatedByUpdatedBy.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of ClassLink objects.
+     * @return array           Array of ClassDocument objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -1722,38 +1722,38 @@ abstract class BaseClassLinkPeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
         }
 
-        ClassLinkPeer::addSelectColumns($criteria);
-        $startcol2 = ClassLinkPeer::NUM_HYDRATE_COLUMNS;
+        ClassDocumentPeer::addSelectColumns($criteria);
+        $startcol2 = ClassDocumentPeer::NUM_HYDRATE_COLUMNS;
 
         SchoolClassPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
-        LinkPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + LinkPeer::NUM_HYDRATE_COLUMNS;
+        DocumentPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(ClassLinkPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
-        $criteria->addJoin(ClassLinkPeer::LINK_ID, LinkPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassDocumentPeer::DOCUMENT_ID, DocumentPeer::ID, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = ClassLinkPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = ClassLinkPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassDocumentPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassDocumentPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = ClassLinkPeer::getOMClass();
+                $cls = ClassDocumentPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                ClassLinkPeer::addInstanceToPool($obj1, $key1);
+                ClassDocumentPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
                 // Add objects for joined SchoolClass rows
@@ -1770,27 +1770,27 @@ abstract class BaseClassLinkPeer
                     SchoolClassPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj2 (SchoolClass)
-                $obj2->addClassLink($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj2 (SchoolClass)
+                $obj2->addClassDocument($obj1);
 
             } // if joined row is not null
 
-                // Add objects for joined Link rows
+                // Add objects for joined Document rows
 
-                $key3 = LinkPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                $key3 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol3);
                 if ($key3 !== null) {
-                    $obj3 = LinkPeer::getInstanceFromPool($key3);
+                    $obj3 = DocumentPeer::getInstanceFromPool($key3);
                     if (!$obj3) {
 
-                        $cls = LinkPeer::getOMClass();
+                        $cls = DocumentPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    LinkPeer::addInstanceToPool($obj3, $key3);
+                    DocumentPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (ClassLink) to the collection in $obj3 (Link)
-                $obj3->addClassLink($obj1);
+                // Add the $obj1 (ClassDocument) to the collection in $obj3 (Document)
+                $obj3->addClassDocument($obj1);
 
             } // if joined row is not null
 
@@ -1810,7 +1810,7 @@ abstract class BaseClassLinkPeer
      */
     public static function getTableMap()
     {
-        return Propel::getDatabaseMap(ClassLinkPeer::DATABASE_NAME)->getTable(ClassLinkPeer::TABLE_NAME);
+        return Propel::getDatabaseMap(ClassDocumentPeer::DATABASE_NAME)->getTable(ClassDocumentPeer::TABLE_NAME);
     }
 
     /**
@@ -1818,9 +1818,9 @@ abstract class BaseClassLinkPeer
      */
     public static function buildTableMap()
     {
-      $dbMap = Propel::getDatabaseMap(BaseClassLinkPeer::DATABASE_NAME);
-      if (!$dbMap->hasTable(BaseClassLinkPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \ClassLinkTableMap());
+      $dbMap = Propel::getDatabaseMap(BaseClassDocumentPeer::DATABASE_NAME);
+      if (!$dbMap->hasTable(BaseClassDocumentPeer::TABLE_NAME)) {
+        $dbMap->addTableObject(new \ClassDocumentTableMap());
       }
     }
 
@@ -1832,13 +1832,13 @@ abstract class BaseClassLinkPeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
-        return ClassLinkPeer::OM_CLASS;
+        return ClassDocumentPeer::OM_CLASS;
     }
 
     /**
-     * Performs an INSERT on the database, given a ClassLink or Criteria object.
+     * Performs an INSERT on the database, given a ClassDocument or Criteria object.
      *
-     * @param      mixed $values Criteria or ClassLink object containing data that is used to create the INSERT statement.
+     * @param      mixed $values Criteria or ClassDocument object containing data that is used to create the INSERT statement.
      * @param      PropelPDO $con the PropelPDO connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -1847,18 +1847,18 @@ abstract class BaseClassLinkPeer
     public static function doInsert($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
         } else {
-            $criteria = $values->buildCriteria(); // build Criteria from ClassLink object
+            $criteria = $values->buildCriteria(); // build Criteria from ClassDocument object
         }
 
 
         // Set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         try {
             // use transaction because $criteria could contain info
@@ -1875,9 +1875,9 @@ abstract class BaseClassLinkPeer
     }
 
     /**
-     * Performs an UPDATE on the database, given a ClassLink or Criteria object.
+     * Performs an UPDATE on the database, given a ClassDocument or Criteria object.
      *
-     * @param      mixed $values Criteria or ClassLink object containing data that is used to create the UPDATE statement.
+     * @param      mixed $values Criteria or ClassDocument object containing data that is used to create the UPDATE statement.
      * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
      * @return int             The number of affected rows (if supported by underlying database driver).
      * @throws PropelException Any exceptions caught during processing will be
@@ -1886,43 +1886,43 @@ abstract class BaseClassLinkPeer
     public static function doUpdate($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
-        $selectCriteria = new Criteria(ClassLinkPeer::DATABASE_NAME);
+        $selectCriteria = new Criteria(ClassDocumentPeer::DATABASE_NAME);
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(ClassLinkPeer::SCHOOL_CLASS_ID);
-            $value = $criteria->remove(ClassLinkPeer::SCHOOL_CLASS_ID);
+            $comparison = $criteria->getComparison(ClassDocumentPeer::SCHOOL_CLASS_ID);
+            $value = $criteria->remove(ClassDocumentPeer::SCHOOL_CLASS_ID);
             if ($value) {
-                $selectCriteria->add(ClassLinkPeer::SCHOOL_CLASS_ID, $value, $comparison);
+                $selectCriteria->add(ClassDocumentPeer::SCHOOL_CLASS_ID, $value, $comparison);
             } else {
-                $selectCriteria->setPrimaryTableName(ClassLinkPeer::TABLE_NAME);
+                $selectCriteria->setPrimaryTableName(ClassDocumentPeer::TABLE_NAME);
             }
 
-            $comparison = $criteria->getComparison(ClassLinkPeer::LINK_ID);
-            $value = $criteria->remove(ClassLinkPeer::LINK_ID);
+            $comparison = $criteria->getComparison(ClassDocumentPeer::DOCUMENT_ID);
+            $value = $criteria->remove(ClassDocumentPeer::DOCUMENT_ID);
             if ($value) {
-                $selectCriteria->add(ClassLinkPeer::LINK_ID, $value, $comparison);
+                $selectCriteria->add(ClassDocumentPeer::DOCUMENT_ID, $value, $comparison);
             } else {
-                $selectCriteria->setPrimaryTableName(ClassLinkPeer::TABLE_NAME);
+                $selectCriteria->setPrimaryTableName(ClassDocumentPeer::TABLE_NAME);
             }
 
-        } else { // $values is ClassLink object
+        } else { // $values is ClassDocument object
             $criteria = $values->buildCriteria(); // gets full criteria
             $selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
         }
 
         // set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         return BasePeer::doUpdate($selectCriteria, $criteria, $con);
     }
 
     /**
-     * Deletes all rows from the class_links table.
+     * Deletes all rows from the class_documents table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).
@@ -1931,19 +1931,19 @@ abstract class BaseClassLinkPeer
     public static function doDeleteAll(PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
         $affectedRows = 0; // initialize var to track total num of affected rows
         try {
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            $affectedRows += BasePeer::doDeleteAll(ClassLinkPeer::TABLE_NAME, $con, ClassLinkPeer::DATABASE_NAME);
+            $affectedRows += BasePeer::doDeleteAll(ClassDocumentPeer::TABLE_NAME, $con, ClassDocumentPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            ClassLinkPeer::clearInstancePool();
-            ClassLinkPeer::clearRelatedInstancePool();
+            ClassDocumentPeer::clearInstancePool();
+            ClassDocumentPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -1954,9 +1954,9 @@ abstract class BaseClassLinkPeer
     }
 
     /**
-     * Performs a DELETE on the database, given a ClassLink or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a ClassDocument or Criteria object OR a primary key value.
      *
-     * @param      mixed $values Criteria or ClassLink object or primary key or array of primary keys
+     * @param      mixed $values Criteria or ClassDocument object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param      PropelPDO $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -1967,23 +1967,23 @@ abstract class BaseClassLinkPeer
      public static function doDelete($values, PropelPDO $con = null)
      {
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             // invalidate the cache for all objects of this type, since we have no
             // way of knowing (without running a query) what objects should be invalidated
             // from the cache based on this Criteria.
-            ClassLinkPeer::clearInstancePool();
+            ClassDocumentPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
-        } elseif ($values instanceof ClassLink) { // it's a model object
+        } elseif ($values instanceof ClassDocument) { // it's a model object
             // invalidate the cache for this single object
-            ClassLinkPeer::removeInstanceFromPool($values);
+            ClassDocumentPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(ClassLinkPeer::DATABASE_NAME);
+            $criteria = new Criteria(ClassDocumentPeer::DATABASE_NAME);
             // primary key is composite; we therefore, expect
             // the primary key passed to be an array of pkey values
             if (count($values) == count($values, COUNT_RECURSIVE)) {
@@ -1991,16 +1991,16 @@ abstract class BaseClassLinkPeer
                 $values = array($values);
             }
             foreach ($values as $value) {
-                $criterion = $criteria->getNewCriterion(ClassLinkPeer::SCHOOL_CLASS_ID, $value[0]);
-                $criterion->addAnd($criteria->getNewCriterion(ClassLinkPeer::LINK_ID, $value[1]));
+                $criterion = $criteria->getNewCriterion(ClassDocumentPeer::SCHOOL_CLASS_ID, $value[0]);
+                $criterion->addAnd($criteria->getNewCriterion(ClassDocumentPeer::DOCUMENT_ID, $value[1]));
                 $criteria->addOr($criterion);
                 // we can invalidate the cache for this single PK
-                ClassLinkPeer::removeInstanceFromPool($value);
+                ClassDocumentPeer::removeInstanceFromPool($value);
             }
         }
 
         // Set the correct dbName
-        $criteria->setDbName(ClassLinkPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassDocumentPeer::DATABASE_NAME);
 
         $affectedRows = 0; // initialize var to track total num of affected rows
 
@@ -2010,7 +2010,7 @@ abstract class BaseClassLinkPeer
             $con->beginTransaction();
 
             $affectedRows += BasePeer::doDelete($criteria, $con);
-            ClassLinkPeer::clearRelatedInstancePool();
+            ClassDocumentPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -2021,13 +2021,13 @@ abstract class BaseClassLinkPeer
     }
 
     /**
-     * Validates all modified columns of given ClassLink object.
+     * Validates all modified columns of given ClassDocument object.
      * If parameter $columns is either a single column name or an array of column names
      * than only those columns are validated.
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param ClassLink $obj The object to validate.
+     * @param ClassDocument $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -2037,8 +2037,8 @@ abstract class BaseClassLinkPeer
         $columns = array();
 
         if ($cols) {
-            $dbMap = Propel::getDatabaseMap(ClassLinkPeer::DATABASE_NAME);
-            $tableMap = $dbMap->getTable(ClassLinkPeer::TABLE_NAME);
+            $dbMap = Propel::getDatabaseMap(ClassDocumentPeer::DATABASE_NAME);
+            $tableMap = $dbMap->getTable(ClassDocumentPeer::TABLE_NAME);
 
             if (! is_array($cols)) {
                 $cols = array($cols);
@@ -2054,29 +2054,29 @@ abstract class BaseClassLinkPeer
 
         }
 
-        return BasePeer::doValidate(ClassLinkPeer::DATABASE_NAME, ClassLinkPeer::TABLE_NAME, $columns);
+        return BasePeer::doValidate(ClassDocumentPeer::DATABASE_NAME, ClassDocumentPeer::TABLE_NAME, $columns);
     }
 
     /**
      * Retrieve object using using composite pkey values.
      * @param   int $school_class_id
-     * @param   int $link_id
+     * @param   int $document_id
      * @param      PropelPDO $con
-     * @return ClassLink
+     * @return ClassDocument
      */
-    public static function retrieveByPK($school_class_id, $link_id, PropelPDO $con = null) {
-        $_instancePoolKey = serialize(array((string) $school_class_id, (string) $link_id));
-         if (null !== ($obj = ClassLinkPeer::getInstanceFromPool($_instancePoolKey))) {
+    public static function retrieveByPK($school_class_id, $document_id, PropelPDO $con = null) {
+        $_instancePoolKey = serialize(array((string) $school_class_id, (string) $document_id));
+         if (null !== ($obj = ClassDocumentPeer::getInstanceFromPool($_instancePoolKey))) {
              return $obj;
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(ClassLinkPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
-        $criteria = new Criteria(ClassLinkPeer::DATABASE_NAME);
-        $criteria->add(ClassLinkPeer::SCHOOL_CLASS_ID, $school_class_id);
-        $criteria->add(ClassLinkPeer::LINK_ID, $link_id);
-        $v = ClassLinkPeer::doSelect($criteria, $con);
+        $criteria = new Criteria(ClassDocumentPeer::DATABASE_NAME);
+        $criteria->add(ClassDocumentPeer::SCHOOL_CLASS_ID, $school_class_id);
+        $criteria->add(ClassDocumentPeer::DOCUMENT_ID, $document_id);
+        $v = ClassDocumentPeer::doSelect($criteria, $con);
 
         return !empty($v) ? $v[0] : null;
     }
@@ -2094,15 +2094,15 @@ abstract class BaseClassLinkPeer
         if($oUser->getIsAdmin()) {
             return true;
         }
-        return $oUser->hasRole("class_links");
+        return $oUser->hasRole("class_documents");
     }
     public static function mayOperateOnOwn($oUser, $mObject, $sOperation) {
-        return $oUser->hasRole("class_links-own");
+        return $oUser->hasRole("class_documents-own");
     }
 
-} // BaseClassLinkPeer
+} // BaseClassDocumentPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseClassLinkPeer::buildTableMap();
+BaseClassDocumentPeer::buildTableMap();
 

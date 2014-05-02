@@ -2,24 +2,24 @@
 
 
 /**
- * Base class that represents a row from the 'school_functions' table.
+ * Base class that represents a row from the 'class_documents' table.
  *
  *
  *
  * @package    propel.generator.model.om
  */
-abstract class BaseSchoolFunction extends BaseObject implements Persistent
+abstract class BaseClassDocument extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'SchoolFunctionPeer';
+    const PEER = 'ClassDocumentPeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        SchoolFunctionPeer
+     * @var        ClassDocumentPeer
      */
     protected static $peer;
 
@@ -30,34 +30,16 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the id field.
+     * The value for the school_class_id field.
      * @var        int
      */
-    protected $id;
+    protected $school_class_id;
 
     /**
-     * The value for the original_id field.
+     * The value for the document_id field.
      * @var        int
      */
-    protected $original_id;
-
-    /**
-     * The value for the title field.
-     * @var        string
-     */
-    protected $title;
-
-    /**
-     * The value for the function_group_id field.
-     * @var        int
-     */
-    protected $function_group_id;
-
-    /**
-     * The value for the school_id field.
-     * @var        int
-     */
-    protected $school_id;
+    protected $document_id;
 
     /**
      * The value for the created_at field.
@@ -84,14 +66,14 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     protected $updated_by;
 
     /**
-     * @var        FunctionGroup
+     * @var        SchoolClass
      */
-    protected $aFunctionGroup;
+    protected $aSchoolClass;
 
     /**
-     * @var        School
+     * @var        Document
      */
-    protected $aSchool;
+    protected $aDocument;
 
     /**
      * @var        User
@@ -102,12 +84,6 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      * @var        User
      */
     protected $aUserRelatedByUpdatedBy;
-
-    /**
-     * @var        PropelObjectCollection|TeamMemberFunction[] Collection to store aggregation of TeamMemberFunction objects.
-     */
-    protected $collTeamMemberFunctions;
-    protected $collTeamMemberFunctionsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -130,64 +106,25 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * An array of objects scheduled for deletion.
-     * @var		PropelObjectCollection
-     */
-    protected $teamMemberFunctionsScheduledForDeletion = null;
-
-    /**
-     * Get the [id] column value.
+     * Get the [school_class_id] column value.
      *
      * @return int
      */
-    public function getId()
+    public function getSchoolClassId()
     {
 
-        return $this->id;
+        return $this->school_class_id;
     }
 
     /**
-     * Get the [original_id] column value.
+     * Get the [document_id] column value.
      *
      * @return int
      */
-    public function getOriginalId()
+    public function getDocumentId()
     {
 
-        return $this->original_id;
-    }
-
-    /**
-     * Get the [title] column value.
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-
-        return $this->title;
-    }
-
-    /**
-     * Get the [function_group_id] column value.
-     *
-     * @return int
-     */
-    public function getFunctionGroupId()
-    {
-
-        return $this->function_group_id;
-    }
-
-    /**
-     * Get the [school_id] column value.
-     *
-     * @return int
-     */
-    public function getSchoolId()
-    {
-
-        return $this->school_id;
+        return $this->document_id;
     }
 
     /**
@@ -293,124 +230,61 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     }
 
     /**
-     * Set the value of [id] column.
+     * Set the value of [school_class_id] column.
      *
      * @param  int $v new value
-     * @return SchoolFunction The current object (for fluent API support)
+     * @return ClassDocument The current object (for fluent API support)
      */
-    public function setId($v)
+    public function setSchoolClassId($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->id !== $v) {
-            $this->id = $v;
-            $this->modifiedColumns[] = SchoolFunctionPeer::ID;
+        if ($this->school_class_id !== $v) {
+            $this->school_class_id = $v;
+            $this->modifiedColumns[] = ClassDocumentPeer::SCHOOL_CLASS_ID;
+        }
+
+        if ($this->aSchoolClass !== null && $this->aSchoolClass->getId() !== $v) {
+            $this->aSchoolClass = null;
         }
 
 
         return $this;
-    } // setId()
+    } // setSchoolClassId()
 
     /**
-     * Set the value of [original_id] column.
+     * Set the value of [document_id] column.
      *
      * @param  int $v new value
-     * @return SchoolFunction The current object (for fluent API support)
+     * @return ClassDocument The current object (for fluent API support)
      */
-    public function setOriginalId($v)
+    public function setDocumentId($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->original_id !== $v) {
-            $this->original_id = $v;
-            $this->modifiedColumns[] = SchoolFunctionPeer::ORIGINAL_ID;
+        if ($this->document_id !== $v) {
+            $this->document_id = $v;
+            $this->modifiedColumns[] = ClassDocumentPeer::DOCUMENT_ID;
+        }
+
+        if ($this->aDocument !== null && $this->aDocument->getId() !== $v) {
+            $this->aDocument = null;
         }
 
 
         return $this;
-    } // setOriginalId()
-
-    /**
-     * Set the value of [title] column.
-     *
-     * @param  string $v new value
-     * @return SchoolFunction The current object (for fluent API support)
-     */
-    public function setTitle($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->title !== $v) {
-            $this->title = $v;
-            $this->modifiedColumns[] = SchoolFunctionPeer::TITLE;
-        }
-
-
-        return $this;
-    } // setTitle()
-
-    /**
-     * Set the value of [function_group_id] column.
-     *
-     * @param  int $v new value
-     * @return SchoolFunction The current object (for fluent API support)
-     */
-    public function setFunctionGroupId($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->function_group_id !== $v) {
-            $this->function_group_id = $v;
-            $this->modifiedColumns[] = SchoolFunctionPeer::FUNCTION_GROUP_ID;
-        }
-
-        if ($this->aFunctionGroup !== null && $this->aFunctionGroup->getId() !== $v) {
-            $this->aFunctionGroup = null;
-        }
-
-
-        return $this;
-    } // setFunctionGroupId()
-
-    /**
-     * Set the value of [school_id] column.
-     *
-     * @param  int $v new value
-     * @return SchoolFunction The current object (for fluent API support)
-     */
-    public function setSchoolId($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->school_id !== $v) {
-            $this->school_id = $v;
-            $this->modifiedColumns[] = SchoolFunctionPeer::SCHOOL_ID;
-        }
-
-        if ($this->aSchool !== null && $this->aSchool->getId() !== $v) {
-            $this->aSchool = null;
-        }
-
-
-        return $this;
-    } // setSchoolId()
+    } // setDocumentId()
 
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
-     * @return SchoolFunction The current object (for fluent API support)
+     * @return ClassDocument The current object (for fluent API support)
      */
     public function setCreatedAt($v)
     {
@@ -420,7 +294,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
                 $this->created_at = $newDateAsString;
-                $this->modifiedColumns[] = SchoolFunctionPeer::CREATED_AT;
+                $this->modifiedColumns[] = ClassDocumentPeer::CREATED_AT;
             }
         } // if either are not null
 
@@ -433,7 +307,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
-     * @return SchoolFunction The current object (for fluent API support)
+     * @return ClassDocument The current object (for fluent API support)
      */
     public function setUpdatedAt($v)
     {
@@ -443,7 +317,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
                 $this->updated_at = $newDateAsString;
-                $this->modifiedColumns[] = SchoolFunctionPeer::UPDATED_AT;
+                $this->modifiedColumns[] = ClassDocumentPeer::UPDATED_AT;
             }
         } // if either are not null
 
@@ -455,7 +329,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      * Set the value of [created_by] column.
      *
      * @param  int $v new value
-     * @return SchoolFunction The current object (for fluent API support)
+     * @return ClassDocument The current object (for fluent API support)
      */
     public function setCreatedBy($v)
     {
@@ -465,7 +339,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
 
         if ($this->created_by !== $v) {
             $this->created_by = $v;
-            $this->modifiedColumns[] = SchoolFunctionPeer::CREATED_BY;
+            $this->modifiedColumns[] = ClassDocumentPeer::CREATED_BY;
         }
 
         if ($this->aUserRelatedByCreatedBy !== null && $this->aUserRelatedByCreatedBy->getId() !== $v) {
@@ -480,7 +354,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      * Set the value of [updated_by] column.
      *
      * @param  int $v new value
-     * @return SchoolFunction The current object (for fluent API support)
+     * @return ClassDocument The current object (for fluent API support)
      */
     public function setUpdatedBy($v)
     {
@@ -490,7 +364,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
 
         if ($this->updated_by !== $v) {
             $this->updated_by = $v;
-            $this->modifiedColumns[] = SchoolFunctionPeer::UPDATED_BY;
+            $this->modifiedColumns[] = ClassDocumentPeer::UPDATED_BY;
         }
 
         if ($this->aUserRelatedByUpdatedBy !== null && $this->aUserRelatedByUpdatedBy->getId() !== $v) {
@@ -533,15 +407,12 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     {
         try {
 
-            $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->original_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->title = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->function_group_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->school_id = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->created_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->updated_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->created_by = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
-            $this->updated_by = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+            $this->school_class_id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->document_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->created_at = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->updated_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->created_by = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->updated_by = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -551,10 +422,10 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 9; // 9 = SchoolFunctionPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = ClassDocumentPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating SchoolFunction object", $e);
+            throw new PropelException("Error populating ClassDocument object", $e);
         }
     }
 
@@ -574,11 +445,11 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
-        if ($this->aFunctionGroup !== null && $this->function_group_id !== $this->aFunctionGroup->getId()) {
-            $this->aFunctionGroup = null;
+        if ($this->aSchoolClass !== null && $this->school_class_id !== $this->aSchoolClass->getId()) {
+            $this->aSchoolClass = null;
         }
-        if ($this->aSchool !== null && $this->school_id !== $this->aSchool->getId()) {
-            $this->aSchool = null;
+        if ($this->aDocument !== null && $this->document_id !== $this->aDocument->getId()) {
+            $this->aDocument = null;
         }
         if ($this->aUserRelatedByCreatedBy !== null && $this->created_by !== $this->aUserRelatedByCreatedBy->getId()) {
             $this->aUserRelatedByCreatedBy = null;
@@ -609,13 +480,13 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(SchoolFunctionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = SchoolFunctionPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = ClassDocumentPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -625,12 +496,10 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aFunctionGroup = null;
-            $this->aSchool = null;
+            $this->aSchoolClass = null;
+            $this->aDocument = null;
             $this->aUserRelatedByCreatedBy = null;
             $this->aUserRelatedByUpdatedBy = null;
-            $this->collTeamMemberFunctions = null;
-
         } // if (deep)
     }
 
@@ -651,17 +520,17 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(SchoolFunctionPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = SchoolFunctionQuery::create()
+            $deleteQuery = ClassDocumentQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             // denyable behavior
-            if(!(SchoolFunctionPeer::isIgnoringRights() || $this->mayOperate("delete"))) {
-                throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "school_functions")));
+            if(!(ClassDocumentPeer::isIgnoringRights() || $this->mayOperate("delete"))) {
+                throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "class_documents")));
             }
 
             if ($ret) {
@@ -699,7 +568,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(SchoolFunctionPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ClassDocumentPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -709,24 +578,24 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // denyable behavior
-                if(!(SchoolFunctionPeer::isIgnoringRights() || $this->mayOperate("insert"))) {
-                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "school_functions")));
+                if(!(ClassDocumentPeer::isIgnoringRights() || $this->mayOperate("insert"))) {
+                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "class_documents")));
                 }
 
                 // extended_timestampable behavior
-                if (!$this->isColumnModified(SchoolFunctionPeer::CREATED_AT)) {
+                if (!$this->isColumnModified(ClassDocumentPeer::CREATED_AT)) {
                     $this->setCreatedAt(time());
                 }
-                if (!$this->isColumnModified(SchoolFunctionPeer::UPDATED_AT)) {
+                if (!$this->isColumnModified(ClassDocumentPeer::UPDATED_AT)) {
                     $this->setUpdatedAt(time());
                 }
                 // attributable behavior
 
                 if(Session::getSession()->isAuthenticated()) {
-                    if (!$this->isColumnModified(SchoolFunctionPeer::CREATED_BY)) {
+                    if (!$this->isColumnModified(ClassDocumentPeer::CREATED_BY)) {
                         $this->setCreatedBy(Session::getSession()->getUser()->getId());
                     }
-                    if (!$this->isColumnModified(SchoolFunctionPeer::UPDATED_BY)) {
+                    if (!$this->isColumnModified(ClassDocumentPeer::UPDATED_BY)) {
                         $this->setUpdatedBy(Session::getSession()->getUser()->getId());
                     }
                 }
@@ -734,18 +603,18 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // denyable behavior
-                if(!(SchoolFunctionPeer::isIgnoringRights() || $this->mayOperate("update"))) {
-                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "school_functions")));
+                if(!(ClassDocumentPeer::isIgnoringRights() || $this->mayOperate("update"))) {
+                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "class_documents")));
                 }
 
                 // extended_timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(SchoolFunctionPeer::UPDATED_AT)) {
+                if ($this->isModified() && !$this->isColumnModified(ClassDocumentPeer::UPDATED_AT)) {
                     $this->setUpdatedAt(time());
                 }
                 // attributable behavior
 
                 if(Session::getSession()->isAuthenticated()) {
-                    if ($this->isModified() && !$this->isColumnModified(SchoolFunctionPeer::UPDATED_BY)) {
+                    if ($this->isModified() && !$this->isColumnModified(ClassDocumentPeer::UPDATED_BY)) {
                         $this->setUpdatedBy(Session::getSession()->getUser()->getId());
                     }
                 }
@@ -758,7 +627,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                SchoolFunctionPeer::addInstanceToPool($this);
+                ClassDocumentPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -793,18 +662,18 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aFunctionGroup !== null) {
-                if ($this->aFunctionGroup->isModified() || $this->aFunctionGroup->isNew()) {
-                    $affectedRows += $this->aFunctionGroup->save($con);
+            if ($this->aSchoolClass !== null) {
+                if ($this->aSchoolClass->isModified() || $this->aSchoolClass->isNew()) {
+                    $affectedRows += $this->aSchoolClass->save($con);
                 }
-                $this->setFunctionGroup($this->aFunctionGroup);
+                $this->setSchoolClass($this->aSchoolClass);
             }
 
-            if ($this->aSchool !== null) {
-                if ($this->aSchool->isModified() || $this->aSchool->isNew()) {
-                    $affectedRows += $this->aSchool->save($con);
+            if ($this->aDocument !== null) {
+                if ($this->aDocument->isModified() || $this->aDocument->isNew()) {
+                    $affectedRows += $this->aDocument->save($con);
                 }
-                $this->setSchool($this->aSchool);
+                $this->setDocument($this->aDocument);
             }
 
             if ($this->aUserRelatedByCreatedBy !== null) {
@@ -832,23 +701,6 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
-            if ($this->teamMemberFunctionsScheduledForDeletion !== null) {
-                if (!$this->teamMemberFunctionsScheduledForDeletion->isEmpty()) {
-                    TeamMemberFunctionQuery::create()
-                        ->filterByPrimaryKeys($this->teamMemberFunctionsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->teamMemberFunctionsScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collTeamMemberFunctions !== null) {
-                foreach ($this->collTeamMemberFunctions as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
             $this->alreadyInSave = false;
 
         }
@@ -869,42 +721,29 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = SchoolFunctionPeer::ID;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . SchoolFunctionPeer::ID . ')');
-        }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(SchoolFunctionPeer::ID)) {
-            $modifiedColumns[':p' . $index++]  = '`id`';
+        if ($this->isColumnModified(ClassDocumentPeer::SCHOOL_CLASS_ID)) {
+            $modifiedColumns[':p' . $index++]  = '`school_class_id`';
         }
-        if ($this->isColumnModified(SchoolFunctionPeer::ORIGINAL_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`original_id`';
+        if ($this->isColumnModified(ClassDocumentPeer::DOCUMENT_ID)) {
+            $modifiedColumns[':p' . $index++]  = '`document_id`';
         }
-        if ($this->isColumnModified(SchoolFunctionPeer::TITLE)) {
-            $modifiedColumns[':p' . $index++]  = '`title`';
-        }
-        if ($this->isColumnModified(SchoolFunctionPeer::FUNCTION_GROUP_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`function_group_id`';
-        }
-        if ($this->isColumnModified(SchoolFunctionPeer::SCHOOL_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`school_id`';
-        }
-        if ($this->isColumnModified(SchoolFunctionPeer::CREATED_AT)) {
+        if ($this->isColumnModified(ClassDocumentPeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
         }
-        if ($this->isColumnModified(SchoolFunctionPeer::UPDATED_AT)) {
+        if ($this->isColumnModified(ClassDocumentPeer::UPDATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`updated_at`';
         }
-        if ($this->isColumnModified(SchoolFunctionPeer::CREATED_BY)) {
+        if ($this->isColumnModified(ClassDocumentPeer::CREATED_BY)) {
             $modifiedColumns[':p' . $index++]  = '`created_by`';
         }
-        if ($this->isColumnModified(SchoolFunctionPeer::UPDATED_BY)) {
+        if ($this->isColumnModified(ClassDocumentPeer::UPDATED_BY)) {
             $modifiedColumns[':p' . $index++]  = '`updated_by`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `school_functions` (%s) VALUES (%s)',
+            'INSERT INTO `class_documents` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -913,20 +752,11 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id`':
-                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+                    case '`school_class_id`':
+                        $stmt->bindValue($identifier, $this->school_class_id, PDO::PARAM_INT);
                         break;
-                    case '`original_id`':
-                        $stmt->bindValue($identifier, $this->original_id, PDO::PARAM_INT);
-                        break;
-                    case '`title`':
-                        $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
-                        break;
-                    case '`function_group_id`':
-                        $stmt->bindValue($identifier, $this->function_group_id, PDO::PARAM_INT);
-                        break;
-                    case '`school_id`':
-                        $stmt->bindValue($identifier, $this->school_id, PDO::PARAM_INT);
+                    case '`document_id`':
+                        $stmt->bindValue($identifier, $this->document_id, PDO::PARAM_INT);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -947,13 +777,6 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
         }
-
-        try {
-            $pk = $con->lastInsertId();
-        } catch (Exception $e) {
-            throw new PropelException('Unable to get autoincrement id.', $e);
-        }
-        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -1039,15 +862,15 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aFunctionGroup !== null) {
-                if (!$this->aFunctionGroup->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aFunctionGroup->getValidationFailures());
+            if ($this->aSchoolClass !== null) {
+                if (!$this->aSchoolClass->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aSchoolClass->getValidationFailures());
                 }
             }
 
-            if ($this->aSchool !== null) {
-                if (!$this->aSchool->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aSchool->getValidationFailures());
+            if ($this->aDocument !== null) {
+                if (!$this->aDocument->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aDocument->getValidationFailures());
                 }
             }
 
@@ -1064,18 +887,10 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             }
 
 
-            if (($retval = SchoolFunctionPeer::doValidate($this, $columns)) !== true) {
+            if (($retval = ClassDocumentPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
-
-                if ($this->collTeamMemberFunctions !== null) {
-                    foreach ($this->collTeamMemberFunctions as $referrerFK) {
-                        if (!$referrerFK->validate($columns)) {
-                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-                        }
-                    }
-                }
 
 
             $this->alreadyInValidation = false;
@@ -1096,7 +911,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = SchoolFunctionPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = ClassDocumentPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1113,30 +928,21 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getId();
+                return $this->getSchoolClassId();
                 break;
             case 1:
-                return $this->getOriginalId();
+                return $this->getDocumentId();
                 break;
             case 2:
-                return $this->getTitle();
-                break;
-            case 3:
-                return $this->getFunctionGroupId();
-                break;
-            case 4:
-                return $this->getSchoolId();
-                break;
-            case 5:
                 return $this->getCreatedAt();
                 break;
-            case 6:
+            case 3:
                 return $this->getUpdatedAt();
                 break;
-            case 7:
+            case 4:
                 return $this->getCreatedBy();
                 break;
-            case 8:
+            case 5:
                 return $this->getUpdatedBy();
                 break;
             default:
@@ -1162,21 +968,18 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['SchoolFunction'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['ClassDocument'][serialize($this->getPrimaryKey())])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['SchoolFunction'][$this->getPrimaryKey()] = true;
-        $keys = SchoolFunctionPeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['ClassDocument'][serialize($this->getPrimaryKey())] = true;
+        $keys = ClassDocumentPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getId(),
-            $keys[1] => $this->getOriginalId(),
-            $keys[2] => $this->getTitle(),
-            $keys[3] => $this->getFunctionGroupId(),
-            $keys[4] => $this->getSchoolId(),
-            $keys[5] => $this->getCreatedAt(),
-            $keys[6] => $this->getUpdatedAt(),
-            $keys[7] => $this->getCreatedBy(),
-            $keys[8] => $this->getUpdatedBy(),
+            $keys[0] => $this->getSchoolClassId(),
+            $keys[1] => $this->getDocumentId(),
+            $keys[2] => $this->getCreatedAt(),
+            $keys[3] => $this->getUpdatedAt(),
+            $keys[4] => $this->getCreatedBy(),
+            $keys[5] => $this->getUpdatedBy(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1184,20 +987,17 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aFunctionGroup) {
-                $result['FunctionGroup'] = $this->aFunctionGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            if (null !== $this->aSchoolClass) {
+                $result['SchoolClass'] = $this->aSchoolClass->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aSchool) {
-                $result['School'] = $this->aSchool->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            if (null !== $this->aDocument) {
+                $result['Document'] = $this->aDocument->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUserRelatedByCreatedBy) {
                 $result['UserRelatedByCreatedBy'] = $this->aUserRelatedByCreatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUserRelatedByUpdatedBy) {
                 $result['UserRelatedByUpdatedBy'] = $this->aUserRelatedByUpdatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->collTeamMemberFunctions) {
-                $result['TeamMemberFunctions'] = $this->collTeamMemberFunctions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1217,7 +1017,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = SchoolFunctionPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = ClassDocumentPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -1234,30 +1034,21 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setId($value);
+                $this->setSchoolClassId($value);
                 break;
             case 1:
-                $this->setOriginalId($value);
+                $this->setDocumentId($value);
                 break;
             case 2:
-                $this->setTitle($value);
-                break;
-            case 3:
-                $this->setFunctionGroupId($value);
-                break;
-            case 4:
-                $this->setSchoolId($value);
-                break;
-            case 5:
                 $this->setCreatedAt($value);
                 break;
-            case 6:
+            case 3:
                 $this->setUpdatedAt($value);
                 break;
-            case 7:
+            case 4:
                 $this->setCreatedBy($value);
                 break;
-            case 8:
+            case 5:
                 $this->setUpdatedBy($value);
                 break;
         } // switch()
@@ -1282,17 +1073,14 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = SchoolFunctionPeer::getFieldNames($keyType);
+        $keys = ClassDocumentPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setOriginalId($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setTitle($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setFunctionGroupId($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setSchoolId($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setCreatedAt($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setUpdatedAt($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setCreatedBy($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setUpdatedBy($arr[$keys[8]]);
+        if (array_key_exists($keys[0], $arr)) $this->setSchoolClassId($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setDocumentId($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setCreatedAt($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setUpdatedAt($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setCreatedBy($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setUpdatedBy($arr[$keys[5]]);
     }
 
     /**
@@ -1302,17 +1090,14 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(SchoolFunctionPeer::DATABASE_NAME);
+        $criteria = new Criteria(ClassDocumentPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(SchoolFunctionPeer::ID)) $criteria->add(SchoolFunctionPeer::ID, $this->id);
-        if ($this->isColumnModified(SchoolFunctionPeer::ORIGINAL_ID)) $criteria->add(SchoolFunctionPeer::ORIGINAL_ID, $this->original_id);
-        if ($this->isColumnModified(SchoolFunctionPeer::TITLE)) $criteria->add(SchoolFunctionPeer::TITLE, $this->title);
-        if ($this->isColumnModified(SchoolFunctionPeer::FUNCTION_GROUP_ID)) $criteria->add(SchoolFunctionPeer::FUNCTION_GROUP_ID, $this->function_group_id);
-        if ($this->isColumnModified(SchoolFunctionPeer::SCHOOL_ID)) $criteria->add(SchoolFunctionPeer::SCHOOL_ID, $this->school_id);
-        if ($this->isColumnModified(SchoolFunctionPeer::CREATED_AT)) $criteria->add(SchoolFunctionPeer::CREATED_AT, $this->created_at);
-        if ($this->isColumnModified(SchoolFunctionPeer::UPDATED_AT)) $criteria->add(SchoolFunctionPeer::UPDATED_AT, $this->updated_at);
-        if ($this->isColumnModified(SchoolFunctionPeer::CREATED_BY)) $criteria->add(SchoolFunctionPeer::CREATED_BY, $this->created_by);
-        if ($this->isColumnModified(SchoolFunctionPeer::UPDATED_BY)) $criteria->add(SchoolFunctionPeer::UPDATED_BY, $this->updated_by);
+        if ($this->isColumnModified(ClassDocumentPeer::SCHOOL_CLASS_ID)) $criteria->add(ClassDocumentPeer::SCHOOL_CLASS_ID, $this->school_class_id);
+        if ($this->isColumnModified(ClassDocumentPeer::DOCUMENT_ID)) $criteria->add(ClassDocumentPeer::DOCUMENT_ID, $this->document_id);
+        if ($this->isColumnModified(ClassDocumentPeer::CREATED_AT)) $criteria->add(ClassDocumentPeer::CREATED_AT, $this->created_at);
+        if ($this->isColumnModified(ClassDocumentPeer::UPDATED_AT)) $criteria->add(ClassDocumentPeer::UPDATED_AT, $this->updated_at);
+        if ($this->isColumnModified(ClassDocumentPeer::CREATED_BY)) $criteria->add(ClassDocumentPeer::CREATED_BY, $this->created_by);
+        if ($this->isColumnModified(ClassDocumentPeer::UPDATED_BY)) $criteria->add(ClassDocumentPeer::UPDATED_BY, $this->updated_by);
 
         return $criteria;
     }
@@ -1327,30 +1112,37 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(SchoolFunctionPeer::DATABASE_NAME);
-        $criteria->add(SchoolFunctionPeer::ID, $this->id);
+        $criteria = new Criteria(ClassDocumentPeer::DATABASE_NAME);
+        $criteria->add(ClassDocumentPeer::SCHOOL_CLASS_ID, $this->school_class_id);
+        $criteria->add(ClassDocumentPeer::DOCUMENT_ID, $this->document_id);
 
         return $criteria;
     }
 
     /**
-     * Returns the primary key for this object (row).
-     * @return int
+     * Returns the composite primary key for this object.
+     * The array elements will be in same order as specified in XML.
+     * @return array
      */
     public function getPrimaryKey()
     {
-        return $this->getId();
+        $pks = array();
+        $pks[0] = $this->getSchoolClassId();
+        $pks[1] = $this->getDocumentId();
+
+        return $pks;
     }
 
     /**
-     * Generic method to set the primary key (id column).
+     * Set the [composite] primary key.
      *
-     * @param  int $key Primary key.
+     * @param array $keys The elements of the composite key (order must match the order in XML file).
      * @return void
      */
-    public function setPrimaryKey($key)
+    public function setPrimaryKey($keys)
     {
-        $this->setId($key);
+        $this->setSchoolClassId($keys[0]);
+        $this->setDocumentId($keys[1]);
     }
 
     /**
@@ -1360,7 +1152,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getId();
+        return (null === $this->getSchoolClassId()) && (null === $this->getDocumentId());
     }
 
     /**
@@ -1369,17 +1161,15 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of SchoolFunction (or compatible) type.
+     * @param object $copyObj An object of ClassDocument (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setOriginalId($this->getOriginalId());
-        $copyObj->setTitle($this->getTitle());
-        $copyObj->setFunctionGroupId($this->getFunctionGroupId());
-        $copyObj->setSchoolId($this->getSchoolId());
+        $copyObj->setSchoolClassId($this->getSchoolClassId());
+        $copyObj->setDocumentId($this->getDocumentId());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setCreatedBy($this->getCreatedBy());
@@ -1392,19 +1182,12 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
-            foreach ($this->getTeamMemberFunctions() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addTeamMemberFunction($relObj->copy($deepCopy));
-                }
-            }
-
             //unflag object copy
             $this->startCopy = false;
         } // if ($deepCopy)
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1417,7 +1200,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return SchoolFunction Clone of current object.
+     * @return ClassDocument Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1437,38 +1220,38 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return SchoolFunctionPeer
+     * @return ClassDocumentPeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new SchoolFunctionPeer();
+            self::$peer = new ClassDocumentPeer();
         }
 
         return self::$peer;
     }
 
     /**
-     * Declares an association between this object and a FunctionGroup object.
+     * Declares an association between this object and a SchoolClass object.
      *
-     * @param                  FunctionGroup $v
-     * @return SchoolFunction The current object (for fluent API support)
+     * @param                  SchoolClass $v
+     * @return ClassDocument The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setFunctionGroup(FunctionGroup $v = null)
+    public function setSchoolClass(SchoolClass $v = null)
     {
         if ($v === null) {
-            $this->setFunctionGroupId(NULL);
+            $this->setSchoolClassId(NULL);
         } else {
-            $this->setFunctionGroupId($v->getId());
+            $this->setSchoolClassId($v->getId());
         }
 
-        $this->aFunctionGroup = $v;
+        $this->aSchoolClass = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the FunctionGroup object, it will not be re-added.
+        // If this object has already been added to the SchoolClass object, it will not be re-added.
         if ($v !== null) {
-            $v->addSchoolFunction($this);
+            $v->addClassDocument($this);
         }
 
 
@@ -1477,50 +1260,50 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
 
 
     /**
-     * Get the associated FunctionGroup object
+     * Get the associated SchoolClass object
      *
      * @param PropelPDO $con Optional Connection object.
      * @param $doQuery Executes a query to get the object if required
-     * @return FunctionGroup The associated FunctionGroup object.
+     * @return SchoolClass The associated SchoolClass object.
      * @throws PropelException
      */
-    public function getFunctionGroup(PropelPDO $con = null, $doQuery = true)
+    public function getSchoolClass(PropelPDO $con = null, $doQuery = true)
     {
-        if ($this->aFunctionGroup === null && ($this->function_group_id !== null) && $doQuery) {
-            $this->aFunctionGroup = FunctionGroupQuery::create()->findPk($this->function_group_id, $con);
+        if ($this->aSchoolClass === null && ($this->school_class_id !== null) && $doQuery) {
+            $this->aSchoolClass = SchoolClassQuery::create()->findPk($this->school_class_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aFunctionGroup->addSchoolFunctions($this);
+                $this->aSchoolClass->addClassDocuments($this);
              */
         }
 
-        return $this->aFunctionGroup;
+        return $this->aSchoolClass;
     }
 
     /**
-     * Declares an association between this object and a School object.
+     * Declares an association between this object and a Document object.
      *
-     * @param                  School $v
-     * @return SchoolFunction The current object (for fluent API support)
+     * @param                  Document $v
+     * @return ClassDocument The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setSchool(School $v = null)
+    public function setDocument(Document $v = null)
     {
         if ($v === null) {
-            $this->setSchoolId(NULL);
+            $this->setDocumentId(NULL);
         } else {
-            $this->setSchoolId($v->getId());
+            $this->setDocumentId($v->getId());
         }
 
-        $this->aSchool = $v;
+        $this->aDocument = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the School object, it will not be re-added.
+        // If this object has already been added to the Document object, it will not be re-added.
         if ($v !== null) {
-            $v->addSchoolFunction($this);
+            $v->addClassDocument($this);
         }
 
 
@@ -1529,34 +1312,34 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
 
 
     /**
-     * Get the associated School object
+     * Get the associated Document object
      *
      * @param PropelPDO $con Optional Connection object.
      * @param $doQuery Executes a query to get the object if required
-     * @return School The associated School object.
+     * @return Document The associated Document object.
      * @throws PropelException
      */
-    public function getSchool(PropelPDO $con = null, $doQuery = true)
+    public function getDocument(PropelPDO $con = null, $doQuery = true)
     {
-        if ($this->aSchool === null && ($this->school_id !== null) && $doQuery) {
-            $this->aSchool = SchoolQuery::create()->findPk($this->school_id, $con);
+        if ($this->aDocument === null && ($this->document_id !== null) && $doQuery) {
+            $this->aDocument = DocumentQuery::create()->findPk($this->document_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aSchool->addSchoolFunctions($this);
+                $this->aDocument->addClassDocuments($this);
              */
         }
 
-        return $this->aSchool;
+        return $this->aDocument;
     }
 
     /**
      * Declares an association between this object and a User object.
      *
      * @param                  User $v
-     * @return SchoolFunction The current object (for fluent API support)
+     * @return ClassDocument The current object (for fluent API support)
      * @throws PropelException
      */
     public function setUserRelatedByCreatedBy(User $v = null)
@@ -1572,7 +1355,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the User object, it will not be re-added.
         if ($v !== null) {
-            $v->addSchoolFunctionRelatedByCreatedBy($this);
+            $v->addClassDocumentRelatedByCreatedBy($this);
         }
 
 
@@ -1597,7 +1380,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUserRelatedByCreatedBy->addSchoolFunctionsRelatedByCreatedBy($this);
+                $this->aUserRelatedByCreatedBy->addClassDocumentsRelatedByCreatedBy($this);
              */
         }
 
@@ -1608,7 +1391,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      * Declares an association between this object and a User object.
      *
      * @param                  User $v
-     * @return SchoolFunction The current object (for fluent API support)
+     * @return ClassDocument The current object (for fluent API support)
      * @throws PropelException
      */
     public function setUserRelatedByUpdatedBy(User $v = null)
@@ -1624,7 +1407,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the User object, it will not be re-added.
         if ($v !== null) {
-            $v->addSchoolFunctionRelatedByUpdatedBy($this);
+            $v->addClassDocumentRelatedByUpdatedBy($this);
         }
 
 
@@ -1649,330 +1432,11 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUserRelatedByUpdatedBy->addSchoolFunctionsRelatedByUpdatedBy($this);
+                $this->aUserRelatedByUpdatedBy->addClassDocumentsRelatedByUpdatedBy($this);
              */
         }
 
         return $this->aUserRelatedByUpdatedBy;
-    }
-
-
-    /**
-     * Initializes a collection based on the name of a relation.
-     * Avoids crafting an 'init[$relationName]s' method name
-     * that wouldn't work when StandardEnglishPluralizer is used.
-     *
-     * @param string $relationName The name of the relation to initialize
-     * @return void
-     */
-    public function initRelation($relationName)
-    {
-        if ('TeamMemberFunction' == $relationName) {
-            $this->initTeamMemberFunctions();
-        }
-    }
-
-    /**
-     * Clears out the collTeamMemberFunctions collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return SchoolFunction The current object (for fluent API support)
-     * @see        addTeamMemberFunctions()
-     */
-    public function clearTeamMemberFunctions()
-    {
-        $this->collTeamMemberFunctions = null; // important to set this to null since that means it is uninitialized
-        $this->collTeamMemberFunctionsPartial = null;
-
-        return $this;
-    }
-
-    /**
-     * reset is the collTeamMemberFunctions collection loaded partially
-     *
-     * @return void
-     */
-    public function resetPartialTeamMemberFunctions($v = true)
-    {
-        $this->collTeamMemberFunctionsPartial = $v;
-    }
-
-    /**
-     * Initializes the collTeamMemberFunctions collection.
-     *
-     * By default this just sets the collTeamMemberFunctions collection to an empty array (like clearcollTeamMemberFunctions());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initTeamMemberFunctions($overrideExisting = true)
-    {
-        if (null !== $this->collTeamMemberFunctions && !$overrideExisting) {
-            return;
-        }
-        $this->collTeamMemberFunctions = new PropelObjectCollection();
-        $this->collTeamMemberFunctions->setModel('TeamMemberFunction');
-    }
-
-    /**
-     * Gets an array of TeamMemberFunction objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this SchoolFunction is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @return PropelObjectCollection|TeamMemberFunction[] List of TeamMemberFunction objects
-     * @throws PropelException
-     */
-    public function getTeamMemberFunctions($criteria = null, PropelPDO $con = null)
-    {
-        $partial = $this->collTeamMemberFunctionsPartial && !$this->isNew();
-        if (null === $this->collTeamMemberFunctions || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collTeamMemberFunctions) {
-                // return empty collection
-                $this->initTeamMemberFunctions();
-            } else {
-                $collTeamMemberFunctions = TeamMemberFunctionQuery::create(null, $criteria)
-                    ->filterBySchoolFunction($this)
-                    ->find($con);
-                if (null !== $criteria) {
-                    if (false !== $this->collTeamMemberFunctionsPartial && count($collTeamMemberFunctions)) {
-                      $this->initTeamMemberFunctions(false);
-
-                      foreach ($collTeamMemberFunctions as $obj) {
-                        if (false == $this->collTeamMemberFunctions->contains($obj)) {
-                          $this->collTeamMemberFunctions->append($obj);
-                        }
-                      }
-
-                      $this->collTeamMemberFunctionsPartial = true;
-                    }
-
-                    $collTeamMemberFunctions->getInternalIterator()->rewind();
-
-                    return $collTeamMemberFunctions;
-                }
-
-                if ($partial && $this->collTeamMemberFunctions) {
-                    foreach ($this->collTeamMemberFunctions as $obj) {
-                        if ($obj->isNew()) {
-                            $collTeamMemberFunctions[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collTeamMemberFunctions = $collTeamMemberFunctions;
-                $this->collTeamMemberFunctionsPartial = false;
-            }
-        }
-
-        return $this->collTeamMemberFunctions;
-    }
-
-    /**
-     * Sets a collection of TeamMemberFunction objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param PropelCollection $teamMemberFunctions A Propel collection.
-     * @param PropelPDO $con Optional connection object
-     * @return SchoolFunction The current object (for fluent API support)
-     */
-    public function setTeamMemberFunctions(PropelCollection $teamMemberFunctions, PropelPDO $con = null)
-    {
-        $teamMemberFunctionsToDelete = $this->getTeamMemberFunctions(new Criteria(), $con)->diff($teamMemberFunctions);
-
-
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->teamMemberFunctionsScheduledForDeletion = clone $teamMemberFunctionsToDelete;
-
-        foreach ($teamMemberFunctionsToDelete as $teamMemberFunctionRemoved) {
-            $teamMemberFunctionRemoved->setSchoolFunction(null);
-        }
-
-        $this->collTeamMemberFunctions = null;
-        foreach ($teamMemberFunctions as $teamMemberFunction) {
-            $this->addTeamMemberFunction($teamMemberFunction);
-        }
-
-        $this->collTeamMemberFunctions = $teamMemberFunctions;
-        $this->collTeamMemberFunctionsPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related TeamMemberFunction objects.
-     *
-     * @param Criteria $criteria
-     * @param boolean $distinct
-     * @param PropelPDO $con
-     * @return int             Count of related TeamMemberFunction objects.
-     * @throws PropelException
-     */
-    public function countTeamMemberFunctions(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-    {
-        $partial = $this->collTeamMemberFunctionsPartial && !$this->isNew();
-        if (null === $this->collTeamMemberFunctions || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collTeamMemberFunctions) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getTeamMemberFunctions());
-            }
-            $query = TeamMemberFunctionQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterBySchoolFunction($this)
-                ->count($con);
-        }
-
-        return count($this->collTeamMemberFunctions);
-    }
-
-    /**
-     * Method called to associate a TeamMemberFunction object to this object
-     * through the TeamMemberFunction foreign key attribute.
-     *
-     * @param    TeamMemberFunction $l TeamMemberFunction
-     * @return SchoolFunction The current object (for fluent API support)
-     */
-    public function addTeamMemberFunction(TeamMemberFunction $l)
-    {
-        if ($this->collTeamMemberFunctions === null) {
-            $this->initTeamMemberFunctions();
-            $this->collTeamMemberFunctionsPartial = true;
-        }
-
-        if (!in_array($l, $this->collTeamMemberFunctions->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddTeamMemberFunction($l);
-
-            if ($this->teamMemberFunctionsScheduledForDeletion and $this->teamMemberFunctionsScheduledForDeletion->contains($l)) {
-                $this->teamMemberFunctionsScheduledForDeletion->remove($this->teamMemberFunctionsScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param	TeamMemberFunction $teamMemberFunction The teamMemberFunction object to add.
-     */
-    protected function doAddTeamMemberFunction($teamMemberFunction)
-    {
-        $this->collTeamMemberFunctions[]= $teamMemberFunction;
-        $teamMemberFunction->setSchoolFunction($this);
-    }
-
-    /**
-     * @param	TeamMemberFunction $teamMemberFunction The teamMemberFunction object to remove.
-     * @return SchoolFunction The current object (for fluent API support)
-     */
-    public function removeTeamMemberFunction($teamMemberFunction)
-    {
-        if ($this->getTeamMemberFunctions()->contains($teamMemberFunction)) {
-            $this->collTeamMemberFunctions->remove($this->collTeamMemberFunctions->search($teamMemberFunction));
-            if (null === $this->teamMemberFunctionsScheduledForDeletion) {
-                $this->teamMemberFunctionsScheduledForDeletion = clone $this->collTeamMemberFunctions;
-                $this->teamMemberFunctionsScheduledForDeletion->clear();
-            }
-            $this->teamMemberFunctionsScheduledForDeletion[]= clone $teamMemberFunction;
-            $teamMemberFunction->setSchoolFunction(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this SchoolFunction is new, it will return
-     * an empty collection; or if this SchoolFunction has previously
-     * been saved, it will retrieve related TeamMemberFunctions from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in SchoolFunction.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|TeamMemberFunction[] List of TeamMemberFunction objects
-     */
-    public function getTeamMemberFunctionsJoinTeamMember($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = TeamMemberFunctionQuery::create(null, $criteria);
-        $query->joinWith('TeamMember', $join_behavior);
-
-        return $this->getTeamMemberFunctions($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this SchoolFunction is new, it will return
-     * an empty collection; or if this SchoolFunction has previously
-     * been saved, it will retrieve related TeamMemberFunctions from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in SchoolFunction.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|TeamMemberFunction[] List of TeamMemberFunction objects
-     */
-    public function getTeamMemberFunctionsJoinUserRelatedByCreatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = TeamMemberFunctionQuery::create(null, $criteria);
-        $query->joinWith('UserRelatedByCreatedBy', $join_behavior);
-
-        return $this->getTeamMemberFunctions($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this SchoolFunction is new, it will return
-     * an empty collection; or if this SchoolFunction has previously
-     * been saved, it will retrieve related TeamMemberFunctions from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in SchoolFunction.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|TeamMemberFunction[] List of TeamMemberFunction objects
-     */
-    public function getTeamMemberFunctionsJoinUserRelatedByUpdatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = TeamMemberFunctionQuery::create(null, $criteria);
-        $query->joinWith('UserRelatedByUpdatedBy', $join_behavior);
-
-        return $this->getTeamMemberFunctions($query, $con);
     }
 
     /**
@@ -1980,11 +1444,8 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      */
     public function clear()
     {
-        $this->id = null;
-        $this->original_id = null;
-        $this->title = null;
-        $this->function_group_id = null;
-        $this->school_id = null;
+        $this->school_class_id = null;
+        $this->document_id = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->created_by = null;
@@ -2011,16 +1472,11 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->collTeamMemberFunctions) {
-                foreach ($this->collTeamMemberFunctions as $o) {
-                    $o->clearAllReferences($deep);
-                }
+            if ($this->aSchoolClass instanceof Persistent) {
+              $this->aSchoolClass->clearAllReferences($deep);
             }
-            if ($this->aFunctionGroup instanceof Persistent) {
-              $this->aFunctionGroup->clearAllReferences($deep);
-            }
-            if ($this->aSchool instanceof Persistent) {
-              $this->aSchool->clearAllReferences($deep);
+            if ($this->aDocument instanceof Persistent) {
+              $this->aDocument->clearAllReferences($deep);
             }
             if ($this->aUserRelatedByCreatedBy instanceof Persistent) {
               $this->aUserRelatedByCreatedBy->clearAllReferences($deep);
@@ -2032,12 +1488,8 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        if ($this->collTeamMemberFunctions instanceof PropelCollection) {
-            $this->collTeamMemberFunctions->clearIterator();
-        }
-        $this->collTeamMemberFunctions = null;
-        $this->aFunctionGroup = null;
-        $this->aSchool = null;
+        $this->aSchoolClass = null;
+        $this->aDocument = null;
         $this->aUserRelatedByCreatedBy = null;
         $this->aUserRelatedByUpdatedBy = null;
     }
@@ -2049,7 +1501,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(SchoolFunctionPeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(ClassDocumentPeer::DEFAULT_STRING_FORMAT);
     }
 
     /**
@@ -2068,12 +1520,12 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
             $oUser = Session::getSession()->getUser();
         }
         $bIsAllowed = false;
-        if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && SchoolFunctionPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
+        if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && ClassDocumentPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
             $bIsAllowed = true;
-        } else if(SchoolFunctionPeer::mayOperateOn($oUser, $this, $sOperation)) {
+        } else if(ClassDocumentPeer::mayOperateOn($oUser, $this, $sOperation)) {
             $bIsAllowed = true;
         }
-        FilterModule::getFilters()->handleSchoolFunctionOperationCheck($sOperation, $this, $oUser, array(&$bIsAllowed));
+        FilterModule::getFilters()->handleClassDocumentOperationCheck($sOperation, $this, $oUser, array(&$bIsAllowed));
         return $bIsAllowed;
     }
     public function mayBeInserted($oUser = false) {
@@ -2091,11 +1543,11 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     /**
      * Mark the current object so that the update date doesn't get updated during next save
      *
-     * @return     SchoolFunction The current object (for fluent API support)
+     * @return     ClassDocument The current object (for fluent API support)
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[] = SchoolFunctionPeer::UPDATED_AT;
+        $this->modifiedColumns[] = ClassDocumentPeer::UPDATED_AT;
 
         return $this;
     }
@@ -2143,11 +1595,11 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     /**
      * Mark the current object so that the updated user doesn't get updated during next save
      *
-     * @return     SchoolFunction The current object (for fluent API support)
+     * @return     ClassDocument The current object (for fluent API support)
      */
     public function keepUpdateUserUnchanged()
     {
-        $this->modifiedColumns[] = SchoolFunctionPeer::UPDATED_BY;
+        $this->modifiedColumns[] = ClassDocumentPeer::UPDATED_BY;
         return $this;
     }
 
@@ -2158,15 +1610,15 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
      */
     public function getPKArray()
     {
-        return array($this->getPrimaryKey());
+        return $this->getPrimaryKey();
     }
 
     /**
-     * @return the composite primary key as a string, separated by _
+     * @return the primary key as a string
      */
     public function getPKString()
     {
-        return implode("", $this->getPKArray());
+        return implode("_", $this->getPKArray());
     }
 
 }

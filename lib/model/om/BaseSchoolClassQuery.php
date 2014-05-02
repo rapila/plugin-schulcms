@@ -90,6 +90,10 @@
  * @method SchoolClassQuery rightJoinClassLink($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ClassLink relation
  * @method SchoolClassQuery innerJoinClassLink($relationAlias = null) Adds a INNER JOIN clause to the query using the ClassLink relation
  *
+ * @method SchoolClassQuery leftJoinClassDocument($relationAlias = null) Adds a LEFT JOIN clause to the query using the ClassDocument relation
+ * @method SchoolClassQuery rightJoinClassDocument($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ClassDocument relation
+ * @method SchoolClassQuery innerJoinClassDocument($relationAlias = null) Adds a INNER JOIN clause to the query using the ClassDocument relation
+ *
  * @method SchoolClassQuery leftJoinClassTeacher($relationAlias = null) Adds a LEFT JOIN clause to the query using the ClassTeacher relation
  * @method SchoolClassQuery rightJoinClassTeacher($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ClassTeacher relation
  * @method SchoolClassQuery innerJoinClassTeacher($relationAlias = null) Adds a INNER JOIN clause to the query using the ClassTeacher relation
@@ -151,8 +155,14 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'rapila', $modelName = 'SchoolClass', $modelAlias = null)
+    public function __construct($dbName = null, $modelName = null, $modelAlias = null)
     {
+        if (null === $dbName) {
+            $dbName = 'rapila';
+        }
+        if (null === $modelName) {
+            $modelName = 'SchoolClass';
+        }
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
@@ -169,10 +179,8 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
         if ($criteria instanceof SchoolClassQuery) {
             return $criteria;
         }
-        $query = new SchoolClassQuery();
-        if (null !== $modelAlias) {
-            $query->setModelAlias($modelAlias);
-        }
+        $query = new SchoolClassQuery(null, null, $modelAlias);
+
         if ($criteria instanceof Criteria) {
             $query->mergeWith($criteria);
         }
@@ -200,7 +208,7 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
             return null;
         }
         if ((null !== ($obj = SchoolClassPeer::getInstanceFromPool((string) $key))) && !$this->formatter) {
-            // the object is alredy in the instance pool
+            // the object is already in the instance pool
             return $obj;
         }
         if ($con === null) {
@@ -915,7 +923,7 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
      * <code>
      * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
      * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
-     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
+     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at < '2011-03-13'
      * </code>
      *
      * @param     mixed $createdAt The value to use as filter.
@@ -958,7 +966,7 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
      * <code>
      * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
      * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
-     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
+     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at < '2011-03-13'
      * </code>
      *
      * @param     mixed $updatedAt The value to use as filter.
@@ -1839,6 +1847,80 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related ClassDocument object
+     *
+     * @param   ClassDocument|PropelObjectCollection $classDocument  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SchoolClassQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByClassDocument($classDocument, $comparison = null)
+    {
+        if ($classDocument instanceof ClassDocument) {
+            return $this
+                ->addUsingAlias(SchoolClassPeer::ID, $classDocument->getSchoolClassId(), $comparison);
+        } elseif ($classDocument instanceof PropelObjectCollection) {
+            return $this
+                ->useClassDocumentQuery()
+                ->filterByPrimaryKeys($classDocument->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByClassDocument() only accepts arguments of type ClassDocument or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ClassDocument relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SchoolClassQuery The current query, for fluid interface
+     */
+    public function joinClassDocument($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ClassDocument');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ClassDocument');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ClassDocument relation ClassDocument object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ClassDocumentQuery A secondary query class using the current class as primary query
+     */
+    public function useClassDocumentQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinClassDocument($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ClassDocument', 'ClassDocumentQuery');
+    }
+
+    /**
      * Filter the query by a related ClassTeacher object
      *
      * @param   ClassTeacher|PropelObjectCollection $classTeacher  the related object to use as filter
@@ -2067,4 +2149,14 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
     {
         return $this->addAscendingOrderByColumn(SchoolClassPeer::CREATED_AT);
     }
+    // extended_keyable behavior
+
+    public function filterByPKArray($pkArray) {
+            return $this->filterByPrimaryKey($pkArray[0]);
+    }
+
+    public function filterByPKString($pkString) {
+        return $this->filterByPrimaryKey($pkString);
+    }
+
 }

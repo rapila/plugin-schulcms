@@ -57,7 +57,7 @@ abstract class BaseSchoolBuildingPeer
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identiy map to hold any loaded instances of SchoolBuilding objects.
+     * An identity map to hold any loaded instances of SchoolBuilding objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
      * @var        array SchoolBuilding[]
@@ -235,7 +235,7 @@ abstract class BaseSchoolBuildingPeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return                 SchoolBuilding
+     * @return SchoolBuilding
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -302,7 +302,7 @@ abstract class BaseSchoolBuildingPeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param      SchoolBuilding $obj A SchoolBuilding object.
+     * @param SchoolBuilding $obj A SchoolBuilding object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
@@ -352,7 +352,7 @@ abstract class BaseSchoolBuildingPeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return   SchoolBuilding Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return SchoolBuilding Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
@@ -373,10 +373,8 @@ abstract class BaseSchoolBuildingPeer
      */
     public static function clearInstancePool($and_clear_all_references = false)
     {
-      if ($and_clear_all_references)
-      {
-        foreach (SchoolBuildingPeer::$instances as $instance)
-        {
+      if ($and_clear_all_references) {
+        foreach (SchoolBuildingPeer::$instances as $instance) {
           $instance->clearAllReferences(true);
         }
       }
@@ -1086,7 +1084,7 @@ abstract class BaseSchoolBuildingPeer
     {
       $dbMap = Propel::getDatabaseMap(BaseSchoolBuildingPeer::DATABASE_NAME);
       if (!$dbMap->hasTable(BaseSchoolBuildingPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new SchoolBuildingTableMap());
+        $dbMap->addTableObject(new \SchoolBuildingTableMap());
       }
     }
 
@@ -1136,7 +1134,7 @@ abstract class BaseSchoolBuildingPeer
             $con->beginTransaction();
             $pk = BasePeer::doInsert($criteria, $con);
             $con->commit();
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -1210,7 +1208,7 @@ abstract class BaseSchoolBuildingPeer
             $con->commit();
 
             return $affectedRows;
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -1276,7 +1274,7 @@ abstract class BaseSchoolBuildingPeer
             $con->commit();
 
             return $affectedRows;
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -1320,7 +1318,7 @@ abstract class BaseSchoolBuildingPeer
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param      SchoolBuilding $obj The object to validate.
+     * @param SchoolBuilding $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -1353,7 +1351,7 @@ abstract class BaseSchoolBuildingPeer
     /**
      * Retrieve a single object by pkey.
      *
-     * @param      int $pk the primary key.
+     * @param int $pk the primary key.
      * @param      PropelPDO $con the connection to use
      * @return SchoolBuilding
      */

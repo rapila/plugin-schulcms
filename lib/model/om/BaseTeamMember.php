@@ -24,7 +24,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     protected static $peer;
 
     /**
-     * The flag var to prevent infinit loop in deep copy
+     * The flag var to prevent infinite loop in deep copy
      * @var       boolean
      */
     protected $startCopy = false;
@@ -244,6 +244,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getId()
     {
+
         return $this->id;
     }
 
@@ -254,6 +255,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getOriginalId()
     {
+
         return $this->original_id;
     }
 
@@ -264,6 +266,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getLastName()
     {
+
         return $this->last_name;
     }
 
@@ -274,6 +277,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getFirstName()
     {
+
         return $this->first_name;
     }
 
@@ -284,6 +288,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getSlug()
     {
+
         return $this->slug;
     }
 
@@ -294,6 +299,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getGenderId()
     {
+
         return $this->gender_id;
     }
 
@@ -384,6 +390,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getProfession()
     {
+
         return $this->profession;
     }
 
@@ -394,6 +401,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getEmailG()
     {
+
         return $this->email_g;
     }
 
@@ -404,6 +412,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getPortraitId()
     {
+
         return $this->portrait_id;
     }
 
@@ -414,6 +423,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getUserId()
     {
+
         return $this->user_id;
     }
 
@@ -424,6 +434,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getIsDeleted()
     {
+
         return $this->is_deleted;
     }
 
@@ -434,6 +445,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getIsNewlyUpdated()
     {
+
         return $this->is_newly_updated;
     }
 
@@ -524,6 +536,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getCreatedBy()
     {
+
         return $this->created_by;
     }
 
@@ -534,13 +547,14 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      */
     public function getUpdatedBy()
     {
+
         return $this->updated_by;
     }
 
     /**
      * Set the value of [id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return TeamMember The current object (for fluent API support)
      */
     public function setId($v)
@@ -561,7 +575,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Set the value of [original_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return TeamMember The current object (for fluent API support)
      */
     public function setOriginalId($v)
@@ -582,12 +596,12 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Set the value of [last_name] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return TeamMember The current object (for fluent API support)
      */
     public function setLastName($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -603,12 +617,12 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Set the value of [first_name] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return TeamMember The current object (for fluent API support)
      */
     public function setFirstName($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -624,12 +638,12 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Set the value of [slug] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return TeamMember The current object (for fluent API support)
      */
     public function setSlug($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -645,12 +659,12 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Set the value of [gender_id] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return TeamMember The current object (for fluent API support)
      */
     public function setGenderId($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -712,12 +726,12 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Set the value of [profession] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return TeamMember The current object (for fluent API support)
      */
     public function setProfession($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -733,12 +747,12 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Set the value of [email_g] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return TeamMember The current object (for fluent API support)
      */
     public function setEmailG($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -754,7 +768,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Set the value of [portrait_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return TeamMember The current object (for fluent API support)
      */
     public function setPortraitId($v)
@@ -779,7 +793,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Set the value of [user_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return TeamMember The current object (for fluent API support)
      */
     public function setUserId($v)
@@ -908,7 +922,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Set the value of [created_by] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return TeamMember The current object (for fluent API support)
      */
     public function setCreatedBy($v)
@@ -933,7 +947,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Set the value of [updated_by] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return TeamMember The current object (for fluent API support)
      */
     public function setUpdatedBy($v)
@@ -986,7 +1000,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      * more tables.
      *
      * @param array $row The row returned by PDOStatement->fetch(PDO::FETCH_NUM)
-     * @param int $startcol 0-based offset column which indicates which restultset column to start with.
+     * @param int $startcol 0-based offset column which indicates which resultset column to start with.
      * @param boolean $rehydrate Whether this object is being re-hydrated from the database.
      * @return int             next starting column
      * @throws PropelException - Any caught Exception will be rewrapped as a PropelException.
@@ -1021,6 +1035,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
+
             return $startcol + 18; // 18 = TeamMemberPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
@@ -1263,7 +1278,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
             $this->alreadyInSave = true;
 
             // We call the save method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -1582,10 +1597,10 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      *
      * In addition to checking the current object, all related objects will
      * also be validated.  If all pass then <code>true</code> is returned; otherwise
-     * an aggreagated array of ValidationFailed objects will be returned.
+     * an aggregated array of ValidationFailed objects will be returned.
      *
      * @param array $columns Array of column names to validate.
-     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objets otherwise.
+     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objects otherwise.
      */
     protected function doValidate($columns = null)
     {
@@ -1597,7 +1612,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
 
 
             // We call the validate method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -1792,6 +1807,11 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
             $keys[16] => $this->getCreatedBy(),
             $keys[17] => $this->getUpdatedBy(),
         );
+        $virtualColumns = $this->virtualColumns;
+        foreach ($virtualColumns as $key => $virtualColumn) {
+            $result[$key] = $virtualColumn;
+        }
+
         if ($includeForeignObjects) {
             if (null !== $this->aDocument) {
                 $result['Document'] = $this->aDocument->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -2132,7 +2152,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a Document object.
      *
-     * @param             Document $v
+     * @param                  Document $v
      * @return TeamMember The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2184,7 +2204,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a User object.
      *
-     * @param             User $v
+     * @param                  User $v
      * @return TeamMember The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2236,7 +2256,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a User object.
      *
-     * @param             User $v
+     * @param                  User $v
      * @return TeamMember The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2288,7 +2308,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a User object.
      *
-     * @param             User $v
+     * @param                  User $v
      * @return TeamMember The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2436,7 +2456,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
                     if (false !== $this->collTeamMemberFunctionsPartial && count($collTeamMemberFunctions)) {
                       $this->initTeamMemberFunctions(false);
 
-                      foreach($collTeamMemberFunctions as $obj) {
+                      foreach ($collTeamMemberFunctions as $obj) {
                         if (false == $this->collTeamMemberFunctions->contains($obj)) {
                           $this->collTeamMemberFunctions->append($obj);
                         }
@@ -2446,12 +2466,13 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
                     }
 
                     $collTeamMemberFunctions->getInternalIterator()->rewind();
+
                     return $collTeamMemberFunctions;
                 }
 
-                if($partial && $this->collTeamMemberFunctions) {
-                    foreach($this->collTeamMemberFunctions as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collTeamMemberFunctions) {
+                    foreach ($this->collTeamMemberFunctions as $obj) {
+                        if ($obj->isNew()) {
                             $collTeamMemberFunctions[] = $obj;
                         }
                     }
@@ -2479,7 +2500,11 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     {
         $teamMemberFunctionsToDelete = $this->getTeamMemberFunctions(new Criteria(), $con)->diff($teamMemberFunctions);
 
-        $this->teamMemberFunctionsScheduledForDeletion = unserialize(serialize($teamMemberFunctionsToDelete));
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->teamMemberFunctionsScheduledForDeletion = clone $teamMemberFunctionsToDelete;
 
         foreach ($teamMemberFunctionsToDelete as $teamMemberFunctionRemoved) {
             $teamMemberFunctionRemoved->setTeamMember(null);
@@ -2513,7 +2538,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getTeamMemberFunctions());
             }
             $query = TeamMemberFunctionQuery::create(null, $criteria);
@@ -2542,8 +2567,13 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
             $this->initTeamMemberFunctions();
             $this->collTeamMemberFunctionsPartial = true;
         }
+
         if (!in_array($l, $this->collTeamMemberFunctions->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddTeamMemberFunction($l);
+
+            if ($this->teamMemberFunctionsScheduledForDeletion and $this->teamMemberFunctionsScheduledForDeletion->contains($l)) {
+                $this->teamMemberFunctionsScheduledForDeletion->remove($this->teamMemberFunctionsScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -2729,7 +2759,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
                     if (false !== $this->collClassTeachersPartial && count($collClassTeachers)) {
                       $this->initClassTeachers(false);
 
-                      foreach($collClassTeachers as $obj) {
+                      foreach ($collClassTeachers as $obj) {
                         if (false == $this->collClassTeachers->contains($obj)) {
                           $this->collClassTeachers->append($obj);
                         }
@@ -2739,12 +2769,13 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
                     }
 
                     $collClassTeachers->getInternalIterator()->rewind();
+
                     return $collClassTeachers;
                 }
 
-                if($partial && $this->collClassTeachers) {
-                    foreach($this->collClassTeachers as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collClassTeachers) {
+                    foreach ($this->collClassTeachers as $obj) {
+                        if ($obj->isNew()) {
                             $collClassTeachers[] = $obj;
                         }
                     }
@@ -2772,7 +2803,11 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     {
         $classTeachersToDelete = $this->getClassTeachers(new Criteria(), $con)->diff($classTeachers);
 
-        $this->classTeachersScheduledForDeletion = unserialize(serialize($classTeachersToDelete));
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->classTeachersScheduledForDeletion = clone $classTeachersToDelete;
 
         foreach ($classTeachersToDelete as $classTeacherRemoved) {
             $classTeacherRemoved->setTeamMember(null);
@@ -2806,7 +2841,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getClassTeachers());
             }
             $query = ClassTeacherQuery::create(null, $criteria);
@@ -2835,8 +2870,13 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
             $this->initClassTeachers();
             $this->collClassTeachersPartial = true;
         }
+
         if (!in_array($l, $this->collClassTeachers->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddClassTeacher($l);
+
+            if ($this->classTeachersScheduledForDeletion and $this->classTeachersScheduledForDeletion->contains($l)) {
+                $this->classTeachersScheduledForDeletion->remove($this->classTeachersScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -3022,7 +3062,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
                     if (false !== $this->collServiceMembersPartial && count($collServiceMembers)) {
                       $this->initServiceMembers(false);
 
-                      foreach($collServiceMembers as $obj) {
+                      foreach ($collServiceMembers as $obj) {
                         if (false == $this->collServiceMembers->contains($obj)) {
                           $this->collServiceMembers->append($obj);
                         }
@@ -3032,12 +3072,13 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
                     }
 
                     $collServiceMembers->getInternalIterator()->rewind();
+
                     return $collServiceMembers;
                 }
 
-                if($partial && $this->collServiceMembers) {
-                    foreach($this->collServiceMembers as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collServiceMembers) {
+                    foreach ($this->collServiceMembers as $obj) {
+                        if ($obj->isNew()) {
                             $collServiceMembers[] = $obj;
                         }
                     }
@@ -3065,7 +3106,11 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     {
         $serviceMembersToDelete = $this->getServiceMembers(new Criteria(), $con)->diff($serviceMembers);
 
-        $this->serviceMembersScheduledForDeletion = unserialize(serialize($serviceMembersToDelete));
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->serviceMembersScheduledForDeletion = clone $serviceMembersToDelete;
 
         foreach ($serviceMembersToDelete as $serviceMemberRemoved) {
             $serviceMemberRemoved->setTeamMember(null);
@@ -3099,7 +3144,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getServiceMembers());
             }
             $query = ServiceMemberQuery::create(null, $criteria);
@@ -3128,8 +3173,13 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
             $this->initServiceMembers();
             $this->collServiceMembersPartial = true;
         }
+
         if (!in_array($l, $this->collServiceMembers->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddServiceMember($l);
+
+            if ($this->serviceMembersScheduledForDeletion and $this->serviceMembersScheduledForDeletion->contains($l)) {
+                $this->serviceMembersScheduledForDeletion->remove($this->serviceMembersScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -3276,7 +3326,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      *
      * This method is a user-space workaround for PHP's inability to garbage collect
      * objects with circular references (even in PHP 5.3). This is currently necessary
-     * when using Propel in certain daemon or large-volumne/high-memory operations.
+     * when using Propel in certain daemon or large-volume/high-memory operations.
      *
      * @param boolean $deep Whether to also clear the references on all referrer objects.
      */
@@ -3440,6 +3490,24 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     {
         $this->modifiedColumns[] = TeamMemberPeer::UPDATED_BY;
         return $this;
+    }
+
+    // extended_keyable behavior
+
+    /**
+     * @return the primary key as an array (even for non-composite keys)
+     */
+    public function getPKArray()
+    {
+        return array($this->getPrimaryKey());
+    }
+
+    /**
+     * @return the composite primary key as a string, separated by _
+     */
+    public function getPKString()
+    {
+        return implode("", $this->getPKArray());
     }
 
 }

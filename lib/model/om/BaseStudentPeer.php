@@ -66,7 +66,7 @@ abstract class BaseStudentPeer
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identiy map to hold any loaded instances of Student objects.
+     * An identity map to hold any loaded instances of Student objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
      * @var        array Student[]
@@ -250,7 +250,7 @@ abstract class BaseStudentPeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return                 Student
+     * @return Student
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -317,7 +317,7 @@ abstract class BaseStudentPeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param      Student $obj A Student object.
+     * @param Student $obj A Student object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
@@ -367,7 +367,7 @@ abstract class BaseStudentPeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return   Student Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return Student Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
@@ -388,10 +388,8 @@ abstract class BaseStudentPeer
      */
     public static function clearInstancePool($and_clear_all_references = false)
     {
-      if ($and_clear_all_references)
-      {
-        foreach (StudentPeer::$instances as $instance)
-        {
+      if ($and_clear_all_references) {
+        foreach (StudentPeer::$instances as $instance) {
           $instance->clearAllReferences(true);
         }
       }
@@ -1447,7 +1445,7 @@ abstract class BaseStudentPeer
     {
       $dbMap = Propel::getDatabaseMap(BaseStudentPeer::DATABASE_NAME);
       if (!$dbMap->hasTable(BaseStudentPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new StudentTableMap());
+        $dbMap->addTableObject(new \StudentTableMap());
       }
     }
 
@@ -1497,7 +1495,7 @@ abstract class BaseStudentPeer
             $con->beginTransaction();
             $pk = BasePeer::doInsert($criteria, $con);
             $con->commit();
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -1571,7 +1569,7 @@ abstract class BaseStudentPeer
             $con->commit();
 
             return $affectedRows;
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -1637,7 +1635,7 @@ abstract class BaseStudentPeer
             $con->commit();
 
             return $affectedRows;
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -1683,7 +1681,7 @@ abstract class BaseStudentPeer
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param      Student $obj The object to validate.
+     * @param Student $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -1716,7 +1714,7 @@ abstract class BaseStudentPeer
     /**
      * Retrieve a single object by pkey.
      *
-     * @param      int $pk the primary key.
+     * @param int $pk the primary key.
      * @param      PropelPDO $con the connection to use
      * @return Student
      */

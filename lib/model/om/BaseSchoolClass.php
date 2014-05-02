@@ -24,7 +24,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     protected static $peer;
 
     /**
-     * The flag var to prevent infinit loop in deep copy
+     * The flag var to prevent infinite loop in deep copy
      * @var       boolean
      */
     protected $startCopy = false;
@@ -196,6 +196,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     protected $collClassLinksPartial;
 
     /**
+     * @var        PropelObjectCollection|ClassDocument[] Collection to store aggregation of ClassDocument objects.
+     */
+    protected $collClassDocuments;
+    protected $collClassDocumentsPartial;
+
+    /**
      * @var        PropelObjectCollection|ClassTeacher[] Collection to store aggregation of ClassTeacher objects.
      */
     protected $collClassTeachers;
@@ -243,6 +249,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $classDocumentsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $classTeachersScheduledForDeletion = null;
 
     /**
@@ -258,6 +270,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getId()
     {
+
         return $this->id;
     }
 
@@ -268,6 +281,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getOriginalId()
     {
+
         return $this->original_id;
     }
 
@@ -278,6 +292,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getName()
     {
+
         return $this->name;
     }
 
@@ -288,6 +303,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getUnitName()
     {
+
         return $this->unit_name;
     }
 
@@ -298,6 +314,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getSlug()
     {
+
         return $this->slug;
     }
 
@@ -308,6 +325,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getYear()
     {
+
         return $this->year;
     }
 
@@ -318,6 +336,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getLevel()
     {
+
         return $this->level;
     }
 
@@ -328,6 +347,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getRoomNumber()
     {
+
         return $this->room_number;
     }
 
@@ -338,6 +358,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getTeachingUnit()
     {
+
         return $this->teaching_unit;
     }
 
@@ -348,6 +369,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getClassPortraitId()
     {
+
         return $this->class_portrait_id;
     }
 
@@ -358,6 +380,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getClassTypeId()
     {
+
         return $this->class_type_id;
     }
 
@@ -368,6 +391,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getClassScheduleId()
     {
+
         return $this->class_schedule_id;
     }
 
@@ -378,6 +402,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getWeekScheduleId()
     {
+
         return $this->week_schedule_id;
     }
 
@@ -388,6 +413,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getSchoolBuildingId()
     {
+
         return $this->school_building_id;
     }
 
@@ -398,6 +424,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getSchoolId()
     {
+
         return $this->school_id;
     }
 
@@ -488,6 +515,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getCreatedBy()
     {
+
         return $this->created_by;
     }
 
@@ -498,13 +526,14 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function getUpdatedBy()
     {
+
         return $this->updated_by;
     }
 
     /**
      * Set the value of [id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setId($v)
@@ -525,7 +554,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [original_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setOriginalId($v)
@@ -546,12 +575,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [name] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setName($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -567,12 +596,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [unit_name] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setUnitName($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -588,12 +617,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [slug] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setSlug($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -609,7 +638,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [year] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setYear($v)
@@ -630,7 +659,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [level] column.
      * Jahrgang
-     * @param int $v new value
+     * @param  int $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setLevel($v)
@@ -651,12 +680,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [room_number] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setRoomNumber($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -672,12 +701,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [teaching_unit] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setTeachingUnit($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -693,7 +722,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [class_portrait_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setClassPortraitId($v)
@@ -718,7 +747,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [class_type_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setClassTypeId($v)
@@ -743,7 +772,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [class_schedule_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setClassScheduleId($v)
@@ -768,7 +797,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [week_schedule_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setWeekScheduleId($v)
@@ -793,7 +822,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [school_building_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setSchoolBuildingId($v)
@@ -818,7 +847,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [school_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setSchoolId($v)
@@ -889,7 +918,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [created_by] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setCreatedBy($v)
@@ -914,7 +943,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Set the value of [updated_by] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
     public function setUpdatedBy($v)
@@ -959,7 +988,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      * more tables.
      *
      * @param array $row The row returned by PDOStatement->fetch(PDO::FETCH_NUM)
-     * @param int $startcol 0-based offset column which indicates which restultset column to start with.
+     * @param int $startcol 0-based offset column which indicates which resultset column to start with.
      * @param boolean $rehydrate Whether this object is being re-hydrated from the database.
      * @return int             next starting column
      * @throws PropelException - Any caught Exception will be rewrapped as a PropelException.
@@ -995,6 +1024,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
+
             return $startcol + 19; // 19 = SchoolClassPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
@@ -1092,6 +1122,8 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $this->collClassStudents = null;
 
             $this->collClassLinks = null;
+
+            $this->collClassDocuments = null;
 
             $this->collClassTeachers = null;
 
@@ -1255,7 +1287,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $this->alreadyInSave = true;
 
             // We call the save method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -1360,6 +1392,23 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->classDocumentsScheduledForDeletion !== null) {
+                if (!$this->classDocumentsScheduledForDeletion->isEmpty()) {
+                    ClassDocumentQuery::create()
+                        ->filterByPrimaryKeys($this->classDocumentsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->classDocumentsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collClassDocuments !== null) {
+                foreach ($this->collClassDocuments as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->classTeachersScheduledForDeletion !== null) {
                 if (!$this->classTeachersScheduledForDeletion->isEmpty()) {
                     ClassTeacherQuery::create()
@@ -1379,10 +1428,9 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
 
             if ($this->eventsScheduledForDeletion !== null) {
                 if (!$this->eventsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->eventsScheduledForDeletion as $event) {
-                        // need to save related object because we set the relation to null
-                        $event->save($con);
-                    }
+                    EventQuery::create()
+                        ->filterByPrimaryKeys($this->eventsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->eventsScheduledForDeletion = null;
                 }
             }
@@ -1626,10 +1674,10 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      *
      * In addition to checking the current object, all related objects will
      * also be validated.  If all pass then <code>true</code> is returned; otherwise
-     * an aggreagated array of ValidationFailed objects will be returned.
+     * an aggregated array of ValidationFailed objects will be returned.
      *
      * @param array $columns Array of column names to validate.
-     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objets otherwise.
+     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objects otherwise.
      */
     protected function doValidate($columns = null)
     {
@@ -1641,7 +1689,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
 
 
             // We call the validate method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -1709,6 +1757,14 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
 
                 if ($this->collClassLinks !== null) {
                     foreach ($this->collClassLinks as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collClassDocuments !== null) {
+                    foreach ($this->collClassDocuments as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1872,6 +1928,11 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $keys[17] => $this->getCreatedBy(),
             $keys[18] => $this->getUpdatedBy(),
         );
+        $virtualColumns = $this->virtualColumns;
+        foreach ($virtualColumns as $key => $virtualColumn) {
+            $result[$key] = $virtualColumn;
+        }
+
         if ($includeForeignObjects) {
             if (null !== $this->aDocumentRelatedByClassPortraitId) {
                 $result['DocumentRelatedByClassPortraitId'] = $this->aDocumentRelatedByClassPortraitId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -1902,6 +1963,9 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             }
             if (null !== $this->collClassLinks) {
                 $result['ClassLinks'] = $this->collClassLinks->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collClassDocuments) {
+                $result['ClassDocuments'] = $this->collClassDocuments->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collClassTeachers) {
                 $result['ClassTeachers'] = $this->collClassTeachers->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2174,6 +2238,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getClassDocuments() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addClassDocument($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getClassTeachers() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addClassTeacher($relObj->copy($deepCopy));
@@ -2239,7 +2309,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a Document object.
      *
-     * @param             Document $v
+     * @param                  Document $v
      * @return SchoolClass The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2291,7 +2361,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a ClassType object.
      *
-     * @param             ClassType $v
+     * @param                  ClassType $v
      * @return SchoolClass The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2343,7 +2413,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a Document object.
      *
-     * @param             Document $v
+     * @param                  Document $v
      * @return SchoolClass The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2395,7 +2465,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a Document object.
      *
-     * @param             Document $v
+     * @param                  Document $v
      * @return SchoolClass The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2447,7 +2517,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a SchoolBuilding object.
      *
-     * @param             SchoolBuilding $v
+     * @param                  SchoolBuilding $v
      * @return SchoolClass The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2499,7 +2569,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a School object.
      *
-     * @param             School $v
+     * @param                  School $v
      * @return SchoolClass The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2551,7 +2621,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a User object.
      *
-     * @param             User $v
+     * @param                  User $v
      * @return SchoolClass The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2603,7 +2673,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a User object.
      *
-     * @param             User $v
+     * @param                  User $v
      * @return SchoolClass The current object (for fluent API support)
      * @throws PropelException
      */
@@ -2668,6 +2738,9 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         }
         if ('ClassLink' == $relationName) {
             $this->initClassLinks();
+        }
+        if ('ClassDocument' == $relationName) {
+            $this->initClassDocuments();
         }
         if ('ClassTeacher' == $relationName) {
             $this->initClassTeachers();
@@ -2754,7 +2827,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     if (false !== $this->collClassStudentsPartial && count($collClassStudents)) {
                       $this->initClassStudents(false);
 
-                      foreach($collClassStudents as $obj) {
+                      foreach ($collClassStudents as $obj) {
                         if (false == $this->collClassStudents->contains($obj)) {
                           $this->collClassStudents->append($obj);
                         }
@@ -2764,12 +2837,13 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     }
 
                     $collClassStudents->getInternalIterator()->rewind();
+
                     return $collClassStudents;
                 }
 
-                if($partial && $this->collClassStudents) {
-                    foreach($this->collClassStudents as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collClassStudents) {
+                    foreach ($this->collClassStudents as $obj) {
+                        if ($obj->isNew()) {
                             $collClassStudents[] = $obj;
                         }
                     }
@@ -2797,7 +2871,11 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     {
         $classStudentsToDelete = $this->getClassStudents(new Criteria(), $con)->diff($classStudents);
 
-        $this->classStudentsScheduledForDeletion = unserialize(serialize($classStudentsToDelete));
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->classStudentsScheduledForDeletion = clone $classStudentsToDelete;
 
         foreach ($classStudentsToDelete as $classStudentRemoved) {
             $classStudentRemoved->setSchoolClass(null);
@@ -2831,7 +2909,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getClassStudents());
             }
             $query = ClassStudentQuery::create(null, $criteria);
@@ -2860,8 +2938,13 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $this->initClassStudents();
             $this->collClassStudentsPartial = true;
         }
+
         if (!in_array($l, $this->collClassStudents->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddClassStudent($l);
+
+            if ($this->classStudentsScheduledForDeletion and $this->classStudentsScheduledForDeletion->contains($l)) {
+                $this->classStudentsScheduledForDeletion->remove($this->classStudentsScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -3047,7 +3130,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     if (false !== $this->collClassLinksPartial && count($collClassLinks)) {
                       $this->initClassLinks(false);
 
-                      foreach($collClassLinks as $obj) {
+                      foreach ($collClassLinks as $obj) {
                         if (false == $this->collClassLinks->contains($obj)) {
                           $this->collClassLinks->append($obj);
                         }
@@ -3057,12 +3140,13 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     }
 
                     $collClassLinks->getInternalIterator()->rewind();
+
                     return $collClassLinks;
                 }
 
-                if($partial && $this->collClassLinks) {
-                    foreach($this->collClassLinks as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collClassLinks) {
+                    foreach ($this->collClassLinks as $obj) {
+                        if ($obj->isNew()) {
                             $collClassLinks[] = $obj;
                         }
                     }
@@ -3090,7 +3174,11 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     {
         $classLinksToDelete = $this->getClassLinks(new Criteria(), $con)->diff($classLinks);
 
-        $this->classLinksScheduledForDeletion = unserialize(serialize($classLinksToDelete));
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->classLinksScheduledForDeletion = clone $classLinksToDelete;
 
         foreach ($classLinksToDelete as $classLinkRemoved) {
             $classLinkRemoved->setSchoolClass(null);
@@ -3124,7 +3212,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getClassLinks());
             }
             $query = ClassLinkQuery::create(null, $criteria);
@@ -3153,8 +3241,13 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $this->initClassLinks();
             $this->collClassLinksPartial = true;
         }
+
         if (!in_array($l, $this->collClassLinks->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddClassLink($l);
+
+            if ($this->classLinksScheduledForDeletion and $this->classLinksScheduledForDeletion->contains($l)) {
+                $this->classLinksScheduledForDeletion->remove($this->classLinksScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -3264,6 +3357,309 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collClassDocuments collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return SchoolClass The current object (for fluent API support)
+     * @see        addClassDocuments()
+     */
+    public function clearClassDocuments()
+    {
+        $this->collClassDocuments = null; // important to set this to null since that means it is uninitialized
+        $this->collClassDocumentsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collClassDocuments collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialClassDocuments($v = true)
+    {
+        $this->collClassDocumentsPartial = $v;
+    }
+
+    /**
+     * Initializes the collClassDocuments collection.
+     *
+     * By default this just sets the collClassDocuments collection to an empty array (like clearcollClassDocuments());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initClassDocuments($overrideExisting = true)
+    {
+        if (null !== $this->collClassDocuments && !$overrideExisting) {
+            return;
+        }
+        $this->collClassDocuments = new PropelObjectCollection();
+        $this->collClassDocuments->setModel('ClassDocument');
+    }
+
+    /**
+     * Gets an array of ClassDocument objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this SchoolClass is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|ClassDocument[] List of ClassDocument objects
+     * @throws PropelException
+     */
+    public function getClassDocuments($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collClassDocumentsPartial && !$this->isNew();
+        if (null === $this->collClassDocuments || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collClassDocuments) {
+                // return empty collection
+                $this->initClassDocuments();
+            } else {
+                $collClassDocuments = ClassDocumentQuery::create(null, $criteria)
+                    ->filterBySchoolClass($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collClassDocumentsPartial && count($collClassDocuments)) {
+                      $this->initClassDocuments(false);
+
+                      foreach ($collClassDocuments as $obj) {
+                        if (false == $this->collClassDocuments->contains($obj)) {
+                          $this->collClassDocuments->append($obj);
+                        }
+                      }
+
+                      $this->collClassDocumentsPartial = true;
+                    }
+
+                    $collClassDocuments->getInternalIterator()->rewind();
+
+                    return $collClassDocuments;
+                }
+
+                if ($partial && $this->collClassDocuments) {
+                    foreach ($this->collClassDocuments as $obj) {
+                        if ($obj->isNew()) {
+                            $collClassDocuments[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collClassDocuments = $collClassDocuments;
+                $this->collClassDocumentsPartial = false;
+            }
+        }
+
+        return $this->collClassDocuments;
+    }
+
+    /**
+     * Sets a collection of ClassDocument objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $classDocuments A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return SchoolClass The current object (for fluent API support)
+     */
+    public function setClassDocuments(PropelCollection $classDocuments, PropelPDO $con = null)
+    {
+        $classDocumentsToDelete = $this->getClassDocuments(new Criteria(), $con)->diff($classDocuments);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->classDocumentsScheduledForDeletion = clone $classDocumentsToDelete;
+
+        foreach ($classDocumentsToDelete as $classDocumentRemoved) {
+            $classDocumentRemoved->setSchoolClass(null);
+        }
+
+        $this->collClassDocuments = null;
+        foreach ($classDocuments as $classDocument) {
+            $this->addClassDocument($classDocument);
+        }
+
+        $this->collClassDocuments = $classDocuments;
+        $this->collClassDocumentsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related ClassDocument objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related ClassDocument objects.
+     * @throws PropelException
+     */
+    public function countClassDocuments(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collClassDocumentsPartial && !$this->isNew();
+        if (null === $this->collClassDocuments || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collClassDocuments) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getClassDocuments());
+            }
+            $query = ClassDocumentQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySchoolClass($this)
+                ->count($con);
+        }
+
+        return count($this->collClassDocuments);
+    }
+
+    /**
+     * Method called to associate a ClassDocument object to this object
+     * through the ClassDocument foreign key attribute.
+     *
+     * @param    ClassDocument $l ClassDocument
+     * @return SchoolClass The current object (for fluent API support)
+     */
+    public function addClassDocument(ClassDocument $l)
+    {
+        if ($this->collClassDocuments === null) {
+            $this->initClassDocuments();
+            $this->collClassDocumentsPartial = true;
+        }
+
+        if (!in_array($l, $this->collClassDocuments->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddClassDocument($l);
+
+            if ($this->classDocumentsScheduledForDeletion and $this->classDocumentsScheduledForDeletion->contains($l)) {
+                $this->classDocumentsScheduledForDeletion->remove($this->classDocumentsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	ClassDocument $classDocument The classDocument object to add.
+     */
+    protected function doAddClassDocument($classDocument)
+    {
+        $this->collClassDocuments[]= $classDocument;
+        $classDocument->setSchoolClass($this);
+    }
+
+    /**
+     * @param	ClassDocument $classDocument The classDocument object to remove.
+     * @return SchoolClass The current object (for fluent API support)
+     */
+    public function removeClassDocument($classDocument)
+    {
+        if ($this->getClassDocuments()->contains($classDocument)) {
+            $this->collClassDocuments->remove($this->collClassDocuments->search($classDocument));
+            if (null === $this->classDocumentsScheduledForDeletion) {
+                $this->classDocumentsScheduledForDeletion = clone $this->collClassDocuments;
+                $this->classDocumentsScheduledForDeletion->clear();
+            }
+            $this->classDocumentsScheduledForDeletion[]= clone $classDocument;
+            $classDocument->setSchoolClass(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this SchoolClass is new, it will return
+     * an empty collection; or if this SchoolClass has previously
+     * been saved, it will retrieve related ClassDocuments from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in SchoolClass.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|ClassDocument[] List of ClassDocument objects
+     */
+    public function getClassDocumentsJoinDocument($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ClassDocumentQuery::create(null, $criteria);
+        $query->joinWith('Document', $join_behavior);
+
+        return $this->getClassDocuments($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this SchoolClass is new, it will return
+     * an empty collection; or if this SchoolClass has previously
+     * been saved, it will retrieve related ClassDocuments from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in SchoolClass.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|ClassDocument[] List of ClassDocument objects
+     */
+    public function getClassDocumentsJoinUserRelatedByCreatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ClassDocumentQuery::create(null, $criteria);
+        $query->joinWith('UserRelatedByCreatedBy', $join_behavior);
+
+        return $this->getClassDocuments($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this SchoolClass is new, it will return
+     * an empty collection; or if this SchoolClass has previously
+     * been saved, it will retrieve related ClassDocuments from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in SchoolClass.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|ClassDocument[] List of ClassDocument objects
+     */
+    public function getClassDocumentsJoinUserRelatedByUpdatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ClassDocumentQuery::create(null, $criteria);
+        $query->joinWith('UserRelatedByUpdatedBy', $join_behavior);
+
+        return $this->getClassDocuments($query, $con);
+    }
+
+    /**
      * Clears out the collClassTeachers collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -3340,7 +3736,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     if (false !== $this->collClassTeachersPartial && count($collClassTeachers)) {
                       $this->initClassTeachers(false);
 
-                      foreach($collClassTeachers as $obj) {
+                      foreach ($collClassTeachers as $obj) {
                         if (false == $this->collClassTeachers->contains($obj)) {
                           $this->collClassTeachers->append($obj);
                         }
@@ -3350,12 +3746,13 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     }
 
                     $collClassTeachers->getInternalIterator()->rewind();
+
                     return $collClassTeachers;
                 }
 
-                if($partial && $this->collClassTeachers) {
-                    foreach($this->collClassTeachers as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collClassTeachers) {
+                    foreach ($this->collClassTeachers as $obj) {
+                        if ($obj->isNew()) {
                             $collClassTeachers[] = $obj;
                         }
                     }
@@ -3383,7 +3780,11 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     {
         $classTeachersToDelete = $this->getClassTeachers(new Criteria(), $con)->diff($classTeachers);
 
-        $this->classTeachersScheduledForDeletion = unserialize(serialize($classTeachersToDelete));
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->classTeachersScheduledForDeletion = clone $classTeachersToDelete;
 
         foreach ($classTeachersToDelete as $classTeacherRemoved) {
             $classTeacherRemoved->setSchoolClass(null);
@@ -3417,7 +3818,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getClassTeachers());
             }
             $query = ClassTeacherQuery::create(null, $criteria);
@@ -3446,8 +3847,13 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $this->initClassTeachers();
             $this->collClassTeachersPartial = true;
         }
+
         if (!in_array($l, $this->collClassTeachers->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddClassTeacher($l);
+
+            if ($this->classTeachersScheduledForDeletion and $this->classTeachersScheduledForDeletion->contains($l)) {
+                $this->classTeachersScheduledForDeletion->remove($this->classTeachersScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -3633,7 +4039,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     if (false !== $this->collEventsPartial && count($collEvents)) {
                       $this->initEvents(false);
 
-                      foreach($collEvents as $obj) {
+                      foreach ($collEvents as $obj) {
                         if (false == $this->collEvents->contains($obj)) {
                           $this->collEvents->append($obj);
                         }
@@ -3643,12 +4049,13 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     }
 
                     $collEvents->getInternalIterator()->rewind();
+
                     return $collEvents;
                 }
 
-                if($partial && $this->collEvents) {
-                    foreach($this->collEvents as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collEvents) {
+                    foreach ($this->collEvents as $obj) {
+                        if ($obj->isNew()) {
                             $collEvents[] = $obj;
                         }
                     }
@@ -3676,7 +4083,8 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     {
         $eventsToDelete = $this->getEvents(new Criteria(), $con)->diff($events);
 
-        $this->eventsScheduledForDeletion = unserialize(serialize($eventsToDelete));
+
+        $this->eventsScheduledForDeletion = $eventsToDelete;
 
         foreach ($eventsToDelete as $eventRemoved) {
             $eventRemoved->setSchoolClass(null);
@@ -3710,7 +4118,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getEvents());
             }
             $query = EventQuery::create(null, $criteria);
@@ -3739,8 +4147,13 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $this->initEvents();
             $this->collEventsPartial = true;
         }
+
         if (!in_array($l, $this->collEvents->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddEvent($l);
+
+            if ($this->eventsScheduledForDeletion and $this->eventsScheduledForDeletion->contains($l)) {
+                $this->eventsScheduledForDeletion->remove($this->eventsScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -3937,7 +4350,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      *
      * This method is a user-space workaround for PHP's inability to garbage collect
      * objects with circular references (even in PHP 5.3). This is currently necessary
-     * when using Propel in certain daemon or large-volumne/high-memory operations.
+     * when using Propel in certain daemon or large-volume/high-memory operations.
      *
      * @param boolean $deep Whether to also clear the references on all referrer objects.
      */
@@ -3952,6 +4365,11 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             }
             if ($this->collClassLinks) {
                 foreach ($this->collClassLinks as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collClassDocuments) {
+                foreach ($this->collClassDocuments as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -4001,6 +4419,10 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $this->collClassLinks->clearIterator();
         }
         $this->collClassLinks = null;
+        if ($this->collClassDocuments instanceof PropelCollection) {
+            $this->collClassDocuments->clearIterator();
+        }
+        $this->collClassDocuments = null;
         if ($this->collClassTeachers instanceof PropelCollection) {
             $this->collClassTeachers->clearIterator();
         }
@@ -4126,6 +4548,24 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     {
         $this->modifiedColumns[] = SchoolClassPeer::UPDATED_BY;
         return $this;
+    }
+
+    // extended_keyable behavior
+
+    /**
+     * @return the primary key as an array (even for non-composite keys)
+     */
+    public function getPKArray()
+    {
+        return array($this->getPrimaryKey());
+    }
+
+    /**
+     * @return the composite primary key as a string, separated by _
+     */
+    public function getPKString()
+    {
+        return implode("", $this->getPKArray());
     }
 
 }
