@@ -82,7 +82,6 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		
 		// If it is not an event page
 		if(!StringUtil::startsWith($oPage->getIdentifier(), SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-')) {
-			
 			$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$this->iEventTypeId));
 			$oEventQuery->upcomingOrOngoing()->filterByIgnoreOnFrontpage(false);
 			Session::getSession()->setAttribute(self::SESSION_BACK_TO_LIST_LINK, null);
