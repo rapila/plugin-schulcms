@@ -79,7 +79,6 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		// Get link page if current page is not a event page
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$bIsAktuelleListe = false;
-		
 		// If it is not an event page
 		if(!StringUtil::startsWith($oPage->getIdentifier(), SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-')) {
 			
