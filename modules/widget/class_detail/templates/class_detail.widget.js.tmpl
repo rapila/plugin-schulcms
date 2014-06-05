@@ -156,12 +156,16 @@ Widget.types.class_detail = {
 			this.content.find("span.room_number").text(class_data.RoomNumber);
 			this.content.find("span.original_id").text(class_data.OriginalId);
 			this.content.find("a.page_link").attr('href', class_data.ClassPageUrl);
+			this.content.find("span.events_count").text(class_data.CountEvents);
+			this.content.find("span.documents_count").text(class_data.CountLinks);
+			this.content.find("span.links_count").text(class_data.CountLinks);
+			
 			this.class_portrait_id = class_data.ClassPortraitId;
 			this.class_schedule_id = class_data.ClassScheduleId;
 			this.week_schedule_id = class_data.WeekScheduleId;
 			this.reload_events(class_data.Id);
 			this.reload_links(class_data.Id);
-			this.reload_documents(class_data.Id);
+			this.reload_documents();
 			this.current_detail_id = class_data.Id;
 			this.detail_widget.set_title(this.detail_widget.settings.title = class_data.ClassTypeName+' '+class_data.Name);
 			this.detail_widget.enable();
@@ -175,7 +179,7 @@ Widget.types.class_detail = {
 		return string.substring(0, length-3)+"…";
 	},
 
-	reload_links: function(class_id) {
+	reload_links: function() {
 		var _this = this;
 		this.link_list.empty();
 		this.content.find('.add_entry.add_link').show();
@@ -227,7 +231,7 @@ Widget.types.class_detail = {
 		});
 	},
 
-	reload_events: function(class_id) {
+	reload_events: function() {
 		var _this = this;
 		this.event_list.empty();
 		var add_event = this.content.find('.add_entry.add_event').show();
@@ -283,7 +287,7 @@ Widget.types.class_detail = {
 		});
 	},
 
-	reload_documents: function(class_id) {
+	reload_documents: function() {
 		var _this = this;
 		this.document_list.empty();
 		this.content.find('.add_entry.add_document').show();
@@ -320,7 +324,7 @@ Widget.types.class_detail = {
 			_this.add_document_button.addClass('ui-loading-add');
 		}
 		Widget.create('document_detail', function(widget) {
-			widget.settings.initial_category_id = _this.settings.class_document_category_id;
+			widget.settings.initial.document_category_id = _this.settings.class_document_category_id;
 			widget.settings.is_called_externally = true;
 		}, function(widget) {
 			if(document_id) {

@@ -21,6 +21,18 @@
 	margin: 0.3em;
 }
 
+h3 span.number {
+	padding-left: 0.3em;
+}
+
+h3 span.number::before {
+	content: '(';
+}
+
+h3 span.number::after {
+	content: ')';
+}
+
 .ui-dialog.detail-widget-class_detail .status_section h3 {
 	border-bottom: #C1C2C4 1px solid;
 	font-weight: 700;

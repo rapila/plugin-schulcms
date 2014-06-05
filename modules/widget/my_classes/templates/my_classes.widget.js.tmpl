@@ -36,6 +36,7 @@ Widget.types.my_classes = {
 				row.find('.class_schedule div').addClass(row_data.ClassSchedule ? 'ui-icon ui-icon-document' : '' );
 				row.find('.week_schedule div').addClass(row_data.WeekSchedule ? 'ui-icon ui-icon-document' : '' );
 				_this.fill_count(row_data.Amount, 'SchülerInnen', row.find('.amount'));
+				_this.fill_count(row_data.Events, 'Dokumente', row.find('.documents'));
 				_this.fill_count(row_data.Events, 'Anlässe', row.find('.events'));
 				_this.fill_count(row_data.Links, 'Links', row.find('.links'));
 				row.dblclick(function(event) {

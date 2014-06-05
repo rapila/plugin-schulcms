@@ -29,6 +29,7 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 			$aClassInfo['Id'] = $oClassTeacher->getSchoolClassId();
 			$aClassInfo['Amount'] = $oClassTeacher->getSchoolClass()->getCountStudents();
 			$aClassInfo['Events'] = $oClassTeacher->getSchoolClass()->countEvents();
+			$aClassInfo['Documents'] = ' ('.$oClassTeacher->getSchoolClass()->countClassDocuments().')';
 			$aClassInfo['Links'] = $oClassTeacher->getSchoolClass()->countClassLinks();
 			$aClassInfo['ClassSchedule'] = $oClassTeacher->getSchoolClass()->getHasClassSchedule();
 			$aClassInfo['WeekSchedule'] = $oClassTeacher->getSchoolClass()->getHasWeekSchedule();

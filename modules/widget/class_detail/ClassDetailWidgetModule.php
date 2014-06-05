@@ -54,6 +54,9 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
     $aResult['ClassTypeName'] = $oSchoolClass->getClassType()->getName();
     $aResult['ClassTeacher'] = $oSchoolClass->getClassTeacherNames();
     $aResult['YearPeriod'] = $oSchoolClass->getYearPeriod();
+    $aResult['CountEvents'] = $oSchoolClass->countEvents();
+    $aResult['CountDocuments'] = $oSchoolClass->countClassDocuments();
+    $aResult['CountLinks'] = $oSchoolClass->countClassLinks();
     $aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getClassLink(), 'FrontendManager');
 		return $aResult;
 	}
@@ -133,7 +136,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$oCriteria->addAscendingOrderByColumn(DocumentPeer::NAME);
 		foreach($oSchoolClass->getClassDocumentsJoinDocument($oCriteria, null, Criteria::INNER_JOIN) as $oClassDocument) {
 			$aResult[$oClassDocument->getDocumentId()]['Name'] = $oClassDocument->getDocument()->getName();
-			$aResult[$oClassDocument->getDocumentId()]['Type'] = $oClassDocument->getDocument()->getExtension();
+			$aResult[$oClassDocument->getDocumentId()]['Extension'] = $oClassDocument->getDocument()->getExtension();
 		}
 		return $aResult;
 	}
