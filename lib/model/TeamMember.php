@@ -18,6 +18,10 @@ class TeamMember extends BaseTeamMember {
 		return substr($this->getFirstName(),0,1).'. '.$this->getLastName();
 	}
 	
+	public function isTeacher() {
+		return $this->countClassTeachers(ClassTeacherQuery::create()->joinWith('SchoolClass', Criteria::INNER_JOIN)) > 0;
+	}
+	
 	/**
 	* getIsClassTeacherClasses()
 	* @param boolean $bGroupByUnitName, default=false
