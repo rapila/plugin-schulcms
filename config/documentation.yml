@@ -1,0 +1,5 @@
+schulcms:
+  provider: json_based
+  priority: 100
+  metadata_url: 'http://schulcms.ch/get_file/documentation/metadata'
+  content_url: 'http://schulcms.ch/get_file/documentation/content/${language}/${part}'
