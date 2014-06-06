@@ -5,19 +5,6 @@ class TeamMemberFilterModule extends FilterModule {
 	const TEAM_REQUEST_KEY = 'team';
 	const TEAM_FUNCTION_GROUP_ID_SEPARATOR = '-';
 
-	// public function onUserLoggedIn($oUser, $mReturnValue) {
-	// 	if($oTeamMembers = $oUser->getTeamMembersRelatedByUserId()){
-	// 		foreach($oTeamMembers as $oTeamMember) {
-	// 			// ErrorHandler::log('team_member', $oTeamMember->isTeacher(), Manager::getRequestedPath(), Manager::getUsedPath(),$mReturnValue);
-	// 			if($oTeamMember->isTeacher()) {
-	// 				// check requested module, if pages >
-	// 				// LinkUtil::redirect(LinkUtil::link(array('dashboard'), 'AdminManager'));
-	// 			}
-	// 			
-	// 		}
-	// 	}
-	// }
-	
 	public function onNavigationItemChildrenRequested(NavigationItem $oNavigationItem) {
 		if(!($oNavigationItem instanceof PageNavigationItem 
 		   && (StringUtil::startsWith($oNavigationItem->getIdentifier(), self::TEAM_REQUEST_KEY.self::TEAM_FUNCTION_GROUP_ID_SEPARATOR) || $oNavigationItem->getIdentifier() === self::TEAM_REQUEST_KEY))) {
