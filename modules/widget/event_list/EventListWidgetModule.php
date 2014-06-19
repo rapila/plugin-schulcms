@@ -2,24 +2,27 @@
 /**
  * @package modules.widget
  */
-class EventListWidgetModule extends WidgetModule {
+class EventListWidgetModule extends SpecializedListWidgetModule {
 
-	private $oListWidget;
 	public $oDelegateProxy;
 	public $oBooleanInputFilter;
 	public $iEventTypeId;
 	public $bShowClassEvent;
 	public $bMayOnlyEditOwnedEvents;
+
+	public $bSimpleMode = false;
+	public $iSchoolClassId = null;
 	
-	public function __construct() {
+	protected function createListWidget() {
 		
 		/// @todo, display only entries that relate to class or service related
-		$this->bMayOnlyEditOwnedEvents = Session::getSession()->getUser()->mayUseAdminModule('events');		
-		$this->oListWidget = new ListWidgetModule();
+		$this->bMayOnlyEditOwnedEvents = Session::getSession()->getUser()->mayUseAdminModule('events');
 		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "Event", "date_start", "desc");
-		$this->oListWidget->setDelegate($this->oDelegateProxy);
 		$this->oBooleanInputFilter = WidgetModule::getWidget('boolean_input', null, true);
 		$this->oDelegateProxy->setIsClassEvent(true);
+		$oListWidget = new ListWidgetModule();
+		$oListWidget->setDelegate($this->oDelegateProxy);
+		return $oListWidget;
 	}
 	
 	public function setEventTypeId($iEventTypeId) {
@@ -30,15 +33,10 @@ class EventListWidgetModule extends WidgetModule {
 	  return $this->iEventTypeId;
 	}
 	
-	public function doWidget() {
-		$aTagAttributes = array('class' => 'event_list');
-		$oListTag = new TagWriter('table', $aTagAttributes);
-		$this->oListWidget->setListTag($oListTag);
-		$this->oListWidget->setSetting('initial_detail_id', isset($this->aInitialSettings['initial_detail_id']) ? $this->aInitialSettings['initial_detail_id'] : null);
-		return $this->oListWidget->doWidget();
-	}
-	
 	public function getColumnIdentifiers() {
+		if($this->bSimpleMode) {
+			return array('id', 'date_start_formatted', 'title', 'is_active', 'has_bericht', 'has_images', 'delete');
+		}
 		return array('id', 'title', 'teaser_truncated', 'date_start_formatted', 'is_class_event', 'is_service_event', 'is_active', 'ignore_on_frontpage', 'has_bericht', 'has_images', 'delete');
 	}
 	
@@ -141,10 +139,15 @@ class EventListWidgetModule extends WidgetModule {
 	}
 	
 	public function getCriteria() {
-    $oQuery = EventQuery::create()->excludeExternallyManaged(!$this->bShowClassEvent);
+    $oQuery = EventQuery::create();
 		if($this->bMayOnlyEditOwnedEvents) {
 			// filterBySchoolClassId()
 			// or filterByServiceId()
+		}
+		if($this->iSchoolClassId !== null) {
+			$oQuery->filterBySchoolClassId($this->iSchoolClassId);
+		} else if(!$this->bShowClassEvent) {
+			$oQuery->excludeExternallyManaged();
 		}
 		return $oQuery;
 	}

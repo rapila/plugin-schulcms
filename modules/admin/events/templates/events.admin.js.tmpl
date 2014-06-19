@@ -1,5 +1,6 @@
 jQuery(document).ready(function() {
 	AdminInterface.content.find('table.event_list').prepareWidget(function(event_list) {
+		AdminInterface.strings.handle_strings_for_list_result('wns.events.no_result', ['event_type_name'], event_list);
 
 		// Sidebar
 		var sidebar;
