@@ -59,7 +59,6 @@ Widget.types.event_detail = {
 		// Handlers
 		this.handle('opened', function() { 
 			this.init_textareas();
-			this.content.find('div.accordion').accordion({active: 0, autoHeight: false, clearStyle: true, collapsible:false});
 		});
 		this.handle('saving', function(event, data) {
 			data.body_preview = _this.event_preview_editor.get_data();
