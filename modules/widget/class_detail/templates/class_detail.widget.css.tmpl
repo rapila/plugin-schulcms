@@ -7,14 +7,9 @@
 	padding: 0;
 }
 
-.ui-dialog.detail-widget-class_detail .ui-state-active {
-	background-color: #ebedef;
-}
-
-.ui-dialog.detail-widget-class_detail .ui-dialog-content .ui-state-active,
-.ui-dialog.detail-widget-class_detail .ui-dialog-content.ui-widget-content .ui-state-default, 
-.ui-widget-content .ui-state-active {
-	background:url("") repeat scroll 0 0 #ebedef;
+.ui-dialog.detail-widget-class_detail table.ui-list td:first-child,
+.ui-dialog.detail-widget-class_detail table.ui-list th:first-child {
+	padding-left: 22px;
 }
 
 .ui-dialog.detail-widget-class_detail a.add_entry {
@@ -50,30 +45,21 @@ h3 span.number::after {
 	width: 30em;
 }
 
-div.droppable_separator {
-	padding: 1px;
-}
-.main_content input.ui-widget-content.time_details {
-	width: 22em;
-}
-
-.ui-dialog.detail-widget-class_detail .status_section .hide_if_not_saved label {
-	width: 8em;
-}
-
-.preview .portrait_area, .stundenplan, .wochenplan {
-	background-color: #FFF;
-	vertical-align: center;
+.portrait_area, .stundenplan, .wochenplan {
 	text-align: center;
 	width: 250px;
-	height: 194px;
-	display: block;
-	line-height: 1.6em;
-	min-height: 7em;
-	padding: 0;
+}
+
+.stundenplan, .wochenplan {
+	margin: .5em 0;
+	height: 20px;
+	min-height: 3.5em;
+}
+
+.portrait_area {
+	min-height: 220px;
+	margin-bottom: 1em;
 	margin: .5em 1em;
-	color: #666;
-	border: 1px solid #f1f1f1;
 }
 
 td.event_date {
@@ -95,16 +81,6 @@ td.status_icons.has_images {
 
 td.delete {
 	width: 1em;
-}
-
-.preview .portrait_area {
-	margin-bottom: 1em;
-}
-
-.stundenplan, .wochenplan {
-	margin: .5em 0;
-	height: 20px;
-	min-height: 3.5em;
 }
 
 span.remove {

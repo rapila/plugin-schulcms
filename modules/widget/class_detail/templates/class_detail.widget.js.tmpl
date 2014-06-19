@@ -1,18 +1,17 @@
 Widget.types.class_detail = {
 	initialize: function() {
 		var _this = this;
-		this.content = Widget.parseHTML("{{includeTemplate=edit}}");
-		// class events and links
+		this._element = Widget.parseHTML("{{includeTemplate=edit}}");
+		
+		//Events, documents and links
 		this.event_prototype = Widget.parseHTML("{{includeTemplate=class_event}}", false, 'tbody');
 		this.link_prototype = Widget.parseHTML("{{includeTemplate=class_link}}", false, 'tbody');
 		this.document_prototype = Widget.parseHTML("{{includeTemplate=class_document}}", false, 'tbody');
-		this.event_list = this.content.find('.event_list');
-		this.link_list = this.content.find('.link_list');
-		this.document_list = this.content.find('.document_list');
-		this.content.find('.add_entry').hide();
-		this.add_event_button = this.content.find('.add_entry.add_event').click(this.edit_event.bind(this));
-		this.add_document_button = this.content.find('.add_entry.add_document').click(this.edit_document.bind(this));
-		this.add_link_button = this.content.find('.add_entry.add_link').click(this.edit_link.bind(this));
+		this.document_list = this._element.find('.document_list');
+		this._element.find('.add_entry').hide();
+		this.add_event_button = this._element.find('.add_entry.add_event').click(this.edit_event.bind(this));
+		this.add_document_button = this._element.find('.add_entry.add_document').click(this.edit_document.bind(this));
+		this.add_link_button = this._element.find('.add_entry.add_link').click(this.edit_link.bind(this));
 
 		this.current_detail_id = null;
 		this.uploader = Widget.create('file_upload');
@@ -20,11 +19,11 @@ Widget.types.class_detail = {
 		Widget.callStatic('detail', 'create_for_instance', this);
 
 		this.handle('opened', function() {
-			this.accordion = jQuery(this.detail_widget.content.find('div.accordion')).accordion({active: this.settings.accordion_active, autoHeight: false, clearStyle: true, collapsible:false});
+			this._element.accordion('option', 'active', this.settings.accordion_active);
 		});
 
 		// portrait
-		var portrait_area = this.content.find('.portrait_area');
+		var portrait_area = this._element.find('.portrait_area');
 		portrait_area.find('.remove').click(function() {
 			_this.class_portrait_id = null;
 			_this.save(true);
@@ -59,7 +58,7 @@ Widget.types.class_detail = {
 		});
 
 		// stundenplan
-		var stundenplan = this.content.find('.stundenplan');
+		var stundenplan = this._element.find('.stundenplan');
 		stundenplan.find('.remove').click(function() {
 			_this.class_schedule_id = null;
 			_this.save(true);
@@ -92,7 +91,7 @@ Widget.types.class_detail = {
 		});
 
 		// wochenplan
-		var wochenplan = this.content.find('.wochenplan');
+		var wochenplan = this._element.find('.wochenplan');
 		wochenplan.find('.remove').click(function() {
 			_this.week_schedule_id = null;
 			_this.save(true);
@@ -150,21 +149,23 @@ Widget.types.class_detail = {
 			if(class_data.LinkCategoryId === null) {
 				class_data.LinkCategoryId = '';
 			}
-			this.content.find("span.name").text(class_data.Name);
-			this.content.find("span.year_period").text(class_data.YearPeriod);
-			this.content.find("span.class_teacher").text(class_data.ClassTeacher);
-			this.content.find("span.room_number").text(class_data.RoomNumber);
-			this.content.find("span.original_id").text(class_data.OriginalId);
-			this.content.find("a.page_link").attr('href', class_data.ClassPageUrl);
-			this.content.find("span.events_count").text(class_data.CountEvents);
-			this.content.find("span.documents_count").text(class_data.CountLinks);
-			this.content.find("span.links_count").text(class_data.CountLinks);
+			this._element.find("span.name").text(class_data.Name);
+			this._element.find("span.year_period").text(class_data.YearPeriod);
+			this._element.find("span.class_teacher").text(class_data.ClassTeacher);
+			this._element.find("span.room_number").text(class_data.RoomNumber);
+			this._element.find("span.original_id").text(class_data.OriginalId);
+			this._element.find("a.page_link").attr('href', class_data.ClassPageUrl);
+			this._element.find("span.events_count").text(class_data.CountEvents);
+			this._element.find("span.documents_count").text(class_data.CountDocuments);
+			this._element.find("span.links_count").text(class_data.CountLinks);
 			
 			this.class_portrait_id = class_data.ClassPortraitId;
 			this.class_schedule_id = class_data.ClassScheduleId;
 			this.week_schedule_id = class_data.WeekScheduleId;
-			this.reload_events(class_data.Id);
-			this.reload_links(class_data.Id);
+
+			this.reload_events();
+			this.reload_links();
+
 			this.reload_documents();
 			this.current_detail_id = class_data.Id;
 			this.detail_widget.set_title(this.detail_widget.settings.title = class_data.ClassTypeName+' '+class_data.Name);
@@ -181,30 +182,14 @@ Widget.types.class_detail = {
 
 	reload_links: function() {
 		var _this = this;
-		this.link_list.empty();
-		this.content.find('.add_entry.add_link').show();
-		this.listLinks(function(links) {
-			jQuery.each(links, function(link_id, link_data) {
-				var link_item = _this.link_prototype.clone();
-				link_item.find('.link_title').text(link_data.Name);
-				link_item.find('td.link_url').html(jQuery('<a/>').text(_this.truncate(link_data.Url, 40)).attr('href', link_data.Url));
-				link_item.find('.delete_link').click(function() {
-					var delete_message = AdminInterface.strings.get_string('wns.link.delete_warning', { link_name: link_data.Name});
-					Widget.confirm("{{writeString=wns.delete_warning_title}}", delete_message, function(confirmed) {
-						if(confirmed) {
-							_this.removeLink(link_id, function() {
-								link_item.remove();
-							});
-						}
-					});
-					return false;
-				});
-				link_item.bind('dblclick', function() {
-					_this.edit_link(link_id);
-				});
-				_this.link_list.append(link_item);
-			});
-		});
+		if(this.link_list) {
+			this.link_list.reload();
+		} else {
+			Widget.createWithElement('list', function(widget) {
+				_this.link_list = widget;
+				widget._element.insertBefore(_this.add_link_button.show());
+			}, this.settings.link_list_session);
+		}
 	},
 
 	edit_link: function(link_id) {
@@ -233,35 +218,14 @@ Widget.types.class_detail = {
 
 	reload_events: function() {
 		var _this = this;
-		this.event_list.empty();
-		var add_event = this.content.find('.add_entry.add_event').show();
-		this.listEvents(function(events) {
-			jQuery.each(events, function(event_id, data) {
-				var event_item = _this.event_prototype.clone();
-				event_item.find('.event_date').text(data.Date);
-				event_item.find('.event_title').text(data.Title);
-				var bericht = event_item.find('.has_bericht').text('  ');
-				if(data.HasBericht) { bericht.addClass('status_icons'); }
-				var images = event_item.find('.has_images').text('  ');
-				if(data.HasImages) { images.addClass('status_icons'); }
-				if(data.IsActive) { event_item.find('.is_active').text('✔'); }
-				event_item.find('.delete_event').click(function() {
-					var delete_message = AdminInterface.strings.get_string('wns.event.delete_warning', { title: data.Title });
-					Widget.confirm("{{writeString=wns.delete_warning_title}}", delete_message, function(confirmed) {
-						if(confirmed) {
-							_this.removeEvent( event_id, function(result) {
-								jQuery(event_item).remove();
-							});
-						}
-					});
-					return false;
-				});
-				event_item.bind('dblclick', function() {
-					_this.edit_event(event_id);
-				});
-				_this.event_list.append(event_item);
-			});
-		});
+		if(this.event_list) {
+			this.event_list.reload();
+		} else {
+			Widget.createWithElement('list', function(widget) {
+				_this.event_list = widget;
+				widget._element.insertBefore(_this.add_event_button.show());
+			}, this.settings.event_list_session);
+		}
 	},
 
 	edit_event: function(event_id) {
@@ -290,7 +254,7 @@ Widget.types.class_detail = {
 	reload_documents: function() {
 		var _this = this;
 		this.document_list.empty();
-		this.content.find('.add_entry.add_document').show();
+		this._element.find('.add_entry.add_document').show();
 		this.listDocuments(function(documents) {
 			jQuery.each(documents, function(document_id, document_data) {
 				var document_item = _this.document_prototype.clone();

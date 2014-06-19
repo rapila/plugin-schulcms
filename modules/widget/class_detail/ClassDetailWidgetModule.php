@@ -5,6 +5,8 @@
 class ClassDetailWidgetModule extends PersistentWidgetModule {
 
 	private $iSchoolClassId = null;
+	private $oEventListWidget = null;
+	private $oLinkListWidget = null;
 
 	public function __construct($sWidgetId) {
 		parent::__construct($sWidgetId);
@@ -39,10 +41,17 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		}
 		$this->setSetting('class_document_category_id', $iSchoolDocumentCategory);
 
+		$this->oEventListWidget = new EventListWidgetModule();
+		$this->oEventListWidget->bSimpleMode = true;
+		$this->setSetting('event_list_session', $this->oEventListWidget->getSessionKey());
+		$this->oLinkListWidget = new ClassLinkListWidgetModule();
+		$this->setSetting('link_list_session', $this->oLinkListWidget->getSessionKey());
 	}
 
 	public function setSchoolClassId($iSchoolClassId) {
 		$this->iSchoolClassId = $iSchoolClassId;
+		$this->oEventListWidget->iSchoolClassId = $iSchoolClassId;
+		$this->oLinkListWidget->setSchoolClassId($iSchoolClassId);
 	}
 
 	public function schoolClassData() {
@@ -51,13 +60,13 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 			return array();
 		}
 		$aResult = $oSchoolClass->toArray(BasePeer::TYPE_PHPNAME, false);
-    $aResult['ClassTypeName'] = $oSchoolClass->getClassType()->getName();
-    $aResult['ClassTeacher'] = $oSchoolClass->getClassTeacherNames();
-    $aResult['YearPeriod'] = $oSchoolClass->getYearPeriod();
-    $aResult['CountEvents'] = $oSchoolClass->countEvents();
-    $aResult['CountDocuments'] = $oSchoolClass->countClassDocuments();
-    $aResult['CountLinks'] = $oSchoolClass->countClassLinks();
-    $aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getClassLink(), 'FrontendManager');
+		$aResult['ClassTypeName'] = $oSchoolClass->getClassType()->getName();
+		$aResult['ClassTeacher'] = $oSchoolClass->getClassTeacherNames();
+		$aResult['YearPeriod'] = $oSchoolClass->getYearPeriod();
+		$aResult['CountEvents'] = $oSchoolClass->countEvents();
+		$aResult['CountDocuments'] = $oSchoolClass->countClassDocuments();
+		$aResult['CountLinks'] = $oSchoolClass->countClassLinks();
+		$aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getClassLink(), 'FrontendManager');
 		return $aResult;
 	}
 
@@ -132,9 +141,8 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 	public function listDocuments() {
 		$aResult = array();
 		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
-		$oCriteria = new Criteria();
-		$oCriteria->addAscendingOrderByColumn(DocumentPeer::NAME);
-		foreach($oSchoolClass->getClassDocumentsJoinDocument($oCriteria, null, Criteria::INNER_JOIN) as $oClassDocument) {
+		$oQuery = DocumentQuery::create()->orderByName();
+		foreach($oSchoolClass->getClassDocumentsJoinDocument($oQuery, null, Criteria::INNER_JOIN) as $oClassDocument) {
 			$aResult[$oClassDocument->getDocumentId()]['Name'] = $oClassDocument->getDocument()->getName();
 			$aResult[$oClassDocument->getDocumentId()]['Extension'] = $oClassDocument->getDocument()->getExtension();
 		}
