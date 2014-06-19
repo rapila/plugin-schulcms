@@ -4,8 +4,6 @@ Widget.types.class_detail = {
 		this._element = Widget.parseHTML("{{includeTemplate=edit}}");
 		
 		//Events, documents and links
-		this.event_prototype = Widget.parseHTML("{{includeTemplate=class_event}}", false, 'tbody');
-		this.link_prototype = Widget.parseHTML("{{includeTemplate=class_link}}", false, 'tbody');
 		this.document_prototype = Widget.parseHTML("{{includeTemplate=class_document}}", false, 'tbody');
 		this.document_list = this._element.find('.document_list');
 		this._element.find('.add_entry').hide();
