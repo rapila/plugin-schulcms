@@ -37,11 +37,11 @@
 	<column name="function_group_id" type="integer" />
 	<foreign-key foreignTable="function_groups" onDelete="setnull">
 		<reference local="function_group_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="school_id" type="integer" />
 	<foreign-key foreignTable="schools" onDelete="cascade">
 		<reference local="school_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 </table>
 
 <table name="function_groups" phpName="FunctionGroup">
