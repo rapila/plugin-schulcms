@@ -1,0 +1,7 @@
+---
+aspects:
+- list
+- detail
+- frontend_config
+enabled: true
+#<File:0x007f8c1c0ed260>

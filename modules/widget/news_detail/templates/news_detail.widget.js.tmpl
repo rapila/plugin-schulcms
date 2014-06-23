@@ -1,0 +1,21 @@
+Widget.types['news_detail'] = {
+	initialize: function() {
+		//called before this._element is available
+		this._element = Widget.parseHTML(this._instanceInformation.content);
+		Widget.callStatic('detail', 'create_for_instance', this);
+		
+	},
+
+	prepare: function() {
+		//called when this._element is available
+		
+	},
+	
+	fill_data: function() {
+		this.loadData(function(data) {
+			
+		});
+	},
+	
+	settings: {"detail_widget":{}}
+};

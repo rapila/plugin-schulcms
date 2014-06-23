@@ -78,6 +78,7 @@ class SchoolClassTableMap extends TableMap
         $this->addRelation('ClassDocument', 'ClassDocument', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassDocuments');
         $this->addRelation('ClassTeacher', 'ClassTeacher', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassTeachers');
         $this->addRelation('Event', 'Event', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'Events');
+        $this->addRelation('News', 'News', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'Newss');
     } // buildRelations()
 
     /**

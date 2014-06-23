@@ -1,0 +1,11 @@
+jQuery(function() {
+	var sidebar;
+	var content;
+	AdminInterface.sidebar.children('[data-widget-type]').prepareWidget(function(widget) {
+		sidebar = widget;
+	});
+	AdminInterface.content.children('[data-widget-type]').prepareWidget(function(widget) {
+		content = widget;
+	});
+	
+});

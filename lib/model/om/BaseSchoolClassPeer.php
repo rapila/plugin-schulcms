@@ -462,6 +462,9 @@ abstract class BaseSchoolClassPeer
         // Invalidate objects in EventPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         EventPeer::clearInstancePool();
+        // Invalidate objects in NewsPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        NewsPeer::clearInstancePool();
     }
 
     /**
@@ -4104,6 +4107,12 @@ abstract class BaseSchoolClassPeer
 
             $criteria->add(EventPeer::SCHOOL_CLASS_ID, $obj->getId());
             $affectedRows += EventPeer::doDelete($criteria, $con);
+
+            // delete related News objects
+            $criteria = new Criteria(NewsPeer::DATABASE_NAME);
+
+            $criteria->add(NewsPeer::SCHOOL_CLASS_ID, $obj->getId());
+            $affectedRows += NewsPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;
