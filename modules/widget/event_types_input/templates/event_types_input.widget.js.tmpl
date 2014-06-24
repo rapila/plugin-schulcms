@@ -9,9 +9,8 @@ Widget.types.event_types_input = {
 		this._element.empty();
 		var option = jQuery('<option/>');
 		this.allEventTypes(function(event_types) {
-			jQuery.each(event_types, function(id, name) {
-				option.clone().text(name).attr('value', id).appendTo(this._element);
-			}.bind(this));
+			this._element.populate({'': "{{writeString=wns.choose}}"});
+			this._element.populate(event_types);
 			if(current) {
 				this.val(current);
 			} else {
@@ -22,6 +21,9 @@ Widget.types.event_types_input = {
 
 	val: function(value) {
 		if(arguments.length) {
+			if(value == '__all') {
+				value = '';
+			}
 			this._element.val(value);
 			this.settings.initial_selection = value;
 			return;
