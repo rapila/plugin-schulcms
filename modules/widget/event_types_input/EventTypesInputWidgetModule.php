@@ -7,18 +7,15 @@ class EventTypesInputWidgetModule extends WidgetModule {
 	private $aEventTypes = array();
 	
 	public function __construct() {
-		$this->aEventTypes = EventTypeQuery::create()->orderById()->find();
+		$this->aEventTypes = EventTypeQuery::create()->orderById()->select(array('Id', 'Name'))->find()->toKeyValue('Id', 'Name');
 		if(count($this->aEventTypes) === 1) {
-			$this->setSetting('initial_selection', (string) $this->aEventTypes[0]->getId());
+			reset($this->aEventTypes);
+			$this->setSetting('initial_selection', (string) key($this->aEventTypes));
 		}
 	}
 
 	public function allEventTypes() {
-		$aResult = array();
-		foreach($this->aEventTypes as $oEventType) {
-			$aResult[$oEventType->getId()] = $oEventType->getName();
-		}
-		return $aResult;
+		return $this->aEventTypes;
 	}
 
 	public function getElementType() {
