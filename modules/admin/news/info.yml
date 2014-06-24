@@ -1,8 +1,7 @@
 aspects:
-	- list
-	- detail
-	- frontend_config
+  - list
+  - detail
+  - frontend_config
 
 enabled: true
-
 allowed_roles: [news]

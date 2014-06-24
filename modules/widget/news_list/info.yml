@@ -1,5 +1,5 @@
----
 aspects:
-- list
+  - list
+  
 enabled: true
-#<File:0x007fb651864520>
+allowed_roles: [news]
