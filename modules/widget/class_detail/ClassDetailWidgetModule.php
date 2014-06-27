@@ -51,7 +51,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 	public function setSchoolClassId($iSchoolClassId) {
 		$this->iSchoolClassId = $iSchoolClassId;
 		$this->oEventListWidget->iSchoolClassId = $iSchoolClassId;
-		$this->oLinkListWidget->setSchoolClassId($iSchoolClassId);
+		$this->oLinkListWidget->iSchoolClassId = $iSchoolClassId;
 	}
 
 	public function schoolClassData() {
