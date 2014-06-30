@@ -1,13 +1,25 @@
-Widget.types['news_list'] = {
-	initialize: function() {
-		//called before this._element is available
-		
-	},
-
-	prepare: function() {
-		//called when this._element is available
-		
-	},
-	
-	settings: {}
-};
+jQuery(document).ready(function() {
+	jQuery('table.news_list').each(function() {
+		jQuery(this).prepareWidget(function(widget) {
+			Widget.callStatic('detail', 'connect_detail_with_list', 'news', widget, 'setNoteId');
+			widget.handle('list-cell_click', function(event, rowIndex, col, row, cell) {
+				if(col.identifier === 'delete') {
+					var file_name = widget.cell_for_identifier('body_truncated', row).text();
+					var delete_message = AdminInterface.strings.get_string('wns.news.delete_warning', { news: file_name});
+					Widget.confirm("{{writeString=wns.delete_warning_title}}", delete_message, function(confirmed) {
+						if(confirmed) {
+							this.delete_row(row);
+						}
+					}.bind(this));
+					event.stopPropagation();
+				}
+			});
+			widget.handle('list-cell_hover', function(event, rowIndex, col, row, cell) {
+				if(col.identifier === 'delete') {
+					cell.css({cursor: 'pointer'});
+				}
+			});
+			AdminInterface.strings.handle_strings_for_list_result('wns.news.no_result', ['news_type_name'], widget);
+		});
+	});
+});

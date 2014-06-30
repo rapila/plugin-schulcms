@@ -1,11 +1,80 @@
 jQuery(function() {
-	var sidebar;
-	var content;
-	AdminInterface.sidebar.children('[data-widget-type]').prepareWidget(function(widget) {
+	var sidebar = AdminInterface.sidebar;
+	var content_list = AdminInterface.content;
+	var info_bar = AdminInterface.info_bar;
+
+	var handlers = [];
+
+	sidebar.children('[data-widget-type]').prepareWidget(function(widget) {
 		sidebar = widget;
+	}.deferred(handlers));
+	content_list.children('[data-widget-type]').prepareWidget(function(widget) {
+		content_list = widget;
+	}.deferred(handlers));
+	info_bar.prepareWidget(function(widget) {
+		info_bar = widget;
+	}.deferred(handlers));
+
+	jQuery.when.apply(jQuery, handlers).then(function() {
+		
+		// Add info_bar elements
+		info_bar.add_button('add-new-item', function() {
+			Widget.create('news_detail', function(widget) {
+				widget.settings.initial_type_id = sidebar.active_row().data('news_type_id');
+				widget.content.find("select[name='news_type_id']").val(content_list.getOption('news_type_id'));
+				widget.open();
+				widget.save_callback = function() {
+					content_list.reload();
+				};
+			});
+		}, 'n', true).add_button('add-new-item', function() {
+			Widget.create('sidebar_input', function(widget) {
+				widget.add_new_sidebar_input("{{writeString=wns.news_type.default_name}}", 'NewsType', sidebar, 'rapila-news_type_changed');
+			});
+		}).add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
+			if(content_list.setSearch(search)) {
+				content_list.reload();
+			}
+		}).add_row_count_info_for_list(content_list);
+		
+		var remove_item = info_bar.add_button('remove-item', function() {
+			var rowData = sidebar.collect_row_data(sidebar.active_row());
+			if(rowData.news_type_id) {
+				content_list.getOption('typeHasNews', rowData.news_type_id, function(result) {
+					if(!result) {
+						return sidebar.delete_row(sidebar.active_row());
+					}
+					var delete_message = "{{writeString=wns.news_type.delete_information}}";
+					Widget.confirm("{{writeString=wns.rapila_alert.information}}", delete_message, function(confirmed) {
+						if(confirmed) {
+							sidebar.delete_row(sidebar.active_row());
+						}
+					}.bind(this));
+				});
+			}
+		}).disable();
+		
+		var edit_item = info_bar.add_button('edit-item', function() {
+			Widget.create('news_type_detail', function(widget) {
+				widget.setNewsTypeId(sidebar.active_row_datas()[0].news_type_id);
+				widget.open();
+				widget.fill_data();
+				widget.save_callback = function() {
+					sidebar.reload();
+				};
+			});
+		}).disable();
+
+		// Sidebar
+		sidebar.settings.row_click_active_mode = 'activate';
+		sidebar.handle('list-selection_changed', function(event, selection) {
+			var news_type_id = selection[0] && selection[0].news_type_id;
+			var has_detail = selection.length === 1 && news_type_id.constructor === Number;
+			remove_item[has_detail ? 'enable' : 'disable']();
+			edit_item[has_detail ? 'enable' : 'disable']();
+			content_list.setOption('news_type_id', news_type_id);
+			content_list.reload();
+		});
+		
 	});
-	AdminInterface.content.children('[data-widget-type]').prepareWidget(function(widget) {
-		content = widget;
-	});
-	
 });

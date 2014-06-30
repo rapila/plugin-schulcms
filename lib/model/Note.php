@@ -7,11 +7,11 @@ class Note extends BaseNote {
 	
 	private static $NOTE_TYPES = array();
 
-	public function getDateStartFormatted($sFormat = 'Y.m.d') {
+	public function getDateStartFormatted($sFormat = 'd.m.Y') {
 		return $this->getDateStart($sFormat);
 	}
 
-	public function getDateEndFormatted($sFormat = 'Y.m.d') {
+	public function getDateEndFormatted($sFormat = 'd.m.Y') {
 		return $this->getDateEnd($sFormat);
 	}
 	

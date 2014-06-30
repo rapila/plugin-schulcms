@@ -3,14 +3,15 @@ class NewsAdminModule extends AdminModule {
 
 	private $oListWidget;
 	private $oSidebarWidget;
+	private $oInputWidget;
 
 	public function __construct() {
 		$this->oListWidget = new NewsListWidgetModule();
-
 		$this->oSidebarWidget = new ListWidgetModule();
 		$this->oSidebarWidget->setListTag(new TagWriter('ul'));
 		$this->oSidebarWidget->setDelegate(new CriteriaListWidgetDelegate($this, 'NewsType', 'name'));
-		$this->oSidebarWidget->setSetting('initial_selection', array('news_type_id' => $this->oListWidget->oDelegateProxy->getNoteTypeId()));
+		$this->oSidebarWidget->setSetting('initial_selection', array('news_type_id' => $this->oListWidget->oDelegateProxy->getNewsTypeId()));
+		$this->oInputWidget = new SidebarInputWidgetModule();
 	}
 
 	public function mainContent() {
@@ -43,7 +44,20 @@ class NewsAdminModule extends AdminModule {
 		return $aResult;
 	}
 
+	public function getCustomListElements() {
+		if(NoteTypeQuery::create()->count() > 0) {
+			return array(
+				array('news_type_id' => CriteriaListWidgetDelegate::SELECT_ALL,
+							'name' => StringPeer::getString('wns.sidebar.select_all'),
+							'magic_column' => 'all'),
+				array('news_type_id' => CriteriaListWidgetDelegate::SELECT_WITHOUT,
+							'name' => StringPeer::getString('wns.news.without_type'),
+							'magic_column' => 'without'));
+		}
+		return array();
+	}
+
 	public function usedWidgets() {
-		return array($this->oSidebarWidget, $this->oListWidget);
+		return array($this->oSidebarWidget, $this->oListWidget, $this->oInputWidget);
 	}
 }
