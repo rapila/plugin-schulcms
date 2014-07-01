@@ -17,8 +17,7 @@ class TeamMembersFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	}
 
 	public function functionGroups() {
-		$oQuery = FunctionGroupQuery::create()->orderByName()->filterbyId(FunctionGroupPeer::getFunctionGroupIdsForTeamlist(), Criteria::IN)->clearSelectColumns()->addSelectColumn(FunctionGroupPeer::ID)->addSelectColumn(FunctionGroupPeer::NAME);
-		return FunctionGroupPeer::doSelectStmt($oQuery)->fetchAll(PDO::FETCH_CLASS);
+		return FunctionGroupQuery::create()->orderByName()->filterbyId(FunctionGroupPeer::getFunctionGroupIdsForTeamlist(), Criteria::IN)->select(array('Id', 'Name'))->find()->toKeyValue('Id', 'Name');
 	}
 
 }

@@ -7,6 +7,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 	private $iSchoolClassId = null;
 	private $oEventListWidget = null;
 	private $oLinkListWidget = null;
+	private $oDocumentListWidget = null;
 
 	public function __construct($sWidgetId) {
 		parent::__construct($sWidgetId);
@@ -46,12 +47,15 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$this->setSetting('event_list_session', $this->oEventListWidget->getSessionKey());
 		$this->oLinkListWidget = new ClassLinkListWidgetModule();
 		$this->setSetting('link_list_session', $this->oLinkListWidget->getSessionKey());
+		// $this->oDocumentListWidget = new ClassDocumentListWidgetModule();
+		// $this->setSetting('document_list_session', $this->oDocumentListWidget->getSessionKey());
 	}
 
 	public function setSchoolClassId($iSchoolClassId) {
 		$this->iSchoolClassId = $iSchoolClassId;
 		$this->oEventListWidget->iSchoolClassId = $iSchoolClassId;
 		$this->oLinkListWidget->iSchoolClassId = $iSchoolClassId;
+		// $this->oDocumentListWidget->iSchoolClassId = $iSchoolClassId;
 	}
 
 	public function schoolClassData() {
