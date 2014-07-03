@@ -1,29 +1,34 @@
 Widget.types.event_types_input = {
 	prepare: function() {
-		var _this = this;
 		this.reload();
 	},
-	
+
 	reload: function() {
 		var current = this._element.val();
 		this._element.empty();
-		var option = jQuery('<option/>');
 		this.allEventTypes(function(event_types) {
-			jQuery.each(event_types, function(id, name) {
-				option.clone().text(name).attr('value', id).appendTo(this._element);
-			}.bind(this));
+			this._element.populate({'': "{{writeString=wns.choose}}"});
+			this._element.populate(event_types);
 			if(current) {
-				this._element.val(current);
+				this.val(current);
 			} else {
-				this._element.val(this.settings.initial_selection || '');
+				this.val(this.settings.initial_selection || '');
 			}
 		});
 	},
-		
-	val: function() {
+
+	val: function(value) {
+		if(arguments.length) {
+			if(value == '__all') {
+				value = '';
+			}
+			this._element.val(value);
+			this.settings.initial_selection = value;
+			return;
+		}
 		return this._element.val();
 	},
-	
+
 	settings: {
 		initial_selection: null
 	}
