@@ -6,7 +6,7 @@ class NewsListWidgetModule extends WidgetModule {
 
 	public function __construct() {
 		$this->oListWidget = new ListWidgetModule();
-		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, 'News', 'date_start', 'desc');
+		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, 'News', 'date_start_formatted', 'desc');
 		$this->oListWidget->setDelegate($this->oDelegateProxy);
 	}
 

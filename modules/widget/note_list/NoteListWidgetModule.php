@@ -9,7 +9,7 @@ class NoteListWidgetModule extends WidgetModule {
 	
 	public function __construct() {
 		$this->oListWidget = new ListWidgetModule();
-		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "Note", "id", "asc");
+		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "Note", "date_start_formatted", "desc");
 		$this->oListWidget->setDelegate($this->oDelegateProxy);
 	}
 	
