@@ -18,7 +18,7 @@ class NewsListWidgetModule extends WidgetModule {
 		return array('id', 'date_start_formatted', 'date_end_formatted', 'headline', 'news_type_name', 'has_image', 'is_inactive', 'delete');
 	}
 
-	public function getDatabaseColumnForColumn($aColumnIdentifier) {
+	public function getDatabaseColumnForColumn($sColumnIdentifier) {
 		if($sColumnIdentifier === 'date_start_formatted') {
 			return NewsPeer::DATE_START;
 		}
@@ -28,7 +28,7 @@ class NewsListWidgetModule extends WidgetModule {
 		return null;
 	}
 
-	public function getMetadataForColumn($aColumnIdentifier) {
+	public function getMetadataForColumn($sColumnIdentifier) {
 		$aResult = array('is_sortable' => true);
 		switch($sColumnIdentifier) {
 			case 'date_start_formatted':
