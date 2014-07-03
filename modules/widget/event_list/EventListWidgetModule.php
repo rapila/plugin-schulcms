@@ -58,7 +58,7 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 				$aResult['is_sortable'] = false;
 				break;			
 			case 'ignore_on_frontpage':
-				$aResult['heading'] = StringPeer::getString('wns.event.ignore_on_frontpage');
+				$aResult['heading'] = StringPeer::getString('wns.event.ignore_on_frontpage_list');
 				break;
 			case 'is_service_event':
 				$aResult['heading'] = StringPeer::getString('wns.event.is_service_event');
