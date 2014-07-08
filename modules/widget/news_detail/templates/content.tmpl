@@ -1,0 +1,40 @@
+<div class="status_section">
+	<div class="image_area ui-state-droppable" title="Bild hier hinein ziehen">
+		<span class="description">Bild<span title="{{writeString=wns.news.remove_image}}" class="remove"> ✘</span></span>
+		<div class="news_image"></div>
+	</div>
+	<div class="hide_if_not_saved">
+		<label>{{writeString=wns.created_info}}:</label><span class="created_info status"></span><br />
+		<label>{{writeString=wns.updated.info}}:</label><span class="updated_info status"></span><br />
+		<label>ID:</label><span class="detail_id"></span>
+	</div>
+</div>
+<div>
+	<div class="group_fields">
+		<label for="news_type_id" class="validate-news_type_required">{{writeString=wns.news.type}}*</label>
+		<select name="news_type_id" class="ui-widget-content autowidth" data-widget-type="news_type_input"></select><br />
+	</div>
+	<div class="group_fields">
+		<label for="date_start">{{writeString=wns.news.date_start}}*</label>
+		<input type="text" name="date_start" size="10" class="ui-widget-content autowidth"/><br />
+	</div>
+	<div class="group_fields">
+		<label for="date_end">{{writeString=wns.news.date_to}}</label>
+		<input type="text" name="date_end" size="10" class="ui-widget-content autowidth"/><br />
+	</div>
+	<div class="group_fields">
+		<label for="school_class_id">{{writeString=wns.class.school_class}}</label>
+		<select name="school_class_id" class="ui-widget-content" data-widget-type="classes_input">{{school_class_options}}</select><br />
+	</div>
+	<div class="group_fields">
+		<label for="is_inactive">{{writeString=wns.news.is_inaktive_detail}}</label>
+		<input type="checkbox" name="is_inactive" /><br />
+	</div>
+</div>
+<label for="headline" class="validate-headline_required">{{writeString=wns.news.headline}}*</label>
+<input type="text" name="headline" />
+
+<label for="body" class="validate-body_required">{{writeString=wns.news.body}}*</label>
+<div class="news_body" data-widget-type="rich_text">
+	<textarea name="body" class="ui-widget-content" rows="10" cols="40"></textarea>
+</div>
