@@ -36,7 +36,6 @@ Widget.types['news_detail'] = {
 
 	fill_data: function() {
 		this.loadData(function(data) {
-			console.log(data);
 			this._element.find('input[name="id"]').val(data.Id);
 			this._element.find('input[name="news_type_id"]').val(data.NewsTypeId);
 			this._element.find('input[name="headline"]').val(data.Headline);
