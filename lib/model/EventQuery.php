@@ -40,14 +40,11 @@ class EventQuery extends BaseEventQuery {
 		} else if($oNavigationItem instanceof VirtualNavigationItem) {
 			$aData = $oNavigationItem->getData();
 		} else {
-			$iIdentifier = $oNavigationItem->getIdentifier();
-			$iIdentifier = explode(EventFilterModule::EVENT_TYPE_SEPARATOR, $iIdentifier);
-			if(isset($iIdentifier[1])) {
-				$iIdentifier = $iIdentifier[1];
-				$aData['event_type'] = $iIdentifier;
-			}
+			$aData = array();
 		}
-		$oQuery = $this->filterByEventTypeId($aData['event_type']);
+		if(isset($aData['event_type'])) {
+			$oQuery = $this->filterByEventTypeId($aData['event_type']);
+		}
 		if(isset($aData['year'])) {
 			$this->add('YEAR(DATE_START)', $aData['year']);
 		} else {

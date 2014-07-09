@@ -16,7 +16,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		}
 		$oRichtext = WidgetModule::getWidget('rich_text', null, null, 'events');
 		// in order to include event related css to richtext editor, connect the event related page by configuring the custom page propery "page identifier"
-		$oEventPage = PagePeer::getPageByIdentifier('events');
+		$oEventPage = PagePeer::getPageByIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS);
 		if($oEventPage) {
 			$oRichtext->setTemplate($oEventPage->getTemplate());
 		}

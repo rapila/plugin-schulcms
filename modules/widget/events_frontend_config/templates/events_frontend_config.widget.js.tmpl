@@ -11,7 +11,7 @@ Widget.types.events_frontend_config = {
 		// display options
 		var options_groups = this.getDisplayModes();
 		var options_set = this.getConfigData() || {};
-		
+
 		// display_mode
 		this.mode_dropdown = this.content.find("select[name='display_mode']");
 		this.mode_dropdown.populate(options_groups.display_modes, options_set.display_mode);
@@ -20,13 +20,14 @@ Widget.types.events_frontend_config = {
 		});
 		// event_type_id
 		this.type_dropdown = this.content.find("select[name='event_type_id']");
-		this.type_dropdown.populate(options_groups.event_types, options_set.event_type_id);
+		this.type_dropdown.populate({ '': "{{writeString=wns.event_type.show_all}}"});
+		this.type_dropdown.populate(options_groups.event_types, options_set.event_type_id || '');
 		this.type_dropdown.change(function() {
 			_this.reload_preview();
 		});
 		// event limit
 		this.limit_dropdown = this.content.find("select[name='event_limit']");
-		this.limit_dropdown.populate(options_groups.event_limits, options_set.event_limit);
+		this.limit_dropdown.populate(options_groups.event_limits, options_set.event_limit || '');
 		this.limit_dropdown.change(function() {
 			_this.reload_preview();
 		});

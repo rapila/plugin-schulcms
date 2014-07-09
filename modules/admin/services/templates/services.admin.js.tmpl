@@ -23,34 +23,41 @@ jQuery(document).ready(function() {
 			Widget.create('service_detail', function(widget) {
 				widget.settings.initial_category_id = sidebar.active_row().data('service_category_id');
 				widget.open();
-				widget.save_callback = function() {
+				widget.handle('saved', function() {
 					content_list.reload();
-				};
+				});
 			});
 		}, 'n', true).add_button('add-new-item', function() {
 			Widget.create('sidebar_input', function(widget) {
-				widget.add_new_sidebar_input("{{writeString=wns.service_category.default_name}}", 'ServiceCategory', sidebar, 'rapila-services_categories_changed');
-			})
+				widget.add_new_sidebar_input("{{writeString=wns.service_category.default_name}}", 'ServiceCategory', sidebar, 'schulcms-service_category_changed');
+			});
 		}).add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
 			if(content_list.setSearch(search)) {
 				content_list.reload();
 			}
 		}).add_row_count_info_for_list(content_list);
 
-		// Sidebar
+		// sidebar items edit and delete buttons
 		var remove_item = info_bar.add_button('remove-item', function() {
-			var rowData = sidebar.collect_row_data(sidebar.active_row());
+			var row = sidebar.active_row();
+			var rowData = sidebar.collect_row_data(row);
 			if(rowData.service_category_id) {
-				content_list.getOption('categoryHasServices', rowData.service_category_id, function(result) {
-					if(!result) {
-						return sidebar.delete_row(sidebar.active_row());
+				function remove_active_category() {
+					sidebar.delete_row(row);
+					Widget.fire('schulcms-service_category_changed', {removed: true, id: rowData.service_category_id});
+				}
+				content_list.getOption('categoryHasServices', rowData.service_category_id, function(has_services) {
+					if(has_services) {
+						Widget.confirm("{{writeString=wns.rapila_alert.information}}", "{{writeString=wns.service_category.delete_information}}", function(confirmed) {
+							if(confirmed) {
+								remove_active_category();
+								content_list.setOption('service_category_id', null);
+								content_list.reload();
+							}
+						});
+					} else {
+						remove_active_category();
 					}
-					var delete_message = "{{writeString=wns.service_category.delete_information}}";
-					Widget.confirm("{{writeString=wns.rapila_alert.information}}", delete_message, function(confirmed) {
-						if(confirmed) {
-							sidebar.delete_row(sidebar.active_row());
-						}
-					}.bind(this));
 				});
 			}
 		}).disable();
@@ -60,12 +67,22 @@ jQuery(document).ready(function() {
 				widget.setServiceCategoryId(sidebar.active_row_datas()[0].service_category_id);
 				widget.open();
 				widget.fill_data();
-				widget.save_callback = function() {
-					sidebar.reload();
+				widget.handle('saved', function() {
 					content_list.reload();
-				};
+				});
 			});
 		}).disable();
+		
+		Widget.handle('schulcms-service_category_changed', function(event, info) {
+			if(info.updated) {
+				sidebar.update_row(sidebar.row_from_row_data({service_category_id: info.id}));
+			} else if (info.removed) {
+				var row = sidebar.row_from_row_data({service_category_id: info.id});
+				if(row) {
+					row.remove();
+				}
+			}
+		});
 
 		sidebar.settings.row_click_active_mode = 'activate';
 		sidebar.handle('list-selection_changed', function(event, selection) {

@@ -1,13 +1,11 @@
 Widget.types.event_types_input = {
 	prepare: function() {
-		var _this = this;
 		this.reload();
 	},
 
 	reload: function() {
 		var current = this._element.val();
 		this._element.empty();
-		var option = jQuery('<option/>');
 		this.allEventTypes(function(event_types) {
 			this._element.populate({'': "{{writeString=wns.choose}}"});
 			this._element.populate(event_types);
