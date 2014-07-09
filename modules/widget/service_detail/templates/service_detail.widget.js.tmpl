@@ -1,18 +1,19 @@
 Widget.types.service_detail = {
 	initialize: function() {
 		var _this = this;
-		this.content = Widget.parseHTML("{{includeTemplate=edit}}");
-		this.content.find('div.hide_if_not_saved').hide();
-		this.service_text = this.content.find('div.service_text');
+		this._element = Widget.parseHTML("{{includeTemplate=edit}}");
+		this._element.find('div.hide_if_not_saved').hide();
+		this.service_text = this._element.find('div.service_text');
 		this.current_detail_id = null;
 
 		// team members
-		this.team_member_container = this.content.find('tbody.team_member_container');
+		this.team_member_container = this._element.find('tbody.team_member_container');
 		this.team_member_container.sortable({});
 		this.team_member_content = Widget.parseHTML("{{includeTemplate=team_member}}", true, 'tbody');
+		this.team_member_content.find('select[name="team_member_id[]"]').prepareWidget();
 		var add_new_team_member_button = jQuery('<a/>').addClass('add-new-item add_entry').text(' ');
 		add_new_team_member_button.click(function() {
-			_this.team_member_content.clone().appendTo(_this.team_member_container);
+			_this.add_team_member();
 		});
 		this.team_member_container.parent().after(add_new_team_member_button);
 		this.team_member_container.delegate('.delete_team_member', 'click', function(event) {
@@ -24,7 +25,7 @@ Widget.types.service_detail = {
 		this.no_documents_placeholder = jQuery('<li/>').html("{{writeString=wns.service.no_document_and_upload_info}}").addClass('no_documents_placeholder');
 		
 		this.uploader = Widget.create('file_upload');
-		this.droppable_area = _this.content.find('.droppable_area');
+		this.droppable_area = _this._element.find('.droppable_area');
 		this.droppable_area.sortable({
 			update: function(document, ui) {
 				var ids = _this.droppable_area.children().map(function() {
@@ -42,7 +43,7 @@ Widget.types.service_detail = {
 		});
 		
 		// Logo upload
-		var logo_area = _this.content.find('.logo_area');
+		var logo_area = _this._element.find('.logo_area');
 		logo_area.find('.remove').hide().click(function() {
 			_this.service_logo_id = null;
 		});
@@ -77,8 +78,8 @@ Widget.types.service_detail = {
 		});
 
 		// initial_category_id
-		this.content.find("select[name='service_category_id']").prepareWidget(function(service_category) {
-			service_category.settings.initial_category_id = _this.settings.initial_category_id;
+		this._element.find("select[name='service_category_id']").prepareWidget(function(service_category) {
+			service_category.val(_this.settings.initial_category_id);
 		}, jQuery.noop);
 		
 		Widget.callStatic('detail', 'create_for_instance', this);
@@ -101,46 +102,63 @@ Widget.types.service_detail = {
 	},
 	
 	fill_data: function() {
-		this.detail_widget.disable();		
-		var _this = this;
-		this.init_textareas();	
+		this.detail_widget.disable();
+		this.init_textareas();
 		this.team_member_container.hide();
 		this.serviceData(function(service_data) {
-			_this.current_detail_id = service_data.Id;
-			_this.service_logo_id = service_data.LogoId;
-			this.content.find("input[name='name']").val(service_data.Name);
-			this.content.find('[name="service_category_id"]').val(service_data.ServiceCategoryId);
-			this.content.find("textarea[name='teaser']").val(service_data.Teaser);
-			this.content.find("textarea[name='address']").val(service_data.Address);
-			this.content.find("textarea[name='opening_hours']").val(service_data.OpeningHours);
-			this.content.find("input[name='phone']").val(service_data.Phone);
-			this.content.find("input[name='email']").val(service_data.Email);
-			this.content.find("input[name='website']").val(service_data.Website);
-			this.content.find("input[name='is_active']").prop('checked', service_data.IsActive);
-			this.content.find(".updated_info").text(service_data.UpdatedInfo);
-			this.content.find(".created_info").text(service_data.CreatedInfo);
-			this.content.find(".detail_id").text(service_data.Id);
-			this.content.find('div.hide_if_not_saved').show();
-			this.detail_widget.set_title(this.detail_widget.settings.title = "{{writeString=wns.service}} "+service_data.Name);
+			this.current_detail_id = service_data.Id;
+			this.service_logo_id = service_data.LogoId;
+			this._element.find("input[name='name']").val(service_data.Name);
+			this._element.find("textarea[name='teaser']").val(service_data.Teaser);
+			this._element.find("textarea[name='address']").val(service_data.Address);
+			this._element.find("textarea[name='opening_hours']").val(service_data.OpeningHours);
+			this._element.find("input[name='phone']").val(service_data.Phone);
+			this._element.find("input[name='email']").val(service_data.Email);
+			this._element.find("input[name='website']").val(service_data.Website);
+			this._element.find("input[name='is_active']").prop('checked', service_data.IsActive);
+			this._element.find(".updated_info").text(service_data.UpdatedInfo);
+			this._element.find(".created_info").text(service_data.CreatedInfo);
+			this._element.find(".detail_id").text(service_data.Id);
+			this._element.find("textarea[name='body_text']").val(service_data.Body);
 			
-			_this.team_member_container.empty();
-			var counter = 1;
-			jQuery.each(service_data.team_members, function(team_member_id, function_name) {
-				var team_member_content = _this.team_member_content.clone();
-				team_member_content.find('select[name="team_member_id[]"]').val(team_member_id);
-				team_member_content.find('input[name="function_name[]"]').val(function_name);
-				team_member_content.appendTo(_this.team_member_container);
-				counter++;
+			this._element.find('[name="service_category_id"]').ensureWidget(function(service_category_input) {
+				service_category_input.val(service_data.ServiceCategoryId);
 			});
-			this.team_member_container.show();
 			
 			this.service_text.ensureWidget(function(widget) {
 				widget.set_data(service_data.Body);
 			});
-			this.content.find("textarea[name='body_text']").val(service_data.Body);
+
+			this.update_document_count(service_data.CountDocuments);
 			this.update_documents();
-			this.detail_widget.enable();		
+			
+			this.list_team_members(service_data.team_members);
+
+			this._element.find('div.hide_if_not_saved').show();
+			this.detail_widget.set_title(this.detail_widget.settings.title = "{{writeString=wns.service}} "+service_data.Name);
+			this.detail_widget.enable();
 		});
+	},
+	
+	add_team_member: function(id, function_name) {
+		var team_member_row = this.team_member_content.clone();
+		team_member_row.find('select[name="team_member_id[]"]').prepareWidget(function(team_member_input) {
+			console.log('add_team_member', id);
+			if(id) {
+				team_member_input.val(id);
+			}
+		});
+		team_member_row.find('input[name="function_name[]"]').val(function_name || '');
+		team_member_row.appendTo(this.team_member_container);
+	},
+	
+	list_team_members: function(team_members) {
+		var _this = this;
+		this.team_member_container.empty();
+		jQuery.each(team_members, function(team_member_id, function_name) {
+			_this.add_team_member(team_member_id, function_name);
+		});
+		this.team_member_container.show();
 	},
 	
 	init_textareas: function() {
@@ -163,7 +181,12 @@ Widget.types.service_detail = {
 			jQuery.each(documents, function(i, document_data) {
 				_this.insert_document(document_data);
 			});
+			_this.update_document_count(documents.length);
 		});
+	},
+	
+	update_document_count: function(count) {
+		this._element.find("span.documents_count").text(count);
 	},
 
 	insert_document: function(document_data) {

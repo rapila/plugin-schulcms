@@ -92,14 +92,14 @@ class ServiceListWidgetModule extends WidgetModule {
 			if($oServiceCategory !== null) {
 				return $oServiceCategory->getName();
 			}
+			if($this->oDelegateProxy->getServiceCategoryId() === CriteriaListWidgetDelegate::SELECT_WITHOUT) {
+				return StringPeer::getString('wns.services.select_without_title');
+			}
 		}
 		return $this->oDelegateProxy->getServiceCategoryId();
 	}
 
 	public function getCriteria() {
-		$oCriteria = new Criteria();
-		$oCriteria->setDistinct();
-		$oCriteria->addJoin(ServicePeer::ID, ServiceMemberPeer::SERVICE_ID, Criteria::LEFT_JOIN);
-		return $oCriteria;
+		return ServiceQuery::create()->joinServiceMember(null,Criteria::LEFT_JOIN)->joinServiceDocument(null,Criteria::LEFT_JOIN)->distinct();
 	}
 }

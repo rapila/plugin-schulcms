@@ -36,6 +36,16 @@ class ServiceCategoryDetailWidgetModule extends PersistentWidgetModule {
 		if(!Flash::noErrors()) {
 			throw new ValidationException();
 		}
-		return $oCategory->save();
+		$oCategory->save();
+		
+		$oResult = new stdClass();
+		$oResult->id = $oCategory->getId();
+		if($this->iCategoryId === null) {
+			$oResult->inserted = true;
+		} else {
+			$oResult->updated = true;
+		}
+		$this->iCategoryId = $oResult->id;
+		return $oResult;
 	}
 }

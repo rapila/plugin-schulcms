@@ -52,6 +52,13 @@ class ServicesAdminModule extends AdminModule {
 		}
 		return $aResult;
 	}
+
+	public function getDatabaseColumnForColumn($sColumnIdentifier) {
+		if($sColumnIdentifier === 'service_category_id') {
+			return ServiceCategoryPeer::ID;
+		}
+		return null;
+	}	
 	
 	public function getCustomListElements() {
 		if(ServiceCategoryQuery::create()->count() > 0) {

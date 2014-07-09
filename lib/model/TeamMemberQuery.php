@@ -78,7 +78,6 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		if($iFunctionId !== null) {
 			$this->joinTeamMemberFunction()->useQuery('TeamMemberFunction')->filterBySchoolFunctionId($iFunctionId)->endUse();
 		}
-		$this->orderByLastName()->orderByFirstName();
 		return $this;
 	}
 
