@@ -5,7 +5,7 @@
  */
 class Event extends BaseEvent {
 
-	private static $EVENT_PAGES = array();
+	private static $EVENTPAGE = null;
 	
 	public function setTitle($sTitle) {
 		$sNameNormalized = StringUtil::normalizePath($sTitle);
@@ -126,10 +126,10 @@ class Event extends BaseEvent {
 	
 	public function getEventPageLink($oEventPage = null) { 
 		if($oEventPage === null) {
-			if(!isset(self::$EVENT_PAGES[$this->getEventTypeId()])) {
-				$EVENT_PAGES[$this->getEventTypeId()] = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS).'-'.$this->getEventTypeId());
+			if(!self::$EVENTPAGE) {
+				self::$EVENTPAGE = PagePeer::getPageByIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS);
 			}
-			$oEventPage = $EVENT_PAGES[$this->getEventTypeId()];
+			$oEventPage = $EVENTPAGE;
 		}
 		$aDateStart = explode('-', $this->getDateStart('Y-n-j'));
 		if(!$oEventPage) {

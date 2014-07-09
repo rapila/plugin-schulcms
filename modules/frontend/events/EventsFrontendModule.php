@@ -18,6 +18,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	
 	public function renderFrontend() { 
 		$aOptions = @unserialize($this->getData());
+
 		$this->iEventTypeId = $aOptions[self::MODE_EVENT_TYPE_ID];
 		if(self::$EVENT === null && isset($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY])) {
 			self::$EVENT = EventQuery::create()->findPk($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY]);
@@ -74,14 +75,15 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	
 	private function renderList($iLimit=null) {
 		// Get basic query
-		$oEventQuery = FrontendEventQuery::create()->filterBySchoolClassId(null, Criteria::ISNULL)->orderByDateStart();
+		$oEventQuery = FrontendEventQuery::create()->excludeExternallyManaged()->orderByDateStart();
 		
 		// Get link page if current page is not a event page
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$bIsAktuelleListe = false;
 		// If it is not an event page
-		if(!StringUtil::startsWith($oPage->getIdentifier(), SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-')) {
-			$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS.'-'.$this->iEventTypeId));
+
+		if($oPage->getIdentifier() !== SchoolPeer::PAGE_IDENTIFIER_EVENTS) {
+			$oPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS));
 			$oEventQuery->upcomingOrOngoing()->filterByIgnoreOnFrontpage(false);
 			Session::getSession()->setAttribute(self::SESSION_BACK_TO_LIST_LINK, null);
 		} else {

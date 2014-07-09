@@ -15,27 +15,18 @@ class EventFilterModule extends FilterModule {
 
 	public function onNavigationItemChildrenRequested(NavigationItem $oNavigationItem) {
 		$mIdentifier = $oNavigationItem->getIdentifier();
-		if($mIdentifier !== null) {
-			$mIdentifier = explode(self::EVENT_TYPE_SEPARATOR, $mIdentifier);
-		}
 		if($oNavigationItem instanceof PageNavigationItem) {
 			// if page identifier suffix is «events»
-			if(isset($mIdentifier[1]) && $mIdentifier[0] === SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS)) {
-				$aData = array('event_type' => $mIdentifier[1]);
-				$aYears = self::selectNames($aData, 'YEAR(DATE_START)');
+			if($mIdentifier === SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS)) {
+				$aYears = self::selectNames(array(), 'YEAR(DATE_START)');
 				foreach($aYears as $iYear) {
 					if($iYear != null) {
-						$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE.$iYear, null, array_merge($aData, array('year' => $iYear))));
+						$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE.$iYear, null, array('year' => $iYear)));
 						
 					}
 				}
-				$aAllYears = FrontendEventQuery::findYearsByEventTypeId($mIdentifier[1]);
-				foreach(array_diff($aAllYears, $aYears) as $iYear) {
-					$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE.$iYear, null, array_merge($aData, array('year' => $iYear))));
-				}
-				
 				// add feed
-				$oFeedItem = new HiddenVirtualNavigationItem(self::EVENT_FEED_ITEM, 'feed', StringPeer::getString('wns.events.feed', null, 'Feed').' '.$oNavigationItem->getLinkText(), null, $mIdentifier[1]);
+				$oFeedItem = new HiddenVirtualNavigationItem(self::EVENT_FEED_ITEM, 'feed', StringPeer::getString('wns.events.feed', null, 'Feed').' '.$oNavigationItem->getLinkText());
 				$oFeedItem->bIsIndexed = false; //Don’t index the feed item or else you’ll be exit()-ed before finishing the index
 				$oNavigationItem->addChild($oFeedItem);
 			}
@@ -43,7 +34,7 @@ class EventFilterModule extends FilterModule {
 							&& $oNavigationItem->getType() === self::ITEM_EVENT_YEAR) {
 			$aData = $oNavigationItem->getData();
 			foreach(self::selectNames($aData, 'MONTH(DATE_START)') as $iMonth) {
-				$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_MONTH, $iMonth, $iMonth, null, array_merge($aData, array('month' => $iMonth))));
+				$oNavigationItem->addChild(new HiddenVirtualNavigationItem(self::ITEM_EVENT_MONTH, $iMonth, $iMonth, null, array_merge($aData, array('month' => $iMonth))));
 			}
 		} else if($oNavigationItem instanceof VirtualNavigationItem
 							&& $oNavigationItem->getType() === self::ITEM_EVENT_MONTH) {
@@ -62,16 +53,13 @@ class EventFilterModule extends FilterModule {
 
 	public function onPageHasBeenSet($oPage, $bIsNotFound, $oNavigationItem) {
 		$mIdentifier = $oPage->getIdentifier();
-		if($mIdentifier !== null) {
-			$mIdentifier = explode(self::EVENT_TYPE_SEPARATOR, $mIdentifier);
-		}
-		if(!isset($mIdentifier[1]) || $mIdentifier[0] !== SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS)) {
+		if($mIdentifier !== SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS)) {
 			//Not a valid event page — return
 			return;
 		}
 		if($oNavigationItem instanceof VirtualNavigationItem) {
 			if($oNavigationItem->getType() === self::EVENT_FEED_ITEM) {
-				$oFeed = new EventsFileModule(null, $oNavigationItem, EventQuery::create()->filterBySchoolClassId(null)->filterByEventTypeId($oNavigationItem->getData()));
+				$oFeed = new EventsFileModule(null, $oNavigationItem, EventQuery::create()->filterBySchoolClassId(null));
 				$oFeed->renderFile();exit;
 			} else {
 				if(self::selectNames($oNavigationItem->getData()) === 1) {
@@ -85,11 +73,14 @@ class EventFilterModule extends FilterModule {
 	
 	public function handleNewsFeed($oPage) { 
 		$aLink = array_merge($oPage->getLink(), array('feed'));
-		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'location' => LinkUtil::link($aLink)));
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'title' => 'Alle Anlässe', 'location' => LinkUtil::link($aLink)));
+		foreach(EventTypeQuery::create()->find() as $oEventType) {
+			ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'title' => $oEventType->getName(), 'location' => LinkUtil::link($aLink)."?event_type={$oEventType->getId()}"));
+		}
 	}
 	
 	private static function selectNames($aData, $sColumn = null) {
-		$oQuery = FrontendEventQuery::create()->distinct()->filterByNavigationItem($aData);
+		$oQuery = FrontendEventQuery::create()->distinct()->excludeExternallyManaged()->filterByNavigationItem($aData);
 		if(is_string($sColumn)) {
 			$oQuery->clearSelectColumns()->addSelectColumn($sColumn);
 			return EventPeer::doSelectStmt($oQuery)->fetchAll(PDO::FETCH_COLUMN);
