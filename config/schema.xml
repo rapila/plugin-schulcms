@@ -25,7 +25,7 @@
 	<column name="school_function_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="school_functions" onDelete="cascade">
 		<reference local="school_function_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="is_main_function" type="boolean" size="1" default="0" />
 	<column name="is_newly_updated" type="boolean" size="1" default="0" />
 </table>
@@ -80,11 +80,11 @@
 	<column name="school_building_id" type="integer" />
 	<foreign-key foreignTable="school_buildings" onDelete="setnull">
 		<reference local="school_building_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="school_id" type="integer" />
 	<foreign-key foreignTable="schools" onDelete="cascade">
 		<reference local="school_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<unique>
 		<unique-column name="original_id" />
 		<unique-column name="year" />
@@ -125,7 +125,7 @@
 	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="school_classes" onDelete="cascade">
 		<reference local="school_class_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="function_name" type="varchar" size="80" />
 	<column name="student_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="students" onDelete="cascade">
@@ -138,7 +138,7 @@
 	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="school_classes" onDelete="cascade">
 		<reference local="school_class_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="link_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="links" onDelete="cascade">
 		<reference local="link_id" foreign="id" />
@@ -149,7 +149,7 @@
 	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="school_classes" onDelete="cascade">
 		<reference local="school_class_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="document_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="documents" onDelete="cascade">
 		<reference local="document_id" foreign="id" />
@@ -160,7 +160,7 @@
 	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="school_classes" onDelete="cascade">
 		<reference local="school_class_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="team_member_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="team_members" onDelete="cascade">
 		<reference local="team_member_id" foreign="id" />
@@ -199,15 +199,15 @@
 	<column name="event_type_id" type="integer" />
 	<foreign-key foreignTable="event_types" onDelete="cascade">
 		<reference local="event_type_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="service_id" type="integer" />
 	<foreign-key foreignTable="services" onDelete="cascade">
 		<reference local="service_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="school_class_id" type="integer" />
 	<foreign-key foreignTable="school_classes" onDelete="cascade">
 		<reference local="school_class_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="gallery_id" type="integer" />
 	<foreign-key foreignTable="document_categories" onDelete="setnull">
 		<reference local="gallery_id" foreign="id" />
@@ -226,7 +226,7 @@
 	<column name="event_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="events" onDelete="cascade">
 		<reference local="event_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="document_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="documents" onDelete="cascade">
 		<reference local="document_id" foreign="id" />
@@ -275,7 +275,7 @@
 	<column name="service_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="services" onDelete="cascade">
 		<reference local="service_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="function_name" type="varchar" size="80" />
 	<column name="team_member_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="team_members" onDelete="cascade">
@@ -291,7 +291,7 @@
 	<column name="service_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="services" onDelete="cascade">
 		<reference local="service_id" foreign="id" />
-	</foreign-key>	
+	</foreign-key>
 	<column name="document_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="documents" onDelete="cascade">
 		<reference local="document_id" foreign="id" />
@@ -300,14 +300,6 @@
 	<behavior name="denyable">
 		<parameter name="role_key" value="services" />
 	</behavior>
-</table>
-
-<table name="***REMOVED***_syncronisations" phpName="***REMOVED***Syncronisation">
-	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-	<column name="duration" type="integer"/>
-	<column name="code" type="integer"/>
-	<column name="log" type="blob" />
-	<column name="is_executed_by_cron_job" type="boolean" required="true" default="1" />
 </table>
 
 <table name="notes" phpName="Note">
