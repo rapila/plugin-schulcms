@@ -689,6 +689,11 @@ abstract class BaseClassStudent extends BaseObject implements Persistent
             $ret = $this->preSave($con);
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // denyable behavior
+                if(!(ClassStudentPeer::isIgnoringRights() || $this->mayOperate("insert"))) {
+                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "class_students")));
+                }
+
                 // extended_timestampable behavior
                 if (!$this->isColumnModified(ClassStudentPeer::CREATED_AT)) {
                     $this->setCreatedAt(time());
@@ -707,13 +712,13 @@ abstract class BaseClassStudent extends BaseObject implements Persistent
                     }
                 }
 
-                // denyable behavior
-                if(!(ClassStudentPeer::isIgnoringRights() || $this->mayOperate("insert"))) {
-                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "class_students")));
-                }
-
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // denyable behavior
+                if(!(ClassStudentPeer::isIgnoringRights() || $this->mayOperate("update"))) {
+                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "class_students")));
+                }
+
                 // extended_timestampable behavior
                 if ($this->isModified() && !$this->isColumnModified(ClassStudentPeer::UPDATED_AT)) {
                     $this->setUpdatedAt(time());
@@ -725,11 +730,6 @@ abstract class BaseClassStudent extends BaseObject implements Persistent
                         $this->setUpdatedBy(Session::getSession()->getUser()->getId());
                     }
                 }
-                // denyable behavior
-                if(!(ClassStudentPeer::isIgnoringRights() || $this->mayOperate("update"))) {
-                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "class_students")));
-                }
-
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1661,6 +1661,30 @@ abstract class BaseClassStudent extends BaseObject implements Persistent
         return $this->alreadyInSave;
     }
 
+    // denyable behavior
+    public function mayOperate($sOperation, $oUser = false) {
+        if($oUser === false) {
+            $oUser = Session::getSession()->getUser();
+        }
+        $bIsAllowed = false;
+        if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && ClassStudentPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
+            $bIsAllowed = true;
+        } else if(ClassStudentPeer::mayOperateOn($oUser, $this, $sOperation)) {
+            $bIsAllowed = true;
+        }
+        FilterModule::getFilters()->handleClassStudentOperationCheck($sOperation, $this, $oUser, array(&$bIsAllowed));
+        return $bIsAllowed;
+    }
+    public function mayBeInserted($oUser = false) {
+        return $this->mayOperate("insert", $oUser);
+    }
+    public function mayBeUpdated($oUser = false) {
+        return $this->mayOperate("update", $oUser);
+    }
+    public function mayBeDeleted($oUser = false) {
+        return $this->mayOperate("delete", $oUser);
+    }
+
     // extended_timestampable behavior
 
     /**
@@ -1724,30 +1748,6 @@ abstract class BaseClassStudent extends BaseObject implements Persistent
     {
         $this->modifiedColumns[] = ClassStudentPeer::UPDATED_BY;
         return $this;
-    }
-
-    // denyable behavior
-    public function mayOperate($sOperation, $oUser = false) {
-        if($oUser === false) {
-            $oUser = Session::getSession()->getUser();
-        }
-        $bIsAllowed = false;
-        if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && ClassStudentPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
-            $bIsAllowed = true;
-        } else if(ClassStudentPeer::mayOperateOn($oUser, $this, $sOperation)) {
-            $bIsAllowed = true;
-        }
-        FilterModule::getFilters()->handleClassStudentOperationCheck($sOperation, $this, $oUser, array(&$bIsAllowed));
-        return $bIsAllowed;
-    }
-    public function mayBeInserted($oUser = false) {
-        return $this->mayOperate("insert", $oUser);
-    }
-    public function mayBeUpdated($oUser = false) {
-        return $this->mayOperate("update", $oUser);
-    }
-    public function mayBeDeleted($oUser = false) {
-        return $this->mayOperate("delete", $oUser);
     }
 
     // extended_keyable behavior

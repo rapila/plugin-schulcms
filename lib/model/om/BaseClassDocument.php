@@ -577,6 +577,11 @@ abstract class BaseClassDocument extends BaseObject implements Persistent
             $ret = $this->preSave($con);
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // denyable behavior
+                if(!(ClassDocumentPeer::isIgnoringRights() || $this->mayOperate("insert"))) {
+                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "class_documents")));
+                }
+
                 // extended_timestampable behavior
                 if (!$this->isColumnModified(ClassDocumentPeer::CREATED_AT)) {
                     $this->setCreatedAt(time());
@@ -595,13 +600,13 @@ abstract class BaseClassDocument extends BaseObject implements Persistent
                     }
                 }
 
-                // denyable behavior
-                if(!(ClassDocumentPeer::isIgnoringRights() || $this->mayOperate("insert"))) {
-                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "class_documents")));
-                }
-
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // denyable behavior
+                if(!(ClassDocumentPeer::isIgnoringRights() || $this->mayOperate("update"))) {
+                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "class_documents")));
+                }
+
                 // extended_timestampable behavior
                 if ($this->isModified() && !$this->isColumnModified(ClassDocumentPeer::UPDATED_AT)) {
                     $this->setUpdatedAt(time());
@@ -613,11 +618,6 @@ abstract class BaseClassDocument extends BaseObject implements Persistent
                         $this->setUpdatedBy(Session::getSession()->getUser()->getId());
                     }
                 }
-                // denyable behavior
-                if(!(ClassDocumentPeer::isIgnoringRights() || $this->mayOperate("update"))) {
-                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "class_documents")));
-                }
-
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1514,6 +1514,30 @@ abstract class BaseClassDocument extends BaseObject implements Persistent
         return $this->alreadyInSave;
     }
 
+    // denyable behavior
+    public function mayOperate($sOperation, $oUser = false) {
+        if($oUser === false) {
+            $oUser = Session::getSession()->getUser();
+        }
+        $bIsAllowed = false;
+        if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && ClassDocumentPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
+            $bIsAllowed = true;
+        } else if(ClassDocumentPeer::mayOperateOn($oUser, $this, $sOperation)) {
+            $bIsAllowed = true;
+        }
+        FilterModule::getFilters()->handleClassDocumentOperationCheck($sOperation, $this, $oUser, array(&$bIsAllowed));
+        return $bIsAllowed;
+    }
+    public function mayBeInserted($oUser = false) {
+        return $this->mayOperate("insert", $oUser);
+    }
+    public function mayBeUpdated($oUser = false) {
+        return $this->mayOperate("update", $oUser);
+    }
+    public function mayBeDeleted($oUser = false) {
+        return $this->mayOperate("delete", $oUser);
+    }
+
     // extended_timestampable behavior
 
     /**
@@ -1577,30 +1601,6 @@ abstract class BaseClassDocument extends BaseObject implements Persistent
     {
         $this->modifiedColumns[] = ClassDocumentPeer::UPDATED_BY;
         return $this;
-    }
-
-    // denyable behavior
-    public function mayOperate($sOperation, $oUser = false) {
-        if($oUser === false) {
-            $oUser = Session::getSession()->getUser();
-        }
-        $bIsAllowed = false;
-        if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && ClassDocumentPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
-            $bIsAllowed = true;
-        } else if(ClassDocumentPeer::mayOperateOn($oUser, $this, $sOperation)) {
-            $bIsAllowed = true;
-        }
-        FilterModule::getFilters()->handleClassDocumentOperationCheck($sOperation, $this, $oUser, array(&$bIsAllowed));
-        return $bIsAllowed;
-    }
-    public function mayBeInserted($oUser = false) {
-        return $this->mayOperate("insert", $oUser);
-    }
-    public function mayBeUpdated($oUser = false) {
-        return $this->mayOperate("update", $oUser);
-    }
-    public function mayBeDeleted($oUser = false) {
-        return $this->mayOperate("delete", $oUser);
     }
 
     // extended_keyable behavior
