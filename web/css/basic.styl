@@ -28,7 +28,7 @@ h1, h2, h3, p, ul
 h2, h3, h4
 	margin-top 1em
 h2:first-child, h1:first-child, h3:first-child
-	margin-top 0	
+	margin-top 0
 h1
 	margin-bottom 1em
 	margin-top 0
@@ -39,7 +39,7 @@ ul, li
 	padding 0
 p, ul
 	padding-bottom 1em
-	
+
 .inner ul, body.editing ul
 	margin-left 1.3em
 .inner ul, .inner li, body.editing ul, body.editing li
@@ -82,9 +82,9 @@ p, ul
 	position absolute
 	top top_area_height
 	height header_main_height
-	
+
 #blackboard_text
-	top 0	
+	top 0
 	margin-top 20px
 	margin-left sidebar_left_width+30px
 	color background_color
@@ -97,7 +97,7 @@ p, ul
 		vertical-align middle
 		a.blackboard_more_link
 			font-size .6em
-			
+
 #blackboard_text, #content_main h1, #content_main h2,
 body.editing h1, body.editing h2
 	font-family 'Architects Daughter', Courier, Serif
@@ -108,14 +108,14 @@ body.editing h1, body.editing h2
 	height header_main_height+22px
 
 a.pdf,
-a.doc, 
+a.doc,
 a.docx
 	padding-left 1.6em
 	background transparent url(../images/pdf.png) no-repeat 1px 2px
 	display inline-block
 	vertical-align top
-	
-a.doc, 
+
+a.doc,
 a.docx
 	padding-left 1.6em
 	background transparent url(../images/doc.png) no-repeat 1px 2px
@@ -128,8 +128,8 @@ a.docx
 	float:right
 	width 150px
 	margin 0 0px 20px 20px
-	
-.portrait_item span 
+
+.portrait_item span
 	display block
 	font-size .95em
 	margin-bottom .8em
@@ -173,13 +173,13 @@ ul#main_navigation
 	&.home
 		margin-right sidebar_right_width
 		margin-top 20px
-	
+
 img.blackboard_image
 	float right
 	width 194px
 	margin -20px 0 0 10px
 	min-height 142px
-	
+
 #spacer
 	height 75px
 
@@ -193,11 +193,11 @@ ul#meta_navigation li a, ul#meta_navigation li span, ul#main_navigation li a, ul
 	line-height 1.4em
 	color #FFF
 
-body.default ul#main_navigation li 
+body.default ul#main_navigation li
 	a, span
 		color #666
 
-ul#secondary_navigation 
+ul#secondary_navigation
 	li
 		padding 0.2em 1em
 		a
@@ -207,8 +207,8 @@ ul#secondary_navigation
 		span
 			color school_color
 
-body.default ul#main_navigation 
-	li 
+body.default ul#main_navigation
+	li
 		span,	a.active, a.current
 			color school_color
 ul#meta_navigation li span
@@ -216,7 +216,7 @@ ul#meta_navigation li span
 
 body.default ul#main_navigation li a:hover,
 ul#meta_navigation li a:hover,
-ul#secondary_navigation li a:hover 
+ul#secondary_navigation li a:hover
 	color black
 
 ul#main_navigation li:first-child
@@ -265,7 +265,7 @@ ul#meta_navigation li
 			margin-top 0
 	table
 		width sidebar_right_width !important
-		td.event_title 
+		td.event_title
 			> a
 				display block
 				margin 8px 0 7px
@@ -353,11 +353,15 @@ table
 #content_main table.with_header:first-child
 	margin-top -23px
 
-table.list_view 
+table.list_view
 	td
 		vertical-align top
 	tr.row:nth-child(2n+1) td
 		background-color #FdFdFd
+	tr.row.info
+		height 30px
+	tr.row.info.title td
+		vertical-align bottom
 
 th
 	text-align left
@@ -392,14 +396,14 @@ td.datum, #sidebar_right td.datum
 	padding-right 0em
 	width 25px
 
-.event_list 
-	td 
+.event_list
+	td
 		line-height 18px
 		a.detail_link
 			display block
 			width 20px
 			background transparent url(../images/detail_link.png) no-repeat 0 3px
-			&:hover 
+			&:hover
 				background transparent url(../images/detail_link_hover.png) no-repeat 0 3px
 		p
 			line-height 16px
@@ -413,21 +417,24 @@ td.datum, #sidebar_right td.datum
 				margin-bottom .5em
 				a.teaser_link
 					color #333
-		.event_title 
+		.event_title
 			a
 				line-height 10px
 				padding-top 3px
 				max-width sidebar_right_link_width
 				&.more_link
 					background transparent url(../images/more_icon.png) no-repeat -1px -2px
-	
+&.hide
+	th
+		visibility hidden
+
 .recent_event_image_link
 	display block
 	margin-top -7px
 	img
 		width 194px
-		
-.report_and_images_teaser 
+
+.report_and_images_teaser
 	font-size 0.9em
 	line-height 20px
 	color #666
@@ -438,10 +445,10 @@ td.datum, #sidebar_right td.datum
 .row.active td, .row.active td a
 	color school_color
 	height 100%
-	
-table.statistics_list 
+
+table.statistics_list
 	margin-top -5px
-	
+
 .statistics_list td
 	border-bottom 1px solid sidebar_right_line_color
 	line-height 22px
@@ -465,8 +472,8 @@ a.stundenplan
 	background transparent url(../images/pdf.png) no-repeat center left
 	&:hover
 		background transparent url(../images/pdf_hover.png) no-repeat center left
-		
-.detail_info 
+
+.detail_info
 	span
 		&.function
 			font-style oblique
@@ -482,9 +489,9 @@ a.stundenplan
 	label:first-child
 		margin-top 0
 	h1 a
-		color #f6f6f6	
-		
-.detail_info label, 
+		color #f6f6f6
+
+.detail_info label,
 #sidebar_right h4
 	margin 0
 	padding 0
@@ -514,7 +521,7 @@ ul.class_teachers
 			font-size 0.85em
 			margin-bottom 2px
 
-.home 
+.home
 	#content_main .inner
 		max-width 440px
 	#aktuell_container .inner
@@ -541,7 +548,7 @@ a img
 	border-left 1px solid #D1C4C4
 	border-bottom 1px solid #D1C4C4
 	margin-bottom .3em
-	&.passed 
+	&.passed
 		background-color #F7F7F7;
 	span
 		display block
@@ -550,7 +557,7 @@ a img
 		font-size .7em
 	div
 		border none
-	
+
 .gallery
 	margin-top 1em
 	.gallery-canvas
@@ -597,7 +604,7 @@ a img
 	height 163px
 .wraptocenter *
 	vertical-align middle
-	
+
 a.event_teaser_classlink
 	margin-left 1em
 
@@ -618,24 +625,24 @@ img.service_logo
 	border 1px solid school_color
 	padding 1em
 
-#aktuell_container, 
-.events a.active, 
+#aktuell_container,
+.events a.active,
 #content_main h2,
-#content_main h1, 
-a:hover,  
+#content_main h1,
+a:hover,
 .highlight,
 a.active,
 tr:hover a
 	color school_color
-	
-.today 
+
+.today
 	padding-left 3px
 	border 1px solid #999
 
 .status_icons
 	width 16px
 	&.has_bericht
-		background transparent url(../images/has_bericht.png) no-repeat 0 3px 
+		background transparent url(../images/has_bericht.png) no-repeat 0 3px
 	&.has_images
 		background transparent url(../images/has_images.png) no-repeat 0 3px
 
@@ -647,7 +654,7 @@ tr:hover a
 		display block
 		padding-left 22px
 		background url('../images/services.png') transparent 0px 4px no-repeat
-		
+
 a.event_service_link
 	margin .5em 0
 	display block
@@ -659,20 +666,20 @@ a.event_service_link
 .service_list,
 .team_list,
 .class_list
-	td:first-child, 
+	td:first-child,
 	th:first-child
 		padding-left 0
-	
+
 .link_list td:first-child
 	width 15px
-	
+
 .link_list td:first-child a
 	background url('../images/links.png') transparent 0px 4px no-repeat
 	padding-left 0
-	
+
 .team_list td:first-child a
 	background url('../images/team_members.png') transparent 0px 4px no-repeat
-	
+
 .class_list td:first-child a
 	background url('../images/classes.png') transparent 0px 2px no-repeat
 
@@ -681,14 +688,14 @@ body.klassen h1 a
 	display:inline-block
 	width 20px
 	background url('../images/classes.png') transparent 0px 4px no-repeat
-	
+
 body.klassen h1 a:hover
 	background url('../images/back_to_list.png') transparent 0px 4px no-repeat
 
 a.more_link,
 a.blackboard_more_link
 	font-style oblique
-	
+
 a.more_link
 	display inline-block
 	line-height inherit
@@ -701,9 +708,9 @@ a.more_link:hover
 iframe
 	border 0
 
-#ajax_loader 
+#ajax_loader
 	display none;
-	
+
 .service_documents a
 	padding-top 2px
 

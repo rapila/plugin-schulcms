@@ -1,15 +1,15 @@
 <?php
-class EventsFrontendConfigWidgetModule extends FrontendConfigWidgetModule { 
+class EventsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 
 	public function getDisplayModes() {
 		$aResult = array();
-		
+
 		// Display modes
 		$aResult['display_modes'] = array();
 		foreach(EventsFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
 			$aResult['display_modes'][$sDisplayMode] = StringPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);
 		}
-	
+
 		// Event types
 		$aEventTypes = EventTypeQuery::create()->orderByName()->find();
 		if(count($aEventTypes) > 0) {
@@ -18,17 +18,18 @@ class EventsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 				$aResult['event_types'][$oEventType->getId()] = $oEventType->getName();
 			}
 		}
-		
+
 		// Display list limit
 		$aResult['event_limits'] = array('' => StringPeer::getString('wns.events.display_all'));
 		foreach(range(1,4) as $iCount) {
 			$aResult['event_limits'][$iCount] = $iCount;
+			$aResult['event_limits'][10] = 10;
 		}
 		return $aResult;
 	}
-	
+
 	public function allEvents($iEventTypeId = null, $iLimit = null, $bIsArchive = false) {
-		$oQuery = FrontendEventQuery::create()->filterBySchoolClassId(null, Criteria::ISNULL);
+		$oQuery = FrontendEventQuery::create()->excludeClassEvents();
 		if(is_numeric($iEventTypeId)) {
 			$oQuery->filterByEventTypeId($iEventTypeId);
 		}

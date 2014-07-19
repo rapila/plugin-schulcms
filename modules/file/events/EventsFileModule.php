@@ -1,9 +1,9 @@
 <?php
 class EventsFileModule extends FileModule {
-	
+
 	private $oBaseNavigationItem = null;
 	private $oQuery = null;
-	
+
 	public function __construct($aRequestPath = null, $oNavigationItem = null, $oQuery = null) {
 		parent::__construct($aRequestPath);
 		if($oNavigationItem !== null) {
@@ -14,12 +14,12 @@ class EventsFileModule extends FileModule {
 		if($oQuery) {
 			$this->oQuery = $oQuery;
 		} else {
-			$this->oQuery = FrontendEventQuery::create()->filterBySchoolClassId(null, Criteria::ISNULL);
+			$this->oQuery = FrontendEventQuery::create()->excludeClassEvents();
 		}
 		header("Content-Type: application/rss+xml;charset=".Settings::getSetting('encoding', 'db', 'utf-8'));
 		RichtextUtil::$USE_ABSOLUTE_LINKS = true;
 	}
-	
+
 	public function renderFile() {
 		$oDocument = new DOMDocument();
 		$oRoot = $oDocument->createElement("rss");
@@ -32,14 +32,14 @@ class EventsFileModule extends FileModule {
 		self::addSimpleAttribute($oDocument, $oChannel, 'language', Session::language());
 		self::addSimpleAttribute($oDocument, $oChannel, 'ttl', "15");
 		$oRoot->appendChild($oChannel);
-		
+
 		// get upcoming events, show only period
 		// FIXME periods for school_class and normal event the same
 		// FIXME add events with reports and images, update
-		
+
 		$iPeriod = 14;
 		$sDateAhead = mktime(0, 0, 0, date("m"), date("d")+$iPeriod, date("y"));
-		
+
 		// get events related to classes or others
 		$oQuery = $this->oQuery->upcomingOrOngoing()->filterByDateStart($sDateAhead, Criteria::LESS_EQUAL)->filterByIsActive(true);
 		$aEvents = $oQuery->find();

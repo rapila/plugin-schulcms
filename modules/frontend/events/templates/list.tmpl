@@ -1,4 +1,4 @@
-<table class="event_list list_view with_header">
+<table class="event_list list_view with_header{{no_events_info}}">
 	<thead>
 		<tr>
 			<th>Datum</th>
@@ -11,6 +11,6 @@
 	<tbody>
   {{list_item}}
 	</tbody>
-</table>
+</table>{{report_list}}
 <div class="report_and_images_teaser">{{identifierContext=start;name=report_and_images_teaser_message}}{{report_and_images_teaser_message}} {{year_link}}<br />{{identifierContext=end;name=report_and_images_teaser_message}}{{display_icon_info}}
 </div>

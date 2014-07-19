@@ -4,15 +4,15 @@
  * @package		 propel.generator.model
  */
 class EventQuery extends BaseEventQuery {
-	
+
 	public function upcomingOrOngoing() {
 		return $this->upcoming()->_and()->filterByDateEnd(null, Criteria::ISNULL)->_or()->filterByDateEnd(date('Y-m-d'), Criteria::GREATER_EQUAL);
 	}
-	
+
 	public function upcoming() {
 		return $this->filterByDateStart(date('Y-m-d'), Criteria::GREATER_EQUAL);
 	}
-		
+
 	public function past($sDate = null) {
 		$sDateToday = date('Y-m-d');
 		$oDateStart = $this->getNewCriterion(EventPeer::DATE_START, $sDateToday, Criteria::LESS_THAN);
@@ -29,7 +29,7 @@ class EventQuery extends BaseEventQuery {
 		$this->add($oDateStart);
 		return $this;
 	}
-	
+
 	public function filterByNavigationItem($oNavigationItem = null) {
 		if($oNavigationItem === null) {
 			$oNavigationItem = FrontendManager::$CURRENT_NAVIGATION_ITEM;
@@ -61,22 +61,26 @@ class EventQuery extends BaseEventQuery {
 		}
 		return $this;
 	}
-	
+
 	public function orderByRand() {
 		return $this->addAscendingOrderByColumn('RAND()');
 	}
-	
+
 	public function excludeExternallyManaged($bIsNull = true) {
 		if($bIsNull) {
-			return $this->filterBySchoolClassId(null, Criteria::ISNULL);
+			return $this->excludeClassEvents();
 		}
 		return $this;
 	}
-	
+
+	public function excludeClassEvents() {
+		return $this->filterBySchoolClassId(null, Criteria::ISNULL);
+	}
+
 	public function filterbyHasImagesOrReview() {
 		return $this->joinEventDocument()->_or()->filterByBodyReview(null, Criteria::ISNOTNULL);
 	}
-	
+
 	public static function findYearsByEventTypeId($iEventType = null) {
 		$oQuery = FrontendEventQuery::create()->distinct()->withColumn('YEAR(events.DateStart)', 'Year');
 		if(is_numeric($iEventType)) {
