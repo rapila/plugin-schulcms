@@ -129,7 +129,7 @@ class Event extends BaseEvent {
 			if(!self::$EVENTPAGE) {
 				self::$EVENTPAGE = PagePeer::getPageByIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS);
 			}
-			$oEventPage = $EVENTPAGE;
+			$oEventPage = self::$EVENTPAGE;
 		}
 		$aDateStart = explode('-', $this->getDateStart('Y-n-j'));
 		if(!$oEventPage) {
