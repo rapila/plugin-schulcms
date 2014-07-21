@@ -23,6 +23,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$aOptions = @unserialize($this->getData());
 
 		$this->iEventTypeId = $aOptions[self::MODE_EVENT_TYPE_ID];
+		// Consider retrieving event differently without $_REQUEST param, check filter
 		if(self::$EVENT === null && isset($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY])) {
 			self::$EVENT = EventQuery::create()->findPk($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY]);
 		}
