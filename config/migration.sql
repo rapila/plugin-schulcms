@@ -10,7 +10,7 @@ ALTER TABLE `schools` ADD `school_unit` VARCHAR( 80 ) CHARACTER SET utf8 COLLATE
 ALTER TABLE `school_classes` ADD `klassentyp` VARCHAR( 80 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `room_number` 
 
 #20110303.1621, name change and new table
-RENAME TABLE `cms_***REMOVED***`.`classes_students` TO `cms_***REMOVED***`.`class_students` ;
+RENAME TABLE `classes_students` TO `class_students` ;
 DROP TABLE IF EXISTS `class_students`;
 CREATE TABLE IF NOT EXISTS `class_students` (
   `school_class_id` int(10) unsigned NOT NULL,
@@ -33,7 +33,7 @@ ALTER TABLE `students` CHANGE `birth_day` `date_of_birth` DATE NULL DEFAULT NULL
 ALTER TABLE `school_functions` ADD `original_id` INT UNSIGNED NOT NULL AFTER `id`;
 
 #20110317.1036
-INSERT INTO `cms_***REMOVED***`.`document_categories` (
+INSERT INTO `document_categories` (
 `id` ,
 `name` ,
 `sort` ,
@@ -408,3 +408,25 @@ ALTER TABLE `class_students` ADD `is_newly_updated` TINYINT UNSIGNED NOT NULL DE
 
 #20111224.1359
 ALTER TABLE `notes` ADD `is_inactive` TINYINT UNSIGNED NOT NULL DEFAULT '0' AFTER `date_end` 
+
+#20111223.1450
+ALTER TABLE `notes` ADD `note_type_id` TINYINT UNSIGNED NULL DEFAULT NULL AFTER `id`;
+ALTER TABLE `notes` ADD INDEX ( `note_type_id` ) ;
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+DROP TABLE IF EXISTS `note_types`;
+CREATE TABLE IF NOT EXISTS `note_types` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(10) unsigned DEFAULT NULL,
+  `updated_at` datetime NOT NULL,
+  `updated_by` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+#20120108.1030
+ALTER TABLE `notes` ADD `image_id` INT UNSIGNED NULL DEFAULT NULL AFTER `date_end` ,
+ADD INDEX ( `image_id` );

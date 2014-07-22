@@ -56,7 +56,7 @@ school_settings:
   gallery_display_image_name: true
 
 
-# example navigation like in pilote project ***REMOVED***
+# example navigation like in pilot project
 navigations:
   main:
     1:
