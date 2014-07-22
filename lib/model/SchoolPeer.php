@@ -74,7 +74,7 @@ class SchoolPeer extends BaseSchoolPeer {
 	}
 
 	public static function getSchoolId() {
-		$iSchoolId = Settings::getSetting("school_settings", '***REMOVED***_school_id', null);
+		$iSchoolId = Settings::getSetting("school_settings", 'main_school_id', null);
 		if($iSchoolId) {
 			return $iSchoolId;
 		}

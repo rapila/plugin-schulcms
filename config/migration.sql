@@ -288,21 +288,6 @@ CREATE TABLE IF NOT EXISTS `service_categories` (
 
 ALTER TABLE `services` ADD `service_category_id` INT UNSIGNED NULL DEFAULT NULL AFTER `is_active` 
 
-#20110521.2024
-CREATE TABLE IF NOT EXISTS `***REMOVED***_syncronisations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `log` longblob,
-  `duration` int(10) unsigned DEFAULT NULL,
-  `code` SMALLINT unsigned DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `created_by` int(10) unsigned DEFAULT NULL,
-  `updated_by` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `***REMOVED***_syncronisations_FI_1` (`created_by`),
-  KEY `***REMOVED***_syncronisations_FI_2` (`updated_by`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
 #20110603.0921
 ALTER TABLE `event_documents` CHANGE `sort_order` `sort` INT( 10 ) UNSIGNED NULL DEFAULT NULL;
 
@@ -311,9 +296,6 @@ ALTER TABLE `schools` ADD `current_year` SMALLINT NULL DEFAULT NULL AFTER `phone
 
 #20110704.1228
 ALTER TABLE `school_classes` ADD `teaching_unit` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `klassentyp_normalized`;
-
-#20110704.1659
-ALTER TABLE `***REMOVED***_syncronisations` ADD `is_executed_by_cron_job` TINYINT UNSIGNED NOT NULL DEFAULT '1' AFTER `code`;
 
 #20110705.1501
 ALTER TABLE `school_classes` ADD `unit_name` VARCHAR( 80 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `name`;

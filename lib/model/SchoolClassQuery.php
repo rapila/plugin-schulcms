@@ -27,7 +27,7 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 	public function filterByClassTypeIdYearAndSchool($iClassTypeId = null, $iYear = null, $oSchool = null) {
 		if($oSchool === null) $oSchool = SchoolPeer::getSchool();
 		if($oSchool === null) {
-			throw new Exception(__METHOD__.' valid school object required. Please check ***REMOVED*** configuration or ***REMOVED***Sync');
+			throw new Exception(__METHOD__.' valid school object required. Please check configuration or Sync');
 		}
 		$iYear = $iYear === null ? $oSchool->getCurrentYear() : $iYear;
 		// Limiting the result by $this->filterBySchool($oSchool)->distinct() can't be used since some schools operate with multiple school_ids

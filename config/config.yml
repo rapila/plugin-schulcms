@@ -4,7 +4,7 @@
 
 school_settings:
   # school id for data synchronisation
-  ***REMOVED***_school_id: null
+  main_school_id: null
   
   # display recent event with report or image gallery
   event_is_recent_day_count: 60
