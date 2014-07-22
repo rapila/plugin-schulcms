@@ -128,13 +128,13 @@ class Event extends BaseEvent {
 		if($oEventPage === null) {
 			if(!self::$EVENTPAGE) {
 				self::$EVENTPAGE = PagePeer::getPageByIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS);
+				if(!self::$EVENTPAGE) {
+					throw new Exception("Error: Your current event page requires a page-identifier SchoolPeer::PAGE_IDENTIFIER_EVENTS");
+				}
 			}
 			$oEventPage = self::$EVENTPAGE;
 		}
 		$aDateStart = explode('-', $this->getDateStart('Y-n-j'));
-		if(!$oEventPage) {
-			throw new Exception("Error: Your current event page requires a page-identifier SchoolPeer::PAGE_IDENTIFIER_EVENTS");
-		}
 		return array_merge($oEventPage->getFullPathArray(), array_merge($aDateStart, array($this->getTitleNormalized())));
 	}
 	

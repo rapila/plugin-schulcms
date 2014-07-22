@@ -1,28 +1,24 @@
 <?php
 class EventFilterModule extends FilterModule {
 
-	const EVENT_TYPE_SEPARATOR = '-';
-
 	const ITEM_EVENT_YEAR = 'event_year';
 	const ITEM_EVENT_MONTH = 'event_month';
 	const ITEM_EVENT_DAY = 'event_day';
 	const ITEM_EVENT = 'event_normalized_title';
 
 	const EVENT_REQUEST_KEY = 'event_detail';
-	const NAV_TITLE = "Alle ";
-
+	const NAV_TITLE_PREFIX = "Alle ";
 	const EVENT_FEED_ITEM = 'event-feed';
 
 	public function onNavigationItemChildrenRequested(NavigationItem $oNavigationItem) {
 		$mIdentifier = $oNavigationItem->getIdentifier();
 		if($oNavigationItem instanceof PageNavigationItem) {
-			// if page identifier suffix is «events»
+
 			if($mIdentifier === SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS)) {
 				$aYears = self::selectNames(array(), 'YEAR(DATE_START)');
 				foreach($aYears as $iYear) {
 					if($iYear != null) {
-						$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE.$iYear, null, array('year' => $iYear)));
-
+						$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE_PREFIX.$iYear, null, array('year' => $iYear)));
 					}
 				}
 				// add feed
