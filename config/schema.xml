@@ -61,9 +61,14 @@
 	<column name="level" description="Jahrgang" type="tinyint" />
 	<column name="room_number" type="varchar" size="5" />
 	<column name="teaching_unit" type="varchar" size="80" />
+	<column name="student_count" type="tinyint" />
 	<column name="class_portrait_id" type="integer" />
 	<foreign-key foreignTable="documents" onDelete="setnull">
 		<reference local="class_portrait_id" foreign="id" />
+	</foreign-key>
+	<column name="subject_id" type="integer" />
+	<foreign-key foreignTable="subjects" onDelete="setnull">
+		<reference local="subject_id" foreign="id" />
 	</foreign-key>
 	<column name="class_type_id" type="tinyint" />
 	<foreign-key foreignTable="class_types" onDelete="setnull">
@@ -88,6 +93,29 @@
 	<unique>
 		<unique-column name="original_id" />
 		<unique-column name="year" />
+	</unique>
+</table>
+
+<table name="school_class_subject_classes" phpName="SchoolClassSubjectClasses">
+	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="school_classes" onDelete="cascade">
+		<reference local="school_class_id" foreign="id" />
+	</foreign-key>
+	<column name="subject_class_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="school_classes" onDelete="cascade">
+		<reference local="subject_class_id" foreign="id" />
+	</foreign-key>
+	<column name="student_count" description="only students that belong to both school_class and subject class" type="tinyint" />
+</table>
+
+<table name="subjects" phpName="Subject">
+	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+	<column name="original_id" type="integer" />
+	<column name="name" type="varchar" size="80" required="true"/>
+	<column name="short_name" type="varchar" size="40" />
+	<column name="slug" type="varchar" size="80" />
+	<unique>
+		<unique-column name="slug" />
 	</unique>
 </table>
 
