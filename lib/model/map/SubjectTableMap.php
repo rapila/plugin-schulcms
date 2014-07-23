@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'students' table.
+ * This class defines the structure of the 'subjects' table.
  *
  *
  *
@@ -14,13 +14,13 @@
  *
  * @package    propel.generator.model.map
  */
-class StudentTableMap extends TableMap
+class SubjectTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'model.map.StudentTableMap';
+    const CLASS_NAME = 'model.map.SubjectTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -32,18 +32,17 @@ class StudentTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('students');
-        $this->setPhpName('Student');
-        $this->setClassname('Student');
+        $this->setName('subjects');
+        $this->setPhpName('Subject');
+        $this->setClassname('Subject');
         $this->setPackage('model');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('original_id', 'OriginalId', 'INTEGER', false, null, null);
-        $this->addColumn('last_name', 'LastName', 'VARCHAR', false, 40, null);
-        $this->addColumn('first_name', 'FirstName', 'VARCHAR', false, 40, null);
-        $this->addColumn('date_of_birth', 'DateOfBirth', 'DATE', false, null, null);
-        $this->addForeignKey('portrait_id', 'PortraitId', 'INTEGER', 'documents', 'id', false, null, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 80, null);
+        $this->addColumn('short_name', 'ShortName', 'VARCHAR', false, 40, null);
+        $this->addColumn('slug', 'Slug', 'VARCHAR', false, 80, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addForeignKey('created_by', 'CreatedBy', 'INTEGER', 'users', 'id', false, null, null);
@@ -56,10 +55,9 @@ class StudentTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Document', 'Document', RelationMap::MANY_TO_ONE, array('portrait_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
         $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
-        $this->addRelation('ClassStudent', 'ClassStudent', RelationMap::ONE_TO_MANY, array('id' => 'student_id', ), 'CASCADE', null, 'ClassStudents');
+        $this->addRelation('SchoolClass', 'SchoolClass', RelationMap::ONE_TO_MANY, array('id' => 'subject_id', ), 'SET NULL', null, 'SchoolClasss');
     } // buildRelations()
 
     /**
@@ -91,4 +89,4 @@ class StudentTableMap extends TableMap
         );
     } // getBehaviors()
 
-} // StudentTableMap
+} // SubjectTableMap

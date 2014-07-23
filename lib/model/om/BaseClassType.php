@@ -643,11 +643,6 @@ abstract class BaseClassType extends BaseObject implements Persistent
             $ret = $this->preSave($con);
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
-                // denyable behavior
-                if(!(ClassTypePeer::isIgnoringRights() || $this->mayOperate("insert"))) {
-                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "class_types")));
-                }
-
                 // extended_timestampable behavior
                 if (!$this->isColumnModified(ClassTypePeer::CREATED_AT)) {
                     $this->setCreatedAt(time());
@@ -666,13 +661,13 @@ abstract class BaseClassType extends BaseObject implements Persistent
                     }
                 }
 
-            } else {
-                $ret = $ret && $this->preUpdate($con);
                 // denyable behavior
-                if(!(ClassTypePeer::isIgnoringRights() || $this->mayOperate("update"))) {
-                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "class_types")));
+                if(!(ClassTypePeer::isIgnoringRights() || $this->mayOperate("insert"))) {
+                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "class_types")));
                 }
 
+            } else {
+                $ret = $ret && $this->preUpdate($con);
                 // extended_timestampable behavior
                 if ($this->isModified() && !$this->isColumnModified(ClassTypePeer::UPDATED_AT)) {
                     $this->setUpdatedAt(time());
@@ -684,6 +679,11 @@ abstract class BaseClassType extends BaseObject implements Persistent
                         $this->setUpdatedBy(Session::getSession()->getUser()->getId());
                     }
                 }
+                // denyable behavior
+                if(!(ClassTypePeer::isIgnoringRights() || $this->mayOperate("update"))) {
+                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "class_types")));
+                }
+
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1723,6 +1723,31 @@ abstract class BaseClassType extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|SchoolClass[] List of SchoolClass objects
      */
+    public function getSchoolClasssJoinSubject($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = SchoolClassQuery::create(null, $criteria);
+        $query->joinWith('Subject', $join_behavior);
+
+        return $this->getSchoolClasss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this ClassType is new, it will return
+     * an empty collection; or if this ClassType has previously
+     * been saved, it will retrieve related SchoolClasss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in ClassType.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|SchoolClass[] List of SchoolClass objects
+     */
     public function getSchoolClasssJoinDocumentRelatedByClassScheduleId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = SchoolClassQuery::create(null, $criteria);
@@ -1934,30 +1959,6 @@ abstract class BaseClassType extends BaseObject implements Persistent
         return $this->alreadyInSave;
     }
 
-    // denyable behavior
-    public function mayOperate($sOperation, $oUser = false) {
-        if($oUser === false) {
-            $oUser = Session::getSession()->getUser();
-        }
-        $bIsAllowed = false;
-        if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && ClassTypePeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
-            $bIsAllowed = true;
-        } else if(ClassTypePeer::mayOperateOn($oUser, $this, $sOperation)) {
-            $bIsAllowed = true;
-        }
-        FilterModule::getFilters()->handleClassTypeOperationCheck($sOperation, $this, $oUser, array(&$bIsAllowed));
-        return $bIsAllowed;
-    }
-    public function mayBeInserted($oUser = false) {
-        return $this->mayOperate("insert", $oUser);
-    }
-    public function mayBeUpdated($oUser = false) {
-        return $this->mayOperate("update", $oUser);
-    }
-    public function mayBeDeleted($oUser = false) {
-        return $this->mayOperate("delete", $oUser);
-    }
-
     // extended_timestampable behavior
 
     /**
@@ -2021,6 +2022,30 @@ abstract class BaseClassType extends BaseObject implements Persistent
     {
         $this->modifiedColumns[] = ClassTypePeer::UPDATED_BY;
         return $this;
+    }
+
+    // denyable behavior
+    public function mayOperate($sOperation, $oUser = false) {
+        if($oUser === false) {
+            $oUser = Session::getSession()->getUser();
+        }
+        $bIsAllowed = false;
+        if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && ClassTypePeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
+            $bIsAllowed = true;
+        } else if(ClassTypePeer::mayOperateOn($oUser, $this, $sOperation)) {
+            $bIsAllowed = true;
+        }
+        FilterModule::getFilters()->handleClassTypeOperationCheck($sOperation, $this, $oUser, array(&$bIsAllowed));
+        return $bIsAllowed;
+    }
+    public function mayBeInserted($oUser = false) {
+        return $this->mayOperate("insert", $oUser);
+    }
+    public function mayBeUpdated($oUser = false) {
+        return $this->mayOperate("update", $oUser);
+    }
+    public function mayBeDeleted($oUser = false) {
+        return $this->mayOperate("delete", $oUser);
     }
 
     // extended_keyable behavior

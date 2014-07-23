@@ -47,7 +47,9 @@ class SchoolClassTableMap extends TableMap
         $this->addColumn('level', 'Level', 'TINYINT', false, null, null);
         $this->addColumn('room_number', 'RoomNumber', 'VARCHAR', false, 5, null);
         $this->addColumn('teaching_unit', 'TeachingUnit', 'VARCHAR', false, 80, null);
+        $this->addColumn('student_count', 'StudentCount', 'TINYINT', false, null, null);
         $this->addForeignKey('class_portrait_id', 'ClassPortraitId', 'INTEGER', 'documents', 'id', false, null, null);
+        $this->addForeignKey('subject_id', 'SubjectId', 'INTEGER', 'subjects', 'id', false, null, null);
         $this->addForeignKey('class_type_id', 'ClassTypeId', 'TINYINT', 'class_types', 'id', false, null, null);
         $this->addForeignKey('class_schedule_id', 'ClassScheduleId', 'INTEGER', 'documents', 'id', false, null, null);
         $this->addForeignKey('week_schedule_id', 'WeekScheduleId', 'INTEGER', 'documents', 'id', false, null, null);
@@ -66,6 +68,7 @@ class SchoolClassTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('DocumentRelatedByClassPortraitId', 'Document', RelationMap::MANY_TO_ONE, array('class_portrait_id' => 'id', ), 'SET NULL', null);
+        $this->addRelation('Subject', 'Subject', RelationMap::MANY_TO_ONE, array('subject_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('ClassType', 'ClassType', RelationMap::MANY_TO_ONE, array('class_type_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('DocumentRelatedByClassScheduleId', 'Document', RelationMap::MANY_TO_ONE, array('class_schedule_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('DocumentRelatedByWeekScheduleId', 'Document', RelationMap::MANY_TO_ONE, array('week_schedule_id' => 'id', ), 'SET NULL', null);
@@ -73,6 +76,8 @@ class SchoolClassTableMap extends TableMap
         $this->addRelation('School', 'School', RelationMap::MANY_TO_ONE, array('school_id' => 'id', ), 'CASCADE', null);
         $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
         $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
+        $this->addRelation('SchoolClassSubjectClassesRelatedBySchoolClassId', 'SchoolClassSubjectClasses', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'SchoolClassSubjectClassessRelatedBySchoolClassId');
+        $this->addRelation('SchoolClassSubjectClassesRelatedBySubjectClassId', 'SchoolClassSubjectClasses', RelationMap::ONE_TO_MANY, array('id' => 'subject_class_id', ), 'CASCADE', null, 'SchoolClassSubjectClassessRelatedBySubjectClassId');
         $this->addRelation('ClassStudent', 'ClassStudent', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassStudents');
         $this->addRelation('ClassLink', 'ClassLink', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassLinks');
         $this->addRelation('ClassDocument', 'ClassDocument', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassDocuments');
@@ -90,11 +95,6 @@ class SchoolClassTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'denyable' =>  array (
-  'mode' => 'by_role',
-  'role_key' => '',
-  'owner_allowed' => '',
-),
             'extended_timestampable' =>  array (
   'create_column' => 'created_at',
   'update_column' => 'updated_at',
@@ -103,6 +103,11 @@ class SchoolClassTableMap extends TableMap
             'attributable' =>  array (
   'create_column' => 'created_by',
   'update_column' => 'updated_by',
+),
+            'denyable' =>  array (
+  'mode' => 'by_role',
+  'role_key' => '',
+  'owner_allowed' => '',
 ),
             'extended_keyable' =>  array (
   'key_separator' => '_',

@@ -2,24 +2,24 @@
 
 
 /**
- * Base class that represents a row from the 'event_types' table.
+ * Base class that represents a row from the 'school_class_subject_classes' table.
  *
  *
  *
  * @package    propel.generator.model.om
  */
-abstract class BaseEventType extends BaseObject implements Persistent
+abstract class BaseSchoolClassSubjectClasses extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'EventTypePeer';
+    const PEER = 'SchoolClassSubjectClassesPeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        EventTypePeer
+     * @var        SchoolClassSubjectClassesPeer
      */
     protected static $peer;
 
@@ -30,16 +30,22 @@ abstract class BaseEventType extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the id field.
+     * The value for the school_class_id field.
      * @var        int
      */
-    protected $id;
+    protected $school_class_id;
 
     /**
-     * The value for the name field.
-     * @var        string
+     * The value for the subject_class_id field.
+     * @var        int
      */
-    protected $name;
+    protected $subject_class_id;
+
+    /**
+     * The value for the student_count field.
+     * @var        int
+     */
+    protected $student_count;
 
     /**
      * The value for the created_at field.
@@ -66,6 +72,16 @@ abstract class BaseEventType extends BaseObject implements Persistent
     protected $updated_by;
 
     /**
+     * @var        SchoolClass
+     */
+    protected $aSchoolClassRelatedBySchoolClassId;
+
+    /**
+     * @var        SchoolClass
+     */
+    protected $aSchoolClassRelatedBySubjectClassId;
+
+    /**
      * @var        User
      */
     protected $aUserRelatedByCreatedBy;
@@ -74,12 +90,6 @@ abstract class BaseEventType extends BaseObject implements Persistent
      * @var        User
      */
     protected $aUserRelatedByUpdatedBy;
-
-    /**
-     * @var        PropelObjectCollection|Event[] Collection to store aggregation of Event objects.
-     */
-    protected $collEvents;
-    protected $collEventsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -102,31 +112,36 @@ abstract class BaseEventType extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * An array of objects scheduled for deletion.
-     * @var		PropelObjectCollection
-     */
-    protected $eventsScheduledForDeletion = null;
-
-    /**
-     * Get the [id] column value.
+     * Get the [school_class_id] column value.
      *
      * @return int
      */
-    public function getId()
+    public function getSchoolClassId()
     {
 
-        return $this->id;
+        return $this->school_class_id;
     }
 
     /**
-     * Get the [name] column value.
+     * Get the [subject_class_id] column value.
      *
-     * @return string
+     * @return int
      */
-    public function getName()
+    public function getSubjectClassId()
     {
 
-        return $this->name;
+        return $this->subject_class_id;
+    }
+
+    /**
+     * Get the [student_count] column value.
+     * only students that belong to both school_class and subject class
+     * @return int
+     */
+    public function getStudentCount()
+    {
+
+        return $this->student_count;
     }
 
     /**
@@ -232,53 +247,82 @@ abstract class BaseEventType extends BaseObject implements Persistent
     }
 
     /**
-     * Set the value of [id] column.
+     * Set the value of [school_class_id] column.
      *
      * @param  int $v new value
-     * @return EventType The current object (for fluent API support)
+     * @return SchoolClassSubjectClasses The current object (for fluent API support)
      */
-    public function setId($v)
+    public function setSchoolClassId($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->id !== $v) {
-            $this->id = $v;
-            $this->modifiedColumns[] = EventTypePeer::ID;
+        if ($this->school_class_id !== $v) {
+            $this->school_class_id = $v;
+            $this->modifiedColumns[] = SchoolClassSubjectClassesPeer::SCHOOL_CLASS_ID;
+        }
+
+        if ($this->aSchoolClassRelatedBySchoolClassId !== null && $this->aSchoolClassRelatedBySchoolClassId->getId() !== $v) {
+            $this->aSchoolClassRelatedBySchoolClassId = null;
         }
 
 
         return $this;
-    } // setId()
+    } // setSchoolClassId()
 
     /**
-     * Set the value of [name] column.
+     * Set the value of [subject_class_id] column.
      *
-     * @param  string $v new value
-     * @return EventType The current object (for fluent API support)
+     * @param  int $v new value
+     * @return SchoolClassSubjectClasses The current object (for fluent API support)
      */
-    public function setName($v)
+    public function setSubjectClassId($v)
     {
-        if ($v !== null) {
-            $v = (string) $v;
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
         }
 
-        if ($this->name !== $v) {
-            $this->name = $v;
-            $this->modifiedColumns[] = EventTypePeer::NAME;
+        if ($this->subject_class_id !== $v) {
+            $this->subject_class_id = $v;
+            $this->modifiedColumns[] = SchoolClassSubjectClassesPeer::SUBJECT_CLASS_ID;
+        }
+
+        if ($this->aSchoolClassRelatedBySubjectClassId !== null && $this->aSchoolClassRelatedBySubjectClassId->getId() !== $v) {
+            $this->aSchoolClassRelatedBySubjectClassId = null;
         }
 
 
         return $this;
-    } // setName()
+    } // setSubjectClassId()
+
+    /**
+     * Set the value of [student_count] column.
+     * only students that belong to both school_class and subject class
+     * @param  int $v new value
+     * @return SchoolClassSubjectClasses The current object (for fluent API support)
+     */
+    public function setStudentCount($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->student_count !== $v) {
+            $this->student_count = $v;
+            $this->modifiedColumns[] = SchoolClassSubjectClassesPeer::STUDENT_COUNT;
+        }
+
+
+        return $this;
+    } // setStudentCount()
 
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
-     * @return EventType The current object (for fluent API support)
+     * @return SchoolClassSubjectClasses The current object (for fluent API support)
      */
     public function setCreatedAt($v)
     {
@@ -288,7 +332,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
                 $this->created_at = $newDateAsString;
-                $this->modifiedColumns[] = EventTypePeer::CREATED_AT;
+                $this->modifiedColumns[] = SchoolClassSubjectClassesPeer::CREATED_AT;
             }
         } // if either are not null
 
@@ -301,7 +345,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
-     * @return EventType The current object (for fluent API support)
+     * @return SchoolClassSubjectClasses The current object (for fluent API support)
      */
     public function setUpdatedAt($v)
     {
@@ -311,7 +355,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
                 $this->updated_at = $newDateAsString;
-                $this->modifiedColumns[] = EventTypePeer::UPDATED_AT;
+                $this->modifiedColumns[] = SchoolClassSubjectClassesPeer::UPDATED_AT;
             }
         } // if either are not null
 
@@ -323,7 +367,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
      * Set the value of [created_by] column.
      *
      * @param  int $v new value
-     * @return EventType The current object (for fluent API support)
+     * @return SchoolClassSubjectClasses The current object (for fluent API support)
      */
     public function setCreatedBy($v)
     {
@@ -333,7 +377,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
 
         if ($this->created_by !== $v) {
             $this->created_by = $v;
-            $this->modifiedColumns[] = EventTypePeer::CREATED_BY;
+            $this->modifiedColumns[] = SchoolClassSubjectClassesPeer::CREATED_BY;
         }
 
         if ($this->aUserRelatedByCreatedBy !== null && $this->aUserRelatedByCreatedBy->getId() !== $v) {
@@ -348,7 +392,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
      * Set the value of [updated_by] column.
      *
      * @param  int $v new value
-     * @return EventType The current object (for fluent API support)
+     * @return SchoolClassSubjectClasses The current object (for fluent API support)
      */
     public function setUpdatedBy($v)
     {
@@ -358,7 +402,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
 
         if ($this->updated_by !== $v) {
             $this->updated_by = $v;
-            $this->modifiedColumns[] = EventTypePeer::UPDATED_BY;
+            $this->modifiedColumns[] = SchoolClassSubjectClassesPeer::UPDATED_BY;
         }
 
         if ($this->aUserRelatedByUpdatedBy !== null && $this->aUserRelatedByUpdatedBy->getId() !== $v) {
@@ -401,12 +445,13 @@ abstract class BaseEventType extends BaseObject implements Persistent
     {
         try {
 
-            $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->created_at = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->updated_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->created_by = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->updated_by = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->school_class_id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->subject_class_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->student_count = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->created_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->updated_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->created_by = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->updated_by = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -416,10 +461,10 @@ abstract class BaseEventType extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 6; // 6 = EventTypePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = SchoolClassSubjectClassesPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating EventType object", $e);
+            throw new PropelException("Error populating SchoolClassSubjectClasses object", $e);
         }
     }
 
@@ -439,6 +484,12 @@ abstract class BaseEventType extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aSchoolClassRelatedBySchoolClassId !== null && $this->school_class_id !== $this->aSchoolClassRelatedBySchoolClassId->getId()) {
+            $this->aSchoolClassRelatedBySchoolClassId = null;
+        }
+        if ($this->aSchoolClassRelatedBySubjectClassId !== null && $this->subject_class_id !== $this->aSchoolClassRelatedBySubjectClassId->getId()) {
+            $this->aSchoolClassRelatedBySubjectClassId = null;
+        }
         if ($this->aUserRelatedByCreatedBy !== null && $this->created_by !== $this->aUserRelatedByCreatedBy->getId()) {
             $this->aUserRelatedByCreatedBy = null;
         }
@@ -468,13 +519,13 @@ abstract class BaseEventType extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(EventTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(SchoolClassSubjectClassesPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = EventTypePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = SchoolClassSubjectClassesPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -484,10 +535,10 @@ abstract class BaseEventType extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aSchoolClassRelatedBySchoolClassId = null;
+            $this->aSchoolClassRelatedBySubjectClassId = null;
             $this->aUserRelatedByCreatedBy = null;
             $this->aUserRelatedByUpdatedBy = null;
-            $this->collEvents = null;
-
         } // if (deep)
     }
 
@@ -508,17 +559,17 @@ abstract class BaseEventType extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(EventTypePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(SchoolClassSubjectClassesPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = EventTypeQuery::create()
+            $deleteQuery = SchoolClassSubjectClassesQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             // denyable behavior
-            if(!(EventTypePeer::isIgnoringRights() || $this->mayOperate("delete"))) {
-                throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "event_types")));
+            if(!(SchoolClassSubjectClassesPeer::isIgnoringRights() || $this->mayOperate("delete"))) {
+                throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "school_class_subject_classes")));
             }
 
             if ($ret) {
@@ -556,7 +607,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(EventTypePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(SchoolClassSubjectClassesPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -566,44 +617,44 @@ abstract class BaseEventType extends BaseObject implements Persistent
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // extended_timestampable behavior
-                if (!$this->isColumnModified(EventTypePeer::CREATED_AT)) {
+                if (!$this->isColumnModified(SchoolClassSubjectClassesPeer::CREATED_AT)) {
                     $this->setCreatedAt(time());
                 }
-                if (!$this->isColumnModified(EventTypePeer::UPDATED_AT)) {
+                if (!$this->isColumnModified(SchoolClassSubjectClassesPeer::UPDATED_AT)) {
                     $this->setUpdatedAt(time());
                 }
                 // attributable behavior
 
                 if(Session::getSession()->isAuthenticated()) {
-                    if (!$this->isColumnModified(EventTypePeer::CREATED_BY)) {
+                    if (!$this->isColumnModified(SchoolClassSubjectClassesPeer::CREATED_BY)) {
                         $this->setCreatedBy(Session::getSession()->getUser()->getId());
                     }
-                    if (!$this->isColumnModified(EventTypePeer::UPDATED_BY)) {
+                    if (!$this->isColumnModified(SchoolClassSubjectClassesPeer::UPDATED_BY)) {
                         $this->setUpdatedBy(Session::getSession()->getUser()->getId());
                     }
                 }
 
                 // denyable behavior
-                if(!(EventTypePeer::isIgnoringRights() || $this->mayOperate("insert"))) {
-                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "event_types")));
+                if(!(SchoolClassSubjectClassesPeer::isIgnoringRights() || $this->mayOperate("insert"))) {
+                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "school_class_subject_classes")));
                 }
 
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // extended_timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(EventTypePeer::UPDATED_AT)) {
+                if ($this->isModified() && !$this->isColumnModified(SchoolClassSubjectClassesPeer::UPDATED_AT)) {
                     $this->setUpdatedAt(time());
                 }
                 // attributable behavior
 
                 if(Session::getSession()->isAuthenticated()) {
-                    if ($this->isModified() && !$this->isColumnModified(EventTypePeer::UPDATED_BY)) {
+                    if ($this->isModified() && !$this->isColumnModified(SchoolClassSubjectClassesPeer::UPDATED_BY)) {
                         $this->setUpdatedBy(Session::getSession()->getUser()->getId());
                     }
                 }
                 // denyable behavior
-                if(!(EventTypePeer::isIgnoringRights() || $this->mayOperate("update"))) {
-                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "event_types")));
+                if(!(SchoolClassSubjectClassesPeer::isIgnoringRights() || $this->mayOperate("update"))) {
+                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "school_class_subject_classes")));
                 }
 
             }
@@ -615,7 +666,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                EventTypePeer::addInstanceToPool($this);
+                SchoolClassSubjectClassesPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -650,6 +701,20 @@ abstract class BaseEventType extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aSchoolClassRelatedBySchoolClassId !== null) {
+                if ($this->aSchoolClassRelatedBySchoolClassId->isModified() || $this->aSchoolClassRelatedBySchoolClassId->isNew()) {
+                    $affectedRows += $this->aSchoolClassRelatedBySchoolClassId->save($con);
+                }
+                $this->setSchoolClassRelatedBySchoolClassId($this->aSchoolClassRelatedBySchoolClassId);
+            }
+
+            if ($this->aSchoolClassRelatedBySubjectClassId !== null) {
+                if ($this->aSchoolClassRelatedBySubjectClassId->isModified() || $this->aSchoolClassRelatedBySubjectClassId->isNew()) {
+                    $affectedRows += $this->aSchoolClassRelatedBySubjectClassId->save($con);
+                }
+                $this->setSchoolClassRelatedBySubjectClassId($this->aSchoolClassRelatedBySubjectClassId);
+            }
+
             if ($this->aUserRelatedByCreatedBy !== null) {
                 if ($this->aUserRelatedByCreatedBy->isModified() || $this->aUserRelatedByCreatedBy->isNew()) {
                     $affectedRows += $this->aUserRelatedByCreatedBy->save($con);
@@ -675,23 +740,6 @@ abstract class BaseEventType extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
-            if ($this->eventsScheduledForDeletion !== null) {
-                if (!$this->eventsScheduledForDeletion->isEmpty()) {
-                    EventQuery::create()
-                        ->filterByPrimaryKeys($this->eventsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->eventsScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collEvents !== null) {
-                foreach ($this->collEvents as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
             $this->alreadyInSave = false;
 
         }
@@ -712,33 +760,32 @@ abstract class BaseEventType extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = EventTypePeer::ID;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . EventTypePeer::ID . ')');
-        }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(EventTypePeer::ID)) {
-            $modifiedColumns[':p' . $index++]  = '`id`';
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::SCHOOL_CLASS_ID)) {
+            $modifiedColumns[':p' . $index++]  = '`school_class_id`';
         }
-        if ($this->isColumnModified(EventTypePeer::NAME)) {
-            $modifiedColumns[':p' . $index++]  = '`name`';
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::SUBJECT_CLASS_ID)) {
+            $modifiedColumns[':p' . $index++]  = '`subject_class_id`';
         }
-        if ($this->isColumnModified(EventTypePeer::CREATED_AT)) {
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::STUDENT_COUNT)) {
+            $modifiedColumns[':p' . $index++]  = '`student_count`';
+        }
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
         }
-        if ($this->isColumnModified(EventTypePeer::UPDATED_AT)) {
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::UPDATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`updated_at`';
         }
-        if ($this->isColumnModified(EventTypePeer::CREATED_BY)) {
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::CREATED_BY)) {
             $modifiedColumns[':p' . $index++]  = '`created_by`';
         }
-        if ($this->isColumnModified(EventTypePeer::UPDATED_BY)) {
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::UPDATED_BY)) {
             $modifiedColumns[':p' . $index++]  = '`updated_by`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `event_types` (%s) VALUES (%s)',
+            'INSERT INTO `school_class_subject_classes` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -747,11 +794,14 @@ abstract class BaseEventType extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id`':
-                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+                    case '`school_class_id`':
+                        $stmt->bindValue($identifier, $this->school_class_id, PDO::PARAM_INT);
                         break;
-                    case '`name`':
-                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                    case '`subject_class_id`':
+                        $stmt->bindValue($identifier, $this->subject_class_id, PDO::PARAM_INT);
+                        break;
+                    case '`student_count`':
+                        $stmt->bindValue($identifier, $this->student_count, PDO::PARAM_INT);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -772,13 +822,6 @@ abstract class BaseEventType extends BaseObject implements Persistent
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
         }
-
-        try {
-            $pk = $con->lastInsertId();
-        } catch (Exception $e) {
-            throw new PropelException('Unable to get autoincrement id.', $e);
-        }
-        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -864,6 +907,18 @@ abstract class BaseEventType extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aSchoolClassRelatedBySchoolClassId !== null) {
+                if (!$this->aSchoolClassRelatedBySchoolClassId->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aSchoolClassRelatedBySchoolClassId->getValidationFailures());
+                }
+            }
+
+            if ($this->aSchoolClassRelatedBySubjectClassId !== null) {
+                if (!$this->aSchoolClassRelatedBySubjectClassId->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aSchoolClassRelatedBySubjectClassId->getValidationFailures());
+                }
+            }
+
             if ($this->aUserRelatedByCreatedBy !== null) {
                 if (!$this->aUserRelatedByCreatedBy->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aUserRelatedByCreatedBy->getValidationFailures());
@@ -877,18 +932,10 @@ abstract class BaseEventType extends BaseObject implements Persistent
             }
 
 
-            if (($retval = EventTypePeer::doValidate($this, $columns)) !== true) {
+            if (($retval = SchoolClassSubjectClassesPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
-
-                if ($this->collEvents !== null) {
-                    foreach ($this->collEvents as $referrerFK) {
-                        if (!$referrerFK->validate($columns)) {
-                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-                        }
-                    }
-                }
 
 
             $this->alreadyInValidation = false;
@@ -909,7 +956,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = EventTypePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = SchoolClassSubjectClassesPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -926,21 +973,24 @@ abstract class BaseEventType extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getId();
+                return $this->getSchoolClassId();
                 break;
             case 1:
-                return $this->getName();
+                return $this->getSubjectClassId();
                 break;
             case 2:
-                return $this->getCreatedAt();
+                return $this->getStudentCount();
                 break;
             case 3:
-                return $this->getUpdatedAt();
+                return $this->getCreatedAt();
                 break;
             case 4:
-                return $this->getCreatedBy();
+                return $this->getUpdatedAt();
                 break;
             case 5:
+                return $this->getCreatedBy();
+                break;
+            case 6:
                 return $this->getUpdatedBy();
                 break;
             default:
@@ -966,18 +1016,19 @@ abstract class BaseEventType extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['EventType'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['SchoolClassSubjectClasses'][serialize($this->getPrimaryKey())])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['EventType'][$this->getPrimaryKey()] = true;
-        $keys = EventTypePeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['SchoolClassSubjectClasses'][serialize($this->getPrimaryKey())] = true;
+        $keys = SchoolClassSubjectClassesPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getId(),
-            $keys[1] => $this->getName(),
-            $keys[2] => $this->getCreatedAt(),
-            $keys[3] => $this->getUpdatedAt(),
-            $keys[4] => $this->getCreatedBy(),
-            $keys[5] => $this->getUpdatedBy(),
+            $keys[0] => $this->getSchoolClassId(),
+            $keys[1] => $this->getSubjectClassId(),
+            $keys[2] => $this->getStudentCount(),
+            $keys[3] => $this->getCreatedAt(),
+            $keys[4] => $this->getUpdatedAt(),
+            $keys[5] => $this->getCreatedBy(),
+            $keys[6] => $this->getUpdatedBy(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -985,14 +1036,17 @@ abstract class BaseEventType extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aSchoolClassRelatedBySchoolClassId) {
+                $result['SchoolClassRelatedBySchoolClassId'] = $this->aSchoolClassRelatedBySchoolClassId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aSchoolClassRelatedBySubjectClassId) {
+                $result['SchoolClassRelatedBySubjectClassId'] = $this->aSchoolClassRelatedBySubjectClassId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aUserRelatedByCreatedBy) {
                 $result['UserRelatedByCreatedBy'] = $this->aUserRelatedByCreatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUserRelatedByUpdatedBy) {
                 $result['UserRelatedByUpdatedBy'] = $this->aUserRelatedByUpdatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->collEvents) {
-                $result['Events'] = $this->collEvents->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1012,7 +1066,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = EventTypePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = SchoolClassSubjectClassesPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -1029,21 +1083,24 @@ abstract class BaseEventType extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setId($value);
+                $this->setSchoolClassId($value);
                 break;
             case 1:
-                $this->setName($value);
+                $this->setSubjectClassId($value);
                 break;
             case 2:
-                $this->setCreatedAt($value);
+                $this->setStudentCount($value);
                 break;
             case 3:
-                $this->setUpdatedAt($value);
+                $this->setCreatedAt($value);
                 break;
             case 4:
-                $this->setCreatedBy($value);
+                $this->setUpdatedAt($value);
                 break;
             case 5:
+                $this->setCreatedBy($value);
+                break;
+            case 6:
                 $this->setUpdatedBy($value);
                 break;
         } // switch()
@@ -1068,14 +1125,15 @@ abstract class BaseEventType extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = EventTypePeer::getFieldNames($keyType);
+        $keys = SchoolClassSubjectClassesPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setCreatedAt($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setUpdatedAt($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setCreatedBy($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setUpdatedBy($arr[$keys[5]]);
+        if (array_key_exists($keys[0], $arr)) $this->setSchoolClassId($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setSubjectClassId($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setStudentCount($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setCreatedAt($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setUpdatedAt($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setCreatedBy($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setUpdatedBy($arr[$keys[6]]);
     }
 
     /**
@@ -1085,14 +1143,15 @@ abstract class BaseEventType extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(EventTypePeer::DATABASE_NAME);
+        $criteria = new Criteria(SchoolClassSubjectClassesPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(EventTypePeer::ID)) $criteria->add(EventTypePeer::ID, $this->id);
-        if ($this->isColumnModified(EventTypePeer::NAME)) $criteria->add(EventTypePeer::NAME, $this->name);
-        if ($this->isColumnModified(EventTypePeer::CREATED_AT)) $criteria->add(EventTypePeer::CREATED_AT, $this->created_at);
-        if ($this->isColumnModified(EventTypePeer::UPDATED_AT)) $criteria->add(EventTypePeer::UPDATED_AT, $this->updated_at);
-        if ($this->isColumnModified(EventTypePeer::CREATED_BY)) $criteria->add(EventTypePeer::CREATED_BY, $this->created_by);
-        if ($this->isColumnModified(EventTypePeer::UPDATED_BY)) $criteria->add(EventTypePeer::UPDATED_BY, $this->updated_by);
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::SCHOOL_CLASS_ID)) $criteria->add(SchoolClassSubjectClassesPeer::SCHOOL_CLASS_ID, $this->school_class_id);
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::SUBJECT_CLASS_ID)) $criteria->add(SchoolClassSubjectClassesPeer::SUBJECT_CLASS_ID, $this->subject_class_id);
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::STUDENT_COUNT)) $criteria->add(SchoolClassSubjectClassesPeer::STUDENT_COUNT, $this->student_count);
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::CREATED_AT)) $criteria->add(SchoolClassSubjectClassesPeer::CREATED_AT, $this->created_at);
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::UPDATED_AT)) $criteria->add(SchoolClassSubjectClassesPeer::UPDATED_AT, $this->updated_at);
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::CREATED_BY)) $criteria->add(SchoolClassSubjectClassesPeer::CREATED_BY, $this->created_by);
+        if ($this->isColumnModified(SchoolClassSubjectClassesPeer::UPDATED_BY)) $criteria->add(SchoolClassSubjectClassesPeer::UPDATED_BY, $this->updated_by);
 
         return $criteria;
     }
@@ -1107,30 +1166,37 @@ abstract class BaseEventType extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(EventTypePeer::DATABASE_NAME);
-        $criteria->add(EventTypePeer::ID, $this->id);
+        $criteria = new Criteria(SchoolClassSubjectClassesPeer::DATABASE_NAME);
+        $criteria->add(SchoolClassSubjectClassesPeer::SCHOOL_CLASS_ID, $this->school_class_id);
+        $criteria->add(SchoolClassSubjectClassesPeer::SUBJECT_CLASS_ID, $this->subject_class_id);
 
         return $criteria;
     }
 
     /**
-     * Returns the primary key for this object (row).
-     * @return int
+     * Returns the composite primary key for this object.
+     * The array elements will be in same order as specified in XML.
+     * @return array
      */
     public function getPrimaryKey()
     {
-        return $this->getId();
+        $pks = array();
+        $pks[0] = $this->getSchoolClassId();
+        $pks[1] = $this->getSubjectClassId();
+
+        return $pks;
     }
 
     /**
-     * Generic method to set the primary key (id column).
+     * Set the [composite] primary key.
      *
-     * @param  int $key Primary key.
+     * @param array $keys The elements of the composite key (order must match the order in XML file).
      * @return void
      */
-    public function setPrimaryKey($key)
+    public function setPrimaryKey($keys)
     {
-        $this->setId($key);
+        $this->setSchoolClassId($keys[0]);
+        $this->setSubjectClassId($keys[1]);
     }
 
     /**
@@ -1140,7 +1206,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getId();
+        return (null === $this->getSchoolClassId()) && (null === $this->getSubjectClassId());
     }
 
     /**
@@ -1149,14 +1215,16 @@ abstract class BaseEventType extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of EventType (or compatible) type.
+     * @param object $copyObj An object of SchoolClassSubjectClasses (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setName($this->getName());
+        $copyObj->setSchoolClassId($this->getSchoolClassId());
+        $copyObj->setSubjectClassId($this->getSubjectClassId());
+        $copyObj->setStudentCount($this->getStudentCount());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setCreatedBy($this->getCreatedBy());
@@ -1169,19 +1237,12 @@ abstract class BaseEventType extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
-            foreach ($this->getEvents() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addEvent($relObj->copy($deepCopy));
-                }
-            }
-
             //unflag object copy
             $this->startCopy = false;
         } // if ($deepCopy)
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1194,7 +1255,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return EventType Clone of current object.
+     * @return SchoolClassSubjectClasses Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1214,22 +1275,126 @@ abstract class BaseEventType extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return EventTypePeer
+     * @return SchoolClassSubjectClassesPeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new EventTypePeer();
+            self::$peer = new SchoolClassSubjectClassesPeer();
         }
 
         return self::$peer;
     }
 
     /**
+     * Declares an association between this object and a SchoolClass object.
+     *
+     * @param                  SchoolClass $v
+     * @return SchoolClassSubjectClasses The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSchoolClassRelatedBySchoolClassId(SchoolClass $v = null)
+    {
+        if ($v === null) {
+            $this->setSchoolClassId(NULL);
+        } else {
+            $this->setSchoolClassId($v->getId());
+        }
+
+        $this->aSchoolClassRelatedBySchoolClassId = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the SchoolClass object, it will not be re-added.
+        if ($v !== null) {
+            $v->addSchoolClassSubjectClassesRelatedBySchoolClassId($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated SchoolClass object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return SchoolClass The associated SchoolClass object.
+     * @throws PropelException
+     */
+    public function getSchoolClassRelatedBySchoolClassId(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aSchoolClassRelatedBySchoolClassId === null && ($this->school_class_id !== null) && $doQuery) {
+            $this->aSchoolClassRelatedBySchoolClassId = SchoolClassQuery::create()->findPk($this->school_class_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSchoolClassRelatedBySchoolClassId->addSchoolClassSubjectClassessRelatedBySchoolClassId($this);
+             */
+        }
+
+        return $this->aSchoolClassRelatedBySchoolClassId;
+    }
+
+    /**
+     * Declares an association between this object and a SchoolClass object.
+     *
+     * @param                  SchoolClass $v
+     * @return SchoolClassSubjectClasses The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSchoolClassRelatedBySubjectClassId(SchoolClass $v = null)
+    {
+        if ($v === null) {
+            $this->setSubjectClassId(NULL);
+        } else {
+            $this->setSubjectClassId($v->getId());
+        }
+
+        $this->aSchoolClassRelatedBySubjectClassId = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the SchoolClass object, it will not be re-added.
+        if ($v !== null) {
+            $v->addSchoolClassSubjectClassesRelatedBySubjectClassId($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated SchoolClass object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return SchoolClass The associated SchoolClass object.
+     * @throws PropelException
+     */
+    public function getSchoolClassRelatedBySubjectClassId(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aSchoolClassRelatedBySubjectClassId === null && ($this->subject_class_id !== null) && $doQuery) {
+            $this->aSchoolClassRelatedBySubjectClassId = SchoolClassQuery::create()->findPk($this->subject_class_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSchoolClassRelatedBySubjectClassId->addSchoolClassSubjectClassessRelatedBySubjectClassId($this);
+             */
+        }
+
+        return $this->aSchoolClassRelatedBySubjectClassId;
+    }
+
+    /**
      * Declares an association between this object and a User object.
      *
      * @param                  User $v
-     * @return EventType The current object (for fluent API support)
+     * @return SchoolClassSubjectClasses The current object (for fluent API support)
      * @throws PropelException
      */
     public function setUserRelatedByCreatedBy(User $v = null)
@@ -1245,7 +1410,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the User object, it will not be re-added.
         if ($v !== null) {
-            $v->addEventTypeRelatedByCreatedBy($this);
+            $v->addSchoolClassSubjectClassesRelatedByCreatedBy($this);
         }
 
 
@@ -1270,7 +1435,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUserRelatedByCreatedBy->addEventTypesRelatedByCreatedBy($this);
+                $this->aUserRelatedByCreatedBy->addSchoolClassSubjectClassessRelatedByCreatedBy($this);
              */
         }
 
@@ -1281,7 +1446,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
      * Declares an association between this object and a User object.
      *
      * @param                  User $v
-     * @return EventType The current object (for fluent API support)
+     * @return SchoolClassSubjectClasses The current object (for fluent API support)
      * @throws PropelException
      */
     public function setUserRelatedByUpdatedBy(User $v = null)
@@ -1297,7 +1462,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the User object, it will not be re-added.
         if ($v !== null) {
-            $v->addEventTypeRelatedByUpdatedBy($this);
+            $v->addSchoolClassSubjectClassesRelatedByUpdatedBy($this);
         }
 
 
@@ -1322,377 +1487,11 @@ abstract class BaseEventType extends BaseObject implements Persistent
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUserRelatedByUpdatedBy->addEventTypesRelatedByUpdatedBy($this);
+                $this->aUserRelatedByUpdatedBy->addSchoolClassSubjectClassessRelatedByUpdatedBy($this);
              */
         }
 
         return $this->aUserRelatedByUpdatedBy;
-    }
-
-
-    /**
-     * Initializes a collection based on the name of a relation.
-     * Avoids crafting an 'init[$relationName]s' method name
-     * that wouldn't work when StandardEnglishPluralizer is used.
-     *
-     * @param string $relationName The name of the relation to initialize
-     * @return void
-     */
-    public function initRelation($relationName)
-    {
-        if ('Event' == $relationName) {
-            $this->initEvents();
-        }
-    }
-
-    /**
-     * Clears out the collEvents collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return EventType The current object (for fluent API support)
-     * @see        addEvents()
-     */
-    public function clearEvents()
-    {
-        $this->collEvents = null; // important to set this to null since that means it is uninitialized
-        $this->collEventsPartial = null;
-
-        return $this;
-    }
-
-    /**
-     * reset is the collEvents collection loaded partially
-     *
-     * @return void
-     */
-    public function resetPartialEvents($v = true)
-    {
-        $this->collEventsPartial = $v;
-    }
-
-    /**
-     * Initializes the collEvents collection.
-     *
-     * By default this just sets the collEvents collection to an empty array (like clearcollEvents());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initEvents($overrideExisting = true)
-    {
-        if (null !== $this->collEvents && !$overrideExisting) {
-            return;
-        }
-        $this->collEvents = new PropelObjectCollection();
-        $this->collEvents->setModel('Event');
-    }
-
-    /**
-     * Gets an array of Event objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this EventType is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @return PropelObjectCollection|Event[] List of Event objects
-     * @throws PropelException
-     */
-    public function getEvents($criteria = null, PropelPDO $con = null)
-    {
-        $partial = $this->collEventsPartial && !$this->isNew();
-        if (null === $this->collEvents || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collEvents) {
-                // return empty collection
-                $this->initEvents();
-            } else {
-                $collEvents = EventQuery::create(null, $criteria)
-                    ->filterByEventType($this)
-                    ->find($con);
-                if (null !== $criteria) {
-                    if (false !== $this->collEventsPartial && count($collEvents)) {
-                      $this->initEvents(false);
-
-                      foreach ($collEvents as $obj) {
-                        if (false == $this->collEvents->contains($obj)) {
-                          $this->collEvents->append($obj);
-                        }
-                      }
-
-                      $this->collEventsPartial = true;
-                    }
-
-                    $collEvents->getInternalIterator()->rewind();
-
-                    return $collEvents;
-                }
-
-                if ($partial && $this->collEvents) {
-                    foreach ($this->collEvents as $obj) {
-                        if ($obj->isNew()) {
-                            $collEvents[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collEvents = $collEvents;
-                $this->collEventsPartial = false;
-            }
-        }
-
-        return $this->collEvents;
-    }
-
-    /**
-     * Sets a collection of Event objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param PropelCollection $events A Propel collection.
-     * @param PropelPDO $con Optional connection object
-     * @return EventType The current object (for fluent API support)
-     */
-    public function setEvents(PropelCollection $events, PropelPDO $con = null)
-    {
-        $eventsToDelete = $this->getEvents(new Criteria(), $con)->diff($events);
-
-
-        $this->eventsScheduledForDeletion = $eventsToDelete;
-
-        foreach ($eventsToDelete as $eventRemoved) {
-            $eventRemoved->setEventType(null);
-        }
-
-        $this->collEvents = null;
-        foreach ($events as $event) {
-            $this->addEvent($event);
-        }
-
-        $this->collEvents = $events;
-        $this->collEventsPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related Event objects.
-     *
-     * @param Criteria $criteria
-     * @param boolean $distinct
-     * @param PropelPDO $con
-     * @return int             Count of related Event objects.
-     * @throws PropelException
-     */
-    public function countEvents(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-    {
-        $partial = $this->collEventsPartial && !$this->isNew();
-        if (null === $this->collEvents || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collEvents) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getEvents());
-            }
-            $query = EventQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByEventType($this)
-                ->count($con);
-        }
-
-        return count($this->collEvents);
-    }
-
-    /**
-     * Method called to associate a Event object to this object
-     * through the Event foreign key attribute.
-     *
-     * @param    Event $l Event
-     * @return EventType The current object (for fluent API support)
-     */
-    public function addEvent(Event $l)
-    {
-        if ($this->collEvents === null) {
-            $this->initEvents();
-            $this->collEventsPartial = true;
-        }
-
-        if (!in_array($l, $this->collEvents->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddEvent($l);
-
-            if ($this->eventsScheduledForDeletion and $this->eventsScheduledForDeletion->contains($l)) {
-                $this->eventsScheduledForDeletion->remove($this->eventsScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param	Event $event The event object to add.
-     */
-    protected function doAddEvent($event)
-    {
-        $this->collEvents[]= $event;
-        $event->setEventType($this);
-    }
-
-    /**
-     * @param	Event $event The event object to remove.
-     * @return EventType The current object (for fluent API support)
-     */
-    public function removeEvent($event)
-    {
-        if ($this->getEvents()->contains($event)) {
-            $this->collEvents->remove($this->collEvents->search($event));
-            if (null === $this->eventsScheduledForDeletion) {
-                $this->eventsScheduledForDeletion = clone $this->collEvents;
-                $this->eventsScheduledForDeletion->clear();
-            }
-            $this->eventsScheduledForDeletion[]= $event;
-            $event->setEventType(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this EventType is new, it will return
-     * an empty collection; or if this EventType has previously
-     * been saved, it will retrieve related Events from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in EventType.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Event[] List of Event objects
-     */
-    public function getEventsJoinService($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = EventQuery::create(null, $criteria);
-        $query->joinWith('Service', $join_behavior);
-
-        return $this->getEvents($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this EventType is new, it will return
-     * an empty collection; or if this EventType has previously
-     * been saved, it will retrieve related Events from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in EventType.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Event[] List of Event objects
-     */
-    public function getEventsJoinSchoolClass($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = EventQuery::create(null, $criteria);
-        $query->joinWith('SchoolClass', $join_behavior);
-
-        return $this->getEvents($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this EventType is new, it will return
-     * an empty collection; or if this EventType has previously
-     * been saved, it will retrieve related Events from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in EventType.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Event[] List of Event objects
-     */
-    public function getEventsJoinDocumentCategory($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = EventQuery::create(null, $criteria);
-        $query->joinWith('DocumentCategory', $join_behavior);
-
-        return $this->getEvents($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this EventType is new, it will return
-     * an empty collection; or if this EventType has previously
-     * been saved, it will retrieve related Events from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in EventType.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Event[] List of Event objects
-     */
-    public function getEventsJoinUserRelatedByCreatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = EventQuery::create(null, $criteria);
-        $query->joinWith('UserRelatedByCreatedBy', $join_behavior);
-
-        return $this->getEvents($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this EventType is new, it will return
-     * an empty collection; or if this EventType has previously
-     * been saved, it will retrieve related Events from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in EventType.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Event[] List of Event objects
-     */
-    public function getEventsJoinUserRelatedByUpdatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = EventQuery::create(null, $criteria);
-        $query->joinWith('UserRelatedByUpdatedBy', $join_behavior);
-
-        return $this->getEvents($query, $con);
     }
 
     /**
@@ -1700,8 +1499,9 @@ abstract class BaseEventType extends BaseObject implements Persistent
      */
     public function clear()
     {
-        $this->id = null;
-        $this->name = null;
+        $this->school_class_id = null;
+        $this->subject_class_id = null;
+        $this->student_count = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->created_by = null;
@@ -1728,10 +1528,11 @@ abstract class BaseEventType extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->collEvents) {
-                foreach ($this->collEvents as $o) {
-                    $o->clearAllReferences($deep);
-                }
+            if ($this->aSchoolClassRelatedBySchoolClassId instanceof Persistent) {
+              $this->aSchoolClassRelatedBySchoolClassId->clearAllReferences($deep);
+            }
+            if ($this->aSchoolClassRelatedBySubjectClassId instanceof Persistent) {
+              $this->aSchoolClassRelatedBySubjectClassId->clearAllReferences($deep);
             }
             if ($this->aUserRelatedByCreatedBy instanceof Persistent) {
               $this->aUserRelatedByCreatedBy->clearAllReferences($deep);
@@ -1743,10 +1544,8 @@ abstract class BaseEventType extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        if ($this->collEvents instanceof PropelCollection) {
-            $this->collEvents->clearIterator();
-        }
-        $this->collEvents = null;
+        $this->aSchoolClassRelatedBySchoolClassId = null;
+        $this->aSchoolClassRelatedBySubjectClassId = null;
         $this->aUserRelatedByCreatedBy = null;
         $this->aUserRelatedByUpdatedBy = null;
     }
@@ -1758,7 +1557,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(EventTypePeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(SchoolClassSubjectClassesPeer::DEFAULT_STRING_FORMAT);
     }
 
     /**
@@ -1776,11 +1575,11 @@ abstract class BaseEventType extends BaseObject implements Persistent
     /**
      * Mark the current object so that the update date doesn't get updated during next save
      *
-     * @return     EventType The current object (for fluent API support)
+     * @return     SchoolClassSubjectClasses The current object (for fluent API support)
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[] = EventTypePeer::UPDATED_AT;
+        $this->modifiedColumns[] = SchoolClassSubjectClassesPeer::UPDATED_AT;
 
         return $this;
     }
@@ -1828,11 +1627,11 @@ abstract class BaseEventType extends BaseObject implements Persistent
     /**
      * Mark the current object so that the updated user doesn't get updated during next save
      *
-     * @return     EventType The current object (for fluent API support)
+     * @return     SchoolClassSubjectClasses The current object (for fluent API support)
      */
     public function keepUpdateUserUnchanged()
     {
-        $this->modifiedColumns[] = EventTypePeer::UPDATED_BY;
+        $this->modifiedColumns[] = SchoolClassSubjectClassesPeer::UPDATED_BY;
         return $this;
     }
 
@@ -1842,12 +1641,12 @@ abstract class BaseEventType extends BaseObject implements Persistent
             $oUser = Session::getSession()->getUser();
         }
         $bIsAllowed = false;
-        if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && EventTypePeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
+        if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && SchoolClassSubjectClassesPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
             $bIsAllowed = true;
-        } else if(EventTypePeer::mayOperateOn($oUser, $this, $sOperation)) {
+        } else if(SchoolClassSubjectClassesPeer::mayOperateOn($oUser, $this, $sOperation)) {
             $bIsAllowed = true;
         }
-        FilterModule::getFilters()->handleEventTypeOperationCheck($sOperation, $this, $oUser, array(&$bIsAllowed));
+        FilterModule::getFilters()->handleSchoolClassSubjectClassesOperationCheck($sOperation, $this, $oUser, array(&$bIsAllowed));
         return $bIsAllowed;
     }
     public function mayBeInserted($oUser = false) {
@@ -1867,15 +1666,15 @@ abstract class BaseEventType extends BaseObject implements Persistent
      */
     public function getPKArray()
     {
-        return array($this->getPrimaryKey());
+        return $this->getPrimaryKey();
     }
 
     /**
-     * @return the composite primary key as a string, separated by _
+     * @return the primary key as a string
      */
     public function getPKString()
     {
-        return implode("", $this->getPKArray());
+        return implode("_", $this->getPKArray());
     }
 
 }

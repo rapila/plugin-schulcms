@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'students' table.
+ * This class defines the structure of the 'school_class_subject_classes' table.
  *
  *
  *
@@ -14,13 +14,13 @@
  *
  * @package    propel.generator.model.map
  */
-class StudentTableMap extends TableMap
+class SchoolClassSubjectClassesTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'model.map.StudentTableMap';
+    const CLASS_NAME = 'model.map.SchoolClassSubjectClassesTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -32,18 +32,15 @@ class StudentTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('students');
-        $this->setPhpName('Student');
-        $this->setClassname('Student');
+        $this->setName('school_class_subject_classes');
+        $this->setPhpName('SchoolClassSubjectClasses');
+        $this->setClassname('SchoolClassSubjectClasses');
         $this->setPackage('model');
-        $this->setUseIdGenerator(true);
+        $this->setUseIdGenerator(false);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('original_id', 'OriginalId', 'INTEGER', false, null, null);
-        $this->addColumn('last_name', 'LastName', 'VARCHAR', false, 40, null);
-        $this->addColumn('first_name', 'FirstName', 'VARCHAR', false, 40, null);
-        $this->addColumn('date_of_birth', 'DateOfBirth', 'DATE', false, null, null);
-        $this->addForeignKey('portrait_id', 'PortraitId', 'INTEGER', 'documents', 'id', false, null, null);
+        $this->addForeignPrimaryKey('school_class_id', 'SchoolClassId', 'INTEGER' , 'school_classes', 'id', true, null, null);
+        $this->addForeignPrimaryKey('subject_class_id', 'SubjectClassId', 'INTEGER' , 'school_classes', 'id', true, null, null);
+        $this->addColumn('student_count', 'StudentCount', 'TINYINT', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addForeignKey('created_by', 'CreatedBy', 'INTEGER', 'users', 'id', false, null, null);
@@ -56,10 +53,10 @@ class StudentTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Document', 'Document', RelationMap::MANY_TO_ONE, array('portrait_id' => 'id', ), 'SET NULL', null);
+        $this->addRelation('SchoolClassRelatedBySchoolClassId', 'SchoolClass', RelationMap::MANY_TO_ONE, array('school_class_id' => 'id', ), 'CASCADE', null);
+        $this->addRelation('SchoolClassRelatedBySubjectClassId', 'SchoolClass', RelationMap::MANY_TO_ONE, array('subject_class_id' => 'id', ), 'CASCADE', null);
         $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
         $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
-        $this->addRelation('ClassStudent', 'ClassStudent', RelationMap::ONE_TO_MANY, array('id' => 'student_id', ), 'CASCADE', null, 'ClassStudents');
     } // buildRelations()
 
     /**
@@ -91,4 +88,4 @@ class StudentTableMap extends TableMap
         );
     } // getBehaviors()
 
-} // StudentTableMap
+} // SchoolClassSubjectClassesTableMap

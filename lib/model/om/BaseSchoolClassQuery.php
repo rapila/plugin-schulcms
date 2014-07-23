@@ -15,7 +15,9 @@
  * @method SchoolClassQuery orderByLevel($order = Criteria::ASC) Order by the level column
  * @method SchoolClassQuery orderByRoomNumber($order = Criteria::ASC) Order by the room_number column
  * @method SchoolClassQuery orderByTeachingUnit($order = Criteria::ASC) Order by the teaching_unit column
+ * @method SchoolClassQuery orderByStudentCount($order = Criteria::ASC) Order by the student_count column
  * @method SchoolClassQuery orderByClassPortraitId($order = Criteria::ASC) Order by the class_portrait_id column
+ * @method SchoolClassQuery orderBySubjectId($order = Criteria::ASC) Order by the subject_id column
  * @method SchoolClassQuery orderByClassTypeId($order = Criteria::ASC) Order by the class_type_id column
  * @method SchoolClassQuery orderByClassScheduleId($order = Criteria::ASC) Order by the class_schedule_id column
  * @method SchoolClassQuery orderByWeekScheduleId($order = Criteria::ASC) Order by the week_schedule_id column
@@ -35,7 +37,9 @@
  * @method SchoolClassQuery groupByLevel() Group by the level column
  * @method SchoolClassQuery groupByRoomNumber() Group by the room_number column
  * @method SchoolClassQuery groupByTeachingUnit() Group by the teaching_unit column
+ * @method SchoolClassQuery groupByStudentCount() Group by the student_count column
  * @method SchoolClassQuery groupByClassPortraitId() Group by the class_portrait_id column
+ * @method SchoolClassQuery groupBySubjectId() Group by the subject_id column
  * @method SchoolClassQuery groupByClassTypeId() Group by the class_type_id column
  * @method SchoolClassQuery groupByClassScheduleId() Group by the class_schedule_id column
  * @method SchoolClassQuery groupByWeekScheduleId() Group by the week_schedule_id column
@@ -53,6 +57,10 @@
  * @method SchoolClassQuery leftJoinDocumentRelatedByClassPortraitId($relationAlias = null) Adds a LEFT JOIN clause to the query using the DocumentRelatedByClassPortraitId relation
  * @method SchoolClassQuery rightJoinDocumentRelatedByClassPortraitId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DocumentRelatedByClassPortraitId relation
  * @method SchoolClassQuery innerJoinDocumentRelatedByClassPortraitId($relationAlias = null) Adds a INNER JOIN clause to the query using the DocumentRelatedByClassPortraitId relation
+ *
+ * @method SchoolClassQuery leftJoinSubject($relationAlias = null) Adds a LEFT JOIN clause to the query using the Subject relation
+ * @method SchoolClassQuery rightJoinSubject($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Subject relation
+ * @method SchoolClassQuery innerJoinSubject($relationAlias = null) Adds a INNER JOIN clause to the query using the Subject relation
  *
  * @method SchoolClassQuery leftJoinClassType($relationAlias = null) Adds a LEFT JOIN clause to the query using the ClassType relation
  * @method SchoolClassQuery rightJoinClassType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ClassType relation
@@ -81,6 +89,14 @@
  * @method SchoolClassQuery leftJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByUpdatedBy relation
  * @method SchoolClassQuery rightJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByUpdatedBy relation
  * @method SchoolClassQuery innerJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByUpdatedBy relation
+ *
+ * @method SchoolClassQuery leftJoinSchoolClassSubjectClassesRelatedBySchoolClassId($relationAlias = null) Adds a LEFT JOIN clause to the query using the SchoolClassSubjectClassesRelatedBySchoolClassId relation
+ * @method SchoolClassQuery rightJoinSchoolClassSubjectClassesRelatedBySchoolClassId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the SchoolClassSubjectClassesRelatedBySchoolClassId relation
+ * @method SchoolClassQuery innerJoinSchoolClassSubjectClassesRelatedBySchoolClassId($relationAlias = null) Adds a INNER JOIN clause to the query using the SchoolClassSubjectClassesRelatedBySchoolClassId relation
+ *
+ * @method SchoolClassQuery leftJoinSchoolClassSubjectClassesRelatedBySubjectClassId($relationAlias = null) Adds a LEFT JOIN clause to the query using the SchoolClassSubjectClassesRelatedBySubjectClassId relation
+ * @method SchoolClassQuery rightJoinSchoolClassSubjectClassesRelatedBySubjectClassId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the SchoolClassSubjectClassesRelatedBySubjectClassId relation
+ * @method SchoolClassQuery innerJoinSchoolClassSubjectClassesRelatedBySubjectClassId($relationAlias = null) Adds a INNER JOIN clause to the query using the SchoolClassSubjectClassesRelatedBySubjectClassId relation
  *
  * @method SchoolClassQuery leftJoinClassStudent($relationAlias = null) Adds a LEFT JOIN clause to the query using the ClassStudent relation
  * @method SchoolClassQuery rightJoinClassStudent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ClassStudent relation
@@ -117,7 +133,9 @@
  * @method SchoolClass findOneByLevel(int $level) Return the first SchoolClass filtered by the level column
  * @method SchoolClass findOneByRoomNumber(string $room_number) Return the first SchoolClass filtered by the room_number column
  * @method SchoolClass findOneByTeachingUnit(string $teaching_unit) Return the first SchoolClass filtered by the teaching_unit column
+ * @method SchoolClass findOneByStudentCount(int $student_count) Return the first SchoolClass filtered by the student_count column
  * @method SchoolClass findOneByClassPortraitId(int $class_portrait_id) Return the first SchoolClass filtered by the class_portrait_id column
+ * @method SchoolClass findOneBySubjectId(int $subject_id) Return the first SchoolClass filtered by the subject_id column
  * @method SchoolClass findOneByClassTypeId(int $class_type_id) Return the first SchoolClass filtered by the class_type_id column
  * @method SchoolClass findOneByClassScheduleId(int $class_schedule_id) Return the first SchoolClass filtered by the class_schedule_id column
  * @method SchoolClass findOneByWeekScheduleId(int $week_schedule_id) Return the first SchoolClass filtered by the week_schedule_id column
@@ -137,7 +155,9 @@
  * @method array findByLevel(int $level) Return SchoolClass objects filtered by the level column
  * @method array findByRoomNumber(string $room_number) Return SchoolClass objects filtered by the room_number column
  * @method array findByTeachingUnit(string $teaching_unit) Return SchoolClass objects filtered by the teaching_unit column
+ * @method array findByStudentCount(int $student_count) Return SchoolClass objects filtered by the student_count column
  * @method array findByClassPortraitId(int $class_portrait_id) Return SchoolClass objects filtered by the class_portrait_id column
+ * @method array findBySubjectId(int $subject_id) Return SchoolClass objects filtered by the subject_id column
  * @method array findByClassTypeId(int $class_type_id) Return SchoolClass objects filtered by the class_type_id column
  * @method array findByClassScheduleId(int $class_schedule_id) Return SchoolClass objects filtered by the class_schedule_id column
  * @method array findByWeekScheduleId(int $week_schedule_id) Return SchoolClass objects filtered by the week_schedule_id column
@@ -254,7 +274,7 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `original_id`, `name`, `unit_name`, `slug`, `year`, `level`, `room_number`, `teaching_unit`, `class_portrait_id`, `class_type_id`, `class_schedule_id`, `week_schedule_id`, `school_building_id`, `school_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `school_classes` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `original_id`, `name`, `unit_name`, `slug`, `year`, `level`, `room_number`, `teaching_unit`, `student_count`, `class_portrait_id`, `subject_id`, `class_type_id`, `class_schedule_id`, `week_schedule_id`, `school_building_id`, `school_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `school_classes` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -657,6 +677,48 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the student_count column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByStudentCount(1234); // WHERE student_count = 1234
+     * $query->filterByStudentCount(array(12, 34)); // WHERE student_count IN (12, 34)
+     * $query->filterByStudentCount(array('min' => 12)); // WHERE student_count >= 12
+     * $query->filterByStudentCount(array('max' => 12)); // WHERE student_count <= 12
+     * </code>
+     *
+     * @param     mixed $studentCount The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return SchoolClassQuery The current query, for fluid interface
+     */
+    public function filterByStudentCount($studentCount = null, $comparison = null)
+    {
+        if (is_array($studentCount)) {
+            $useMinMax = false;
+            if (isset($studentCount['min'])) {
+                $this->addUsingAlias(SchoolClassPeer::STUDENT_COUNT, $studentCount['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($studentCount['max'])) {
+                $this->addUsingAlias(SchoolClassPeer::STUDENT_COUNT, $studentCount['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(SchoolClassPeer::STUDENT_COUNT, $studentCount, $comparison);
+    }
+
+    /**
      * Filter the query on the class_portrait_id column
      *
      * Example usage:
@@ -698,6 +760,50 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SchoolClassPeer::CLASS_PORTRAIT_ID, $classPortraitId, $comparison);
+    }
+
+    /**
+     * Filter the query on the subject_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBySubjectId(1234); // WHERE subject_id = 1234
+     * $query->filterBySubjectId(array(12, 34)); // WHERE subject_id IN (12, 34)
+     * $query->filterBySubjectId(array('min' => 12)); // WHERE subject_id >= 12
+     * $query->filterBySubjectId(array('max' => 12)); // WHERE subject_id <= 12
+     * </code>
+     *
+     * @see       filterBySubject()
+     *
+     * @param     mixed $subjectId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return SchoolClassQuery The current query, for fluid interface
+     */
+    public function filterBySubjectId($subjectId = null, $comparison = null)
+    {
+        if (is_array($subjectId)) {
+            $useMinMax = false;
+            if (isset($subjectId['min'])) {
+                $this->addUsingAlias(SchoolClassPeer::SUBJECT_ID, $subjectId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($subjectId['max'])) {
+                $this->addUsingAlias(SchoolClassPeer::SUBJECT_ID, $subjectId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(SchoolClassPeer::SUBJECT_ID, $subjectId, $comparison);
     }
 
     /**
@@ -1168,6 +1274,82 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
         return $this
             ->joinDocumentRelatedByClassPortraitId($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'DocumentRelatedByClassPortraitId', 'DocumentQuery');
+    }
+
+    /**
+     * Filter the query by a related Subject object
+     *
+     * @param   Subject|PropelObjectCollection $subject The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SchoolClassQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterBySubject($subject, $comparison = null)
+    {
+        if ($subject instanceof Subject) {
+            return $this
+                ->addUsingAlias(SchoolClassPeer::SUBJECT_ID, $subject->getId(), $comparison);
+        } elseif ($subject instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(SchoolClassPeer::SUBJECT_ID, $subject->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterBySubject() only accepts arguments of type Subject or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Subject relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SchoolClassQuery The current query, for fluid interface
+     */
+    public function joinSubject($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Subject');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Subject');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Subject relation Subject object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   SubjectQuery A secondary query class using the current class as primary query
+     */
+    public function useSubjectQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinSubject($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Subject', 'SubjectQuery');
     }
 
     /**
@@ -1700,6 +1882,154 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
         return $this
             ->joinUserRelatedByUpdatedBy($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByUpdatedBy', 'UserQuery');
+    }
+
+    /**
+     * Filter the query by a related SchoolClassSubjectClasses object
+     *
+     * @param   SchoolClassSubjectClasses|PropelObjectCollection $schoolClassSubjectClasses  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SchoolClassQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterBySchoolClassSubjectClassesRelatedBySchoolClassId($schoolClassSubjectClasses, $comparison = null)
+    {
+        if ($schoolClassSubjectClasses instanceof SchoolClassSubjectClasses) {
+            return $this
+                ->addUsingAlias(SchoolClassPeer::ID, $schoolClassSubjectClasses->getSchoolClassId(), $comparison);
+        } elseif ($schoolClassSubjectClasses instanceof PropelObjectCollection) {
+            return $this
+                ->useSchoolClassSubjectClassesRelatedBySchoolClassIdQuery()
+                ->filterByPrimaryKeys($schoolClassSubjectClasses->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterBySchoolClassSubjectClassesRelatedBySchoolClassId() only accepts arguments of type SchoolClassSubjectClasses or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the SchoolClassSubjectClassesRelatedBySchoolClassId relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SchoolClassQuery The current query, for fluid interface
+     */
+    public function joinSchoolClassSubjectClassesRelatedBySchoolClassId($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('SchoolClassSubjectClassesRelatedBySchoolClassId');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'SchoolClassSubjectClassesRelatedBySchoolClassId');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the SchoolClassSubjectClassesRelatedBySchoolClassId relation SchoolClassSubjectClasses object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   SchoolClassSubjectClassesQuery A secondary query class using the current class as primary query
+     */
+    public function useSchoolClassSubjectClassesRelatedBySchoolClassIdQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinSchoolClassSubjectClassesRelatedBySchoolClassId($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'SchoolClassSubjectClassesRelatedBySchoolClassId', 'SchoolClassSubjectClassesQuery');
+    }
+
+    /**
+     * Filter the query by a related SchoolClassSubjectClasses object
+     *
+     * @param   SchoolClassSubjectClasses|PropelObjectCollection $schoolClassSubjectClasses  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SchoolClassQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterBySchoolClassSubjectClassesRelatedBySubjectClassId($schoolClassSubjectClasses, $comparison = null)
+    {
+        if ($schoolClassSubjectClasses instanceof SchoolClassSubjectClasses) {
+            return $this
+                ->addUsingAlias(SchoolClassPeer::ID, $schoolClassSubjectClasses->getSubjectClassId(), $comparison);
+        } elseif ($schoolClassSubjectClasses instanceof PropelObjectCollection) {
+            return $this
+                ->useSchoolClassSubjectClassesRelatedBySubjectClassIdQuery()
+                ->filterByPrimaryKeys($schoolClassSubjectClasses->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterBySchoolClassSubjectClassesRelatedBySubjectClassId() only accepts arguments of type SchoolClassSubjectClasses or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the SchoolClassSubjectClassesRelatedBySubjectClassId relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SchoolClassQuery The current query, for fluid interface
+     */
+    public function joinSchoolClassSubjectClassesRelatedBySubjectClassId($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('SchoolClassSubjectClassesRelatedBySubjectClassId');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'SchoolClassSubjectClassesRelatedBySubjectClassId');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the SchoolClassSubjectClassesRelatedBySubjectClassId relation SchoolClassSubjectClasses object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   SchoolClassSubjectClassesQuery A secondary query class using the current class as primary query
+     */
+    public function useSchoolClassSubjectClassesRelatedBySubjectClassIdQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinSchoolClassSubjectClassesRelatedBySubjectClassId($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'SchoolClassSubjectClassesRelatedBySubjectClassId', 'SchoolClassSubjectClassesQuery');
     }
 
     /**
