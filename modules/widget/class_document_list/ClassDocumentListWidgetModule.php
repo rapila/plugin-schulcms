@@ -11,6 +11,7 @@ class ClassDocumentListWidgetModule extends DocumentListWidgetModule {
 	public function getColumnIdentifiers() {
 		$aResult = parent::getColumnIdentifiers();
 		$aResult = array_diff($aResult, array('document_kind', 'category_name', 'is_protected'));
+		ErrorHandler::log('getColumnIdentifiers', $aResult);
 		return $aResult;
 	}
 
