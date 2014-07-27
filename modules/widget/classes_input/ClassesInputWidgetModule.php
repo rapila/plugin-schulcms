@@ -3,17 +3,19 @@
 * @package modules.widget
 */
 class ClassesInputWidgetModule extends WidgetModule {
-		
-  public function getClasses() {
-		$aClasses = SchoolClassQuery::create()->filterByHasStudents()->orderByName()->find();
+
+  public function listClasses($bWithStudentsOnly = false) {
 		$aResult = array();
-		foreach($aClasses as $oClass) {
-			$sClassType = $oClass->getClassType() ? $oClass->getClassType()->getName() : '?';
-      $aResult[$oClass->getId()] = $sClassType.' '.$oClass->getName();
+		$oQuery = SchoolClassQuery::create()->joinClassType(null, Criteria::INNER_JOIN)->orderByName();
+		if($bWithStudentsOnly) {
+			$oQuery->filterByHasStudents();
+		}
+		foreach($oQuery->select(array('Id', 'Name', 'ClassType.Name'))->find() as $i => $aClass) {
+			$aResult[] = array('key' => $aClass['Id'], 'value' => $aClass['ClassType.Name']. ' '. $aClass['Name']);
 		}
 		return $aResult;
 	}
-	
+
 	public function getElementType() {
 		return 'select';
 	}

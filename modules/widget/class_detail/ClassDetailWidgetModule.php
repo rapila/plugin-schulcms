@@ -42,8 +42,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		}
 		$this->setSetting('class_document_category_id', $iSchoolDocumentCategory);
 
-		$this->oEventListWidget = new EventListWidgetModule();
-		$this->oEventListWidget->bSimpleMode = true;
+		$this->oEventListWidget = new ClassEventListWidgetModule();
 		$this->setSetting('event_list_session', $this->oEventListWidget->getSessionKey());
 		$this->oLinkListWidget = new ClassLinkListWidgetModule();
 		$this->setSetting('link_list_session', $this->oLinkListWidget->getSessionKey());

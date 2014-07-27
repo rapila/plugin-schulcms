@@ -4,7 +4,7 @@ Widget.types.event_detail = {
 		this.content = Widget.parseHTML("{{includeTemplate=edit}}");
 		this.content.find('div.hide_if_not_saved').hide();
 		this.current_detail_id = null;
-		
+
 		this.preview_text = this.content.find('div.event_preview');
 		this.review_text = this.content.find('div.event_review');
 
@@ -12,7 +12,7 @@ Widget.types.event_detail = {
 		this.uploader = Widget.create('file_upload');
 		this.droppable_area = _this.content.find('.droppable_area');
 		this.droppable_area.append(this.no_images_upload_info);
-		
+
 		this.droppable_area.sortable({
 			update: function(document, ui) {
 				var ids = _this.droppable_area.children().map(function() {
@@ -31,8 +31,8 @@ Widget.types.event_detail = {
 		this.content.find("input[name^='date_']").datepicker({
 			dateFormat: 'dd.mm.yy'
 		});
-		this.content.find("select[name='event_type_id']").prepareWidget(function(event_input) {
-			event_input.settings.initial_selection = _this.settings.initial_type_id;
+		this.content.find("select[name='event_type_id']").prepareWidget(function(event_type_input) {
+			event_type_input.settings.initial_selection = _this.settings.initial_type_id;
 		}, jQuery.noop);
 		this.content.find("select[name='service_id']").prepareWidget(function(services_input_widget) {
 			if(jQuery(services_input_widget._element).find('option').length == (services_input_widget.settings.default_value_label ? 1 : 0)) {
@@ -41,25 +41,25 @@ Widget.types.event_detail = {
 				});
 			}
 		});
-		
+
 		var school_class_select = this.content.find("select[name='school_class_id']");
 		school_class_select.prepareWidget(function(classes_input_widget) {
-			jQuery(school_class_select).val(_this.settings.predefined_school_class_id);
+			classes_input_widget.val(_this.settings.predefined_school_class_id);
 			classes_input_widget.settings.disabled = !!_this.settings.predefined_school_class_id;
 		}, function(classes_input_widget) {
 			if(_this.settings.predefined_school_class_id) {
-				classes_input_widget._element.val(_this.settings.predefined_school_class_id);
+				classes_input_widget.val(_this.settings.predefined_school_class_id);
 				_this.content.find('.service_select_items').each(function() {
 					jQuery(this).hide();
 				});
 			}
 		});
-		
+
 		// Instance
 		Widget.callStatic('detail', 'create_for_instance', this);
-		
+
 		// Handlers
-		this.handle('opened', function() { 
+		this.handle('opened', function() {
 			this.init_textareas();
 		});
 		this.handle('saving', function(event, data) {
@@ -67,12 +67,11 @@ Widget.types.event_detail = {
 			data.body_review = _this.event_review_editor.get_data();
 		}.bind(_this));
 	},
-	
+
 	fill_data: function() {
 		this.detail_widget.disable();
-		var _this = this;
 		this.eventData(function(event_data) {
-			_this.current_detail_id = event_data.Id;
+			this.current_detail_id = event_data.Id;
 			this.content.find("input[name='title']").val(event_data.Title);
 			this.content.find("textarea[name='teaser']").val(event_data.Teaser);
 			this.content.find("input[name='date_start']").val(event_data.DateStart);
@@ -82,8 +81,10 @@ Widget.types.event_detail = {
 			this.content.find("input[name='is_active']").attr('checked', event_data.IsActive);
 			this.content.find("input[name='ignore_on_frontpage']").attr('checked', event_data.IgnoreOnFrontpage);
 			this.content.find("select[name='service_id']").val(event_data.ServiceId || '');
-			if(!_this.settings.predefined_school_class_id) {
-				this.content.find("select[name='school_class_id']").val(event_data.SchoolClassId);
+			if(!this.settings.predefined_school_class_id) {
+				this.content.find("select[name='school_class_id']").ensureWidget(function(school_class_input) {
+					school_class_input.val(event_data.SchoolClassId);
+				});
 			}
 			this.content.find("select[name='event_type_id']").val(event_data.EventTypeId);
 			this.content.find(".updated_info").text(event_data.UpdatedInfo);
@@ -96,12 +97,12 @@ Widget.types.event_detail = {
 			this.review_text.ensureWidget(function(widget) {
 				widget.set_data(event_data.BodyReview);
 			});
-			_this.update_documents();
+			this.update_documents();
 			this.content.find('div.hide_if_not_saved').show();
 			this.detail_widget.enable();
 		});
 	},
-	
+
 	update_documents: function() {
 		var _this = this;
 		this.droppable_area.empty();
@@ -114,14 +115,14 @@ Widget.types.event_detail = {
 			});
 		});
 	},
-	
+
 	insert_thumbnail: function(document_data) {
 		var _this = this;
 		var document_id = document_data.Id;
 		var doc = jQuery('<div/>').addClass('ui-widget ui-widget-content ui-image-picker-image ui-placeholder');
 		doc.css({width: ''+this.settings.thumbnail_size+'px', height: this.settings.thumbnail_size+13+'px'});
 		doc.data('document_id', document_id);
-		
+
 		jQuery('<span/>').addClass('ui-icon ui-icon-trash').click(function(event) {
 			var delete_message = AdminInterface.strings.get_string('wns.document.delete_warning', { document_name: document_data.Name});
 			Widget.confirm("{{writeString=wns.delete_warning_title}}", delete_message, function(confirmed) {
@@ -150,17 +151,17 @@ Widget.types.event_detail = {
 		this.droppable_area.find('div.no_images_placeholder').remove();
 		this.droppable_area.append(doc);
 	},
-	
+
 	upload_success: function(document_id, options) {
 		var _this = this;
 		this.addEventDocument(document_id, function() {
-			_this.insert_thumbnail(_this.getSingleDocument(document_id, _this.settings.thumbnail_size));				
+			_this.insert_thumbnail(_this.getSingleDocument(document_id, _this.settings.thumbnail_size));
 		});
 	},
-	
+
 	upload_error: function(error) {
 	},
-	
+
 	init_textareas: function() {
 		var _this = this;
 		if(!this.preview_text.didPrepareWidget()) {
@@ -178,7 +179,7 @@ Widget.types.event_detail = {
 			}, jQuery.noop);
 		}
 	},
-	
+
 	settings: {
 		detail_widget: {
 			title: "{{writeString=wns.event.create}}",

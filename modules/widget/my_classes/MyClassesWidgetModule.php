@@ -11,15 +11,16 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 		}
 	}
 
-	public function listClasses() {
+	public function listClasses($bOnlyMainClasses = true) {
 		$aResult = array();
 		if(!$this->oTeamMember) {
 			return $aResult;
 		}
 		$oQuery = ClassTeacherQuery::create()->joinSchoolClass()->useSchoolClassQuery()->orderByYear(Criteria::DESC)->orderByUnitName()->endUse()->filterByTeamMemberId($this->oTeamMember->getId());
 		$oClassesPage = PageQuery::create()->filterByIdentifier(SchoolPeer::PAGE_IDENTIFIER_CLASSES)->findOne();
-
-		$oQuery->filterByIsClassTeacher(true);
+		if($bOnlyMainClasses) {
+			$oQuery->filterByIsClassTeacher(true);
+		}
 		foreach($oQuery->find() as $oClassTeacher) {
 			$aClassInfo = array();
 			$aClassInfo['Name'] = $oClassTeacher->getSchoolClass()->getName();

@@ -7,7 +7,6 @@ Widget.types.class_detail = {
 		this.add_event_button = this._element.find('.add_entry.add_event').click(this.edit_event.bind(this));
 		this.add_document_button = this._element.find('.add_entry.add_document').click(this.edit_document.bind(this));
 		this.add_link_button = this._element.find('.add_entry.add_link').click(this.edit_link.bind(this));
-
 		this.current_detail_id = null;
 		this.uploader = Widget.create('file_upload');
 
@@ -173,7 +172,7 @@ Widget.types.class_detail = {
 			this.link_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
-				_this.link_list = widget;
+				this.link_list = widget;
 				widget._element.insertBefore(_this.add_link_button.show());
 			}, this.settings.link_list_session);
 		}
@@ -206,9 +205,7 @@ Widget.types.class_detail = {
 	reload_events: function() {
 		var _this = this;
 		if(this.event_list) {
-			this.event_list.reload(false, function(result) {
-				console.log('reload_events', result);
-			});
+			this.event_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				_this.event_list = widget;
@@ -246,7 +243,7 @@ Widget.types.class_detail = {
 			this.document_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
-				_this.document_list = widget;
+				this.document_list = widget;
 				widget._element.insertBefore(_this.add_document_button.show());
 			}, this.settings.document_list_session);
 		}

@@ -1,21 +1,39 @@
 Widget.types.classes_input = {
 	prepare: function() {
+		this.reload();
+		Widget.handle('schulcms-class_changed', this.reload.bind(this));
+	},
+
+	reload: function() {
 		var _this = this;
-		var option = jQuery('<option/>');
-		var classes = this.getClasses();
-		jQuery.each(classes, function(id, name) {
-			option.clone().val(id).text(name).appendTo(_this._element);
+		var current = this._element.val();
+		this._element.empty();
+		this.listClasses(function(classes) {
+			this._element.populate({'': this.settings.default_value_label});
+			this._element.populate(classes, null, false);
+			if(current) {
+				this._element.val(current);
+			} else {
+				this._element.val(_this.settings.initial_selection || '');
+			}
 		});
-		if(this.settings.default_value_label) {
-			this._element.prepend(option.clone().attr('value', '').text(this.settings.default_value_label));
-			this._element.val('');
-		}
 		if(this.settings.disabled) {
 			this._element.attr('disabled', true);
 		}
 	},
-	
+
+	val: function(value) {
+		if(arguments.length) {
+			this._element.val(value);
+			this.settings.initial_selection = value;
+			return;
+		}
+		return this._element.val();
+	},
+
 	settings: {
-		default_value_label: '------'
+		default_value_label: '------',
+		initial_selection: null,
+		disabled: false
 	}
 };

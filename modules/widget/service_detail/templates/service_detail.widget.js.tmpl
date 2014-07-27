@@ -23,7 +23,7 @@ Widget.types.service_detail = {
 		// service documents and upload
 		this.document_prototype = Widget.parseHTML("{{includeTemplate=document}}");
 		this.no_documents_placeholder = jQuery('<li/>').html("{{writeString=wns.service.no_document_and_upload_info}}").addClass('no_documents_placeholder');
-		
+
 		this.uploader = Widget.create('file_upload');
 		this.droppable_area = _this._element.find('.droppable_area');
 		this.droppable_area.sortable({
@@ -41,24 +41,24 @@ Widget.types.service_detail = {
 		this.uploader.allow_drag_to(_this.droppable_area, null, function(target, file) {
 			return { document_category_id: _this.settings.service_file_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
 		});
-		
+
 		// Logo upload
 		var logo_area = _this._element.find('.logo_area');
 		logo_area.find('.remove').hide().click(function() {
 			_this.service_logo_id = null;
 		});
-		
+
 		this.uploader.allow_drag_to(logo_area, null, function(target, file) {
 			if(file.type.indexOf('image/') !== 0) {
 				Widget.notifyUser('alert', 'Das Logo muss ein Bild sein (Datei vom Typ «PNG», «GIF», «JPG»)');
 				return false;
 			}
-			
+
 			return {document_kind: 'image', document_id: _this.service_logo_id, document_category_id: _this.settings.service_file_category_id, callback: _this.logo_upload_success.bind(_this), error: _this.upload_error.bind(_this) };
 		}, true);
-		
+
 		var service_logo_id = null;
-		Object.defineProperty(_this, 'service_logo_id', { 
+		Object.defineProperty(_this, 'service_logo_id', {
 			get: function() {
 				return service_logo_id;
 			},
@@ -81,10 +81,10 @@ Widget.types.service_detail = {
 		this._element.find("select[name='service_category_id']").prepareWidget(function(service_category) {
 			service_category.val(_this.settings.initial_category_id);
 		}, jQuery.noop);
-		
+
 		Widget.callStatic('detail', 'create_for_instance', this);
-		
-		this.handle('opened', function() { 
+
+		this.handle('opened', function() {
 			this.init_textareas();
 			this.accordion = jQuery(this.detail_widget.content.find('div.accordion')).accordion({active: 0, autoHeight: false, clearStyle: true, collapsible:false});
 		});
@@ -100,7 +100,7 @@ Widget.types.service_detail = {
 			data.body_text = _this.service_text_editor.get_data();
 		}.bind(_this));
 	},
-	
+
 	fill_data: function() {
 		this.detail_widget.disable();
 		this.init_textareas();
@@ -120,18 +120,18 @@ Widget.types.service_detail = {
 			this._element.find(".created_info").text(service_data.CreatedInfo);
 			this._element.find(".detail_id").text(service_data.Id);
 			this._element.find("textarea[name='body_text']").val(service_data.Body);
-			
+
 			this._element.find('[name="service_category_id"]').ensureWidget(function(service_category_input) {
 				service_category_input.val(service_data.ServiceCategoryId);
 			});
-			
+
 			this.service_text.ensureWidget(function(widget) {
 				widget.set_data(service_data.Body);
 			});
 
 			this.update_document_count(service_data.CountDocuments);
 			this.update_documents();
-			
+
 			this.list_team_members(service_data.team_members);
 
 			this._element.find('div.hide_if_not_saved').show();
@@ -139,11 +139,10 @@ Widget.types.service_detail = {
 			this.detail_widget.enable();
 		});
 	},
-	
+
 	add_team_member: function(id, function_name) {
 		var team_member_row = this.team_member_content.clone();
 		team_member_row.find('select[name="team_member_id[]"]').prepareWidget(function(team_member_input) {
-			console.log('add_team_member', id);
 			if(id) {
 				team_member_input.val(id);
 			}
@@ -151,7 +150,7 @@ Widget.types.service_detail = {
 		team_member_row.find('input[name="function_name[]"]').val(function_name || '');
 		team_member_row.appendTo(this.team_member_container);
 	},
-	
+
 	list_team_members: function(team_members) {
 		var _this = this;
 		this.team_member_container.empty();
@@ -160,7 +159,7 @@ Widget.types.service_detail = {
 		});
 		this.team_member_container.show();
 	},
-	
+
 	init_textareas: function() {
 		var _this = this;
 		if(!this.service_text.didPrepareWidget()) {
@@ -170,7 +169,7 @@ Widget.types.service_detail = {
 			}, jQuery.noop);
 		}
 	},
-	
+
 	update_documents: function() {
 		var _this = this;
 		this.droppable_area.empty();
@@ -184,7 +183,7 @@ Widget.types.service_detail = {
 			_this.update_document_count(documents.length);
 		});
 	},
-	
+
 	update_document_count: function(count) {
 		this._element.find("span.documents_count").text(count);
 	},
@@ -227,22 +226,22 @@ Widget.types.service_detail = {
 		var document_link = document_item.find('a.document_link').attr('href', document_data.DisplayUrl);
 		document_link.addClass('pointer').attr('title', '{{writeString=wns.document.download}}');
 	},
-	
+
 	upload_success: function(document_id, options) {
 		var _this = this;
 		this.addServiceDocument(document_id, function() {
-			_this.insert_document(_this.getSingleDocument(document_id));				
+			_this.insert_document(_this.getSingleDocument(document_id));
 		});
 	},
-	
+
 	logo_upload_success: function(logo_id) {
 		this.service_logo_id = logo_id;
 		this.save(true);
 	},
-	
+
 	upload_error: function(error) {
 	},
-	
+
 	save: function(should_remain_open) {
 		if(should_remain_open) {
 			this.settings.remains_open = true;
