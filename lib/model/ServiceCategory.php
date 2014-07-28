@@ -18,9 +18,9 @@ class ServiceCategory extends BaseServiceCategory {
 		$aArray[] = LinkUtil::link(array('services'), 'AdminManager', array('service_category_id' => $this->getId()));
 		return $aArray;
 	}
-	
+
 	public function setName($sName) {
-		$this->setNameNormalized(StringUtil::normalize($sName));
+		$this->setSlug(StringUtil::normalize(str_replace('-', '', $sName), '-', '-'));
 		return parent::setName($sName);
 	}
 }

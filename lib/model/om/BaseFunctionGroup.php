@@ -42,10 +42,10 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
     protected $original_name;
 
     /**
-     * The value for the name_normalized field.
+     * The value for the slug field.
      * @var        string
      */
-    protected $name_normalized;
+    protected $slug;
 
     /**
      * The value for the name field.
@@ -142,14 +142,14 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [name_normalized] column value.
+     * Get the [slug] column value.
      *
      * @return string
      */
-    public function getNameNormalized()
+    public function getSlug()
     {
 
-        return $this->name_normalized;
+        return $this->slug;
     }
 
     /**
@@ -308,25 +308,25 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
     } // setOriginalName()
 
     /**
-     * Set the value of [name_normalized] column.
+     * Set the value of [slug] column.
      *
      * @param  string $v new value
      * @return FunctionGroup The current object (for fluent API support)
      */
-    public function setNameNormalized($v)
+    public function setSlug($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->name_normalized !== $v) {
-            $this->name_normalized = $v;
-            $this->modifiedColumns[] = FunctionGroupPeer::NAME_NORMALIZED;
+        if ($this->slug !== $v) {
+            $this->slug = $v;
+            $this->modifiedColumns[] = FunctionGroupPeer::SLUG;
         }
 
 
         return $this;
-    } // setNameNormalized()
+    } // setSlug()
 
     /**
      * Set the value of [name] column.
@@ -479,7 +479,7 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->original_name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->name_normalized = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->slug = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
             $this->name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             $this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
@@ -803,8 +803,8 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
         if ($this->isColumnModified(FunctionGroupPeer::ORIGINAL_NAME)) {
             $modifiedColumns[':p' . $index++]  = '`original_name`';
         }
-        if ($this->isColumnModified(FunctionGroupPeer::NAME_NORMALIZED)) {
-            $modifiedColumns[':p' . $index++]  = '`name_normalized`';
+        if ($this->isColumnModified(FunctionGroupPeer::SLUG)) {
+            $modifiedColumns[':p' . $index++]  = '`slug`';
         }
         if ($this->isColumnModified(FunctionGroupPeer::NAME)) {
             $modifiedColumns[':p' . $index++]  = '`name`';
@@ -838,8 +838,8 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
                     case '`original_name`':
                         $stmt->bindValue($identifier, $this->original_name, PDO::PARAM_STR);
                         break;
-                    case '`name_normalized`':
-                        $stmt->bindValue($identifier, $this->name_normalized, PDO::PARAM_STR);
+                    case '`slug`':
+                        $stmt->bindValue($identifier, $this->slug, PDO::PARAM_STR);
                         break;
                     case '`name`':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
@@ -1023,7 +1023,7 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
                 return $this->getOriginalName();
                 break;
             case 2:
-                return $this->getNameNormalized();
+                return $this->getSlug();
                 break;
             case 3:
                 return $this->getName();
@@ -1071,7 +1071,7 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getOriginalName(),
-            $keys[2] => $this->getNameNormalized(),
+            $keys[2] => $this->getSlug(),
             $keys[3] => $this->getName(),
             $keys[4] => $this->getCreatedAt(),
             $keys[5] => $this->getUpdatedAt(),
@@ -1134,7 +1134,7 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
                 $this->setOriginalName($value);
                 break;
             case 2:
-                $this->setNameNormalized($value);
+                $this->setSlug($value);
                 break;
             case 3:
                 $this->setName($value);
@@ -1177,7 +1177,7 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setOriginalName($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setNameNormalized($arr[$keys[2]]);
+        if (array_key_exists($keys[2], $arr)) $this->setSlug($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setName($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
@@ -1196,7 +1196,7 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
 
         if ($this->isColumnModified(FunctionGroupPeer::ID)) $criteria->add(FunctionGroupPeer::ID, $this->id);
         if ($this->isColumnModified(FunctionGroupPeer::ORIGINAL_NAME)) $criteria->add(FunctionGroupPeer::ORIGINAL_NAME, $this->original_name);
-        if ($this->isColumnModified(FunctionGroupPeer::NAME_NORMALIZED)) $criteria->add(FunctionGroupPeer::NAME_NORMALIZED, $this->name_normalized);
+        if ($this->isColumnModified(FunctionGroupPeer::SLUG)) $criteria->add(FunctionGroupPeer::SLUG, $this->slug);
         if ($this->isColumnModified(FunctionGroupPeer::NAME)) $criteria->add(FunctionGroupPeer::NAME, $this->name);
         if ($this->isColumnModified(FunctionGroupPeer::CREATED_AT)) $criteria->add(FunctionGroupPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(FunctionGroupPeer::UPDATED_AT)) $criteria->add(FunctionGroupPeer::UPDATED_AT, $this->updated_at);
@@ -1266,7 +1266,7 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setOriginalName($this->getOriginalName());
-        $copyObj->setNameNormalized($this->getNameNormalized());
+        $copyObj->setSlug($this->getSlug());
         $copyObj->setName($this->getName());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -1763,7 +1763,7 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
     {
         $this->id = null;
         $this->original_name = null;
-        $this->name_normalized = null;
+        $this->slug = null;
         $this->name = null;
         $this->created_at = null;
         $this->updated_at = null;

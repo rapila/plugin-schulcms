@@ -6,13 +6,13 @@
 class Event extends BaseEvent {
 
 	private static $EVENTPAGE = null;
-	
+
 	public function setTitle($sTitle) {
 		$sNameNormalized = StringUtil::normalizePath($sTitle);
-		$this->setTitleNormalized($sNameNormalized);
+		$this->setSlug($sNameNormalized);
 		return parent::setTitle($sTitle);
 	}
-	
+
 	/**
 	* for reference tracking only
 	*/
@@ -23,7 +23,7 @@ class Event extends BaseEvent {
 	public function getIsClassEvent() {
 		return $this->getSchoolClassId() !== null;
 	}
-	
+
 	public function getIsServiceEvent() {
 		return $this->getServiceId() !== null;
 	}
@@ -31,18 +31,18 @@ class Event extends BaseEvent {
 	public function getTeaserTruncated() {
 		return StringUtil::truncate($this->getTeaser(), 40);
 	}
-	
+
 	public function isPreview() {
 		if($this->getDateEnd() !== null) {
 			return $this->getDateEnd('Ymd') >= date('Ymd');
 		}
 		return $this->getDateStart('Ymd') >= date('Ymd');
 	}
-	
+
 	public function isMultiDay() {
 		return $this->getDateEnd() > $this->getDateStart();
 	}
-	
+
 	public function getDateFromTo($sFormat = 'd.m.Y') {
 		$aResult = array();
 		if($this->getDateEnd() === null) {
@@ -56,7 +56,7 @@ class Event extends BaseEvent {
 		}
 		return $this->getDateStart('d.').' bis '.$this->getDateEnd($sFormat);
 	}
-	
+
 	public function getWeekdayName() {
 		return LocaleUtil::getDayNameByWeekDay($this->getDateStart('w'));
 	}
@@ -66,14 +66,14 @@ class Event extends BaseEvent {
 			return $this->getDateStart('j').'. '.LocaleUtil::getMonthNameByMonthId($this->getDateStart('n')).' '.$this->getDateStart('Y');
 		}
 	}
-	
+
 	public function getLastDate($sFormat = 'd.m.Y') {
 		if($this->getDateEnd()) {
 			return $this->getDateEnd($sFormat);
 		}
 		return $this->getDateStart($sFormat);
 	}
-	
+
 	public function getDateStartFormatted($sFormat = 'Y.m.d') {
 		return $this->getDateStart($sFormat);
 	}
@@ -87,27 +87,27 @@ class Event extends BaseEvent {
 		}
 		return false;
 	}
-	
+
 	public function isReview() {
 		return $this->getLastDate('Ymd') < date('Ymd');
 	}
-	
+
 	public function hasImages() {
 		return $this->countEventDocuments() > 0;
 	}
-	
+
 	public function getHasImages() {
 		return $this->hasImages();
 	}
-	
+
 	public function hasReviewText() {
 		return $this->getBodyReview() !== null;
 	}
-	
+
 	public function hasBericht() {
 		return $this->isReview() && $this->hasReviewText();
 	}
-	
+
 	public function getHasBericht() {
 		return $this->hasBericht();
 	}
@@ -117,14 +117,14 @@ class Event extends BaseEvent {
 		$oCriteria->joinDocument()->useQuery(DocumentPeer::OM_CLASS)->filterByDocumentKind('image');
 		return $this->getEventDocuments($oCriteria);
 	}
-	
+
 	public function getFirstImage() {
 		$oCriteria = EventDocumentQuery::create()->filterByEventId($this->getId())->orderBySort();
 		$oCriteria->joinDocument()->useQuery(DocumentPeer::OM_CLASS)->filterByDocumentKind('image');
 		return $oCriteria->findOne();
 	}
-	
-	public function getEventPageLink($oEventPage = null) { 
+
+	public function getEventPageLink($oEventPage = null) {
 		if($oEventPage === null) {
 			if(!self::$EVENTPAGE) {
 				self::$EVENTPAGE = PagePeer::getPageByIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS);
@@ -135,18 +135,18 @@ class Event extends BaseEvent {
 			$oEventPage = self::$EVENTPAGE;
 		}
 		$aDateStart = explode('-', $this->getDateStart('Y-n-j'));
-		return array_merge($oEventPage->getFullPathArray(), array_merge($aDateStart, array($this->getTitleNormalized())));
+		return array_merge($oEventPage->getFullPathArray(), array_merge($aDateStart, array($this->getSlug())));
 	}
-	
+
 	public function getAdminLink() {
 		return array('events', $this->getId());
 	}
-	
+
 	public function delete(PropelPDO $oConnection = null) {
 		EventDocumentQuery::create()->filterByEventId($this->getId())->delete();
 		return parent::delete($oConnection);
 	}
-	
+
 	public function getRssAttributes($bForReview = false, $oBaseNavigationItem = null) {
 		$aResult = array();
 		$aResult['title'] = $this->getTitle();
@@ -169,12 +169,12 @@ class Event extends BaseEvent {
 		$aResult['category'] = $this->getEventType()->getName();
 		return $aResult;
 	}
-	
+
 	public function getDateStartTimeStamp() {
 		return (int)$this->getDateStart('U');
 		// why not return $this->date_start;
 	}
-	
-	
+
+
 
 }

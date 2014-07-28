@@ -38,8 +38,8 @@ abstract class BaseEventPeer
     /** the column name for the title field */
     const TITLE = 'events.title';
 
-    /** the column name for the title_normalized field */
-    const TITLE_NORMALIZED = 'events.title_normalized';
+    /** the column name for the slug field */
+    const SLUG = 'events.slug';
 
     /** the column name for the teaser field */
     const TEASER = 'events.teaser';
@@ -113,11 +113,11 @@ abstract class BaseEventPeer
      * e.g. EventPeer::$fieldNames[EventPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Title', 'TitleNormalized', 'Teaser', 'BodyPreview', 'BodyReview', 'LocationInfo', 'DateStart', 'DateEnd', 'TimeDetails', 'IsActive', 'IgnoreOnFrontpage', 'EventTypeId', 'ServiceId', 'SchoolClassId', 'GalleryId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'title', 'titleNormalized', 'teaser', 'bodyPreview', 'bodyReview', 'locationInfo', 'dateStart', 'dateEnd', 'timeDetails', 'isActive', 'ignoreOnFrontpage', 'eventTypeId', 'serviceId', 'schoolClassId', 'galleryId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-        BasePeer::TYPE_COLNAME => array (EventPeer::ID, EventPeer::TITLE, EventPeer::TITLE_NORMALIZED, EventPeer::TEASER, EventPeer::BODY_PREVIEW, EventPeer::BODY_REVIEW, EventPeer::LOCATION_INFO, EventPeer::DATE_START, EventPeer::DATE_END, EventPeer::TIME_DETAILS, EventPeer::IS_ACTIVE, EventPeer::IGNORE_ON_FRONTPAGE, EventPeer::EVENT_TYPE_ID, EventPeer::SERVICE_ID, EventPeer::SCHOOL_CLASS_ID, EventPeer::GALLERY_ID, EventPeer::CREATED_AT, EventPeer::UPDATED_AT, EventPeer::CREATED_BY, EventPeer::UPDATED_BY, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TITLE', 'TITLE_NORMALIZED', 'TEASER', 'BODY_PREVIEW', 'BODY_REVIEW', 'LOCATION_INFO', 'DATE_START', 'DATE_END', 'TIME_DETAILS', 'IS_ACTIVE', 'IGNORE_ON_FRONTPAGE', 'EVENT_TYPE_ID', 'SERVICE_ID', 'SCHOOL_CLASS_ID', 'GALLERY_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'title', 'title_normalized', 'teaser', 'body_preview', 'body_review', 'location_info', 'date_start', 'date_end', 'time_details', 'is_active', 'ignore_on_frontpage', 'event_type_id', 'service_id', 'school_class_id', 'gallery_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Title', 'Slug', 'Teaser', 'BodyPreview', 'BodyReview', 'LocationInfo', 'DateStart', 'DateEnd', 'TimeDetails', 'IsActive', 'IgnoreOnFrontpage', 'EventTypeId', 'ServiceId', 'SchoolClassId', 'GalleryId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'title', 'slug', 'teaser', 'bodyPreview', 'bodyReview', 'locationInfo', 'dateStart', 'dateEnd', 'timeDetails', 'isActive', 'ignoreOnFrontpage', 'eventTypeId', 'serviceId', 'schoolClassId', 'galleryId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+        BasePeer::TYPE_COLNAME => array (EventPeer::ID, EventPeer::TITLE, EventPeer::SLUG, EventPeer::TEASER, EventPeer::BODY_PREVIEW, EventPeer::BODY_REVIEW, EventPeer::LOCATION_INFO, EventPeer::DATE_START, EventPeer::DATE_END, EventPeer::TIME_DETAILS, EventPeer::IS_ACTIVE, EventPeer::IGNORE_ON_FRONTPAGE, EventPeer::EVENT_TYPE_ID, EventPeer::SERVICE_ID, EventPeer::SCHOOL_CLASS_ID, EventPeer::GALLERY_ID, EventPeer::CREATED_AT, EventPeer::UPDATED_AT, EventPeer::CREATED_BY, EventPeer::UPDATED_BY, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TITLE', 'SLUG', 'TEASER', 'BODY_PREVIEW', 'BODY_REVIEW', 'LOCATION_INFO', 'DATE_START', 'DATE_END', 'TIME_DETAILS', 'IS_ACTIVE', 'IGNORE_ON_FRONTPAGE', 'EVENT_TYPE_ID', 'SERVICE_ID', 'SCHOOL_CLASS_ID', 'GALLERY_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'title', 'slug', 'teaser', 'body_preview', 'body_review', 'location_info', 'date_start', 'date_end', 'time_details', 'is_active', 'ignore_on_frontpage', 'event_type_id', 'service_id', 'school_class_id', 'gallery_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, )
     );
 
@@ -128,11 +128,11 @@ abstract class BaseEventPeer
      * e.g. EventPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Title' => 1, 'TitleNormalized' => 2, 'Teaser' => 3, 'BodyPreview' => 4, 'BodyReview' => 5, 'LocationInfo' => 6, 'DateStart' => 7, 'DateEnd' => 8, 'TimeDetails' => 9, 'IsActive' => 10, 'IgnoreOnFrontpage' => 11, 'EventTypeId' => 12, 'ServiceId' => 13, 'SchoolClassId' => 14, 'GalleryId' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, 'CreatedBy' => 18, 'UpdatedBy' => 19, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'title' => 1, 'titleNormalized' => 2, 'teaser' => 3, 'bodyPreview' => 4, 'bodyReview' => 5, 'locationInfo' => 6, 'dateStart' => 7, 'dateEnd' => 8, 'timeDetails' => 9, 'isActive' => 10, 'ignoreOnFrontpage' => 11, 'eventTypeId' => 12, 'serviceId' => 13, 'schoolClassId' => 14, 'galleryId' => 15, 'createdAt' => 16, 'updatedAt' => 17, 'createdBy' => 18, 'updatedBy' => 19, ),
-        BasePeer::TYPE_COLNAME => array (EventPeer::ID => 0, EventPeer::TITLE => 1, EventPeer::TITLE_NORMALIZED => 2, EventPeer::TEASER => 3, EventPeer::BODY_PREVIEW => 4, EventPeer::BODY_REVIEW => 5, EventPeer::LOCATION_INFO => 6, EventPeer::DATE_START => 7, EventPeer::DATE_END => 8, EventPeer::TIME_DETAILS => 9, EventPeer::IS_ACTIVE => 10, EventPeer::IGNORE_ON_FRONTPAGE => 11, EventPeer::EVENT_TYPE_ID => 12, EventPeer::SERVICE_ID => 13, EventPeer::SCHOOL_CLASS_ID => 14, EventPeer::GALLERY_ID => 15, EventPeer::CREATED_AT => 16, EventPeer::UPDATED_AT => 17, EventPeer::CREATED_BY => 18, EventPeer::UPDATED_BY => 19, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TITLE' => 1, 'TITLE_NORMALIZED' => 2, 'TEASER' => 3, 'BODY_PREVIEW' => 4, 'BODY_REVIEW' => 5, 'LOCATION_INFO' => 6, 'DATE_START' => 7, 'DATE_END' => 8, 'TIME_DETAILS' => 9, 'IS_ACTIVE' => 10, 'IGNORE_ON_FRONTPAGE' => 11, 'EVENT_TYPE_ID' => 12, 'SERVICE_ID' => 13, 'SCHOOL_CLASS_ID' => 14, 'GALLERY_ID' => 15, 'CREATED_AT' => 16, 'UPDATED_AT' => 17, 'CREATED_BY' => 18, 'UPDATED_BY' => 19, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'title' => 1, 'title_normalized' => 2, 'teaser' => 3, 'body_preview' => 4, 'body_review' => 5, 'location_info' => 6, 'date_start' => 7, 'date_end' => 8, 'time_details' => 9, 'is_active' => 10, 'ignore_on_frontpage' => 11, 'event_type_id' => 12, 'service_id' => 13, 'school_class_id' => 14, 'gallery_id' => 15, 'created_at' => 16, 'updated_at' => 17, 'created_by' => 18, 'updated_by' => 19, ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Title' => 1, 'Slug' => 2, 'Teaser' => 3, 'BodyPreview' => 4, 'BodyReview' => 5, 'LocationInfo' => 6, 'DateStart' => 7, 'DateEnd' => 8, 'TimeDetails' => 9, 'IsActive' => 10, 'IgnoreOnFrontpage' => 11, 'EventTypeId' => 12, 'ServiceId' => 13, 'SchoolClassId' => 14, 'GalleryId' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, 'CreatedBy' => 18, 'UpdatedBy' => 19, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'title' => 1, 'slug' => 2, 'teaser' => 3, 'bodyPreview' => 4, 'bodyReview' => 5, 'locationInfo' => 6, 'dateStart' => 7, 'dateEnd' => 8, 'timeDetails' => 9, 'isActive' => 10, 'ignoreOnFrontpage' => 11, 'eventTypeId' => 12, 'serviceId' => 13, 'schoolClassId' => 14, 'galleryId' => 15, 'createdAt' => 16, 'updatedAt' => 17, 'createdBy' => 18, 'updatedBy' => 19, ),
+        BasePeer::TYPE_COLNAME => array (EventPeer::ID => 0, EventPeer::TITLE => 1, EventPeer::SLUG => 2, EventPeer::TEASER => 3, EventPeer::BODY_PREVIEW => 4, EventPeer::BODY_REVIEW => 5, EventPeer::LOCATION_INFO => 6, EventPeer::DATE_START => 7, EventPeer::DATE_END => 8, EventPeer::TIME_DETAILS => 9, EventPeer::IS_ACTIVE => 10, EventPeer::IGNORE_ON_FRONTPAGE => 11, EventPeer::EVENT_TYPE_ID => 12, EventPeer::SERVICE_ID => 13, EventPeer::SCHOOL_CLASS_ID => 14, EventPeer::GALLERY_ID => 15, EventPeer::CREATED_AT => 16, EventPeer::UPDATED_AT => 17, EventPeer::CREATED_BY => 18, EventPeer::UPDATED_BY => 19, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TITLE' => 1, 'SLUG' => 2, 'TEASER' => 3, 'BODY_PREVIEW' => 4, 'BODY_REVIEW' => 5, 'LOCATION_INFO' => 6, 'DATE_START' => 7, 'DATE_END' => 8, 'TIME_DETAILS' => 9, 'IS_ACTIVE' => 10, 'IGNORE_ON_FRONTPAGE' => 11, 'EVENT_TYPE_ID' => 12, 'SERVICE_ID' => 13, 'SCHOOL_CLASS_ID' => 14, 'GALLERY_ID' => 15, 'CREATED_AT' => 16, 'UPDATED_AT' => 17, 'CREATED_BY' => 18, 'UPDATED_BY' => 19, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'title' => 1, 'slug' => 2, 'teaser' => 3, 'body_preview' => 4, 'body_review' => 5, 'location_info' => 6, 'date_start' => 7, 'date_end' => 8, 'time_details' => 9, 'is_active' => 10, 'ignore_on_frontpage' => 11, 'event_type_id' => 12, 'service_id' => 13, 'school_class_id' => 14, 'gallery_id' => 15, 'created_at' => 16, 'updated_at' => 17, 'created_by' => 18, 'updated_by' => 19, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, )
     );
 
@@ -209,7 +209,7 @@ abstract class BaseEventPeer
         if (null === $alias) {
             $criteria->addSelectColumn(EventPeer::ID);
             $criteria->addSelectColumn(EventPeer::TITLE);
-            $criteria->addSelectColumn(EventPeer::TITLE_NORMALIZED);
+            $criteria->addSelectColumn(EventPeer::SLUG);
             $criteria->addSelectColumn(EventPeer::TEASER);
             $criteria->addSelectColumn(EventPeer::BODY_PREVIEW);
             $criteria->addSelectColumn(EventPeer::BODY_REVIEW);
@@ -230,7 +230,7 @@ abstract class BaseEventPeer
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.title');
-            $criteria->addSelectColumn($alias . '.title_normalized');
+            $criteria->addSelectColumn($alias . '.slug');
             $criteria->addSelectColumn($alias . '.teaser');
             $criteria->addSelectColumn($alias . '.body_preview');
             $criteria->addSelectColumn($alias . '.body_review');

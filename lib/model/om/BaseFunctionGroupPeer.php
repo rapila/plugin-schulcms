@@ -38,8 +38,8 @@ abstract class BaseFunctionGroupPeer
     /** the column name for the original_name field */
     const ORIGINAL_NAME = 'function_groups.original_name';
 
-    /** the column name for the name_normalized field */
-    const NAME_NORMALIZED = 'function_groups.name_normalized';
+    /** the column name for the slug field */
+    const SLUG = 'function_groups.slug';
 
     /** the column name for the name field */
     const NAME = 'function_groups.name';
@@ -77,11 +77,11 @@ abstract class BaseFunctionGroupPeer
      * e.g. FunctionGroupPeer::$fieldNames[FunctionGroupPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'OriginalName', 'NameNormalized', 'Name', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'originalName', 'nameNormalized', 'name', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-        BasePeer::TYPE_COLNAME => array (FunctionGroupPeer::ID, FunctionGroupPeer::ORIGINAL_NAME, FunctionGroupPeer::NAME_NORMALIZED, FunctionGroupPeer::NAME, FunctionGroupPeer::CREATED_AT, FunctionGroupPeer::UPDATED_AT, FunctionGroupPeer::CREATED_BY, FunctionGroupPeer::UPDATED_BY, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ORIGINAL_NAME', 'NAME_NORMALIZED', 'NAME', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'original_name', 'name_normalized', 'name', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+        BasePeer::TYPE_PHPNAME => array ('Id', 'OriginalName', 'Slug', 'Name', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'originalName', 'slug', 'name', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+        BasePeer::TYPE_COLNAME => array (FunctionGroupPeer::ID, FunctionGroupPeer::ORIGINAL_NAME, FunctionGroupPeer::SLUG, FunctionGroupPeer::NAME, FunctionGroupPeer::CREATED_AT, FunctionGroupPeer::UPDATED_AT, FunctionGroupPeer::CREATED_BY, FunctionGroupPeer::UPDATED_BY, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ORIGINAL_NAME', 'SLUG', 'NAME', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'original_name', 'slug', 'name', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
@@ -92,11 +92,11 @@ abstract class BaseFunctionGroupPeer
      * e.g. FunctionGroupPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OriginalName' => 1, 'NameNormalized' => 2, 'Name' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, 'CreatedBy' => 6, 'UpdatedBy' => 7, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'originalName' => 1, 'nameNormalized' => 2, 'name' => 3, 'createdAt' => 4, 'updatedAt' => 5, 'createdBy' => 6, 'updatedBy' => 7, ),
-        BasePeer::TYPE_COLNAME => array (FunctionGroupPeer::ID => 0, FunctionGroupPeer::ORIGINAL_NAME => 1, FunctionGroupPeer::NAME_NORMALIZED => 2, FunctionGroupPeer::NAME => 3, FunctionGroupPeer::CREATED_AT => 4, FunctionGroupPeer::UPDATED_AT => 5, FunctionGroupPeer::CREATED_BY => 6, FunctionGroupPeer::UPDATED_BY => 7, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ORIGINAL_NAME' => 1, 'NAME_NORMALIZED' => 2, 'NAME' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, 'CREATED_BY' => 6, 'UPDATED_BY' => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'original_name' => 1, 'name_normalized' => 2, 'name' => 3, 'created_at' => 4, 'updated_at' => 5, 'created_by' => 6, 'updated_by' => 7, ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OriginalName' => 1, 'Slug' => 2, 'Name' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, 'CreatedBy' => 6, 'UpdatedBy' => 7, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'originalName' => 1, 'slug' => 2, 'name' => 3, 'createdAt' => 4, 'updatedAt' => 5, 'createdBy' => 6, 'updatedBy' => 7, ),
+        BasePeer::TYPE_COLNAME => array (FunctionGroupPeer::ID => 0, FunctionGroupPeer::ORIGINAL_NAME => 1, FunctionGroupPeer::SLUG => 2, FunctionGroupPeer::NAME => 3, FunctionGroupPeer::CREATED_AT => 4, FunctionGroupPeer::UPDATED_AT => 5, FunctionGroupPeer::CREATED_BY => 6, FunctionGroupPeer::UPDATED_BY => 7, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ORIGINAL_NAME' => 1, 'SLUG' => 2, 'NAME' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, 'CREATED_BY' => 6, 'UPDATED_BY' => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'original_name' => 1, 'slug' => 2, 'name' => 3, 'created_at' => 4, 'updated_at' => 5, 'created_by' => 6, 'updated_by' => 7, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
@@ -173,7 +173,7 @@ abstract class BaseFunctionGroupPeer
         if (null === $alias) {
             $criteria->addSelectColumn(FunctionGroupPeer::ID);
             $criteria->addSelectColumn(FunctionGroupPeer::ORIGINAL_NAME);
-            $criteria->addSelectColumn(FunctionGroupPeer::NAME_NORMALIZED);
+            $criteria->addSelectColumn(FunctionGroupPeer::SLUG);
             $criteria->addSelectColumn(FunctionGroupPeer::NAME);
             $criteria->addSelectColumn(FunctionGroupPeer::CREATED_AT);
             $criteria->addSelectColumn(FunctionGroupPeer::UPDATED_AT);
@@ -182,7 +182,7 @@ abstract class BaseFunctionGroupPeer
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.original_name');
-            $criteria->addSelectColumn($alias . '.name_normalized');
+            $criteria->addSelectColumn($alias . '.slug');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');

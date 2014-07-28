@@ -38,11 +38,11 @@ abstract class BaseClassTypePeer
     /** the column name for the original_name field */
     const ORIGINAL_NAME = 'class_types.original_name';
 
-    /** the column name for the name_normalized field */
-    const NAME_NORMALIZED = 'class_types.name_normalized';
-
     /** the column name for the name field */
     const NAME = 'class_types.name';
+
+    /** the column name for the slug field */
+    const SLUG = 'class_types.slug';
 
     /** the column name for the created_at field */
     const CREATED_AT = 'class_types.created_at';
@@ -77,11 +77,11 @@ abstract class BaseClassTypePeer
      * e.g. ClassTypePeer::$fieldNames[ClassTypePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'OriginalName', 'NameNormalized', 'Name', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'originalName', 'nameNormalized', 'name', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-        BasePeer::TYPE_COLNAME => array (ClassTypePeer::ID, ClassTypePeer::ORIGINAL_NAME, ClassTypePeer::NAME_NORMALIZED, ClassTypePeer::NAME, ClassTypePeer::CREATED_AT, ClassTypePeer::UPDATED_AT, ClassTypePeer::CREATED_BY, ClassTypePeer::UPDATED_BY, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ORIGINAL_NAME', 'NAME_NORMALIZED', 'NAME', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'original_name', 'name_normalized', 'name', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+        BasePeer::TYPE_PHPNAME => array ('Id', 'OriginalName', 'Name', 'Slug', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'originalName', 'name', 'slug', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+        BasePeer::TYPE_COLNAME => array (ClassTypePeer::ID, ClassTypePeer::ORIGINAL_NAME, ClassTypePeer::NAME, ClassTypePeer::SLUG, ClassTypePeer::CREATED_AT, ClassTypePeer::UPDATED_AT, ClassTypePeer::CREATED_BY, ClassTypePeer::UPDATED_BY, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ORIGINAL_NAME', 'NAME', 'SLUG', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'original_name', 'name', 'slug', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
@@ -92,11 +92,11 @@ abstract class BaseClassTypePeer
      * e.g. ClassTypePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OriginalName' => 1, 'NameNormalized' => 2, 'Name' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, 'CreatedBy' => 6, 'UpdatedBy' => 7, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'originalName' => 1, 'nameNormalized' => 2, 'name' => 3, 'createdAt' => 4, 'updatedAt' => 5, 'createdBy' => 6, 'updatedBy' => 7, ),
-        BasePeer::TYPE_COLNAME => array (ClassTypePeer::ID => 0, ClassTypePeer::ORIGINAL_NAME => 1, ClassTypePeer::NAME_NORMALIZED => 2, ClassTypePeer::NAME => 3, ClassTypePeer::CREATED_AT => 4, ClassTypePeer::UPDATED_AT => 5, ClassTypePeer::CREATED_BY => 6, ClassTypePeer::UPDATED_BY => 7, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ORIGINAL_NAME' => 1, 'NAME_NORMALIZED' => 2, 'NAME' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, 'CREATED_BY' => 6, 'UPDATED_BY' => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'original_name' => 1, 'name_normalized' => 2, 'name' => 3, 'created_at' => 4, 'updated_at' => 5, 'created_by' => 6, 'updated_by' => 7, ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OriginalName' => 1, 'Name' => 2, 'Slug' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, 'CreatedBy' => 6, 'UpdatedBy' => 7, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'originalName' => 1, 'name' => 2, 'slug' => 3, 'createdAt' => 4, 'updatedAt' => 5, 'createdBy' => 6, 'updatedBy' => 7, ),
+        BasePeer::TYPE_COLNAME => array (ClassTypePeer::ID => 0, ClassTypePeer::ORIGINAL_NAME => 1, ClassTypePeer::NAME => 2, ClassTypePeer::SLUG => 3, ClassTypePeer::CREATED_AT => 4, ClassTypePeer::UPDATED_AT => 5, ClassTypePeer::CREATED_BY => 6, ClassTypePeer::UPDATED_BY => 7, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ORIGINAL_NAME' => 1, 'NAME' => 2, 'SLUG' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, 'CREATED_BY' => 6, 'UPDATED_BY' => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'original_name' => 1, 'name' => 2, 'slug' => 3, 'created_at' => 4, 'updated_at' => 5, 'created_by' => 6, 'updated_by' => 7, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
@@ -173,8 +173,8 @@ abstract class BaseClassTypePeer
         if (null === $alias) {
             $criteria->addSelectColumn(ClassTypePeer::ID);
             $criteria->addSelectColumn(ClassTypePeer::ORIGINAL_NAME);
-            $criteria->addSelectColumn(ClassTypePeer::NAME_NORMALIZED);
             $criteria->addSelectColumn(ClassTypePeer::NAME);
+            $criteria->addSelectColumn(ClassTypePeer::SLUG);
             $criteria->addSelectColumn(ClassTypePeer::CREATED_AT);
             $criteria->addSelectColumn(ClassTypePeer::UPDATED_AT);
             $criteria->addSelectColumn(ClassTypePeer::CREATED_BY);
@@ -182,8 +182,8 @@ abstract class BaseClassTypePeer
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.original_name');
-            $criteria->addSelectColumn($alias . '.name_normalized');
             $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.slug');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
             $criteria->addSelectColumn($alias . '.created_by');

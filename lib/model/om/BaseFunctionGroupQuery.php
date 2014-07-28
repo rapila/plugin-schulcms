@@ -8,7 +8,7 @@
  *
  * @method FunctionGroupQuery orderById($order = Criteria::ASC) Order by the id column
  * @method FunctionGroupQuery orderByOriginalName($order = Criteria::ASC) Order by the original_name column
- * @method FunctionGroupQuery orderByNameNormalized($order = Criteria::ASC) Order by the name_normalized column
+ * @method FunctionGroupQuery orderBySlug($order = Criteria::ASC) Order by the slug column
  * @method FunctionGroupQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method FunctionGroupQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method FunctionGroupQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
@@ -17,7 +17,7 @@
  *
  * @method FunctionGroupQuery groupById() Group by the id column
  * @method FunctionGroupQuery groupByOriginalName() Group by the original_name column
- * @method FunctionGroupQuery groupByNameNormalized() Group by the name_normalized column
+ * @method FunctionGroupQuery groupBySlug() Group by the slug column
  * @method FunctionGroupQuery groupByName() Group by the name column
  * @method FunctionGroupQuery groupByCreatedAt() Group by the created_at column
  * @method FunctionGroupQuery groupByUpdatedAt() Group by the updated_at column
@@ -44,7 +44,7 @@
  * @method FunctionGroup findOneOrCreate(PropelPDO $con = null) Return the first FunctionGroup matching the query, or a new FunctionGroup object populated from the query conditions when no match is found
  *
  * @method FunctionGroup findOneByOriginalName(string $original_name) Return the first FunctionGroup filtered by the original_name column
- * @method FunctionGroup findOneByNameNormalized(string $name_normalized) Return the first FunctionGroup filtered by the name_normalized column
+ * @method FunctionGroup findOneBySlug(string $slug) Return the first FunctionGroup filtered by the slug column
  * @method FunctionGroup findOneByName(string $name) Return the first FunctionGroup filtered by the name column
  * @method FunctionGroup findOneByCreatedAt(string $created_at) Return the first FunctionGroup filtered by the created_at column
  * @method FunctionGroup findOneByUpdatedAt(string $updated_at) Return the first FunctionGroup filtered by the updated_at column
@@ -53,7 +53,7 @@
  *
  * @method array findById(int $id) Return FunctionGroup objects filtered by the id column
  * @method array findByOriginalName(string $original_name) Return FunctionGroup objects filtered by the original_name column
- * @method array findByNameNormalized(string $name_normalized) Return FunctionGroup objects filtered by the name_normalized column
+ * @method array findBySlug(string $slug) Return FunctionGroup objects filtered by the slug column
  * @method array findByName(string $name) Return FunctionGroup objects filtered by the name column
  * @method array findByCreatedAt(string $created_at) Return FunctionGroup objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return FunctionGroup objects filtered by the updated_at column
@@ -166,7 +166,7 @@ abstract class BaseFunctionGroupQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `original_name`, `name_normalized`, `name`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `function_groups` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `original_name`, `slug`, `name`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `function_groups` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -327,32 +327,32 @@ abstract class BaseFunctionGroupQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the name_normalized column
+     * Filter the query on the slug column
      *
      * Example usage:
      * <code>
-     * $query->filterByNameNormalized('fooValue');   // WHERE name_normalized = 'fooValue'
-     * $query->filterByNameNormalized('%fooValue%'); // WHERE name_normalized LIKE '%fooValue%'
+     * $query->filterBySlug('fooValue');   // WHERE slug = 'fooValue'
+     * $query->filterBySlug('%fooValue%'); // WHERE slug LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $nameNormalized The value to use as filter.
+     * @param     string $slug The value to use as filter.
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return FunctionGroupQuery The current query, for fluid interface
      */
-    public function filterByNameNormalized($nameNormalized = null, $comparison = null)
+    public function filterBySlug($slug = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($nameNormalized)) {
+            if (is_array($slug)) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $nameNormalized)) {
-                $nameNormalized = str_replace('*', '%', $nameNormalized);
+            } elseif (preg_match('/[\%\*]/', $slug)) {
+                $slug = str_replace('*', '%', $slug);
                 $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(FunctionGroupPeer::NAME_NORMALIZED, $nameNormalized, $comparison);
+        return $this->addUsingAlias(FunctionGroupPeer::SLUG, $slug, $comparison);
     }
 
     /**

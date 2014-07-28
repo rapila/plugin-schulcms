@@ -8,7 +8,7 @@
  *
  * @method ServiceCategoryQuery orderById($order = Criteria::ASC) Order by the id column
  * @method ServiceCategoryQuery orderByName($order = Criteria::ASC) Order by the name column
- * @method ServiceCategoryQuery orderByNameNormalized($order = Criteria::ASC) Order by the name_normalized column
+ * @method ServiceCategoryQuery orderBySlug($order = Criteria::ASC) Order by the slug column
  * @method ServiceCategoryQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method ServiceCategoryQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method ServiceCategoryQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
@@ -16,7 +16,7 @@
  *
  * @method ServiceCategoryQuery groupById() Group by the id column
  * @method ServiceCategoryQuery groupByName() Group by the name column
- * @method ServiceCategoryQuery groupByNameNormalized() Group by the name_normalized column
+ * @method ServiceCategoryQuery groupBySlug() Group by the slug column
  * @method ServiceCategoryQuery groupByCreatedAt() Group by the created_at column
  * @method ServiceCategoryQuery groupByUpdatedAt() Group by the updated_at column
  * @method ServiceCategoryQuery groupByCreatedBy() Group by the created_by column
@@ -42,7 +42,7 @@
  * @method ServiceCategory findOneOrCreate(PropelPDO $con = null) Return the first ServiceCategory matching the query, or a new ServiceCategory object populated from the query conditions when no match is found
  *
  * @method ServiceCategory findOneByName(string $name) Return the first ServiceCategory filtered by the name column
- * @method ServiceCategory findOneByNameNormalized(string $name_normalized) Return the first ServiceCategory filtered by the name_normalized column
+ * @method ServiceCategory findOneBySlug(string $slug) Return the first ServiceCategory filtered by the slug column
  * @method ServiceCategory findOneByCreatedAt(string $created_at) Return the first ServiceCategory filtered by the created_at column
  * @method ServiceCategory findOneByUpdatedAt(string $updated_at) Return the first ServiceCategory filtered by the updated_at column
  * @method ServiceCategory findOneByCreatedBy(int $created_by) Return the first ServiceCategory filtered by the created_by column
@@ -50,7 +50,7 @@
  *
  * @method array findById(int $id) Return ServiceCategory objects filtered by the id column
  * @method array findByName(string $name) Return ServiceCategory objects filtered by the name column
- * @method array findByNameNormalized(string $name_normalized) Return ServiceCategory objects filtered by the name_normalized column
+ * @method array findBySlug(string $slug) Return ServiceCategory objects filtered by the slug column
  * @method array findByCreatedAt(string $created_at) Return ServiceCategory objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return ServiceCategory objects filtered by the updated_at column
  * @method array findByCreatedBy(int $created_by) Return ServiceCategory objects filtered by the created_by column
@@ -162,7 +162,7 @@ abstract class BaseServiceCategoryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `name_normalized`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `service_categories` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `name`, `slug`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `service_categories` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -323,32 +323,32 @@ abstract class BaseServiceCategoryQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the name_normalized column
+     * Filter the query on the slug column
      *
      * Example usage:
      * <code>
-     * $query->filterByNameNormalized('fooValue');   // WHERE name_normalized = 'fooValue'
-     * $query->filterByNameNormalized('%fooValue%'); // WHERE name_normalized LIKE '%fooValue%'
+     * $query->filterBySlug('fooValue');   // WHERE slug = 'fooValue'
+     * $query->filterBySlug('%fooValue%'); // WHERE slug LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $nameNormalized The value to use as filter.
+     * @param     string $slug The value to use as filter.
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ServiceCategoryQuery The current query, for fluid interface
      */
-    public function filterByNameNormalized($nameNormalized = null, $comparison = null)
+    public function filterBySlug($slug = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($nameNormalized)) {
+            if (is_array($slug)) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $nameNormalized)) {
-                $nameNormalized = str_replace('*', '%', $nameNormalized);
+            } elseif (preg_match('/[\%\*]/', $slug)) {
+                $slug = str_replace('*', '%', $slug);
                 $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(ServiceCategoryPeer::NAME_NORMALIZED, $nameNormalized, $comparison);
+        return $this->addUsingAlias(ServiceCategoryPeer::SLUG, $slug, $comparison);
     }
 
     /**

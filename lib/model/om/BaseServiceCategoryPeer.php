@@ -38,8 +38,8 @@ abstract class BaseServiceCategoryPeer
     /** the column name for the name field */
     const NAME = 'service_categories.name';
 
-    /** the column name for the name_normalized field */
-    const NAME_NORMALIZED = 'service_categories.name_normalized';
+    /** the column name for the slug field */
+    const SLUG = 'service_categories.slug';
 
     /** the column name for the created_at field */
     const CREATED_AT = 'service_categories.created_at';
@@ -74,11 +74,11 @@ abstract class BaseServiceCategoryPeer
      * e.g. ServiceCategoryPeer::$fieldNames[ServiceCategoryPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'NameNormalized', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'nameNormalized', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-        BasePeer::TYPE_COLNAME => array (ServiceCategoryPeer::ID, ServiceCategoryPeer::NAME, ServiceCategoryPeer::NAME_NORMALIZED, ServiceCategoryPeer::CREATED_AT, ServiceCategoryPeer::UPDATED_AT, ServiceCategoryPeer::CREATED_BY, ServiceCategoryPeer::UPDATED_BY, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'NAME_NORMALIZED', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'name_normalized', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Slug', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'slug', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+        BasePeer::TYPE_COLNAME => array (ServiceCategoryPeer::ID, ServiceCategoryPeer::NAME, ServiceCategoryPeer::SLUG, ServiceCategoryPeer::CREATED_AT, ServiceCategoryPeer::UPDATED_AT, ServiceCategoryPeer::CREATED_BY, ServiceCategoryPeer::UPDATED_BY, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'SLUG', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'slug', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
@@ -89,11 +89,11 @@ abstract class BaseServiceCategoryPeer
      * e.g. ServiceCategoryPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'NameNormalized' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, 'CreatedBy' => 5, 'UpdatedBy' => 6, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'nameNormalized' => 2, 'createdAt' => 3, 'updatedAt' => 4, 'createdBy' => 5, 'updatedBy' => 6, ),
-        BasePeer::TYPE_COLNAME => array (ServiceCategoryPeer::ID => 0, ServiceCategoryPeer::NAME => 1, ServiceCategoryPeer::NAME_NORMALIZED => 2, ServiceCategoryPeer::CREATED_AT => 3, ServiceCategoryPeer::UPDATED_AT => 4, ServiceCategoryPeer::CREATED_BY => 5, ServiceCategoryPeer::UPDATED_BY => 6, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'NAME_NORMALIZED' => 2, 'CREATED_AT' => 3, 'UPDATED_AT' => 4, 'CREATED_BY' => 5, 'UPDATED_BY' => 6, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'name_normalized' => 2, 'created_at' => 3, 'updated_at' => 4, 'created_by' => 5, 'updated_by' => 6, ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Slug' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, 'CreatedBy' => 5, 'UpdatedBy' => 6, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'slug' => 2, 'createdAt' => 3, 'updatedAt' => 4, 'createdBy' => 5, 'updatedBy' => 6, ),
+        BasePeer::TYPE_COLNAME => array (ServiceCategoryPeer::ID => 0, ServiceCategoryPeer::NAME => 1, ServiceCategoryPeer::SLUG => 2, ServiceCategoryPeer::CREATED_AT => 3, ServiceCategoryPeer::UPDATED_AT => 4, ServiceCategoryPeer::CREATED_BY => 5, ServiceCategoryPeer::UPDATED_BY => 6, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'SLUG' => 2, 'CREATED_AT' => 3, 'UPDATED_AT' => 4, 'CREATED_BY' => 5, 'UPDATED_BY' => 6, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'slug' => 2, 'created_at' => 3, 'updated_at' => 4, 'created_by' => 5, 'updated_by' => 6, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
@@ -170,7 +170,7 @@ abstract class BaseServiceCategoryPeer
         if (null === $alias) {
             $criteria->addSelectColumn(ServiceCategoryPeer::ID);
             $criteria->addSelectColumn(ServiceCategoryPeer::NAME);
-            $criteria->addSelectColumn(ServiceCategoryPeer::NAME_NORMALIZED);
+            $criteria->addSelectColumn(ServiceCategoryPeer::SLUG);
             $criteria->addSelectColumn(ServiceCategoryPeer::CREATED_AT);
             $criteria->addSelectColumn(ServiceCategoryPeer::UPDATED_AT);
             $criteria->addSelectColumn(ServiceCategoryPeer::CREATED_BY);
@@ -178,7 +178,7 @@ abstract class BaseServiceCategoryPeer
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
-            $criteria->addSelectColumn($alias . '.name_normalized');
+            $criteria->addSelectColumn($alias . '.slug');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
             $criteria->addSelectColumn($alias . '.created_by');

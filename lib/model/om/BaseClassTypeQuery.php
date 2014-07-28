@@ -8,8 +8,8 @@
  *
  * @method ClassTypeQuery orderById($order = Criteria::ASC) Order by the id column
  * @method ClassTypeQuery orderByOriginalName($order = Criteria::ASC) Order by the original_name column
- * @method ClassTypeQuery orderByNameNormalized($order = Criteria::ASC) Order by the name_normalized column
  * @method ClassTypeQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method ClassTypeQuery orderBySlug($order = Criteria::ASC) Order by the slug column
  * @method ClassTypeQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method ClassTypeQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method ClassTypeQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
@@ -17,8 +17,8 @@
  *
  * @method ClassTypeQuery groupById() Group by the id column
  * @method ClassTypeQuery groupByOriginalName() Group by the original_name column
- * @method ClassTypeQuery groupByNameNormalized() Group by the name_normalized column
  * @method ClassTypeQuery groupByName() Group by the name column
+ * @method ClassTypeQuery groupBySlug() Group by the slug column
  * @method ClassTypeQuery groupByCreatedAt() Group by the created_at column
  * @method ClassTypeQuery groupByUpdatedAt() Group by the updated_at column
  * @method ClassTypeQuery groupByCreatedBy() Group by the created_by column
@@ -44,8 +44,8 @@
  * @method ClassType findOneOrCreate(PropelPDO $con = null) Return the first ClassType matching the query, or a new ClassType object populated from the query conditions when no match is found
  *
  * @method ClassType findOneByOriginalName(string $original_name) Return the first ClassType filtered by the original_name column
- * @method ClassType findOneByNameNormalized(string $name_normalized) Return the first ClassType filtered by the name_normalized column
  * @method ClassType findOneByName(string $name) Return the first ClassType filtered by the name column
+ * @method ClassType findOneBySlug(string $slug) Return the first ClassType filtered by the slug column
  * @method ClassType findOneByCreatedAt(string $created_at) Return the first ClassType filtered by the created_at column
  * @method ClassType findOneByUpdatedAt(string $updated_at) Return the first ClassType filtered by the updated_at column
  * @method ClassType findOneByCreatedBy(int $created_by) Return the first ClassType filtered by the created_by column
@@ -53,8 +53,8 @@
  *
  * @method array findById(int $id) Return ClassType objects filtered by the id column
  * @method array findByOriginalName(string $original_name) Return ClassType objects filtered by the original_name column
- * @method array findByNameNormalized(string $name_normalized) Return ClassType objects filtered by the name_normalized column
  * @method array findByName(string $name) Return ClassType objects filtered by the name column
+ * @method array findBySlug(string $slug) Return ClassType objects filtered by the slug column
  * @method array findByCreatedAt(string $created_at) Return ClassType objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return ClassType objects filtered by the updated_at column
  * @method array findByCreatedBy(int $created_by) Return ClassType objects filtered by the created_by column
@@ -166,7 +166,7 @@ abstract class BaseClassTypeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `original_name`, `name_normalized`, `name`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `class_types` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `original_name`, `name`, `slug`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `class_types` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -327,35 +327,6 @@ abstract class BaseClassTypeQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the name_normalized column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByNameNormalized('fooValue');   // WHERE name_normalized = 'fooValue'
-     * $query->filterByNameNormalized('%fooValue%'); // WHERE name_normalized LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $nameNormalized The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ClassTypeQuery The current query, for fluid interface
-     */
-    public function filterByNameNormalized($nameNormalized = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($nameNormalized)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $nameNormalized)) {
-                $nameNormalized = str_replace('*', '%', $nameNormalized);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(ClassTypePeer::NAME_NORMALIZED, $nameNormalized, $comparison);
-    }
-
-    /**
      * Filter the query on the name column
      *
      * Example usage:
@@ -382,6 +353,35 @@ abstract class BaseClassTypeQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ClassTypePeer::NAME, $name, $comparison);
+    }
+
+    /**
+     * Filter the query on the slug column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBySlug('fooValue');   // WHERE slug = 'fooValue'
+     * $query->filterBySlug('%fooValue%'); // WHERE slug LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $slug The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ClassTypeQuery The current query, for fluid interface
+     */
+    public function filterBySlug($slug = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($slug)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $slug)) {
+                $slug = str_replace('*', '%', $slug);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(ClassTypePeer::SLUG, $slug, $comparison);
     }
 
     /**

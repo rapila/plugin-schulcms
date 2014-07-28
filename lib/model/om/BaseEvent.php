@@ -42,10 +42,10 @@ abstract class BaseEvent extends BaseObject implements Persistent
     protected $title;
 
     /**
-     * The value for the title_normalized field.
+     * The value for the slug field.
      * @var        string
      */
-    protected $title_normalized;
+    protected $slug;
 
     /**
      * The value for the teaser field.
@@ -258,14 +258,14 @@ abstract class BaseEvent extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [title_normalized] column value.
+     * Get the [slug] column value.
      *
      * @return string
      */
-    public function getTitleNormalized()
+    public function getSlug()
     {
 
-        return $this->title_normalized;
+        return $this->slug;
     }
 
     /**
@@ -614,25 +614,25 @@ abstract class BaseEvent extends BaseObject implements Persistent
     } // setTitle()
 
     /**
-     * Set the value of [title_normalized] column.
+     * Set the value of [slug] column.
      *
      * @param  string $v new value
      * @return Event The current object (for fluent API support)
      */
-    public function setTitleNormalized($v)
+    public function setSlug($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->title_normalized !== $v) {
-            $this->title_normalized = $v;
-            $this->modifiedColumns[] = EventPeer::TITLE_NORMALIZED;
+        if ($this->slug !== $v) {
+            $this->slug = $v;
+            $this->modifiedColumns[] = EventPeer::SLUG;
         }
 
 
         return $this;
-    } // setTitleNormalized()
+    } // setSlug()
 
     /**
      * Set the value of [teaser] column.
@@ -1087,7 +1087,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->title = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->title_normalized = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->slug = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
             $this->teaser = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             if ($row[$startcol + 4] !== null) {
                 $this->body_preview = fopen('php://memory', 'r+');
@@ -1488,8 +1488,8 @@ abstract class BaseEvent extends BaseObject implements Persistent
         if ($this->isColumnModified(EventPeer::TITLE)) {
             $modifiedColumns[':p' . $index++]  = '`title`';
         }
-        if ($this->isColumnModified(EventPeer::TITLE_NORMALIZED)) {
-            $modifiedColumns[':p' . $index++]  = '`title_normalized`';
+        if ($this->isColumnModified(EventPeer::SLUG)) {
+            $modifiedColumns[':p' . $index++]  = '`slug`';
         }
         if ($this->isColumnModified(EventPeer::TEASER)) {
             $modifiedColumns[':p' . $index++]  = '`teaser`';
@@ -1559,8 +1559,8 @@ abstract class BaseEvent extends BaseObject implements Persistent
                     case '`title`':
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
-                    case '`title_normalized`':
-                        $stmt->bindValue($identifier, $this->title_normalized, PDO::PARAM_STR);
+                    case '`slug`':
+                        $stmt->bindValue($identifier, $this->slug, PDO::PARAM_STR);
                         break;
                     case '`teaser`':
                         $stmt->bindValue($identifier, $this->teaser, PDO::PARAM_STR);
@@ -1810,7 +1810,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 return $this->getTitle();
                 break;
             case 2:
-                return $this->getTitleNormalized();
+                return $this->getSlug();
                 break;
             case 3:
                 return $this->getTeaser();
@@ -1894,7 +1894,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getTitle(),
-            $keys[2] => $this->getTitleNormalized(),
+            $keys[2] => $this->getSlug(),
             $keys[3] => $this->getTeaser(),
             $keys[4] => $this->getBodyPreview(),
             $keys[5] => $this->getBodyReview(),
@@ -1981,7 +1981,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 $this->setTitle($value);
                 break;
             case 2:
-                $this->setTitleNormalized($value);
+                $this->setSlug($value);
                 break;
             case 3:
                 $this->setTeaser($value);
@@ -2060,7 +2060,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setTitle($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setTitleNormalized($arr[$keys[2]]);
+        if (array_key_exists($keys[2], $arr)) $this->setSlug($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setTeaser($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setBodyPreview($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setBodyReview($arr[$keys[5]]);
@@ -2091,7 +2091,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
 
         if ($this->isColumnModified(EventPeer::ID)) $criteria->add(EventPeer::ID, $this->id);
         if ($this->isColumnModified(EventPeer::TITLE)) $criteria->add(EventPeer::TITLE, $this->title);
-        if ($this->isColumnModified(EventPeer::TITLE_NORMALIZED)) $criteria->add(EventPeer::TITLE_NORMALIZED, $this->title_normalized);
+        if ($this->isColumnModified(EventPeer::SLUG)) $criteria->add(EventPeer::SLUG, $this->slug);
         if ($this->isColumnModified(EventPeer::TEASER)) $criteria->add(EventPeer::TEASER, $this->teaser);
         if ($this->isColumnModified(EventPeer::BODY_PREVIEW)) $criteria->add(EventPeer::BODY_PREVIEW, $this->body_preview);
         if ($this->isColumnModified(EventPeer::BODY_REVIEW)) $criteria->add(EventPeer::BODY_REVIEW, $this->body_review);
@@ -2173,7 +2173,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setTitle($this->getTitle());
-        $copyObj->setTitleNormalized($this->getTitleNormalized());
+        $copyObj->setSlug($this->getSlug());
         $copyObj->setTeaser($this->getTeaser());
         $copyObj->setBodyPreview($this->getBodyPreview());
         $copyObj->setBodyReview($this->getBodyReview());
@@ -2893,7 +2893,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     {
         $this->id = null;
         $this->title = null;
-        $this->title_normalized = null;
+        $this->slug = null;
         $this->teaser = null;
         $this->body_preview = null;
         $this->body_review = null;

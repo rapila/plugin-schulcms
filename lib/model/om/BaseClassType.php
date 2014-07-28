@@ -42,16 +42,16 @@ abstract class BaseClassType extends BaseObject implements Persistent
     protected $original_name;
 
     /**
-     * The value for the name_normalized field.
-     * @var        string
-     */
-    protected $name_normalized;
-
-    /**
      * The value for the name field.
      * @var        string
      */
     protected $name;
+
+    /**
+     * The value for the slug field.
+     * @var        string
+     */
+    protected $slug;
 
     /**
      * The value for the created_at field.
@@ -142,17 +142,6 @@ abstract class BaseClassType extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [name_normalized] column value.
-     *
-     * @return string
-     */
-    public function getNameNormalized()
-    {
-
-        return $this->name_normalized;
-    }
-
-    /**
      * Get the [name] column value.
      *
      * @return string
@@ -161,6 +150,17 @@ abstract class BaseClassType extends BaseObject implements Persistent
     {
 
         return $this->name;
+    }
+
+    /**
+     * Get the [slug] column value.
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+
+        return $this->slug;
     }
 
     /**
@@ -308,27 +308,6 @@ abstract class BaseClassType extends BaseObject implements Persistent
     } // setOriginalName()
 
     /**
-     * Set the value of [name_normalized] column.
-     *
-     * @param  string $v new value
-     * @return ClassType The current object (for fluent API support)
-     */
-    public function setNameNormalized($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->name_normalized !== $v) {
-            $this->name_normalized = $v;
-            $this->modifiedColumns[] = ClassTypePeer::NAME_NORMALIZED;
-        }
-
-
-        return $this;
-    } // setNameNormalized()
-
-    /**
      * Set the value of [name] column.
      *
      * @param  string $v new value
@@ -348,6 +327,27 @@ abstract class BaseClassType extends BaseObject implements Persistent
 
         return $this;
     } // setName()
+
+    /**
+     * Set the value of [slug] column.
+     *
+     * @param  string $v new value
+     * @return ClassType The current object (for fluent API support)
+     */
+    public function setSlug($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->slug !== $v) {
+            $this->slug = $v;
+            $this->modifiedColumns[] = ClassTypePeer::SLUG;
+        }
+
+
+        return $this;
+    } // setSlug()
 
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
@@ -479,8 +479,8 @@ abstract class BaseClassType extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->original_name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->name_normalized = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->slug = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             $this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->created_by = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
@@ -803,11 +803,11 @@ abstract class BaseClassType extends BaseObject implements Persistent
         if ($this->isColumnModified(ClassTypePeer::ORIGINAL_NAME)) {
             $modifiedColumns[':p' . $index++]  = '`original_name`';
         }
-        if ($this->isColumnModified(ClassTypePeer::NAME_NORMALIZED)) {
-            $modifiedColumns[':p' . $index++]  = '`name_normalized`';
-        }
         if ($this->isColumnModified(ClassTypePeer::NAME)) {
             $modifiedColumns[':p' . $index++]  = '`name`';
+        }
+        if ($this->isColumnModified(ClassTypePeer::SLUG)) {
+            $modifiedColumns[':p' . $index++]  = '`slug`';
         }
         if ($this->isColumnModified(ClassTypePeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
@@ -838,11 +838,11 @@ abstract class BaseClassType extends BaseObject implements Persistent
                     case '`original_name`':
                         $stmt->bindValue($identifier, $this->original_name, PDO::PARAM_STR);
                         break;
-                    case '`name_normalized`':
-                        $stmt->bindValue($identifier, $this->name_normalized, PDO::PARAM_STR);
-                        break;
                     case '`name`':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                        break;
+                    case '`slug`':
+                        $stmt->bindValue($identifier, $this->slug, PDO::PARAM_STR);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -1023,10 +1023,10 @@ abstract class BaseClassType extends BaseObject implements Persistent
                 return $this->getOriginalName();
                 break;
             case 2:
-                return $this->getNameNormalized();
+                return $this->getName();
                 break;
             case 3:
-                return $this->getName();
+                return $this->getSlug();
                 break;
             case 4:
                 return $this->getCreatedAt();
@@ -1071,8 +1071,8 @@ abstract class BaseClassType extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getOriginalName(),
-            $keys[2] => $this->getNameNormalized(),
-            $keys[3] => $this->getName(),
+            $keys[2] => $this->getName(),
+            $keys[3] => $this->getSlug(),
             $keys[4] => $this->getCreatedAt(),
             $keys[5] => $this->getUpdatedAt(),
             $keys[6] => $this->getCreatedBy(),
@@ -1134,10 +1134,10 @@ abstract class BaseClassType extends BaseObject implements Persistent
                 $this->setOriginalName($value);
                 break;
             case 2:
-                $this->setNameNormalized($value);
+                $this->setName($value);
                 break;
             case 3:
-                $this->setName($value);
+                $this->setSlug($value);
                 break;
             case 4:
                 $this->setCreatedAt($value);
@@ -1177,8 +1177,8 @@ abstract class BaseClassType extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setOriginalName($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setNameNormalized($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setName($arr[$keys[3]]);
+        if (array_key_exists($keys[2], $arr)) $this->setName($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setSlug($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setCreatedBy($arr[$keys[6]]);
@@ -1196,8 +1196,8 @@ abstract class BaseClassType extends BaseObject implements Persistent
 
         if ($this->isColumnModified(ClassTypePeer::ID)) $criteria->add(ClassTypePeer::ID, $this->id);
         if ($this->isColumnModified(ClassTypePeer::ORIGINAL_NAME)) $criteria->add(ClassTypePeer::ORIGINAL_NAME, $this->original_name);
-        if ($this->isColumnModified(ClassTypePeer::NAME_NORMALIZED)) $criteria->add(ClassTypePeer::NAME_NORMALIZED, $this->name_normalized);
         if ($this->isColumnModified(ClassTypePeer::NAME)) $criteria->add(ClassTypePeer::NAME, $this->name);
+        if ($this->isColumnModified(ClassTypePeer::SLUG)) $criteria->add(ClassTypePeer::SLUG, $this->slug);
         if ($this->isColumnModified(ClassTypePeer::CREATED_AT)) $criteria->add(ClassTypePeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(ClassTypePeer::UPDATED_AT)) $criteria->add(ClassTypePeer::UPDATED_AT, $this->updated_at);
         if ($this->isColumnModified(ClassTypePeer::CREATED_BY)) $criteria->add(ClassTypePeer::CREATED_BY, $this->created_by);
@@ -1266,8 +1266,8 @@ abstract class BaseClassType extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setOriginalName($this->getOriginalName());
-        $copyObj->setNameNormalized($this->getNameNormalized());
         $copyObj->setName($this->getName());
+        $copyObj->setSlug($this->getSlug());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setCreatedBy($this->getCreatedBy());
@@ -1888,8 +1888,8 @@ abstract class BaseClassType extends BaseObject implements Persistent
     {
         $this->id = null;
         $this->original_name = null;
-        $this->name_normalized = null;
         $this->name = null;
+        $this->slug = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->created_by = null;

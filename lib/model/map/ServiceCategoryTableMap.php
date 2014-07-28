@@ -40,7 +40,7 @@ class ServiceCategoryTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 100, null);
-        $this->addColumn('name_normalized', 'NameNormalized', 'VARCHAR', false, 80, null);
+        $this->addColumn('slug', 'Slug', 'VARCHAR', false, 80, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addForeignKey('created_by', 'CreatedBy', 'INTEGER', 'users', 'id', false, null, null);
