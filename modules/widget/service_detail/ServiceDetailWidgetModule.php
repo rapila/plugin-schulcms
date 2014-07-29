@@ -15,7 +15,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 			throw new Exception('Config error: school_settings > externally_managed_document_categories > service_documents');
 		}
 		$oRichtext = WidgetModule::getWidget('rich_text', null, null, SchoolPeer::PAGE_IDENTIFIER_SERVICES);
-		
+
 		// include styles that are used in dedicated template
 		$oServicePage = PagePeer::getPageByIdentifier('services');
 		if($oServicePage) {
@@ -24,11 +24,11 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 		$this->setSetting('richtext_session', $oRichtext->getSessionKey());
 		$this->setSetting('service_file_category_id', $iServiceDocumentCategoryId);
 	}
-	
+
 	public function setServiceId($iServiceId) {
 		$this->iServiceId = $iServiceId;
 	}
-	
+
 	public function serviceData() {
 		$oService = ServiceQuery::create()->findPk($this->iServiceId);
 		if($oService === null) {
@@ -50,7 +50,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['Body'] = $sBody;
 		return $aResult;
 	}
-	
+
 	public function allDocuments() {
 	  $aDocuments = ServiceDocumentQuery::create()->filterByServiceId($this->iServiceId)->joinDocument()->orderBySort()->find();
 	  $aResult = array();
@@ -59,15 +59,15 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 	  }
 	  return $aResult;
 	}
-	
+
 	public function rowData($oDocument) {
-		return array( 'Name' => $oDocument->getName(), 
-		 							'Extension' => $oDocument->getDocumentType()->getExtension(), 
-								  'Id' => $oDocument->getId(), 
+		return array( 'Name' => $oDocument->getName(),
+		 							'Extension' => $oDocument->getDocumentType()->getExtension(),
+								  'Id' => $oDocument->getId(),
 								  'DisplayUrl' => $oDocument->getDisplayUrl()
 								);
 	}
-	
+
 	public function getSingleDocument($iDocumentId) {
 		$oDokument = DocumentQuery::create()->findPk($iDocumentId);
 		if($oDokument) {
@@ -75,14 +75,14 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 		}
 		return null;
 	}
-	
+
 	public function deleteDocument($iDocumentId) {
 		$oDocument = DocumentQuery::create()->findPk($iDocumentId);
 		if($oDocument && ServiceDocumentQuery::create()->filterByDocument($oDocument)->filterByServiceId($this->iServiceId)->findOne()) {
 			return $oDocument->delete();
 		}
 	}
-	
+
 	public function reorderDocuments($aDocumentIds) {
 		foreach($aDocumentIds as $iCount => $iDocumentId) {
 			$oDocument = ServiceDocumentQuery::create()->findPk(array($this->iServiceId, $iDocumentId));
@@ -105,7 +105,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 	  $oServiceDocument->setSort(ServiceDocumentQuery::create()->filterByServiceId($this->iServiceId)->count() + 1);
 	  return $oServiceDocument->save();
 	}
-	
+
 	private function validate($aServiceData) {
 		$oFlash = Flash::getFlash();
 		$oFlash->setArrayToCheck($aServiceData);
@@ -139,13 +139,21 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 			$oService = ServiceQuery::create()->findPk($this->iServiceId);
 		}
 		ArrayUtil::trimStringsInArray($aServiceData);
-		$oService->fromArray($aServiceData, BasePeer::TYPE_FIELDNAME);
+		$oService->setName($aServiceData['name']);
+		$oService->setTeaser($aServiceData['teaser']);
+		$oService->setAddress($aServiceData['address']);
+		$oService->setOpeningHours($aServiceData['opening_hours']);
+		$oService->setEmail($aServiceData['email']);
+		$oService->setPhone($aServiceData['phone']);
+		$oService->setTeaser($aServiceData['teaser']);
+		$oService->setWebsite($aServiceData['website']);
+		$oService->setIsActive($aServiceData['is_active']);
+		$oService->setLogoId($aServiceData['logo_id']);
 		$oService->setServiceCategoryId($aServiceData['service_category_id'] ? $aServiceData['service_category_id'] : null);
-		
 		$oRichtextUtil = new RichtextUtil();
 		$oRichtextUtil->setTrackReferences($oService);
 		$oService->setBody($oRichtextUtil->parseInputFromEditor($aServiceData['body_text']));
-		
+
 		if(!$oService->isNew()) {
 			ServiceMemberQuery::create()->filterByService($oService)->find()->delete();
 		} else {
@@ -182,7 +190,6 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 		if(!Flash::noErrors()) {
 			throw new ValidationException();
 		}
-		$oService->setIsActive($aServiceData['is_active']);
 		$oService->save();
 		return $oService->getId();
 	}

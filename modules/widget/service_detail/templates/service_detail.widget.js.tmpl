@@ -22,13 +22,14 @@ Widget.types.service_detail = {
 
 		// service documents and upload
 		this.document_prototype = Widget.parseHTML("{{includeTemplate=document}}");
-		this.no_documents_placeholder = jQuery('<li/>').html("{{writeString=wns.service.no_document_and_upload_info}}").addClass('no_documents_placeholder');
+		this.no_documents_placeholder = jQuery('<div/>').html("{{writeString=wns.service.no_document_and_upload_info}}").addClass('no_documents_placeholder');
 
 		this.uploader = Widget.create('file_upload');
-		this.droppable_area = _this._element.find('.droppable_area');
-		this.droppable_area.sortable({
+		this.droppable_area = this._element.find('.droppable_area');
+		this.document_list = this.droppable_area.find('.document_list');
+		this.document_list.sortable({
 			update: function(document, ui) {
-				var ids = _this.droppable_area.children().map(function() {
+				var ids = _this.document_list.children().map(function() {
 					return jQuery(this).data('document_id');
 				}).get();
 				if(_this.current_detail_id !== null) {
@@ -86,7 +87,7 @@ Widget.types.service_detail = {
 
 		this.handle('opened', function() {
 			this.init_textareas();
-			this.accordion = jQuery(this.detail_widget.content.find('div.accordion')).accordion({active: 0, autoHeight: false, clearStyle: true, collapsible:false});
+			this.update_document_count(0);
 		});
 		this.handle('saved', function(event, id) {
 			this.setServiceId(id);
@@ -172,10 +173,10 @@ Widget.types.service_detail = {
 
 	update_documents: function() {
 		var _this = this;
-		this.droppable_area.empty();
+		this.document_list.empty();
 		this.allDocuments(function(documents) {
 			if(documents.length === 0) {
-				this.droppable_area.append(_this.no_documents_placeholder);
+				this.document_list.append(_this.no_documents_placeholder);
 			}
 			jQuery.each(documents, function(i, document_data) {
 				_this.insert_document(document_data);
@@ -193,23 +194,24 @@ Widget.types.service_detail = {
 		var document_id = document_data.Id;
 		var document_item = this.document_prototype.clone();
 		document_item.data('document_id', document_id);
-		this.droppable_area.find('li.no_documents_placeholder').remove();
-		this.droppable_area.append(document_item);
+		this.document_list.find('div.no_documents_placeholder').remove();
+		console.log(document_item, this.document_list);
+		this.document_list.append(document_item);
 		document_item.find('span.delete_doc').click(function(event) {
 			var delete_message = AdminInterface.strings.get_string('wns.document.delete_warning', { document_name: document_data.Name});
 			Widget.confirm("{{writeString=wns.delete_warning_title}}", delete_message, function(confirmed) {
 				if(confirmed) {
 					_this.deleteDocument( document_id, function(result) {
 						jQuery(document_item).remove();
-						if(_this.droppable_area.find('li.preview_edit').length === 0) {
-							_this.droppable_area.empty().append(_this.no_documents_placeholder);
+						if(_this.document_list.find('tr.preview_edit').length === 0) {
+							_this.document_list.empty().append(_this.no_documents_placeholder);
 						}
 					});
 				}
 			});
 			return false;
 		});
-		var document_name = document_item.find('span.document_name');
+		var document_name = document_item.find('td.document_name');
 		document_name.text(document_data.Name+'.'+document_data.Extension);
 		document_name.addClass('pointer '+document_data.Extension).attr('title', '{{writeString=wns.edit_file.dblclick}}').dblclick(function() {
 			Widget.create('document_detail', function(detail) {

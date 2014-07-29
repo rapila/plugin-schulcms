@@ -5,10 +5,10 @@
 class EventDetailWidgetModule extends PersistentWidgetModule {
 	private $iEventId = null;
 	private $aUnsavedDocuments = array();
-	
+
 	public function __construct($sWidgetId) {
 		parent::__construct($sWidgetId);
-		
+
     // config section 'school_settings' :'externally_managed_document_categories'
 		$iEventDocumentCategory = SchoolPeer::getDocumentCategoryConfig('event_documents');
 		if(DocumentCategoryQuery::create()->filterById($iEventDocumentCategory)->count() === 0) {
@@ -23,11 +23,11 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$this->setSetting('richtext_session', $oRichtext->getSessionKey());
 		$this->setSetting('events_document_category_id', $iEventDocumentCategory);
 	}
-	
+
 	public function setEventId($iEventId) {
 		$this->iEventId = $iEventId;
 	}
-	
+
 	public function allDocuments($iThumbnailSize = 180) {
 	  $aDocuments = EventDocumentQuery::create()->filterByEventId($this->iEventId)->joinDocument()->orderBySort()->find();
 	  $aResult = array();
@@ -36,14 +36,14 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 	  }
 	  return $aResult;
 	}
-	
+
 	public function rowData($oDocument, $iThumbnailSize = 180) {
-		return array( 'Name' => $oDocument->getName(), 
-								  'Id' => $oDocument->getId(), 
+		return array( 'Name' => $oDocument->getName(),
+								  'Id' => $oDocument->getId(),
 								  'Preview' => $oDocument->getPreview($iThumbnailSize)
 								);
 	}
-	
+
 	public function getSingleDocument($iDocumentId, $iThumbnailSize) {
 		$oDokument = DocumentQuery::create()->findPk($iDocumentId);
 		if($oDokument) {
@@ -51,14 +51,14 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		}
 		return null;
 	}
-	
+
 	public function deleteDocument($iDocumentId) {
 		$oDocument = DocumentQuery::create()->findPk($iDocumentId);
 		if($oDocument && EventDocumentQuery::create()->filterByDocument($oDocument)->filterByEventId($this->iEventId)->findOne()) {
 			return $oDocument->delete();
 		}
 	}
-	
+
 	public function reorderDocuments($aDocumentIds) {
 		foreach($aDocumentIds as $iCount => $iDocumentId) {
 			$oDocument = EventDocumentQuery::create()->findPk(array($this->iEventId, $iDocumentId));
@@ -66,7 +66,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 			$oDocument->save();
 		}
 	}
-	
+
 	public function eventData() {
 		$oEvent = EventQuery::create()->findPk($this->iEventId);
 		if($oEvent === null) {
@@ -91,7 +91,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['BodyReview'] = $sBodyReview;
 		return $aResult;
 	}
-	
+
 	public function addEventDocument($iDocumentId) {
 	  if($this->iEventId === null) {
 	    $this->aUnsavedDocuments[] = $iDocumentId;
@@ -105,21 +105,19 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 	  $oEventDocument->setDocumentId($iDocumentId);
 	  return $oEventDocument->save();
 	}
-	
+
 	private function validate($aEventData, $oEvent) {
 		$oFlash = Flash::getFlash();
 		$oFlash->setArrayToCheck($aEventData);
 		$oFlash->checkForValue('title', 'title_required');
-		if($aEventData['teaser'] != null) {
-			// $oFlash->checkForLength('teaser', null, 514, 'teaser_max_length');
-		} else if($aEventData['is_active']) {
-		  $oFlash->addMessage("is_active_teaser_required");
+		if($aEventData['is_active']) {
+			$oFlash->checkForValue('teaser', 'is_active_teaser_required');
+			if($aEventData['date_start'] == null) {
+			  $oFlash->addMessage("date_start_required");
+			}
 		}
-		
-		if($aEventData['is_active'] && $aEventData['date_start'] == null) {
-		  $oFlash->addMessage("date_start_required");
-		}
-		if($oExistingEvent = EventQuery::create()->filterByTitleNormalized($oEvent->getTitleNormalized())->findOne()) {
+
+		if($oExistingEvent = EventQuery::create()->filterBySlug($oEvent->getSlug())->findOne()) {
 		  if($oExistingEvent !== $oEvent
 		    && $oExistingEvent->getEventTypeId() === $oEvent->getEventTypeId()
 		    && $oExistingEvent->getDateStart('Y-m-d') === $oEvent->getDateStart('Y-m-d')) {
@@ -136,34 +134,38 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		  $oEvent = EventQuery::create()->findPk($this->iEventId);
 		}
 		ArrayUtil::trimStringsInArray($aEventData);
-		$oEvent->fromArray($aEventData, BasePeer::TYPE_FIELDNAME);
-		
+		$oEvent->setIsActive($aEventData['is_active']);
+		$oEvent->setEventTypeId($aEventData['event_type_id']);
+		$oEvent->setTitle($aEventData['title']);
+		$oEvent->setTeaser($aEventData['teaser']);
+		$oEvent->setLocationInfo($aEventData['location_info']);
+		$oEvent->setTimeDetails($aEventData['time_details']);
+		$oEvent->setIgnoreOnFrontpage($aEventData['ignore_on_frontpage']);
+		$oEvent->setIsActive($aEventData['is_active']);
+		$oEvent->setDateStart($aEventData['date_start']);
+		$oEvent->setDateEnd($aEventData['date_end'] == null ? null : $aEventData['date_end']);
 		$oEvent->setSchoolClassId($aEventData['school_class_id'] != null ? $aEventData['school_class_id'] : null);
-		if(isset($aEventData['service_id'])) {
-  		$oEvent->setServiceId($aEventData['service_id'] != null ? $aEventData['service_id'] : null);
-		}
-		// track page, document and link references
-		$oRichtextUtil = new RichtextUtil();
-		$oRichtextUtil->setTrackReferences($oEvent);
-		
 		if($oEvent->getDateEnd() !== null && $oEvent->getDateEnd() < $oEvent->getDateStart()) {
 			$oEvent->setDateEnd(null);
 		}
-		
-		// Text Hinweis
+		if(isset($aEventData['service_id'])) {
+  		$oEvent->setServiceId($aEventData['service_id'] != null ? $aEventData['service_id'] : null);
+		}
+		$this->validate($aEventData, $oEvent);
+
+		// track page, document and link references and hande preview and review text
+		$oRichtextUtil = new RichtextUtil();
 		$sPreview = $oRichtextUtil->parseInputFromEditor($aEventData['body_preview']);
 		if(trim($sPreview) == '') {
 		  $sPreview = null;
 		}
 		$oEvent->setBodyPreview($sPreview);
-		
-		// Text Bericht
 		$sReview = $oRichtextUtil->parseInputFromEditor($aEventData['body_review']);
 		if(trim($sReview) == '') {
 			$sReview = null;
 		}
 		$oEvent->setBodyReview($sReview);
-		$this->validate($aEventData, $oEvent);
+		$oRichtextUtil->setTrackReferences($oEvent);
 		if(!Flash::noErrors()) {
 			throw new ValidationException();
 		}
@@ -174,8 +176,6 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		    $oEvent->addEventDocument($oEventDocument);
 		  }
 		}
-		$oEvent->setIgnoreOnFrontpage($aEventData['ignore_on_frontpage']);
-		$oEvent->setIsActive($aEventData['is_active']);
 		$oEvent->save();
 		return $oEvent->getId();
 	}

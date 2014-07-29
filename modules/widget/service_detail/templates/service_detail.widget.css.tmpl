@@ -1,10 +1,5 @@
-.ui-dialog.detail-widget-service_detail .ui-dialog-content,
-.ui-dialog.detail-widget-service_detail .ui-accordion-content  {
-	padding: 0;
-}
-
-.main_content select.ui-widget-content, 
-.main_content input.ui-widget-content, 
+.main_content select.ui-widget-content,
+.main_content input.ui-widget-content,
 .main_content textarea.ui-widget-content {
 	width: 30em;
 }
@@ -23,22 +18,37 @@ div.status_section input.ui-widget-content {
 	padding: 4px 7px 9px 7px;
 }
 
-.ui-dialog.detail-widget .ui-accordion .ui-accordion-content .droppable_area {
-	border: none;
+.ui-dialog.detail-widget-service_detail .image_browse_area {
+	padding: 0 0 3em;
+}
+
+.ui-dialog.detail-widget-service_detail .ui-list.document_list {
 	min-height: 7em;
+	margin: 0;
 }
 
-.ui-accordion-content .droppable_area .ui-icon {
+.ui-accordion-content .document_list .ui-icon {
 	display: inline-block;
 }
 
-.ui-accordion-content .droppable_area .document_name {
-	display: inline-block;
-	width: 80%;
+table.document_list td {
+	background-color: inherit;
+	width: 25px;
 }
 
-ol.droppable_area.ui-editable-items-list li {
-	padding-left: .5em;
+.ui-accordion-content .document_list td.document_name {
+	display: inline-block;
+	width: auto;
+	padding-left: 1.9em;
+}
+
+table.document_list div.no_documents_placeholder {
+	padding:2em 5em;
+	font-size:1.1em;
+	background-image: none;
+}
+.ui-list tr.preview_edit.ui-list-row {
+	max-height: 22px;
 }
 
 .logo_area {
@@ -71,16 +81,11 @@ span.document_name {
 	background: transparent url("{{writeDirectInclude=admin/pdf.png;template=location_only}}") no-repeat;
 	display: inline-block;
 }
+
 span.document_name.docx, span.document_name.doc {
 	background: transparent url("{{writeDirectInclude=admin/doc.png;template=location_only}}") no-repeat;
 }
 
 td.counter {
 	width: 10px;
-}
-
-ol.droppable_area.ui-editable-items-list li.no_documents_placeholder {
-	padding:2em 5em;
-	font-size:1.1em;
-	background-image: none;
 }

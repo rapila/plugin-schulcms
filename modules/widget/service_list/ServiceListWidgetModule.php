@@ -6,13 +6,13 @@ class ServiceListWidgetModule extends WidgetModule {
 
 	private $oListWidget;
 	public $oDelegateProxy;
-	
+
 	public function __construct() {
 		$this->oListWidget = new ListWidgetModule();
 		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "Service", "name", "asc");
 		$this->oListWidget->setDelegate($this->oDelegateProxy);
 	}
-	
+
 	public function doWidget() {
 		$aTagAttributes = array('class' => 'service_list');
 		$oListTag = new TagWriter('table', $aTagAttributes);
@@ -20,11 +20,11 @@ class ServiceListWidgetModule extends WidgetModule {
 		$this->oListWidget->setSetting('initial_detail_id', isset($this->aInitialSettings['initial_detail_id']) ? $this->aInitialSettings['initial_detail_id'] : null);
 		return $this->oListWidget->doWidget();
 	}
-	
+
 	public function getColumnIdentifiers() {
 		return array('id', 'name', 'phone', 'service_category_name', 'website', 'team_count', 'document_count', 'is_active', 'delete');
 	}
-	
+
 	public function getMetadataForColumn($sColumnIdentifier) {
 		$aResult = array('is_sortable' => true);
 		switch($sColumnIdentifier) {
@@ -43,6 +43,7 @@ class ServiceListWidgetModule extends WidgetModule {
 				break;
 			case 'team_count':
 				$aResult['heading'] = StringPeer::getString('wns.service.team_count');
+				$aResult['display_type'] = ListWidgetModule::DISPLAY_TYPE_NUMERIC;
 				break;
 			case 'document_count':
 				$aResult['heading'] = StringPeer::getString('wns.service.document_count');
@@ -65,14 +66,14 @@ class ServiceListWidgetModule extends WidgetModule {
 		}
 		return null;
 	}
-	
+
 	public function getDatabaseColumnForColumn($sColumnIdentifier) {
 		if($sColumnIdentifier === 'service_category_name') {
 			return ServicePeer::SERVICE_CATEGORY_ID;
 		}
 		return null;
 	}
-	
+
   public function toggleIsActive($aRowData) {
 		$oService = ServiceQuery::create()->findPk($aRowData['id']);
 		if($oService) {
@@ -81,11 +82,11 @@ class ServiceListWidgetModule extends WidgetModule {
 		}
 		return false;
 	}
-	
+
 	public function getCategoryHasServices($iServiceCategoryId) {
 		return ServiceQuery::create()->filterByServiceCategoryId($iServiceCategoryId)->count() > 0;
 	}
-	
+
 	public function getServiceCategoryName() {
 		if($this->oDelegateProxy->getServiceCategoryId() !== CriteriaListWidgetDelegate::SELECT_ALL) {
 			$oServiceCategory = ServiceCategoryQuery::create()->findPk($this->oDelegateProxy->getServiceCategoryId());

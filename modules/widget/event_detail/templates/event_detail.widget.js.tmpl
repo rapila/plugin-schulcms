@@ -116,7 +116,7 @@ Widget.types.event_detail = {
 		});
 	},
 
-	insert_thumbnail: function(document_data) {
+	insert_thumbnail: function(document_data, container) {
 		var _this = this;
 		var document_id = document_data.Id;
 		var doc = jQuery('<div/>').addClass('ui-widget ui-widget-content ui-image-picker-image ui-placeholder');
@@ -145,6 +145,10 @@ Widget.types.event_detail = {
 			}, function(detail) {
 				detail.setDocumentId(document_id);
 				detail.fill_data();
+				detail.save_callback = function() {
+					var new_document_data = _this.getSingleDocument(document_id, _this.settings.thumbnail_size);
+					doc.empty().append(Widget.parseHTML(new_document_data.Preview));
+				};
 			});
 		});
 		doc.append(document_object);
