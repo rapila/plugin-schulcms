@@ -34,7 +34,13 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 		if($oNews === null) {
 			$oNews = new News();
 		}
-		$oNews->fromArray($aData, BasePeer::TYPE_FIELDNAME);
+		$oNews->setIsInactive($aData['is_inactive']);
+		$oNews->setDateStart($aData['date_start'] == null ? date('Y-m-d') : $aData['date_start']);
+		$oNews->setDateEnd($aData['date_end'] == null ? date('Y-m-d') : $aData['date_end']);
+		$oNews->setNewsTypeId($aData['news_type_id']);
+		$oNews->setHeadline($aData['headline']);
+		$oNews->setBody(RichtextUtil::parseInputFromEditorForStorage($aData['body']));
+		$oNews->setImageId($aData['image_id']);
 		$oNews->save();
 	}
 

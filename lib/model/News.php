@@ -7,8 +7,6 @@ class News extends BaseNews {
 
 	private static $NEWS_TYPES = array();
 
-
-
 	/**
 	* Sets the journal entry text. When given a TagParser or an HtmlTag instance, this method will use the first paragraph tag found to construct the synopsis (short text).
 	* @param string|TagParser|HtmlTag $mText
