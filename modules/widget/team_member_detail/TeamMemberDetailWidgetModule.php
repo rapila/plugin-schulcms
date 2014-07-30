@@ -14,11 +14,11 @@ class TeamMemberDetailWidgetModule extends PersistentWidgetModule {
 		}
 		$this->setSetting('portrait_category_id', $iTeamMemberPortraitCategory);
 	}
-	
+
 	public function setTeamMemberId($iTeamMemberId) {
 		$this->iTeamMemberId = $iTeamMemberId;
 	}
-	
+
 	public function teamMemberData() {
 		$oTeamMember = TeamMemberQuery::create()->findPk($this->iTeamMemberId);
 		if($oTeamMember === null) {
@@ -34,7 +34,7 @@ class TeamMemberDetailWidgetModule extends PersistentWidgetModule {
     $aResult['ClassTeacherInfo'] = $oTeamMember->getClassNames();
 		return $aResult;
 	}
-	
+
 	public function inviteUser() {
 		$oTeamMember = TeamMemberQuery::create()->findPk($this->iTeamMemberId);
 		$oUser = $oTeamMember->getUserRelatedByUserId();
@@ -56,9 +56,12 @@ class TeamMemberDetailWidgetModule extends PersistentWidgetModule {
 		}
 		$oEmail->send();
 	}
-	
+
 	public function saveData($aTeamMemberData) {
 		$oTeamMember = TeamMemberQuery::create()->findPk($this->iTeamMemberId);
+		if($aTeamMemberData['portrait_id'] == null && $oTeamMember->getDocument()) {
+			$oTeamMember->getDocument()->delete();
+		}
 		$oTeamMember->setPortraitId($aTeamMemberData['portrait_id']);
 		return $oTeamMember->save();
 	}

@@ -3,25 +3,25 @@
  * @package		 propel.generator.model
  */
 class TeamMember extends BaseTeamMember {
-	
+
 	public static $TEAMLIST_GROUPS = array();
-	
+
 	public function getFullNameInverted() {
 		return $this->getLastName().', '.$this->getFirstName();
 	}
-	
+
 	public function getFullName() {
 		return $this->getFirstName().' '.$this->getLastName();
 	}
-	
+
 	public function getFullNameShort() {
 		return substr($this->getFirstName(),0,1).'. '.$this->getLastName();
 	}
-	
+
 	public function isTeacher() {
 		return $this->countClassTeachers(ClassTeacherQuery::create()->joinWith('SchoolClass', Criteria::INNER_JOIN)) > 0;
 	}
-	
+
 	/**
 	* getIsClassTeacherClasses()
 	* @param boolean $bGroupByUnitName, default=false
@@ -45,11 +45,11 @@ class TeamMember extends BaseTeamMember {
 		}
 		return parent::getClassTeachersJoinSchoolClass($oQuery, $oCon, $sJoinBehavior);
 	}
-	
+
 	public function getClassTeachersJoinSchoolClassesForPermissions($bIncludeOldClasses) {
 		return self::getClassTeachersJoinSchoolClass(null, null, Criteria::INNER_JOIN, $bIncludeOldClasses);
 	}
-		
+
 	/**
 	* getClassTeacherClasses()
 	* @param boolean $bGroupByUnitName, default=false
@@ -65,8 +65,8 @@ class TeamMember extends BaseTeamMember {
 			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->orderByName()->endUse();
 		}
 		return $this->getClassTeachersJoinSchoolClass($oQuery);
-	} 
-	
+	}
+
 	public function getClassNames() {
 		$aResult = array();
 		foreach($this->getIsClassTeacherClasses() as $oClassTeacher) {
@@ -76,25 +76,25 @@ class TeamMember extends BaseTeamMember {
 		}
 		return implode(', ', $aResult);
 	}
-	
+
 	public function getDateOfBirthFormatted() {
 		if($this->date_of_birth != null) {
 			return LocaleUtil::localizeDate($this->date_of_birth);
 		}
 	}
-	
+
 	public function getAgeAndDateOfBirth() {
 		if($this->date_of_birth != null) {
 			return $this->getAge().' / '.LocaleUtil::localizeDate($this->date_of_birth);
 		}
 	}
-	
+
 	public function getEmployedSinceFormatted() {
 		if($this->employed_since != null) {
 			return LocaleUtil::localizeDate($this->employed_since);
 		}
 	}
-	
+
 	public function getAgePhp() {
 		if($this->date_of_birth != null) {
 			list($iYear,$iMonth,$iDay) = explode("-",$this->getDateOfBirth('Y-m-d'));
@@ -103,10 +103,10 @@ class TeamMember extends BaseTeamMember {
 			$iDayDiff		= date("d") - $iDay;
 			if ($iDayDiff < 0 || $iMonthDiff < 0)
 				$iYearDiff--;
-			return $iYearDiff;		
+			return $iYearDiff;
 		}
 	}
-	
+
 	public function getAge() {
 		if($this->date_of_birth != null) {
 			list($iYear,$sDayMonth) = explode("-",$this->getDateOfBirth('Y-md'));
@@ -114,21 +114,21 @@ class TeamMember extends BaseTeamMember {
 			if (date("md") < $sDayMonth) {
 				$iYearDiff--;
 			}
-			return $iYearDiff;		
+			return $iYearDiff;
 		}
 	}
-	
+
 	public function getHasPortrait() {
 		return $this->getPortraitId() != null;
 	}
-	
+
 	public function getClassTeacherTitle() {
 		if($this->getGenderId() === 'f') {
 			return StringPeer::getString('wns.class.class_teacher_female');
 		}
 		return StringPeer::getString('wns.class.class_teacher_male');
 	}
-	
+
 	public function getFirstTeamMemberFunctionName() {
 		$oCriteria = new Criteria();
 		$oCriteria->add(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeamlist(), Criteria::IN);
@@ -140,14 +140,14 @@ class TeamMember extends BaseTeamMember {
 		}
 		return null;
 	}
-	
+
 	public function getGenderKeyFromId() {
 		if($this->getGenderId() === 'f') {
 			return 'female';
 		}
 		return 'male';
 	}
-	
+
 	public function getIsActiveTeamMember() {
 		if(self::$TEAMLIST_GROUPS == null) {
 			self::$TEAMLIST_GROUPS = FunctionGroupPeer::getFunctionGroupIdsForTeamlist();
@@ -159,23 +159,31 @@ class TeamMember extends BaseTeamMember {
 		}
 		return false;
 	}
-	
+
 	public function getTeamMemberFunctionsJoinSchoolFunction($oCriteria = null, $oConn = null, $oJoinBehaviour = Criteria::INNER_JOIN) {
 		return parent::getTeamMemberFunctionsJoinSchoolFunction($oCriteria, $oConn, $oJoinBehaviour);
 	}
-	
+
 	public function delete(PropelPDO $con = null) {
 		if($this->getUserRelatedByUserId()) {
 			$this->getUserRelatedByUserId()->delete();
 		}
 		parent::delete($con);
 	}
-	
+
 	public function getTeamMemberLink($oTeamMemberPage = null) {
 		if($oTeamMemberPage === null) {
 			$oTeamMemberPage = PageQuery::create()->filterByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_TEAM));
 		}
 		return array_merge($oTeamMemberPage->getFullPathArray(), array($this->getSlug()));
+	}
+
+	public function preDelete(PropelPDO $con = null) {
+		parent::preDelete($con);
+		if($oDocument = $this->getDocument()) {
+			$oDocument->delete();
+		}
+		return true;
 	}
 
 }

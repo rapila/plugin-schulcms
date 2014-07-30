@@ -43,7 +43,7 @@ Widget.types.class_detail = {
 					remove_link.hide();
 				} else {
 					remove_link.show();
-					Widget.callStatic('document_detail', 'documentPreview', class_portrait_id, 250, function(html) {
+					Widget.callStatic('document_detail', 'documentPreview', class_portrait_id, 220, function(html) {
 						portrait_area.find('.class_portrait').html(html);
 					});
 				}
@@ -151,6 +151,7 @@ Widget.types.class_detail = {
 			this._element.find("span.original_id").text(class_data.OriginalId);
 			this._element.find("a.page_link").attr('href', class_data.ClassPageUrl);
 			this._element.find("span.events_count").text(class_data.CountEvents);
+			this._element.find("span.count_students").text(class_data.CountStudents);
 			this._element.find("span.documents_count").text(class_data.CountDocuments);
 			this._element.find("span.links_count").text(class_data.CountLinks);
 

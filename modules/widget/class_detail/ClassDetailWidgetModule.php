@@ -67,6 +67,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['ClassTeacher'] = $oSchoolClass->getClassTeacherNames();
 		$aResult['YearPeriod'] = $oSchoolClass->getYearPeriod();
 		$aResult['CountEvents'] = $oSchoolClass->countEvents();
+		$aResult['CountStudents'] = $oSchoolClass->countStudentsByUnitName();
 		$aResult['CountDocuments'] = $oSchoolClass->countClassDocuments();
 		$aResult['CountLinks'] = $oSchoolClass->countClassLinks();
 		$aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getClassLink(), 'FrontendManager');
@@ -166,8 +167,17 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 
 	public function saveData($aSchoolClassData) {
 		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
+		if($aSchoolClassData['class_portrait_id'] == null && $oSchoolClass->getDocumentRelatedByClassPortraitId()) {
+			$oSchoolClass->getDocumentRelatedByClassPortraitId()->delete();
+		}
 		$oSchoolClass->setClassPortraitId($aSchoolClassData['class_portrait_id']);
+		if($aSchoolClassData['class_schedule_id'] == null && $oSchoolClass->getDocumentRelatedByClassScheduleId()) {
+			$oSchoolClass->getDocumentRelatedByClassScheduleId()->delete();
+		}
 		$oSchoolClass->setClassScheduleId($aSchoolClassData['class_schedule_id']);
+		if($aSchoolClassData['week_schedule_id'] == null && $oSchoolClass->getDocumentRelatedByWeekScheduleId()) {
+			$oSchoolClass->getDocumentRelatedByWeekScheduleId()->delete();
+		}
 		$oSchoolClass->setWeekScheduleId($aSchoolClassData['week_schedule_id']);
 		return $oSchoolClass->save();
 	}

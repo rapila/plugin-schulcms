@@ -3,19 +3,20 @@ Widget.types.team_member_detail = {
 		var _this = this;
 		this.content = Widget.parseHTML("{{includeTemplate=edit}}");
 		this.content.find('div.hide_if_not_saved').hide();
-		
+
 		this.invite_button = this.content.find('.invite_button').button({disabled: true}).click(function() {
 			_this.inviteUser(function() {
 				Widget.notifyUser(Widget.logSeverity.INFO, "{{writeString=team_member.invite_email_success}}");
 			});
 		});
 		this.uploader = Widget.create('file_upload');
-			
+
 		var portrait_area = _this.content.find('.portrait_area');
 		portrait_area.find('.remove').click(function() {
 			_this.portrait_id = null;
+			_this.save(true);
 		});
-		
+
 		this.uploader.allow_drag_to(portrait_area, null, function(target, file) {
 			if(file.type.indexOf('image/') !== 0) {
 				Widget.notifyUser('alert', 'Das Portrait muss ein Bild sein (Datei vom Typ «JPG», «PNG»)');
@@ -24,7 +25,7 @@ Widget.types.team_member_detail = {
 
 			return {document_kind: 'image', document_id: _this.portrait_id, document_category_id: _this.settings.portrait_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
 		}, true);
-		
+
 		// Portrait setter/getter
 		var portrait_id = null;
 		Object.defineProperty(_this, 'portrait_id', {
@@ -45,22 +46,22 @@ Widget.types.team_member_detail = {
 				}
 			}
 		});
-		
+
 		Widget.callStatic('detail', 'create_for_instance', this);
-		
+
 		this.handle('saving', function(event, data) {
 			data.portrait_id = _this.portrait_id;
 		});
 	},
-	
+
 	upload_success: function(document_id, error) {
 		this.portrait_id = document_id;
 		this.save(true);
 	},
-	
+
 	upload_error: function(error) {
 	},
-	
+
 	save: function(should_remain_open) {
 		if(should_remain_open) {
 			this.settings.remains_open = true;
@@ -72,7 +73,7 @@ Widget.types.team_member_detail = {
 	},
 
 	fill_data: function() {
-		this.detail_widget.disable();		
+		this.detail_widget.disable();
 		this.invite_button.button('disable');
 		this.teamMemberData(function(team_member_data) {
 			this.content.find("span.last_name").text(team_member_data.LastName || "");
@@ -92,14 +93,14 @@ Widget.types.team_member_detail = {
 			if(team_member_data.EmailP) {
 				this.invite_button.button('enable');
 			}
-			this.detail_widget.enable();		
+			this.detail_widget.enable();
 		});
 	},
-	
+
 	settings: {
 		detail_widget: {
 			title: "{{writeString=wns.team_member.create}}",
-			width: 550,
+			width: 600,
 			minHeight: 500
 		}
 	}

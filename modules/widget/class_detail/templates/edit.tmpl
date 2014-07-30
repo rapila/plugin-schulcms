@@ -1,22 +1,23 @@
 <form enctype="multipart/form-data" class="accordion">
-	<h3><a href="#">Allgemeine Infos</a></h3>
+	<h3><a href="#">{{writeString=wns.class.tab_general_info}}</a></h3>
 	<div class="tab_part general_info">
 		<div class="status_section">
 			<div class="hide_if_not_saved">
-				<h3>Daten aus Original-DB [ ID :<span class="original_id status"></span> ]</h3>
-				<label>Name:</label><span class="name status"></span><br />
-				<label>Jahr:</label><span class="year_period status"></span><br />
-				<label>Klassenlehrer:</label><span class="class_teacher status"></span><br />
-				<label>Zimmer:</label><span class="room_number status"></span><br />
+				<h3>{{writeString=school_class.data_info_title}} [ ID :<span class="original_id status"></span> ]</h3>
+				<label>{{writeString=school_class.name}}:</label><span class="name status"></span><br />
+				<label>{{writeString=school_class.year}}:</label><span class="year_period status"></span><br />
+				<label>{{writeString=school_class.count_students}}:</label><span class="count_students status"></span><br />
+				<label>{{writeString=school_class.main_teacher}}:</label><span class="class_teacher status"></span><br />
+				<label>{{writeString=school_class.room_number}}:</label><span class="room_number status"></span><br />
 				<div class="droppable_separator">
 					<div class="stundenplan ui-state-droppable" title="Stundenplan hier hinein ziehen">
-						<span class="description">Stundenplan (PDF)<span title="{{writeString=wns.class.remove_schedule}}" class="remove"> ✘</span></span>
+						<span class="description">{{writeString=school_class.schedule}}<span title="{{writeString=wns.class.remove_schedule}}" class="remove"> ✘</span></span>
 						<div class="class_schedule"></div>
 					</div>
 				</div>
 				<div class="droppable_separator">
 					<div class="wochenplan ui-state-droppable" title="Wochenplan hier hinein ziehen">
-						<span class="description">Wochenplan (PDF)<span title="{{writeString=wns.class.remove_schedule}}" class="remove"> ✘</span></span>
+						<span class="description">{{writeString=school_class.week_schedule}}<span title="{{writeString=wns.class.remove_schedule}}" class="remove"> ✘</span></span>
 						<div class="week_schedule"></div>
 					</div>
 				</div>
@@ -25,7 +26,7 @@
 		<div class="specials">
 			<div class="preview">
 				<div class="portrait_area ui-state-droppable" title="Portrait hier hinein ziehen">
-					<span class="description">(Klassen-) Bild<span title="{{writeString=wns.class.remove_portrait}}" class="remove"> ✘</span></span>
+					<span class="description">{{writeString=school_class.portrait}}<span title="{{writeString=wns.class.remove_portrait}}" class="remove"> ✘</span></span>
 					<div class="class_portrait"></div>
 				</div>
 			</div>
