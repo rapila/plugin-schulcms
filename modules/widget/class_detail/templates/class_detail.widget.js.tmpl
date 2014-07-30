@@ -139,6 +139,7 @@ Widget.types.class_detail = {
 	fill_data: function() {
 		this.detail_widget.disable();
 		this.schoolClassData(function(class_data) {
+			this._element.find('div.tab_part.list > table').empty();
 			this.current_detail_id = class_data.Id;
 			if(class_data.LinkCategoryId === null) {
 				class_data.LinkCategoryId = '';
@@ -208,7 +209,7 @@ Widget.types.class_detail = {
 			this.event_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
-				_this.event_list = widget;
+				this.event_list = widget;
 				widget._element.insertBefore(_this.add_event_button.show());
 			}, this.settings.event_list_session);
 		}

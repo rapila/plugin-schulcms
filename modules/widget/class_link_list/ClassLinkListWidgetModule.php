@@ -9,7 +9,7 @@ class ClassLinkListWidgetModule extends LinkListWidgetModule {
 
 	public function getColumnIdentifiers() {
 		$aResult = parent::getColumnIdentifiers();
-		$aResult = array_diff($aResult, array('category_name'));
+		$aResult = array_diff($aResult, array('category_name', 'has_tags'));
 		return $aResult;
 	}
 
