@@ -129,10 +129,7 @@ Widget.types.service_detail = {
 			this.service_text.ensureWidget(function(widget) {
 				widget.set_data(service_data.Body);
 			});
-
-			this.update_document_count(service_data.CountDocuments);
 			this.update_documents();
-
 			this.list_team_members(service_data.team_members);
 
 			this._element.find('div.hide_if_not_saved').show();
@@ -150,6 +147,7 @@ Widget.types.service_detail = {
 		});
 		team_member_row.find('input[name="function_name[]"]').val(function_name || '');
 		team_member_row.appendTo(this.team_member_container);
+		this.update_team_member_count(this.team_member_container.find('tr').length);
 	},
 
 	list_team_members: function(team_members) {
@@ -158,6 +156,7 @@ Widget.types.service_detail = {
 		jQuery.each(team_members, function(team_member_id, function_name) {
 			_this.add_team_member(team_member_id, function_name);
 		});
+		this.update_team_member_count(team_members.length);
 		this.team_member_container.show();
 	},
 
@@ -187,6 +186,10 @@ Widget.types.service_detail = {
 
 	update_document_count: function(count) {
 		this._element.find("span.documents_count").text(count);
+	},
+
+	update_team_member_count: function(count) {
+		this._element.find("span.team_member_count").text(count);
 	},
 
 	insert_document: function(document_data) {
@@ -257,7 +260,7 @@ Widget.types.service_detail = {
 	settings: {
 		detail_widget: {
 			title: "{{writeString=wns.service.create}}",
-			width: 650
+			width: 800
 		},
 		initial_category_id: null,
 		richtext_settings: {

@@ -2,15 +2,21 @@
 	<h3><a href="#">Angebotsdaten</a></h3>
 	<div class="general_info">
 		<div class="status_section">
-			<label for="phone">{{writeString=wns.phone}}</label>
-			<input type="text" name="phone" class="ui-widget-content"/><br />
-			<label for="email" class="validate-valid_email">{{writeString=wns.email}}</label>
-			<input type="text" name="email" class="ui-widget-content"/><br />
-			<label for="website">{{writeString=wns.service.website}}</label>
-			<input type="text" name="website" class="ui-widget-content"/><br />
-			<div class="logo_area" style="clear:left;">
-				<span class="description">{{writeString=wns.draganddrop}} Logo<span title="{{writeString=wns.service.remove_logo}}" class="remove"> ✘</span></span>
-				<div class="service_logo"></div>
+			<div class="service_data">
+				<label for="address">{{writeString=wns.address}}</label>
+				<textarea class="ui-widget-content" name="address" rows="3" cols="20"></textarea>
+				<label for="opening_hours">{{writeString=wns.service.opening_hours}}</label>
+				<textarea class="ui-widget-content" name="opening_hours" rows="3" cols="20"></textarea><br />
+				<label for="phone">{{writeString=wns.phone}}</label>
+				<input type="text" name="phone" class="ui-widget-content"/><br />
+				<label for="email" class="validate-valid_email">{{writeString=wns.email}}</label>
+				<input type="text" name="email" class="ui-widget-content"/><br />
+				<label for="website">{{writeString=wns.service.website}}</label>
+				<input type="text" name="website" class="ui-widget-content"/><br />
+				<div class="logo_area" style="clear:left;">
+					<span class="description">{{writeString=wns.draganddrop}} Logo<span title="{{writeString=wns.service.remove_logo}}" class="remove"> ✘</span></span>
+					<div class="service_logo"></div>
+				</div>
 			</div>
 			<div class="hide_if_not_saved">
 	  		<label>{{writeString=wns.created_info}}:</label><span class="created_info status"></span><br />
@@ -19,18 +25,10 @@
 			</div>
 		</div>
 		<div class="main_content">
-			<label for="name" class="validate-name_required">{{writeString=wns.service.name}}</label>
-			<input type="text" name="name" class="ui-widget-content"/><br />
-			<label for="teaser" class="validate-is_active_teaser_required">{{writeString=wns.service.teaser}}</label>
-			<textarea name="teaser" class="ui-widget-content" rows="3" cols="20"></textarea><br />
 			<div class="group_fields">
-				<label for="address">{{writeString=wns.address}}</label>
-				<textarea class="ui-widget-content" name="address" rows="3" cols="20"></textarea>
+				<label for="name" class="validate-name_required">{{writeString=wns.service.name}}</label>
+				<input type="text" name="name" class="ui-widget-content"/>
 			</div>
-			<div class="group_fields" style="margin-left:.5em">
-				<label for="opening_hours">{{writeString=wns.service.opening_hours}}</label>
-				<textarea class="ui-widget-content" name="opening_hours" rows="3" cols="20"></textarea><br />
-			</div><br />
 			<div class="group_fields">
 				<label for="service_category_id">{{writeString=wns.service.service_category}}</label>
 				<select name="service_category_id" class="ui-widget-content" style="width: 170px;" data-widget-type="service_category_input">
@@ -40,30 +38,33 @@
 				<label for="is_active">{{writeString=wns.is_online}}</label>
 				<input type="checkbox" name="is_active" style="padding-left:-2px;" />
 			</div>
-		</div><br style="clear:right;" />
-		<fieldset><legend class="validate-duplicate_team_member">{{writeString=wns.service.legend_team_members}}</legend>
-			<table>
-				<thead>
-					<tr>
-						<th>Sort</th>
-						<th>Name</th>
-						<th>Funktion</th>
-						<th> </th>
-					</tr>
-				</thead>
-				<tbody class="team_member_container ui-editable-items-list">
-				</tbody>
-			</table>
-		</fieldset>
+			<label for="teaser" class="validate-is_active_teaser_required">{{writeString=wns.service.teaser}}</label>
+			<textarea name="teaser" class="ui-widget-content" rows="3" cols="20"></textarea><br />
+			<label for="body">{{writeString=wns.service.body}}</label>
+			<div class="service_text reset_padding" data-widget-type="rich_text">
+				<textarea name="body" class="ui-widget-content" rows="10" cols="50"></textarea>
+			</div>
+		</div>
 	</div>
-	<h3><a href="#">Angebotstext</a></h3>
-	<div class="service_text reset_padding" data-widget-type="rich_text">
-			<textarea name="body" class="ui-widget-content" rows="10" cols="50"></textarea>
+	<h3><a href="#">MitarbeiterInnen<span class="team_member_count number"></span></a></h3>
+	<div class="reset_padding">
+		<table class="ui-list">
+			<thead>
+				<tr class="ui-list-headrow">
+					<th>Sort</th>
+					<th>Name</th>
+					<th>Funktion</th>
+					<th> </th>
+				</tr>
+			</thead>
+			<tbody class="team_member_container ui-editable-items-list">
+			</tbody>
+		</table>
 	</div>
 	<h3>
 			<a href="#">Wichtige Dokumente<span class="documents_count number"></span></a>
 	</h3>
-	<div class="ui-state-droppable image_browse_area droppable_area">
+	<div class="ui-state-droppable image_browse_area droppable_area reset_padding">
 		<table class="ui-list document_list"></table>
 	</div>
 </form>
