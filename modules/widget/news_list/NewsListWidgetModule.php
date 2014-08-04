@@ -15,15 +15,12 @@ class NewsListWidgetModule extends WidgetModule {
 	}
 
 	public function getColumnIdentifiers() {
-		return array('id', 'date_start_formatted', 'date_end_formatted', 'headline', 'news_type_name', 'has_image', 'is_inactive', 'delete');
+		return array('id', 'date_start_formatted', 'date_end_formatted', 'headline', 'news_type_name', 'is_inactive', 'delete');
 	}
 
 	public function getDatabaseColumnForColumn($sColumnIdentifier) {
 		if($sColumnIdentifier === 'date_start_formatted') {
 			return NewsPeer::DATE_START;
-		}
-		if($sColumnIdentifier === 'has_image') {
-			return NewsPeer::IMAGE_ID;
 		}
 		return null;
 	}
@@ -45,10 +42,6 @@ class NewsListWidgetModule extends WidgetModule {
 				$aResult['heading'] = StringPeer::getString('wns.news.type');
 				$aResult['is_sortable'] = false;
 				break;
-			case 'has_image':
-				$aResult['heading'] = StringPeer::getString('wns.news.has_image');
-				break;
-				$aResult['is_sortable'] = false;
 			case 'is_inactive':
 				$aResult['heading'] = StringPeer::getString('wns.news.is_inactive');
 				break;

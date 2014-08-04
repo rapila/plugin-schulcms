@@ -1,0 +1,28 @@
+Widget.types['news_type_detail'] = {
+	initialize: function() {
+		this._element = Widget.parseHTML("{{includeTemplate=edit}}");
+		Widget.callStatic('detail', 'create_for_instance', this);
+
+	},
+
+	fill_data: function() {
+		this.loadData(function(data) {
+			this._element.find("input[name='name']").val(data.Name);
+			this._element.find("input[name='is_externally_managed']").val(data.IsExternallyManaged);
+			this._element.find(".updated_info").text(data.UpdatedInfo);
+			this._element.find(".created_info").text(data.CreatedInfo);
+			this._element.find("span[class='detail_id']").text(data.Id);
+			this.detail_widget.set_title(this.detail_widget.settings.title = data.Name);
+		});
+	},
+
+	save_callback: function () {
+		Widget.fire('schulcms-news_type_changed', info);
+	},
+
+	settings: {
+		"detail_widget": {
+			title: "{{writeString=wns.note_type.create}}",
+			width: 530
+	}}
+};

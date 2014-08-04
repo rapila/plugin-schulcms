@@ -18,6 +18,9 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 		}
 
 		$aResult = $oNews->toArray(BasePeer::TYPE_PHPNAME, false);
+		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oNews);
+		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oNews);
+	
 		$aResult['DateStart'] = $oNews->getDateStart('d.m.Y');
 		$aResult['DateEnd'] = $oNews->getDateEnd('d.m.Y');
     $sBody = '';
@@ -40,8 +43,8 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 		$oNews->setNewsTypeId($aData['news_type_id']);
 		$oNews->setHeadline($aData['headline']);
 		$oNews->setBody(RichtextUtil::parseInputFromEditorForStorage($aData['body']));
-		$oNews->setImageId($aData['image_id']);
 		$oNews->save();
+		return $oNews->getId();
 	}
 
 	public function setNewsId($iNewsId) {

@@ -59,8 +59,13 @@ jQuery(function() {
 				widget.setNewsTypeId(sidebar.active_row_datas()[0].news_type_id);
 				widget.open();
 				widget.fill_data();
-				widget.save_callback = function() {
-					sidebar.reload();
+				widget.save_callback = function(info) {
+					if(info.inserted) {
+						sidebar.reload();
+					} else {
+						sidebar.update_row(sidebar.active_row());
+						content_list.reload();
+					}
 				};
 			});
 		}).disable();

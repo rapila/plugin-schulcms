@@ -1,41 +1,53 @@
 Widget.types['news_detail'] = {
 	initialize: function() {
 		var _this = this;
-		
+
 		//called before this._element is available
-		this._element = Widget.parseHTML(this._instanceInformation.content);
-		this._element.append(Widget.parseHTML("{{includeTemplate=content}}"));
+		this._element = Widget.parseHTML("{{includeTemplate=edit}}");
+		this.news_body = this._element.find('div.news_body');
+		
+		this._element.find('div.hide_if_not_saved').hide();
+
 		Widget.callStatic('detail', 'create_for_instance', this);
 
-		this._element.find("select[name='news_type_id']").prepareWidget(function(news_type_input_widget) {
-			news_type_input_widget.settings.initial_selection = _this.settings.initial_type_id;
-			news_type_input_widget.settings.disabled = !!_this.settings.predefined_news_type_id;
-		}, function(news_type_input_widget) {
+		this._element.find("select[name='news_type_id']").prepareWidget(function(widget) {
+			widget.settings.initial_selection = _this.settings.initial_type_id;
+			widget.settings.disabled = !!_this.settings.predefined_news_type_id;
+		}, function(widget) {
 			if(_this.settings.predefined_news_type_id) {
-				news_type_input_widget.val(_this.settings.predefined_news_type_id);
+				widget.val(_this.settings.predefined_news_type_id);
 			}
 		});
 
-		var school_class_select = this._element.find("select[name='school_class_id']");
-		school_class_select.prepareWidget(function(classes_input_widget) {
-			jQuery(school_class_select).val(_this.settings.predefined_school_class_id);
-			classes_input_widget.settings.disabled = !!_this.settings.predefined_school_class_id;
-		}, function(classes_input_widget) {
+		this._element.find("select[name='school_class_id']").prepareWidget(function(widget) {
+			widget.val(_this.settings.predefined_school_class_id);
+			widget.settings.disabled = !!_this.settings.predefined_school_class_id;
+		}, function(widget) {
 			if(_this.settings.predefined_school_class_id) {
-				classes_input_widget._element.val(_this.settings.predefined_school_class_id);
+				widget._element.val(_this.settings.predefined_school_class_id);
 				_this._element.find('.service_select_items').hide();
 			}
 		});
-
-	},
-
-	prepare: function() {
-		//called when this._element is available
+		
+		// Handlers
+		this.handle('opened', function() { 
+			this.init_textarea();
+		});
+		this.handle('saving', function(event, data) {
+			data.body = _this.news_body_editor.get_data();
+		}.bind(_this));
+		this.handle('saved', function(event, id) {
+			this.setNewsId(id);
+			this.current_detail_id = id;
+		});
 
 	},
 
 	fill_data: function() {
+		this.detail_widget.disable();
+		this.init_textarea();
 		this.loadData(function(data) {
+			this.current_detail_id = data.Id;
 			this._element.find('input[name="id"]').val(data.Id);
 			this._element.find('input[name="news_type_id"]').val(data.NewsTypeId);
 			this._element.find('input[name="headline"]').val(data.Headline);
@@ -45,13 +57,28 @@ Widget.types['news_detail'] = {
 			this._element.find('input[name="date_end"]').val(data.DateEnd);
 			this._element.find('input[name="is_inactive"]').val(data.IsInactive);
 			this._element.find('input[name="school_class_id"]').val(data.SchoolClassId);
-			this._element.find('input[name="image_id"]').val(data.ImageId);
-			this._element.find('input[name="created_at"]').val(data.CreatedAt);
-			this._element.find('input[name="created_by"]').val(data.CreatedBy);
-			this._element.find('input[name="updated_at"]').val(data.UpdatedAt);
-			this._element.find('input[name="updated_by"]').val(data.UpdatedBy);
+			this._element.find('span.created_info').text(data.CreatedInfo);
+			this._element.find('span.updated_info').text(data.UpdatedInfo);
+			this._element.find('span.detail_id').text(data.Id);
+			this._element.find('div.hide_if_not_saved').show();
+			this.detail_widget.enable();
 		});
 	},
 
-	settings: {"detail_widget":{}}
+	init_textarea: function() {
+		var _this = this;
+		if(!this.news_body.didPrepareWidget()) {
+			this.news_body.attr('data-widget-session', this.settings.richtext_session).prepareWidget(function(rich_text_widget) {
+				_this.news_body_editor = rich_text_widget;
+				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings);
+			}, jQuery.noop);
+		}
+	},
+
+	settings: {
+		"detail_widget":{
+			title: "{{writeString=wns.news.create}}",
+			width: 700
+		}
+	}
 };
