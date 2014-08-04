@@ -85,12 +85,6 @@ abstract class BaseNews extends BaseObject implements Persistent
     protected $school_class_id;
 
     /**
-     * The value for the image_id field.
-     * @var        int
-     */
-    protected $image_id;
-
-    /**
      * The value for the created_at field.
      * @var        string
      */
@@ -123,11 +117,6 @@ abstract class BaseNews extends BaseObject implements Persistent
      * @var        SchoolClass
      */
     protected $aSchoolClass;
-
-    /**
-     * @var        Document
-     */
-    protected $aDocument;
 
     /**
      * @var        User
@@ -335,17 +324,6 @@ abstract class BaseNews extends BaseObject implements Persistent
     {
 
         return $this->school_class_id;
-    }
-
-    /**
-     * Get the [image_id] column value.
-     *
-     * @return int
-     */
-    public function getImageId()
-    {
-
-        return $this->image_id;
     }
 
     /**
@@ -666,31 +644,6 @@ abstract class BaseNews extends BaseObject implements Persistent
     } // setSchoolClassId()
 
     /**
-     * Set the value of [image_id] column.
-     *
-     * @param  int $v new value
-     * @return News The current object (for fluent API support)
-     */
-    public function setImageId($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->image_id !== $v) {
-            $this->image_id = $v;
-            $this->modifiedColumns[] = NewsPeer::IMAGE_ID;
-        }
-
-        if ($this->aDocument !== null && $this->aDocument->getId() !== $v) {
-            $this->aDocument = null;
-        }
-
-
-        return $this;
-    } // setImageId()
-
-    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
@@ -843,11 +796,10 @@ abstract class BaseNews extends BaseObject implements Persistent
             $this->date_end = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->is_inactive = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
             $this->school_class_id = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
-            $this->image_id = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
-            $this->created_at = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-            $this->updated_at = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-            $this->created_by = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
-            $this->updated_by = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
+            $this->created_at = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->updated_at = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->created_by = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
+            $this->updated_by = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -857,7 +809,7 @@ abstract class BaseNews extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 14; // 14 = NewsPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = NewsPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating News object", $e);
@@ -885,9 +837,6 @@ abstract class BaseNews extends BaseObject implements Persistent
         }
         if ($this->aSchoolClass !== null && $this->school_class_id !== $this->aSchoolClass->getId()) {
             $this->aSchoolClass = null;
-        }
-        if ($this->aDocument !== null && $this->image_id !== $this->aDocument->getId()) {
-            $this->aDocument = null;
         }
         if ($this->aUserRelatedByCreatedBy !== null && $this->created_by !== $this->aUserRelatedByCreatedBy->getId()) {
             $this->aUserRelatedByCreatedBy = null;
@@ -936,7 +885,6 @@ abstract class BaseNews extends BaseObject implements Persistent
 
             $this->aNewsType = null;
             $this->aSchoolClass = null;
-            $this->aDocument = null;
             $this->aUserRelatedByCreatedBy = null;
             $this->aUserRelatedByUpdatedBy = null;
         } // if (deep)
@@ -1115,13 +1063,6 @@ abstract class BaseNews extends BaseObject implements Persistent
                 $this->setSchoolClass($this->aSchoolClass);
             }
 
-            if ($this->aDocument !== null) {
-                if ($this->aDocument->isModified() || $this->aDocument->isNew()) {
-                    $affectedRows += $this->aDocument->save($con);
-                }
-                $this->setDocument($this->aDocument);
-            }
-
             if ($this->aUserRelatedByCreatedBy !== null) {
                 if ($this->aUserRelatedByCreatedBy->isModified() || $this->aUserRelatedByCreatedBy->isNew()) {
                     $affectedRows += $this->aUserRelatedByCreatedBy->save($con);
@@ -1210,9 +1151,6 @@ abstract class BaseNews extends BaseObject implements Persistent
         if ($this->isColumnModified(NewsPeer::SCHOOL_CLASS_ID)) {
             $modifiedColumns[':p' . $index++]  = '`school_class_id`';
         }
-        if ($this->isColumnModified(NewsPeer::IMAGE_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`image_id`';
-        }
         if ($this->isColumnModified(NewsPeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
         }
@@ -1268,9 +1206,6 @@ abstract class BaseNews extends BaseObject implements Persistent
                         break;
                     case '`school_class_id`':
                         $stmt->bindValue($identifier, $this->school_class_id, PDO::PARAM_INT);
-                        break;
-                    case '`image_id`':
-                        $stmt->bindValue($identifier, $this->image_id, PDO::PARAM_INT);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -1395,12 +1330,6 @@ abstract class BaseNews extends BaseObject implements Persistent
                 }
             }
 
-            if ($this->aDocument !== null) {
-                if (!$this->aDocument->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aDocument->getValidationFailures());
-                }
-            }
-
             if ($this->aUserRelatedByCreatedBy !== null) {
                 if (!$this->aUserRelatedByCreatedBy->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aUserRelatedByCreatedBy->getValidationFailures());
@@ -1482,18 +1411,15 @@ abstract class BaseNews extends BaseObject implements Persistent
                 return $this->getSchoolClassId();
                 break;
             case 9:
-                return $this->getImageId();
-                break;
-            case 10:
                 return $this->getCreatedAt();
                 break;
-            case 11:
+            case 10:
                 return $this->getUpdatedAt();
                 break;
-            case 12:
+            case 11:
                 return $this->getCreatedBy();
                 break;
-            case 13:
+            case 12:
                 return $this->getUpdatedBy();
                 break;
             default:
@@ -1534,11 +1460,10 @@ abstract class BaseNews extends BaseObject implements Persistent
             $keys[6] => $this->getDateEnd(),
             $keys[7] => $this->getIsInactive(),
             $keys[8] => $this->getSchoolClassId(),
-            $keys[9] => $this->getImageId(),
-            $keys[10] => $this->getCreatedAt(),
-            $keys[11] => $this->getUpdatedAt(),
-            $keys[12] => $this->getCreatedBy(),
-            $keys[13] => $this->getUpdatedBy(),
+            $keys[9] => $this->getCreatedAt(),
+            $keys[10] => $this->getUpdatedAt(),
+            $keys[11] => $this->getCreatedBy(),
+            $keys[12] => $this->getUpdatedBy(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1551,9 +1476,6 @@ abstract class BaseNews extends BaseObject implements Persistent
             }
             if (null !== $this->aSchoolClass) {
                 $result['SchoolClass'] = $this->aSchoolClass->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aDocument) {
-                $result['Document'] = $this->aDocument->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUserRelatedByCreatedBy) {
                 $result['UserRelatedByCreatedBy'] = $this->aUserRelatedByCreatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -1623,18 +1545,15 @@ abstract class BaseNews extends BaseObject implements Persistent
                 $this->setSchoolClassId($value);
                 break;
             case 9:
-                $this->setImageId($value);
-                break;
-            case 10:
                 $this->setCreatedAt($value);
                 break;
-            case 11:
+            case 10:
                 $this->setUpdatedAt($value);
                 break;
-            case 12:
+            case 11:
                 $this->setCreatedBy($value);
                 break;
-            case 13:
+            case 12:
                 $this->setUpdatedBy($value);
                 break;
         } // switch()
@@ -1670,11 +1589,10 @@ abstract class BaseNews extends BaseObject implements Persistent
         if (array_key_exists($keys[6], $arr)) $this->setDateEnd($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setIsInactive($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setSchoolClassId($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setImageId($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setCreatedAt($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setUpdatedAt($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setCreatedBy($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setUpdatedBy($arr[$keys[13]]);
+        if (array_key_exists($keys[9], $arr)) $this->setCreatedAt($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setUpdatedAt($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setCreatedBy($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setUpdatedBy($arr[$keys[12]]);
     }
 
     /**
@@ -1695,7 +1613,6 @@ abstract class BaseNews extends BaseObject implements Persistent
         if ($this->isColumnModified(NewsPeer::DATE_END)) $criteria->add(NewsPeer::DATE_END, $this->date_end);
         if ($this->isColumnModified(NewsPeer::IS_INACTIVE)) $criteria->add(NewsPeer::IS_INACTIVE, $this->is_inactive);
         if ($this->isColumnModified(NewsPeer::SCHOOL_CLASS_ID)) $criteria->add(NewsPeer::SCHOOL_CLASS_ID, $this->school_class_id);
-        if ($this->isColumnModified(NewsPeer::IMAGE_ID)) $criteria->add(NewsPeer::IMAGE_ID, $this->image_id);
         if ($this->isColumnModified(NewsPeer::CREATED_AT)) $criteria->add(NewsPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(NewsPeer::UPDATED_AT)) $criteria->add(NewsPeer::UPDATED_AT, $this->updated_at);
         if ($this->isColumnModified(NewsPeer::CREATED_BY)) $criteria->add(NewsPeer::CREATED_BY, $this->created_by);
@@ -1771,7 +1688,6 @@ abstract class BaseNews extends BaseObject implements Persistent
         $copyObj->setDateEnd($this->getDateEnd());
         $copyObj->setIsInactive($this->getIsInactive());
         $copyObj->setSchoolClassId($this->getSchoolClassId());
-        $copyObj->setImageId($this->getImageId());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setCreatedBy($this->getCreatedBy());
@@ -1939,58 +1855,6 @@ abstract class BaseNews extends BaseObject implements Persistent
     }
 
     /**
-     * Declares an association between this object and a Document object.
-     *
-     * @param                  Document $v
-     * @return News The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setDocument(Document $v = null)
-    {
-        if ($v === null) {
-            $this->setImageId(NULL);
-        } else {
-            $this->setImageId($v->getId());
-        }
-
-        $this->aDocument = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Document object, it will not be re-added.
-        if ($v !== null) {
-            $v->addNews($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Document object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Document The associated Document object.
-     * @throws PropelException
-     */
-    public function getDocument(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aDocument === null && ($this->image_id !== null) && $doQuery) {
-            $this->aDocument = DocumentQuery::create()->findPk($this->image_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aDocument->addNewss($this);
-             */
-        }
-
-        return $this->aDocument;
-    }
-
-    /**
      * Declares an association between this object and a User object.
      *
      * @param                  User $v
@@ -2108,7 +1972,6 @@ abstract class BaseNews extends BaseObject implements Persistent
         $this->date_end = null;
         $this->is_inactive = null;
         $this->school_class_id = null;
-        $this->image_id = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->created_by = null;
@@ -2142,9 +2005,6 @@ abstract class BaseNews extends BaseObject implements Persistent
             if ($this->aSchoolClass instanceof Persistent) {
               $this->aSchoolClass->clearAllReferences($deep);
             }
-            if ($this->aDocument instanceof Persistent) {
-              $this->aDocument->clearAllReferences($deep);
-            }
             if ($this->aUserRelatedByCreatedBy instanceof Persistent) {
               $this->aUserRelatedByCreatedBy->clearAllReferences($deep);
             }
@@ -2157,7 +2017,6 @@ abstract class BaseNews extends BaseObject implements Persistent
 
         $this->aNewsType = null;
         $this->aSchoolClass = null;
-        $this->aDocument = null;
         $this->aUserRelatedByCreatedBy = null;
         $this->aUserRelatedByUpdatedBy = null;
     }

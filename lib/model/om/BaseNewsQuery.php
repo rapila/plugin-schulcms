@@ -15,7 +15,6 @@
  * @method NewsQuery orderByDateEnd($order = Criteria::ASC) Order by the date_end column
  * @method NewsQuery orderByIsInactive($order = Criteria::ASC) Order by the is_inactive column
  * @method NewsQuery orderBySchoolClassId($order = Criteria::ASC) Order by the school_class_id column
- * @method NewsQuery orderByImageId($order = Criteria::ASC) Order by the image_id column
  * @method NewsQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method NewsQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method NewsQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
@@ -30,7 +29,6 @@
  * @method NewsQuery groupByDateEnd() Group by the date_end column
  * @method NewsQuery groupByIsInactive() Group by the is_inactive column
  * @method NewsQuery groupBySchoolClassId() Group by the school_class_id column
- * @method NewsQuery groupByImageId() Group by the image_id column
  * @method NewsQuery groupByCreatedAt() Group by the created_at column
  * @method NewsQuery groupByUpdatedAt() Group by the updated_at column
  * @method NewsQuery groupByCreatedBy() Group by the created_by column
@@ -47,10 +45,6 @@
  * @method NewsQuery leftJoinSchoolClass($relationAlias = null) Adds a LEFT JOIN clause to the query using the SchoolClass relation
  * @method NewsQuery rightJoinSchoolClass($relationAlias = null) Adds a RIGHT JOIN clause to the query using the SchoolClass relation
  * @method NewsQuery innerJoinSchoolClass($relationAlias = null) Adds a INNER JOIN clause to the query using the SchoolClass relation
- *
- * @method NewsQuery leftJoinDocument($relationAlias = null) Adds a LEFT JOIN clause to the query using the Document relation
- * @method NewsQuery rightJoinDocument($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Document relation
- * @method NewsQuery innerJoinDocument($relationAlias = null) Adds a INNER JOIN clause to the query using the Document relation
  *
  * @method NewsQuery leftJoinUserRelatedByCreatedBy($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByCreatedBy relation
  * @method NewsQuery rightJoinUserRelatedByCreatedBy($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByCreatedBy relation
@@ -71,7 +65,6 @@
  * @method News findOneByDateEnd(string $date_end) Return the first News filtered by the date_end column
  * @method News findOneByIsInactive(boolean $is_inactive) Return the first News filtered by the is_inactive column
  * @method News findOneBySchoolClassId(int $school_class_id) Return the first News filtered by the school_class_id column
- * @method News findOneByImageId(int $image_id) Return the first News filtered by the image_id column
  * @method News findOneByCreatedAt(string $created_at) Return the first News filtered by the created_at column
  * @method News findOneByUpdatedAt(string $updated_at) Return the first News filtered by the updated_at column
  * @method News findOneByCreatedBy(int $created_by) Return the first News filtered by the created_by column
@@ -86,7 +79,6 @@
  * @method array findByDateEnd(string $date_end) Return News objects filtered by the date_end column
  * @method array findByIsInactive(boolean $is_inactive) Return News objects filtered by the is_inactive column
  * @method array findBySchoolClassId(int $school_class_id) Return News objects filtered by the school_class_id column
- * @method array findByImageId(int $image_id) Return News objects filtered by the image_id column
  * @method array findByCreatedAt(string $created_at) Return News objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return News objects filtered by the updated_at column
  * @method array findByCreatedBy(int $created_by) Return News objects filtered by the created_by column
@@ -198,7 +190,7 @@ abstract class BaseNewsQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `news_type_id`, `headline`, `body`, `body_short`, `date_start`, `date_end`, `is_inactive`, `school_class_id`, `image_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `news` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `news_type_id`, `headline`, `body`, `body_short`, `date_start`, `date_end`, `is_inactive`, `school_class_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `news` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -588,50 +580,6 @@ abstract class BaseNewsQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the image_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByImageId(1234); // WHERE image_id = 1234
-     * $query->filterByImageId(array(12, 34)); // WHERE image_id IN (12, 34)
-     * $query->filterByImageId(array('min' => 12)); // WHERE image_id >= 12
-     * $query->filterByImageId(array('max' => 12)); // WHERE image_id <= 12
-     * </code>
-     *
-     * @see       filterByDocument()
-     *
-     * @param     mixed $imageId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return NewsQuery The current query, for fluid interface
-     */
-    public function filterByImageId($imageId = null, $comparison = null)
-    {
-        if (is_array($imageId)) {
-            $useMinMax = false;
-            if (isset($imageId['min'])) {
-                $this->addUsingAlias(NewsPeer::IMAGE_ID, $imageId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($imageId['max'])) {
-                $this->addUsingAlias(NewsPeer::IMAGE_ID, $imageId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(NewsPeer::IMAGE_ID, $imageId, $comparison);
-    }
-
-    /**
      * Filter the query on the created_at column
      *
      * Example usage:
@@ -955,82 +903,6 @@ abstract class BaseNewsQuery extends ModelCriteria
         return $this
             ->joinSchoolClass($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'SchoolClass', 'SchoolClassQuery');
-    }
-
-    /**
-     * Filter the query by a related Document object
-     *
-     * @param   Document|PropelObjectCollection $document The related object(s) to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 NewsQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByDocument($document, $comparison = null)
-    {
-        if ($document instanceof Document) {
-            return $this
-                ->addUsingAlias(NewsPeer::IMAGE_ID, $document->getId(), $comparison);
-        } elseif ($document instanceof PropelObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(NewsPeer::IMAGE_ID, $document->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByDocument() only accepts arguments of type Document or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Document relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return NewsQuery The current query, for fluid interface
-     */
-    public function joinDocument($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Document');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Document');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Document relation Document object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   DocumentQuery A secondary query class using the current class as primary query
-     */
-    public function useDocumentQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinDocument($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Document', 'DocumentQuery');
     }
 
     /**

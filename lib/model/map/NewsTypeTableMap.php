@@ -39,7 +39,7 @@ class NewsTypeTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', false, 100, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 100, null);
         $this->addColumn('is_externally_managed', 'IsExternallyManaged', 'BOOLEAN', false, 1, false);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);

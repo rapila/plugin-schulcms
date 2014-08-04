@@ -47,7 +47,6 @@ class NewsTableMap extends TableMap
         $this->addColumn('date_end', 'DateEnd', 'DATE', false, null, null);
         $this->addColumn('is_inactive', 'IsInactive', 'BOOLEAN', false, 1, false);
         $this->addForeignKey('school_class_id', 'SchoolClassId', 'INTEGER', 'school_classes', 'id', false, null, null);
-        $this->addForeignKey('image_id', 'ImageId', 'INTEGER', 'documents', 'id', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addForeignKey('created_by', 'CreatedBy', 'INTEGER', 'users', 'id', false, null, null);
@@ -62,7 +61,6 @@ class NewsTableMap extends TableMap
     {
         $this->addRelation('NewsType', 'NewsType', RelationMap::MANY_TO_ONE, array('news_type_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('SchoolClass', 'SchoolClass', RelationMap::MANY_TO_ONE, array('school_class_id' => 'id', ), 'CASCADE', null);
-        $this->addRelation('Document', 'Document', RelationMap::MANY_TO_ONE, array('image_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
         $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
     } // buildRelations()

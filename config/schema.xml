@@ -373,10 +373,6 @@
 	<foreign-key foreignTable="school_classes" onDelete="cascade">
 		<reference local="school_class_id" foreign="id" />
 	</foreign-key>
-	<column name="image_id" type="integer" />
-	<foreign-key foreignTable="documents" onDelete="setnull">
-		<reference local="image_id" foreign="id" />
-	</foreign-key>
 	<behavior name="denyable">
 		<parameter name="role_key" value="notes" />
 	</behavior>
@@ -384,7 +380,7 @@
 
 <table name="news_types" phpName="NewsType">
 	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-	<column name="name" type="varchar" size="100" />
+	<column name="name" type="varchar" size="100" required="true" />
 	<column name="is_externally_managed" type="boolean" size="1" default="0" />
 	<behavior name="denyable">
 		<parameter name="role_key" value="notes" />
