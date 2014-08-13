@@ -84,13 +84,15 @@ session_default:
 text_module:
   toolbar:
     -
-      - ["Bold", "Italic"]
-      - ["Link", "Unlink", "-", "Image"]
-      - ["NumberedList", "BulletedList"]
-      - ["Undo", "Redo", "PasteText"]
-      - ["Format"]
-      - ["RemoveFormat", "Source", "-", "Maximize"]
+      - ['Bold', 'Italic', '-', 'BulletedList']
+      - ['Link', 'Unlink']
+      - ['Image']
+      - ['Table']
+      - ['Undo', 'Redo']
+      - ['Maximize', 'Format']
+      - ['RemoveFormat', 'PasteText', 'Source']
   richtext_width: 700
+  format_tags: 'p;h1;h2;h3'
 
 
 
