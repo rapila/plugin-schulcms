@@ -17,10 +17,10 @@ class PropelMigration_1403529933
 		{
 			// add the post-migration code here
 			// var_dump(__DIR__); exit;
-				
+
 			require_once realpath(__DIR__.'/../../base/lib/inc.php');
 			Propel::disableInstancePooling();
-			
+
 			// migrate note_types to news_types
 			foreach(NoteTypeQuery::create()->orderByCreatedAt()->find() as $oNoteType) {
 				$oNewsType = new NewsType();
@@ -42,7 +42,6 @@ class PropelMigration_1403529933
 				$oNews->setDateStart($oNote->getDateStart());
 				$oNews->setDateEnd($oNote->getDateEnd());
 				$oNews->setIsInactive($oNote->getIsInactive());
-				$oNews->setImageId($oNote->getImageId());
 				$oNews->setCreatedAt($oNote->getCreatedAt());
 				$oNews->setCreatedBy($oNote->getCreatedBy());
 				$oNews->setUpdatedAt($oNote->getUpdatedAt());
@@ -88,7 +87,6 @@ CREATE TABLE `news`
 		`date_end` DATE,
 		`is_inactive` TINYINT(1) DEFAULT 0,
 		`school_class_id` INTEGER,
-		`image_id` INTEGER,
 		`created_at` DATETIME,
 		`updated_at` DATETIME,
 		`created_by` INTEGER,
@@ -96,9 +94,8 @@ CREATE TABLE `news`
 		PRIMARY KEY (`id`),
 		INDEX `news_FI_1` (`news_type_id`),
 		INDEX `news_FI_2` (`school_class_id`),
-		INDEX `news_FI_3` (`image_id`),
-		INDEX `news_FI_4` (`created_by`),
-		INDEX `news_FI_5` (`updated_by`)
+		INDEX `news_FI_3` (`created_by`),
+		INDEX `news_FI_4` (`updated_by`)
 ) ENGINE=MyISAM;
 
 CREATE TABLE `news_types`
