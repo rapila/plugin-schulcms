@@ -1,13 +1,14 @@
 <?php
-class NewsListWidgetModule extends WidgetModule {
+class NewsListWidgetModule extends SpecializedListWidgetModule {
 
-	private $oListWidget;
+	protected $oListWidget;
 	public $oDelegateProxy;
 
-	public function __construct() {
-		$this->oListWidget = new ListWidgetModule();
+	protected function createListWidget() {
 		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, 'News', 'date_start_formatted', 'desc');
-		$this->oListWidget->setDelegate($this->oDelegateProxy);
+		$oListWidget = new ListWidgetModule();
+		$oListWidget->setDelegate($this->oDelegateProxy);
+		return $oListWidget;
 	}
 
 	public function doWidget() {
@@ -65,6 +66,7 @@ class NewsListWidgetModule extends WidgetModule {
 	public function getTypeHasNews($iNewsTypeId) {
 		return NewsQuery::create()->filterByNewsTypeId($iNewsTypeId)->count() > 0;
 	}
+
 	public function getNewsTypeName() {
 		$oNewsType = NewsTypeQuery::create()->findPk($this->oDelegateProxy->getNewsTypeId());
 		if($oNewsType) {
@@ -76,4 +78,7 @@ class NewsListWidgetModule extends WidgetModule {
 		return $this->oDelegateProxy->getNewsTypeId();
 	}
 
+	public function getCriteria() {
+		return NewsQuery::create()->excludeExternallyManaged();
+	}
 }
