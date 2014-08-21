@@ -17,12 +17,10 @@ Widget.types.news_type_input = {
 				this._element.val(_this.settings.initial_selection || '');
 			}
 		});
-		if(this.settings.disabled) {
-			this._element.attr('disabled', true);
-		}
 	},
 	
 	val: function(value) {
+		console.log('input type', value);
 		if(arguments.length) {
 			this._element.val(value);
 			this.settings.initial_selection = value;

@@ -84,16 +84,25 @@ session_default:
 text_module:
   toolbar:
     -
-      - ['Bold', 'Italic', '-', 'BulletedList']
+      - ['Bold', '-', 'BulletedList']
       - ['Link', 'Unlink']
       - ['Image']
       - ['Table']
+      - ['Format']
       - ['Undo', 'Redo']
-      - ['Maximize', 'Format']
       - ['RemoveFormat', 'PasteText', 'Source']
+      - ['Maximize']
   richtext_width: 700
   format_tags: 'p;h1;h2;h3'
-
-
-
-
+  
+news:
+  text_module:
+    toolbar:
+      -
+        - ['Bold', '-', 'BulletedList']
+        - ['Link', 'Unlink']
+        - ['Undo', 'Redo']
+        - ['RemoveFormat', 'PasteText', 'Source']
+        - ['Maximize']
+    richtext_width: 700
+    format_tags: 'p'

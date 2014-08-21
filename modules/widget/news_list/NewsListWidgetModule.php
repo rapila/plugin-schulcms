@@ -16,12 +16,15 @@ class NewsListWidgetModule extends SpecializedListWidgetModule {
 	}
 
 	public function getColumnIdentifiers() {
-		return array('id', 'date_start_formatted', 'date_end_formatted', 'headline', 'news_type_name', 'is_inactive', 'delete');
+		return array('id', 'date_start_formatted', 'date_end_formatted', 'headline', 'body_truncated', 'is_inactive', 'delete');
 	}
 
 	public function getDatabaseColumnForColumn($sColumnIdentifier) {
 		if($sColumnIdentifier === 'date_start_formatted') {
 			return NewsPeer::DATE_START;
+		}
+		if($sColumnIdentifier === 'body_truncated') {
+			return NewsPeer::BODY;
 		}
 		return null;
 	}
@@ -39,8 +42,8 @@ class NewsListWidgetModule extends SpecializedListWidgetModule {
 			case 'headline':
 				$aResult['heading'] = StringPeer::getString('wns.news.headline');
 				break;
-			case 'news_type_name':
-				$aResult['heading'] = StringPeer::getString('wns.news.type');
+			case 'body_truncated':
+				$aResult['heading'] = StringPeer::getString('wns.news.body_truncated');
 				$aResult['is_sortable'] = false;
 				break;
 			case 'is_inactive':

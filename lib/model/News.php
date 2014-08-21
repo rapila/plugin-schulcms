@@ -53,6 +53,18 @@ class News extends BaseNews {
 			self::$NEWS_TYPES[$this->getNewsTypeId()] = $this->getNewsType();
 		}
 		return self::$NEWS_TYPES[$this->getNewsTypeId()]->getName();
-
 	}
+
+	public function getBodyTruncated($iLength = 70) {
+		$sText = '';
+		if(is_resource($this->getBody())) {
+			$sText = RichtextUtil::parseStorageForBackendOutput(stream_get_contents($this->getBody()))->render();
+			$sText = strip_tags($sText);
+		}
+		if($iLength) {
+			return StringUtil::truncate($sText, $iLength);
+		}
+		return $sText;
+	}
+
 }

@@ -19,7 +19,6 @@ class NewsTypeDetailWidgetModule extends PersistentWidgetModule {
 		$aResult = $oNewsType->toArray(BasePeer::TYPE_PHPNAME, false);
 		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oNewsType);
 		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oNewsType);
-		ErrorHandler::log('RES', $aResult);
 		return $aResult;
 	}
 

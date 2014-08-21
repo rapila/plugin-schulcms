@@ -9,10 +9,10 @@ Widget.types['news_detail'] = {
 		this._element.find('div.hide_if_not_saved').hide();
 
 		Widget.callStatic('detail', 'create_for_instance', this);
-
-		this._element.find("select[name='news_type_id']").prepareWidget(function(widget) {
+		this.news_type_dropdown = this._element.find("select[name='news_type_id']");
+		
+		this.news_type_dropdown.prepareWidget(function(widget) {
 			widget.settings.initial_selection = _this.settings.initial_type_id;
-			widget.settings.disabled = !!_this.settings.predefined_news_type_id;
 		}, function(widget) {
 			if(_this.settings.predefined_news_type_id) {
 				widget.val(_this.settings.predefined_news_type_id);
@@ -30,7 +30,6 @@ Widget.types['news_detail'] = {
 			this.setNewsId(id);
 			this.current_detail_id = id;
 		});
-
 	},
 
 	fill_data: function() {
@@ -39,7 +38,9 @@ Widget.types['news_detail'] = {
 		this.loadData(function(data) {
 			this.current_detail_id = data.Id;
 			this._element.find('input[name="id"]').val(data.Id);
-			this._element.find('input[name="news_type_id"]').val(data.NewsTypeId);
+			this.news_type_dropdown.ensureWidget(function(widget) {
+				widget.val(data.NewsTypeId);
+			});
 			this._element.find('input[name="headline"]').val(data.Headline);
 			this.news_body.ensureWidget(function(widget) {
 				widget.set_data(data.Body);
