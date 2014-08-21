@@ -10,6 +10,7 @@ class NewsFrontendModule extends DynamicFrontendModule {
 	const MODE_SELECT_KEY = 'display_mode';
 
 	public function renderFrontend() {
+		return '<p>TO BE REFACTORED ENTIRELY</p>';
 		$aOptions = $this->widgetData();
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
 			return null;
@@ -26,7 +27,7 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		if($iNewsTypeId !== null) {
 			$oQuery->filterByNewsTypeId($iNewsTypeId);
 		}
-		$oQuery->filterByDate()->orderByDate();
+		$oQuery->filterByDateStart()->orderByDateStart();
 		if($iLimit) {
 			$oQuery->limit($iLimit);
 		}
