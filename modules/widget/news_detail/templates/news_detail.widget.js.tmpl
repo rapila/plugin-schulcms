@@ -18,16 +18,6 @@ Widget.types['news_detail'] = {
 				widget.val(_this.settings.predefined_news_type_id);
 			}
 		});
-
-		this._element.find("select[name='school_class_id']").prepareWidget(function(widget) {
-			widget.val(_this.settings.predefined_school_class_id);
-			widget.settings.disabled = !!_this.settings.predefined_school_class_id;
-		}, function(widget) {
-			if(_this.settings.predefined_school_class_id) {
-				widget._element.val(_this.settings.predefined_school_class_id);
-				_this._element.find('.service_select_items').hide();
-			}
-		});
 		
 		// Handlers
 		this.handle('opened', function() { 
@@ -55,8 +45,7 @@ Widget.types['news_detail'] = {
 			this._element.find('input[name="body_short"]').val(data.BodyShort);
 			this._element.find('input[name="date_start"]').val(data.DateStart);
 			this._element.find('input[name="date_end"]').val(data.DateEnd);
-			this._element.find('input[name="is_inactive"]').val(data.IsInactive);
-			this._element.find('input[name="school_class_id"]').val(data.SchoolClassId);
+			this._element.find('input[name="is_inactive"]').prop(data.IsInactive);
 			this._element.find('span.created_info').text(data.CreatedInfo);
 			this._element.find('span.updated_info').text(data.UpdatedInfo);
 			this._element.find('span.detail_id').text(data.Id);
