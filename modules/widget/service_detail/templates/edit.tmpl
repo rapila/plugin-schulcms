@@ -2,23 +2,21 @@
 	<h3><a href="#">Angebotsdaten</a></h3>
 	<div class="general_info">
 		<div class="status_section">
-			<div class="service_data">
-				<label for="address">{{writeString=wns.address}}</label>
-				<textarea class="ui-widget-content" name="address" rows="3" cols="20"></textarea>
-				<label for="opening_hours">{{writeString=wns.service.opening_hours}}</label>
-				<textarea class="ui-widget-content" name="opening_hours" rows="3" cols="20"></textarea><br />
-				<label for="phone">{{writeString=wns.phone}}</label>
-				<input type="text" name="phone" class="ui-widget-content"/><br />
-				<label for="email" class="validate-valid_email">{{writeString=wns.email}}</label>
-				<input type="text" name="email" class="ui-widget-content"/><br />
-				<label for="website">{{writeString=wns.service.website}}</label>
-				<input type="text" name="website" class="ui-widget-content"/><br />
-				<div class="logo_area" style="clear:left;">
-					<span class="description">{{writeString=wns.draganddrop}} Logo<span title="{{writeString=wns.service.remove_logo}}" class="remove"> ✘</span></span>
-					<div class="service_logo"></div>
-				</div>
+			<label for="address">{{writeString=wns.address}}</label>
+			<textarea class="ui-widget-content" name="address" rows="3" cols="20"></textarea>
+			<label for="opening_hours">{{writeString=wns.service.opening_hours}}</label>
+			<textarea class="ui-widget-content" name="opening_hours" rows="3" cols="20"></textarea><br />
+			<label for="phone">{{writeString=wns.phone}}</label>
+			<input type="text" name="phone" class="ui-widget-content"/><br />
+			<label for="email" class="validate-valid_email">{{writeString=wns.email}}</label>
+			<input type="text" name="email" class="ui-widget-content"/><br />
+			<label for="website">{{writeString=wns.service.website}}</label>
+			<input type="text" name="website" class="ui-widget-content"/><br />
+			<div class="logo_area" style="clear:left;">
+				<span class="description">{{writeString=wns.draganddrop}} Logo<span title="{{writeString=wns.service.remove_logo}}" class="remove"> ✘</span></span>
+				<div class="service_logo"></div>
 			</div>
-			<div class="hide_if_not_saved">
+				<div class="hide_if_not_saved">
 	  		<label>{{writeString=wns.created_info}}:</label><span class="created_info status"></span><br />
 	  		<label>{{writeString=wns.updated.info}}:</label><span class="updated_info status"></span><br />
 				<label>ID:</label><span class="detail_id"></span>

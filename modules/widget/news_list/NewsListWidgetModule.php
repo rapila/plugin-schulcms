@@ -36,7 +36,7 @@ class NewsListWidgetModule extends WidgetModule {
 				$aResult['is_sortable'] = false;
 				break;
 			case 'headline':
-				$aResult['heading'] = StringPeer::getString('wns.news.body');
+				$aResult['heading'] = StringPeer::getString('wns.news.headline');
 				break;
 			case 'news_type_name':
 				$aResult['heading'] = StringPeer::getString('wns.news.type');
@@ -61,7 +61,7 @@ class NewsListWidgetModule extends WidgetModule {
 		}
 		return null;
 	}
-	
+
 	public function getTypeHasNews($iNewsTypeId) {
 		return NewsQuery::create()->filterByNewsTypeId($iNewsTypeId)->count() > 0;
 	}

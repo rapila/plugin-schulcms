@@ -13,7 +13,6 @@ class EventFilterModule extends FilterModule {
 	public function onNavigationItemChildrenRequested(NavigationItem $oNavigationItem) {
 		$mIdentifier = $oNavigationItem->getIdentifier();
 		if($oNavigationItem instanceof PageNavigationItem) {
-
 			if($mIdentifier === SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS)) {
 				$aYears = self::selectNames(array(), 'YEAR(DATE_START)');
 				foreach($aYears as $iYear) {
