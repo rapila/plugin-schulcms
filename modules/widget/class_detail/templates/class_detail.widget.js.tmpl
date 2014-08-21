@@ -3,7 +3,8 @@ Widget.types.class_detail = {
 		var _this = this;
 		this._element = Widget.parseHTML("{{includeTemplate=edit}}");
 
-		//Events, documents and links
+		//News, events, documents and links
+		this.add_news_button = this._element.find('.add_entry.add_news').click(this.edit_news.bind(this));
 		this.add_event_button = this._element.find('.add_entry.add_event').click(this.edit_event.bind(this));
 		this.add_document_button = this._element.find('.add_entry.add_document').click(this.edit_document.bind(this));
 		this.add_link_button = this._element.find('.add_entry.add_link').click(this.edit_link.bind(this));
@@ -150,6 +151,7 @@ Widget.types.class_detail = {
 			this._element.find("span.room_number").text(class_data.RoomNumber);
 			this._element.find("span.original_id").text(class_data.OriginalId);
 			this._element.find("a.page_link").attr('href', class_data.ClassPageUrl);
+			this._element.find("span.news_count").text(class_data.CountNews);
 			this._element.find("span.events_count").text(class_data.CountEvents);
 			this._element.find("span.count_students").text(class_data.CountStudents);
 			this._element.find("span.documents_count").text(class_data.CountDocuments);
@@ -159,6 +161,7 @@ Widget.types.class_detail = {
 			this.class_schedule_id = class_data.ClassScheduleId;
 			this.week_schedule_id = class_data.WeekScheduleId;
 
+			this.reload_news();
 			this.reload_events();
 			this.reload_links();
 			this.reload_documents();
@@ -204,6 +207,18 @@ Widget.types.class_detail = {
 		});
 	},
 
+	reload_news: function() {
+		var _this = this;
+		if(this.news_list) {
+			this.news_list.reload();
+		} else {
+			Widget.createWithElement('list', function(widget) {
+				this.news_list = widget;
+				widget._element.insertBefore(_this.add_news_button.show());
+			}, this.settings.news_list_session);
+		}
+	},
+
 	reload_events: function() {
 		var _this = this;
 		if(this.event_list) {
@@ -214,6 +229,30 @@ Widget.types.class_detail = {
 				widget._element.insertBefore(_this.add_event_button.show());
 			}, this.settings.event_list_session);
 		}
+	},
+
+	edit_news: function(news_id) {
+		if(isNaN(news_id)) {
+			news_id = null;
+		}
+		var _this = this;
+		if(!news_id) {
+			this.add_news_button.addClass('ui-loading-add');
+		}
+		Widget.create('news_detail', function(widget){
+			widget.settings.predefined_news_type_id = _this.settings.news_type_id;
+		}, function(widget) {
+			if(news_id) {
+				widget.setNewsId(news_id);
+				widget.fill_data();
+			}
+			widget.open();
+			widget.save_callback = function(news_id) {
+				_this.addClassNews(news_id);
+				_this.reload_news();
+			};
+			_this.add_news_button.removeClass('ui-loading-add');
+		});
 	},
 
 	edit_event: function(event_id) {

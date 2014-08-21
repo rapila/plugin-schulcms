@@ -127,6 +127,24 @@ class SchoolClass extends BaseSchoolClass {
 		return $iCount;
 	}
 
+	public function countClassNews() {
+		return $this->countClassNewss();
+	}
+
+	public function getClassNews() {
+		return $this->getClassNewss();
+	}
+
+	public function isClassNews($iNewsId) {
+		$iNewsId = (int) $iNewsId;
+		foreach($this->getClassNews() as $oClassNews) {
+			if($oClassNews->getId() === $iNewsId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function isClassEvent($iEventId) {
 		$iEventId = (int) $iEventId;
 		foreach($this->getEvents() as $oEvent) {

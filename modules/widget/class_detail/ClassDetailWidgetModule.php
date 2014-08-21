@@ -5,6 +5,7 @@
 class ClassDetailWidgetModule extends PersistentWidgetModule {
 
 	private $iSchoolClassId = null;
+	private $oNewsListWidget = null;
 	private $oEventListWidget = null;
 	private $oLinkListWidget = null;
 	private $oDocumentListWidget = null;
@@ -34,24 +35,36 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		if(LinkCategoryQuery::create()->filterById($iSchoolLinkCategory)->count() === 0) {
 			throw new Exception('Config error: school_settings > externally_managed_link_categories > school_class_links');
 		}
-		$this->setSetting('link_category_id', $iSchoolLinkCategory);
+		$this->setSetting('class_link_category_id', $iSchoolLinkCategory);
 
 		$iSchoolDocumentCategory = SchoolPeer::getDocumentCategoryConfig('school_class_documents');
 		if(DocumentCategoryQuery::create()->filterById($iSchoolDocumentCategory)->count() === 0) {
 			throw new Exception('Config error: school_settings > externally_managed_document_categories > school_class_documents');
 		}
 		$this->setSetting('class_document_category_id', $iSchoolDocumentCategory);
+		
+		$iSchoolNewsTypeId = SchoolPeer::getNewsTypeConfig('school_class_news_type');
+		if(NewsTypeQuery::create()->filterById($iSchoolNewsTypeId)->count() === 0) {
+			throw new Exception('Config error: school_settings > externally_managed_news_types > school_class_news_type');
+		}
+		$this->setSetting('news_type_id', $iSchoolNewsTypeId);
+
+		$this->oNewsListWidget = new ClassNewsListWidgetModule();
+		$this->setSetting('news_list_session', $this->oNewsListWidget->getSessionKey());
 
 		$this->oEventListWidget = new ClassEventListWidgetModule();
 		$this->setSetting('event_list_session', $this->oEventListWidget->getSessionKey());
+
 		$this->oLinkListWidget = new ClassLinkListWidgetModule();
 		$this->setSetting('link_list_session', $this->oLinkListWidget->getSessionKey());
+
 		$this->oDocumentListWidget = new ClassDocumentListWidgetModule();
 		$this->setSetting('document_list_session', $this->oDocumentListWidget->getSessionKey());
 	}
 
 	public function setSchoolClassId($iSchoolClassId) {
 		$this->iSchoolClassId = $iSchoolClassId;
+		$this->oNewsListWidget->iSchoolClassId = $iSchoolClassId;
 		$this->oEventListWidget->iSchoolClassId = $iSchoolClassId;
 		$this->oLinkListWidget->iSchoolClassId = $iSchoolClassId;
 		$this->oDocumentListWidget->iSchoolClassId = $iSchoolClassId;
@@ -66,12 +79,24 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['ClassTypeName'] = $oSchoolClass->getClassType()->getName();
 		$aResult['ClassTeacher'] = $oSchoolClass->getClassTeacherNames();
 		$aResult['YearPeriod'] = $oSchoolClass->getYearPeriod();
+		$aResult['CountNews'] = $oSchoolClass->countClassNews();
 		$aResult['CountEvents'] = $oSchoolClass->countEvents();
 		$aResult['CountStudents'] = $oSchoolClass->countStudentsByUnitName();
 		$aResult['CountDocuments'] = $oSchoolClass->countClassDocuments();
 		$aResult['CountLinks'] = $oSchoolClass->countClassLinks();
 		$aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getClassLink(), 'FrontendManager');
 		return $aResult;
+	}
+
+	public function removeNews($iNewsId) {
+		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
+		if($oSchoolClass->isClassNews($iNewsId)) {
+			$oClassNews = NewsQuery::create()->findPk($iNewsId);
+			if($oClassNews) {
+				return $oClassNews->delete();
+			}
+		}
+		return false;
 	}
 
 	public function removeEvent($iEventId) {
@@ -107,6 +132,17 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		return false;
 	}
 
+	public function addClassNews($iNewsId = null) {
+	  if(ClassNewsQuery::create()->findPk(array($this->iSchoolClassId, $iNewsId))) {
+	    return;
+	  }
+		ClassNewsPeer::ignoreRights(true);
+		$oClassNews = new ClassNews();
+		$oClassNews->setSchoolClassId($this->iSchoolClassId);
+		$oClassNews->setNewsId($iNewsId);
+		return $oClassNews->save();
+	}
+
 	public function addClassLink($iLinkId = null) {
 	  if(ClassLinkQuery::create()->findPk(array($this->iSchoolClassId, $iLinkId))) {
 	    return;
@@ -127,42 +163,6 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$oClassDocument->setSchoolClassId($this->iSchoolClassId);
 		$oClassDocument->setDocumentId($iDocumentId);
 		return $oClassDocument->save();
-	}
-
-	public function listEvents() {
-		$aResult = array();
-		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
-		foreach($oSchoolClass->getEvents() as $oEvent) {
-			$aResult[$oEvent->getId()]['Date'] = $oEvent->getDateStart('d.m.Y');
-			$aResult[$oEvent->getId()]['Title'] = $oEvent->getTitle();
-			$aResult[$oEvent->getId()]['IsActive'] = $oEvent->getIsActive();
-			$aResult[$oEvent->getId()]['HasBericht'] = $oEvent->getHasBericht();
-			$aResult[$oEvent->getId()]['HasImages'] = $oEvent->getHasImages();
-		}
-		return $aResult;
-	}
-
-	public function listDocuments() {
-		$aResult = array();
-		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
-		$oQuery = DocumentQuery::create()->orderByName();
-		foreach($oSchoolClass->getClassDocumentsJoinDocument($oQuery, null, Criteria::INNER_JOIN) as $oClassDocument) {
-			$aResult[$oClassDocument->getDocumentId()]['Name'] = $oClassDocument->getDocument()->getName();
-			$aResult[$oClassDocument->getDocumentId()]['Extension'] = $oClassDocument->getDocument()->getExtension();
-		}
-		return $aResult;
-	}
-
-	public function listLinks() {
-		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
-		$oCriteria = new Criteria();
-		$oCriteria->addAscendingOrderByColumn(LinkPeer::NAME);
-		$aResult = array();
-		foreach($oSchoolClass->getClassLinksJoinLink($oCriteria, null, Criteria::INNER_JOIN) as $oClassLink) {
-			$aResult[$oClassLink->getLinkId()]['Name'] = $oClassLink->getLink()->getName();
-			$aResult[$oClassLink->getLinkId()]['Url'] = StringUtil::truncate($oClassLink->getLink()->getUrl(), 40);
-		}
-		return $aResult;
 	}
 
 	public function saveData($aSchoolClassData) {

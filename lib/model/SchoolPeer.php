@@ -12,6 +12,7 @@ class SchoolPeer extends BaseSchoolPeer {
 
 	private static $EXTERNALLY_MANAGED_DOCUMENT_CATEGORIES = null;
 	private static $EXTERNALLY_MANAGED_LINK_CATEGORIES = null;
+	private static $EXTERNALLY_MANAGED_NEWS_TYPES = null;
 	private static $PAGE_IDENTIFIERS = null;
 	private static $SCHOOL = null;
 	private static $ACTIVE_FUNCTION_GROUPS = null;
@@ -28,6 +29,16 @@ class SchoolPeer extends BaseSchoolPeer {
 			return self::$EXTERNALLY_MANAGED_DOCUMENT_CATEGORIES[$sKey];
 		}
 		throw new Exception(__METHOD__.": Please check your externally externally_managed_document_categories '$sKey' in config section school_settings");
+	}	
+	
+	public static function getNewsTypeConfig($sKey) { 
+		if(!is_array(self::$EXTERNALLY_MANAGED_NEWS_TYPES)) {
+			self::$EXTERNALLY_MANAGED_NEWS_TYPES = Settings::getSetting('school_settings', 'externally_managed_news_types', array());
+		}
+		if(isset(self::$EXTERNALLY_MANAGED_NEWS_TYPES[$sKey])) {
+			return self::$EXTERNALLY_MANAGED_NEWS_TYPES[$sKey];
+		}
+		throw new Exception(__METHOD__.": Please check your externally externally_managed_news_types '$sKey' in config section school_settings");
 	}	
 	
 	public static function getLinkCategoryConfig($sKey) { 

@@ -71,9 +71,6 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 		$oFlash->checkForValue('news_type_id', 'news_type_required');
 		if(!$aData['is_inactive']) {
 			$oFlash->checkForValue('body', 'is_active_body_required');
-			if($aData['date_start'] == null) {
-			  $oFlash->addMessage("date_start_required");
-			}
 		}
 		$oFlash->finishReporting();
 	}

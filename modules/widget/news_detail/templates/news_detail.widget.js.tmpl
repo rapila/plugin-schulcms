@@ -9,27 +9,39 @@ Widget.types['news_detail'] = {
 		this._element.find('div.hide_if_not_saved').hide();
 
 		Widget.callStatic('detail', 'create_for_instance', this);
-		this.news_type_dropdown = this._element.find("select[name='news_type_id']");
 		
-		this.news_type_dropdown.prepareWidget(function(widget) {
-			widget.settings.initial_selection = _this.settings.initial_type_id;
-		}, function(widget) {
-			if(_this.settings.predefined_news_type_id) {
-				widget.val(_this.settings.predefined_news_type_id);
-			}
-		});
-
 		// Handlers
 		this.handle('opened', function() {
 			this.init_textarea();
 		});
+		
+		if(!this.news_type_is_predefined()) {
+			this.news_type_dropdown = this._element.find("select[name='news_type_id']");
+			this.news_type_dropdown.prepareWidget(function(widget) {
+				widget.settings.initial_selection = _this.settings.initial_type_id;
+			}, function(widget) {
+				if(_this.settings.predefined_news_type_id) {
+					widget.val(_this.settings.predefined_news_type_id);
+				}
+			});
+		} else {
+			this._element.find('div.news_type_elements').hide();
+		}
+		
 		this.handle('saving', function(event, data) {
 			data.body = _this.news_body_editor.get_data();
+			if(this.news_type_is_predefined()) {
+				data.news_type_id = _this.settings.predefined_news_type_id;
+			}
 		}.bind(_this));
 		this.handle('saved', function(event, id) {
 			this.setNewsId(id);
 			this.current_detail_id = id;
 		});
+	},
+	
+	news_type_is_predefined: function() {
+		return this.settings.predefined_news_type_id !== null;
 	},
 
 	fill_data: function() {
@@ -38,9 +50,11 @@ Widget.types['news_detail'] = {
 		this.loadData(function(data) {
 			this.current_detail_id = data.Id;
 			this._element.find('input[name="id"]').val(data.Id);
-			this.news_type_dropdown.ensureWidget(function(widget) {
-				widget.val(data.NewsTypeId);
-			});
+			if(!this.news_type_is_predefined()) {
+				this.news_type_dropdown.ensureWidget(function(widget) {
+					widget.val(data.NewsTypeId);
+				});
+			}
 			this._element.find('input[name="headline"]').val(data.Headline);
 			this.news_body.ensureWidget(function(widget) {
 				widget.set_data(data.Body);
@@ -67,9 +81,10 @@ Widget.types['news_detail'] = {
 	},
 
 	settings: {
-		"detail_widget":{
+		detail_widget: {
 			title: "{{writeString=wns.news.create}}",
 			width: 890
-		}
+		},
+		predefined_news_type_id: null
 	}
 };
