@@ -11,7 +11,7 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 	const MODE_SELECT_KEY = 'display_mode';
 
 	public function renderFrontend() {
-		$this->iBlackboardNoteTypeId = Settings::getSetting("school_settings", 'blackboard_note_type_id', null);
+		$this->iBlackboardNoteTypeId = Settings::getSetting("school_settings", 'blackboard_news_type_id', null);
 
 		$aOptions = $this->widgetData();
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
@@ -101,7 +101,7 @@ class BlackboardFrontendModule extends DynamicFrontendModule {
 		$aOptions = array();
 		foreach(BlackboardFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
 			if($sDisplayMode !== 'event_report' &&
-				(Settings::getSetting("school_settings", 'blackboard_note_type_id', null) === null)) {
+				(Settings::getSetting("school_settings", 'blackboard_news_type_id', null) === null)) {
 				continue;
 			}
 			$aOptions[$sDisplayMode] = StringPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);

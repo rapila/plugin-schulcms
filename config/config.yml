@@ -17,7 +17,7 @@ school_settings:
   # display stundent names setting
   display_student_names: false
 
-  blackboard_note_type_id: null
+  blackboard_news_type_id: null
 
   # registry for externally used documents, are not displayed by default in admin module "documents"
   externally_managed_document_categories:
