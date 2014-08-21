@@ -3,41 +3,41 @@
  * @package modules.frontend
  */
 
-class NotesFrontendModule extends DynamicFrontendModule {
-	
+class NewsFrontendModule extends DynamicFrontendModule {
+
 	public static $DISPLAY_MODES = array('current_note');
-	
+
 	const MODE_SELECT_KEY = 'display_mode';
-	
+
 	public function renderFrontend() {
 		$aOptions = $this->widgetData();
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
 			return null;
 		}
 		switch($aOptions[self::MODE_SELECT_KEY]) {
-			case 'current_note': return $this->renderCurrentNote(@$aOptions['note_type_id'], @$aOptions['limit']);
+			case 'current_note': return $this->renderCurrentNews(@$aOptions['news_type_id'], @$aOptions['limit']);
 			default:
 				return null;
 		}
 	}
 
-	public function renderCurrentNote($iNoteTypeId=null, $iLimit=null) {
-		$oQuery = NoteQuery::create()->filterByIsInactive(false);
-		if($iNoteTypeId !== null) {
-			$oQuery->filterByNoteTypeId($iNoteTypeId);
+	public function renderCurrentNews($iNewsTypeId=null, $iLimit=null) {
+		$oQuery = NewsQuery::create()->filterByIsInactive(false);
+		if($iNewsTypeId !== null) {
+			$oQuery->filterByNewsTypeId($iNewsTypeId);
 		}
 		$oQuery->filterByDate()->orderByDate();
 		if($iLimit) {
 			$oQuery->limit($iLimit);
 		}
 
-		foreach($oQuery->find() as $oNote) {
-			if($oNote && is_resource($oNote->getBody())) {
-				$oTemplate = $this->constructTemplate('note');
-				if($oNoteType = $oNote->getNoteType()){
-					$oTemplate->replaceIdentifier('note_type_name', $oNoteType->getName());
+		foreach($oQuery->find() as $oNews) {
+			if($oNews && is_resource($oNews->getBody())) {
+				$oTemplate = $this->constructTemplate('news');
+				if($oNewsType = $oNews->getNewsType()){
+					$oTemplate->replaceIdentifier('news_type_name', $oNewsType->getName());
 				}
-				$sContent = stream_get_contents($oNote->getBody());
+				$sContent = stream_get_contents($oNews->getBody());
 				if($sContent != '') {
 					$oTemplate->replaceIdentifier('content', RichtextUtil::parseStorageForFrontendOutput($sContent));
 				}
