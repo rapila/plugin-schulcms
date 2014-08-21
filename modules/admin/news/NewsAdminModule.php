@@ -45,7 +45,7 @@ class NewsAdminModule extends AdminModule {
 	}
 
 	public function getCustomListElements() {
-		if(NoteTypeQuery::create()->count() > 0) {
+		if(NewsTypeQuery::create()->count() > 0) {
 			return array(
 				array('news_type_id' => CriteriaListWidgetDelegate::SELECT_ALL,
 							'name' => StringPeer::getString('wns.sidebar.select_all'),

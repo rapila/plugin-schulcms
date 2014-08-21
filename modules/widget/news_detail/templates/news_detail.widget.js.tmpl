@@ -5,7 +5,7 @@ Widget.types['news_detail'] = {
 		//called before this._element is available
 		this._element = Widget.parseHTML("{{includeTemplate=edit}}");
 		this.news_body = this._element.find('div.news_body');
-		
+
 		this._element.find('div.hide_if_not_saved').hide();
 
 		Widget.callStatic('detail', 'create_for_instance', this);
@@ -18,9 +18,9 @@ Widget.types['news_detail'] = {
 				widget.val(_this.settings.predefined_news_type_id);
 			}
 		});
-		
+
 		// Handlers
-		this.handle('opened', function() { 
+		this.handle('opened', function() {
 			this.init_textarea();
 		});
 		this.handle('saving', function(event, data) {
@@ -41,8 +41,9 @@ Widget.types['news_detail'] = {
 			this._element.find('input[name="id"]').val(data.Id);
 			this._element.find('input[name="news_type_id"]').val(data.NewsTypeId);
 			this._element.find('input[name="headline"]').val(data.Headline);
-			this._element.find('textarea[name="body"]').text(data.Body);
-			this._element.find('input[name="body_short"]').val(data.BodyShort);
+			this.news_body.ensureWidget(function(widget) {
+				widget.set_data(data.Body);
+			});
 			this._element.find('input[name="date_start"]').val(data.DateStart);
 			this._element.find('input[name="date_end"]').val(data.DateEnd);
 			this._element.find('input[name="is_inactive"]').prop(data.IsInactive);

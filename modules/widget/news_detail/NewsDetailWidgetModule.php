@@ -5,6 +5,13 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 
 	public function __construct($sSessionKey = null) {
 		parent::__construct($sSessionKey);
+
+		$oRichtext = WidgetModule::getWidget('rich_text', null, null, 'news');
+		$oRootPage = PageQuery::create()->findOneByTreeLeft(1);
+		if($oRootPage) {
+			$oRichtext->setTemplate($oRootPage->getTemplate());
+		}
+		$this->setSetting('richtext_session', $oRichtext->getSessionKey());
 	}
 
 	public function getElementType() {
@@ -42,9 +49,33 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 		$oNews->setDateEnd($aData['date_end'] == null ? null : $aData['date_end']);
 		$oNews->setNewsTypeId($aData['news_type_id']);
 		$oNews->setHeadline($aData['headline']);
-		$oNews->setBody(RichtextUtil::parseInputFromEditorForStorage($aData['body']));
+
+		$oRichtextUtil = new RichtextUtil();
+		$oNews->setBody($oRichtextUtil->parseInputFromEditor($aData['body']));
+		$oRichtextUtil->setTrackReferences($oNews);
+
+		$this->validate($aData, $oNews);
+
+		if(!Flash::noErrors()) {
+			throw new ValidationException();
+		}
+
 		$oNews->save();
 		return $oNews->getId();
+	}
+
+	private function validate($aData, $oNews) {
+		$oFlash = Flash::getFlash();
+		$oFlash->setArrayToCheck($aData);
+		$oFlash->checkForValue('headline', 'headline_required');
+		$oFlash->checkForValue('news_type_id', 'news_type_required');
+		if(!$aData['is_inactive']) {
+			$oFlash->checkForValue('body', 'is_active_body_required');
+			if($aData['date_start'] == null) {
+			  $oFlash->addMessage("date_start_required");
+			}
+		}
+		$oFlash->finishReporting();
 	}
 
 	public function setNewsId($iNewsId) {
