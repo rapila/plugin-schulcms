@@ -231,6 +231,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     protected $collClassDocumentsPartial;
 
     /**
+     * @var        PropelObjectCollection|ClassNews[] Collection to store aggregation of ClassNews objects.
+     */
+    protected $collClassNewss;
+    protected $collClassNewssPartial;
+
+    /**
      * @var        PropelObjectCollection|ClassTeacher[] Collection to store aggregation of ClassTeacher objects.
      */
     protected $collClassTeachers;
@@ -291,6 +297,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $classDocumentsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $classNewssScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1244,6 +1256,8 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
 
             $this->collClassDocuments = null;
 
+            $this->collClassNewss = null;
+
             $this->collClassTeachers = null;
 
             $this->collEvents = null;
@@ -1563,6 +1577,23 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
 
             if ($this->collClassDocuments !== null) {
                 foreach ($this->collClassDocuments as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->classNewssScheduledForDeletion !== null) {
+                if (!$this->classNewssScheduledForDeletion->isEmpty()) {
+                    ClassNewsQuery::create()
+                        ->filterByPrimaryKeys($this->classNewssScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->classNewssScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collClassNewss !== null) {
+                foreach ($this->collClassNewss as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1965,6 +1996,14 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collClassNewss !== null) {
+                    foreach ($this->collClassNewss as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collClassTeachers !== null) {
                     foreach ($this->collClassTeachers as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -2177,6 +2216,9 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             }
             if (null !== $this->collClassDocuments) {
                 $result['ClassDocuments'] = $this->collClassDocuments->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collClassNewss) {
+                $result['ClassNewss'] = $this->collClassNewss->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collClassTeachers) {
                 $result['ClassTeachers'] = $this->collClassTeachers->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2476,6 +2518,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             foreach ($this->getClassDocuments() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addClassDocument($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getClassNewss() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addClassNews($relObj->copy($deepCopy));
                 }
             }
 
@@ -3034,6 +3082,9 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         }
         if ('ClassDocument' == $relationName) {
             $this->initClassDocuments();
+        }
+        if ('ClassNews' == $relationName) {
+            $this->initClassNewss();
         }
         if ('ClassTeacher' == $relationName) {
             $this->initClassTeachers();
@@ -4509,6 +4560,309 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collClassNewss collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return SchoolClass The current object (for fluent API support)
+     * @see        addClassNewss()
+     */
+    public function clearClassNewss()
+    {
+        $this->collClassNewss = null; // important to set this to null since that means it is uninitialized
+        $this->collClassNewssPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collClassNewss collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialClassNewss($v = true)
+    {
+        $this->collClassNewssPartial = $v;
+    }
+
+    /**
+     * Initializes the collClassNewss collection.
+     *
+     * By default this just sets the collClassNewss collection to an empty array (like clearcollClassNewss());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initClassNewss($overrideExisting = true)
+    {
+        if (null !== $this->collClassNewss && !$overrideExisting) {
+            return;
+        }
+        $this->collClassNewss = new PropelObjectCollection();
+        $this->collClassNewss->setModel('ClassNews');
+    }
+
+    /**
+     * Gets an array of ClassNews objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this SchoolClass is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|ClassNews[] List of ClassNews objects
+     * @throws PropelException
+     */
+    public function getClassNewss($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collClassNewssPartial && !$this->isNew();
+        if (null === $this->collClassNewss || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collClassNewss) {
+                // return empty collection
+                $this->initClassNewss();
+            } else {
+                $collClassNewss = ClassNewsQuery::create(null, $criteria)
+                    ->filterBySchoolClass($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collClassNewssPartial && count($collClassNewss)) {
+                      $this->initClassNewss(false);
+
+                      foreach ($collClassNewss as $obj) {
+                        if (false == $this->collClassNewss->contains($obj)) {
+                          $this->collClassNewss->append($obj);
+                        }
+                      }
+
+                      $this->collClassNewssPartial = true;
+                    }
+
+                    $collClassNewss->getInternalIterator()->rewind();
+
+                    return $collClassNewss;
+                }
+
+                if ($partial && $this->collClassNewss) {
+                    foreach ($this->collClassNewss as $obj) {
+                        if ($obj->isNew()) {
+                            $collClassNewss[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collClassNewss = $collClassNewss;
+                $this->collClassNewssPartial = false;
+            }
+        }
+
+        return $this->collClassNewss;
+    }
+
+    /**
+     * Sets a collection of ClassNews objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $classNewss A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return SchoolClass The current object (for fluent API support)
+     */
+    public function setClassNewss(PropelCollection $classNewss, PropelPDO $con = null)
+    {
+        $classNewssToDelete = $this->getClassNewss(new Criteria(), $con)->diff($classNewss);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->classNewssScheduledForDeletion = clone $classNewssToDelete;
+
+        foreach ($classNewssToDelete as $classNewsRemoved) {
+            $classNewsRemoved->setSchoolClass(null);
+        }
+
+        $this->collClassNewss = null;
+        foreach ($classNewss as $classNews) {
+            $this->addClassNews($classNews);
+        }
+
+        $this->collClassNewss = $classNewss;
+        $this->collClassNewssPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related ClassNews objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related ClassNews objects.
+     * @throws PropelException
+     */
+    public function countClassNewss(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collClassNewssPartial && !$this->isNew();
+        if (null === $this->collClassNewss || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collClassNewss) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getClassNewss());
+            }
+            $query = ClassNewsQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySchoolClass($this)
+                ->count($con);
+        }
+
+        return count($this->collClassNewss);
+    }
+
+    /**
+     * Method called to associate a ClassNews object to this object
+     * through the ClassNews foreign key attribute.
+     *
+     * @param    ClassNews $l ClassNews
+     * @return SchoolClass The current object (for fluent API support)
+     */
+    public function addClassNews(ClassNews $l)
+    {
+        if ($this->collClassNewss === null) {
+            $this->initClassNewss();
+            $this->collClassNewssPartial = true;
+        }
+
+        if (!in_array($l, $this->collClassNewss->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddClassNews($l);
+
+            if ($this->classNewssScheduledForDeletion and $this->classNewssScheduledForDeletion->contains($l)) {
+                $this->classNewssScheduledForDeletion->remove($this->classNewssScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	ClassNews $classNews The classNews object to add.
+     */
+    protected function doAddClassNews($classNews)
+    {
+        $this->collClassNewss[]= $classNews;
+        $classNews->setSchoolClass($this);
+    }
+
+    /**
+     * @param	ClassNews $classNews The classNews object to remove.
+     * @return SchoolClass The current object (for fluent API support)
+     */
+    public function removeClassNews($classNews)
+    {
+        if ($this->getClassNewss()->contains($classNews)) {
+            $this->collClassNewss->remove($this->collClassNewss->search($classNews));
+            if (null === $this->classNewssScheduledForDeletion) {
+                $this->classNewssScheduledForDeletion = clone $this->collClassNewss;
+                $this->classNewssScheduledForDeletion->clear();
+            }
+            $this->classNewssScheduledForDeletion[]= clone $classNews;
+            $classNews->setSchoolClass(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this SchoolClass is new, it will return
+     * an empty collection; or if this SchoolClass has previously
+     * been saved, it will retrieve related ClassNewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in SchoolClass.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|ClassNews[] List of ClassNews objects
+     */
+    public function getClassNewssJoinNews($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ClassNewsQuery::create(null, $criteria);
+        $query->joinWith('News', $join_behavior);
+
+        return $this->getClassNewss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this SchoolClass is new, it will return
+     * an empty collection; or if this SchoolClass has previously
+     * been saved, it will retrieve related ClassNewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in SchoolClass.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|ClassNews[] List of ClassNews objects
+     */
+    public function getClassNewssJoinUserRelatedByCreatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ClassNewsQuery::create(null, $criteria);
+        $query->joinWith('UserRelatedByCreatedBy', $join_behavior);
+
+        return $this->getClassNewss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this SchoolClass is new, it will return
+     * an empty collection; or if this SchoolClass has previously
+     * been saved, it will retrieve related ClassNewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in SchoolClass.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|ClassNews[] List of ClassNews objects
+     */
+    public function getClassNewssJoinUserRelatedByUpdatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ClassNewsQuery::create(null, $criteria);
+        $query->joinWith('UserRelatedByUpdatedBy', $join_behavior);
+
+        return $this->getClassNewss($query, $con);
+    }
+
+    /**
      * Clears out the collClassTeachers collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -5234,6 +5588,11 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collClassNewss) {
+                foreach ($this->collClassNewss as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collClassTeachers) {
                 foreach ($this->collClassTeachers as $o) {
                     $o->clearAllReferences($deep);
@@ -5295,6 +5654,10 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $this->collClassDocuments->clearIterator();
         }
         $this->collClassDocuments = null;
+        if ($this->collClassNewss instanceof PropelCollection) {
+            $this->collClassNewss->clearIterator();
+        }
+        $this->collClassNewss = null;
         if ($this->collClassTeachers instanceof PropelCollection) {
             $this->collClassTeachers->clearIterator();
         }

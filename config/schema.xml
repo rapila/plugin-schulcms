@@ -184,6 +184,17 @@
 	</foreign-key>
 </table>
 
+<table name="class_news" phpName="ClassNews">
+	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="school_classes" onDelete="cascade">
+		<reference local="school_class_id" foreign="id" />
+	</foreign-key>
+	<column name="news_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="news" onDelete="cascade">
+		<reference local="news_id" foreign="id" />
+	</foreign-key>
+</table>
+
 <table name="class_teachers" phpName="ClassTeacher">
 	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="school_classes" onDelete="cascade">

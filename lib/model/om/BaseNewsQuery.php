@@ -48,6 +48,10 @@
  * @method NewsQuery rightJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByUpdatedBy relation
  * @method NewsQuery innerJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByUpdatedBy relation
  *
+ * @method NewsQuery leftJoinClassNews($relationAlias = null) Adds a LEFT JOIN clause to the query using the ClassNews relation
+ * @method NewsQuery rightJoinClassNews($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ClassNews relation
+ * @method NewsQuery innerJoinClassNews($relationAlias = null) Adds a INNER JOIN clause to the query using the ClassNews relation
+ *
  * @method News findOne(PropelPDO $con = null) Return the first News matching the query
  * @method News findOneOrCreate(PropelPDO $con = null) Return the first News matching the query, or a new News object populated from the query conditions when no match is found
  *
@@ -927,6 +931,80 @@ abstract class BaseNewsQuery extends ModelCriteria
         return $this
             ->joinUserRelatedByUpdatedBy($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByUpdatedBy', 'UserQuery');
+    }
+
+    /**
+     * Filter the query by a related ClassNews object
+     *
+     * @param   ClassNews|PropelObjectCollection $classNews  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 NewsQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByClassNews($classNews, $comparison = null)
+    {
+        if ($classNews instanceof ClassNews) {
+            return $this
+                ->addUsingAlias(NewsPeer::ID, $classNews->getNewsId(), $comparison);
+        } elseif ($classNews instanceof PropelObjectCollection) {
+            return $this
+                ->useClassNewsQuery()
+                ->filterByPrimaryKeys($classNews->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByClassNews() only accepts arguments of type ClassNews or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ClassNews relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return NewsQuery The current query, for fluid interface
+     */
+    public function joinClassNews($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ClassNews');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ClassNews');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ClassNews relation ClassNews object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ClassNewsQuery A secondary query class using the current class as primary query
+     */
+    public function useClassNewsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinClassNews($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ClassNews', 'ClassNewsQuery');
     }
 
     /**

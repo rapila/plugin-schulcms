@@ -2,80 +2,62 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'news' table.
+ * Base static class for performing query and update operations on the 'class_news' table.
  *
  *
  *
  * @package propel.generator.model.om
  */
-abstract class BaseNewsPeer
+abstract class BaseClassNewsPeer
 {
 
     /** the default database name for this class */
     const DATABASE_NAME = 'rapila';
 
     /** the table name for this class */
-    const TABLE_NAME = 'news';
+    const TABLE_NAME = 'class_news';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'News';
+    const OM_CLASS = 'ClassNews';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'NewsTableMap';
+    const TM_CLASS = 'ClassNewsTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 6;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 12;
+    const NUM_HYDRATE_COLUMNS = 6;
 
-    /** the column name for the id field */
-    const ID = 'news.id';
+    /** the column name for the school_class_id field */
+    const SCHOOL_CLASS_ID = 'class_news.school_class_id';
 
-    /** the column name for the news_type_id field */
-    const NEWS_TYPE_ID = 'news.news_type_id';
-
-    /** the column name for the headline field */
-    const HEADLINE = 'news.headline';
-
-    /** the column name for the body field */
-    const BODY = 'news.body';
-
-    /** the column name for the body_short field */
-    const BODY_SHORT = 'news.body_short';
-
-    /** the column name for the date_start field */
-    const DATE_START = 'news.date_start';
-
-    /** the column name for the date_end field */
-    const DATE_END = 'news.date_end';
-
-    /** the column name for the is_inactive field */
-    const IS_INACTIVE = 'news.is_inactive';
+    /** the column name for the news_id field */
+    const NEWS_ID = 'class_news.news_id';
 
     /** the column name for the created_at field */
-    const CREATED_AT = 'news.created_at';
+    const CREATED_AT = 'class_news.created_at';
 
     /** the column name for the updated_at field */
-    const UPDATED_AT = 'news.updated_at';
+    const UPDATED_AT = 'class_news.updated_at';
 
     /** the column name for the created_by field */
-    const CREATED_BY = 'news.created_by';
+    const CREATED_BY = 'class_news.created_by';
 
     /** the column name for the updated_by field */
-    const UPDATED_BY = 'news.updated_by';
+    const UPDATED_BY = 'class_news.updated_by';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identity map to hold any loaded instances of News objects.
+     * An identity map to hold any loaded instances of ClassNews objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
-     * @var        array News[]
+     * @var        array ClassNews[]
      */
     public static $instances = array();
 
@@ -86,30 +68,30 @@ abstract class BaseNewsPeer
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
-     * e.g. NewsPeer::$fieldNames[NewsPeer::TYPE_PHPNAME][0] = 'Id'
+     * e.g. ClassNewsPeer::$fieldNames[ClassNewsPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'NewsTypeId', 'Headline', 'Body', 'BodyShort', 'DateStart', 'DateEnd', 'IsInactive', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'newsTypeId', 'headline', 'body', 'bodyShort', 'dateStart', 'dateEnd', 'isInactive', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-        BasePeer::TYPE_COLNAME => array (NewsPeer::ID, NewsPeer::NEWS_TYPE_ID, NewsPeer::HEADLINE, NewsPeer::BODY, NewsPeer::BODY_SHORT, NewsPeer::DATE_START, NewsPeer::DATE_END, NewsPeer::IS_INACTIVE, NewsPeer::CREATED_AT, NewsPeer::UPDATED_AT, NewsPeer::CREATED_BY, NewsPeer::UPDATED_BY, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NEWS_TYPE_ID', 'HEADLINE', 'BODY', 'BODY_SHORT', 'DATE_START', 'DATE_END', 'IS_INACTIVE', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'news_type_id', 'headline', 'body', 'body_short', 'date_start', 'date_end', 'is_inactive', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        BasePeer::TYPE_PHPNAME => array ('SchoolClassId', 'NewsId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId', 'newsId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+        BasePeer::TYPE_COLNAME => array (ClassNewsPeer::SCHOOL_CLASS_ID, ClassNewsPeer::NEWS_ID, ClassNewsPeer::CREATED_AT, ClassNewsPeer::UPDATED_AT, ClassNewsPeer::CREATED_BY, ClassNewsPeer::UPDATED_BY, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID', 'NEWS_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+        BasePeer::TYPE_FIELDNAME => array ('school_class_id', 'news_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
-     * e.g. NewsPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
+     * e.g. ClassNewsPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'NewsTypeId' => 1, 'Headline' => 2, 'Body' => 3, 'BodyShort' => 4, 'DateStart' => 5, 'DateEnd' => 6, 'IsInactive' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, 'CreatedBy' => 10, 'UpdatedBy' => 11, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'newsTypeId' => 1, 'headline' => 2, 'body' => 3, 'bodyShort' => 4, 'dateStart' => 5, 'dateEnd' => 6, 'isInactive' => 7, 'createdAt' => 8, 'updatedAt' => 9, 'createdBy' => 10, 'updatedBy' => 11, ),
-        BasePeer::TYPE_COLNAME => array (NewsPeer::ID => 0, NewsPeer::NEWS_TYPE_ID => 1, NewsPeer::HEADLINE => 2, NewsPeer::BODY => 3, NewsPeer::BODY_SHORT => 4, NewsPeer::DATE_START => 5, NewsPeer::DATE_END => 6, NewsPeer::IS_INACTIVE => 7, NewsPeer::CREATED_AT => 8, NewsPeer::UPDATED_AT => 9, NewsPeer::CREATED_BY => 10, NewsPeer::UPDATED_BY => 11, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NEWS_TYPE_ID' => 1, 'HEADLINE' => 2, 'BODY' => 3, 'BODY_SHORT' => 4, 'DATE_START' => 5, 'DATE_END' => 6, 'IS_INACTIVE' => 7, 'CREATED_AT' => 8, 'UPDATED_AT' => 9, 'CREATED_BY' => 10, 'UPDATED_BY' => 11, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'news_type_id' => 1, 'headline' => 2, 'body' => 3, 'body_short' => 4, 'date_start' => 5, 'date_end' => 6, 'is_inactive' => 7, 'created_at' => 8, 'updated_at' => 9, 'created_by' => 10, 'updated_by' => 11, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        BasePeer::TYPE_PHPNAME => array ('SchoolClassId' => 0, 'NewsId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, 'CreatedBy' => 4, 'UpdatedBy' => 5, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('schoolClassId' => 0, 'newsId' => 1, 'createdAt' => 2, 'updatedAt' => 3, 'createdBy' => 4, 'updatedBy' => 5, ),
+        BasePeer::TYPE_COLNAME => array (ClassNewsPeer::SCHOOL_CLASS_ID => 0, ClassNewsPeer::NEWS_ID => 1, ClassNewsPeer::CREATED_AT => 2, ClassNewsPeer::UPDATED_AT => 3, ClassNewsPeer::CREATED_BY => 4, ClassNewsPeer::UPDATED_BY => 5, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('SCHOOL_CLASS_ID' => 0, 'NEWS_ID' => 1, 'CREATED_AT' => 2, 'UPDATED_AT' => 3, 'CREATED_BY' => 4, 'UPDATED_BY' => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('school_class_id' => 0, 'news_id' => 1, 'created_at' => 2, 'updated_at' => 3, 'created_by' => 4, 'updated_by' => 5, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -124,10 +106,10 @@ abstract class BaseNewsPeer
      */
     public static function translateFieldName($name, $fromType, $toType)
     {
-        $toNames = NewsPeer::getFieldNames($toType);
-        $key = isset(NewsPeer::$fieldKeys[$fromType][$name]) ? NewsPeer::$fieldKeys[$fromType][$name] : null;
+        $toNames = ClassNewsPeer::getFieldNames($toType);
+        $key = isset(ClassNewsPeer::$fieldKeys[$fromType][$name]) ? ClassNewsPeer::$fieldKeys[$fromType][$name] : null;
         if ($key === null) {
-            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(NewsPeer::$fieldKeys[$fromType], true));
+            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(ClassNewsPeer::$fieldKeys[$fromType], true));
         }
 
         return $toNames[$key];
@@ -144,11 +126,11 @@ abstract class BaseNewsPeer
      */
     public static function getFieldNames($type = BasePeer::TYPE_PHPNAME)
     {
-        if (!array_key_exists($type, NewsPeer::$fieldNames)) {
+        if (!array_key_exists($type, ClassNewsPeer::$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter $type to be one of the class constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME, BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. ' . $type . ' was given.');
         }
 
-        return NewsPeer::$fieldNames[$type];
+        return ClassNewsPeer::$fieldNames[$type];
     }
 
     /**
@@ -160,12 +142,12 @@ abstract class BaseNewsPeer
      *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
      * </code>
      * @param      string $alias The alias for the current table.
-     * @param      string $column The column name for current table. (i.e. NewsPeer::COLUMN_NAME).
+     * @param      string $column The column name for current table. (i.e. ClassNewsPeer::COLUMN_NAME).
      * @return string
      */
     public static function alias($alias, $column)
     {
-        return str_replace(NewsPeer::TABLE_NAME.'.', $alias.'.', $column);
+        return str_replace(ClassNewsPeer::TABLE_NAME.'.', $alias.'.', $column);
     }
 
     /**
@@ -183,27 +165,15 @@ abstract class BaseNewsPeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(NewsPeer::ID);
-            $criteria->addSelectColumn(NewsPeer::NEWS_TYPE_ID);
-            $criteria->addSelectColumn(NewsPeer::HEADLINE);
-            $criteria->addSelectColumn(NewsPeer::BODY);
-            $criteria->addSelectColumn(NewsPeer::BODY_SHORT);
-            $criteria->addSelectColumn(NewsPeer::DATE_START);
-            $criteria->addSelectColumn(NewsPeer::DATE_END);
-            $criteria->addSelectColumn(NewsPeer::IS_INACTIVE);
-            $criteria->addSelectColumn(NewsPeer::CREATED_AT);
-            $criteria->addSelectColumn(NewsPeer::UPDATED_AT);
-            $criteria->addSelectColumn(NewsPeer::CREATED_BY);
-            $criteria->addSelectColumn(NewsPeer::UPDATED_BY);
+            $criteria->addSelectColumn(ClassNewsPeer::SCHOOL_CLASS_ID);
+            $criteria->addSelectColumn(ClassNewsPeer::NEWS_ID);
+            $criteria->addSelectColumn(ClassNewsPeer::CREATED_AT);
+            $criteria->addSelectColumn(ClassNewsPeer::UPDATED_AT);
+            $criteria->addSelectColumn(ClassNewsPeer::CREATED_BY);
+            $criteria->addSelectColumn(ClassNewsPeer::UPDATED_BY);
         } else {
-            $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.news_type_id');
-            $criteria->addSelectColumn($alias . '.headline');
-            $criteria->addSelectColumn($alias . '.body');
-            $criteria->addSelectColumn($alias . '.body_short');
-            $criteria->addSelectColumn($alias . '.date_start');
-            $criteria->addSelectColumn($alias . '.date_end');
-            $criteria->addSelectColumn($alias . '.is_inactive');
+            $criteria->addSelectColumn($alias . '.school_class_id');
+            $criteria->addSelectColumn($alias . '.news_id');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
             $criteria->addSelectColumn($alias . '.created_by');
@@ -227,21 +197,21 @@ abstract class BaseNewsPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NewsPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassNewsPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NewsPeer::addSelectColumns($criteria);
+            ClassNewsPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-        $criteria->setDbName(NewsPeer::DATABASE_NAME); // Set the correct dbName
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME); // Set the correct dbName
 
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
         // BasePeer returns a PDOStatement
         $stmt = BasePeer::doCount($criteria, $con);
@@ -260,7 +230,7 @@ abstract class BaseNewsPeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return News
+     * @return ClassNews
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -268,7 +238,7 @@ abstract class BaseNewsPeer
     {
         $critcopy = clone $criteria;
         $critcopy->setLimit(1);
-        $objects = NewsPeer::doSelect($critcopy, $con);
+        $objects = ClassNewsPeer::doSelect($critcopy, $con);
         if ($objects) {
             return $objects[0];
         }
@@ -286,7 +256,7 @@ abstract class BaseNewsPeer
      */
     public static function doSelect(Criteria $criteria, PropelPDO $con = null)
     {
-        return NewsPeer::populateObjects(NewsPeer::doSelectStmt($criteria, $con));
+        return ClassNewsPeer::populateObjects(ClassNewsPeer::doSelectStmt($criteria, $con));
     }
     /**
      * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -304,16 +274,16 @@ abstract class BaseNewsPeer
     public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         if (!$criteria->hasSelectClause()) {
             $criteria = clone $criteria;
-            NewsPeer::addSelectColumns($criteria);
+            ClassNewsPeer::addSelectColumns($criteria);
         }
 
         // Set the correct dbName
-        $criteria->setDbName(NewsPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
 
         // BasePeer returns a PDOStatement
         return BasePeer::doSelect($criteria, $con);
@@ -327,16 +297,16 @@ abstract class BaseNewsPeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param News $obj A News object.
+     * @param ClassNews $obj A ClassNews object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getId();
+                $key = serialize(array((string) $obj->getSchoolClassId(), (string) $obj->getNewsId()));
             } // if key === null
-            NewsPeer::$instances[$key] = $obj;
+            ClassNewsPeer::$instances[$key] = $obj;
         }
     }
 
@@ -348,7 +318,7 @@ abstract class BaseNewsPeer
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param      mixed $value A News object or a primary key value.
+     * @param      mixed $value A ClassNews object or a primary key value.
      *
      * @return void
      * @throws PropelException - if the value is invalid.
@@ -356,17 +326,17 @@ abstract class BaseNewsPeer
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
-            if (is_object($value) && $value instanceof News) {
-                $key = (string) $value->getId();
-            } elseif (is_scalar($value)) {
+            if (is_object($value) && $value instanceof ClassNews) {
+                $key = serialize(array((string) $value->getSchoolClassId(), (string) $value->getNewsId()));
+            } elseif (is_array($value) && count($value) === 2) {
                 // assume we've been passed a primary key
-                $key = (string) $value;
+                $key = serialize(array((string) $value[0], (string) $value[1]));
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or News object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or ClassNews object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
                 throw $e;
             }
 
-            unset(NewsPeer::$instances[$key]);
+            unset(ClassNewsPeer::$instances[$key]);
         }
     } // removeInstanceFromPool()
 
@@ -377,14 +347,14 @@ abstract class BaseNewsPeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return News Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return ClassNews Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
     {
         if (Propel::isInstancePoolingEnabled()) {
-            if (isset(NewsPeer::$instances[$key])) {
-                return NewsPeer::$instances[$key];
+            if (isset(ClassNewsPeer::$instances[$key])) {
+                return ClassNewsPeer::$instances[$key];
             }
         }
 
@@ -399,22 +369,19 @@ abstract class BaseNewsPeer
     public static function clearInstancePool($and_clear_all_references = false)
     {
       if ($and_clear_all_references) {
-        foreach (NewsPeer::$instances as $instance) {
+        foreach (ClassNewsPeer::$instances as $instance) {
           $instance->clearAllReferences(true);
         }
       }
-        NewsPeer::$instances = array();
+        ClassNewsPeer::$instances = array();
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to news
+     * Method to invalidate the instance pool of all tables related to class_news
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
     {
-        // Invalidate objects in ClassNewsPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ClassNewsPeer::clearInstancePool();
     }
 
     /**
@@ -430,11 +397,11 @@ abstract class BaseNewsPeer
     public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
     {
         // If the PK cannot be derived from the row, return null.
-        if ($row[$startcol] === null) {
+        if ($row[$startcol] === null && $row[$startcol + 1] === null) {
             return null;
         }
 
-        return (string) $row[$startcol];
+        return serialize(array((string) $row[$startcol], (string) $row[$startcol + 1]));
     }
 
     /**
@@ -449,7 +416,7 @@ abstract class BaseNewsPeer
     public static function getPrimaryKeyFromRow($row, $startcol = 0)
     {
 
-        return (int) $row[$startcol];
+        return array((int) $row[$startcol], (int) $row[$startcol + 1]);
     }
 
     /**
@@ -464,11 +431,11 @@ abstract class BaseNewsPeer
         $results = array();
 
         // set the class once to avoid overhead in the loop
-        $cls = NewsPeer::getOMClass();
+        $cls = ClassNewsPeer::getOMClass();
         // populate the object(s)
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key = NewsPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj = NewsPeer::getInstanceFromPool($key))) {
+            $key = ClassNewsPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj = ClassNewsPeer::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
@@ -477,7 +444,7 @@ abstract class BaseNewsPeer
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                NewsPeer::addInstanceToPool($obj, $key);
+                ClassNewsPeer::addInstanceToPool($obj, $key);
             } // if key exists
         }
         $stmt->closeCursor();
@@ -491,21 +458,21 @@ abstract class BaseNewsPeer
      * @param      int $startcol The 0-based offset for reading from the resultset row.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
-     * @return array (News object, last column rank)
+     * @return array (ClassNews object, last column rank)
      */
     public static function populateObject($row, $startcol = 0)
     {
-        $key = NewsPeer::getPrimaryKeyHashFromRow($row, $startcol);
-        if (null !== ($obj = NewsPeer::getInstanceFromPool($key))) {
+        $key = ClassNewsPeer::getPrimaryKeyHashFromRow($row, $startcol);
+        if (null !== ($obj = ClassNewsPeer::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $startcol, true); // rehydrate
-            $col = $startcol + NewsPeer::NUM_HYDRATE_COLUMNS;
+            $col = $startcol + ClassNewsPeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = NewsPeer::OM_CLASS;
+            $cls = ClassNewsPeer::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
-            NewsPeer::addInstanceToPool($obj, $key);
+            ClassNewsPeer::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -513,7 +480,7 @@ abstract class BaseNewsPeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related NewsType table
+     * Returns the number of rows matching criteria, joining the related SchoolClass table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -521,7 +488,7 @@ abstract class BaseNewsPeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinNewsType(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinSchoolClass(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -529,26 +496,77 @@ abstract class BaseNewsPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NewsPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassNewsPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NewsPeer::addSelectColumns($criteria);
+            ClassNewsPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(NewsPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(NewsPeer::NEWS_TYPE_ID, NewsTypePeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related News table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinNews(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(ClassNewsPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            ClassNewsPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(ClassNewsPeer::NEWS_ID, NewsPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -580,26 +598,26 @@ abstract class BaseNewsPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NewsPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassNewsPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NewsPeer::addSelectColumns($criteria);
+            ClassNewsPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(NewsPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(NewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -631,26 +649,26 @@ abstract class BaseNewsPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NewsPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassNewsPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NewsPeer::addSelectColumns($criteria);
+            ClassNewsPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(NewsPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(NewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -666,61 +684,61 @@ abstract class BaseNewsPeer
 
 
     /**
-     * Selects a collection of News objects pre-filled with their NewsType objects.
+     * Selects a collection of ClassNews objects pre-filled with their SchoolClass objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of News objects.
+     * @return array           Array of ClassNews objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinNewsType(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinSchoolClass(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(NewsPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
         }
 
-        NewsPeer::addSelectColumns($criteria);
-        $startcol = NewsPeer::NUM_HYDRATE_COLUMNS;
-        NewsTypePeer::addSelectColumns($criteria);
+        ClassNewsPeer::addSelectColumns($criteria);
+        $startcol = ClassNewsPeer::NUM_HYDRATE_COLUMNS;
+        SchoolClassPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(NewsPeer::NEWS_TYPE_ID, NewsTypePeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = NewsPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = NewsPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassNewsPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassNewsPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = NewsPeer::getOMClass();
+                $cls = ClassNewsPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                NewsPeer::addInstanceToPool($obj1, $key1);
+                ClassNewsPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
-            $key2 = NewsTypePeer::getPrimaryKeyHashFromRow($row, $startcol);
+            $key2 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol);
             if ($key2 !== null) {
-                $obj2 = NewsTypePeer::getInstanceFromPool($key2);
+                $obj2 = SchoolClassPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = NewsTypePeer::getOMClass();
+                    $cls = SchoolClassPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol);
-                    NewsTypePeer::addInstanceToPool($obj2, $key2);
+                    SchoolClassPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (News) to $obj2 (NewsType)
-                $obj2->addNews($obj1);
+                // Add the $obj1 (ClassNews) to $obj2 (SchoolClass)
+                $obj2->addClassNews($obj1);
 
             } // if joined row was not null
 
@@ -733,11 +751,78 @@ abstract class BaseNewsPeer
 
 
     /**
-     * Selects a collection of News objects pre-filled with their User objects.
+     * Selects a collection of ClassNews objects pre-filled with their News objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of News objects.
+     * @return array           Array of ClassNews objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinNews(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
+        }
+
+        ClassNewsPeer::addSelectColumns($criteria);
+        $startcol = ClassNewsPeer::NUM_HYDRATE_COLUMNS;
+        NewsPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(ClassNewsPeer::NEWS_ID, NewsPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = ClassNewsPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassNewsPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = ClassNewsPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                ClassNewsPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = NewsPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = NewsPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = NewsPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    NewsPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (ClassNews) to $obj2 (News)
+                $obj2->addClassNews($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of ClassNews objects pre-filled with their User objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of ClassNews objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -747,31 +832,31 @@ abstract class BaseNewsPeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(NewsPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
         }
 
-        NewsPeer::addSelectColumns($criteria);
-        $startcol = NewsPeer::NUM_HYDRATE_COLUMNS;
+        ClassNewsPeer::addSelectColumns($criteria);
+        $startcol = ClassNewsPeer::NUM_HYDRATE_COLUMNS;
         UserPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(NewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = NewsPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = NewsPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassNewsPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassNewsPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = NewsPeer::getOMClass();
+                $cls = ClassNewsPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                NewsPeer::addInstanceToPool($obj1, $key1);
+                ClassNewsPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
             $key2 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -786,8 +871,8 @@ abstract class BaseNewsPeer
                     UserPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (News) to $obj2 (User)
-                $obj2->addNewsRelatedByCreatedBy($obj1);
+                // Add the $obj1 (ClassNews) to $obj2 (User)
+                $obj2->addClassNewsRelatedByCreatedBy($obj1);
 
             } // if joined row was not null
 
@@ -800,11 +885,11 @@ abstract class BaseNewsPeer
 
 
     /**
-     * Selects a collection of News objects pre-filled with their User objects.
+     * Selects a collection of ClassNews objects pre-filled with their User objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of News objects.
+     * @return array           Array of ClassNews objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -814,31 +899,31 @@ abstract class BaseNewsPeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(NewsPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
         }
 
-        NewsPeer::addSelectColumns($criteria);
-        $startcol = NewsPeer::NUM_HYDRATE_COLUMNS;
+        ClassNewsPeer::addSelectColumns($criteria);
+        $startcol = ClassNewsPeer::NUM_HYDRATE_COLUMNS;
         UserPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(NewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = NewsPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = NewsPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassNewsPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassNewsPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = NewsPeer::getOMClass();
+                $cls = ClassNewsPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                NewsPeer::addInstanceToPool($obj1, $key1);
+                ClassNewsPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
             $key2 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -853,8 +938,8 @@ abstract class BaseNewsPeer
                     UserPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (News) to $obj2 (User)
-                $obj2->addNewsRelatedByUpdatedBy($obj1);
+                // Add the $obj1 (ClassNews) to $obj2 (User)
+                $obj2->addClassNewsRelatedByUpdatedBy($obj1);
 
             } // if joined row was not null
 
@@ -883,30 +968,32 @@ abstract class BaseNewsPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NewsPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassNewsPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NewsPeer::addSelectColumns($criteria);
+            ClassNewsPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(NewsPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(NewsPeer::NEWS_TYPE_ID, NewsTypePeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
-        $criteria->addJoin(NewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::NEWS_ID, NewsPeer::ID, $join_behavior);
 
-        $criteria->addJoin(NewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+
+        $criteria->addJoin(ClassNewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -921,12 +1008,12 @@ abstract class BaseNewsPeer
     }
 
     /**
-     * Selects a collection of News objects pre-filled with all related objects.
+     * Selects a collection of ClassNews objects pre-filled with all related objects.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of News objects.
+     * @return array           Array of ClassNews objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -936,78 +1023,83 @@ abstract class BaseNewsPeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(NewsPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
         }
 
+        ClassNewsPeer::addSelectColumns($criteria);
+        $startcol2 = ClassNewsPeer::NUM_HYDRATE_COLUMNS;
+
+        SchoolClassPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
+
         NewsPeer::addSelectColumns($criteria);
-        $startcol2 = NewsPeer::NUM_HYDRATE_COLUMNS;
-
-        NewsTypePeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + NewsTypePeer::NUM_HYDRATE_COLUMNS;
-
-        UserPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + UserPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + NewsPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(NewsPeer::NEWS_TYPE_ID, NewsTypePeer::ID, $join_behavior);
+        UserPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(NewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
-        $criteria->addJoin(NewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::NEWS_ID, NewsPeer::ID, $join_behavior);
+
+        $criteria->addJoin(ClassNewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+
+        $criteria->addJoin(ClassNewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = NewsPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = NewsPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassNewsPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassNewsPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = NewsPeer::getOMClass();
+                $cls = ClassNewsPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                NewsPeer::addInstanceToPool($obj1, $key1);
+                ClassNewsPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-            // Add objects for joined NewsType rows
+            // Add objects for joined SchoolClass rows
 
-            $key2 = NewsTypePeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            $key2 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol2);
             if ($key2 !== null) {
-                $obj2 = NewsTypePeer::getInstanceFromPool($key2);
+                $obj2 = SchoolClassPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = NewsTypePeer::getOMClass();
+                    $cls = SchoolClassPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    NewsTypePeer::addInstanceToPool($obj2, $key2);
+                    SchoolClassPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 loaded
 
-                // Add the $obj1 (News) to the collection in $obj2 (NewsType)
-                $obj2->addNews($obj1);
+                // Add the $obj1 (ClassNews) to the collection in $obj2 (SchoolClass)
+                $obj2->addClassNews($obj1);
             } // if joined row not null
 
-            // Add objects for joined User rows
+            // Add objects for joined News rows
 
-            $key3 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            $key3 = NewsPeer::getPrimaryKeyHashFromRow($row, $startcol3);
             if ($key3 !== null) {
-                $obj3 = UserPeer::getInstanceFromPool($key3);
+                $obj3 = NewsPeer::getInstanceFromPool($key3);
                 if (!$obj3) {
 
-                    $cls = UserPeer::getOMClass();
+                    $cls = NewsPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    UserPeer::addInstanceToPool($obj3, $key3);
+                    NewsPeer::addInstanceToPool($obj3, $key3);
                 } // if obj3 loaded
 
-                // Add the $obj1 (News) to the collection in $obj3 (User)
-                $obj3->addNewsRelatedByCreatedBy($obj1);
+                // Add the $obj1 (ClassNews) to the collection in $obj3 (News)
+                $obj3->addClassNews($obj1);
             } // if joined row not null
 
             // Add objects for joined User rows
@@ -1024,8 +1116,26 @@ abstract class BaseNewsPeer
                     UserPeer::addInstanceToPool($obj4, $key4);
                 } // if obj4 loaded
 
-                // Add the $obj1 (News) to the collection in $obj4 (User)
-                $obj4->addNewsRelatedByUpdatedBy($obj1);
+                // Add the $obj1 (ClassNews) to the collection in $obj4 (User)
+                $obj4->addClassNewsRelatedByCreatedBy($obj1);
+            } // if joined row not null
+
+            // Add objects for joined User rows
+
+            $key5 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+            if ($key5 !== null) {
+                $obj5 = UserPeer::getInstanceFromPool($key5);
+                if (!$obj5) {
+
+                    $cls = UserPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    UserPeer::addInstanceToPool($obj5, $key5);
+                } // if obj5 loaded
+
+                // Add the $obj1 (ClassNews) to the collection in $obj5 (User)
+                $obj5->addClassNewsRelatedByUpdatedBy($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -1037,7 +1147,7 @@ abstract class BaseNewsPeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related NewsType table
+     * Returns the number of rows matching criteria, joining the related SchoolClass table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1045,7 +1155,7 @@ abstract class BaseNewsPeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinAllExceptNewsType(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinAllExceptSchoolClass(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -1053,28 +1163,85 @@ abstract class BaseNewsPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NewsPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassNewsPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NewsPeer::addSelectColumns($criteria);
+            ClassNewsPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(NewsPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(NewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::NEWS_ID, NewsPeer::ID, $join_behavior);
 
-        $criteria->addJoin(NewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+
+        $criteria->addJoin(ClassNewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related News table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptNews(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(ClassNewsPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            ClassNewsPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(ClassNewsPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+
+        $criteria->addJoin(ClassNewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+
+        $criteria->addJoin(ClassNewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1106,26 +1273,28 @@ abstract class BaseNewsPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NewsPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassNewsPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NewsPeer::addSelectColumns($criteria);
+            ClassNewsPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(NewsPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(NewsPeer::NEWS_TYPE_ID, NewsTypePeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+
+        $criteria->addJoin(ClassNewsPeer::NEWS_ID, NewsPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1157,26 +1326,28 @@ abstract class BaseNewsPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NewsPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ClassNewsPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NewsPeer::addSelectColumns($criteria);
+            ClassNewsPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(NewsPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(NewsPeer::NEWS_TYPE_ID, NewsTypePeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+
+        $criteria->addJoin(ClassNewsPeer::NEWS_ID, NewsPeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1192,16 +1363,16 @@ abstract class BaseNewsPeer
 
 
     /**
-     * Selects a collection of News objects pre-filled with all related objects except NewsType.
+     * Selects a collection of ClassNews objects pre-filled with all related objects except SchoolClass.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of News objects.
+     * @return array           Array of ClassNews objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptNewsType(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptSchoolClass(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -1209,56 +1380,61 @@ abstract class BaseNewsPeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(NewsPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
         }
 
-        NewsPeer::addSelectColumns($criteria);
-        $startcol2 = NewsPeer::NUM_HYDRATE_COLUMNS;
+        ClassNewsPeer::addSelectColumns($criteria);
+        $startcol2 = ClassNewsPeer::NUM_HYDRATE_COLUMNS;
 
-        UserPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + UserPeer::NUM_HYDRATE_COLUMNS;
+        NewsPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + NewsPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(NewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+        UserPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(NewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::NEWS_ID, NewsPeer::ID, $join_behavior);
+
+        $criteria->addJoin(ClassNewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+
+        $criteria->addJoin(ClassNewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = NewsPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = NewsPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassNewsPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassNewsPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = NewsPeer::getOMClass();
+                $cls = ClassNewsPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                NewsPeer::addInstanceToPool($obj1, $key1);
+                ClassNewsPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-                // Add objects for joined User rows
+                // Add objects for joined News rows
 
-                $key2 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                $key2 = NewsPeer::getPrimaryKeyHashFromRow($row, $startcol2);
                 if ($key2 !== null) {
-                    $obj2 = UserPeer::getInstanceFromPool($key2);
+                    $obj2 = NewsPeer::getInstanceFromPool($key2);
                     if (!$obj2) {
 
-                        $cls = UserPeer::getOMClass();
+                        $cls = NewsPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    UserPeer::addInstanceToPool($obj2, $key2);
+                    NewsPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (News) to the collection in $obj2 (User)
-                $obj2->addNewsRelatedByCreatedBy($obj1);
+                // Add the $obj1 (ClassNews) to the collection in $obj2 (News)
+                $obj2->addClassNews($obj1);
 
             } // if joined row is not null
 
@@ -1276,8 +1452,27 @@ abstract class BaseNewsPeer
                     UserPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (News) to the collection in $obj3 (User)
-                $obj3->addNewsRelatedByUpdatedBy($obj1);
+                // Add the $obj1 (ClassNews) to the collection in $obj3 (User)
+                $obj3->addClassNewsRelatedByCreatedBy($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined User rows
+
+                $key4 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = UserPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = UserPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    UserPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (ClassNews) to the collection in $obj4 (User)
+                $obj4->addClassNewsRelatedByUpdatedBy($obj1);
 
             } // if joined row is not null
 
@@ -1290,12 +1485,134 @@ abstract class BaseNewsPeer
 
 
     /**
-     * Selects a collection of News objects pre-filled with all related objects except UserRelatedByCreatedBy.
+     * Selects a collection of ClassNews objects pre-filled with all related objects except News.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of News objects.
+     * @return array           Array of ClassNews objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptNews(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
+        }
+
+        ClassNewsPeer::addSelectColumns($criteria);
+        $startcol2 = ClassNewsPeer::NUM_HYDRATE_COLUMNS;
+
+        SchoolClassPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + UserPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(ClassNewsPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
+
+        $criteria->addJoin(ClassNewsPeer::CREATED_BY, UserPeer::ID, $join_behavior);
+
+        $criteria->addJoin(ClassNewsPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = ClassNewsPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassNewsPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = ClassNewsPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                ClassNewsPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined SchoolClass rows
+
+                $key2 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = SchoolClassPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = SchoolClassPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    SchoolClassPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (ClassNews) to the collection in $obj2 (SchoolClass)
+                $obj2->addClassNews($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined User rows
+
+                $key3 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = UserPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = UserPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    UserPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (ClassNews) to the collection in $obj3 (User)
+                $obj3->addClassNewsRelatedByCreatedBy($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined User rows
+
+                $key4 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = UserPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = UserPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    UserPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (ClassNews) to the collection in $obj4 (User)
+                $obj4->addClassNewsRelatedByUpdatedBy($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of ClassNews objects pre-filled with all related objects except UserRelatedByCreatedBy.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of ClassNews objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -1307,51 +1624,75 @@ abstract class BaseNewsPeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(NewsPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
         }
 
+        ClassNewsPeer::addSelectColumns($criteria);
+        $startcol2 = ClassNewsPeer::NUM_HYDRATE_COLUMNS;
+
+        SchoolClassPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
+
         NewsPeer::addSelectColumns($criteria);
-        $startcol2 = NewsPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + NewsPeer::NUM_HYDRATE_COLUMNS;
 
-        NewsTypePeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + NewsTypePeer::NUM_HYDRATE_COLUMNS;
+        $criteria->addJoin(ClassNewsPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
-        $criteria->addJoin(NewsPeer::NEWS_TYPE_ID, NewsTypePeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::NEWS_ID, NewsPeer::ID, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = NewsPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = NewsPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassNewsPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassNewsPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = NewsPeer::getOMClass();
+                $cls = ClassNewsPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                NewsPeer::addInstanceToPool($obj1, $key1);
+                ClassNewsPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-                // Add objects for joined NewsType rows
+                // Add objects for joined SchoolClass rows
 
-                $key2 = NewsTypePeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                $key2 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol2);
                 if ($key2 !== null) {
-                    $obj2 = NewsTypePeer::getInstanceFromPool($key2);
+                    $obj2 = SchoolClassPeer::getInstanceFromPool($key2);
                     if (!$obj2) {
 
-                        $cls = NewsTypePeer::getOMClass();
+                        $cls = SchoolClassPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    NewsTypePeer::addInstanceToPool($obj2, $key2);
+                    SchoolClassPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (News) to the collection in $obj2 (NewsType)
-                $obj2->addNews($obj1);
+                // Add the $obj1 (ClassNews) to the collection in $obj2 (SchoolClass)
+                $obj2->addClassNews($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined News rows
+
+                $key3 = NewsPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = NewsPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = NewsPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    NewsPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (ClassNews) to the collection in $obj3 (News)
+                $obj3->addClassNews($obj1);
 
             } // if joined row is not null
 
@@ -1364,12 +1705,12 @@ abstract class BaseNewsPeer
 
 
     /**
-     * Selects a collection of News objects pre-filled with all related objects except UserRelatedByUpdatedBy.
+     * Selects a collection of ClassNews objects pre-filled with all related objects except UserRelatedByUpdatedBy.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of News objects.
+     * @return array           Array of ClassNews objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -1381,51 +1722,75 @@ abstract class BaseNewsPeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(NewsPeer::DATABASE_NAME);
+            $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
         }
 
+        ClassNewsPeer::addSelectColumns($criteria);
+        $startcol2 = ClassNewsPeer::NUM_HYDRATE_COLUMNS;
+
+        SchoolClassPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
+
         NewsPeer::addSelectColumns($criteria);
-        $startcol2 = NewsPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + NewsPeer::NUM_HYDRATE_COLUMNS;
 
-        NewsTypePeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + NewsTypePeer::NUM_HYDRATE_COLUMNS;
+        $criteria->addJoin(ClassNewsPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
-        $criteria->addJoin(NewsPeer::NEWS_TYPE_ID, NewsTypePeer::ID, $join_behavior);
+        $criteria->addJoin(ClassNewsPeer::NEWS_ID, NewsPeer::ID, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = NewsPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = NewsPeer::getInstanceFromPool($key1))) {
+            $key1 = ClassNewsPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ClassNewsPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = NewsPeer::getOMClass();
+                $cls = ClassNewsPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                NewsPeer::addInstanceToPool($obj1, $key1);
+                ClassNewsPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-                // Add objects for joined NewsType rows
+                // Add objects for joined SchoolClass rows
 
-                $key2 = NewsTypePeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                $key2 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol2);
                 if ($key2 !== null) {
-                    $obj2 = NewsTypePeer::getInstanceFromPool($key2);
+                    $obj2 = SchoolClassPeer::getInstanceFromPool($key2);
                     if (!$obj2) {
 
-                        $cls = NewsTypePeer::getOMClass();
+                        $cls = SchoolClassPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    NewsTypePeer::addInstanceToPool($obj2, $key2);
+                    SchoolClassPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (News) to the collection in $obj2 (NewsType)
-                $obj2->addNews($obj1);
+                // Add the $obj1 (ClassNews) to the collection in $obj2 (SchoolClass)
+                $obj2->addClassNews($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined News rows
+
+                $key3 = NewsPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = NewsPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = NewsPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    NewsPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (ClassNews) to the collection in $obj3 (News)
+                $obj3->addClassNews($obj1);
 
             } // if joined row is not null
 
@@ -1445,7 +1810,7 @@ abstract class BaseNewsPeer
      */
     public static function getTableMap()
     {
-        return Propel::getDatabaseMap(NewsPeer::DATABASE_NAME)->getTable(NewsPeer::TABLE_NAME);
+        return Propel::getDatabaseMap(ClassNewsPeer::DATABASE_NAME)->getTable(ClassNewsPeer::TABLE_NAME);
     }
 
     /**
@@ -1453,9 +1818,9 @@ abstract class BaseNewsPeer
      */
     public static function buildTableMap()
     {
-      $dbMap = Propel::getDatabaseMap(BaseNewsPeer::DATABASE_NAME);
-      if (!$dbMap->hasTable(BaseNewsPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \NewsTableMap());
+      $dbMap = Propel::getDatabaseMap(BaseClassNewsPeer::DATABASE_NAME);
+      if (!$dbMap->hasTable(BaseClassNewsPeer::TABLE_NAME)) {
+        $dbMap->addTableObject(new \ClassNewsTableMap());
       }
     }
 
@@ -1467,13 +1832,13 @@ abstract class BaseNewsPeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
-        return NewsPeer::OM_CLASS;
+        return ClassNewsPeer::OM_CLASS;
     }
 
     /**
-     * Performs an INSERT on the database, given a News or Criteria object.
+     * Performs an INSERT on the database, given a ClassNews or Criteria object.
      *
-     * @param      mixed $values Criteria or News object containing data that is used to create the INSERT statement.
+     * @param      mixed $values Criteria or ClassNews object containing data that is used to create the INSERT statement.
      * @param      PropelPDO $con the PropelPDO connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -1482,22 +1847,18 @@ abstract class BaseNewsPeer
     public static function doInsert($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
         } else {
-            $criteria = $values->buildCriteria(); // build Criteria from News object
-        }
-
-        if ($criteria->containsKey(NewsPeer::ID) && $criteria->keyContainsValue(NewsPeer::ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.NewsPeer::ID.')');
+            $criteria = $values->buildCriteria(); // build Criteria from ClassNews object
         }
 
 
         // Set the correct dbName
-        $criteria->setDbName(NewsPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
 
         try {
             // use transaction because $criteria could contain info
@@ -1514,9 +1875,9 @@ abstract class BaseNewsPeer
     }
 
     /**
-     * Performs an UPDATE on the database, given a News or Criteria object.
+     * Performs an UPDATE on the database, given a ClassNews or Criteria object.
      *
-     * @param      mixed $values Criteria or News object containing data that is used to create the UPDATE statement.
+     * @param      mixed $values Criteria or ClassNews object containing data that is used to create the UPDATE statement.
      * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
      * @return int             The number of affected rows (if supported by underlying database driver).
      * @throws PropelException Any exceptions caught during processing will be
@@ -1525,35 +1886,43 @@ abstract class BaseNewsPeer
     public static function doUpdate($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
-        $selectCriteria = new Criteria(NewsPeer::DATABASE_NAME);
+        $selectCriteria = new Criteria(ClassNewsPeer::DATABASE_NAME);
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(NewsPeer::ID);
-            $value = $criteria->remove(NewsPeer::ID);
+            $comparison = $criteria->getComparison(ClassNewsPeer::SCHOOL_CLASS_ID);
+            $value = $criteria->remove(ClassNewsPeer::SCHOOL_CLASS_ID);
             if ($value) {
-                $selectCriteria->add(NewsPeer::ID, $value, $comparison);
+                $selectCriteria->add(ClassNewsPeer::SCHOOL_CLASS_ID, $value, $comparison);
             } else {
-                $selectCriteria->setPrimaryTableName(NewsPeer::TABLE_NAME);
+                $selectCriteria->setPrimaryTableName(ClassNewsPeer::TABLE_NAME);
             }
 
-        } else { // $values is News object
+            $comparison = $criteria->getComparison(ClassNewsPeer::NEWS_ID);
+            $value = $criteria->remove(ClassNewsPeer::NEWS_ID);
+            if ($value) {
+                $selectCriteria->add(ClassNewsPeer::NEWS_ID, $value, $comparison);
+            } else {
+                $selectCriteria->setPrimaryTableName(ClassNewsPeer::TABLE_NAME);
+            }
+
+        } else { // $values is ClassNews object
             $criteria = $values->buildCriteria(); // gets full criteria
             $selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
         }
 
         // set the correct dbName
-        $criteria->setDbName(NewsPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
 
         return BasePeer::doUpdate($selectCriteria, $criteria, $con);
     }
 
     /**
-     * Deletes all rows from the news table.
+     * Deletes all rows from the class_news table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).
@@ -1562,20 +1931,19 @@ abstract class BaseNewsPeer
     public static function doDeleteAll(PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
         $affectedRows = 0; // initialize var to track total num of affected rows
         try {
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            $affectedRows += NewsPeer::doOnDeleteCascade(new Criteria(NewsPeer::DATABASE_NAME), $con);
-            $affectedRows += BasePeer::doDeleteAll(NewsPeer::TABLE_NAME, $con, NewsPeer::DATABASE_NAME);
+            $affectedRows += BasePeer::doDeleteAll(ClassNewsPeer::TABLE_NAME, $con, ClassNewsPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            NewsPeer::clearInstancePool();
-            NewsPeer::clearRelatedInstancePool();
+            ClassNewsPeer::clearInstancePool();
+            ClassNewsPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -1586,9 +1954,9 @@ abstract class BaseNewsPeer
     }
 
     /**
-     * Performs a DELETE on the database, given a News or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a ClassNews or Criteria object OR a primary key value.
      *
-     * @param      mixed $values Criteria or News object or primary key or array of primary keys
+     * @param      mixed $values Criteria or ClassNews object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param      PropelPDO $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -1599,22 +1967,40 @@ abstract class BaseNewsPeer
      public static function doDelete($values, PropelPDO $con = null)
      {
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
+            // invalidate the cache for all objects of this type, since we have no
+            // way of knowing (without running a query) what objects should be invalidated
+            // from the cache based on this Criteria.
+            ClassNewsPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
-        } elseif ($values instanceof News) { // it's a model object
+        } elseif ($values instanceof ClassNews) { // it's a model object
+            // invalidate the cache for this single object
+            ClassNewsPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(NewsPeer::DATABASE_NAME);
-            $criteria->add(NewsPeer::ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(ClassNewsPeer::DATABASE_NAME);
+            // primary key is composite; we therefore, expect
+            // the primary key passed to be an array of pkey values
+            if (count($values) == count($values, COUNT_RECURSIVE)) {
+                // array is not multi-dimensional
+                $values = array($values);
+            }
+            foreach ($values as $value) {
+                $criterion = $criteria->getNewCriterion(ClassNewsPeer::SCHOOL_CLASS_ID, $value[0]);
+                $criterion->addAnd($criteria->getNewCriterion(ClassNewsPeer::NEWS_ID, $value[1]));
+                $criteria->addOr($criterion);
+                // we can invalidate the cache for this single PK
+                ClassNewsPeer::removeInstanceFromPool($value);
+            }
         }
 
         // Set the correct dbName
-        $criteria->setDbName(NewsPeer::DATABASE_NAME);
+        $criteria->setDbName(ClassNewsPeer::DATABASE_NAME);
 
         $affectedRows = 0; // initialize var to track total num of affected rows
 
@@ -1623,25 +2009,8 @@ abstract class BaseNewsPeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
-            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
-            $c = clone $criteria;
-            $affectedRows += NewsPeer::doOnDeleteCascade($c, $con);
-
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            if ($values instanceof Criteria) {
-                NewsPeer::clearInstancePool();
-            } elseif ($values instanceof News) { // it's a model object
-                NewsPeer::removeInstanceFromPool($values);
-            } else { // it's a primary key, or an array of pks
-                foreach ((array) $values as $singleval) {
-                    NewsPeer::removeInstanceFromPool($singleval);
-                }
-            }
-
             $affectedRows += BasePeer::doDelete($criteria, $con);
-            NewsPeer::clearRelatedInstancePool();
+            ClassNewsPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -1652,46 +2021,13 @@ abstract class BaseNewsPeer
     }
 
     /**
-     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
-     * feature (like MySQL or SQLite).
-     *
-     * This method is not very speedy because it must perform a query first to get
-     * the implicated records and then perform the deletes by calling those Peer classes.
-     *
-     * This method should be used within a transaction if possible.
-     *
-     * @param      Criteria $criteria
-     * @param      PropelPDO $con
-     * @return int The number of affected rows (if supported by underlying database driver).
-     */
-    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
-    {
-        // initialize var to track total num of affected rows
-        $affectedRows = 0;
-
-        // first find the objects that are implicated by the $criteria
-        $objects = NewsPeer::doSelect($criteria, $con);
-        foreach ($objects as $obj) {
-
-
-            // delete related ClassNews objects
-            $criteria = new Criteria(ClassNewsPeer::DATABASE_NAME);
-
-            $criteria->add(ClassNewsPeer::NEWS_ID, $obj->getId());
-            $affectedRows += ClassNewsPeer::doDelete($criteria, $con);
-        }
-
-        return $affectedRows;
-    }
-
-    /**
-     * Validates all modified columns of given News object.
+     * Validates all modified columns of given ClassNews object.
      * If parameter $columns is either a single column name or an array of column names
      * than only those columns are validated.
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param News $obj The object to validate.
+     * @param ClassNews $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -1701,8 +2037,8 @@ abstract class BaseNewsPeer
         $columns = array();
 
         if ($cols) {
-            $dbMap = Propel::getDatabaseMap(NewsPeer::DATABASE_NAME);
-            $tableMap = $dbMap->getTable(NewsPeer::TABLE_NAME);
+            $dbMap = Propel::getDatabaseMap(ClassNewsPeer::DATABASE_NAME);
+            $tableMap = $dbMap->getTable(ClassNewsPeer::TABLE_NAME);
 
             if (! is_array($cols)) {
                 $cols = array($cols);
@@ -1718,62 +2054,32 @@ abstract class BaseNewsPeer
 
         }
 
-        return BasePeer::doValidate(NewsPeer::DATABASE_NAME, NewsPeer::TABLE_NAME, $columns);
+        return BasePeer::doValidate(ClassNewsPeer::DATABASE_NAME, ClassNewsPeer::TABLE_NAME, $columns);
     }
 
     /**
-     * Retrieve a single object by pkey.
-     *
-     * @param int $pk the primary key.
-     * @param      PropelPDO $con the connection to use
-     * @return News
+     * Retrieve object using using composite pkey values.
+     * @param   int $school_class_id
+     * @param   int $news_id
+     * @param      PropelPDO $con
+     * @return ClassNews
      */
-    public static function retrieveByPK($pk, PropelPDO $con = null)
-    {
-
-        if (null !== ($obj = NewsPeer::getInstanceFromPool((string) $pk))) {
-            return $obj;
+    public static function retrieveByPK($school_class_id, $news_id, PropelPDO $con = null) {
+        $_instancePoolKey = serialize(array((string) $school_class_id, (string) $news_id));
+         if (null !== ($obj = ClassNewsPeer::getInstanceFromPool($_instancePoolKey))) {
+             return $obj;
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ClassNewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
+        $criteria = new Criteria(ClassNewsPeer::DATABASE_NAME);
+        $criteria->add(ClassNewsPeer::SCHOOL_CLASS_ID, $school_class_id);
+        $criteria->add(ClassNewsPeer::NEWS_ID, $news_id);
+        $v = ClassNewsPeer::doSelect($criteria, $con);
 
-        $criteria = new Criteria(NewsPeer::DATABASE_NAME);
-        $criteria->add(NewsPeer::ID, $pk);
-
-        $v = NewsPeer::doSelect($criteria, $con);
-
-        return !empty($v) > 0 ? $v[0] : null;
+        return !empty($v) ? $v[0] : null;
     }
-
-    /**
-     * Retrieve multiple objects by pkey.
-     *
-     * @param      array $pks List of primary keys
-     * @param      PropelPDO $con the connection to use
-     * @return News[]
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function retrieveByPKs($pks, PropelPDO $con = null)
-    {
-        if ($con === null) {
-            $con = Propel::getConnection(NewsPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-        }
-
-        $objs = null;
-        if (empty($pks)) {
-            $objs = array();
-        } else {
-            $criteria = new Criteria(NewsPeer::DATABASE_NAME);
-            $criteria->add(NewsPeer::ID, $pks, Criteria::IN);
-            $objs = NewsPeer::doSelect($criteria, $con);
-        }
-
-        return $objs;
-    }
-
     // denyable behavior
     public static function ignoreRights($bIgnore = true) {
         self::$IGNORE_RIGHTS = $bIgnore;
@@ -1788,15 +2094,15 @@ abstract class BaseNewsPeer
         if($oUser->getIsAdmin()) {
             return true;
         }
-        return $oUser->hasRole("news");
+        return $oUser->hasRole("class_news");
     }
     public static function mayOperateOnOwn($oUser, $mObject, $sOperation) {
-        return $oUser->hasRole("news-own");
+        return $oUser->hasRole("class_news-own");
     }
 
-} // BaseNewsPeer
+} // BaseClassNewsPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseNewsPeer::buildTableMap();
+BaseClassNewsPeer::buildTableMap();
 

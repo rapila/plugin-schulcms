@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'news' table.
+ * This class defines the structure of the 'class_news' table.
  *
  *
  *
@@ -14,13 +14,13 @@
  *
  * @package    propel.generator.model.map
  */
-class NewsTableMap extends TableMap
+class ClassNewsTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'model.map.NewsTableMap';
+    const CLASS_NAME = 'model.map.ClassNewsTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -32,20 +32,14 @@ class NewsTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('news');
-        $this->setPhpName('News');
-        $this->setClassname('News');
+        $this->setName('class_news');
+        $this->setPhpName('ClassNews');
+        $this->setClassname('ClassNews');
         $this->setPackage('model');
-        $this->setUseIdGenerator(true);
+        $this->setUseIdGenerator(false);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('news_type_id', 'NewsTypeId', 'TINYINT', 'news_types', 'id', false, null, null);
-        $this->addColumn('headline', 'Headline', 'VARCHAR', true, 80, null);
-        $this->addColumn('body', 'Body', 'BLOB', false, null, null);
-        $this->addColumn('body_short', 'BodyShort', 'BLOB', false, null, null);
-        $this->addColumn('date_start', 'DateStart', 'DATE', true, null, null);
-        $this->addColumn('date_end', 'DateEnd', 'DATE', false, null, null);
-        $this->addColumn('is_inactive', 'IsInactive', 'BOOLEAN', false, 1, false);
+        $this->addForeignPrimaryKey('school_class_id', 'SchoolClassId', 'INTEGER' , 'school_classes', 'id', true, null, null);
+        $this->addForeignPrimaryKey('news_id', 'NewsId', 'INTEGER' , 'news', 'id', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addForeignKey('created_by', 'CreatedBy', 'INTEGER', 'users', 'id', false, null, null);
@@ -58,10 +52,10 @@ class NewsTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('NewsType', 'NewsType', RelationMap::MANY_TO_ONE, array('news_type_id' => 'id', ), 'SET NULL', null);
+        $this->addRelation('SchoolClass', 'SchoolClass', RelationMap::MANY_TO_ONE, array('school_class_id' => 'id', ), 'CASCADE', null);
+        $this->addRelation('News', 'News', RelationMap::MANY_TO_ONE, array('news_id' => 'id', ), 'CASCADE', null);
         $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
         $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
-        $this->addRelation('ClassNews', 'ClassNews', RelationMap::ONE_TO_MANY, array('id' => 'news_id', ), 'CASCADE', null, 'ClassNewss');
     } // buildRelations()
 
     /**
@@ -73,11 +67,6 @@ class NewsTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'denyable' =>  array (
-  'mode' => '',
-  'role_key' => 'news',
-  'owner_allowed' => '',
-),
             'extended_timestampable' =>  array (
   'create_column' => 'created_at',
   'update_column' => 'updated_at',
@@ -87,10 +76,15 @@ class NewsTableMap extends TableMap
   'create_column' => 'created_by',
   'update_column' => 'updated_by',
 ),
+            'denyable' =>  array (
+  'mode' => 'by_role',
+  'role_key' => '',
+  'owner_allowed' => '',
+),
             'extended_keyable' =>  array (
   'key_separator' => '_',
 ),
         );
     } // getBehaviors()
 
-} // NewsTableMap
+} // ClassNewsTableMap
