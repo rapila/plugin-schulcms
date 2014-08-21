@@ -1,16 +1,19 @@
 <form>
 	<div class="status_section">
-		<label for="news_type_id" class="validate-news_type_required">{{writeString=wns.news.type}}*</label>
-		<select name="news_type_id" class="ui-widget-content" data-widget-type="news_type_input"></select><br />
-		<label for="school_class_id">{{writeString=wns.class.school_class}}</label>
-		<select name="school_class_id" class="ui-widget-content" data-widget-type="classes_input">{{school_class_options}}</select><br />
 		<div class="hide_if_not_saved">
 			<label>{{writeString=wns.created_info}}:</label><span class="created_info status"></span><br />
 			<label>{{writeString=wns.updated.info}}:</label><span class="updated_info status"></span><br />
 			<label>ID:</label><span class="detail_id"></span>
 		</div>
+		<label for="is_inactive">{{writeString=wns.news.is_inaktive_detail}}</label>
+		<input type="checkbox" name="is_inactive"/>
 	</div>
+
 	<div>
+		<div class="group_fields">
+			<label for="news_type_id" class="validate-news_type_required">{{writeString=wns.news.type}}*</label>
+			<select name="news_type_id" class="ui-widget-content autowidth" data-widget-type="news_type_input"></select><br />
+		</div>
 		<div class="group_fields">
 			<label for="headline" class="validate-headline_required">{{writeString=wns.news.headline}}*</label>
 			<input type="text" class="ui-widget-content" name="headline" />
@@ -22,10 +25,6 @@
 		<div class="group_fields">
 			<label for="date_end">{{writeString=wns.news.date_to}}</label>
 			<input type="text" name="date_end" size="10" class="ui-widget-content autowidth"/><br />
-		</div>
-		<div class="group_fields">
-			<label for="is_inactive">{{writeString=wns.news.is_inaktive_detail}}</label>
-			<input type="checkbox" name="is_inactive" /><br />
 		</div>
 	</div>
 
