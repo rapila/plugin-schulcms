@@ -1415,10 +1415,10 @@ abstract class BaseNewsTypePeer
         if($oUser->getIsAdmin()) {
             return true;
         }
-        return $oUser->hasRole("notes");
+        return $oUser->hasRole("news");
     }
     public static function mayOperateOnOwn($oUser, $mObject, $sOperation) {
-        return $oUser->hasRole("notes-own");
+        return $oUser->hasRole("news-own");
     }
 
 } // BaseNewsTypePeer

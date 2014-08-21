@@ -591,7 +591,7 @@ abstract class BaseNewsType extends BaseObject implements Persistent
             $ret = $this->preDelete($con);
             // denyable behavior
             if(!(NewsTypePeer::isIgnoringRights() || $this->mayOperate("delete"))) {
-                throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "notes")));
+                throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "news")));
             }
 
             if ($ret) {
@@ -640,7 +640,7 @@ abstract class BaseNewsType extends BaseObject implements Persistent
                 $ret = $ret && $this->preInsert($con);
                 // denyable behavior
                 if(!(NewsTypePeer::isIgnoringRights() || $this->mayOperate("insert"))) {
-                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "notes")));
+                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "news")));
                 }
 
                 // extended_timestampable behavior
@@ -665,7 +665,7 @@ abstract class BaseNewsType extends BaseObject implements Persistent
                 $ret = $ret && $this->preUpdate($con);
                 // denyable behavior
                 if(!(NewsTypePeer::isIgnoringRights() || $this->mayOperate("update"))) {
-                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "notes")));
+                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "news")));
                 }
 
                 // extended_timestampable behavior
@@ -1658,31 +1658,6 @@ abstract class BaseNewsType extends BaseObject implements Persistent
         }
 
         return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this NewsType is new, it will return
-     * an empty collection; or if this NewsType has previously
-     * been saved, it will retrieve related Newss from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in NewsType.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|News[] List of News objects
-     */
-    public function getNewssJoinSchoolClass($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = NewsQuery::create(null, $criteria);
-        $query->joinWith('SchoolClass', $join_behavior);
-
-        return $this->getNewss($query, $con);
     }
 
 

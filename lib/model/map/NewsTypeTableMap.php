@@ -69,7 +69,7 @@ class NewsTypeTableMap extends TableMap
         return array(
             'denyable' =>  array (
   'mode' => '',
-  'role_key' => 'notes',
+  'role_key' => 'news',
   'owner_allowed' => '',
 ),
             'extended_timestampable' =>  array (

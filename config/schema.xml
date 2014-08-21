@@ -330,33 +330,6 @@
 	</behavior>
 </table>
 
-<table name="notes" phpName="Note">
-	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-	<column name="note_type_id" type="tinyint" />
-	<foreign-key foreignTable="note_types" onDelete="setnull">
-		<reference local="note_type_id" foreign="id" />
-	</foreign-key>
-	<column name="body" type="blob" />
-	<column name="date_start" type="date" required="true"/>
-	<column name="date_end" type="date"/>
-	<column name="is_inactive" type="boolean" size="1" default="0" />
-	<column name="image_id" type="integer" />
-	<foreign-key foreignTable="documents" onDelete="setnull">
-		<reference local="image_id" foreign="id" />
-	</foreign-key>
-	<behavior name="denyable">
-		<parameter name="role_key" value="notes" />
-	</behavior>
-</table>
-
-<table name="note_types" phpName="NoteType">
-	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-	<column name="name" type="varchar" size="100" />
-	<behavior name="denyable">
-		<parameter name="role_key" value="notes" />
-	</behavior>
-</table>
-
 <table name="news" phpName="News">
 	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
 	<column name="news_type_id" type="tinyint" />
@@ -369,12 +342,8 @@
 	<column name="date_start" type="date" required="true"/>
 	<column name="date_end" type="date"/>
 	<column name="is_inactive" type="boolean" size="1" default="0" />
-	<column name="school_class_id" type="integer" />
-	<foreign-key foreignTable="school_classes" onDelete="cascade">
-		<reference local="school_class_id" foreign="id" />
-	</foreign-key>
 	<behavior name="denyable">
-		<parameter name="role_key" value="notes" />
+		<parameter name="role_key" value="news" />
 	</behavior>
 </table>
 
@@ -383,6 +352,6 @@
 	<column name="name" type="varchar" size="100" required="true" />
 	<column name="is_externally_managed" type="boolean" size="1" default="0" />
 	<behavior name="denyable">
-		<parameter name="role_key" value="notes" />
+		<parameter name="role_key" value="news" />
 	</behavior>
 </table>
