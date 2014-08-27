@@ -33,9 +33,9 @@ school_settings:
   # registry for externally used links, are not displayed by default in admin module "links"
   externally_managed_link_categories:
     school_class_links: 2
-    
+
   externally_managed_news_types:
-    school_class_news_type_type: 5
+    school_class_news_type: 5
 
   # registry for persistent page identifiers
   page_identifiers:
@@ -97,7 +97,7 @@ text_module:
       - ['Maximize']
   richtext_width: 700
   format_tags: 'p;h1;h2;h3'
-  
+
 news:
   text_module:
     toolbar:
