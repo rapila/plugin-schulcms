@@ -8,6 +8,10 @@ Widget.types.class_detail = {
 		this.add_event_button = this._element.find('.add_entry.add_event').click(this.edit_event.bind(this));
 		this.add_document_button = this._element.find('.add_entry.add_document').click(this.edit_document.bind(this));
 		this.add_link_button = this._element.find('.add_entry.add_link').click(this.edit_link.bind(this));
+		this.news_list = null;
+		this.event_list = null;
+		this.document_list = null;
+		this.link_list = null;
 		this.current_detail_id = null;
 		this.uploader = Widget.create('file_upload');
 
@@ -177,7 +181,7 @@ Widget.types.class_detail = {
 			this.link_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
-				this.link_list = widget;
+				_this.link_list = widget;
 				widget._element.insertBefore(_this.add_link_button.show());
 			}, this.settings.link_list_session);
 		}
@@ -213,7 +217,7 @@ Widget.types.class_detail = {
 			this.news_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
-				this.news_list = widget;
+				_this.news_list = widget;
 				widget._element.insertBefore(_this.add_news_button.show());
 			}, this.settings.news_list_session);
 		}
@@ -225,7 +229,7 @@ Widget.types.class_detail = {
 			this.event_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
-				this.event_list = widget;
+				_this.event_list = widget;
 				widget._element.insertBefore(_this.add_event_button.show());
 			}, this.settings.event_list_session);
 		}
@@ -284,7 +288,7 @@ Widget.types.class_detail = {
 			this.document_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
-				this.document_list = widget;
+				_this.document_list = widget;
 				widget._element.insertBefore(_this.add_document_button.show());
 			}, this.settings.document_list_session);
 		}
