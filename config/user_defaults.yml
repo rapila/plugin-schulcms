@@ -8,7 +8,7 @@ admin_menu:
       - module.classes
       - module.team_members
       - module.services
-      - module.notes
+      - module.news
       - ~
       - module.strings
       - module.documents
@@ -16,50 +16,30 @@ admin_menu:
       - ~
       - module.users
     - module.dashboard
+    - ~
+    - tag
+    - documentation
   right:
     - activity
-    - tag
-    - ~
     - domain_name
     - logo
     - user
     - logout
 
-dashboard: 
+dashboard:
   layout: 2cols2thirds
-  widgets: 
-    - 
+  widgets:
+    -
       config: [ ]
       color: 'rgb(20, 142, 164)'
       collapsed: false
       type: my_classes
       title: 'Meine Klassen'
       container: 'column-1'
-    - 
-      config: 
-        text: |
-        <h2>Willkommen in deinem Dashboard!</h2>
-        <p>&nbsp;</p>
-        <p>Das <em>Dashboard</em> ist etwas ähnliches wie das <strong>Armaturenbrett</strong> in deinem Administrations-Führerstand.</p>
-        <p>Hier kannst du dir kleine 
-          <em>Helfer-Programme</em> einrichten, so ähnlich wie die Anzeigeinstrumente in einem Cockpit. Diese kleinen Helferchen nennen wir <strong>Widgets</strong>
-        </p>
-        <p>Hier werden zum Beispiel deine Klassen angezeigt, wenn du KlassenlehrerIn bist.</p>
-        <p>Für diese Klassen kannst du</p>
-        <ul>
-          <li>das Klassenfoto hochladen</li>
-          <li>den Stundenplan hochladen</li>
-          <li>den Wochenplan hochladen</li>
-          <li>Anlässe, Galerien, Berichte erstellen</li>
-          <li>Links erstellen</li>
-        </ul>
-        <p>Wenn du Fragen hast oder Hilfe brauchst, so wende dich bitte an die Administratoren oder Superuser, von denen es in jeder Schule mindestens ein(e) gibt.</p>
-        <p>Viel Vergnügen.</p>
-        <p>&nbsp;</p>
-          
-      color: 'rgb(141, 193, 0)'
-      contrastColor: 'black'
+    -
+      config:
+      color: 'rgb(242, 188, 0)'
       collapsed: false
-      type: static_text
-      title: Hinweise
-      container: column-2
+      type: documentation
+      title: 'Benutzer-Dokumentation'
+      container: 'column-2'
