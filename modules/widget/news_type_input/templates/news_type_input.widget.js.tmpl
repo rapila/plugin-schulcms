@@ -3,7 +3,7 @@ Widget.types.news_type_input = {
 		this.reload();
 		Widget.handle('schulcms-news_type_changed', this.reload.bind(this));
 	},
-	
+
 	reload: function() {
 		var _this = this;
 		var current = this._element.val();
@@ -18,7 +18,7 @@ Widget.types.news_type_input = {
 			}
 		});
 	},
-	
+
 	val: function(value) {
 		if(arguments.length) {
 			this._element.val(value);
@@ -27,7 +27,7 @@ Widget.types.news_type_input = {
 		}
 		return this._element.val();
 	},
-	
+
 	settings: {
 		initial_selection: null
 	}

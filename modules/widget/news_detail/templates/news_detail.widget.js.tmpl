@@ -9,12 +9,12 @@ Widget.types['news_detail'] = {
 		this._element.find('div.hide_if_not_saved').hide();
 
 		Widget.callStatic('detail', 'create_for_instance', this);
-		
+
 		// Handlers
 		this.handle('opened', function() {
 			this.init_textarea();
 		});
-		
+
 		if(!this.news_type_is_predefined()) {
 			this.news_type_dropdown = this._element.find("select[name='news_type_id']");
 			this.news_type_dropdown.prepareWidget(function(widget) {
@@ -27,7 +27,7 @@ Widget.types['news_detail'] = {
 		} else {
 			this._element.find('div.news_type_elements').hide();
 		}
-		
+
 		this.handle('saving', function(event, data) {
 			data.body = _this.news_body_editor.get_data();
 			if(this.news_type_is_predefined()) {
@@ -39,7 +39,7 @@ Widget.types['news_detail'] = {
 			this.current_detail_id = id;
 		});
 	},
-	
+
 	news_type_is_predefined: function() {
 		return this.settings.predefined_news_type_id !== null;
 	},
@@ -50,10 +50,14 @@ Widget.types['news_detail'] = {
 		this.loadData(function(data) {
 			this.current_detail_id = data.Id;
 			this._element.find('input[name="id"]').val(data.Id);
+			this.current_news_type_id = data.NewsTypeId;
 			if(!this.news_type_is_predefined()) {
+				this.settings.predefined_news_type_id = data.NewsTypeId;
 				this.news_type_dropdown.ensureWidget(function(widget) {
 					widget.val(data.NewsTypeId);
 				});
+			} else {
+				this._element.find('div.news_type_elements').hide();
 			}
 			this._element.find('input[name="headline"]').val(data.Headline);
 			this.news_body.ensureWidget(function(widget) {

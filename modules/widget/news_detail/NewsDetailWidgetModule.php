@@ -14,8 +14,8 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 		$this->setSetting('richtext_session', $oRichtext->getSessionKey());
 	}
 
-	public function getElementType() {
-		return "form";
+	public function setNewsId($iNewsId) {
+		$this->iNewsId = $iNewsId;
 	}
 
 	public function loadData() {
@@ -27,7 +27,6 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 		$aResult = $oNews->toArray(BasePeer::TYPE_PHPNAME, false);
 		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oNews);
 		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oNews);
-
 		$aResult['DateStart'] = $oNews->getDateStart('d.m.Y');
 		$aResult['DateEnd'] = $oNews->getDateEnd('d.m.Y');
     $sBody = '';
@@ -55,11 +54,9 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 		$oRichtextUtil->setTrackReferences($oNews);
 
 		$this->validate($aData, $oNews);
-
 		if(!Flash::noErrors()) {
 			throw new ValidationException();
 		}
-
 		$oNews->save();
 		return $oNews->getId();
 	}
@@ -73,9 +70,5 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 			$oFlash->checkForValue('body', 'is_active_body_required');
 		}
 		$oFlash->finishReporting();
-	}
-
-	public function setNewsId($iNewsId) {
-		$this->iNewsId = $iNewsId;
 	}
 }
