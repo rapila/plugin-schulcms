@@ -171,15 +171,14 @@ Widget.types.class_detail = {
 	},
 
 	refresh_open_list_widget: function(index) {
-		if(index === 0) return;
-		var panel = this._element.find('tab_part').eq(index);
-		console.log('refresh_open_list_widget', index, this._element.find('tab_part'), panel);
+		if(index === 1) this.reload_news(true);
+		if(index === 2) this.reload_events(true);
+		if(index === 3) this.reload_documents(true);
+		if(index === 4) this.reload_links(true);
 	},
 
 	fill_data: function() {
 		this.loaded_lists = [];
-		this.detail_widget.disable();
-		this.refresh_open_list_widget(this.settings.accordion_active);
 		this.schoolClassData(function(class_data) {
 			this.current_detail_id = class_data.Id;
 			if(class_data.LinkCategoryId === null) {
@@ -202,6 +201,8 @@ Widget.types.class_detail = {
 			this.week_schedule_id = class_data.WeekScheduleId;
 
 			this.detail_widget.set_title(this.detail_widget.settings.title = class_data.ClassTypeName+' '+class_data.Name);
+			this.detail_widget.disable();
+			this.refresh_open_list_widget(this.settings.accordion_active);
 			this.detail_widget.enable();
 
 		});
