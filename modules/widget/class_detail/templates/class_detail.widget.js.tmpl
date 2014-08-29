@@ -4,10 +4,10 @@ Widget.types.class_detail = {
 		this._element = Widget.parseHTML("{{includeTemplate=edit}}");
 
 		//News, events, documents and links
-		this.add_news_button = this._element.find('.add_entry.add_news').click(this.edit_news.bind(this));
-		this.add_event_button = this._element.find('.add_entry.add_event').click(this.edit_event.bind(this));
-		this.add_document_button = this._element.find('.add_entry.add_document').click(this.edit_document.bind(this));
-		this.add_link_button = this._element.find('.add_entry.add_link').click(this.edit_link.bind(this));
+		this.add_news_button = this._element.find('.add_entry.add_news').click(this.create_news.bind(this));
+		this.add_event_button = this._element.find('.add_entry.add_event').click(this.create_event.bind(this));
+		this.add_document_button = this._element.find('.add_entry.add_document').click(this.create_document.bind(this));
+		this.add_link_button = this._element.find('.add_entry.add_link').click(this.create_link.bind(this));
 		this.news_list = null;
 		this.event_list = null;
 		this.document_list = null;
@@ -195,41 +195,63 @@ Widget.types.class_detail = {
 		});
 	},
 
-	reload_links: function(reload) {
+	create_link: function() {
 		var _this = this;
-		if(this.link_list) {
-			if(reload || this.list_requires_loading('links')) {
-				this.link_list.reload();
-			}
-		} else {
-			Widget.createWithElement('list', function(widget) {
-				_this.link_list = widget;
-				widget._element.insertBefore(_this.add_link_button.show());
-			}, this.settings.link_list_session);
-		}
-	},
-
-	edit_link: function(link_id) {
-		var _this = this;
-		if(isNaN(link_id)) {
-			link_id = null;
-		}
-		if(!link_id) {
-			_this.add_link_button.addClass('ui-loading-add');
-		}
+		this.add_link_button.addClass('ui-loading-add');
 		Widget.create('link_detail', function(widget) {
 			widget.settings.predefined_link_category_id = _this.settings.link_category_id;
 		}, function(widget) {
-			if(link_id) {
-				widget.setLinkId(link_id);
-				widget.fill_data();
-			}
 			widget.open();
 			widget.save_callback = function(link_id) {
 				_this.addClassLink(link_id);
 				_this.reload_links(true);
 			};
 			_this.add_link_button.removeClass('ui-loading-add');
+		});
+	},
+
+	create_news: function() {
+		var _this = this;
+		this.add_news_button.addClass('ui-loading-add');
+		Widget.create('news_detail', function(widget){
+			widget.settings.predefined_news_type_id = _this.settings.news_type_id;
+		}, function(widget) {
+			widget.open();
+			widget.save_callback = function(news_id) {
+				_this.addClassNews(news_id);
+				_this.reload_news(true);
+			};
+			_this.add_news_button.removeClass('ui-loading-add');
+		});
+	},
+
+	create_event: function() {
+		var _this = this;
+		this.add_event_button.addClass('ui-loading-add');
+		Widget.create('event_detail', function(widget) {
+			widget.settings.predefined_school_class_id = _this.current_detail_id;
+		}, function(widget) {
+			widget.open();
+			widget.save_callback = function() {
+				_this.reload_events(true);
+			};
+			_this.add_event_button.removeClass('ui-loading-add');
+		});
+	},
+
+	create_document: function() {
+		var _this = this;
+		this.add_document_button.addClass('ui-loading-add');
+		Widget.create('document_detail', function(widget) {
+			widget.settings.initial.document_category_id = _this.settings.class_document_category_id;
+			widget.settings.is_called_externally = true;
+		}, function(widget) {
+			widget.open();
+			widget.save_callback = function(document_id) {
+				_this.addClassDocument(document_id);
+				_this.reload_documents(true);
+			};
+			_this.add_document_button.removeClass('ui-loading-add');
 		});
 	},
 
@@ -262,53 +284,6 @@ Widget.types.class_detail = {
 		}
 	},
 
-	edit_news: function(news_id) {
-		if(isNaN(news_id)) {
-			news_id = null;
-		}
-		var _this = this;
-		if(!news_id) {
-			this.add_news_button.addClass('ui-loading-add');
-		}
-		Widget.create('news_detail', function(widget){
-			widget.settings.predefined_news_type_id = _this.settings.news_type_id;
-		}, function(widget) {
-			if(news_id) {
-				widget.setNewsId(news_id);
-				widget.fill_data();
-			}
-			widget.open();
-			widget.save_callback = function(news_id) {
-				_this.addClassNews(news_id);
-				_this.reload_news(true);
-			};
-			_this.add_news_button.removeClass('ui-loading-add');
-		});
-	},
-
-	edit_event: function(event_id) {
-		if(isNaN(event_id)) {
-			event_id = null;
-		}
-		var _this = this;
-		if(!event_id) {
-			this.add_event_button.addClass('ui-loading-add');
-		}
-		Widget.create('event_detail', function(widget) {
-			widget.settings.predefined_school_class_id = _this.current_detail_id;
-		}, function(widget) {
-			if(event_id) {
-				widget.setEventId(event_id);
-				widget.fill_data();
-			}
-			widget.open();
-			widget.save_callback = function(event_id) {
-				_this.reload_events(true);
-			};
-			_this.add_event_button.removeClass('ui-loading-add');
-		});
-	},
-
 	reload_documents: function(reload) {
 		var _this = this;
 		if(this.document_list) {
@@ -323,29 +298,18 @@ Widget.types.class_detail = {
 		}
 	},
 
-	edit_document: function(document_id) {
+	reload_links: function(reload) {
 		var _this = this;
-		if(isNaN(document_id)) {
-			document_id = null;
-		}
-		if(!document_id) {
-			_this.add_document_button.addClass('ui-loading-add');
-		}
-		Widget.create('document_detail', function(widget) {
-			widget.settings.initial.document_category_id = _this.settings.class_document_category_id;
-			widget.settings.is_called_externally = true;
-		}, function(widget) {
-			if(document_id) {
-				widget.setDocumentId(document_id);
-				widget.fill_data();
+		if(this.link_list) {
+			if(reload || this.list_requires_loading('links')) {
+				this.link_list.reload();
 			}
-			widget.open();
-			widget.save_callback = function(document_id) {
-				_this.addClassDocument(document_id);
-				_this.reload_documents(true);
-			};
-			_this.add_document_button.removeClass('ui-loading-add');
-		});
+		} else {
+			Widget.createWithElement('list', function(widget) {
+				_this.link_list = widget;
+				widget._element.insertBefore(_this.add_link_button.show());
+			}, this.settings.link_list_session);
+		}
 	},
 
 	save: function(should_remain_open) {
