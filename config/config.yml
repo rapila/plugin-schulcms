@@ -35,7 +35,7 @@ school_settings:
     school_class_links: 2
 
   externally_managed_news_types:
-    school_class_news_type: 5
+    school_class_news_type_id: 5
 
   # registry for persistent page identifiers
   page_identifiers:
