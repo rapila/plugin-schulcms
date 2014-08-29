@@ -14,10 +14,27 @@ Widget.types.class_detail = {
 		this.link_list = null;
 		this.current_detail_id = null;
 		this.uploader = Widget.create('file_upload');
+		this.loaded_lists = [];
 
 		Widget.callStatic('detail', 'create_for_instance', this);
+
 		this.handle('opened', function() {
-			this._element.accordion('option', 'active', this.settings.accordion_active);
+			var _this = this;
+			this.loaded_lists = [];
+			this._element.accordion({
+				option: {'active': this.settings.accordion_active || 0 },
+				beforeActivate: function(event, ui) {
+					if(ui.newPanel.is('.news')) {
+						_this.reload_news();
+					} else if(ui.newPanel.is('.events')) {
+						_this.reload_events();
+					} else if(ui.newPanel.is('.documents')) {
+						_this.reload_documents();
+					} else if(ui.newPanel.is('.links')) {
+						_this.reload_links();
+					}
+				}
+			});
 		});
 
 		// portrait
@@ -127,6 +144,14 @@ Widget.types.class_detail = {
 		});
 	},
 
+	list_requires_loading: function(key) {
+		if(jQuery.inArray(key, _this.loaded_lists)) {
+			return true;
+		}
+		_this.loaded_lists.push(key);
+		return false;
+	},
+
 	upload_success: function(document_id, options) {
 		if(options.class_document_type === 'schedule') {
 			this.class_schedule_id = document_id;
@@ -165,20 +190,17 @@ Widget.types.class_detail = {
 			this.class_schedule_id = class_data.ClassScheduleId;
 			this.week_schedule_id = class_data.WeekScheduleId;
 
-			this.reload_news();
-			this.reload_events();
-			this.reload_links();
-			this.reload_documents();
-
 			this.detail_widget.set_title(this.detail_widget.settings.title = class_data.ClassTypeName+' '+class_data.Name);
 			this.detail_widget.enable();
 		});
 	},
 
-	reload_links: function() {
+	reload_links: function(reload) {
 		var _this = this;
 		if(this.link_list) {
-			this.link_list.reload();
+			if(reload || this.list_requires_loading('links')) {
+				this.link_list.reload();
+			}
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				_this.link_list = widget;
@@ -205,28 +227,33 @@ Widget.types.class_detail = {
 			widget.open();
 			widget.save_callback = function(link_id) {
 				_this.addClassLink(link_id);
-				_this.reload_links();
+				_this.reload_links(true);
 			};
 			_this.add_link_button.removeClass('ui-loading-add');
 		});
 	},
 
-	reload_news: function() {
+	reload_news: function(reload) {
 		var _this = this;
 		if(this.news_list) {
-			this.news_list.reload();
+			if(reload || this.list_requires_loading('news')) {
+				this.news_list.reload();
+			}
 		} else {
 			Widget.createWithElement('list', function(widget) {
+				widget.settings.school_class_news_type_id = _this.settings.news_type_id;
 				_this.news_list = widget;
 				widget._element.insertBefore(_this.add_news_button.show());
 			}, this.settings.news_list_session);
 		}
 	},
 
-	reload_events: function() {
+	reload_events: function(reload) {
 		var _this = this;
 		if(this.event_list) {
-			this.event_list.reload();
+			if(reload || this.list_requires_loading('events')) {
+				this.event_list.reload();
+			}
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				_this.event_list = widget;
@@ -253,7 +280,7 @@ Widget.types.class_detail = {
 			widget.open();
 			widget.save_callback = function(news_id) {
 				_this.addClassNews(news_id);
-				_this.reload_news();
+				_this.reload_news(true);
 			};
 			_this.add_news_button.removeClass('ui-loading-add');
 		});
@@ -276,16 +303,18 @@ Widget.types.class_detail = {
 			}
 			widget.open();
 			widget.save_callback = function(event_id) {
-				_this.reload_events();
+				_this.reload_events(true);
 			};
 			_this.add_event_button.removeClass('ui-loading-add');
 		});
 	},
 
-	reload_documents: function() {
+	reload_documents: function(reload) {
 		var _this = this;
 		if(this.document_list) {
-			this.document_list.reload();
+			if(reload || this.list_requires_loading('documents')) {
+				this.document_list.reload();
+			}
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				_this.document_list = widget;
@@ -313,7 +342,7 @@ Widget.types.class_detail = {
 			widget.open();
 			widget.save_callback = function(document_id) {
 				_this.addClassDocument(document_id);
-				_this.reload_documents();
+				_this.reload_documents(true);
 			};
 			_this.add_document_button.removeClass('ui-loading-add');
 		});
