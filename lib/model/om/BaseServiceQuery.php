@@ -62,10 +62,6 @@
  * @method ServiceQuery rightJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByUpdatedBy relation
  * @method ServiceQuery innerJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByUpdatedBy relation
  *
- * @method ServiceQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
- * @method ServiceQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
- * @method ServiceQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
- *
  * @method ServiceQuery leftJoinServiceMember($relationAlias = null) Adds a LEFT JOIN clause to the query using the ServiceMember relation
  * @method ServiceQuery rightJoinServiceMember($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ServiceMember relation
  * @method ServiceQuery innerJoinServiceMember($relationAlias = null) Adds a INNER JOIN clause to the query using the ServiceMember relation
@@ -1186,80 +1182,6 @@ abstract class BaseServiceQuery extends ModelCriteria
         return $this
             ->joinUserRelatedByUpdatedBy($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByUpdatedBy', 'UserQuery');
-    }
-
-    /**
-     * Filter the query by a related Event object
-     *
-     * @param   Event|PropelObjectCollection $event  the related object to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 ServiceQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByEvent($event, $comparison = null)
-    {
-        if ($event instanceof Event) {
-            return $this
-                ->addUsingAlias(ServicePeer::ID, $event->getServiceId(), $comparison);
-        } elseif ($event instanceof PropelObjectCollection) {
-            return $this
-                ->useEventQuery()
-                ->filterByPrimaryKeys($event->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByEvent() only accepts arguments of type Event or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Event relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return ServiceQuery The current query, for fluid interface
-     */
-    public function joinEvent($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Event');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Event');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Event relation Event object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   EventQuery A secondary query class using the current class as primary query
-     */
-    public function useEventQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinEvent($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Event', 'EventQuery');
     }
 
     /**

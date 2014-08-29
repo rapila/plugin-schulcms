@@ -148,9 +148,6 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		if($oEvent->getDateEnd() !== null && $oEvent->getDateEnd() < $oEvent->getDateStart()) {
 			$oEvent->setDateEnd(null);
 		}
-		if(isset($aEventData['service_id'])) {
-  		$oEvent->setServiceId($aEventData['service_id'] != null ? $aEventData['service_id'] : null);
-		}
 		$this->validate($aEventData, $oEvent);
 
 		// track page, document and link references and hande preview and review text

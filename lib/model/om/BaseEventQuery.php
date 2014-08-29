@@ -19,7 +19,6 @@
  * @method EventQuery orderByIsActive($order = Criteria::ASC) Order by the is_active column
  * @method EventQuery orderByIgnoreOnFrontpage($order = Criteria::ASC) Order by the ignore_on_frontpage column
  * @method EventQuery orderByEventTypeId($order = Criteria::ASC) Order by the event_type_id column
- * @method EventQuery orderByServiceId($order = Criteria::ASC) Order by the service_id column
  * @method EventQuery orderBySchoolClassId($order = Criteria::ASC) Order by the school_class_id column
  * @method EventQuery orderByGalleryId($order = Criteria::ASC) Order by the gallery_id column
  * @method EventQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
@@ -40,7 +39,6 @@
  * @method EventQuery groupByIsActive() Group by the is_active column
  * @method EventQuery groupByIgnoreOnFrontpage() Group by the ignore_on_frontpage column
  * @method EventQuery groupByEventTypeId() Group by the event_type_id column
- * @method EventQuery groupByServiceId() Group by the service_id column
  * @method EventQuery groupBySchoolClassId() Group by the school_class_id column
  * @method EventQuery groupByGalleryId() Group by the gallery_id column
  * @method EventQuery groupByCreatedAt() Group by the created_at column
@@ -55,10 +53,6 @@
  * @method EventQuery leftJoinEventType($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventType relation
  * @method EventQuery rightJoinEventType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventType relation
  * @method EventQuery innerJoinEventType($relationAlias = null) Adds a INNER JOIN clause to the query using the EventType relation
- *
- * @method EventQuery leftJoinService($relationAlias = null) Adds a LEFT JOIN clause to the query using the Service relation
- * @method EventQuery rightJoinService($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Service relation
- * @method EventQuery innerJoinService($relationAlias = null) Adds a INNER JOIN clause to the query using the Service relation
  *
  * @method EventQuery leftJoinSchoolClass($relationAlias = null) Adds a LEFT JOIN clause to the query using the SchoolClass relation
  * @method EventQuery rightJoinSchoolClass($relationAlias = null) Adds a RIGHT JOIN clause to the query using the SchoolClass relation
@@ -95,7 +89,6 @@
  * @method Event findOneByIsActive(boolean $is_active) Return the first Event filtered by the is_active column
  * @method Event findOneByIgnoreOnFrontpage(boolean $ignore_on_frontpage) Return the first Event filtered by the ignore_on_frontpage column
  * @method Event findOneByEventTypeId(int $event_type_id) Return the first Event filtered by the event_type_id column
- * @method Event findOneByServiceId(int $service_id) Return the first Event filtered by the service_id column
  * @method Event findOneBySchoolClassId(int $school_class_id) Return the first Event filtered by the school_class_id column
  * @method Event findOneByGalleryId(int $gallery_id) Return the first Event filtered by the gallery_id column
  * @method Event findOneByCreatedAt(string $created_at) Return the first Event filtered by the created_at column
@@ -116,7 +109,6 @@
  * @method array findByIsActive(boolean $is_active) Return Event objects filtered by the is_active column
  * @method array findByIgnoreOnFrontpage(boolean $ignore_on_frontpage) Return Event objects filtered by the ignore_on_frontpage column
  * @method array findByEventTypeId(int $event_type_id) Return Event objects filtered by the event_type_id column
- * @method array findByServiceId(int $service_id) Return Event objects filtered by the service_id column
  * @method array findBySchoolClassId(int $school_class_id) Return Event objects filtered by the school_class_id column
  * @method array findByGalleryId(int $gallery_id) Return Event objects filtered by the gallery_id column
  * @method array findByCreatedAt(string $created_at) Return Event objects filtered by the created_at column
@@ -230,7 +222,7 @@ abstract class BaseEventQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `title`, `slug`, `teaser`, `body_preview`, `body_review`, `location_info`, `date_start`, `date_end`, `time_details`, `is_active`, `ignore_on_frontpage`, `event_type_id`, `service_id`, `school_class_id`, `gallery_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `events` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `title`, `slug`, `teaser`, `body_preview`, `body_review`, `location_info`, `date_start`, `date_end`, `time_details`, `is_active`, `ignore_on_frontpage`, `event_type_id`, `school_class_id`, `gallery_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `events` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -719,50 +711,6 @@ abstract class BaseEventQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the service_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByServiceId(1234); // WHERE service_id = 1234
-     * $query->filterByServiceId(array(12, 34)); // WHERE service_id IN (12, 34)
-     * $query->filterByServiceId(array('min' => 12)); // WHERE service_id >= 12
-     * $query->filterByServiceId(array('max' => 12)); // WHERE service_id <= 12
-     * </code>
-     *
-     * @see       filterByService()
-     *
-     * @param     mixed $serviceId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return EventQuery The current query, for fluid interface
-     */
-    public function filterByServiceId($serviceId = null, $comparison = null)
-    {
-        if (is_array($serviceId)) {
-            $useMinMax = false;
-            if (isset($serviceId['min'])) {
-                $this->addUsingAlias(EventPeer::SERVICE_ID, $serviceId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($serviceId['max'])) {
-                $this->addUsingAlias(EventPeer::SERVICE_ID, $serviceId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(EventPeer::SERVICE_ID, $serviceId, $comparison);
-    }
-
-    /**
      * Filter the query on the school_class_id column
      *
      * Example usage:
@@ -1098,82 +1046,6 @@ abstract class BaseEventQuery extends ModelCriteria
         return $this
             ->joinEventType($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'EventType', 'EventTypeQuery');
-    }
-
-    /**
-     * Filter the query by a related Service object
-     *
-     * @param   Service|PropelObjectCollection $service The related object(s) to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 EventQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByService($service, $comparison = null)
-    {
-        if ($service instanceof Service) {
-            return $this
-                ->addUsingAlias(EventPeer::SERVICE_ID, $service->getId(), $comparison);
-        } elseif ($service instanceof PropelObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(EventPeer::SERVICE_ID, $service->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByService() only accepts arguments of type Service or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Service relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return EventQuery The current query, for fluid interface
-     */
-    public function joinService($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Service');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Service');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Service relation Service object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   ServiceQuery A secondary query class using the current class as primary query
-     */
-    public function useServiceQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinService($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Service', 'ServiceQuery');
     }
 
     /**

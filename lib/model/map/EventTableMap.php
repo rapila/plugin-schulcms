@@ -51,7 +51,6 @@ class EventTableMap extends TableMap
         $this->addColumn('is_active', 'IsActive', 'BOOLEAN', false, 1, false);
         $this->addColumn('ignore_on_frontpage', 'IgnoreOnFrontpage', 'BOOLEAN', false, 1, false);
         $this->addForeignKey('event_type_id', 'EventTypeId', 'INTEGER', 'event_types', 'id', false, null, null);
-        $this->addForeignKey('service_id', 'ServiceId', 'INTEGER', 'services', 'id', false, null, null);
         $this->addForeignKey('school_class_id', 'SchoolClassId', 'INTEGER', 'school_classes', 'id', false, null, null);
         $this->addForeignKey('gallery_id', 'GalleryId', 'INTEGER', 'document_categories', 'id', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -67,7 +66,6 @@ class EventTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('EventType', 'EventType', RelationMap::MANY_TO_ONE, array('event_type_id' => 'id', ), 'CASCADE', null);
-        $this->addRelation('Service', 'Service', RelationMap::MANY_TO_ONE, array('service_id' => 'id', ), 'CASCADE', null);
         $this->addRelation('SchoolClass', 'SchoolClass', RelationMap::MANY_TO_ONE, array('school_class_id' => 'id', ), 'CASCADE', null);
         $this->addRelation('DocumentCategory', 'DocumentCategory', RelationMap::MANY_TO_ONE, array('gallery_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);

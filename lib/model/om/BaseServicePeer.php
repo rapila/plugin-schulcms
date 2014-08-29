@@ -437,9 +437,6 @@ abstract class BaseServicePeer
      */
     public static function clearRelatedInstancePool()
     {
-        // Invalidate objects in EventPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        EventPeer::clearInstancePool();
         // Invalidate objects in ServiceMemberPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ServiceMemberPeer::clearInstancePool();
@@ -2102,12 +2099,6 @@ abstract class BaseServicePeer
         $objects = ServicePeer::doSelect($criteria, $con);
         foreach ($objects as $obj) {
 
-
-            // delete related Event objects
-            $criteria = new Criteria(EventPeer::DATABASE_NAME);
-
-            $criteria->add(EventPeer::SERVICE_ID, $obj->getId());
-            $affectedRows += EventPeer::doDelete($criteria, $con);
 
             // delete related ServiceMember objects
             $criteria = new Criteria(ServiceMemberPeer::DATABASE_NAME);

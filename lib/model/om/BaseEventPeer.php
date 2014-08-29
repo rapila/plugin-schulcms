@@ -24,13 +24,13 @@ abstract class BaseEventPeer
     const TM_CLASS = 'EventTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 20;
+    const NUM_COLUMNS = 19;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 20;
+    const NUM_HYDRATE_COLUMNS = 19;
 
     /** the column name for the id field */
     const ID = 'events.id';
@@ -71,9 +71,6 @@ abstract class BaseEventPeer
     /** the column name for the event_type_id field */
     const EVENT_TYPE_ID = 'events.event_type_id';
 
-    /** the column name for the service_id field */
-    const SERVICE_ID = 'events.service_id';
-
     /** the column name for the school_class_id field */
     const SCHOOL_CLASS_ID = 'events.school_class_id';
 
@@ -113,12 +110,12 @@ abstract class BaseEventPeer
      * e.g. EventPeer::$fieldNames[EventPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Title', 'Slug', 'Teaser', 'BodyPreview', 'BodyReview', 'LocationInfo', 'DateStart', 'DateEnd', 'TimeDetails', 'IsActive', 'IgnoreOnFrontpage', 'EventTypeId', 'ServiceId', 'SchoolClassId', 'GalleryId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'title', 'slug', 'teaser', 'bodyPreview', 'bodyReview', 'locationInfo', 'dateStart', 'dateEnd', 'timeDetails', 'isActive', 'ignoreOnFrontpage', 'eventTypeId', 'serviceId', 'schoolClassId', 'galleryId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-        BasePeer::TYPE_COLNAME => array (EventPeer::ID, EventPeer::TITLE, EventPeer::SLUG, EventPeer::TEASER, EventPeer::BODY_PREVIEW, EventPeer::BODY_REVIEW, EventPeer::LOCATION_INFO, EventPeer::DATE_START, EventPeer::DATE_END, EventPeer::TIME_DETAILS, EventPeer::IS_ACTIVE, EventPeer::IGNORE_ON_FRONTPAGE, EventPeer::EVENT_TYPE_ID, EventPeer::SERVICE_ID, EventPeer::SCHOOL_CLASS_ID, EventPeer::GALLERY_ID, EventPeer::CREATED_AT, EventPeer::UPDATED_AT, EventPeer::CREATED_BY, EventPeer::UPDATED_BY, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TITLE', 'SLUG', 'TEASER', 'BODY_PREVIEW', 'BODY_REVIEW', 'LOCATION_INFO', 'DATE_START', 'DATE_END', 'TIME_DETAILS', 'IS_ACTIVE', 'IGNORE_ON_FRONTPAGE', 'EVENT_TYPE_ID', 'SERVICE_ID', 'SCHOOL_CLASS_ID', 'GALLERY_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'title', 'slug', 'teaser', 'body_preview', 'body_review', 'location_info', 'date_start', 'date_end', 'time_details', 'is_active', 'ignore_on_frontpage', 'event_type_id', 'service_id', 'school_class_id', 'gallery_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Title', 'Slug', 'Teaser', 'BodyPreview', 'BodyReview', 'LocationInfo', 'DateStart', 'DateEnd', 'TimeDetails', 'IsActive', 'IgnoreOnFrontpage', 'EventTypeId', 'SchoolClassId', 'GalleryId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'title', 'slug', 'teaser', 'bodyPreview', 'bodyReview', 'locationInfo', 'dateStart', 'dateEnd', 'timeDetails', 'isActive', 'ignoreOnFrontpage', 'eventTypeId', 'schoolClassId', 'galleryId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+        BasePeer::TYPE_COLNAME => array (EventPeer::ID, EventPeer::TITLE, EventPeer::SLUG, EventPeer::TEASER, EventPeer::BODY_PREVIEW, EventPeer::BODY_REVIEW, EventPeer::LOCATION_INFO, EventPeer::DATE_START, EventPeer::DATE_END, EventPeer::TIME_DETAILS, EventPeer::IS_ACTIVE, EventPeer::IGNORE_ON_FRONTPAGE, EventPeer::EVENT_TYPE_ID, EventPeer::SCHOOL_CLASS_ID, EventPeer::GALLERY_ID, EventPeer::CREATED_AT, EventPeer::UPDATED_AT, EventPeer::CREATED_BY, EventPeer::UPDATED_BY, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TITLE', 'SLUG', 'TEASER', 'BODY_PREVIEW', 'BODY_REVIEW', 'LOCATION_INFO', 'DATE_START', 'DATE_END', 'TIME_DETAILS', 'IS_ACTIVE', 'IGNORE_ON_FRONTPAGE', 'EVENT_TYPE_ID', 'SCHOOL_CLASS_ID', 'GALLERY_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'title', 'slug', 'teaser', 'body_preview', 'body_review', 'location_info', 'date_start', 'date_end', 'time_details', 'is_active', 'ignore_on_frontpage', 'event_type_id', 'school_class_id', 'gallery_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
     /**
@@ -128,12 +125,12 @@ abstract class BaseEventPeer
      * e.g. EventPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Title' => 1, 'Slug' => 2, 'Teaser' => 3, 'BodyPreview' => 4, 'BodyReview' => 5, 'LocationInfo' => 6, 'DateStart' => 7, 'DateEnd' => 8, 'TimeDetails' => 9, 'IsActive' => 10, 'IgnoreOnFrontpage' => 11, 'EventTypeId' => 12, 'ServiceId' => 13, 'SchoolClassId' => 14, 'GalleryId' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, 'CreatedBy' => 18, 'UpdatedBy' => 19, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'title' => 1, 'slug' => 2, 'teaser' => 3, 'bodyPreview' => 4, 'bodyReview' => 5, 'locationInfo' => 6, 'dateStart' => 7, 'dateEnd' => 8, 'timeDetails' => 9, 'isActive' => 10, 'ignoreOnFrontpage' => 11, 'eventTypeId' => 12, 'serviceId' => 13, 'schoolClassId' => 14, 'galleryId' => 15, 'createdAt' => 16, 'updatedAt' => 17, 'createdBy' => 18, 'updatedBy' => 19, ),
-        BasePeer::TYPE_COLNAME => array (EventPeer::ID => 0, EventPeer::TITLE => 1, EventPeer::SLUG => 2, EventPeer::TEASER => 3, EventPeer::BODY_PREVIEW => 4, EventPeer::BODY_REVIEW => 5, EventPeer::LOCATION_INFO => 6, EventPeer::DATE_START => 7, EventPeer::DATE_END => 8, EventPeer::TIME_DETAILS => 9, EventPeer::IS_ACTIVE => 10, EventPeer::IGNORE_ON_FRONTPAGE => 11, EventPeer::EVENT_TYPE_ID => 12, EventPeer::SERVICE_ID => 13, EventPeer::SCHOOL_CLASS_ID => 14, EventPeer::GALLERY_ID => 15, EventPeer::CREATED_AT => 16, EventPeer::UPDATED_AT => 17, EventPeer::CREATED_BY => 18, EventPeer::UPDATED_BY => 19, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TITLE' => 1, 'SLUG' => 2, 'TEASER' => 3, 'BODY_PREVIEW' => 4, 'BODY_REVIEW' => 5, 'LOCATION_INFO' => 6, 'DATE_START' => 7, 'DATE_END' => 8, 'TIME_DETAILS' => 9, 'IS_ACTIVE' => 10, 'IGNORE_ON_FRONTPAGE' => 11, 'EVENT_TYPE_ID' => 12, 'SERVICE_ID' => 13, 'SCHOOL_CLASS_ID' => 14, 'GALLERY_ID' => 15, 'CREATED_AT' => 16, 'UPDATED_AT' => 17, 'CREATED_BY' => 18, 'UPDATED_BY' => 19, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'title' => 1, 'slug' => 2, 'teaser' => 3, 'body_preview' => 4, 'body_review' => 5, 'location_info' => 6, 'date_start' => 7, 'date_end' => 8, 'time_details' => 9, 'is_active' => 10, 'ignore_on_frontpage' => 11, 'event_type_id' => 12, 'service_id' => 13, 'school_class_id' => 14, 'gallery_id' => 15, 'created_at' => 16, 'updated_at' => 17, 'created_by' => 18, 'updated_by' => 19, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Title' => 1, 'Slug' => 2, 'Teaser' => 3, 'BodyPreview' => 4, 'BodyReview' => 5, 'LocationInfo' => 6, 'DateStart' => 7, 'DateEnd' => 8, 'TimeDetails' => 9, 'IsActive' => 10, 'IgnoreOnFrontpage' => 11, 'EventTypeId' => 12, 'SchoolClassId' => 13, 'GalleryId' => 14, 'CreatedAt' => 15, 'UpdatedAt' => 16, 'CreatedBy' => 17, 'UpdatedBy' => 18, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'title' => 1, 'slug' => 2, 'teaser' => 3, 'bodyPreview' => 4, 'bodyReview' => 5, 'locationInfo' => 6, 'dateStart' => 7, 'dateEnd' => 8, 'timeDetails' => 9, 'isActive' => 10, 'ignoreOnFrontpage' => 11, 'eventTypeId' => 12, 'schoolClassId' => 13, 'galleryId' => 14, 'createdAt' => 15, 'updatedAt' => 16, 'createdBy' => 17, 'updatedBy' => 18, ),
+        BasePeer::TYPE_COLNAME => array (EventPeer::ID => 0, EventPeer::TITLE => 1, EventPeer::SLUG => 2, EventPeer::TEASER => 3, EventPeer::BODY_PREVIEW => 4, EventPeer::BODY_REVIEW => 5, EventPeer::LOCATION_INFO => 6, EventPeer::DATE_START => 7, EventPeer::DATE_END => 8, EventPeer::TIME_DETAILS => 9, EventPeer::IS_ACTIVE => 10, EventPeer::IGNORE_ON_FRONTPAGE => 11, EventPeer::EVENT_TYPE_ID => 12, EventPeer::SCHOOL_CLASS_ID => 13, EventPeer::GALLERY_ID => 14, EventPeer::CREATED_AT => 15, EventPeer::UPDATED_AT => 16, EventPeer::CREATED_BY => 17, EventPeer::UPDATED_BY => 18, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TITLE' => 1, 'SLUG' => 2, 'TEASER' => 3, 'BODY_PREVIEW' => 4, 'BODY_REVIEW' => 5, 'LOCATION_INFO' => 6, 'DATE_START' => 7, 'DATE_END' => 8, 'TIME_DETAILS' => 9, 'IS_ACTIVE' => 10, 'IGNORE_ON_FRONTPAGE' => 11, 'EVENT_TYPE_ID' => 12, 'SCHOOL_CLASS_ID' => 13, 'GALLERY_ID' => 14, 'CREATED_AT' => 15, 'UPDATED_AT' => 16, 'CREATED_BY' => 17, 'UPDATED_BY' => 18, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'title' => 1, 'slug' => 2, 'teaser' => 3, 'body_preview' => 4, 'body_review' => 5, 'location_info' => 6, 'date_start' => 7, 'date_end' => 8, 'time_details' => 9, 'is_active' => 10, 'ignore_on_frontpage' => 11, 'event_type_id' => 12, 'school_class_id' => 13, 'gallery_id' => 14, 'created_at' => 15, 'updated_at' => 16, 'created_by' => 17, 'updated_by' => 18, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
     /**
@@ -220,7 +217,6 @@ abstract class BaseEventPeer
             $criteria->addSelectColumn(EventPeer::IS_ACTIVE);
             $criteria->addSelectColumn(EventPeer::IGNORE_ON_FRONTPAGE);
             $criteria->addSelectColumn(EventPeer::EVENT_TYPE_ID);
-            $criteria->addSelectColumn(EventPeer::SERVICE_ID);
             $criteria->addSelectColumn(EventPeer::SCHOOL_CLASS_ID);
             $criteria->addSelectColumn(EventPeer::GALLERY_ID);
             $criteria->addSelectColumn(EventPeer::CREATED_AT);
@@ -241,7 +237,6 @@ abstract class BaseEventPeer
             $criteria->addSelectColumn($alias . '.is_active');
             $criteria->addSelectColumn($alias . '.ignore_on_frontpage');
             $criteria->addSelectColumn($alias . '.event_type_id');
-            $criteria->addSelectColumn($alias . '.service_id');
             $criteria->addSelectColumn($alias . '.school_class_id');
             $criteria->addSelectColumn($alias . '.gallery_id');
             $criteria->addSelectColumn($alias . '.created_at');
@@ -604,57 +599,6 @@ abstract class BaseEventPeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related Service table
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return int Number of matching rows.
-     */
-    public static function doCountJoinService(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        // we're going to modify criteria, so copy it first
-        $criteria = clone $criteria;
-
-        // We need to set the primary table name, since in the case that there are no WHERE columns
-        // it will be impossible for the BasePeer::createSelectSql() method to determine which
-        // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(EventPeer::TABLE_NAME);
-
-        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-            $criteria->setDistinct();
-        }
-
-        if (!$criteria->hasSelectClause()) {
-            EventPeer::addSelectColumns($criteria);
-        }
-
-        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-
-        // Set the correct dbName
-        $criteria->setDbName(EventPeer::DATABASE_NAME);
-
-        if ($con === null) {
-            $con = Propel::getConnection(EventPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-        }
-
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
-
-        $stmt = BasePeer::doCount($criteria, $con);
-
-        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $count = (int) $row[0];
-        } else {
-            $count = 0; // no rows returned; we infer that means 0 matches.
-        }
-        $stmt->closeCursor();
-
-        return $count;
-    }
-
-
-    /**
      * Returns the number of rows matching criteria, joining the related SchoolClass table
      *
      * @param      Criteria $criteria
@@ -913,73 +857,6 @@ abstract class BaseEventPeer
                 } // if obj2 already loaded
 
                 // Add the $obj1 (Event) to $obj2 (EventType)
-                $obj2->addEvent($obj1);
-
-            } // if joined row was not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Selects a collection of Event objects pre-filled with their Service objects.
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Event objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinService(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(EventPeer::DATABASE_NAME);
-        }
-
-        EventPeer::addSelectColumns($criteria);
-        $startcol = EventPeer::NUM_HYDRATE_COLUMNS;
-        ServicePeer::addSelectColumns($criteria);
-
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = EventPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = EventPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-
-                $cls = EventPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                EventPeer::addInstanceToPool($obj1, $key1);
-            } // if $obj1 already loaded
-
-            $key2 = ServicePeer::getPrimaryKeyHashFromRow($row, $startcol);
-            if ($key2 !== null) {
-                $obj2 = ServicePeer::getInstanceFromPool($key2);
-                if (!$obj2) {
-
-                    $cls = ServicePeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol);
-                    ServicePeer::addInstanceToPool($obj2, $key2);
-                } // if obj2 already loaded
-
-                // Add the $obj1 (Event) to $obj2 (Service)
                 $obj2->addEvent($obj1);
 
             } // if joined row was not null
@@ -1298,8 +1175,6 @@ abstract class BaseEventPeer
 
         $criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
 
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
-
         $criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
         $criteria->addJoin(EventPeer::GALLERY_ID, DocumentCategoryPeer::ID, $join_behavior);
@@ -1345,24 +1220,19 @@ abstract class BaseEventPeer
         EventTypePeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + EventTypePeer::NUM_HYDRATE_COLUMNS;
 
-        ServicePeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + ServicePeer::NUM_HYDRATE_COLUMNS;
-
         SchoolClassPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
         DocumentCategoryPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        UserPeer::addSelectColumns($criteria);
-        $startcol8 = $startcol7 + UserPeer::NUM_HYDRATE_COLUMNS;
-
         $criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
 
         $criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
@@ -1407,58 +1277,58 @@ abstract class BaseEventPeer
                 $obj2->addEvent($obj1);
             } // if joined row not null
 
-            // Add objects for joined Service rows
-
-            $key3 = ServicePeer::getPrimaryKeyHashFromRow($row, $startcol3);
-            if ($key3 !== null) {
-                $obj3 = ServicePeer::getInstanceFromPool($key3);
-                if (!$obj3) {
-
-                    $cls = ServicePeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    ServicePeer::addInstanceToPool($obj3, $key3);
-                } // if obj3 loaded
-
-                // Add the $obj1 (Event) to the collection in $obj3 (Service)
-                $obj3->addEvent($obj1);
-            } // if joined row not null
-
             // Add objects for joined SchoolClass rows
 
-            $key4 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-            if ($key4 !== null) {
-                $obj4 = SchoolClassPeer::getInstanceFromPool($key4);
-                if (!$obj4) {
+            $key3 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            if ($key3 !== null) {
+                $obj3 = SchoolClassPeer::getInstanceFromPool($key3);
+                if (!$obj3) {
 
                     $cls = SchoolClassPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    SchoolClassPeer::addInstanceToPool($obj4, $key4);
-                } // if obj4 loaded
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    SchoolClassPeer::addInstanceToPool($obj3, $key3);
+                } // if obj3 loaded
 
-                // Add the $obj1 (Event) to the collection in $obj4 (SchoolClass)
-                $obj4->addEvent($obj1);
+                // Add the $obj1 (Event) to the collection in $obj3 (SchoolClass)
+                $obj3->addEvent($obj1);
             } // if joined row not null
 
             // Add objects for joined DocumentCategory rows
 
-            $key5 = DocumentCategoryPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-            if ($key5 !== null) {
-                $obj5 = DocumentCategoryPeer::getInstanceFromPool($key5);
-                if (!$obj5) {
+            $key4 = DocumentCategoryPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+            if ($key4 !== null) {
+                $obj4 = DocumentCategoryPeer::getInstanceFromPool($key4);
+                if (!$obj4) {
 
                     $cls = DocumentCategoryPeer::getOMClass();
 
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    DocumentCategoryPeer::addInstanceToPool($obj4, $key4);
+                } // if obj4 loaded
+
+                // Add the $obj1 (Event) to the collection in $obj4 (DocumentCategory)
+                $obj4->addEvent($obj1);
+            } // if joined row not null
+
+            // Add objects for joined User rows
+
+            $key5 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+            if ($key5 !== null) {
+                $obj5 = UserPeer::getInstanceFromPool($key5);
+                if (!$obj5) {
+
+                    $cls = UserPeer::getOMClass();
+
                     $obj5 = new $cls();
                     $obj5->hydrate($row, $startcol5);
-                    DocumentCategoryPeer::addInstanceToPool($obj5, $key5);
+                    UserPeer::addInstanceToPool($obj5, $key5);
                 } // if obj5 loaded
 
-                // Add the $obj1 (Event) to the collection in $obj5 (DocumentCategory)
-                $obj5->addEvent($obj1);
+                // Add the $obj1 (Event) to the collection in $obj5 (User)
+                $obj5->addEventRelatedByCreatedBy($obj1);
             } // if joined row not null
 
             // Add objects for joined User rows
@@ -1476,25 +1346,7 @@ abstract class BaseEventPeer
                 } // if obj6 loaded
 
                 // Add the $obj1 (Event) to the collection in $obj6 (User)
-                $obj6->addEventRelatedByCreatedBy($obj1);
-            } // if joined row not null
-
-            // Add objects for joined User rows
-
-            $key7 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-            if ($key7 !== null) {
-                $obj7 = UserPeer::getInstanceFromPool($key7);
-                if (!$obj7) {
-
-                    $cls = UserPeer::getOMClass();
-
-                    $obj7 = new $cls();
-                    $obj7->hydrate($row, $startcol7);
-                    UserPeer::addInstanceToPool($obj7, $key7);
-                } // if obj7 loaded
-
-                // Add the $obj1 (Event) to the collection in $obj7 (User)
-                $obj7->addEventRelatedByUpdatedBy($obj1);
+                $obj6->addEventRelatedByUpdatedBy($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -1540,67 +1392,6 @@ abstract class BaseEventPeer
         if ($con === null) {
             $con = Propel::getConnection(EventPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
-
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::GALLERY_ID, DocumentCategoryPeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::CREATED_BY, UserPeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
-
-        $stmt = BasePeer::doCount($criteria, $con);
-
-        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $count = (int) $row[0];
-        } else {
-            $count = 0; // no rows returned; we infer that means 0 matches.
-        }
-        $stmt->closeCursor();
-
-        return $count;
-    }
-
-
-    /**
-     * Returns the number of rows matching criteria, joining the related Service table
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return int Number of matching rows.
-     */
-    public static function doCountJoinAllExceptService(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        // we're going to modify criteria, so copy it first
-        $criteria = clone $criteria;
-
-        // We need to set the primary table name, since in the case that there are no WHERE columns
-        // it will be impossible for the BasePeer::createSelectSql() method to determine which
-        // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(EventPeer::TABLE_NAME);
-
-        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-            $criteria->setDistinct();
-        }
-
-        if (!$criteria->hasSelectClause()) {
-            EventPeer::addSelectColumns($criteria);
-        }
-
-        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
-
-        // Set the correct dbName
-        $criteria->setDbName(EventPeer::DATABASE_NAME);
-
-        if ($con === null) {
-            $con = Propel::getConnection(EventPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-        }
-
-        $criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
@@ -1661,8 +1452,6 @@ abstract class BaseEventPeer
 
         $criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
 
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
-
         $criteria->addJoin(EventPeer::GALLERY_ID, DocumentCategoryPeer::ID, $join_behavior);
 
         $criteria->addJoin(EventPeer::CREATED_BY, UserPeer::ID, $join_behavior);
@@ -1719,8 +1508,6 @@ abstract class BaseEventPeer
         }
 
         $criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
 
         $criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
@@ -1779,8 +1566,6 @@ abstract class BaseEventPeer
 
         $criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
 
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
-
         $criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
         $criteria->addJoin(EventPeer::GALLERY_ID, DocumentCategoryPeer::ID, $join_behavior);
@@ -1836,8 +1621,6 @@ abstract class BaseEventPeer
 
         $criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
 
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
-
         $criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
         $criteria->addJoin(EventPeer::GALLERY_ID, DocumentCategoryPeer::ID, $join_behavior);
@@ -1879,22 +1662,17 @@ abstract class BaseEventPeer
         EventPeer::addSelectColumns($criteria);
         $startcol2 = EventPeer::NUM_HYDRATE_COLUMNS;
 
-        ServicePeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + ServicePeer::NUM_HYDRATE_COLUMNS;
-
         SchoolClassPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
+        $startcol3 = $startcol2 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
         DocumentCategoryPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
-
-        UserPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
 
         $criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
@@ -1922,60 +1700,60 @@ abstract class BaseEventPeer
                 EventPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-                // Add objects for joined Service rows
-
-                $key2 = ServicePeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = ServicePeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = ServicePeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    ServicePeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (Event) to the collection in $obj2 (Service)
-                $obj2->addEvent($obj1);
-
-            } // if joined row is not null
-
                 // Add objects for joined SchoolClass rows
 
-                $key3 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = SchoolClassPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
+                $key2 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = SchoolClassPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
 
                         $cls = SchoolClassPeer::getOMClass();
 
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    SchoolClassPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    SchoolClassPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
 
-                // Add the $obj1 (Event) to the collection in $obj3 (SchoolClass)
-                $obj3->addEvent($obj1);
+                // Add the $obj1 (Event) to the collection in $obj2 (SchoolClass)
+                $obj2->addEvent($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined DocumentCategory rows
 
-                $key4 = DocumentCategoryPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = DocumentCategoryPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
+                $key3 = DocumentCategoryPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = DocumentCategoryPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
 
                         $cls = DocumentCategoryPeer::getOMClass();
 
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    DocumentCategoryPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Event) to the collection in $obj3 (DocumentCategory)
+                $obj3->addEvent($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined User rows
+
+                $key4 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = UserPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = UserPeer::getOMClass();
+
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    DocumentCategoryPeer::addInstanceToPool($obj4, $key4);
+                    UserPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (Event) to the collection in $obj4 (DocumentCategory)
-                $obj4->addEvent($obj1);
+                // Add the $obj1 (Event) to the collection in $obj4 (User)
+                $obj4->addEventRelatedByCreatedBy($obj1);
 
             } // if joined row is not null
 
@@ -1994,196 +1772,7 @@ abstract class BaseEventPeer
                 } // if $obj5 already loaded
 
                 // Add the $obj1 (Event) to the collection in $obj5 (User)
-                $obj5->addEventRelatedByCreatedBy($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key6 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-                if ($key6 !== null) {
-                    $obj6 = UserPeer::getInstanceFromPool($key6);
-                    if (!$obj6) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    UserPeer::addInstanceToPool($obj6, $key6);
-                } // if $obj6 already loaded
-
-                // Add the $obj1 (Event) to the collection in $obj6 (User)
-                $obj6->addEventRelatedByUpdatedBy($obj1);
-
-            } // if joined row is not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Selects a collection of Event objects pre-filled with all related objects except Service.
-     *
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Event objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinAllExceptService(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        // $criteria->getDbName() will return the same object if not set to another value
-        // so == check is okay and faster
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(EventPeer::DATABASE_NAME);
-        }
-
-        EventPeer::addSelectColumns($criteria);
-        $startcol2 = EventPeer::NUM_HYDRATE_COLUMNS;
-
-        EventTypePeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + EventTypePeer::NUM_HYDRATE_COLUMNS;
-
-        SchoolClassPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
-
-        DocumentCategoryPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
-
-        UserPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
-
-        UserPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::GALLERY_ID, DocumentCategoryPeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::CREATED_BY, UserPeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
-
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = EventPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = EventPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = EventPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                EventPeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-                // Add objects for joined EventType rows
-
-                $key2 = EventTypePeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = EventTypePeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = EventTypePeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    EventTypePeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (Event) to the collection in $obj2 (EventType)
-                $obj2->addEvent($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined SchoolClass rows
-
-                $key3 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = SchoolClassPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = SchoolClassPeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    SchoolClassPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (Event) to the collection in $obj3 (SchoolClass)
-                $obj3->addEvent($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined DocumentCategory rows
-
-                $key4 = DocumentCategoryPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = DocumentCategoryPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
-
-                        $cls = DocumentCategoryPeer::getOMClass();
-
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    DocumentCategoryPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
-
-                // Add the $obj1 (Event) to the collection in $obj4 (DocumentCategory)
-                $obj4->addEvent($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key5 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = UserPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    UserPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
-
-                // Add the $obj1 (Event) to the collection in $obj5 (User)
-                $obj5->addEventRelatedByCreatedBy($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key6 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-                if ($key6 !== null) {
-                    $obj6 = UserPeer::getInstanceFromPool($key6);
-                    if (!$obj6) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    UserPeer::addInstanceToPool($obj6, $key6);
-                } // if $obj6 already loaded
-
-                // Add the $obj1 (Event) to the collection in $obj6 (User)
-                $obj6->addEventRelatedByUpdatedBy($obj1);
+                $obj5->addEventRelatedByUpdatedBy($obj1);
 
             } // if joined row is not null
 
@@ -2222,21 +1811,16 @@ abstract class BaseEventPeer
         EventTypePeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + EventTypePeer::NUM_HYDRATE_COLUMNS;
 
-        ServicePeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + ServicePeer::NUM_HYDRATE_COLUMNS;
-
         DocumentCategoryPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        UserPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
-
         $criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
 
         $criteria->addJoin(EventPeer::GALLERY_ID, DocumentCategoryPeer::ID, $join_behavior);
 
@@ -2281,41 +1865,41 @@ abstract class BaseEventPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Service rows
+                // Add objects for joined DocumentCategory rows
 
-                $key3 = ServicePeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                $key3 = DocumentCategoryPeer::getPrimaryKeyHashFromRow($row, $startcol3);
                 if ($key3 !== null) {
-                    $obj3 = ServicePeer::getInstanceFromPool($key3);
+                    $obj3 = DocumentCategoryPeer::getInstanceFromPool($key3);
                     if (!$obj3) {
 
-                        $cls = ServicePeer::getOMClass();
+                        $cls = DocumentCategoryPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    ServicePeer::addInstanceToPool($obj3, $key3);
+                    DocumentCategoryPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (Event) to the collection in $obj3 (Service)
+                // Add the $obj1 (Event) to the collection in $obj3 (DocumentCategory)
                 $obj3->addEvent($obj1);
 
             } // if joined row is not null
 
-                // Add objects for joined DocumentCategory rows
+                // Add objects for joined User rows
 
-                $key4 = DocumentCategoryPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                $key4 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
                 if ($key4 !== null) {
-                    $obj4 = DocumentCategoryPeer::getInstanceFromPool($key4);
+                    $obj4 = UserPeer::getInstanceFromPool($key4);
                     if (!$obj4) {
 
-                        $cls = DocumentCategoryPeer::getOMClass();
+                        $cls = UserPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    DocumentCategoryPeer::addInstanceToPool($obj4, $key4);
+                    UserPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (Event) to the collection in $obj4 (DocumentCategory)
-                $obj4->addEvent($obj1);
+                // Add the $obj1 (Event) to the collection in $obj4 (User)
+                $obj4->addEventRelatedByCreatedBy($obj1);
 
             } // if joined row is not null
 
@@ -2334,26 +1918,7 @@ abstract class BaseEventPeer
                 } // if $obj5 already loaded
 
                 // Add the $obj1 (Event) to the collection in $obj5 (User)
-                $obj5->addEventRelatedByCreatedBy($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key6 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-                if ($key6 !== null) {
-                    $obj6 = UserPeer::getInstanceFromPool($key6);
-                    if (!$obj6) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    UserPeer::addInstanceToPool($obj6, $key6);
-                } // if $obj6 already loaded
-
-                // Add the $obj1 (Event) to the collection in $obj6 (User)
-                $obj6->addEventRelatedByUpdatedBy($obj1);
+                $obj5->addEventRelatedByUpdatedBy($obj1);
 
             } // if joined row is not null
 
@@ -2392,21 +1957,16 @@ abstract class BaseEventPeer
         EventTypePeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + EventTypePeer::NUM_HYDRATE_COLUMNS;
 
-        ServicePeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + ServicePeer::NUM_HYDRATE_COLUMNS;
-
         SchoolClassPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + UserPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        UserPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
-
         $criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
 
         $criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
@@ -2451,41 +2011,41 @@ abstract class BaseEventPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Service rows
+                // Add objects for joined SchoolClass rows
 
-                $key3 = ServicePeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                $key3 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol3);
                 if ($key3 !== null) {
-                    $obj3 = ServicePeer::getInstanceFromPool($key3);
+                    $obj3 = SchoolClassPeer::getInstanceFromPool($key3);
                     if (!$obj3) {
 
-                        $cls = ServicePeer::getOMClass();
+                        $cls = SchoolClassPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    ServicePeer::addInstanceToPool($obj3, $key3);
+                    SchoolClassPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (Event) to the collection in $obj3 (Service)
+                // Add the $obj1 (Event) to the collection in $obj3 (SchoolClass)
                 $obj3->addEvent($obj1);
 
             } // if joined row is not null
 
-                // Add objects for joined SchoolClass rows
+                // Add objects for joined User rows
 
-                $key4 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                $key4 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
                 if ($key4 !== null) {
-                    $obj4 = SchoolClassPeer::getInstanceFromPool($key4);
+                    $obj4 = UserPeer::getInstanceFromPool($key4);
                     if (!$obj4) {
 
-                        $cls = SchoolClassPeer::getOMClass();
+                        $cls = UserPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    SchoolClassPeer::addInstanceToPool($obj4, $key4);
+                    UserPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (Event) to the collection in $obj4 (SchoolClass)
-                $obj4->addEvent($obj1);
+                // Add the $obj1 (Event) to the collection in $obj4 (User)
+                $obj4->addEventRelatedByCreatedBy($obj1);
 
             } // if joined row is not null
 
@@ -2504,26 +2064,7 @@ abstract class BaseEventPeer
                 } // if $obj5 already loaded
 
                 // Add the $obj1 (Event) to the collection in $obj5 (User)
-                $obj5->addEventRelatedByCreatedBy($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key6 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-                if ($key6 !== null) {
-                    $obj6 = UserPeer::getInstanceFromPool($key6);
-                    if (!$obj6) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    UserPeer::addInstanceToPool($obj6, $key6);
-                } // if $obj6 already loaded
-
-                // Add the $obj1 (Event) to the collection in $obj6 (User)
-                $obj6->addEventRelatedByUpdatedBy($obj1);
+                $obj5->addEventRelatedByUpdatedBy($obj1);
 
             } // if joined row is not null
 
@@ -2562,18 +2103,13 @@ abstract class BaseEventPeer
         EventTypePeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + EventTypePeer::NUM_HYDRATE_COLUMNS;
 
-        ServicePeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + ServicePeer::NUM_HYDRATE_COLUMNS;
-
         SchoolClassPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
         DocumentCategoryPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
 
         $criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
@@ -2616,60 +2152,41 @@ abstract class BaseEventPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Service rows
-
-                $key3 = ServicePeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = ServicePeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = ServicePeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    ServicePeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (Event) to the collection in $obj3 (Service)
-                $obj3->addEvent($obj1);
-
-            } // if joined row is not null
-
                 // Add objects for joined SchoolClass rows
 
-                $key4 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = SchoolClassPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
+                $key3 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = SchoolClassPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
 
                         $cls = SchoolClassPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    SchoolClassPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    SchoolClassPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
 
-                // Add the $obj1 (Event) to the collection in $obj4 (SchoolClass)
-                $obj4->addEvent($obj1);
+                // Add the $obj1 (Event) to the collection in $obj3 (SchoolClass)
+                $obj3->addEvent($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined DocumentCategory rows
 
-                $key5 = DocumentCategoryPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = DocumentCategoryPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
+                $key4 = DocumentCategoryPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = DocumentCategoryPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
 
                         $cls = DocumentCategoryPeer::getOMClass();
 
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    DocumentCategoryPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    DocumentCategoryPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
 
-                // Add the $obj1 (Event) to the collection in $obj5 (DocumentCategory)
-                $obj5->addEvent($obj1);
+                // Add the $obj1 (Event) to the collection in $obj4 (DocumentCategory)
+                $obj4->addEvent($obj1);
 
             } // if joined row is not null
 
@@ -2708,18 +2225,13 @@ abstract class BaseEventPeer
         EventTypePeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + EventTypePeer::NUM_HYDRATE_COLUMNS;
 
-        ServicePeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + ServicePeer::NUM_HYDRATE_COLUMNS;
-
         SchoolClassPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + SchoolClassPeer::NUM_HYDRATE_COLUMNS;
 
         DocumentCategoryPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + DocumentCategoryPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(EventPeer::EVENT_TYPE_ID, EventTypePeer::ID, $join_behavior);
-
-        $criteria->addJoin(EventPeer::SERVICE_ID, ServicePeer::ID, $join_behavior);
 
         $criteria->addJoin(EventPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, $join_behavior);
 
@@ -2762,60 +2274,41 @@ abstract class BaseEventPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Service rows
-
-                $key3 = ServicePeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = ServicePeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = ServicePeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    ServicePeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (Event) to the collection in $obj3 (Service)
-                $obj3->addEvent($obj1);
-
-            } // if joined row is not null
-
                 // Add objects for joined SchoolClass rows
 
-                $key4 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = SchoolClassPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
+                $key3 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = SchoolClassPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
 
                         $cls = SchoolClassPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    SchoolClassPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    SchoolClassPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
 
-                // Add the $obj1 (Event) to the collection in $obj4 (SchoolClass)
-                $obj4->addEvent($obj1);
+                // Add the $obj1 (Event) to the collection in $obj3 (SchoolClass)
+                $obj3->addEvent($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined DocumentCategory rows
 
-                $key5 = DocumentCategoryPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = DocumentCategoryPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
+                $key4 = DocumentCategoryPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = DocumentCategoryPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
 
                         $cls = DocumentCategoryPeer::getOMClass();
 
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    DocumentCategoryPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    DocumentCategoryPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
 
-                // Add the $obj1 (Event) to the collection in $obj5 (DocumentCategory)
-                $obj5->addEvent($obj1);
+                // Add the $obj1 (Event) to the collection in $obj4 (DocumentCategory)
+                $obj4->addEvent($obj1);
 
             } // if joined row is not null
 

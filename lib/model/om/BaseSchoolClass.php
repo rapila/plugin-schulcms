@@ -5432,31 +5432,6 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Event[] List of Event objects
      */
-    public function getEventsJoinService($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = EventQuery::create(null, $criteria);
-        $query->joinWith('Service', $join_behavior);
-
-        return $this->getEvents($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this SchoolClass is new, it will return
-     * an empty collection; or if this SchoolClass has previously
-     * been saved, it will retrieve related Events from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in SchoolClass.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Event[] List of Event objects
-     */
     public function getEventsJoinDocumentCategory($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = EventQuery::create(null, $criteria);

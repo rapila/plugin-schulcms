@@ -1,16 +1,16 @@
 Widget.types.event_detail = {
 	initialize: function() {
 		var _this = this;
-		this.content = Widget.parseHTML("{{includeTemplate=edit}}");
-		this.content.find('div.hide_if_not_saved').hide();
+		this._element = Widget.parseHTML("{{includeTemplate=edit}}");
+		this._element.find('div.hide_if_not_saved').hide();
 		this.current_detail_id = null;
 
-		this.preview_text = this.content.find('div.event_preview');
-		this.review_text = this.content.find('div.event_review');
+		this.preview_text = this._element.find('div.event_preview');
+		this.review_text = this._element.find('div.event_review');
 
 		this.no_images_upload_info = jQuery('<div/>').html("{{writeString=wns.event.no_images_and_upload_info}}").addClass('no_images_placeholder');
 		this.uploader = Widget.create('file_upload');
-		this.droppable_area = _this.content.find('.droppable_area');
+		this.droppable_area = _this._element.find('.droppable_area');
 		this.droppable_area.append(this.no_images_upload_info);
 
 		this.droppable_area.sortable({
@@ -28,32 +28,26 @@ Widget.types.event_detail = {
 		this.uploader.allow_drag_to(_this.droppable_area, null, function(target, file) {
 			return { document_category_id: _this.settings.events_document_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
 		});
-		this.content.find("input[name^='date_']").datepicker({
+		this._element.find("input[name^='date_']").datepicker({
 			dateFormat: 'dd.mm.yy'
 		});
-		this.content.find("select[name='event_type_id']").prepareWidget(function(event_type_input) {
+		this._element.find("select[name='event_type_id']").prepareWidget(function(event_type_input) {
 			event_type_input.settings.initial_selection = _this.settings.initial_type_id;
 		}, jQuery.noop);
-		this.content.find("select[name='service_id']").prepareWidget(function(services_input_widget) {
-			if(jQuery(services_input_widget._element).find('option').length == (services_input_widget.settings.default_value_label ? 1 : 0)) {
-				_this.content.find('.service_select_items').each(function() {
-					jQuery(this).hide();
-				});
-			}
-		});
 
-		var school_class_select = this.content.find("select[name='school_class_id']");
-		school_class_select.prepareWidget(function(classes_input_widget) {
-			classes_input_widget.val(_this.settings.predefined_school_class_id);
-			classes_input_widget.settings.disabled = !!_this.settings.predefined_school_class_id;
-		}, function(classes_input_widget) {
-			if(_this.settings.predefined_school_class_id) {
-				classes_input_widget.val(_this.settings.predefined_school_class_id);
-				_this.content.find('.service_select_items').each(function() {
-					jQuery(this).hide();
-				});
-			}
-		});
+		if(!this.school_class_is_predefined()) {
+			this._element.find('div.service_elements').hide();
+			this.school_class_dropdown = this._element.find("select[name='school_class_id']");
+			this.school_class_dropdown.prepareWidget(function(widget) {
+				widget.settings.initial_selection = _this.settings.predefined_school_class_id;
+			}, function(widget) {
+				if(_this.settings.predefined_school_class_id) {
+					widget.val(_this.settings.predefined_school_class_id);
+				}
+			});
+		} else {
+			this._element.find('div.school_class_elements').hide();
+		}
 
 		// Instance
 		Widget.callStatic('detail', 'create_for_instance', this);
@@ -65,40 +59,47 @@ Widget.types.event_detail = {
 		this.handle('saving', function(event, data) {
 			data.body_preview = _this.event_preview_editor.get_data();
 			data.body_review = _this.event_review_editor.get_data();
+			data.school_class_id = _this.current_school_class_id;
 		}.bind(_this));
+	},
+
+	school_class_is_predefined: function() {
+		return this.settings.predefined_school_class_id !== null;
 	},
 
 	fill_data: function() {
 		this.detail_widget.disable();
-		this.eventData(function(event_data) {
-			this.current_detail_id = event_data.Id;
-			this.content.find("input[name='title']").val(event_data.Title);
-			this.content.find("textarea[name='teaser']").val(event_data.Teaser);
-			this.content.find("input[name='date_start']").val(event_data.DateStart);
-			this.content.find("input[name='date_end']").val(event_data.DateEnd);
-			this.content.find("input[name='time_details']").val(event_data.TimeDetails);
-			this.content.find("input[name='location_info']").val(event_data.LocationInfo);
-			this.content.find("input[name='is_active']").attr('checked', event_data.IsActive);
-			this.content.find("input[name='ignore_on_frontpage']").attr('checked', event_data.IgnoreOnFrontpage);
-			this.content.find("select[name='service_id']").val(event_data.ServiceId || '');
-			if(!this.settings.predefined_school_class_id) {
-				this.content.find("select[name='school_class_id']").ensureWidget(function(school_class_input) {
-					school_class_input.val(event_data.SchoolClassId);
+		this.eventData(function(data) {
+			this.current_detail_id = data.Id;
+			this._element.find("input[name='title']").val(data.Title);
+			this._element.find("textarea[name='teaser']").val(data.Teaser);
+			this._element.find("input[name='date_start']").val(data.DateStart);
+			this._element.find("input[name='date_end']").val(data.DateEnd);
+			this._element.find("input[name='time_details']").val(data.TimeDetails);
+			this._element.find("input[name='location_info']").val(data.LocationInfo);
+			this._element.find("input[name='is_active']").attr('checked', data.IsActive);
+			this._element.find("input[name='ignore_on_frontpage']").attr('checked', data.IgnoreOnFrontpage);
+
+			if(!this.school_class_is_predefined()) {
+				this.school_class_dropdown.ensureWidget(function(widget) {
+					widget.val(data.SchoolClassId);
 				});
+			} else {
+				this.current_school_class_id = data.SchoolClassId;
 			}
-			this.content.find("select[name='event_type_id']").val(event_data.EventTypeId);
-			this.content.find(".updated_info").text(event_data.UpdatedInfo);
-			this.content.find(".created_info").text(event_data.CreatedInfo);
-			this.content.find(".detail_id").text(event_data.Id);
-			this.detail_widget.set_title(this.detail_widget.settings.title = event_data.Title);
+			this._element.find("select[name='event_type_id']").val(data.EventTypeId);
+			this._element.find(".updated_info").text(data.UpdatedInfo);
+			this._element.find(".created_info").text(data.CreatedInfo);
+			this._element.find(".detail_id").text(data.Id);
+			this.detail_widget.set_title(this.detail_widget.settings.title = data.Title);
 			this.preview_text.ensureWidget(function(widget) {
-				widget.set_data(event_data.BodyPreview);
+				widget.set_data(data.BodyPreview);
 			});
 			this.review_text.ensureWidget(function(widget) {
-				widget.set_data(event_data.BodyReview);
+				widget.set_data(data.BodyReview);
 			});
 			this.update_documents();
-			this.content.find('div.hide_if_not_saved').show();
+			this._element.find('div.hide_if_not_saved').show();
 			this.detail_widget.enable();
 		});
 	},

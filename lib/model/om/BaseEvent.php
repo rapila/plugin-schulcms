@@ -110,12 +110,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
     protected $event_type_id;
 
     /**
-     * The value for the service_id field.
-     * @var        int
-     */
-    protected $service_id;
-
-    /**
      * The value for the school_class_id field.
      * @var        int
      */
@@ -155,11 +149,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
      * @var        EventType
      */
     protected $aEventType;
-
-    /**
-     * @var        Service
-     */
-    protected $aService;
 
     /**
      * @var        SchoolClass
@@ -434,17 +423,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
     {
 
         return $this->event_type_id;
-    }
-
-    /**
-     * Get the [service_id] column value.
-     *
-     * @return int
-     */
-    public function getServiceId()
-    {
-
-        return $this->service_id;
     }
 
     /**
@@ -875,31 +853,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
     } // setEventTypeId()
 
     /**
-     * Set the value of [service_id] column.
-     *
-     * @param  int $v new value
-     * @return Event The current object (for fluent API support)
-     */
-    public function setServiceId($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->service_id !== $v) {
-            $this->service_id = $v;
-            $this->modifiedColumns[] = EventPeer::SERVICE_ID;
-        }
-
-        if ($this->aService !== null && $this->aService->getId() !== $v) {
-            $this->aService = null;
-        }
-
-
-        return $this;
-    } // setServiceId()
-
-    /**
      * Set the value of [school_class_id] column.
      *
      * @param  int $v new value
@@ -1110,13 +1063,12 @@ abstract class BaseEvent extends BaseObject implements Persistent
             $this->is_active = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
             $this->ignore_on_frontpage = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
             $this->event_type_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
-            $this->service_id = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
-            $this->school_class_id = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
-            $this->gallery_id = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
-            $this->created_at = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
-            $this->updated_at = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
-            $this->created_by = ($row[$startcol + 18] !== null) ? (int) $row[$startcol + 18] : null;
-            $this->updated_by = ($row[$startcol + 19] !== null) ? (int) $row[$startcol + 19] : null;
+            $this->school_class_id = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
+            $this->gallery_id = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
+            $this->created_at = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+            $this->updated_at = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
+            $this->created_by = ($row[$startcol + 17] !== null) ? (int) $row[$startcol + 17] : null;
+            $this->updated_by = ($row[$startcol + 18] !== null) ? (int) $row[$startcol + 18] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1126,7 +1078,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 20; // 20 = EventPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 19; // 19 = EventPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Event object", $e);
@@ -1151,9 +1103,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
 
         if ($this->aEventType !== null && $this->event_type_id !== $this->aEventType->getId()) {
             $this->aEventType = null;
-        }
-        if ($this->aService !== null && $this->service_id !== $this->aService->getId()) {
-            $this->aService = null;
         }
         if ($this->aSchoolClass !== null && $this->school_class_id !== $this->aSchoolClass->getId()) {
             $this->aSchoolClass = null;
@@ -1207,7 +1156,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aEventType = null;
-            $this->aService = null;
             $this->aSchoolClass = null;
             $this->aDocumentCategory = null;
             $this->aUserRelatedByCreatedBy = null;
@@ -1383,13 +1331,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 $this->setEventType($this->aEventType);
             }
 
-            if ($this->aService !== null) {
-                if ($this->aService->isModified() || $this->aService->isNew()) {
-                    $affectedRows += $this->aService->save($con);
-                }
-                $this->setService($this->aService);
-            }
-
             if ($this->aSchoolClass !== null) {
                 if ($this->aSchoolClass->isModified() || $this->aSchoolClass->isNew()) {
                     $affectedRows += $this->aSchoolClass->save($con);
@@ -1521,9 +1462,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
         if ($this->isColumnModified(EventPeer::EVENT_TYPE_ID)) {
             $modifiedColumns[':p' . $index++]  = '`event_type_id`';
         }
-        if ($this->isColumnModified(EventPeer::SERVICE_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`service_id`';
-        }
         if ($this->isColumnModified(EventPeer::SCHOOL_CLASS_ID)) {
             $modifiedColumns[':p' . $index++]  = '`school_class_id`';
         }
@@ -1597,9 +1535,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
                         break;
                     case '`event_type_id`':
                         $stmt->bindValue($identifier, $this->event_type_id, PDO::PARAM_INT);
-                        break;
-                    case '`service_id`':
-                        $stmt->bindValue($identifier, $this->service_id, PDO::PARAM_INT);
                         break;
                     case '`school_class_id`':
                         $stmt->bindValue($identifier, $this->school_class_id, PDO::PARAM_INT);
@@ -1724,12 +1659,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 }
             }
 
-            if ($this->aService !== null) {
-                if (!$this->aService->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aService->getValidationFailures());
-                }
-            }
-
             if ($this->aSchoolClass !== null) {
                 if (!$this->aSchoolClass->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aSchoolClass->getValidationFailures());
@@ -1843,24 +1772,21 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 return $this->getEventTypeId();
                 break;
             case 13:
-                return $this->getServiceId();
-                break;
-            case 14:
                 return $this->getSchoolClassId();
                 break;
-            case 15:
+            case 14:
                 return $this->getGalleryId();
                 break;
-            case 16:
+            case 15:
                 return $this->getCreatedAt();
                 break;
-            case 17:
+            case 16:
                 return $this->getUpdatedAt();
                 break;
-            case 18:
+            case 17:
                 return $this->getCreatedBy();
                 break;
-            case 19:
+            case 18:
                 return $this->getUpdatedBy();
                 break;
             default:
@@ -1905,13 +1831,12 @@ abstract class BaseEvent extends BaseObject implements Persistent
             $keys[10] => $this->getIsActive(),
             $keys[11] => $this->getIgnoreOnFrontpage(),
             $keys[12] => $this->getEventTypeId(),
-            $keys[13] => $this->getServiceId(),
-            $keys[14] => $this->getSchoolClassId(),
-            $keys[15] => $this->getGalleryId(),
-            $keys[16] => $this->getCreatedAt(),
-            $keys[17] => $this->getUpdatedAt(),
-            $keys[18] => $this->getCreatedBy(),
-            $keys[19] => $this->getUpdatedBy(),
+            $keys[13] => $this->getSchoolClassId(),
+            $keys[14] => $this->getGalleryId(),
+            $keys[15] => $this->getCreatedAt(),
+            $keys[16] => $this->getUpdatedAt(),
+            $keys[17] => $this->getCreatedBy(),
+            $keys[18] => $this->getUpdatedBy(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1921,9 +1846,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
         if ($includeForeignObjects) {
             if (null !== $this->aEventType) {
                 $result['EventType'] = $this->aEventType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aService) {
-                $result['Service'] = $this->aService->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aSchoolClass) {
                 $result['SchoolClass'] = $this->aSchoolClass->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -2014,24 +1936,21 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 $this->setEventTypeId($value);
                 break;
             case 13:
-                $this->setServiceId($value);
-                break;
-            case 14:
                 $this->setSchoolClassId($value);
                 break;
-            case 15:
+            case 14:
                 $this->setGalleryId($value);
                 break;
-            case 16:
+            case 15:
                 $this->setCreatedAt($value);
                 break;
-            case 17:
+            case 16:
                 $this->setUpdatedAt($value);
                 break;
-            case 18:
+            case 17:
                 $this->setCreatedBy($value);
                 break;
-            case 19:
+            case 18:
                 $this->setUpdatedBy($value);
                 break;
         } // switch()
@@ -2071,13 +1990,12 @@ abstract class BaseEvent extends BaseObject implements Persistent
         if (array_key_exists($keys[10], $arr)) $this->setIsActive($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setIgnoreOnFrontpage($arr[$keys[11]]);
         if (array_key_exists($keys[12], $arr)) $this->setEventTypeId($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setServiceId($arr[$keys[13]]);
-        if (array_key_exists($keys[14], $arr)) $this->setSchoolClassId($arr[$keys[14]]);
-        if (array_key_exists($keys[15], $arr)) $this->setGalleryId($arr[$keys[15]]);
-        if (array_key_exists($keys[16], $arr)) $this->setCreatedAt($arr[$keys[16]]);
-        if (array_key_exists($keys[17], $arr)) $this->setUpdatedAt($arr[$keys[17]]);
-        if (array_key_exists($keys[18], $arr)) $this->setCreatedBy($arr[$keys[18]]);
-        if (array_key_exists($keys[19], $arr)) $this->setUpdatedBy($arr[$keys[19]]);
+        if (array_key_exists($keys[13], $arr)) $this->setSchoolClassId($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setGalleryId($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setCreatedAt($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setUpdatedAt($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setCreatedBy($arr[$keys[17]]);
+        if (array_key_exists($keys[18], $arr)) $this->setUpdatedBy($arr[$keys[18]]);
     }
 
     /**
@@ -2102,7 +2020,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
         if ($this->isColumnModified(EventPeer::IS_ACTIVE)) $criteria->add(EventPeer::IS_ACTIVE, $this->is_active);
         if ($this->isColumnModified(EventPeer::IGNORE_ON_FRONTPAGE)) $criteria->add(EventPeer::IGNORE_ON_FRONTPAGE, $this->ignore_on_frontpage);
         if ($this->isColumnModified(EventPeer::EVENT_TYPE_ID)) $criteria->add(EventPeer::EVENT_TYPE_ID, $this->event_type_id);
-        if ($this->isColumnModified(EventPeer::SERVICE_ID)) $criteria->add(EventPeer::SERVICE_ID, $this->service_id);
         if ($this->isColumnModified(EventPeer::SCHOOL_CLASS_ID)) $criteria->add(EventPeer::SCHOOL_CLASS_ID, $this->school_class_id);
         if ($this->isColumnModified(EventPeer::GALLERY_ID)) $criteria->add(EventPeer::GALLERY_ID, $this->gallery_id);
         if ($this->isColumnModified(EventPeer::CREATED_AT)) $criteria->add(EventPeer::CREATED_AT, $this->created_at);
@@ -2184,7 +2101,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
         $copyObj->setIsActive($this->getIsActive());
         $copyObj->setIgnoreOnFrontpage($this->getIgnoreOnFrontpage());
         $copyObj->setEventTypeId($this->getEventTypeId());
-        $copyObj->setServiceId($this->getServiceId());
         $copyObj->setSchoolClassId($this->getSchoolClassId());
         $copyObj->setGalleryId($this->getGalleryId());
         $copyObj->setCreatedAt($this->getCreatedAt());
@@ -2305,58 +2221,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
         }
 
         return $this->aEventType;
-    }
-
-    /**
-     * Declares an association between this object and a Service object.
-     *
-     * @param                  Service $v
-     * @return Event The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setService(Service $v = null)
-    {
-        if ($v === null) {
-            $this->setServiceId(NULL);
-        } else {
-            $this->setServiceId($v->getId());
-        }
-
-        $this->aService = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Service object, it will not be re-added.
-        if ($v !== null) {
-            $v->addEvent($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Service object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Service The associated Service object.
-     * @throws PropelException
-     */
-    public function getService(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aService === null && ($this->service_id !== null) && $doQuery) {
-            $this->aService = ServiceQuery::create()->findPk($this->service_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aService->addEvents($this);
-             */
-        }
-
-        return $this->aService;
     }
 
     /**
@@ -2904,7 +2768,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
         $this->is_active = null;
         $this->ignore_on_frontpage = null;
         $this->event_type_id = null;
-        $this->service_id = null;
         $this->school_class_id = null;
         $this->gallery_id = null;
         $this->created_at = null;
@@ -2942,9 +2805,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
             if ($this->aEventType instanceof Persistent) {
               $this->aEventType->clearAllReferences($deep);
             }
-            if ($this->aService instanceof Persistent) {
-              $this->aService->clearAllReferences($deep);
-            }
             if ($this->aSchoolClass instanceof Persistent) {
               $this->aSchoolClass->clearAllReferences($deep);
             }
@@ -2966,7 +2826,6 @@ abstract class BaseEvent extends BaseObject implements Persistent
         }
         $this->collEventDocuments = null;
         $this->aEventType = null;
-        $this->aService = null;
         $this->aSchoolClass = null;
         $this->aDocumentCategory = null;
         $this->aUserRelatedByCreatedBy = null;
