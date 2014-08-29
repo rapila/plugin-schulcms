@@ -20,18 +20,21 @@ Widget.types.class_detail = {
 
 		this.handle('opened', function() {
 			var _this = this;
-			this.loaded_lists = [];
 			this._element.accordion({
 				option: {'active': this.settings.accordion_active || 0 },
 				beforeActivate: function(event, ui) {
 					if(ui.newPanel.is('.news')) {
-						_this.reload_news();
+						_this.settings.accordion_active = 1;
+						_this.reload_news(false);
 					} else if(ui.newPanel.is('.events')) {
-						_this.reload_events();
+						_this.settings.accordion_active = 2;
+						_this.reload_events(false);
 					} else if(ui.newPanel.is('.documents')) {
-						_this.reload_documents();
+						_this.settings.accordion_active = 3;
+						_this.reload_documents(false);
 					} else if(ui.newPanel.is('.links')) {
-						_this.reload_links();
+						_this.settings.accordion_active = 4;
+						_this.reload_links(false);
 					}
 				}
 			});
@@ -80,7 +83,7 @@ Widget.types.class_detail = {
 		});
 
 		this.uploader.allow_drag_to(stundenplan, null, function(target, file) {
-			if(file.type !== 'application/pdf' && file.name.lastIndexOf('.pdf') !== (file.name.length-4)) {
+			if(file.type !== 'application/pdf' && file.name.lastIndexOf('.pdf') !== (file.name.length - 4)) {
 				Widget.notifyUser(Widget.logSeverity.ALERT, 'Der Stundenplan muss eine Datei vom Typ «PDF» sein');
 				return false;
 			}
@@ -145,11 +148,12 @@ Widget.types.class_detail = {
 	},
 
 	list_requires_loading: function(key) {
+		var _this = this;
 		if(jQuery.inArray(key, _this.loaded_lists)) {
-			return true;
+			return false;
 		}
 		_this.loaded_lists.push(key);
-		return false;
+		return true;
 	},
 
 	upload_success: function(document_id, options) {
@@ -166,10 +170,17 @@ Widget.types.class_detail = {
 	upload_error: function(error) {
 	},
 
+	refresh_open_list_widget: function(index) {
+		if(index === 0) return;
+		var panel = this._element.find('tab_part').eq(index);
+		console.log('refresh_open_list_widget', index, this._element.find('tab_part'), panel);
+	},
+
 	fill_data: function() {
+		this.loaded_lists = [];
 		this.detail_widget.disable();
+		this.refresh_open_list_widget(this.settings.accordion_active);
 		this.schoolClassData(function(class_data) {
-			this._element.find('div.tab_part.list > table').empty();
 			this.current_detail_id = class_data.Id;
 			if(class_data.LinkCategoryId === null) {
 				class_data.LinkCategoryId = '';
@@ -192,6 +203,7 @@ Widget.types.class_detail = {
 
 			this.detail_widget.set_title(this.detail_widget.settings.title = class_data.ClassTypeName+' '+class_data.Name);
 			this.detail_widget.enable();
+
 		});
 	},
 
