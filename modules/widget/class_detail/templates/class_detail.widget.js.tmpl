@@ -2,8 +2,9 @@ Widget.types.class_detail = {
 	initialize: function() {
 		var _this = this;
 		this._element = Widget.parseHTML("{{includeTemplate=edit}}");
+		this.current_detail_id = null;
 
-		//News, events, documents and links
+		// Prepare  news, events, documents and links elements
 		this.add_news_button = this._element.find('.add_entry.add_news').click(this.create_news.bind(this));
 		this.add_event_button = this._element.find('.add_entry.add_event').click(this.create_event.bind(this));
 		this.add_document_button = this._element.find('.add_entry.add_document').click(this.create_document.bind(this));
@@ -12,11 +13,12 @@ Widget.types.class_detail = {
 		this.event_list = null;
 		this.document_list = null;
 		this.link_list = null;
-		this.current_detail_id = null;
-		this.uploader = Widget.create('file_upload');
 		this.loaded_lists = [];
 
 		Widget.callStatic('detail', 'create_for_instance', this);
+
+		// Prepare file uploads
+		this.prepare_file_uploads();
 
 		this.handle('opened', function() {
 			var _this = this;
@@ -24,22 +26,29 @@ Widget.types.class_detail = {
 				option: {'active': this.settings.accordion_active || 0 },
 				beforeActivate: function(event, ui) {
 					if(ui.newPanel.is('.news')) {
-						_this.settings.accordion_active = 1;
 						_this.reload_news(false);
 					} else if(ui.newPanel.is('.events')) {
-						_this.settings.accordion_active = 2;
 						_this.reload_events(false);
 					} else if(ui.newPanel.is('.documents')) {
-						_this.settings.accordion_active = 3;
 						_this.reload_documents(false);
 					} else if(ui.newPanel.is('.links')) {
-						_this.settings.accordion_active = 4;
 						_this.reload_links(false);
 					}
 				}
 			});
 		});
 
+		this.handle('saving', function(event, data) {
+			data.class_portrait_id = _this.class_portrait_id;
+			data.class_schedule_id = _this.class_schedule_id;
+			data.week_schedule_id = _this.week_schedule_id;
+		});
+	},
+
+	prepare_file_uploads: function() {
+		var _this = this;
+
+		this.uploader = Widget.create('file_upload');
 		// portrait
 		var portrait_area = this._element.find('.portrait_area');
 		portrait_area.find('.remove').click(function() {
@@ -139,21 +148,6 @@ Widget.types.class_detail = {
 				}
 			}
 		});
-
-		this.handle('saving', function(event, data) {
-			data.class_portrait_id = _this.class_portrait_id;
-			data.class_schedule_id = _this.class_schedule_id;
-			data.week_schedule_id = _this.week_schedule_id;
-		});
-	},
-
-	list_requires_loading: function(key) {
-		var _this = this;
-		if(jQuery.inArray(key, _this.loaded_lists)) {
-			return false;
-		}
-		_this.loaded_lists.push(key);
-		return true;
 	},
 
 	upload_success: function(document_id, options) {
@@ -170,15 +164,10 @@ Widget.types.class_detail = {
 	upload_error: function(error) {
 	},
 
-	refresh_open_list_widget: function(index) {
-		if(index === 1) this.reload_news(true);
-		if(index === 2) this.reload_events(true);
-		if(index === 3) this.reload_documents(true);
-		if(index === 4) this.reload_links(true);
-	},
-
 	fill_data: function() {
 		this.loaded_lists = [];
+		this.detail_widget.disable();
+
 		this.schoolClassData(function(class_data) {
 			this.current_detail_id = class_data.Id;
 			if(class_data.LinkCategoryId === null) {
@@ -201,10 +190,9 @@ Widget.types.class_detail = {
 			this.week_schedule_id = class_data.WeekScheduleId;
 
 			this.detail_widget.set_title(this.detail_widget.settings.title = class_data.ClassTypeName+' '+class_data.Name);
-			this.detail_widget.disable();
-			this.refresh_open_list_widget(this.settings.accordion_active);
-			this.detail_widget.enable();
 
+			this.detail_widget.enable();
+			this.reload_active_panel_content(this._element.accordion("option", "active"));
 		});
 	},
 
@@ -268,12 +256,30 @@ Widget.types.class_detail = {
 		});
 	},
 
+	list_requires_loading: function(key, force_reload) {
+		var registered = jQuery.inArray(key, this.loaded_lists) !== -1;
+		if(!registered) {
+			this.loaded_lists.push(key);
+			return true;
+		}
+		if(force_reload) {
+			return true;
+		}
+		return false;
+	},
+
+	reload_active_panel_content: function(index) {
+		if(index === 1) this.reload_news(true);
+		if(index === 2) this.reload_events(true);
+		if(index === 3) this.reload_documents(true);
+		if(index === 4) this.reload_links(true);
+	},
+
 	reload_news: function(reload) {
 		var _this = this;
+		reload = this.list_requires_loading('news', reload);
 		if(this.news_list) {
-			if(reload || this.list_requires_loading('news')) {
-				this.news_list.reload();
-			}
+			reload && this.news_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				widget.settings.school_class_news_type_id = _this.settings.news_type_id;
@@ -285,10 +291,9 @@ Widget.types.class_detail = {
 
 	reload_events: function(reload) {
 		var _this = this;
+		reload = this.list_requires_loading('events', reload);
 		if(this.event_list) {
-			if(reload || this.list_requires_loading('events')) {
-				this.event_list.reload();
-			}
+			reload && this.event_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				_this.event_list = widget;
@@ -299,10 +304,9 @@ Widget.types.class_detail = {
 
 	reload_documents: function(reload) {
 		var _this = this;
+		reload = this.list_requires_loading('documents', reload);
 		if(this.document_list) {
-			if(reload || this.list_requires_loading('documents')) {
-				this.document_list.reload();
-			}
+			reload && this.document_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				_this.document_list = widget;
@@ -313,10 +317,9 @@ Widget.types.class_detail = {
 
 	reload_links: function(reload) {
 		var _this = this;
+		reload = this.list_requires_loading('links', reload);
 		if(this.link_list) {
-			if(reload || this.list_requires_loading('links')) {
-				this.link_list.reload();
-			}
+			reload && this.link_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				_this.link_list = widget;
