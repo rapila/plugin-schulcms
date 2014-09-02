@@ -9,7 +9,7 @@ class ClassEventListWidgetModule extends EventListWidgetModule {
 
 	public function getColumnIdentifiers() {
 		$aResult = parent::getColumnIdentifiers();
-		$aResult = array_diff($aResult, array('teaser_truncated', 'is_class_event', 'is_service_event', 'ignore_on_frontpage'));
+		$aResult = array_diff($aResult, array('teaser_truncated', 'is_class_event', 'ignore_on_frontpage'));
 		return $aResult;
 	}
 

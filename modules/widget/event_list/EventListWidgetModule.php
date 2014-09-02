@@ -28,7 +28,7 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 	}
 
 	public function getColumnIdentifiers() {
-		return array('id', 'title', 'teaser_truncated', 'date_start_formatted', 'is_class_event', 'is_service_event', 'is_active', 'ignore_on_frontpage', 'has_bericht', 'has_images', 'delete');
+		return array('id', 'title', 'teaser_truncated', 'date_start_formatted', 'is_class_event', 'is_active', 'ignore_on_frontpage', 'has_bericht', 'has_images', 'delete');
 	}
 
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -50,9 +50,6 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 				break;
 			case 'ignore_on_frontpage':
 				$aResult['heading'] = StringPeer::getString('wns.event.ignore_on_frontpage_list');
-				break;
-			case 'is_service_event':
-				$aResult['heading'] = StringPeer::getString('wns.event.is_service_event');
 				break;
 			case 'is_active':
 				$aResult['heading'] = StringPeer::getString('wns.event.is_online');
@@ -83,9 +80,6 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 		}
 		if($sColumnIdentifier === 'teaser_truncated') {
 			return EventPeer::TEASER;
-		}
-    if($sColumnIdentifier === 'is_service_event') {
-			return EventPeer::SERVICE_ID;
 		}
 		return null;
 	}

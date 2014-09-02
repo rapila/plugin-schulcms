@@ -24,10 +24,6 @@ class Event extends BaseEvent {
 		return $this->getSchoolClassId() !== null;
 	}
 
-	public function getIsServiceEvent() {
-		return $this->getServiceId() !== null;
-	}
-
 	public function getTeaserTruncated() {
 		return StringUtil::truncate($this->getTeaser(), 40);
 	}
