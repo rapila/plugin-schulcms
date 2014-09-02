@@ -181,9 +181,9 @@ Widget.types.class_detail = {
 			this._element.find("a.page_link").attr('href', class_data.ClassPageUrl);
 			this._element.find("span.news_count").text(class_data.CountNews);
 			this._element.find("span.events_count").text(class_data.CountEvents);
-			this._element.find("span.count_students").text(class_data.CountStudents);
 			this._element.find("span.documents_count").text(class_data.CountDocuments);
 			this._element.find("span.links_count").text(class_data.CountLinks);
+			this._element.find("span.count_students").text(class_data.CountStudents);
 
 			this.class_portrait_id = class_data.ClassPortraitId;
 			this.class_schedule_id = class_data.ClassScheduleId;
@@ -196,26 +196,11 @@ Widget.types.class_detail = {
 		});
 	},
 
-	create_link: function() {
-		var _this = this;
-		this.add_link_button.addClass('ui-loading-add');
-		Widget.create('link_detail', function(widget) {
-			widget.settings.predefined_link_category_id = _this.settings.link_category_id;
-		}, function(widget) {
-			widget.open();
-			widget.save_callback = function(link_id) {
-				_this.addClassLink(link_id);
-				_this.reload_links(true);
-			};
-			_this.add_link_button.removeClass('ui-loading-add');
-		});
-	},
-
 	create_news: function() {
 		var _this = this;
 		this.add_news_button.addClass('ui-loading-add');
 		Widget.create('news_detail', function(widget){
-			widget.settings.predefined_news_type_id = _this.settings.news_type_id;
+			widget.settings.predefined_news_type_id = _this.settings.class_news_type_id;
 		}, function(widget) {
 			widget.open();
 			widget.save_callback = function(news_id) {
@@ -231,6 +216,7 @@ Widget.types.class_detail = {
 		this.add_event_button.addClass('ui-loading-add');
 		Widget.create('event_detail', function(widget) {
 			widget.settings.predefined_school_class_id = _this.current_detail_id;
+			widget.settings.predefined_event_type_id = _this.settings.class_event_type_id;
 		}, function(widget) {
 			widget.open();
 			widget.save_callback = function() {
@@ -253,6 +239,21 @@ Widget.types.class_detail = {
 				_this.reload_documents(true);
 			};
 			_this.add_document_button.removeClass('ui-loading-add');
+		});
+	},
+
+	create_link: function() {
+		var _this = this;
+		this.add_link_button.addClass('ui-loading-add');
+		Widget.create('link_detail', function(widget) {
+			widget.settings.predefined_link_category_id = _this.settings.class_link_category_id;
+		}, function(widget) {
+			widget.open();
+			widget.save_callback = function(link_id) {
+				_this.addClassLink(link_id);
+				_this.reload_links(true);
+			};
+			_this.add_link_button.removeClass('ui-loading-add');
 		});
 	},
 
@@ -282,7 +283,7 @@ Widget.types.class_detail = {
 			reload && this.news_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
-				widget.settings.school_class_news_type_id = _this.settings.news_type_id;
+				widget.settings.school_class_news_type_id = _this.settings.class_news_type_id;
 				_this.news_list = widget;
 				widget._element.insertBefore(_this.add_news_button.show());
 			}, this.settings.news_list_session);
@@ -296,6 +297,8 @@ Widget.types.class_detail = {
 			reload && this.event_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
+				widget.settings.school_class_event_type_id = _this.settings.class_event_type_id;
+				widget.settings.predefined_school_class_id = _this.settings.predefined_school_class_id;
 				_this.event_list = widget;
 				widget._element.insertBefore(_this.add_event_button.show());
 			}, this.settings.event_list_session);
@@ -309,6 +312,8 @@ Widget.types.class_detail = {
 			reload && this.document_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
+				widget.settings.school_class_document_category_id = _this.settings.class_document_category_id;
+				widget.settings.is_called_externally = true;
 				_this.document_list = widget;
 				widget._element.insertBefore(_this.add_document_button.show());
 			}, this.settings.document_list_session);
@@ -322,6 +327,7 @@ Widget.types.class_detail = {
 			reload && this.link_list.reload();
 		} else {
 			Widget.createWithElement('list', function(widget) {
+				widget.settings.school_class_link_category_id = _this.settings.class_link_category_id;
 				_this.link_list = widget;
 				widget._element.insertBefore(_this.add_link_button.show());
 			}, this.settings.link_list_session);

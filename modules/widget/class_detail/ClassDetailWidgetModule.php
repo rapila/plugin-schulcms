@@ -31,11 +31,18 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		}
 		$this->setSetting('week_plan_category_id', $iClassWeekplanCategory);
 
-		$iClassLinkCategory = SchoolPeer::getLinkCategoryConfig('school_class_links');
-		if(LinkCategoryQuery::create()->findPk($iClassLinkCategory) === null) {
+		$iClassLinkCategoryId = SchoolPeer::getLinkCategoryConfig('school_class_links');
+		if(LinkCategoryQuery::create()->findPk($iClassLinkCategoryId) === null) {
 			throw new Exception('Config error: school_settings > externally_managed_link_categories > school_class_links');
 		}
-		$this->setSetting('class_link_category_id', $iClassLinkCategory);
+		ErrorHandler::log('$iClassLinkCategoryId', $iClassLinkCategoryId);
+		$this->setSetting('class_link_category_id', $iClassLinkCategoryId);
+
+		$iClassEventTypeId = Settings::getSetting('school_settings', 'class_default_event_type_id', 1);
+		if(EventTypeQuery::create()->findPk($iClassEventTypeId) === null) {
+			throw new Exception('Config error: school_settings > class_default_event_type_id');
+		}
+		$this->setSetting('class_event_type_id', $iClassEventTypeId);
 
 		$iClassDocumentCategoryId = SchoolPeer::getDocumentCategoryConfig('school_class_documents');
 		if(DocumentCategoryQuery::create()->findPk($iClassDocumentCategoryId) === null) {
@@ -47,7 +54,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		if(NewsTypeQuery::create()->findPk($iClassNewsTypeId) === null) {
 			throw new Exception('Config error: school_settings > externally_managed_news_types > school_class_news_type');
 		}
-		$this->setSetting('news_type_id', $iClassNewsTypeId);
+		$this->setSetting('class_news_type_id', $iClassNewsTypeId);
 
 		$this->oNewsListWidget = new ClassNewsListWidgetModule();
 		$this->setSetting('news_list_session', $this->oNewsListWidget->getSessionKey());

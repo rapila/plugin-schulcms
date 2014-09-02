@@ -8,8 +8,32 @@ Widget.types.event_detail = {
 		this.preview_text = this._element.find('div.event_preview');
 		this.review_text = this._element.find('div.event_review');
 
+		// Format date field
+		this._element.find("input[name^='date_']").datepicker({
+			dateFormat: 'dd.mm.yy'
+		});
+
+		// Event type selection is only available if not predefined
+		if(!this.event_type_is_predefined()) {
+			this.event_type_dropdown = this._element.find("select[name='event_type_id']").prepareWidget(function(widget) {
+				widget.settings.initial_selection = _this.settings.initial_type_id;
+			}, jQuery.noop);
+		} else {
+			this._element.find('div.event_type_elements').hide();
+		}
+
+		// School class selection is only available if not predefined
+		if(!this.school_class_is_predefined()) {
+			this.school_class_dropdown = this._element.find("select[name='school_class_id']");
+			this.school_class_dropdown.prepareWidget(function(widget) {
+				widget.settings.initial_selection = _this.settings.predefined_school_class_id || '';
+			}, jQuery.noop);
+		} else {
+			this._element.find('div.school_class_elements').hide();
+		}
+
+		// Upload images
 		this.no_images_upload_info = jQuery('<div/>').html("{{writeString=wns.event.no_images_and_upload_info}}").addClass('no_images_placeholder');
-		this.uploader = Widget.create('file_upload');
 		this.droppable_area = _this._element.find('.droppable_area');
 		this.droppable_area.append(this.no_images_upload_info);
 
@@ -24,30 +48,10 @@ Widget.types.event_detail = {
 				}
 			}
 		});
-
+		this.uploader = Widget.create('file_upload');
 		this.uploader.allow_drag_to(_this.droppable_area, null, function(target, file) {
 			return { document_category_id: _this.settings.events_document_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
 		});
-		this._element.find("input[name^='date_']").datepicker({
-			dateFormat: 'dd.mm.yy'
-		});
-		this._element.find("select[name='event_type_id']").prepareWidget(function(event_type_input) {
-			event_type_input.settings.initial_selection = _this.settings.initial_type_id;
-		}, jQuery.noop);
-
-		if(!this.school_class_is_predefined()) {
-			this._element.find('div.service_elements').hide();
-			this.school_class_dropdown = this._element.find("select[name='school_class_id']");
-			this.school_class_dropdown.prepareWidget(function(widget) {
-				widget.settings.initial_selection = _this.settings.predefined_school_class_id;
-			}, function(widget) {
-				if(_this.settings.predefined_school_class_id) {
-					widget.val(_this.settings.predefined_school_class_id);
-				}
-			});
-		} else {
-			this._element.find('div.school_class_elements').hide();
-		}
 
 		// Instance
 		Widget.callStatic('detail', 'create_for_instance', this);
@@ -56,21 +60,50 @@ Widget.types.event_detail = {
 		this.handle('opened', function() {
 			this.init_textareas();
 		});
+
 		this.handle('saving', function(event, data) {
 			data.body_preview = _this.event_preview_editor.get_data();
 			data.body_review = _this.event_review_editor.get_data();
-			data.school_class_id = _this.current_school_class_id;
+			if(this.school_class_is_predefined()) {
+				data.school_class_id = this.settings.predefined_school_class_id;
+			}
+			if(this.event_type_is_predefined()) {
+				data.event_type_id = this.settings.predefined_event_type_id;
+			}
 		}.bind(_this));
+	},
+
+	init_textareas: function() {
+		var _this = this;
+		if(!this.preview_text.didPrepareWidget()) {
+			this.preview_text.attr('data-widget-session', this.settings.richtext_session).prepareWidget(function(rich_text_widget) {
+				_this.event_preview_editor = rich_text_widget;
+				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings);
+			}, jQuery.noop);
+		}
+		if(!this.review_text.didPrepareWidget()) {
+			this.review_text.attr('data-widget-session', this.settings.richtext_session).prepareWidget(function(rich_text_widget) {
+				_this.event_review_editor = rich_text_widget;
+				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings, {
+					height: 350
+				});
+			}, jQuery.noop);
+		}
 	},
 
 	school_class_is_predefined: function() {
 		return this.settings.predefined_school_class_id !== null;
 	},
 
+	event_type_is_predefined: function() {
+		return this.settings.predefined_event_type_id !== null;
+	},
+
 	fill_data: function() {
 		this.detail_widget.disable();
 		this.eventData(function(data) {
 			this.current_detail_id = data.Id;
+
 			this._element.find("input[name='title']").val(data.Title);
 			this._element.find("textarea[name='teaser']").val(data.Teaser);
 			this._element.find("input[name='date_start']").val(data.DateStart);
@@ -79,19 +112,26 @@ Widget.types.event_detail = {
 			this._element.find("input[name='location_info']").val(data.LocationInfo);
 			this._element.find("input[name='is_active']").attr('checked', data.IsActive);
 			this._element.find("input[name='ignore_on_frontpage']").attr('checked', data.IgnoreOnFrontpage);
+			this._element.find(".updated_info").text(data.UpdatedInfo);
+			this._element.find(".created_info").text(data.CreatedInfo);
+			this._element.find(".detail_id").text(data.Id);
 
 			if(!this.school_class_is_predefined()) {
 				this.school_class_dropdown.ensureWidget(function(widget) {
 					widget.val(data.SchoolClassId);
 				});
 			} else {
-				this.current_school_class_id = data.SchoolClassId;
+				this._element.find('div.school_class_elements').hide();
 			}
-			this._element.find("select[name='event_type_id']").val(data.EventTypeId);
-			this._element.find(".updated_info").text(data.UpdatedInfo);
-			this._element.find(".created_info").text(data.CreatedInfo);
-			this._element.find(".detail_id").text(data.Id);
-			this.detail_widget.set_title(this.detail_widget.settings.title = data.Title);
+
+			if(!this.event_type_is_predefined()) {
+				this.event_type_dropdown.ensureWidget(function(widget) {
+					widget.val(data.EventTypeId);
+				});
+			}	else {
+				this._element.find('div.event_type_elements').hide();
+			}
+
 			this.preview_text.ensureWidget(function(widget) {
 				widget.set_data(data.BodyPreview);
 			});
@@ -99,6 +139,7 @@ Widget.types.event_detail = {
 				widget.set_data(data.BodyReview);
 			});
 			this.update_documents();
+			this.detail_widget.set_title(this.detail_widget.settings.title = data.Title);
 			this._element.find('div.hide_if_not_saved').show();
 			this.detail_widget.enable();
 		});
@@ -167,24 +208,6 @@ Widget.types.event_detail = {
 	upload_error: function(error) {
 	},
 
-	init_textareas: function() {
-		var _this = this;
-		if(!this.preview_text.didPrepareWidget()) {
-			this.preview_text.attr('data-widget-session', this.settings.richtext_session).prepareWidget(function(rich_text_widget) {
-				_this.event_preview_editor = rich_text_widget;
-				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings);
-			}, jQuery.noop);
-		}
-		if(!this.review_text.didPrepareWidget()) {
-			this.review_text.attr('data-widget-session', this.settings.richtext_session).prepareWidget(function(rich_text_widget) {
-				_this.event_review_editor = rich_text_widget;
-				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings, {
-					height: 350
-				});
-			}, jQuery.noop);
-		}
-	},
-
 	settings: {
 		detail_widget: {
 			title: "{{writeString=wns.event.create}}",
@@ -192,6 +215,7 @@ Widget.types.event_detail = {
 		},
 		thumbnail_size: 150,
 		initial_type_id: 1,
-		predefined_school_class_id: null
+		predefined_school_class_id: null,
+		predefined_event_type_id: null
 	}
 };

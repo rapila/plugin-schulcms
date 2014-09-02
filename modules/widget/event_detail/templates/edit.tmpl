@@ -2,19 +2,23 @@
 	<h3><a href="#">{{writeString=wns.event.accordion_title.general_info}}</a></h3>
 	<div class="general_info">
 		<div class="status_section">
-			<div class="select_container">
-				<label for="event_type_id">{{writeString=wns.event.event_type}}</label>
-				<select name="event_type_id" class="ui-widget-content" data-widget-type="event_types_input"></select>
+				<div class="event_type_elements">
+					<label for="event_type_id">{{writeString=wns.event.event_type}}</label>
+					<select name="event_type_id" class="ui-widget-content" data-widget-type="event_types_input"></select>
+				</div>
 				<div class="school_class_elements">
-					<label for="school_class_id">{{writeString=wns.class.school_class}}</label>
+					<label for="school_class_id">{{writeString=wns.event.school_class}}</label>
 					<select name="school_class_id" class="ui-widget-content" data-widget-type="classes_input">{{school_class_options}}</select>
 				</div>
-			</div>
-			<div style="padding: .3em 0;">
-				<input type="checkbox" style="display:inline;" name="is_active" />
+				<div>
+				<div class="group_fields">
 				<label for="is_active">{{writeString=wns.is_online}}</label>
-				<input type="checkbox" style="display:inline;" name="ignore_on_frontpage" />
-				<label for="ignore_on_frontpage" class="help" title="{{writeString=wns.event.ignore_on_frontpage_help}}">{{writeString=wns.event.ignore_on_frontpage}}</label><br />
+				<input type="checkbox" style="display:inline;" name="is_active" />
+				</div>
+				<div class="group_fields school_class_elements">
+					<label for="ignore_on_frontpage" class="help" title="{{writeString=wns.event.ignore_on_frontpage_help}}">{{writeString=wns.event.ignore_on_frontpage}}</label>
+					<input type="checkbox" style="display:inline;" name="ignore_on_frontpage" />
+				</div>
 			</div>
 			<div class="hide_if_not_saved">
 	  		<label>{{writeString=wns.created_info}}:</label><span class="created_info status"></span><br />
@@ -40,10 +44,10 @@
 					<label for="time_details">{{writeString=wns.event.time_details}}</label>
 					<input type="text" name="time_details" size="10" class="ui-widget-content time_details"/><br />
 				</div><br />
-			</div>
-			<div>
-				<label for="location_info">{{writeString=wns.event.location_info}}</label>
-				<input type="text" name="location_info" class="ui-widget-content event"/><br />
+				<div class="group_fields">
+					<label for="location_info">{{writeString=wns.event.location_info}}</label>
+					<input type="text" name="location_info" class="ui-widget-content location_info"/><br />
+				</div><br />
 			</div>
 		</div>
 		<label class="help" title="{{writeString=wns.event.body_preview_label_help}}">{{writeString=wns.event.body_preview_label}}</label>

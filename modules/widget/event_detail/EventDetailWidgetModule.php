@@ -140,7 +140,9 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$oEvent->setTeaser($aEventData['teaser']);
 		$oEvent->setLocationInfo($aEventData['location_info']);
 		$oEvent->setTimeDetails($aEventData['time_details']);
-		$oEvent->setIgnoreOnFrontpage($aEventData['ignore_on_frontpage']);
+		if(isset($aEventData['ignore_on_frontpage'])) {
+			$oEvent->setIgnoreOnFrontpage($aEventData['ignore_on_frontpage']);
+		}
 		$oEvent->setIsActive($aEventData['is_active']);
 		$oEvent->setDateStart($aEventData['date_start']);
 		$oEvent->setDateEnd($aEventData['date_end'] == null ? null : $aEventData['date_end']);
