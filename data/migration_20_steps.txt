@@ -1,12 +1,19 @@
 Migrationsschritte
 
-• Propel Migrationen laufen lassen
+Propel Migrationen in folgender Reihenfolge laufen lassen
+• checkout plugin/schulcms commit 2c67814ba00fda69494eb1324c52666483a7b3d4
+  run “rap migrate-model.sh -p schulcms”
+  run “ran generate-model.sh”
+• checkout plugin/schulcms commit 12c62fa4d7a24eeae285512223a3dcca8de7d49e
+  run “rap migrate-model.sh -p schulcms”
+	run “ran generate-model.sh”
+• checkout plugin/schulcms (or master?) commit a446ffebbc026703093bc42893a06b232e2ded39
+  run “rap migrate-model.sh -p schulcms”
 
-• remove content objects if page_type is changing (SchoolHome / PortalHome)
-• Migration pages > objects > container_name
+Remove content objects if page_type is changing (SchoolHome / PortalHome)
 
-• check all configuration pages
+Migration pages > objects > container_name depending on container_name changes
 
-Beispiel Dump
+Create Example dumps for easy development of new sites
 • Including: Home, School Class page, Custom 404 page, Search page etc.
 
