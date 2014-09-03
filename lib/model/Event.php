@@ -24,8 +24,14 @@ class Event extends BaseEvent {
 		return $this->getSchoolClassId() !== null;
 	}
 
-	public function getTeaserTruncated() {
-		return StringUtil::truncate($this->getTeaser(), 40);
+	public function getBodyTruncated() {
+		// refactor to use body short when implemented
+		$sContent = null;
+		if($this->getBodyPreview() != null) {
+			$sContent = stream_get_contents($this->getBodyPreview());
+			return StringUtil::truncate(strip_tags($sContent), 40);
+		}
+		return null;
 	}
 
 	public function isPreview() {
