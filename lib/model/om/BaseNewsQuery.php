@@ -13,7 +13,7 @@
  * @method NewsQuery orderByBodyShort($order = Criteria::ASC) Order by the body_short column
  * @method NewsQuery orderByDateStart($order = Criteria::ASC) Order by the date_start column
  * @method NewsQuery orderByDateEnd($order = Criteria::ASC) Order by the date_end column
- * @method NewsQuery orderByIsInactive($order = Criteria::ASC) Order by the is_inactive column
+ * @method NewsQuery orderByIsActive($order = Criteria::ASC) Order by the is_active column
  * @method NewsQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method NewsQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method NewsQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
@@ -26,7 +26,7 @@
  * @method NewsQuery groupByBodyShort() Group by the body_short column
  * @method NewsQuery groupByDateStart() Group by the date_start column
  * @method NewsQuery groupByDateEnd() Group by the date_end column
- * @method NewsQuery groupByIsInactive() Group by the is_inactive column
+ * @method NewsQuery groupByIsActive() Group by the is_active column
  * @method NewsQuery groupByCreatedAt() Group by the created_at column
  * @method NewsQuery groupByUpdatedAt() Group by the updated_at column
  * @method NewsQuery groupByCreatedBy() Group by the created_by column
@@ -61,7 +61,7 @@
  * @method News findOneByBodyShort(resource $body_short) Return the first News filtered by the body_short column
  * @method News findOneByDateStart(string $date_start) Return the first News filtered by the date_start column
  * @method News findOneByDateEnd(string $date_end) Return the first News filtered by the date_end column
- * @method News findOneByIsInactive(boolean $is_inactive) Return the first News filtered by the is_inactive column
+ * @method News findOneByIsActive(boolean $is_active) Return the first News filtered by the is_active column
  * @method News findOneByCreatedAt(string $created_at) Return the first News filtered by the created_at column
  * @method News findOneByUpdatedAt(string $updated_at) Return the first News filtered by the updated_at column
  * @method News findOneByCreatedBy(int $created_by) Return the first News filtered by the created_by column
@@ -74,7 +74,7 @@
  * @method array findByBodyShort(resource $body_short) Return News objects filtered by the body_short column
  * @method array findByDateStart(string $date_start) Return News objects filtered by the date_start column
  * @method array findByDateEnd(string $date_end) Return News objects filtered by the date_end column
- * @method array findByIsInactive(boolean $is_inactive) Return News objects filtered by the is_inactive column
+ * @method array findByIsActive(boolean $is_active) Return News objects filtered by the is_active column
  * @method array findByCreatedAt(string $created_at) Return News objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return News objects filtered by the updated_at column
  * @method array findByCreatedBy(int $created_by) Return News objects filtered by the created_by column
@@ -186,7 +186,7 @@ abstract class BaseNewsQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `news_type_id`, `headline`, `body`, `body_short`, `date_start`, `date_end`, `is_inactive`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `news` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `news_type_id`, `headline`, `body`, `body_short`, `date_start`, `date_end`, `is_active`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `news` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -505,15 +505,15 @@ abstract class BaseNewsQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the is_inactive column
+     * Filter the query on the is_active column
      *
      * Example usage:
      * <code>
-     * $query->filterByIsInactive(true); // WHERE is_inactive = true
-     * $query->filterByIsInactive('yes'); // WHERE is_inactive = true
+     * $query->filterByIsActive(true); // WHERE is_active = true
+     * $query->filterByIsActive('yes'); // WHERE is_active = true
      * </code>
      *
-     * @param     boolean|string $isInactive The value to use as filter.
+     * @param     boolean|string $isActive The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -522,13 +522,13 @@ abstract class BaseNewsQuery extends ModelCriteria
      *
      * @return NewsQuery The current query, for fluid interface
      */
-    public function filterByIsInactive($isInactive = null, $comparison = null)
+    public function filterByIsActive($isActive = null, $comparison = null)
     {
-        if (is_string($isInactive)) {
-            $isInactive = in_array(strtolower($isInactive), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        if (is_string($isActive)) {
+            $isActive = in_array(strtolower($isActive), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(NewsPeer::IS_INACTIVE, $isInactive, $comparison);
+        return $this->addUsingAlias(NewsPeer::IS_ACTIVE, $isActive, $comparison);
     }
 
     /**

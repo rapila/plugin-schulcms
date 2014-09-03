@@ -43,7 +43,7 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 		if($oNews === null) {
 			$oNews = new News();
 		}
-		$oNews->setIsInactive($aData['is_inactive']);
+		$oNews->setIsActive($aData['is_active']);
 		$oNews->setDateStart($aData['date_start'] == null ? date('Y-m-d') : $aData['date_start']);
 		$oNews->setDateEnd($aData['date_end'] == null ? null : $aData['date_end']);
 		$oNews->setNewsTypeId($aData['news_type_id']);
@@ -66,7 +66,7 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 		$oFlash->setArrayToCheck($aData);
 		$oFlash->checkForValue('headline', 'headline_required');
 		$oFlash->checkForValue('news_type_id', 'news_type_required');
-		if(!$aData['is_inactive']) {
+		if($aData['is_active']) {
 			$oFlash->checkForValue('body', 'is_active_body_required');
 		}
 		$oFlash->finishReporting();

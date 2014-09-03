@@ -45,7 +45,7 @@ class NewsTableMap extends TableMap
         $this->addColumn('body_short', 'BodyShort', 'BLOB', false, null, null);
         $this->addColumn('date_start', 'DateStart', 'DATE', true, null, null);
         $this->addColumn('date_end', 'DateEnd', 'DATE', false, null, null);
-        $this->addColumn('is_inactive', 'IsInactive', 'BOOLEAN', false, 1, false);
+        $this->addColumn('is_active', 'IsActive', 'BOOLEAN', false, 1, true);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addForeignKey('created_by', 'CreatedBy', 'INTEGER', 'users', 'id', false, null, null);

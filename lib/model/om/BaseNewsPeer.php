@@ -53,8 +53,8 @@ abstract class BaseNewsPeer
     /** the column name for the date_end field */
     const DATE_END = 'news.date_end';
 
-    /** the column name for the is_inactive field */
-    const IS_INACTIVE = 'news.is_inactive';
+    /** the column name for the is_active field */
+    const IS_ACTIVE = 'news.is_active';
 
     /** the column name for the created_at field */
     const CREATED_AT = 'news.created_at';
@@ -89,11 +89,11 @@ abstract class BaseNewsPeer
      * e.g. NewsPeer::$fieldNames[NewsPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'NewsTypeId', 'Headline', 'Body', 'BodyShort', 'DateStart', 'DateEnd', 'IsInactive', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'newsTypeId', 'headline', 'body', 'bodyShort', 'dateStart', 'dateEnd', 'isInactive', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-        BasePeer::TYPE_COLNAME => array (NewsPeer::ID, NewsPeer::NEWS_TYPE_ID, NewsPeer::HEADLINE, NewsPeer::BODY, NewsPeer::BODY_SHORT, NewsPeer::DATE_START, NewsPeer::DATE_END, NewsPeer::IS_INACTIVE, NewsPeer::CREATED_AT, NewsPeer::UPDATED_AT, NewsPeer::CREATED_BY, NewsPeer::UPDATED_BY, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NEWS_TYPE_ID', 'HEADLINE', 'BODY', 'BODY_SHORT', 'DATE_START', 'DATE_END', 'IS_INACTIVE', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'news_type_id', 'headline', 'body', 'body_short', 'date_start', 'date_end', 'is_inactive', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+        BasePeer::TYPE_PHPNAME => array ('Id', 'NewsTypeId', 'Headline', 'Body', 'BodyShort', 'DateStart', 'DateEnd', 'IsActive', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'newsTypeId', 'headline', 'body', 'bodyShort', 'dateStart', 'dateEnd', 'isActive', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+        BasePeer::TYPE_COLNAME => array (NewsPeer::ID, NewsPeer::NEWS_TYPE_ID, NewsPeer::HEADLINE, NewsPeer::BODY, NewsPeer::BODY_SHORT, NewsPeer::DATE_START, NewsPeer::DATE_END, NewsPeer::IS_ACTIVE, NewsPeer::CREATED_AT, NewsPeer::UPDATED_AT, NewsPeer::CREATED_BY, NewsPeer::UPDATED_BY, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NEWS_TYPE_ID', 'HEADLINE', 'BODY', 'BODY_SHORT', 'DATE_START', 'DATE_END', 'IS_ACTIVE', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'news_type_id', 'headline', 'body', 'body_short', 'date_start', 'date_end', 'is_active', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
@@ -104,11 +104,11 @@ abstract class BaseNewsPeer
      * e.g. NewsPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'NewsTypeId' => 1, 'Headline' => 2, 'Body' => 3, 'BodyShort' => 4, 'DateStart' => 5, 'DateEnd' => 6, 'IsInactive' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, 'CreatedBy' => 10, 'UpdatedBy' => 11, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'newsTypeId' => 1, 'headline' => 2, 'body' => 3, 'bodyShort' => 4, 'dateStart' => 5, 'dateEnd' => 6, 'isInactive' => 7, 'createdAt' => 8, 'updatedAt' => 9, 'createdBy' => 10, 'updatedBy' => 11, ),
-        BasePeer::TYPE_COLNAME => array (NewsPeer::ID => 0, NewsPeer::NEWS_TYPE_ID => 1, NewsPeer::HEADLINE => 2, NewsPeer::BODY => 3, NewsPeer::BODY_SHORT => 4, NewsPeer::DATE_START => 5, NewsPeer::DATE_END => 6, NewsPeer::IS_INACTIVE => 7, NewsPeer::CREATED_AT => 8, NewsPeer::UPDATED_AT => 9, NewsPeer::CREATED_BY => 10, NewsPeer::UPDATED_BY => 11, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NEWS_TYPE_ID' => 1, 'HEADLINE' => 2, 'BODY' => 3, 'BODY_SHORT' => 4, 'DATE_START' => 5, 'DATE_END' => 6, 'IS_INACTIVE' => 7, 'CREATED_AT' => 8, 'UPDATED_AT' => 9, 'CREATED_BY' => 10, 'UPDATED_BY' => 11, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'news_type_id' => 1, 'headline' => 2, 'body' => 3, 'body_short' => 4, 'date_start' => 5, 'date_end' => 6, 'is_inactive' => 7, 'created_at' => 8, 'updated_at' => 9, 'created_by' => 10, 'updated_by' => 11, ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'NewsTypeId' => 1, 'Headline' => 2, 'Body' => 3, 'BodyShort' => 4, 'DateStart' => 5, 'DateEnd' => 6, 'IsActive' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, 'CreatedBy' => 10, 'UpdatedBy' => 11, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'newsTypeId' => 1, 'headline' => 2, 'body' => 3, 'bodyShort' => 4, 'dateStart' => 5, 'dateEnd' => 6, 'isActive' => 7, 'createdAt' => 8, 'updatedAt' => 9, 'createdBy' => 10, 'updatedBy' => 11, ),
+        BasePeer::TYPE_COLNAME => array (NewsPeer::ID => 0, NewsPeer::NEWS_TYPE_ID => 1, NewsPeer::HEADLINE => 2, NewsPeer::BODY => 3, NewsPeer::BODY_SHORT => 4, NewsPeer::DATE_START => 5, NewsPeer::DATE_END => 6, NewsPeer::IS_ACTIVE => 7, NewsPeer::CREATED_AT => 8, NewsPeer::UPDATED_AT => 9, NewsPeer::CREATED_BY => 10, NewsPeer::UPDATED_BY => 11, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NEWS_TYPE_ID' => 1, 'HEADLINE' => 2, 'BODY' => 3, 'BODY_SHORT' => 4, 'DATE_START' => 5, 'DATE_END' => 6, 'IS_ACTIVE' => 7, 'CREATED_AT' => 8, 'UPDATED_AT' => 9, 'CREATED_BY' => 10, 'UPDATED_BY' => 11, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'news_type_id' => 1, 'headline' => 2, 'body' => 3, 'body_short' => 4, 'date_start' => 5, 'date_end' => 6, 'is_active' => 7, 'created_at' => 8, 'updated_at' => 9, 'created_by' => 10, 'updated_by' => 11, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
@@ -190,7 +190,7 @@ abstract class BaseNewsPeer
             $criteria->addSelectColumn(NewsPeer::BODY_SHORT);
             $criteria->addSelectColumn(NewsPeer::DATE_START);
             $criteria->addSelectColumn(NewsPeer::DATE_END);
-            $criteria->addSelectColumn(NewsPeer::IS_INACTIVE);
+            $criteria->addSelectColumn(NewsPeer::IS_ACTIVE);
             $criteria->addSelectColumn(NewsPeer::CREATED_AT);
             $criteria->addSelectColumn(NewsPeer::UPDATED_AT);
             $criteria->addSelectColumn(NewsPeer::CREATED_BY);
@@ -203,7 +203,7 @@ abstract class BaseNewsPeer
             $criteria->addSelectColumn($alias . '.body_short');
             $criteria->addSelectColumn($alias . '.date_start');
             $criteria->addSelectColumn($alias . '.date_end');
-            $criteria->addSelectColumn($alias . '.is_inactive');
+            $criteria->addSelectColumn($alias . '.is_active');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
             $criteria->addSelectColumn($alias . '.created_by');

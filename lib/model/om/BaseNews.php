@@ -72,11 +72,11 @@ abstract class BaseNews extends BaseObject implements Persistent
     protected $date_end;
 
     /**
-     * The value for the is_inactive field.
-     * Note: this column has a database default value of: false
+     * The value for the is_active field.
+     * Note: this column has a database default value of: true
      * @var        boolean
      */
-    protected $is_inactive;
+    protected $is_active;
 
     /**
      * The value for the created_at field.
@@ -157,7 +157,7 @@ abstract class BaseNews extends BaseObject implements Persistent
      */
     public function applyDefaultValues()
     {
-        $this->is_inactive = false;
+        $this->is_active = true;
     }
 
     /**
@@ -306,14 +306,14 @@ abstract class BaseNews extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [is_inactive] column value.
+     * Get the [is_active] column value.
      *
      * @return boolean
      */
-    public function getIsInactive()
+    public function getIsActive()
     {
 
-        return $this->is_inactive;
+        return $this->is_active;
     }
 
     /**
@@ -580,7 +580,7 @@ abstract class BaseNews extends BaseObject implements Persistent
     } // setDateEnd()
 
     /**
-     * Sets the value of the [is_inactive] column.
+     * Sets the value of the [is_active] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -589,7 +589,7 @@ abstract class BaseNews extends BaseObject implements Persistent
      * @param boolean|integer|string $v The new value
      * @return News The current object (for fluent API support)
      */
-    public function setIsInactive($v)
+    public function setIsActive($v)
     {
         if ($v !== null) {
             if (is_string($v)) {
@@ -599,14 +599,14 @@ abstract class BaseNews extends BaseObject implements Persistent
             }
         }
 
-        if ($this->is_inactive !== $v) {
-            $this->is_inactive = $v;
-            $this->modifiedColumns[] = NewsPeer::IS_INACTIVE;
+        if ($this->is_active !== $v) {
+            $this->is_active = $v;
+            $this->modifiedColumns[] = NewsPeer::IS_ACTIVE;
         }
 
 
         return $this;
-    } // setIsInactive()
+    } // setIsActive()
 
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
@@ -714,7 +714,7 @@ abstract class BaseNews extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->is_inactive !== false) {
+            if ($this->is_active !== true) {
                 return false;
             }
 
@@ -759,7 +759,7 @@ abstract class BaseNews extends BaseObject implements Persistent
             }
             $this->date_start = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->date_end = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->is_inactive = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
+            $this->is_active = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
             $this->created_at = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->updated_at = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->created_by = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
@@ -1117,8 +1117,8 @@ abstract class BaseNews extends BaseObject implements Persistent
         if ($this->isColumnModified(NewsPeer::DATE_END)) {
             $modifiedColumns[':p' . $index++]  = '`date_end`';
         }
-        if ($this->isColumnModified(NewsPeer::IS_INACTIVE)) {
-            $modifiedColumns[':p' . $index++]  = '`is_inactive`';
+        if ($this->isColumnModified(NewsPeer::IS_ACTIVE)) {
+            $modifiedColumns[':p' . $index++]  = '`is_active`';
         }
         if ($this->isColumnModified(NewsPeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
@@ -1170,8 +1170,8 @@ abstract class BaseNews extends BaseObject implements Persistent
                     case '`date_end`':
                         $stmt->bindValue($identifier, $this->date_end, PDO::PARAM_STR);
                         break;
-                    case '`is_inactive`':
-                        $stmt->bindValue($identifier, (int) $this->is_inactive, PDO::PARAM_INT);
+                    case '`is_active`':
+                        $stmt->bindValue($identifier, (int) $this->is_active, PDO::PARAM_INT);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -1373,7 +1373,7 @@ abstract class BaseNews extends BaseObject implements Persistent
                 return $this->getDateEnd();
                 break;
             case 7:
-                return $this->getIsInactive();
+                return $this->getIsActive();
                 break;
             case 8:
                 return $this->getCreatedAt();
@@ -1423,7 +1423,7 @@ abstract class BaseNews extends BaseObject implements Persistent
             $keys[4] => $this->getBodyShort(),
             $keys[5] => $this->getDateStart(),
             $keys[6] => $this->getDateEnd(),
-            $keys[7] => $this->getIsInactive(),
+            $keys[7] => $this->getIsActive(),
             $keys[8] => $this->getCreatedAt(),
             $keys[9] => $this->getUpdatedAt(),
             $keys[10] => $this->getCreatedBy(),
@@ -1503,7 +1503,7 @@ abstract class BaseNews extends BaseObject implements Persistent
                 $this->setDateEnd($value);
                 break;
             case 7:
-                $this->setIsInactive($value);
+                $this->setIsActive($value);
                 break;
             case 8:
                 $this->setCreatedAt($value);
@@ -1548,7 +1548,7 @@ abstract class BaseNews extends BaseObject implements Persistent
         if (array_key_exists($keys[4], $arr)) $this->setBodyShort($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setDateStart($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setDateEnd($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setIsInactive($arr[$keys[7]]);
+        if (array_key_exists($keys[7], $arr)) $this->setIsActive($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setCreatedAt($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setUpdatedAt($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setCreatedBy($arr[$keys[10]]);
@@ -1571,7 +1571,7 @@ abstract class BaseNews extends BaseObject implements Persistent
         if ($this->isColumnModified(NewsPeer::BODY_SHORT)) $criteria->add(NewsPeer::BODY_SHORT, $this->body_short);
         if ($this->isColumnModified(NewsPeer::DATE_START)) $criteria->add(NewsPeer::DATE_START, $this->date_start);
         if ($this->isColumnModified(NewsPeer::DATE_END)) $criteria->add(NewsPeer::DATE_END, $this->date_end);
-        if ($this->isColumnModified(NewsPeer::IS_INACTIVE)) $criteria->add(NewsPeer::IS_INACTIVE, $this->is_inactive);
+        if ($this->isColumnModified(NewsPeer::IS_ACTIVE)) $criteria->add(NewsPeer::IS_ACTIVE, $this->is_active);
         if ($this->isColumnModified(NewsPeer::CREATED_AT)) $criteria->add(NewsPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(NewsPeer::UPDATED_AT)) $criteria->add(NewsPeer::UPDATED_AT, $this->updated_at);
         if ($this->isColumnModified(NewsPeer::CREATED_BY)) $criteria->add(NewsPeer::CREATED_BY, $this->created_by);
@@ -1645,7 +1645,7 @@ abstract class BaseNews extends BaseObject implements Persistent
         $copyObj->setBodyShort($this->getBodyShort());
         $copyObj->setDateStart($this->getDateStart());
         $copyObj->setDateEnd($this->getDateEnd());
-        $copyObj->setIsInactive($this->getIsInactive());
+        $copyObj->setIsActive($this->getIsActive());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setCreatedBy($this->getCreatedBy());
@@ -2201,7 +2201,7 @@ abstract class BaseNews extends BaseObject implements Persistent
         $this->body_short = null;
         $this->date_start = null;
         $this->date_end = null;
-        $this->is_inactive = null;
+        $this->is_active = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->created_by = null;
