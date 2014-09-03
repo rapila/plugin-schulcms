@@ -1,0 +1,12 @@
+Migrationsschritte
+
+• Propel Migrationen laufen lassen
+
+• remove content objects if page_type is changing (SchoolHome / PortalHome)
+• Migration pages > objects > container_name
+
+• check all configuration pages
+
+Beispiel Dump
+• Including: Home, School Class page, Custom 404 page, Search page etc.
+
