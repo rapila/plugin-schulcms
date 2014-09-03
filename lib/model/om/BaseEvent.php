@@ -54,6 +54,12 @@ abstract class BaseEvent extends BaseObject implements Persistent
     protected $body_preview;
 
     /**
+     * The value for the body_preview_short field.
+     * @var        resource
+     */
+    protected $body_preview_short;
+
+    /**
      * The value for the body_review field.
      * @var        resource
      */
@@ -260,6 +266,17 @@ abstract class BaseEvent extends BaseObject implements Persistent
     {
 
         return $this->body_preview;
+    }
+
+    /**
+     * Get the [body_preview_short] column value.
+     * teaser
+     * @return resource
+     */
+    public function getBodyPreviewShort()
+    {
+
+        return $this->body_preview_short;
     }
 
     /**
@@ -618,6 +635,30 @@ abstract class BaseEvent extends BaseObject implements Persistent
 
         return $this;
     } // setBodyPreview()
+
+    /**
+     * Set the value of [body_preview_short] column.
+     * teaser
+     * @param  resource $v new value
+     * @return Event The current object (for fluent API support)
+     */
+    public function setBodyPreviewShort($v)
+    {
+        // Because BLOB columns are streams in PDO we have to assume that they are
+        // always modified when a new value is passed in.  For example, the contents
+        // of the stream itself may have changed externally.
+        if (!is_resource($v) && $v !== null) {
+            $this->body_preview_short = fopen('php://memory', 'r+');
+            fwrite($this->body_preview_short, $v);
+            rewind($this->body_preview_short);
+        } else { // it's already a stream
+            $this->body_preview_short = $v;
+        }
+        $this->modifiedColumns[] = EventPeer::BODY_PREVIEW_SHORT;
+
+
+        return $this;
+    } // setBodyPreviewShort()
 
     /**
      * Set the value of [body_review] column.
@@ -1011,25 +1052,32 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 $this->body_preview = null;
             }
             if ($row[$startcol + 4] !== null) {
+                $this->body_preview_short = fopen('php://memory', 'r+');
+                fwrite($this->body_preview_short, $row[$startcol + 4]);
+                rewind($this->body_preview_short);
+            } else {
+                $this->body_preview_short = null;
+            }
+            if ($row[$startcol + 5] !== null) {
                 $this->body_review = fopen('php://memory', 'r+');
-                fwrite($this->body_review, $row[$startcol + 4]);
+                fwrite($this->body_review, $row[$startcol + 5]);
                 rewind($this->body_review);
             } else {
                 $this->body_review = null;
             }
-            $this->location_info = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->date_start = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->date_end = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->time_details = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->is_active = ($row[$startcol + 9] !== null) ? (boolean) $row[$startcol + 9] : null;
-            $this->ignore_on_frontpage = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
-            $this->event_type_id = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
-            $this->school_class_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
-            $this->gallery_id = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
-            $this->created_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
-            $this->updated_at = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
-            $this->created_by = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
-            $this->updated_by = ($row[$startcol + 17] !== null) ? (int) $row[$startcol + 17] : null;
+            $this->location_info = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->date_start = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->date_end = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->time_details = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->is_active = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
+            $this->ignore_on_frontpage = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
+            $this->event_type_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
+            $this->school_class_id = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
+            $this->gallery_id = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
+            $this->created_at = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+            $this->updated_at = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
+            $this->created_by = ($row[$startcol + 17] !== null) ? (int) $row[$startcol + 17] : null;
+            $this->updated_by = ($row[$startcol + 18] !== null) ? (int) $row[$startcol + 18] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1039,7 +1087,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 18; // 18 = EventPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 19; // 19 = EventPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Event object", $e);
@@ -1333,6 +1381,11 @@ abstract class BaseEvent extends BaseObject implements Persistent
                     rewind($this->body_preview);
                 }
 
+                // Rewind the body_preview_short LOB column, since PDO does not rewind after inserting value.
+                if ($this->body_preview_short !== null && is_resource($this->body_preview_short)) {
+                    rewind($this->body_preview_short);
+                }
+
                 // Rewind the body_review LOB column, since PDO does not rewind after inserting value.
                 if ($this->body_review !== null && is_resource($this->body_review)) {
                     rewind($this->body_review);
@@ -1395,6 +1448,9 @@ abstract class BaseEvent extends BaseObject implements Persistent
         }
         if ($this->isColumnModified(EventPeer::BODY_PREVIEW)) {
             $modifiedColumns[':p' . $index++]  = '`body_preview`';
+        }
+        if ($this->isColumnModified(EventPeer::BODY_PREVIEW_SHORT)) {
+            $modifiedColumns[':p' . $index++]  = '`body_preview_short`';
         }
         if ($this->isColumnModified(EventPeer::BODY_REVIEW)) {
             $modifiedColumns[':p' . $index++]  = '`body_review`';
@@ -1463,6 +1519,12 @@ abstract class BaseEvent extends BaseObject implements Persistent
                             rewind($this->body_preview);
                         }
                         $stmt->bindValue($identifier, $this->body_preview, PDO::PARAM_LOB);
+                        break;
+                    case '`body_preview_short`':
+                        if (is_resource($this->body_preview_short)) {
+                            rewind($this->body_preview_short);
+                        }
+                        $stmt->bindValue($identifier, $this->body_preview_short, PDO::PARAM_LOB);
                         break;
                     case '`body_review`':
                         if (is_resource($this->body_review)) {
@@ -1700,45 +1762,48 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 return $this->getBodyPreview();
                 break;
             case 4:
-                return $this->getBodyReview();
+                return $this->getBodyPreviewShort();
                 break;
             case 5:
-                return $this->getLocationInfo();
+                return $this->getBodyReview();
                 break;
             case 6:
-                return $this->getDateStart();
+                return $this->getLocationInfo();
                 break;
             case 7:
-                return $this->getDateEnd();
+                return $this->getDateStart();
                 break;
             case 8:
-                return $this->getTimeDetails();
+                return $this->getDateEnd();
                 break;
             case 9:
-                return $this->getIsActive();
+                return $this->getTimeDetails();
                 break;
             case 10:
-                return $this->getIgnoreOnFrontpage();
+                return $this->getIsActive();
                 break;
             case 11:
-                return $this->getEventTypeId();
+                return $this->getIgnoreOnFrontpage();
                 break;
             case 12:
-                return $this->getSchoolClassId();
+                return $this->getEventTypeId();
                 break;
             case 13:
-                return $this->getGalleryId();
+                return $this->getSchoolClassId();
                 break;
             case 14:
-                return $this->getCreatedAt();
+                return $this->getGalleryId();
                 break;
             case 15:
-                return $this->getUpdatedAt();
+                return $this->getCreatedAt();
                 break;
             case 16:
-                return $this->getCreatedBy();
+                return $this->getUpdatedAt();
                 break;
             case 17:
+                return $this->getCreatedBy();
+                break;
+            case 18:
                 return $this->getUpdatedBy();
                 break;
             default:
@@ -1774,20 +1839,21 @@ abstract class BaseEvent extends BaseObject implements Persistent
             $keys[1] => $this->getTitle(),
             $keys[2] => $this->getSlug(),
             $keys[3] => $this->getBodyPreview(),
-            $keys[4] => $this->getBodyReview(),
-            $keys[5] => $this->getLocationInfo(),
-            $keys[6] => $this->getDateStart(),
-            $keys[7] => $this->getDateEnd(),
-            $keys[8] => $this->getTimeDetails(),
-            $keys[9] => $this->getIsActive(),
-            $keys[10] => $this->getIgnoreOnFrontpage(),
-            $keys[11] => $this->getEventTypeId(),
-            $keys[12] => $this->getSchoolClassId(),
-            $keys[13] => $this->getGalleryId(),
-            $keys[14] => $this->getCreatedAt(),
-            $keys[15] => $this->getUpdatedAt(),
-            $keys[16] => $this->getCreatedBy(),
-            $keys[17] => $this->getUpdatedBy(),
+            $keys[4] => $this->getBodyPreviewShort(),
+            $keys[5] => $this->getBodyReview(),
+            $keys[6] => $this->getLocationInfo(),
+            $keys[7] => $this->getDateStart(),
+            $keys[8] => $this->getDateEnd(),
+            $keys[9] => $this->getTimeDetails(),
+            $keys[10] => $this->getIsActive(),
+            $keys[11] => $this->getIgnoreOnFrontpage(),
+            $keys[12] => $this->getEventTypeId(),
+            $keys[13] => $this->getSchoolClassId(),
+            $keys[14] => $this->getGalleryId(),
+            $keys[15] => $this->getCreatedAt(),
+            $keys[16] => $this->getUpdatedAt(),
+            $keys[17] => $this->getCreatedBy(),
+            $keys[18] => $this->getUpdatedBy(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1860,45 +1926,48 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 $this->setBodyPreview($value);
                 break;
             case 4:
-                $this->setBodyReview($value);
+                $this->setBodyPreviewShort($value);
                 break;
             case 5:
-                $this->setLocationInfo($value);
+                $this->setBodyReview($value);
                 break;
             case 6:
-                $this->setDateStart($value);
+                $this->setLocationInfo($value);
                 break;
             case 7:
-                $this->setDateEnd($value);
+                $this->setDateStart($value);
                 break;
             case 8:
-                $this->setTimeDetails($value);
+                $this->setDateEnd($value);
                 break;
             case 9:
-                $this->setIsActive($value);
+                $this->setTimeDetails($value);
                 break;
             case 10:
-                $this->setIgnoreOnFrontpage($value);
+                $this->setIsActive($value);
                 break;
             case 11:
-                $this->setEventTypeId($value);
+                $this->setIgnoreOnFrontpage($value);
                 break;
             case 12:
-                $this->setSchoolClassId($value);
+                $this->setEventTypeId($value);
                 break;
             case 13:
-                $this->setGalleryId($value);
+                $this->setSchoolClassId($value);
                 break;
             case 14:
-                $this->setCreatedAt($value);
+                $this->setGalleryId($value);
                 break;
             case 15:
-                $this->setUpdatedAt($value);
+                $this->setCreatedAt($value);
                 break;
             case 16:
-                $this->setCreatedBy($value);
+                $this->setUpdatedAt($value);
                 break;
             case 17:
+                $this->setCreatedBy($value);
+                break;
+            case 18:
                 $this->setUpdatedBy($value);
                 break;
         } // switch()
@@ -1929,20 +1998,21 @@ abstract class BaseEvent extends BaseObject implements Persistent
         if (array_key_exists($keys[1], $arr)) $this->setTitle($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setSlug($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setBodyPreview($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setBodyReview($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setLocationInfo($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setDateStart($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setDateEnd($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setTimeDetails($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setIsActive($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setIgnoreOnFrontpage($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setEventTypeId($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setSchoolClassId($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setGalleryId($arr[$keys[13]]);
-        if (array_key_exists($keys[14], $arr)) $this->setCreatedAt($arr[$keys[14]]);
-        if (array_key_exists($keys[15], $arr)) $this->setUpdatedAt($arr[$keys[15]]);
-        if (array_key_exists($keys[16], $arr)) $this->setCreatedBy($arr[$keys[16]]);
-        if (array_key_exists($keys[17], $arr)) $this->setUpdatedBy($arr[$keys[17]]);
+        if (array_key_exists($keys[4], $arr)) $this->setBodyPreviewShort($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setBodyReview($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setLocationInfo($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setDateStart($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setDateEnd($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setTimeDetails($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setIsActive($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setIgnoreOnFrontpage($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setEventTypeId($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setSchoolClassId($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setGalleryId($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setCreatedAt($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setUpdatedAt($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setCreatedBy($arr[$keys[17]]);
+        if (array_key_exists($keys[18], $arr)) $this->setUpdatedBy($arr[$keys[18]]);
     }
 
     /**
@@ -1958,6 +2028,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
         if ($this->isColumnModified(EventPeer::TITLE)) $criteria->add(EventPeer::TITLE, $this->title);
         if ($this->isColumnModified(EventPeer::SLUG)) $criteria->add(EventPeer::SLUG, $this->slug);
         if ($this->isColumnModified(EventPeer::BODY_PREVIEW)) $criteria->add(EventPeer::BODY_PREVIEW, $this->body_preview);
+        if ($this->isColumnModified(EventPeer::BODY_PREVIEW_SHORT)) $criteria->add(EventPeer::BODY_PREVIEW_SHORT, $this->body_preview_short);
         if ($this->isColumnModified(EventPeer::BODY_REVIEW)) $criteria->add(EventPeer::BODY_REVIEW, $this->body_review);
         if ($this->isColumnModified(EventPeer::LOCATION_INFO)) $criteria->add(EventPeer::LOCATION_INFO, $this->location_info);
         if ($this->isColumnModified(EventPeer::DATE_START)) $criteria->add(EventPeer::DATE_START, $this->date_start);
@@ -2038,6 +2109,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
         $copyObj->setTitle($this->getTitle());
         $copyObj->setSlug($this->getSlug());
         $copyObj->setBodyPreview($this->getBodyPreview());
+        $copyObj->setBodyPreviewShort($this->getBodyPreviewShort());
         $copyObj->setBodyReview($this->getBodyReview());
         $copyObj->setLocationInfo($this->getLocationInfo());
         $copyObj->setDateStart($this->getDateStart());
@@ -2704,6 +2776,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
         $this->title = null;
         $this->slug = null;
         $this->body_preview = null;
+        $this->body_preview_short = null;
         $this->body_review = null;
         $this->location_info = null;
         $this->date_start = null;

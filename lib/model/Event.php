@@ -13,6 +13,37 @@ class Event extends BaseEvent {
 		return parent::setTitle($sTitle);
 	}
 
+	public function setBodyPreview($mText) {
+		if (method_exists(BaseEvent, 'setBodyPreview')) {
+			if($mText instanceof TagParser) {
+				$mText = $mText->getTag();
+			}
+			if($mText instanceof HtmlTag) {
+				$oTextShort = null;
+				foreach($mText->getChildren() as $oChild) {
+					if($oChild instanceof HtmlTag && strtolower($oChild->getName()) === 'p') {
+						$oTextShort = $oChild;
+						break;
+					}
+				}
+				$mText = $mText->__toString();
+				if($oTextShort) {
+					$this->setBodyPreviewShort($oTextShort->__toString());
+				} else {
+					$this->setBodyPreviewShort($mText);
+				}
+			}
+		}
+		parent::setBodyPreview($mText);
+	}
+
+	public function getTeaser() {
+		// if(is_resource($oEvent->getBodyPreviewShort())) {
+		// 	return stream_get_contents($oEvent->getBodyPreviewShort());
+		// }
+		return null;
+	}
+
 	/**
 	* for reference tracking only
 	*/
