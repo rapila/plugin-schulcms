@@ -5,7 +5,7 @@ Widget.types.event_detail = {
 		this._element.find('div.hide_if_not_saved').hide();
 		this.current_detail_id = null;
 
-		this.preview_text = this._element.find('div.event_text');
+		this.event_text = this._element.find('div.event_text');
 		this.review_text = this._element.find('div.event_review');
 
 		// Format date field
@@ -74,9 +74,10 @@ Widget.types.event_detail = {
 	},
 
 	init_textareas: function() {
+		return;
 		var _this = this;
-		if(!this.preview_text.didPrepareWidget()) {
-			this.preview_text.attr('data-widget-session', this.settings.richtext_session).prepareWidget(function(rich_text_widget) {
+		if(!this.event_text.didPrepareWidget()) {
+			this.event_text.attr('data-widget-session', this.settings.richtext_session).prepareWidget(function(rich_text_widget) {
 				_this.event_text_editor = rich_text_widget;
 				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings);
 			}, jQuery.noop);
@@ -131,7 +132,7 @@ Widget.types.event_detail = {
 				this._element.find('div.event_type_elements').hide();
 			}
 
-			this.preview_text.ensureWidget(function(widget) {
+			this.event_text.ensureWidget(function(widget) {
 				widget.set_data(data.BodyPreview);
 			});
 			this.review_text.ensureWidget(function(widget) {
