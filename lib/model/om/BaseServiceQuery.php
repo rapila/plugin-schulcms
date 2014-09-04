@@ -16,6 +16,7 @@
  * @method ServiceQuery orderByEmail($order = Criteria::ASC) Order by the email column
  * @method ServiceQuery orderByWebsite($order = Criteria::ASC) Order by the website column
  * @method ServiceQuery orderByBody($order = Criteria::ASC) Order by the body column
+ * @method ServiceQuery orderByBodyShort($order = Criteria::ASC) Order by the body_short column
  * @method ServiceQuery orderByIsActive($order = Criteria::ASC) Order by the is_active column
  * @method ServiceQuery orderByLogoId($order = Criteria::ASC) Order by the logo_id column
  * @method ServiceQuery orderByServiceCategoryId($order = Criteria::ASC) Order by the service_category_id column
@@ -34,6 +35,7 @@
  * @method ServiceQuery groupByEmail() Group by the email column
  * @method ServiceQuery groupByWebsite() Group by the website column
  * @method ServiceQuery groupByBody() Group by the body column
+ * @method ServiceQuery groupByBodyShort() Group by the body_short column
  * @method ServiceQuery groupByIsActive() Group by the is_active column
  * @method ServiceQuery groupByLogoId() Group by the logo_id column
  * @method ServiceQuery groupByServiceCategoryId() Group by the service_category_id column
@@ -82,6 +84,7 @@
  * @method Service findOneByEmail(string $email) Return the first Service filtered by the email column
  * @method Service findOneByWebsite(string $website) Return the first Service filtered by the website column
  * @method Service findOneByBody(resource $body) Return the first Service filtered by the body column
+ * @method Service findOneByBodyShort(resource $body_short) Return the first Service filtered by the body_short column
  * @method Service findOneByIsActive(boolean $is_active) Return the first Service filtered by the is_active column
  * @method Service findOneByLogoId(int $logo_id) Return the first Service filtered by the logo_id column
  * @method Service findOneByServiceCategoryId(int $service_category_id) Return the first Service filtered by the service_category_id column
@@ -100,6 +103,7 @@
  * @method array findByEmail(string $email) Return Service objects filtered by the email column
  * @method array findByWebsite(string $website) Return Service objects filtered by the website column
  * @method array findByBody(resource $body) Return Service objects filtered by the body column
+ * @method array findByBodyShort(resource $body_short) Return Service objects filtered by the body_short column
  * @method array findByIsActive(boolean $is_active) Return Service objects filtered by the is_active column
  * @method array findByLogoId(int $logo_id) Return Service objects filtered by the logo_id column
  * @method array findByServiceCategoryId(int $service_category_id) Return Service objects filtered by the service_category_id column
@@ -214,7 +218,7 @@ abstract class BaseServiceQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `slug`, `teaser`, `address`, `opening_hours`, `phone`, `email`, `website`, `body`, `is_active`, `logo_id`, `service_category_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `services` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `name`, `slug`, `teaser`, `address`, `opening_hours`, `phone`, `email`, `website`, `body`, `body_short`, `is_active`, `logo_id`, `service_category_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `services` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -589,6 +593,20 @@ abstract class BaseServiceQuery extends ModelCriteria
     {
 
         return $this->addUsingAlias(ServicePeer::BODY, $body, $comparison);
+    }
+
+    /**
+     * Filter the query on the body_short column
+     *
+     * @param     mixed $bodyShort The value to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ServiceQuery The current query, for fluid interface
+     */
+    public function filterByBodyShort($bodyShort = null, $comparison = null)
+    {
+
+        return $this->addUsingAlias(ServicePeer::BODY_SHORT, $bodyShort, $comparison);
     }
 
     /**

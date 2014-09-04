@@ -283,6 +283,7 @@
 	<column name="email" type="varchar" size="255" />
 	<column name="website" type="varchar" size="255" />
 	<column name="body" type="blob" />
+	<column name="body_short" type="blob" />
 	<column name="is_active" type="boolean" size="1" default="0" />
 	<column name="logo_id" type="integer" />
 	<foreign-key foreignTable="documents" onDelete="setnull">

@@ -48,6 +48,7 @@ class ServiceTableMap extends TableMap
         $this->addColumn('email', 'Email', 'VARCHAR', false, 255, null);
         $this->addColumn('website', 'Website', 'VARCHAR', false, 255, null);
         $this->addColumn('body', 'Body', 'BLOB', false, null, null);
+        $this->addColumn('body_short', 'BodyShort', 'BLOB', false, null, null);
         $this->addColumn('is_active', 'IsActive', 'BOOLEAN', false, 1, false);
         $this->addForeignKey('logo_id', 'LogoId', 'INTEGER', 'documents', 'id', false, null, null);
         $this->addForeignKey('service_category_id', 'ServiceCategoryId', 'INTEGER', 'service_categories', 'id', false, null, null);

@@ -90,6 +90,12 @@ abstract class BaseService extends BaseObject implements Persistent
     protected $body;
 
     /**
+     * The value for the body_short field.
+     * @var        resource
+     */
+    protected $body_short;
+
+    /**
      * The value for the is_active field.
      * Note: this column has a database default value of: false
      * @var        boolean
@@ -325,6 +331,17 @@ abstract class BaseService extends BaseObject implements Persistent
     {
 
         return $this->body;
+    }
+
+    /**
+     * Get the [body_short] column value.
+     *
+     * @return resource
+     */
+    public function getBodyShort()
+    {
+
+        return $this->body_short;
     }
 
     /**
@@ -676,6 +693,30 @@ abstract class BaseService extends BaseObject implements Persistent
     } // setBody()
 
     /**
+     * Set the value of [body_short] column.
+     *
+     * @param  resource $v new value
+     * @return Service The current object (for fluent API support)
+     */
+    public function setBodyShort($v)
+    {
+        // Because BLOB columns are streams in PDO we have to assume that they are
+        // always modified when a new value is passed in.  For example, the contents
+        // of the stream itself may have changed externally.
+        if (!is_resource($v) && $v !== null) {
+            $this->body_short = fopen('php://memory', 'r+');
+            fwrite($this->body_short, $v);
+            rewind($this->body_short);
+        } else { // it's already a stream
+            $this->body_short = $v;
+        }
+        $this->modifiedColumns[] = ServicePeer::BODY_SHORT;
+
+
+        return $this;
+    } // setBodyShort()
+
+    /**
      * Sets the value of the [is_active] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -902,13 +943,20 @@ abstract class BaseService extends BaseObject implements Persistent
             } else {
                 $this->body = null;
             }
-            $this->is_active = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
-            $this->logo_id = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
-            $this->service_category_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
-            $this->created_at = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
-            $this->updated_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
-            $this->created_by = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
-            $this->updated_by = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
+            if ($row[$startcol + 10] !== null) {
+                $this->body_short = fopen('php://memory', 'r+');
+                fwrite($this->body_short, $row[$startcol + 10]);
+                rewind($this->body_short);
+            } else {
+                $this->body_short = null;
+            }
+            $this->is_active = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
+            $this->logo_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
+            $this->service_category_id = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
+            $this->created_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+            $this->updated_at = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+            $this->created_by = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
+            $this->updated_by = ($row[$startcol + 17] !== null) ? (int) $row[$startcol + 17] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -918,7 +966,7 @@ abstract class BaseService extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 17; // 17 = ServicePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 18; // 18 = ServicePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Service object", $e);
@@ -1203,6 +1251,11 @@ abstract class BaseService extends BaseObject implements Persistent
                     rewind($this->body);
                 }
 
+                // Rewind the body_short LOB column, since PDO does not rewind after inserting value.
+                if ($this->body_short !== null && is_resource($this->body_short)) {
+                    rewind($this->body_short);
+                }
+
                 $this->resetModified();
             }
 
@@ -1296,6 +1349,9 @@ abstract class BaseService extends BaseObject implements Persistent
         if ($this->isColumnModified(ServicePeer::BODY)) {
             $modifiedColumns[':p' . $index++]  = '`body`';
         }
+        if ($this->isColumnModified(ServicePeer::BODY_SHORT)) {
+            $modifiedColumns[':p' . $index++]  = '`body_short`';
+        }
         if ($this->isColumnModified(ServicePeer::IS_ACTIVE)) {
             $modifiedColumns[':p' . $index++]  = '`is_active`';
         }
@@ -1360,6 +1416,12 @@ abstract class BaseService extends BaseObject implements Persistent
                             rewind($this->body);
                         }
                         $stmt->bindValue($identifier, $this->body, PDO::PARAM_LOB);
+                        break;
+                    case '`body_short`':
+                        if (is_resource($this->body_short)) {
+                            rewind($this->body_short);
+                        }
+                        $stmt->bindValue($identifier, $this->body_short, PDO::PARAM_LOB);
                         break;
                     case '`is_active`':
                         $stmt->bindValue($identifier, (int) $this->is_active, PDO::PARAM_INT);
@@ -1593,24 +1655,27 @@ abstract class BaseService extends BaseObject implements Persistent
                 return $this->getBody();
                 break;
             case 10:
-                return $this->getIsActive();
+                return $this->getBodyShort();
                 break;
             case 11:
-                return $this->getLogoId();
+                return $this->getIsActive();
                 break;
             case 12:
-                return $this->getServiceCategoryId();
+                return $this->getLogoId();
                 break;
             case 13:
-                return $this->getCreatedAt();
+                return $this->getServiceCategoryId();
                 break;
             case 14:
-                return $this->getUpdatedAt();
+                return $this->getCreatedAt();
                 break;
             case 15:
-                return $this->getCreatedBy();
+                return $this->getUpdatedAt();
                 break;
             case 16:
+                return $this->getCreatedBy();
+                break;
+            case 17:
                 return $this->getUpdatedBy();
                 break;
             default:
@@ -1652,13 +1717,14 @@ abstract class BaseService extends BaseObject implements Persistent
             $keys[7] => $this->getEmail(),
             $keys[8] => $this->getWebsite(),
             $keys[9] => $this->getBody(),
-            $keys[10] => $this->getIsActive(),
-            $keys[11] => $this->getLogoId(),
-            $keys[12] => $this->getServiceCategoryId(),
-            $keys[13] => $this->getCreatedAt(),
-            $keys[14] => $this->getUpdatedAt(),
-            $keys[15] => $this->getCreatedBy(),
-            $keys[16] => $this->getUpdatedBy(),
+            $keys[10] => $this->getBodyShort(),
+            $keys[11] => $this->getIsActive(),
+            $keys[12] => $this->getLogoId(),
+            $keys[13] => $this->getServiceCategoryId(),
+            $keys[14] => $this->getCreatedAt(),
+            $keys[15] => $this->getUpdatedAt(),
+            $keys[16] => $this->getCreatedBy(),
+            $keys[17] => $this->getUpdatedBy(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1749,24 +1815,27 @@ abstract class BaseService extends BaseObject implements Persistent
                 $this->setBody($value);
                 break;
             case 10:
-                $this->setIsActive($value);
+                $this->setBodyShort($value);
                 break;
             case 11:
-                $this->setLogoId($value);
+                $this->setIsActive($value);
                 break;
             case 12:
-                $this->setServiceCategoryId($value);
+                $this->setLogoId($value);
                 break;
             case 13:
-                $this->setCreatedAt($value);
+                $this->setServiceCategoryId($value);
                 break;
             case 14:
-                $this->setUpdatedAt($value);
+                $this->setCreatedAt($value);
                 break;
             case 15:
-                $this->setCreatedBy($value);
+                $this->setUpdatedAt($value);
                 break;
             case 16:
+                $this->setCreatedBy($value);
+                break;
+            case 17:
                 $this->setUpdatedBy($value);
                 break;
         } // switch()
@@ -1803,13 +1872,14 @@ abstract class BaseService extends BaseObject implements Persistent
         if (array_key_exists($keys[7], $arr)) $this->setEmail($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setWebsite($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setBody($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setIsActive($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setLogoId($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setServiceCategoryId($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setCreatedAt($arr[$keys[13]]);
-        if (array_key_exists($keys[14], $arr)) $this->setUpdatedAt($arr[$keys[14]]);
-        if (array_key_exists($keys[15], $arr)) $this->setCreatedBy($arr[$keys[15]]);
-        if (array_key_exists($keys[16], $arr)) $this->setUpdatedBy($arr[$keys[16]]);
+        if (array_key_exists($keys[10], $arr)) $this->setBodyShort($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setIsActive($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setLogoId($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setServiceCategoryId($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setCreatedAt($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setUpdatedAt($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setCreatedBy($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setUpdatedBy($arr[$keys[17]]);
     }
 
     /**
@@ -1831,6 +1901,7 @@ abstract class BaseService extends BaseObject implements Persistent
         if ($this->isColumnModified(ServicePeer::EMAIL)) $criteria->add(ServicePeer::EMAIL, $this->email);
         if ($this->isColumnModified(ServicePeer::WEBSITE)) $criteria->add(ServicePeer::WEBSITE, $this->website);
         if ($this->isColumnModified(ServicePeer::BODY)) $criteria->add(ServicePeer::BODY, $this->body);
+        if ($this->isColumnModified(ServicePeer::BODY_SHORT)) $criteria->add(ServicePeer::BODY_SHORT, $this->body_short);
         if ($this->isColumnModified(ServicePeer::IS_ACTIVE)) $criteria->add(ServicePeer::IS_ACTIVE, $this->is_active);
         if ($this->isColumnModified(ServicePeer::LOGO_ID)) $criteria->add(ServicePeer::LOGO_ID, $this->logo_id);
         if ($this->isColumnModified(ServicePeer::SERVICE_CATEGORY_ID)) $criteria->add(ServicePeer::SERVICE_CATEGORY_ID, $this->service_category_id);
@@ -1910,6 +1981,7 @@ abstract class BaseService extends BaseObject implements Persistent
         $copyObj->setEmail($this->getEmail());
         $copyObj->setWebsite($this->getWebsite());
         $copyObj->setBody($this->getBody());
+        $copyObj->setBodyShort($this->getBodyShort());
         $copyObj->setIsActive($this->getIsActive());
         $copyObj->setLogoId($this->getLogoId());
         $copyObj->setServiceCategoryId($this->getServiceCategoryId());
@@ -2835,6 +2907,7 @@ abstract class BaseService extends BaseObject implements Persistent
         $this->email = null;
         $this->website = null;
         $this->body = null;
+        $this->body_short = null;
         $this->is_active = null;
         $this->logo_id = null;
         $this->service_category_id = null;
