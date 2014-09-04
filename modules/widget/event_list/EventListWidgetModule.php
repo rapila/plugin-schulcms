@@ -38,7 +38,7 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 				$aResult['heading'] = StringPeer::getString('wns.event.title');
 				break;
 			case 'body_truncated':
-				$aResult['heading'] = StringPeer::getString('wns.event.teaser');
+				$aResult['heading'] = StringPeer::getString('wns.event.body_short');
 				break;
 			case 'date_start_formatted':
 				$aResult['heading'] = StringPeer::getString('wns.event.date_start');
@@ -79,7 +79,7 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 			return EventPeer::DATE_START;
 		}
 		if($sColumnIdentifier === 'body_truncated') {
-			return EventPeer::BODY_PREVIEW;
+			return EventPeer::BODY;
 		}
 		return null;
 	}

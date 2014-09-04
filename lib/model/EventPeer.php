@@ -8,8 +8,7 @@ class EventPeer extends BaseEventPeer {
 
 	public static function addSearchToCriteria($sSearch, $oCriteria) {
 		$oSearchCriterion = $oCriteria->getNewCriterion(self::TITLE, "%$sSearch%", Criteria::LIKE);
-		// $oSearchCriterion->addOr($oCriteria->getNewCriterion(self::BODY_PREVIEW_SHORT, "%$sSearch%", Criteria::LIKE));
-		$oSearchCriterion->addOr($oCriteria->getNewCriterion(self::BODY_PREVIEW, "%$sSearch%", Criteria::LIKE));
+		$oSearchCriterion->addOr($oCriteria->getNewCriterion(self::BODY, "%$sSearch%", Criteria::LIKE));
 		$oSearchCriterion->addOr($oCriteria->getNewCriterion(self::BODY_REVIEW, "%$sSearch%", Criteria::LIKE));
 		$oCriteria->add($oSearchCriterion);
 	}
