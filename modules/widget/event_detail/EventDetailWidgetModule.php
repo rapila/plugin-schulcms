@@ -106,13 +106,13 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 	  return $oEventDocument->save();
 	}
 
-	private function validate($aEventData, $oEvent) {
+	private function validate($aData, $oEvent) {
 		$oFlash = Flash::getFlash();
-		$oFlash->setArrayToCheck($aEventData);
+		$oFlash->setArrayToCheck($aData);
 		$oFlash->checkForValue('title', 'title_required');
-		if($aEventData['is_active']) {
+		if($aData['is_active']) {
 			$oFlash->checkForValue('body_preview', 'is_active_body_required');
-			if($aEventData['date_start'] == null) {
+			if($aData['date_start'] == null) {
 			  $oFlash->addMessage("date_start_required");
 			}
 		}
@@ -127,39 +127,37 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$oFlash->finishReporting();
 	}
 
-	public function saveData($aEventData) {
+	public function saveData($aData) {
 		if($this->iEventId === null) {
 			$oEvent = new Event();
 		} else {
 		  $oEvent = EventQuery::create()->findPk($this->iEventId);
 		}
-		ArrayUtil::trimStringsInArray($aEventData);
-		$oEvent->setIsActive($aEventData['is_active']);
-		$oEvent->setEventTypeId($aEventData['event_type_id']);
-		$oEvent->setTitle($aEventData['title']);
-		$oEvent->setTeaser($aEventData['teaser']);
-		$oEvent->setLocationInfo($aEventData['location_info']);
-		$oEvent->setTimeDetails($aEventData['time_details']);
-		if(isset($aEventData['ignore_on_frontpage'])) {
-			$oEvent->setIgnoreOnFrontpage($aEventData['ignore_on_frontpage']);
+
+		ArrayUtil::trimStringsInArray($aData);
+		$oEvent->setIsActive($aData['is_active']);
+		$oEvent->setEventTypeId($aData['event_type_id']);
+		$oEvent->setTitle($aData['title']);
+		$oEvent->setLocationInfo($aData['location_info']);
+		$oEvent->setTimeDetails($aData['time_details']);
+		if(isset($aData['ignore_on_frontpage'])) {
+			$oEvent->setIgnoreOnFrontpage($aData['ignore_on_frontpage']);
 		}
-		$oEvent->setIsActive($aEventData['is_active']);
-		$oEvent->setDateStart($aEventData['date_start']);
-		$oEvent->setDateEnd($aEventData['date_end'] == null ? null : $aEventData['date_end']);
-		$oEvent->setSchoolClassId($aEventData['school_class_id'] != null ? $aEventData['school_class_id'] : null);
+		$oEvent->setIsActive($aData['is_active']);
+		$oEvent->setDateStart($aData['date_start']);
+		$oEvent->setDateEnd($aData['date_end'] == null ? null : $aData['date_end']);
+		$oEvent->setSchoolClassId($aData['school_class_id'] != null ? $aData['school_class_id'] : null);
 		if($oEvent->getDateEnd() !== null && $oEvent->getDateEnd() < $oEvent->getDateStart()) {
 			$oEvent->setDateEnd(null);
 		}
-		$this->validate($aEventData, $oEvent);
+		$this->validate($aData, $oEvent);
 
 		// track page, document and link references and hande preview and review text
 		$oRichtextUtil = new RichtextUtil();
-		$sPreview = $oRichtextUtil->parseInputFromEditor($aEventData['body_preview']);
-		if(trim($sPreview) == '') {
-		  $sPreview = null;
-		}
-		$oEvent->setBodyPreview($sPreview);
-		$sReview = $oRichtextUtil->parseInputFromEditor($aEventData['body_review']);
+		$oEvent->setBodyPreview($oRichtextUtil->getTagParser($aData['body_preview']));
+		$oRichtextUtil->setTrackReferences($oEvent);
+
+		$sReview = $oRichtextUtil->parseInputFromEditor($aData['body_review']);
 		if(trim($sReview) == '') {
 			$sReview = null;
 		}

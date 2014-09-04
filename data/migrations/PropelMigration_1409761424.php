@@ -22,7 +22,8 @@ class PropelMigration_1409761424
 			foreach(EventQuery::create()->find() as $oEvent) {
 				if(is_resource($oEvent->getBodyPreview())) {
 					$sReviewContent = stream_get_contents($oEvent->getBodyPreview());
-					$oEvent->setBodyPreview($sReviewContent);
+					$oRichtextUtil = new RichtextUtil();
+					$oEvent->setBodyPreview($oRichtextUtil->getTagParser($sReviewContent));
 					$oEvent->save();
 				}
 			}
