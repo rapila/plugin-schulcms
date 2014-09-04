@@ -249,8 +249,8 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		}
 
 		// If there is no body review (bericht), get body preview
-		if ($sBody === null && self::$EVENT->getBodyPreview()) {
-			$sContent = stream_get_contents(self::$EVENT->getBodyPreview());
+		if ($sBody === null && self::$EVENT->getBody()) {
+			$sContent = stream_get_contents(self::$EVENT->getBody());
 			if($sContent != '') {
 				$sBody = RichtextUtil::parseStorageForFrontendOutput($sContent);
 			}

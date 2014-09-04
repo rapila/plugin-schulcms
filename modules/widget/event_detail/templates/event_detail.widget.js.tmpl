@@ -5,7 +5,7 @@ Widget.types.event_detail = {
 		this._element.find('div.hide_if_not_saved').hide();
 		this.current_detail_id = null;
 
-		this.preview_text = this._element.find('div.event_preview');
+		this.preview_text = this._element.find('div.event_text');
 		this.review_text = this._element.find('div.event_review');
 
 		// Format date field
@@ -62,7 +62,7 @@ Widget.types.event_detail = {
 		});
 
 		this.handle('saving', function(event, data) {
-			data.body_preview = _this.event_preview_editor.get_data();
+			data.body_preview = _this.event_text_editor.get_data();
 			data.body_review = _this.event_review_editor.get_data();
 			if(this.school_class_is_predefined()) {
 				data.school_class_id = this.settings.predefined_school_class_id;
@@ -77,7 +77,7 @@ Widget.types.event_detail = {
 		var _this = this;
 		if(!this.preview_text.didPrepareWidget()) {
 			this.preview_text.attr('data-widget-session', this.settings.richtext_session).prepareWidget(function(rich_text_widget) {
-				_this.event_preview_editor = rich_text_widget;
+				_this.event_text_editor = rich_text_widget;
 				jQuery.extend(rich_text_widget.settings, _this.settings.richtext_settings);
 			}, jQuery.noop);
 		}

@@ -165,8 +165,8 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 				$sBody = RichtextUtil::parseStorageForFrontendOutput($sReviewContent);
 			}
 		}
-		if ($sBody === null && self::$EVENT->getBodyPreview()) {
-			$sContent = stream_get_contents(self::$EVENT->getBodyPreview());
+		if ($sBody === null && self::$EVENT->getBody()) {
+			$sContent = stream_get_contents(self::$EVENT->getBody());
 			if($sContent != '') {
 				$sBody = RichtextUtil::parseStorageForFrontendOutput($sContent);
 			}

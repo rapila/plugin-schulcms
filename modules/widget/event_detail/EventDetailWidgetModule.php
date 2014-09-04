@@ -80,8 +80,8 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$oEventType = EventTypeQuery::create()->findPk($oEvent->getEventTypeId() ? $oEvent->getEventTypeId() : 1);
 		$aResult['AnlassTyp'] = $oEventType ? $oEventType->getName() : '';
     $sBodyPreview = '';
-		if(is_resource($oEvent->getBodyPreview())) {
-			$sBodyPreview = RichtextUtil::parseStorageForBackendOutput(stream_get_contents($oEvent->getBodyPreview()))->render();
+		if(is_resource($oEvent->getBody())) {
+			$sBodyPreview = RichtextUtil::parseStorageForBackendOutput(stream_get_contents($oEvent->getBody()))->render();
 		}
 		$aResult['BodyPreview'] = $sBodyPreview;
     $sBodyReview = '';
@@ -111,7 +111,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$oFlash->setArrayToCheck($aData);
 		$oFlash->checkForValue('title', 'title_required');
 		if($aData['is_active']) {
-			$oFlash->checkForValue('body_preview', 'is_active_body_required');
+			$oFlash->checkForValue('body', 'is_active_body_required');
 			if($aData['date_start'] == null) {
 			  $oFlash->addMessage("date_start_required");
 			}
@@ -154,7 +154,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 
 		// track page, document and link references and hande preview and review text
 		$oRichtextUtil = new RichtextUtil();
-		$oEvent->setBodyPreview($oRichtextUtil->getTagParser($aData['body_preview']));
+		$oEvent->setBody($oRichtextUtil->getTagParser($aData['body']));
 		$oRichtextUtil->setTrackReferences($oEvent);
 
 		$sReview = $oRichtextUtil->parseInputFromEditor($aData['body_review']);

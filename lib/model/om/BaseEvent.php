@@ -48,16 +48,16 @@ abstract class BaseEvent extends BaseObject implements Persistent
     protected $slug;
 
     /**
-     * The value for the body_preview field.
+     * The value for the body field.
      * @var        resource
      */
-    protected $body_preview;
+    protected $body;
 
     /**
-     * The value for the body_preview_short field.
+     * The value for the body_short field.
      * @var        resource
      */
-    protected $body_preview_short;
+    protected $body_short;
 
     /**
      * The value for the body_review field.
@@ -258,25 +258,25 @@ abstract class BaseEvent extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [body_preview] column value.
+     * Get the [body] column value.
      *
      * @return resource
      */
-    public function getBodyPreview()
+    public function getBody()
     {
 
-        return $this->body_preview;
+        return $this->body;
     }
 
     /**
-     * Get the [body_preview_short] column value.
+     * Get the [body_short] column value.
      * teaser
      * @return resource
      */
-    public function getBodyPreviewShort()
+    public function getBodyShort()
     {
 
-        return $this->body_preview_short;
+        return $this->body_short;
     }
 
     /**
@@ -613,52 +613,52 @@ abstract class BaseEvent extends BaseObject implements Persistent
     } // setSlug()
 
     /**
-     * Set the value of [body_preview] column.
+     * Set the value of [body] column.
      *
      * @param  resource $v new value
      * @return Event The current object (for fluent API support)
      */
-    public function setBodyPreview($v)
+    public function setBody($v)
     {
         // Because BLOB columns are streams in PDO we have to assume that they are
         // always modified when a new value is passed in.  For example, the contents
         // of the stream itself may have changed externally.
         if (!is_resource($v) && $v !== null) {
-            $this->body_preview = fopen('php://memory', 'r+');
-            fwrite($this->body_preview, $v);
-            rewind($this->body_preview);
+            $this->body = fopen('php://memory', 'r+');
+            fwrite($this->body, $v);
+            rewind($this->body);
         } else { // it's already a stream
-            $this->body_preview = $v;
+            $this->body = $v;
         }
-        $this->modifiedColumns[] = EventPeer::BODY_PREVIEW;
+        $this->modifiedColumns[] = EventPeer::BODY;
 
 
         return $this;
-    } // setBodyPreview()
+    } // setBody()
 
     /**
-     * Set the value of [body_preview_short] column.
+     * Set the value of [body_short] column.
      * teaser
      * @param  resource $v new value
      * @return Event The current object (for fluent API support)
      */
-    public function setBodyPreviewShort($v)
+    public function setBodyShort($v)
     {
         // Because BLOB columns are streams in PDO we have to assume that they are
         // always modified when a new value is passed in.  For example, the contents
         // of the stream itself may have changed externally.
         if (!is_resource($v) && $v !== null) {
-            $this->body_preview_short = fopen('php://memory', 'r+');
-            fwrite($this->body_preview_short, $v);
-            rewind($this->body_preview_short);
+            $this->body_short = fopen('php://memory', 'r+');
+            fwrite($this->body_short, $v);
+            rewind($this->body_short);
         } else { // it's already a stream
-            $this->body_preview_short = $v;
+            $this->body_short = $v;
         }
-        $this->modifiedColumns[] = EventPeer::BODY_PREVIEW_SHORT;
+        $this->modifiedColumns[] = EventPeer::BODY_SHORT;
 
 
         return $this;
-    } // setBodyPreviewShort()
+    } // setBodyShort()
 
     /**
      * Set the value of [body_review] column.
@@ -1045,18 +1045,18 @@ abstract class BaseEvent extends BaseObject implements Persistent
             $this->title = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
             $this->slug = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
             if ($row[$startcol + 3] !== null) {
-                $this->body_preview = fopen('php://memory', 'r+');
-                fwrite($this->body_preview, $row[$startcol + 3]);
-                rewind($this->body_preview);
+                $this->body = fopen('php://memory', 'r+');
+                fwrite($this->body, $row[$startcol + 3]);
+                rewind($this->body);
             } else {
-                $this->body_preview = null;
+                $this->body = null;
             }
             if ($row[$startcol + 4] !== null) {
-                $this->body_preview_short = fopen('php://memory', 'r+');
-                fwrite($this->body_preview_short, $row[$startcol + 4]);
-                rewind($this->body_preview_short);
+                $this->body_short = fopen('php://memory', 'r+');
+                fwrite($this->body_short, $row[$startcol + 4]);
+                rewind($this->body_short);
             } else {
-                $this->body_preview_short = null;
+                $this->body_short = null;
             }
             if ($row[$startcol + 5] !== null) {
                 $this->body_review = fopen('php://memory', 'r+');
@@ -1376,14 +1376,14 @@ abstract class BaseEvent extends BaseObject implements Persistent
                     $this->doUpdate($con);
                 }
                 $affectedRows += 1;
-                // Rewind the body_preview LOB column, since PDO does not rewind after inserting value.
-                if ($this->body_preview !== null && is_resource($this->body_preview)) {
-                    rewind($this->body_preview);
+                // Rewind the body LOB column, since PDO does not rewind after inserting value.
+                if ($this->body !== null && is_resource($this->body)) {
+                    rewind($this->body);
                 }
 
-                // Rewind the body_preview_short LOB column, since PDO does not rewind after inserting value.
-                if ($this->body_preview_short !== null && is_resource($this->body_preview_short)) {
-                    rewind($this->body_preview_short);
+                // Rewind the body_short LOB column, since PDO does not rewind after inserting value.
+                if ($this->body_short !== null && is_resource($this->body_short)) {
+                    rewind($this->body_short);
                 }
 
                 // Rewind the body_review LOB column, since PDO does not rewind after inserting value.
@@ -1446,11 +1446,11 @@ abstract class BaseEvent extends BaseObject implements Persistent
         if ($this->isColumnModified(EventPeer::SLUG)) {
             $modifiedColumns[':p' . $index++]  = '`slug`';
         }
-        if ($this->isColumnModified(EventPeer::BODY_PREVIEW)) {
-            $modifiedColumns[':p' . $index++]  = '`body_preview`';
+        if ($this->isColumnModified(EventPeer::BODY)) {
+            $modifiedColumns[':p' . $index++]  = '`body`';
         }
-        if ($this->isColumnModified(EventPeer::BODY_PREVIEW_SHORT)) {
-            $modifiedColumns[':p' . $index++]  = '`body_preview_short`';
+        if ($this->isColumnModified(EventPeer::BODY_SHORT)) {
+            $modifiedColumns[':p' . $index++]  = '`body_short`';
         }
         if ($this->isColumnModified(EventPeer::BODY_REVIEW)) {
             $modifiedColumns[':p' . $index++]  = '`body_review`';
@@ -1514,17 +1514,17 @@ abstract class BaseEvent extends BaseObject implements Persistent
                     case '`slug`':
                         $stmt->bindValue($identifier, $this->slug, PDO::PARAM_STR);
                         break;
-                    case '`body_preview`':
-                        if (is_resource($this->body_preview)) {
-                            rewind($this->body_preview);
+                    case '`body`':
+                        if (is_resource($this->body)) {
+                            rewind($this->body);
                         }
-                        $stmt->bindValue($identifier, $this->body_preview, PDO::PARAM_LOB);
+                        $stmt->bindValue($identifier, $this->body, PDO::PARAM_LOB);
                         break;
-                    case '`body_preview_short`':
-                        if (is_resource($this->body_preview_short)) {
-                            rewind($this->body_preview_short);
+                    case '`body_short`':
+                        if (is_resource($this->body_short)) {
+                            rewind($this->body_short);
                         }
-                        $stmt->bindValue($identifier, $this->body_preview_short, PDO::PARAM_LOB);
+                        $stmt->bindValue($identifier, $this->body_short, PDO::PARAM_LOB);
                         break;
                     case '`body_review`':
                         if (is_resource($this->body_review)) {
@@ -1759,10 +1759,10 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 return $this->getSlug();
                 break;
             case 3:
-                return $this->getBodyPreview();
+                return $this->getBody();
                 break;
             case 4:
-                return $this->getBodyPreviewShort();
+                return $this->getBodyShort();
                 break;
             case 5:
                 return $this->getBodyReview();
@@ -1838,8 +1838,8 @@ abstract class BaseEvent extends BaseObject implements Persistent
             $keys[0] => $this->getId(),
             $keys[1] => $this->getTitle(),
             $keys[2] => $this->getSlug(),
-            $keys[3] => $this->getBodyPreview(),
-            $keys[4] => $this->getBodyPreviewShort(),
+            $keys[3] => $this->getBody(),
+            $keys[4] => $this->getBodyShort(),
             $keys[5] => $this->getBodyReview(),
             $keys[6] => $this->getLocationInfo(),
             $keys[7] => $this->getDateStart(),
@@ -1923,10 +1923,10 @@ abstract class BaseEvent extends BaseObject implements Persistent
                 $this->setSlug($value);
                 break;
             case 3:
-                $this->setBodyPreview($value);
+                $this->setBody($value);
                 break;
             case 4:
-                $this->setBodyPreviewShort($value);
+                $this->setBodyShort($value);
                 break;
             case 5:
                 $this->setBodyReview($value);
@@ -1997,8 +1997,8 @@ abstract class BaseEvent extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setTitle($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setSlug($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setBodyPreview($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setBodyPreviewShort($arr[$keys[4]]);
+        if (array_key_exists($keys[3], $arr)) $this->setBody($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setBodyShort($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setBodyReview($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setLocationInfo($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setDateStart($arr[$keys[7]]);
@@ -2027,8 +2027,8 @@ abstract class BaseEvent extends BaseObject implements Persistent
         if ($this->isColumnModified(EventPeer::ID)) $criteria->add(EventPeer::ID, $this->id);
         if ($this->isColumnModified(EventPeer::TITLE)) $criteria->add(EventPeer::TITLE, $this->title);
         if ($this->isColumnModified(EventPeer::SLUG)) $criteria->add(EventPeer::SLUG, $this->slug);
-        if ($this->isColumnModified(EventPeer::BODY_PREVIEW)) $criteria->add(EventPeer::BODY_PREVIEW, $this->body_preview);
-        if ($this->isColumnModified(EventPeer::BODY_PREVIEW_SHORT)) $criteria->add(EventPeer::BODY_PREVIEW_SHORT, $this->body_preview_short);
+        if ($this->isColumnModified(EventPeer::BODY)) $criteria->add(EventPeer::BODY, $this->body);
+        if ($this->isColumnModified(EventPeer::BODY_SHORT)) $criteria->add(EventPeer::BODY_SHORT, $this->body_short);
         if ($this->isColumnModified(EventPeer::BODY_REVIEW)) $criteria->add(EventPeer::BODY_REVIEW, $this->body_review);
         if ($this->isColumnModified(EventPeer::LOCATION_INFO)) $criteria->add(EventPeer::LOCATION_INFO, $this->location_info);
         if ($this->isColumnModified(EventPeer::DATE_START)) $criteria->add(EventPeer::DATE_START, $this->date_start);
@@ -2108,8 +2108,8 @@ abstract class BaseEvent extends BaseObject implements Persistent
     {
         $copyObj->setTitle($this->getTitle());
         $copyObj->setSlug($this->getSlug());
-        $copyObj->setBodyPreview($this->getBodyPreview());
-        $copyObj->setBodyPreviewShort($this->getBodyPreviewShort());
+        $copyObj->setBody($this->getBody());
+        $copyObj->setBodyShort($this->getBodyShort());
         $copyObj->setBodyReview($this->getBodyReview());
         $copyObj->setLocationInfo($this->getLocationInfo());
         $copyObj->setDateStart($this->getDateStart());
@@ -2775,8 +2775,8 @@ abstract class BaseEvent extends BaseObject implements Persistent
         $this->id = null;
         $this->title = null;
         $this->slug = null;
-        $this->body_preview = null;
-        $this->body_preview_short = null;
+        $this->body = null;
+        $this->body_short = null;
         $this->body_review = null;
         $this->location_info = null;
         $this->date_start = null;

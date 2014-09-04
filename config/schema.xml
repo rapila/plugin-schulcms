@@ -226,8 +226,8 @@
 	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
 	<column name="title" type="varchar" size="255" />
 	<column name="slug" type="varchar" size="255" />
-	<column name="body_preview" type="blob" />
-	<column name="body_preview_short" type="blob" description="teaser" />
+	<column name="body" type="blob" />
+	<column name="body_short" type="blob" description="teaser" />
 	<column name="body_review" type="blob" />
 	<column name="location_info" type="varchar" size="255" />
 	<column name="date_start" type="date" required="true"/>

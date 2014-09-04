@@ -9,8 +9,8 @@
  * @method EventQuery orderById($order = Criteria::ASC) Order by the id column
  * @method EventQuery orderByTitle($order = Criteria::ASC) Order by the title column
  * @method EventQuery orderBySlug($order = Criteria::ASC) Order by the slug column
- * @method EventQuery orderByBodyPreview($order = Criteria::ASC) Order by the body_preview column
- * @method EventQuery orderByBodyPreviewShort($order = Criteria::ASC) Order by the body_preview_short column
+ * @method EventQuery orderByBody($order = Criteria::ASC) Order by the body column
+ * @method EventQuery orderByBodyShort($order = Criteria::ASC) Order by the body_short column
  * @method EventQuery orderByBodyReview($order = Criteria::ASC) Order by the body_review column
  * @method EventQuery orderByLocationInfo($order = Criteria::ASC) Order by the location_info column
  * @method EventQuery orderByDateStart($order = Criteria::ASC) Order by the date_start column
@@ -29,8 +29,8 @@
  * @method EventQuery groupById() Group by the id column
  * @method EventQuery groupByTitle() Group by the title column
  * @method EventQuery groupBySlug() Group by the slug column
- * @method EventQuery groupByBodyPreview() Group by the body_preview column
- * @method EventQuery groupByBodyPreviewShort() Group by the body_preview_short column
+ * @method EventQuery groupByBody() Group by the body column
+ * @method EventQuery groupByBodyShort() Group by the body_short column
  * @method EventQuery groupByBodyReview() Group by the body_review column
  * @method EventQuery groupByLocationInfo() Group by the location_info column
  * @method EventQuery groupByDateStart() Group by the date_start column
@@ -79,8 +79,8 @@
  *
  * @method Event findOneByTitle(string $title) Return the first Event filtered by the title column
  * @method Event findOneBySlug(string $slug) Return the first Event filtered by the slug column
- * @method Event findOneByBodyPreview(resource $body_preview) Return the first Event filtered by the body_preview column
- * @method Event findOneByBodyPreviewShort(resource $body_preview_short) Return the first Event filtered by the body_preview_short column
+ * @method Event findOneByBody(resource $body) Return the first Event filtered by the body column
+ * @method Event findOneByBodyShort(resource $body_short) Return the first Event filtered by the body_short column
  * @method Event findOneByBodyReview(resource $body_review) Return the first Event filtered by the body_review column
  * @method Event findOneByLocationInfo(string $location_info) Return the first Event filtered by the location_info column
  * @method Event findOneByDateStart(string $date_start) Return the first Event filtered by the date_start column
@@ -99,8 +99,8 @@
  * @method array findById(int $id) Return Event objects filtered by the id column
  * @method array findByTitle(string $title) Return Event objects filtered by the title column
  * @method array findBySlug(string $slug) Return Event objects filtered by the slug column
- * @method array findByBodyPreview(resource $body_preview) Return Event objects filtered by the body_preview column
- * @method array findByBodyPreviewShort(resource $body_preview_short) Return Event objects filtered by the body_preview_short column
+ * @method array findByBody(resource $body) Return Event objects filtered by the body column
+ * @method array findByBodyShort(resource $body_short) Return Event objects filtered by the body_short column
  * @method array findByBodyReview(resource $body_review) Return Event objects filtered by the body_review column
  * @method array findByLocationInfo(string $location_info) Return Event objects filtered by the location_info column
  * @method array findByDateStart(string $date_start) Return Event objects filtered by the date_start column
@@ -222,7 +222,7 @@ abstract class BaseEventQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `title`, `slug`, `body_preview`, `body_preview_short`, `body_review`, `location_info`, `date_start`, `date_end`, `time_details`, `is_active`, `ignore_on_frontpage`, `event_type_id`, `school_class_id`, `gallery_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `events` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `title`, `slug`, `body`, `body_short`, `body_review`, `location_info`, `date_start`, `date_end`, `time_details`, `is_active`, `ignore_on_frontpage`, `event_type_id`, `school_class_id`, `gallery_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `events` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -412,31 +412,31 @@ abstract class BaseEventQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the body_preview column
+     * Filter the query on the body column
      *
-     * @param     mixed $bodyPreview The value to use as filter
+     * @param     mixed $body The value to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return EventQuery The current query, for fluid interface
      */
-    public function filterByBodyPreview($bodyPreview = null, $comparison = null)
+    public function filterByBody($body = null, $comparison = null)
     {
 
-        return $this->addUsingAlias(EventPeer::BODY_PREVIEW, $bodyPreview, $comparison);
+        return $this->addUsingAlias(EventPeer::BODY, $body, $comparison);
     }
 
     /**
-     * Filter the query on the body_preview_short column
+     * Filter the query on the body_short column
      *
-     * @param     mixed $bodyPreviewShort The value to use as filter
+     * @param     mixed $bodyShort The value to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return EventQuery The current query, for fluid interface
      */
-    public function filterByBodyPreviewShort($bodyPreviewShort = null, $comparison = null)
+    public function filterByBodyShort($bodyShort = null, $comparison = null)
     {
 
-        return $this->addUsingAlias(EventPeer::BODY_PREVIEW_SHORT, $bodyPreviewShort, $comparison);
+        return $this->addUsingAlias(EventPeer::BODY_SHORT, $bodyShort, $comparison);
     }
 
     /**

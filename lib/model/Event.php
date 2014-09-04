@@ -13,7 +13,7 @@ class Event extends BaseEvent {
 		return parent::setTitle($sTitle);
 	}
 
-	public function setBodyPreview($mText) {
+	public function setBody($mText) {
 		if($mText instanceof TagParser) {
 			$mText = $mText->getTag();
 		}
@@ -32,13 +32,13 @@ class Event extends BaseEvent {
 				$this->setBodyPreviewShort($mText);
 			}
 		}
-		parent::setBodyPreview($mText);
+		parent::setBody($mText);
 	}
 
 	public function getTeaser() {
-		// if(is_resource($oEvent->getBodyPreviewShort())) {
-		// 	return stream_get_contents($oEvent->getBodyPreviewShort());
-		// }
+		if(is_resource($oEvent->getBodyShort())) {
+			return stream_get_contents($oEvent->getBodyShort());
+		}
 		return null;
 	}
 
@@ -56,8 +56,8 @@ class Event extends BaseEvent {
 	public function getBodyTruncated() {
 		// refactor to use body short when implemented
 		$sContent = null;
-		if($this->getBodyPreview() != null) {
-			$sContent = stream_get_contents($this->getBodyPreview());
+		if($this->getBody() != null) {
+			$sContent = stream_get_contents($this->getBody());
 			return StringUtil::truncate(strip_tags($sContent), 40);
 		}
 		return null;

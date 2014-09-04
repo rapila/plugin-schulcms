@@ -1,18 +1,29 @@
-Migrationsschritte
+Migrationsschritte für SchulCMS Pilotprojekte (git@rapi.la:plugin-schulcms-old.git)
+WIP: IMPORTATN : update with each migration step of wettingen-devel and wettingen-site-prototype development
 
-Propel Migrationen in folgender Reihenfolge laufen lassen
+1. Update step by step bis zu release-1.2
+
+2. Switch to new SchulCMS Plugin (git@github.com:rapila/plugin-schulcms.git)
+	 Test it, run all necessary scripts, including migrate-model.sh
+
+3. Checkout last commit 2c67814ba00fda69494eb1324c52666483a7b3d4
+	 Test it, run all necessary scripts, including migrate-model.sh
+
+4. Propel Migrationen bezüglich Event Teaser in folgender Reihenfolge laufen lassen
 • checkout plugin/schulcms commit 2c67814ba00fda69494eb1324c52666483a7b3d4
+  (make sure the model is generated on a previous commit!)
   run “rap migrate-model.sh -p schulcms”
-  run “ran generate-model.sh”
+  run “rap generate-model.sh” and “rap clear-caches.sh”
 • checkout plugin/schulcms commit 12c62fa4d7a24eeae285512223a3dcca8de7d49e
   run “rap migrate-model.sh -p schulcms”
-	run “ran generate-model.sh”
+  run “rap generate-model.sh” and “rap clear-caches.sh”
 • checkout plugin/schulcms (or master?) commit a446ffebbc026703093bc42893a06b232e2ded39
   run “rap migrate-model.sh -p schulcms”
+  run “rap generate-model.sh” and “rap clear-caches.sh”
 
-Remove content objects if page_type is changing (SchoolHome / PortalHome)
+5. Remove content objects if page_type is changing (SchoolHome / PortalHome)
 
-Migration pages > objects > container_name depending on container_name changes
+6. Migration pages > objects > container_name depending on container_name changes
 
 Create Example dumps for easy development of new sites
 • Including: Home, School Class page, Custom 404 page, Search page etc.
