@@ -36,8 +36,8 @@ class Event extends BaseEvent {
 	}
 
 	public function getTeaser() {
-		if(is_resource($oEvent->getBodyShort())) {
-			return stream_get_contents($oEvent->getBodyShort());
+		if(is_resource($this->getBodyShort())) {
+			return stream_get_contents($this->getBodyShort());
 		}
 		return null;
 	}
