@@ -27,9 +27,9 @@ class Event extends BaseEvent {
 			}
 			$mText = $mText->__toString();
 			if($oTextShort) {
-				$this->setBodyPreviewShort($oTextShort->__toString());
+				$this->setBodyShort($oTextShort->__toString());
 			} else {
-				$this->setBodyPreviewShort($mText);
+				$this->setBodyShort($mText);
 			}
 		}
 		parent::setBody($mText);
