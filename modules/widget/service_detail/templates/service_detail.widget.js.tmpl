@@ -109,6 +109,7 @@ Widget.types.service_detail = {
 		this.serviceData(function(service_data) {
 			this.current_detail_id = service_data.Id;
 			this.service_logo_id = service_data.LogoId;
+
 			this._element.find("input[name='name']").val(service_data.Name);
 			this._element.find("textarea[name='teaser']").val(service_data.Teaser);
 			this._element.find("textarea[name='address']").val(service_data.Address);
@@ -129,6 +130,7 @@ Widget.types.service_detail = {
 			this.service_text.ensureWidget(function(widget) {
 				widget.set_data(service_data.Body);
 			});
+
 			this.update_documents();
 			this.list_team_members(service_data.team_members);
 
@@ -260,11 +262,11 @@ Widget.types.service_detail = {
 	settings: {
 		detail_widget: {
 			title: "{{writeString=wns.service.create}}",
-			width: 800
+			width: 900
 		},
 		initial_category_id: null,
 		richtext_settings: {
-			height: 250,
+			height: 300,
 			toolbar_Full: [
 				['Bold','Italic','-','Image','BulletedList'],['Link','Unlink'],
 				['Undo','Redo','-','RemoveFormat'],

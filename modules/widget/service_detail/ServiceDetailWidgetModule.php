@@ -106,19 +106,19 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 	  return $oServiceDocument->save();
 	}
 
-	private function validate($aServiceData) {
+	private function validate($aData) {
 		$oFlash = Flash::getFlash();
-		$oFlash->setArrayToCheck($aServiceData);
+		$oFlash->setArrayToCheck($aData);
 		$oFlash->checkForValue('name', 'name_required');
-		if($aServiceData['email'] != null) {
+		if($aData['email'] != null) {
 			$oFlash->checkForEmail('email', 'valid_email');
 		}
-		if($aServiceData['is_active'] && $aServiceData['teaser'] == null) {
-			$oFlash->addMessage("is_active_teaser_required");
+		if($aData['is_active'] && $aData['body'] == null) {
+			$oFlash->addMessage("is_active_body_required");
 		}
 		$aSetTeamMemberIds = array();
-		if(isset($aServiceData['team_member_id'])) {
-			$aTeamMemberIds = is_array($aServiceData['team_member_id']) ? $aServiceData['team_member_id'] : array($aServiceData['team_member_id']);
+		if(isset($aData['team_member_id'])) {
+			$aTeamMemberIds = is_array($aData['team_member_id']) ? $aData['team_member_id'] : array($aData['team_member_id']);
 			foreach($aTeamMemberIds as $iTeamMemberId) {
 				if(!$iTeamMemberId) {
 					continue;
@@ -132,27 +132,26 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 		$oFlash->finishReporting();
 	}
 
-	public function saveData($aServiceData) {
+	public function saveData($aData) {
 		if($this->iServiceId === null) {
 			$oService = new Service();
 		} else {
 			$oService = ServiceQuery::create()->findPk($this->iServiceId);
 		}
-		ArrayUtil::trimStringsInArray($aServiceData);
-		$oService->setName($aServiceData['name']);
-		$oService->setTeaser($aServiceData['teaser']);
-		$oService->setAddress($aServiceData['address']);
-		$oService->setOpeningHours($aServiceData['opening_hours']);
-		$oService->setEmail($aServiceData['email']);
-		$oService->setPhone($aServiceData['phone']);
-		$oService->setTeaser($aServiceData['teaser']);
-		$oService->setWebsite($aServiceData['website']);
-		$oService->setIsActive($aServiceData['is_active']);
-		$oService->setLogoId($aServiceData['logo_id']);
-		$oService->setServiceCategoryId($aServiceData['service_category_id'] ? $aServiceData['service_category_id'] : null);
+		ArrayUtil::trimStringsInArray($aData);
+		$oService->setName($aData['name']);
+		$oService->setAddress($aData['address']);
+		$oService->setOpeningHours($aData['opening_hours']);
+		$oService->setEmail($aData['email']);
+		$oService->setPhone($aData['phone']);
+		$oService->setWebsite($aData['website']);
+		$oService->setIsActive($aData['is_active']);
+		$oService->setLogoId($aData['logo_id']);
+		$oService->setServiceCategoryId($aData['service_category_id'] ? $aData['service_category_id'] : null);
+
 		$oRichtextUtil = new RichtextUtil();
+		$oService->setBody($oRichtextUtil->getTagParser($aData['body_text']));
 		$oRichtextUtil->setTrackReferences($oService);
-		$oService->setBody($oRichtextUtil->parseInputFromEditor($aServiceData['body_text']));
 
 		if(!$oService->isNew()) {
 			ServiceMemberQuery::create()->filterByService($oService)->find()->delete();
@@ -166,27 +165,27 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 		  }
 		}
 
-		if(isset($aServiceData['team_member_id'])) {
+		if(isset($aData['team_member_id'])) {
 			$aServiceMembers = array();
-			foreach($aServiceData['team_member_id'] as $iCounter => $iTeamMemberId) {
+			foreach($aData['team_member_id'] as $iCounter => $iTeamMemberId) {
 				if(!$iTeamMemberId) {
 					continue;
 				}
 				if(isset($aServiceMembers[$iCounter])) {
 					$oServiceMember = $aServiceMembers[$iCounter];
-					$oServiceMember->setFunctionName($aServiceData['function_name'][$iCounter]);
+					$oServiceMember->setFunctionName($aData['function_name'][$iCounter]);
 					$oServiceMember->setSort($iCounter+1);
 				} else {
 					$oServiceMember = new ServiceMember();
 					$oServiceMember->setTeamMemberId($iTeamMemberId);
-					$oServiceMember->setFunctionName($aServiceData['function_name'][$iCounter]);
+					$oServiceMember->setFunctionName($aData['function_name'][$iCounter]);
 					$oServiceMember->setSort($iCounter+1);
 					$aServiceMembers[$iCounter] = $oServiceMember;
 					$oService->addServiceMember($oServiceMember);
 				}
 			}
 		}
-		$this->validate($aServiceData);
+		$this->validate($aData);
 		if(!Flash::noErrors()) {
 			throw new ValidationException();
 		}

@@ -9,11 +9,44 @@ class Service extends BaseService {
 		$this->setSlug(StringUtil::normalize(str_replace('-', '', $sName), '-', '-'));
 		return parent::setName($sName);
 	}
-	
+
+	/**
+	* Sets the body short text. When given a TagParser or an HtmlTag instance, this method will use the first paragraph tag found to construct the synopsis (short text).
+	* @param string|TagParser|HtmlTag $mText
+	*/
+	public function setBody($mText) {
+		if($mText instanceof TagParser) {
+			$mText = $mText->getTag();
+		}
+		if($mText instanceof HtmlTag) {
+			$oTextShort = null;
+			foreach($mText->getChildren() as $oChild) {
+				if($oChild instanceof HtmlTag && strtolower($oChild->getName()) === 'p') {
+					$oTextShort = $oChild;
+					break;
+				}
+			}
+			$mText = $mText->__toString();
+			if($oTextShort) {
+				$this->setBodyShort($oTextShort->__toString());
+			} else {
+				$this->setBodyShort($mText);
+			}
+		}
+		parent::setBody($mText);
+	}
+
+	// public function getTeaser() {
+	// 	if(is_resource($this->getBodyShort())) {
+	// 		return stream_get_contents($this->getBodyShort());
+	// 	}
+	// 	return null;
+	// }
+
 	public function getTeamCount() {
 		return $this->countServiceMembers();
 	}
-	
+
 	public function getDocumentCount() {
 		return $this->countServiceDocuments();
 	}
@@ -32,7 +65,7 @@ class Service extends BaseService {
 		}
 		return $aResult;
 	}
-	
+
 	public function getWebsiteWithProtocol() {
 	  if($this->getWebsite() == null) {
 	    return null;
@@ -42,7 +75,7 @@ class Service extends BaseService {
 	  }
 	  return 'http://'.$this->getWebsite();
 	}
-	
+
 	public function getServiceLink($oServicePage = null) {
 		if($oServicePage === null) {
 			$oServicePage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_SERVICES));
@@ -52,25 +85,25 @@ class Service extends BaseService {
 		}
 		return null;
 	}
-	
+
 	public function getServiceCategoryName() {
 		if($this->getServiceCategory()) {
 			return $this->getServiceCategory()->getName();
 		}
 		return null;
 	}
-	
+
  /**
 	* for reference tracking only
 	*/
 	public function getDescription() {
 		return StringPeer::getString('wns.service.description', null, null, array('name' => $this->getName()));
 	}
-	
+
 	public function getAdminLink() {
 		return array('services', $this->getId());
 	}
-	
+
 	public function delete(PropelPDO $oConnection = null) {
 		$oImage = $this->getDocument();
 		if($oImage) {
