@@ -4,21 +4,21 @@
  */
 
 class ClassesFrontendModule extends DynamicFrontendModule {
-	
+
 	public static $DISPLAY_MODES = array('klassen_liste', 'klassen_with_detail', 'klassen_kontext_detail', 'klassen_main_detail');
 	public static $EVENT;
 	public static $CLASS;
 	public $oTeamPage;
-	
+
 	const MODE_SELECT_KEY = 'display_mode';
 	const DETAIL_IDENTIFIER_EVENT = 'anlass';
 	const CACHE_KEY = 'classes_list_';
-	
+
 	public static function acceptedRequestParams() {
 		return array(self::DETAIL_IDENTIFIER_EVENT);
 	}
-	
-	public function renderFrontend() { 
+
+	public function renderFrontend() {
 		$this->oTeamPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('team'));
 		$aOptions = @unserialize($this->getData());
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
@@ -26,7 +26,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		}
 		if(isset($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY]) || $aOptions[self::MODE_SELECT_KEY] === 'klassen_kontext_detail') {
 			if($aOptions[self::MODE_SELECT_KEY] === 'klassen_kontext_detail') {
-				return $this->renderKlassenKontext();	
+				return $this->renderKlassenKontext();
 			}
 			return $this->renderKlassenDetail();
 		}
@@ -80,7 +80,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		}
 		return $oTemplate;
 	}
-	
+
 	public function renderKlassenDetail() {
 		if(isset($_REQUEST[self::DETAIL_IDENTIFIER_EVENT])) {
 			self::$EVENT = EventQuery::create()->findPk($_REQUEST[self::DETAIL_IDENTIFIER_EVENT]);
@@ -133,10 +133,10 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 			$oClassTeacherTemplate->replaceIdentifier('class_teacher_functions', $sKlassenlehrerin.implode(' und ', $aParams['functions']));
 			$oTemplate->replaceIdentifierMultiple('class_teachers', $oClassTeacherTemplate);
 		}
-		
+
 		return $oTemplate;
 	}
-	
+
 	private static function getClassTeachersOrdered($aClassTeachers) {
 		$aClassTeachersSet = array();
 		foreach($aClassTeachers as $oClassTeacher) {
@@ -152,34 +152,31 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		}
 		return $aClassTeachersSet;
 	}
-	
-	public function renderClassEvent() {		
+
+	public function renderClassEvent() {
 		$oTemplate = $this->constructTemplate('class_event_detail');
 		$oTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
 		$oTemplate->replaceIdentifier('date_from_to', self::$EVENT->getDateFromTo());
-		
+
 		$sBody = null;
 		if (self::$EVENT->hasBericht()) {
 			$sReviewContent = stream_get_contents(self::$EVENT->getBodyReview());
 			if($sReviewContent != '') {
-				$sBody = RichtextUtil::parseStorageForFrontendOutput($sReviewContent);			
+				$sBody = RichtextUtil::parseStorageForFrontendOutput($sReviewContent);
 			}
-		} 
+		}
 		if ($sBody === null && self::$EVENT->getBodyPreview()) {
 			$sContent = stream_get_contents(self::$EVENT->getBodyPreview());
 			if($sContent != '') {
 				$sBody = RichtextUtil::parseStorageForFrontendOutput($sContent);
 			}
 		}
-		if ($sBody == null) {
-			$sBody = self::$EVENT->getTeaser();
-		}
 		$oTemplate->replaceIdentifier('body', $sBody);
-		
+
 		EventsFrontendModule::renderGallery(self::$EVENT, $oTemplate);
 		return $oTemplate;
 	}
-	
+
 	public function renderKlassenKontext($bShowRandomKontext = false) {
 		if(!isset($_REQUEST[SchoolClassFilterModule::CLASSES_REQUEST_KEY])) {
 			return null;
@@ -230,12 +227,12 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 				$aLinkParams = array_merge($aClassLinkParams, array(self::DETAIL_IDENTIFIER_EVENT, $oEvent->getId()));
 				$oEventTemplate->replaceIdentifier('detail_link', LinkUtil::link($aLinkParams));
 				$oEventTemplate->replaceIdentifier('detail_link_title', $oEvent->getTeaser());
-				
+
 				$oEventTempl->replaceIdentifierMultiple('list_item', $oEventTemplate);
 			}
 			$oTemplate->replaceIdentifier('event_section', $oEventTempl);
 		}
-		
+
 		if($bRequiresBackToLink) {
 			$oTemplate->replaceIdentifier('unit_name', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.class.go_to_home'),'class' => 'class_home', 'href' => LinkUtil::link($aClassLinkParams)), 'Klasse '.$aClasses[0]->getUnitName()));
 			$oTemplate->replaceIdentifier('full_unit_name', TagWriter::quickTag('a', array('href' => LinkUtil::link($aClassLinkParams)), $aClasses[0]->getFullClassName()));
@@ -243,7 +240,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 			$oTemplate->replaceIdentifier('full_unit_name', $aClasses[0]->getFullClassName());
 			$oTemplate->replaceIdentifier('unit_name', 'Klasse '.$aClasses[0]->getUnitName());
 		}
-		
+
 		// links
 		$aLinks = ClassLinkQuery::create()->joinLink()->filterBySchoolClassId($aClassIds)->find();
 		if(count($aLinks) > 0) {
