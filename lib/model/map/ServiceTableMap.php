@@ -41,7 +41,6 @@ class ServiceTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 80, null);
         $this->addColumn('slug', 'Slug', 'VARCHAR', false, 80, null);
-        $this->addColumn('teaser', 'Teaser', 'VARCHAR', false, 255, null);
         $this->addColumn('address', 'Address', 'VARCHAR', false, 255, null);
         $this->addColumn('opening_hours', 'OpeningHours', 'VARCHAR', false, 255, null);
         $this->addColumn('phone', 'Phone', 'VARCHAR', false, 20, null);

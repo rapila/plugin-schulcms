@@ -36,12 +36,13 @@ class Service extends BaseService {
 		parent::setBody($mText);
 	}
 
-	// public function getTeaser() {
-	// 	if(is_resource($this->getBodyShort())) {
-	// 		return stream_get_contents($this->getBodyShort());
-	// 	}
-	// 	return null;
-	// }
+	// alias for body short for consistency
+	public function getTeaser() {
+		if(is_resource($this->getBodyShort())) {
+			return stream_get_contents($this->getBodyShort());
+		}
+		return null;
+	}
 
 	public function getTeamCount() {
 		return $this->countServiceMembers();

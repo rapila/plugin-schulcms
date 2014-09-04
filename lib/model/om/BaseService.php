@@ -48,12 +48,6 @@ abstract class BaseService extends BaseObject implements Persistent
     protected $slug;
 
     /**
-     * The value for the teaser field.
-     * @var        string
-     */
-    protected $teaser;
-
-    /**
      * The value for the address field.
      * @var        string
      */
@@ -254,17 +248,6 @@ abstract class BaseService extends BaseObject implements Persistent
     {
 
         return $this->slug;
-    }
-
-    /**
-     * Get the [teaser] column value.
-     *
-     * @return string
-     */
-    public function getTeaser()
-    {
-
-        return $this->teaser;
     }
 
     /**
@@ -541,27 +524,6 @@ abstract class BaseService extends BaseObject implements Persistent
 
         return $this;
     } // setSlug()
-
-    /**
-     * Set the value of [teaser] column.
-     *
-     * @param  string $v new value
-     * @return Service The current object (for fluent API support)
-     */
-    public function setTeaser($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->teaser !== $v) {
-            $this->teaser = $v;
-            $this->modifiedColumns[] = ServicePeer::TEASER;
-        }
-
-
-        return $this;
-    } // setTeaser()
 
     /**
      * Set the value of [address] column.
@@ -930,33 +892,32 @@ abstract class BaseService extends BaseObject implements Persistent
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
             $this->slug = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->teaser = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->address = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->opening_hours = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->phone = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->email = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->website = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            if ($row[$startcol + 9] !== null) {
+            $this->address = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->opening_hours = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->phone = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->email = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->website = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            if ($row[$startcol + 8] !== null) {
                 $this->body = fopen('php://memory', 'r+');
-                fwrite($this->body, $row[$startcol + 9]);
+                fwrite($this->body, $row[$startcol + 8]);
                 rewind($this->body);
             } else {
                 $this->body = null;
             }
-            if ($row[$startcol + 10] !== null) {
+            if ($row[$startcol + 9] !== null) {
                 $this->body_short = fopen('php://memory', 'r+');
-                fwrite($this->body_short, $row[$startcol + 10]);
+                fwrite($this->body_short, $row[$startcol + 9]);
                 rewind($this->body_short);
             } else {
                 $this->body_short = null;
             }
-            $this->is_active = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
-            $this->logo_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
-            $this->service_category_id = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
-            $this->created_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
-            $this->updated_at = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
-            $this->created_by = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
-            $this->updated_by = ($row[$startcol + 17] !== null) ? (int) $row[$startcol + 17] : null;
+            $this->is_active = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
+            $this->logo_id = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
+            $this->service_category_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
+            $this->created_at = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+            $this->updated_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+            $this->created_by = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
+            $this->updated_by = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -966,7 +927,7 @@ abstract class BaseService extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 18; // 18 = ServicePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 17; // 17 = ServicePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Service object", $e);
@@ -1328,9 +1289,6 @@ abstract class BaseService extends BaseObject implements Persistent
         if ($this->isColumnModified(ServicePeer::SLUG)) {
             $modifiedColumns[':p' . $index++]  = '`slug`';
         }
-        if ($this->isColumnModified(ServicePeer::TEASER)) {
-            $modifiedColumns[':p' . $index++]  = '`teaser`';
-        }
         if ($this->isColumnModified(ServicePeer::ADDRESS)) {
             $modifiedColumns[':p' . $index++]  = '`address`';
         }
@@ -1392,9 +1350,6 @@ abstract class BaseService extends BaseObject implements Persistent
                         break;
                     case '`slug`':
                         $stmt->bindValue($identifier, $this->slug, PDO::PARAM_STR);
-                        break;
-                    case '`teaser`':
-                        $stmt->bindValue($identifier, $this->teaser, PDO::PARAM_STR);
                         break;
                     case '`address`':
                         $stmt->bindValue($identifier, $this->address, PDO::PARAM_STR);
@@ -1634,48 +1589,45 @@ abstract class BaseService extends BaseObject implements Persistent
                 return $this->getSlug();
                 break;
             case 3:
-                return $this->getTeaser();
-                break;
-            case 4:
                 return $this->getAddress();
                 break;
-            case 5:
+            case 4:
                 return $this->getOpeningHours();
                 break;
-            case 6:
+            case 5:
                 return $this->getPhone();
                 break;
-            case 7:
+            case 6:
                 return $this->getEmail();
                 break;
-            case 8:
+            case 7:
                 return $this->getWebsite();
                 break;
-            case 9:
+            case 8:
                 return $this->getBody();
                 break;
-            case 10:
+            case 9:
                 return $this->getBodyShort();
                 break;
-            case 11:
+            case 10:
                 return $this->getIsActive();
                 break;
-            case 12:
+            case 11:
                 return $this->getLogoId();
                 break;
-            case 13:
+            case 12:
                 return $this->getServiceCategoryId();
                 break;
-            case 14:
+            case 13:
                 return $this->getCreatedAt();
                 break;
-            case 15:
+            case 14:
                 return $this->getUpdatedAt();
                 break;
-            case 16:
+            case 15:
                 return $this->getCreatedBy();
                 break;
-            case 17:
+            case 16:
                 return $this->getUpdatedBy();
                 break;
             default:
@@ -1710,21 +1662,20 @@ abstract class BaseService extends BaseObject implements Persistent
             $keys[0] => $this->getId(),
             $keys[1] => $this->getName(),
             $keys[2] => $this->getSlug(),
-            $keys[3] => $this->getTeaser(),
-            $keys[4] => $this->getAddress(),
-            $keys[5] => $this->getOpeningHours(),
-            $keys[6] => $this->getPhone(),
-            $keys[7] => $this->getEmail(),
-            $keys[8] => $this->getWebsite(),
-            $keys[9] => $this->getBody(),
-            $keys[10] => $this->getBodyShort(),
-            $keys[11] => $this->getIsActive(),
-            $keys[12] => $this->getLogoId(),
-            $keys[13] => $this->getServiceCategoryId(),
-            $keys[14] => $this->getCreatedAt(),
-            $keys[15] => $this->getUpdatedAt(),
-            $keys[16] => $this->getCreatedBy(),
-            $keys[17] => $this->getUpdatedBy(),
+            $keys[3] => $this->getAddress(),
+            $keys[4] => $this->getOpeningHours(),
+            $keys[5] => $this->getPhone(),
+            $keys[6] => $this->getEmail(),
+            $keys[7] => $this->getWebsite(),
+            $keys[8] => $this->getBody(),
+            $keys[9] => $this->getBodyShort(),
+            $keys[10] => $this->getIsActive(),
+            $keys[11] => $this->getLogoId(),
+            $keys[12] => $this->getServiceCategoryId(),
+            $keys[13] => $this->getCreatedAt(),
+            $keys[14] => $this->getUpdatedAt(),
+            $keys[15] => $this->getCreatedBy(),
+            $keys[16] => $this->getUpdatedBy(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1794,48 +1745,45 @@ abstract class BaseService extends BaseObject implements Persistent
                 $this->setSlug($value);
                 break;
             case 3:
-                $this->setTeaser($value);
-                break;
-            case 4:
                 $this->setAddress($value);
                 break;
-            case 5:
+            case 4:
                 $this->setOpeningHours($value);
                 break;
-            case 6:
+            case 5:
                 $this->setPhone($value);
                 break;
-            case 7:
+            case 6:
                 $this->setEmail($value);
                 break;
-            case 8:
+            case 7:
                 $this->setWebsite($value);
                 break;
-            case 9:
+            case 8:
                 $this->setBody($value);
                 break;
-            case 10:
+            case 9:
                 $this->setBodyShort($value);
                 break;
-            case 11:
+            case 10:
                 $this->setIsActive($value);
                 break;
-            case 12:
+            case 11:
                 $this->setLogoId($value);
                 break;
-            case 13:
+            case 12:
                 $this->setServiceCategoryId($value);
                 break;
-            case 14:
+            case 13:
                 $this->setCreatedAt($value);
                 break;
-            case 15:
+            case 14:
                 $this->setUpdatedAt($value);
                 break;
-            case 16:
+            case 15:
                 $this->setCreatedBy($value);
                 break;
-            case 17:
+            case 16:
                 $this->setUpdatedBy($value);
                 break;
         } // switch()
@@ -1865,21 +1813,20 @@ abstract class BaseService extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setSlug($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setTeaser($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setAddress($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setOpeningHours($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setPhone($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setEmail($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setWebsite($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setBody($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setBodyShort($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setIsActive($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setLogoId($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setServiceCategoryId($arr[$keys[13]]);
-        if (array_key_exists($keys[14], $arr)) $this->setCreatedAt($arr[$keys[14]]);
-        if (array_key_exists($keys[15], $arr)) $this->setUpdatedAt($arr[$keys[15]]);
-        if (array_key_exists($keys[16], $arr)) $this->setCreatedBy($arr[$keys[16]]);
-        if (array_key_exists($keys[17], $arr)) $this->setUpdatedBy($arr[$keys[17]]);
+        if (array_key_exists($keys[3], $arr)) $this->setAddress($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setOpeningHours($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setPhone($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setEmail($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setWebsite($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setBody($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setBodyShort($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setIsActive($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setLogoId($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setServiceCategoryId($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setCreatedAt($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setUpdatedAt($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setCreatedBy($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setUpdatedBy($arr[$keys[16]]);
     }
 
     /**
@@ -1894,7 +1841,6 @@ abstract class BaseService extends BaseObject implements Persistent
         if ($this->isColumnModified(ServicePeer::ID)) $criteria->add(ServicePeer::ID, $this->id);
         if ($this->isColumnModified(ServicePeer::NAME)) $criteria->add(ServicePeer::NAME, $this->name);
         if ($this->isColumnModified(ServicePeer::SLUG)) $criteria->add(ServicePeer::SLUG, $this->slug);
-        if ($this->isColumnModified(ServicePeer::TEASER)) $criteria->add(ServicePeer::TEASER, $this->teaser);
         if ($this->isColumnModified(ServicePeer::ADDRESS)) $criteria->add(ServicePeer::ADDRESS, $this->address);
         if ($this->isColumnModified(ServicePeer::OPENING_HOURS)) $criteria->add(ServicePeer::OPENING_HOURS, $this->opening_hours);
         if ($this->isColumnModified(ServicePeer::PHONE)) $criteria->add(ServicePeer::PHONE, $this->phone);
@@ -1974,7 +1920,6 @@ abstract class BaseService extends BaseObject implements Persistent
     {
         $copyObj->setName($this->getName());
         $copyObj->setSlug($this->getSlug());
-        $copyObj->setTeaser($this->getTeaser());
         $copyObj->setAddress($this->getAddress());
         $copyObj->setOpeningHours($this->getOpeningHours());
         $copyObj->setPhone($this->getPhone());
@@ -2900,7 +2845,6 @@ abstract class BaseService extends BaseObject implements Persistent
         $this->id = null;
         $this->name = null;
         $this->slug = null;
-        $this->teaser = null;
         $this->address = null;
         $this->opening_hours = null;
         $this->phone = null;

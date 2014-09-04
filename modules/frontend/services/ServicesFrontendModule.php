@@ -4,12 +4,12 @@
  */
 
 class ServicesFrontendModule extends DynamicFrontendModule {
-	
+
 	public static $DISPLAY_MODES = array('service_liste', 'service_detail', 'service_intern_detail', 'service_teaser', 'team_member_portraits');
 	public static $SERVICE;
 	public $aServiceCategoryIds;
 	public $iExcludeInternalCategoryId;
-	
+
 	const DETAIL_IDENTIFIER = 'id';
 	const MODE_SELECT_KEY = 'display_mode';
 	const SERVICE_CATEGORY_IDS = "service_category_id";
@@ -19,8 +19,8 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		$this->iExcludeInternalCategoryId = Settings::getSetting("school_settings", 'internally_used_service_category', null);
 		parent::__construct($oLanguageObject, $aPath, $iId);
 	}
-	
-	public function renderFrontend() { 
+
+	public function renderFrontend() {
 		$aOptions = @unserialize($this->getData());
 		$this->aServiceCategoryIds = @$aOptions[self::SERVICE_CATEGORY_IDS];
 		$iServiceId = @$aOptions['service_id'];
@@ -37,7 +37,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		}
 		return '';
 	}
-	
+
 	// renderList
 	private function renderList() {
 		if(self::$SERVICE) {
@@ -49,22 +49,22 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		if(FrontendManager::$CURRENT_PAGE->getParent() && (FrontendManager::$CURRENT_PAGE->getParent()->getId() === $oPage->getId())) {
 		  $oPage = FrontendManager::$CURRENT_PAGE;
 		}
-		
+
 		$sOddEven = 'odd';
 		foreach($aServices as $oService) {
 			$oItemTemplate = $this->constructTemplate('list_item');
 			$oItemTemplate->replaceIdentifier('oddeven', $sOddEven = $sOddEven === 'even' ? 'odd' : 'even');
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oService->getServiceLink($oPage)));
 			$oItemTemplate->replaceIdentifier('detail_link_text', $oService->getName());
-			$oItemTemplate->replaceIdentifier('detail_link_title', 'Details von '.$oService->getName());			
+			$oItemTemplate->replaceIdentifier('detail_link_title', 'Details von '.$oService->getName());
 			$oItemTemplate->replaceIdentifier('phone', $oService->getPhone());
-			$oItemTemplate->replaceIdentifier('teaser', StringUtil::truncate($oService->getTeaser(), 130));
+			$oItemTemplate->replaceIdentifier('teaser', $oService->getTeaser());
 			$oItemTemplate->replaceIdentifier('website', $oService->getWebsiteWithProtocol());
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
 		return $oTemplate;
 	}
-	
+
 	public function renderDetail($isIntern=false) {
 		if(self::$SERVICE === null) {
 			return;
@@ -85,7 +85,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		$oTemplate->replaceIdentifier('portraits', $this->addPortraits());
 		return $oTemplate;
 	}
-	
+
 	public function renderDetailContext() {
 		$oTemplate = $this->constructTemplate('detail_context');
 		$oTemplate->replaceIdentifier('name', self::$SERVICE->getName());
@@ -97,27 +97,27 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 			foreach(self::$SERVICE->getOpeningHoursFormatted() as $i => $mNewLine) {
 				if(is_array($mNewLine)) {
 					foreach($mNewLine as $mPart) {
-						$oTemplate->replaceIdentifierMultiple('opening_hours', $mPart, null, Template::NO_NEW_CONTEXT); 
-					} 
+						$oTemplate->replaceIdentifierMultiple('opening_hours', $mPart, null, Template::NO_NEW_CONTEXT);
+					}
 				} else {
-					$oTemplate->replaceIdentifierMultiple('opening_hours', $mNewLine, null, Template::NO_NEW_CONTEXT);	
+					$oTemplate->replaceIdentifierMultiple('opening_hours', $mNewLine, null, Template::NO_NEW_CONTEXT);
 				}
 				if($i < ($iCount-1)) {
-					$oTemplate->replaceIdentifierMultiple('opening_hours', TagWriter::quickTag('br'), null, Template::NO_NEW_CONTEXT);	
+					$oTemplate->replaceIdentifierMultiple('opening_hours', TagWriter::quickTag('br'), null, Template::NO_NEW_CONTEXT);
 				}
 			}
 		}
 		$sLabelMitarbeiter = 'Mitarbeiter';
 		$bIsFemale = true;
 		$i = 0;
-		
+
 		// team_members
 		$oCriteria = new Criteria();
 		$oCriteria->addAscendingOrderByColumn(ServiceMemberPeer::SORT);
 		foreach(self::$SERVICE->getServiceMembers($oCriteria) as $i => $oServiceMember) {
 			$i++;
 			if($oServiceMember->getTeamMember()) {
-				$sName = $oServiceMember->getTeamMember()->getFullName();				
+				$sName = $oServiceMember->getTeamMember()->getFullName();
 				if($oServiceMember->getFunctionName()) {
 					$bIsFemale = $oServiceMember->getTeamMember()->getGenderId() === 'f';
 					$sName .= ', '. $oServiceMember->getFunctionName();
@@ -126,7 +126,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 				}
 			}
 		}
-		
+
 		if($i === 1 && $bIsFemale) {
 			$sLabelMitarbeiter = $sLabelMitarbeiter.'in';
 		}
@@ -137,17 +137,17 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 			$oTemplate->replaceIdentifier('email', TagWriter::quickTag('a', array('title' => self::$SERVICE->getEmail(),'href' => 'mailto:'.self::$SERVICE->getEmail()), StringUtil::truncate(self::$SERVICE->getEmail(), 27)));
 		if(self::$SERVICE->getWebsite() != null)
 			$oTemplate->replaceIdentifier('website', TagWriter::quickTag('a', array('href' => self::$SERVICE->getWebsiteWithProtocol()), StringUtil::truncate(self::$SERVICE->getWebsite(), 27)));
-			
+
     foreach(self::$SERVICE->getServiceDocuments() as $oServiceDocument) {
 			if($oServiceDocument->getDocument()) {
-        $oTemplate->replaceIdentifierMultiple('service_document', TagWriter::quickTag('a', array('href' => $oServiceDocument->getDocument()->getDisplayUrl(), 'title' => $oServiceDocument->getDocument()->getDescription(),'class' => $oServiceDocument->getDocument()->getExtension()), $oServiceDocument->getDocument()->getName()), null, Template::NO_NEW_CONTEXT); 
+        $oTemplate->replaceIdentifierMultiple('service_document', TagWriter::quickTag('a', array('href' => $oServiceDocument->getDocument()->getDisplayUrl(), 'title' => $oServiceDocument->getDocument()->getDescription(),'class' => $oServiceDocument->getDocument()->getExtension()), $oServiceDocument->getDocument()->getName()), null, Template::NO_NEW_CONTEXT);
 			}
 		}
 
 		return $oTemplate;
 	}
-	
-	public function renderTeaserDetail($iServiceId = null) { 
+
+	public function renderTeaserDetail($iServiceId = null) {
 		if(self::$SERVICE === null) {
 			self::$SERVICE =  ServiceQuery::create()->filterByIsActive(true)->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL)->filterByTeaser(null, Criteria::ISNOTNULL)->orderByRand()->findOne();
 		}
@@ -162,7 +162,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		}
 		return;
 	}
-	
+
 	private function renderTeamMemberPortraits() {
 		if(self::$SERVICE === null) {
 			return;
@@ -171,7 +171,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		$this->addPortraits($oTemplate);
 		return $oTemplate;
 	}
-	
+
 	private function addPortraits($oTemplate=null, $iWidth = 150) {
 		$oCriteria = new Criteria();
 		$oCriteria->addJoin(ServiceMemberPeer::TEAM_MEMBER_ID, TeamMemberPeer::ID, Criteria::INNER_JOIN);
@@ -195,7 +195,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		}
 		return $oTemplate;
 	}
-	
+
 	public function listQuery() {
 		$oQuery = ServiceQuery::create()->filterByIsActive(true)->orderByName();
 		if($this->aServiceCategoryIds) {
@@ -207,7 +207,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		}
 		return $oQuery;
 	}
-	
+
   public function getJsForFrontend() {
 		if(Settings::getSetting("frontend", "protect_email_addresses", false)) {
 			$oResourceIncluder = ResourceIncluder::defaultIncluder();
