@@ -35,7 +35,6 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		if(LinkCategoryQuery::create()->findPk($iClassLinkCategoryId) === null) {
 			throw new Exception('Config error: school_settings > externally_managed_link_categories > school_class_links');
 		}
-		ErrorHandler::log('$iClassLinkCategoryId', $iClassLinkCategoryId);
 		$this->setSetting('class_link_category_id', $iClassLinkCategoryId);
 
 		$iClassEventTypeId = Settings::getSetting('school_settings', 'class_default_event_type_id', 1);
