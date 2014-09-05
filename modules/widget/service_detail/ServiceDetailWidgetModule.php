@@ -48,6 +48,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 			$sBody = RichtextUtil::parseStorageForBackendOutput(stream_get_contents($oService->getBody()))->render();
 		}
 		$aResult['Body'] = $sBody;
+		unset($aResult['BodyShort']);
 		return $aResult;
 	}
 

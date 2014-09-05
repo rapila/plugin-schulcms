@@ -3,13 +3,14 @@
  * @package modules.widget
  */
 class EventDetailWidgetModule extends PersistentWidgetModule {
+
 	private $iEventId = null;
 	private $aUnsavedDocuments = array();
 
-	public function __construct($sWidgetId) {
-		parent::__construct($sWidgetId);
+	public function __construct($sSessionKey = null) {
+		parent::__construct($sSessionKey);
 
-    // config section 'school_settings' :'externally_managed_document_categories'
+		// config section 'school_settings' :'externally_managed_document_categories'
 		$iEventDocumentCategory = SchoolPeer::getDocumentCategoryConfig('event_documents');
 		if(DocumentCategoryQuery::create()->filterById($iEventDocumentCategory)->count() === 0) {
 			throw new Exception('Config error: school_settings > externally_managed_document_categories > event_documents');
@@ -29,18 +30,18 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 	}
 
 	public function allDocuments($iThumbnailSize = 180) {
-	  $aDocuments = EventDocumentQuery::create()->filterByEventId($this->iEventId)->joinDocument()->orderBySort()->find();
-	  $aResult = array();
-	  foreach($aDocuments as $oEventDocument) {
-	    $aResult[] = $this->rowData($oEventDocument->getDocument(), $iThumbnailSize);
-	  }
-	  return $aResult;
+		$aDocuments = EventDocumentQuery::create()->filterByEventId($this->iEventId)->joinDocument()->orderBySort()->find();
+		$aResult = array();
+		foreach($aDocuments as $oEventDocument) {
+			$aResult[] = $this->rowData($oEventDocument->getDocument(), $iThumbnailSize);
+		}
+		return $aResult;
 	}
 
 	public function rowData($oDocument, $iThumbnailSize = 180) {
 		return array( 'Name' => $oDocument->getName(),
-								  'Id' => $oDocument->getId(),
-								  'Preview' => $oDocument->getPreview($iThumbnailSize)
+									'Id' => $oDocument->getId(),
+									'Preview' => $oDocument->getPreview($iThumbnailSize)
 								);
 	}
 
@@ -79,26 +80,28 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oEvent);
 		$oEventType = EventTypeQuery::create()->findPk($oEvent->getEventTypeId() ? $oEvent->getEventTypeId() : 1);
 		$aResult['AnlassTyp'] = $oEventType ? $oEventType->getName() : '';
-    $sBody = '';
+		$sBody = '';
 		if(is_resource($oEvent->getBody())) {
 			$sBody = RichtextUtil::parseStorageForBackendOutput(stream_get_contents($oEvent->getBody()))->render();
 		}
 		$aResult['Body'] = $sBody;
+		unset($aResult['BodyShort']);
+		$aResult['BodyReview'] = is_resource($oEvent->getBodyReview()) ? stream_get_contents($oEvent->getBodyReview()) : '';
 		return $aResult;
 	}
 
 	public function addEventDocument($iDocumentId) {
-	  if($this->iEventId === null) {
-	    $this->aUnsavedDocuments[] = $iDocumentId;
-	    return;
-	  }
-	  if(EventDocumentQuery::create()->findPk(array($this->iEventId, $iDocumentId))) {
-	    return;
-	  }
-	  $oEventDocument = new EventDocument();
-	  $oEventDocument->setEventId($this->iEventId);
-	  $oEventDocument->setDocumentId($iDocumentId);
-	  return $oEventDocument->save();
+		if($this->iEventId === null) {
+			$this->aUnsavedDocuments[] = $iDocumentId;
+			return;
+		}
+		if(EventDocumentQuery::create()->findPk(array($this->iEventId, $iDocumentId))) {
+			return;
+		}
+		$oEventDocument = new EventDocument();
+		$oEventDocument->setEventId($this->iEventId);
+		$oEventDocument->setDocumentId($iDocumentId);
+		return $oEventDocument->save();
 	}
 
 	private function validate($aData, $oEvent) {
@@ -108,16 +111,16 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		if($aData['is_active']) {
 			$oFlash->checkForValue('body', 'is_active_body_required');
 			if($aData['date_start'] == null) {
-			  $oFlash->addMessage("date_start_required");
+				$oFlash->addMessage("date_start_required");
 			}
 		}
 
 		if($oExistingEvent = EventQuery::create()->filterBySlug($oEvent->getSlug())->findOne()) {
-		  if($oExistingEvent !== $oEvent
-		    && $oExistingEvent->getEventTypeId() === $oEvent->getEventTypeId()
-		    && $oExistingEvent->getDateStart('Y-m-d') === $oEvent->getDateStart('Y-m-d')) {
-		    $oFlash->addMessage("same_identity_not_permitted");
-		  }
+			if($oExistingEvent !== $oEvent
+				&& $oExistingEvent->getEventTypeId() === $oEvent->getEventTypeId()
+				&& $oExistingEvent->getDateStart('Y-m-d') === $oEvent->getDateStart('Y-m-d')) {
+				$oFlash->addMessage("same_identity_not_permitted");
+			}
 		}
 		$oFlash->finishReporting();
 	}
@@ -126,7 +129,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		if($this->iEventId === null) {
 			$oEvent = new Event();
 		} else {
-		  $oEvent = EventQuery::create()->findPk($this->iEventId);
+			$oEvent = EventQuery::create()->findPk($this->iEventId);
 		}
 
 		ArrayUtil::trimStringsInArray($aData);
@@ -162,11 +165,11 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 			throw new ValidationException();
 		}
 		if($oEvent->isNew()) {
-		  foreach($this->aUnsavedDocuments as $iDocumentId) {
-    	  $oEventDocument = new EventDocument();
-    	  $oEventDocument->setDocumentId($iDocumentId);
-		    $oEvent->addEventDocument($oEventDocument);
-		  }
+			foreach($this->aUnsavedDocuments as $iDocumentId) {
+				$oEventDocument = new EventDocument();
+				$oEventDocument->setDocumentId($iDocumentId);
+				$oEvent->addEventDocument($oEventDocument);
+			}
 		}
 		$oEvent->save();
 		return $oEvent->getId();

@@ -106,36 +106,36 @@ Widget.types.service_detail = {
 		this.detail_widget.disable();
 		this.init_textarea();
 		this.team_member_container.hide();
-		this.serviceData(function(service_data) {
-			this.current_detail_id = service_data.Id;
-			this.service_logo_id = service_data.LogoId;
+		this.serviceData(function(data) {
+			this.current_detail_id = data.Id;
+			this.service_logo_id = data.LogoId;
 
-			this._element.find("input[name='name']").val(service_data.Name);
-			this._element.find("textarea[name='teaser']").val(service_data.Teaser);
-			this._element.find("textarea[name='address']").val(service_data.Address);
-			this._element.find("textarea[name='opening_hours']").val(service_data.OpeningHours);
-			this._element.find("input[name='phone']").val(service_data.Phone);
-			this._element.find("input[name='email']").val(service_data.Email);
-			this._element.find("input[name='website']").val(service_data.Website);
-			this._element.find("input[name='is_active']").prop('checked', service_data.IsActive);
-			this._element.find(".updated_info").text(service_data.UpdatedInfo);
-			this._element.find(".created_info").text(service_data.CreatedInfo);
-			this._element.find(".detail_id").text(service_data.Id);
-			this._element.find("textarea[name='body_text']").val(service_data.Body);
+			this._element.find("input[name='name']").val(data.Name);
+			this._element.find("textarea[name='teaser']").val(data.Teaser);
+			this._element.find("textarea[name='address']").val(data.Address);
+			this._element.find("textarea[name='opening_hours']").val(data.OpeningHours);
+			this._element.find("input[name='phone']").val(data.Phone);
+			this._element.find("input[name='email']").val(data.Email);
+			this._element.find("input[name='website']").val(data.Website);
+			this._element.find("input[name='is_active']").prop('checked', data.IsActive);
+			this._element.find(".updated_info").text(data.UpdatedInfo);
+			this._element.find(".created_info").text(data.CreatedInfo);
+			this._element.find(".detail_id").text(data.Id);
+			this._element.find("textarea[name='body_text']").val(data.Body);
 
 			this._element.find('[name="service_category_id"]').ensureWidget(function(service_category_input) {
-				service_category_input.val(service_data.ServiceCategoryId);
+				service_category_input.val(data.ServiceCategoryId);
 			});
 
 			this.service_text.ensureWidget(function(widget) {
-				widget.set_data(service_data.Body);
+				widget.set_data(data.Body);
 			});
 
 			this.update_documents();
-			this.list_team_members(service_data.team_members);
+			this.list_team_members(data.team_members);
 
 			this._element.find('div.hide_if_not_saved').show();
-			this.detail_widget.set_title(this.detail_widget.settings.title = "{{writeString=wns.service}} "+service_data.Name);
+			this.detail_widget.set_title(this.detail_widget.settings.title = "{{writeString=wns.service}} "+data.Name);
 			this.detail_widget.enable();
 		});
 	},
