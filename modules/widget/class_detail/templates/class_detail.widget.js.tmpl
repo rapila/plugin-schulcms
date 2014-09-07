@@ -298,7 +298,7 @@ Widget.types.class_detail = {
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				widget.settings.school_class_event_type_id = _this.settings.class_event_type_id;
-				widget.settings.predefined_school_class_id = _this.settings.predefined_school_class_id;
+				widget.settings.predefined_school_class_id = _this.current_detail_id;
 				_this.event_list = widget;
 				widget._element.insertBefore(_this.add_event_button.show());
 			}, this.settings.event_list_session);
