@@ -13,26 +13,13 @@ class Event extends BaseEvent {
 		return parent::setTitle($sTitle);
 	}
 
-	public function setBody($mText) {
-		if($mText instanceof TagParser) {
-			$mText = $mText->getTag();
+	public function setBodyAsTag($oTag) {
+		if($oTag instanceof TagParser) {
+			$oTag = $oTag->getTag();
 		}
-		if($mText instanceof HtmlTag) {
-			$oTextShort = null;
-			foreach($mText->getChildren() as $oChild) {
-				if($oChild instanceof HtmlTag && strtolower($oChild->getName()) === 'p') {
-					$oTextShort = $oChild;
-					break;
-				}
-			}
-			$mText = $mText->__toString();
-			if($oTextShort) {
-				$this->setBodyShort($oTextShort->__toString());
-			} else {
-				$this->setBodyShort($mText);
-			}
-		}
-		parent::setBody($mText);
+		$sBodyShort = $oTag->extractFirstElement();
+		$this->setBodyShort($sBodyShort);
+		$this->setBody($oTag->__toString());
 	}
 
 	public function getTeaser() {

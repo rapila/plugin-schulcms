@@ -50,8 +50,8 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 		$oNews->setHeadline($aData['headline']);
 
 		$oRichtextUtil = new RichtextUtil();
-		$oNews->setBody($oRichtextUtil->getTagParser($aData['body']));
 		$oRichtextUtil->setTrackReferences($oNews);
+		$oNews->setBodyAsTag($oRichtextUtil->getTagParser($aData['body']));
 
 		$this->validate($aData, $oNews);
 		if(!Flash::noErrors()) {

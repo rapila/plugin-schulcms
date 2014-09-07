@@ -152,15 +152,16 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 
 		// track page, document and link references and hande preview and review text
 		$oRichtextUtil = new RichtextUtil();
-		$oEvent->setBody($oRichtextUtil->getTagParser($aData['body']));
 		$oRichtextUtil->setTrackReferences($oEvent);
+
+		$oEvent->setBodyAsTag($oRichtextUtil->getTagParser($aData['body']));
 
 		$sReview = $oRichtextUtil->parseInputFromEditor($aData['body_review']);
 		if(trim($sReview) == '') {
 			$sReview = null;
 		}
 		$oEvent->setBodyReview($sReview);
-		$oRichtextUtil->setTrackReferences($oEvent);
+
 		if(!Flash::noErrors()) {
 			throw new ValidationException();
 		}

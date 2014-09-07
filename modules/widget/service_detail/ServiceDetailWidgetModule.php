@@ -63,7 +63,7 @@ class ServiceDetailWidgetModule extends PersistentWidgetModule {
 
 	public function rowData($oDocument) {
 		return array( 'Name' => $oDocument->getName(),
-		 							'Extension' => $oDocument->getDocumentType()->getExtension(),
+									'Extension' => $oDocument->getDocumentType()->getExtension(),
 								  'Id' => $oDocument->getId(),
 								  'DisplayUrl' => $oDocument->getDisplayUrl()
 								);
