@@ -85,68 +85,13 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['ClassTypeName'] = $oSchoolClass->getClassType()->getName();
 		$aResult['ClassTeacher'] = $oSchoolClass->getClassTeacherNames();
 		$aResult['YearPeriod'] = $oSchoolClass->getYearPeriod();
-		$aResult['CountNews'] = $oSchoolClass->countClassNews();
+		$aResult['CountNews'] = $oSchoolClass->countNews();
 		$aResult['CountEvents'] = $oSchoolClass->countEvents();
 		$aResult['CountStudents'] = $oSchoolClass->countStudentsByUnitName();
 		$aResult['CountDocuments'] = $oSchoolClass->countClassDocuments();
 		$aResult['CountLinks'] = $oSchoolClass->countClassLinks();
 		$aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getClassLink(), 'FrontendManager');
 		return $aResult;
-	}
-
-	public function removeNews($iNewsId) {
-		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
-		if($oSchoolClass->isClassNews($iNewsId)) {
-			$oClassNews = NewsQuery::create()->findPk($iNewsId);
-			if($oClassNews) {
-				return $oClassNews->delete();
-			}
-		}
-		return false;
-	}
-
-	public function removeEvent($iEventId) {
-		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
-		if($oSchoolClass->isClassEvent($iEventId)) {
-			$oEvent = EventQuery::create()->findPk($iEventId);
-			if($oEvent) {
-				return $oEvent->delete();
-			}
-		}
-		return false;
-	}
-
-	public function removeLink($iLinkId) {
-		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
-		if($oSchoolClass->isClassLink($iLinkId)) {
-			$oLink = LinkQuery::create()->findPk($iLinkId);
-			if($oLink) {
-				return $oLink->delete();
-			}
-		}
-		return false;
-	}
-
-	public function removeDocument($iDocumentId) {
-		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
-		if($oSchoolClass->isClassDocument($iDocumentId)) {
-			$oDocument = DocumentQuery::create()->findPk($iDocumentId);
-			if($oDocument) {
-				return $oDocument->delete();
-			}
-		}
-		return false;
-	}
-
-	public function addClassNews($iNewsId = null) {
-	  if(ClassNewsQuery::create()->findPk(array($this->iSchoolClassId, $iNewsId))) {
-	    return;
-	  }
-		ClassNewsPeer::ignoreRights(true);
-		$oClassNews = new ClassNews();
-		$oClassNews->setSchoolClassId($this->iSchoolClassId);
-		$oClassNews->setNewsId($iNewsId);
-		return $oClassNews->save();
 	}
 
 	public function addClassLink($iLinkId = null) {

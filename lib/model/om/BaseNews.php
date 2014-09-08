@@ -79,6 +79,12 @@ abstract class BaseNews extends BaseObject implements Persistent
     protected $is_active;
 
     /**
+     * The value for the school_class_id field.
+     * @var        int
+     */
+    protected $school_class_id;
+
+    /**
      * The value for the created_at field.
      * @var        string
      */
@@ -108,6 +114,11 @@ abstract class BaseNews extends BaseObject implements Persistent
     protected $aNewsType;
 
     /**
+     * @var        SchoolClass
+     */
+    protected $aSchoolClass;
+
+    /**
      * @var        User
      */
     protected $aUserRelatedByCreatedBy;
@@ -116,12 +127,6 @@ abstract class BaseNews extends BaseObject implements Persistent
      * @var        User
      */
     protected $aUserRelatedByUpdatedBy;
-
-    /**
-     * @var        PropelObjectCollection|ClassNews[] Collection to store aggregation of ClassNews objects.
-     */
-    protected $collClassNewss;
-    protected $collClassNewssPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -142,12 +147,6 @@ abstract class BaseNews extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var		PropelObjectCollection
-     */
-    protected $classNewssScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -314,6 +313,17 @@ abstract class BaseNews extends BaseObject implements Persistent
     {
 
         return $this->is_active;
+    }
+
+    /**
+     * Get the [school_class_id] column value.
+     *
+     * @return int
+     */
+    public function getSchoolClassId()
+    {
+
+        return $this->school_class_id;
     }
 
     /**
@@ -609,6 +619,31 @@ abstract class BaseNews extends BaseObject implements Persistent
     } // setIsActive()
 
     /**
+     * Set the value of [school_class_id] column.
+     *
+     * @param  int $v new value
+     * @return News The current object (for fluent API support)
+     */
+    public function setSchoolClassId($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->school_class_id !== $v) {
+            $this->school_class_id = $v;
+            $this->modifiedColumns[] = NewsPeer::SCHOOL_CLASS_ID;
+        }
+
+        if ($this->aSchoolClass !== null && $this->aSchoolClass->getId() !== $v) {
+            $this->aSchoolClass = null;
+        }
+
+
+        return $this;
+    } // setSchoolClassId()
+
+    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
@@ -760,10 +795,11 @@ abstract class BaseNews extends BaseObject implements Persistent
             $this->date_start = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->date_end = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->is_active = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
-            $this->created_at = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->updated_at = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-            $this->created_by = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
-            $this->updated_by = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
+            $this->school_class_id = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+            $this->created_at = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->updated_at = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->created_by = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
+            $this->updated_by = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -773,7 +809,7 @@ abstract class BaseNews extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 12; // 12 = NewsPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = NewsPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating News object", $e);
@@ -798,6 +834,9 @@ abstract class BaseNews extends BaseObject implements Persistent
 
         if ($this->aNewsType !== null && $this->news_type_id !== $this->aNewsType->getId()) {
             $this->aNewsType = null;
+        }
+        if ($this->aSchoolClass !== null && $this->school_class_id !== $this->aSchoolClass->getId()) {
+            $this->aSchoolClass = null;
         }
         if ($this->aUserRelatedByCreatedBy !== null && $this->created_by !== $this->aUserRelatedByCreatedBy->getId()) {
             $this->aUserRelatedByCreatedBy = null;
@@ -845,10 +884,9 @@ abstract class BaseNews extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aNewsType = null;
+            $this->aSchoolClass = null;
             $this->aUserRelatedByCreatedBy = null;
             $this->aUserRelatedByUpdatedBy = null;
-            $this->collClassNewss = null;
-
         } // if (deep)
     }
 
@@ -1018,6 +1056,13 @@ abstract class BaseNews extends BaseObject implements Persistent
                 $this->setNewsType($this->aNewsType);
             }
 
+            if ($this->aSchoolClass !== null) {
+                if ($this->aSchoolClass->isModified() || $this->aSchoolClass->isNew()) {
+                    $affectedRows += $this->aSchoolClass->save($con);
+                }
+                $this->setSchoolClass($this->aSchoolClass);
+            }
+
             if ($this->aUserRelatedByCreatedBy !== null) {
                 if ($this->aUserRelatedByCreatedBy->isModified() || $this->aUserRelatedByCreatedBy->isNew()) {
                     $affectedRows += $this->aUserRelatedByCreatedBy->save($con);
@@ -1051,23 +1096,6 @@ abstract class BaseNews extends BaseObject implements Persistent
                 }
 
                 $this->resetModified();
-            }
-
-            if ($this->classNewssScheduledForDeletion !== null) {
-                if (!$this->classNewssScheduledForDeletion->isEmpty()) {
-                    ClassNewsQuery::create()
-                        ->filterByPrimaryKeys($this->classNewssScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->classNewssScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collClassNewss !== null) {
-                foreach ($this->collClassNewss as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
             }
 
             $this->alreadyInSave = false;
@@ -1119,6 +1147,9 @@ abstract class BaseNews extends BaseObject implements Persistent
         }
         if ($this->isColumnModified(NewsPeer::IS_ACTIVE)) {
             $modifiedColumns[':p' . $index++]  = '`is_active`';
+        }
+        if ($this->isColumnModified(NewsPeer::SCHOOL_CLASS_ID)) {
+            $modifiedColumns[':p' . $index++]  = '`school_class_id`';
         }
         if ($this->isColumnModified(NewsPeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
@@ -1172,6 +1203,9 @@ abstract class BaseNews extends BaseObject implements Persistent
                         break;
                     case '`is_active`':
                         $stmt->bindValue($identifier, (int) $this->is_active, PDO::PARAM_INT);
+                        break;
+                    case '`school_class_id`':
+                        $stmt->bindValue($identifier, $this->school_class_id, PDO::PARAM_INT);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -1290,6 +1324,12 @@ abstract class BaseNews extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->aSchoolClass !== null) {
+                if (!$this->aSchoolClass->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aSchoolClass->getValidationFailures());
+                }
+            }
+
             if ($this->aUserRelatedByCreatedBy !== null) {
                 if (!$this->aUserRelatedByCreatedBy->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aUserRelatedByCreatedBy->getValidationFailures());
@@ -1307,14 +1347,6 @@ abstract class BaseNews extends BaseObject implements Persistent
                 $failureMap = array_merge($failureMap, $retval);
             }
 
-
-                if ($this->collClassNewss !== null) {
-                    foreach ($this->collClassNewss as $referrerFK) {
-                        if (!$referrerFK->validate($columns)) {
-                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-                        }
-                    }
-                }
 
 
             $this->alreadyInValidation = false;
@@ -1376,15 +1408,18 @@ abstract class BaseNews extends BaseObject implements Persistent
                 return $this->getIsActive();
                 break;
             case 8:
-                return $this->getCreatedAt();
+                return $this->getSchoolClassId();
                 break;
             case 9:
-                return $this->getUpdatedAt();
+                return $this->getCreatedAt();
                 break;
             case 10:
-                return $this->getCreatedBy();
+                return $this->getUpdatedAt();
                 break;
             case 11:
+                return $this->getCreatedBy();
+                break;
+            case 12:
                 return $this->getUpdatedBy();
                 break;
             default:
@@ -1424,10 +1459,11 @@ abstract class BaseNews extends BaseObject implements Persistent
             $keys[5] => $this->getDateStart(),
             $keys[6] => $this->getDateEnd(),
             $keys[7] => $this->getIsActive(),
-            $keys[8] => $this->getCreatedAt(),
-            $keys[9] => $this->getUpdatedAt(),
-            $keys[10] => $this->getCreatedBy(),
-            $keys[11] => $this->getUpdatedBy(),
+            $keys[8] => $this->getSchoolClassId(),
+            $keys[9] => $this->getCreatedAt(),
+            $keys[10] => $this->getUpdatedAt(),
+            $keys[11] => $this->getCreatedBy(),
+            $keys[12] => $this->getUpdatedBy(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1438,14 +1474,14 @@ abstract class BaseNews extends BaseObject implements Persistent
             if (null !== $this->aNewsType) {
                 $result['NewsType'] = $this->aNewsType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
+            if (null !== $this->aSchoolClass) {
+                $result['SchoolClass'] = $this->aSchoolClass->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aUserRelatedByCreatedBy) {
                 $result['UserRelatedByCreatedBy'] = $this->aUserRelatedByCreatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUserRelatedByUpdatedBy) {
                 $result['UserRelatedByUpdatedBy'] = $this->aUserRelatedByUpdatedBy->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->collClassNewss) {
-                $result['ClassNewss'] = $this->collClassNewss->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1506,15 +1542,18 @@ abstract class BaseNews extends BaseObject implements Persistent
                 $this->setIsActive($value);
                 break;
             case 8:
-                $this->setCreatedAt($value);
+                $this->setSchoolClassId($value);
                 break;
             case 9:
-                $this->setUpdatedAt($value);
+                $this->setCreatedAt($value);
                 break;
             case 10:
-                $this->setCreatedBy($value);
+                $this->setUpdatedAt($value);
                 break;
             case 11:
+                $this->setCreatedBy($value);
+                break;
+            case 12:
                 $this->setUpdatedBy($value);
                 break;
         } // switch()
@@ -1549,10 +1588,11 @@ abstract class BaseNews extends BaseObject implements Persistent
         if (array_key_exists($keys[5], $arr)) $this->setDateStart($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setDateEnd($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setIsActive($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setCreatedAt($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setUpdatedAt($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setCreatedBy($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setUpdatedBy($arr[$keys[11]]);
+        if (array_key_exists($keys[8], $arr)) $this->setSchoolClassId($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setCreatedAt($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setUpdatedAt($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setCreatedBy($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setUpdatedBy($arr[$keys[12]]);
     }
 
     /**
@@ -1572,6 +1612,7 @@ abstract class BaseNews extends BaseObject implements Persistent
         if ($this->isColumnModified(NewsPeer::DATE_START)) $criteria->add(NewsPeer::DATE_START, $this->date_start);
         if ($this->isColumnModified(NewsPeer::DATE_END)) $criteria->add(NewsPeer::DATE_END, $this->date_end);
         if ($this->isColumnModified(NewsPeer::IS_ACTIVE)) $criteria->add(NewsPeer::IS_ACTIVE, $this->is_active);
+        if ($this->isColumnModified(NewsPeer::SCHOOL_CLASS_ID)) $criteria->add(NewsPeer::SCHOOL_CLASS_ID, $this->school_class_id);
         if ($this->isColumnModified(NewsPeer::CREATED_AT)) $criteria->add(NewsPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(NewsPeer::UPDATED_AT)) $criteria->add(NewsPeer::UPDATED_AT, $this->updated_at);
         if ($this->isColumnModified(NewsPeer::CREATED_BY)) $criteria->add(NewsPeer::CREATED_BY, $this->created_by);
@@ -1646,6 +1687,7 @@ abstract class BaseNews extends BaseObject implements Persistent
         $copyObj->setDateStart($this->getDateStart());
         $copyObj->setDateEnd($this->getDateEnd());
         $copyObj->setIsActive($this->getIsActive());
+        $copyObj->setSchoolClassId($this->getSchoolClassId());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setCreatedBy($this->getCreatedBy());
@@ -1657,12 +1699,6 @@ abstract class BaseNews extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
-
-            foreach ($this->getClassNewss() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addClassNews($relObj->copy($deepCopy));
-                }
-            }
 
             //unflag object copy
             $this->startCopy = false;
@@ -1764,6 +1800,58 @@ abstract class BaseNews extends BaseObject implements Persistent
         }
 
         return $this->aNewsType;
+    }
+
+    /**
+     * Declares an association between this object and a SchoolClass object.
+     *
+     * @param                  SchoolClass $v
+     * @return News The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSchoolClass(SchoolClass $v = null)
+    {
+        if ($v === null) {
+            $this->setSchoolClassId(NULL);
+        } else {
+            $this->setSchoolClassId($v->getId());
+        }
+
+        $this->aSchoolClass = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the SchoolClass object, it will not be re-added.
+        if ($v !== null) {
+            $v->addNews($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated SchoolClass object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return SchoolClass The associated SchoolClass object.
+     * @throws PropelException
+     */
+    public function getSchoolClass(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aSchoolClass === null && ($this->school_class_id !== null) && $doQuery) {
+            $this->aSchoolClass = SchoolClassQuery::create()->findPk($this->school_class_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSchoolClass->addNewss($this);
+             */
+        }
+
+        return $this->aSchoolClass;
     }
 
     /**
@@ -1870,325 +1958,6 @@ abstract class BaseNews extends BaseObject implements Persistent
         return $this->aUserRelatedByUpdatedBy;
     }
 
-
-    /**
-     * Initializes a collection based on the name of a relation.
-     * Avoids crafting an 'init[$relationName]s' method name
-     * that wouldn't work when StandardEnglishPluralizer is used.
-     *
-     * @param string $relationName The name of the relation to initialize
-     * @return void
-     */
-    public function initRelation($relationName)
-    {
-        if ('ClassNews' == $relationName) {
-            $this->initClassNewss();
-        }
-    }
-
-    /**
-     * Clears out the collClassNewss collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return News The current object (for fluent API support)
-     * @see        addClassNewss()
-     */
-    public function clearClassNewss()
-    {
-        $this->collClassNewss = null; // important to set this to null since that means it is uninitialized
-        $this->collClassNewssPartial = null;
-
-        return $this;
-    }
-
-    /**
-     * reset is the collClassNewss collection loaded partially
-     *
-     * @return void
-     */
-    public function resetPartialClassNewss($v = true)
-    {
-        $this->collClassNewssPartial = $v;
-    }
-
-    /**
-     * Initializes the collClassNewss collection.
-     *
-     * By default this just sets the collClassNewss collection to an empty array (like clearcollClassNewss());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initClassNewss($overrideExisting = true)
-    {
-        if (null !== $this->collClassNewss && !$overrideExisting) {
-            return;
-        }
-        $this->collClassNewss = new PropelObjectCollection();
-        $this->collClassNewss->setModel('ClassNews');
-    }
-
-    /**
-     * Gets an array of ClassNews objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this News is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @return PropelObjectCollection|ClassNews[] List of ClassNews objects
-     * @throws PropelException
-     */
-    public function getClassNewss($criteria = null, PropelPDO $con = null)
-    {
-        $partial = $this->collClassNewssPartial && !$this->isNew();
-        if (null === $this->collClassNewss || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collClassNewss) {
-                // return empty collection
-                $this->initClassNewss();
-            } else {
-                $collClassNewss = ClassNewsQuery::create(null, $criteria)
-                    ->filterByNews($this)
-                    ->find($con);
-                if (null !== $criteria) {
-                    if (false !== $this->collClassNewssPartial && count($collClassNewss)) {
-                      $this->initClassNewss(false);
-
-                      foreach ($collClassNewss as $obj) {
-                        if (false == $this->collClassNewss->contains($obj)) {
-                          $this->collClassNewss->append($obj);
-                        }
-                      }
-
-                      $this->collClassNewssPartial = true;
-                    }
-
-                    $collClassNewss->getInternalIterator()->rewind();
-
-                    return $collClassNewss;
-                }
-
-                if ($partial && $this->collClassNewss) {
-                    foreach ($this->collClassNewss as $obj) {
-                        if ($obj->isNew()) {
-                            $collClassNewss[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collClassNewss = $collClassNewss;
-                $this->collClassNewssPartial = false;
-            }
-        }
-
-        return $this->collClassNewss;
-    }
-
-    /**
-     * Sets a collection of ClassNews objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param PropelCollection $classNewss A Propel collection.
-     * @param PropelPDO $con Optional connection object
-     * @return News The current object (for fluent API support)
-     */
-    public function setClassNewss(PropelCollection $classNewss, PropelPDO $con = null)
-    {
-        $classNewssToDelete = $this->getClassNewss(new Criteria(), $con)->diff($classNewss);
-
-
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->classNewssScheduledForDeletion = clone $classNewssToDelete;
-
-        foreach ($classNewssToDelete as $classNewsRemoved) {
-            $classNewsRemoved->setNews(null);
-        }
-
-        $this->collClassNewss = null;
-        foreach ($classNewss as $classNews) {
-            $this->addClassNews($classNews);
-        }
-
-        $this->collClassNewss = $classNewss;
-        $this->collClassNewssPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related ClassNews objects.
-     *
-     * @param Criteria $criteria
-     * @param boolean $distinct
-     * @param PropelPDO $con
-     * @return int             Count of related ClassNews objects.
-     * @throws PropelException
-     */
-    public function countClassNewss(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-    {
-        $partial = $this->collClassNewssPartial && !$this->isNew();
-        if (null === $this->collClassNewss || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collClassNewss) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getClassNewss());
-            }
-            $query = ClassNewsQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByNews($this)
-                ->count($con);
-        }
-
-        return count($this->collClassNewss);
-    }
-
-    /**
-     * Method called to associate a ClassNews object to this object
-     * through the ClassNews foreign key attribute.
-     *
-     * @param    ClassNews $l ClassNews
-     * @return News The current object (for fluent API support)
-     */
-    public function addClassNews(ClassNews $l)
-    {
-        if ($this->collClassNewss === null) {
-            $this->initClassNewss();
-            $this->collClassNewssPartial = true;
-        }
-
-        if (!in_array($l, $this->collClassNewss->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddClassNews($l);
-
-            if ($this->classNewssScheduledForDeletion and $this->classNewssScheduledForDeletion->contains($l)) {
-                $this->classNewssScheduledForDeletion->remove($this->classNewssScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param	ClassNews $classNews The classNews object to add.
-     */
-    protected function doAddClassNews($classNews)
-    {
-        $this->collClassNewss[]= $classNews;
-        $classNews->setNews($this);
-    }
-
-    /**
-     * @param	ClassNews $classNews The classNews object to remove.
-     * @return News The current object (for fluent API support)
-     */
-    public function removeClassNews($classNews)
-    {
-        if ($this->getClassNewss()->contains($classNews)) {
-            $this->collClassNewss->remove($this->collClassNewss->search($classNews));
-            if (null === $this->classNewssScheduledForDeletion) {
-                $this->classNewssScheduledForDeletion = clone $this->collClassNewss;
-                $this->classNewssScheduledForDeletion->clear();
-            }
-            $this->classNewssScheduledForDeletion[]= clone $classNews;
-            $classNews->setNews(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this News is new, it will return
-     * an empty collection; or if this News has previously
-     * been saved, it will retrieve related ClassNewss from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in News.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|ClassNews[] List of ClassNews objects
-     */
-    public function getClassNewssJoinSchoolClass($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = ClassNewsQuery::create(null, $criteria);
-        $query->joinWith('SchoolClass', $join_behavior);
-
-        return $this->getClassNewss($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this News is new, it will return
-     * an empty collection; or if this News has previously
-     * been saved, it will retrieve related ClassNewss from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in News.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|ClassNews[] List of ClassNews objects
-     */
-    public function getClassNewssJoinUserRelatedByCreatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = ClassNewsQuery::create(null, $criteria);
-        $query->joinWith('UserRelatedByCreatedBy', $join_behavior);
-
-        return $this->getClassNewss($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this News is new, it will return
-     * an empty collection; or if this News has previously
-     * been saved, it will retrieve related ClassNewss from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in News.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|ClassNews[] List of ClassNews objects
-     */
-    public function getClassNewssJoinUserRelatedByUpdatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = ClassNewsQuery::create(null, $criteria);
-        $query->joinWith('UserRelatedByUpdatedBy', $join_behavior);
-
-        return $this->getClassNewss($query, $con);
-    }
-
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -2202,6 +1971,7 @@ abstract class BaseNews extends BaseObject implements Persistent
         $this->date_start = null;
         $this->date_end = null;
         $this->is_active = null;
+        $this->school_class_id = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->created_by = null;
@@ -2229,13 +1999,11 @@ abstract class BaseNews extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->collClassNewss) {
-                foreach ($this->collClassNewss as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
             if ($this->aNewsType instanceof Persistent) {
               $this->aNewsType->clearAllReferences($deep);
+            }
+            if ($this->aSchoolClass instanceof Persistent) {
+              $this->aSchoolClass->clearAllReferences($deep);
             }
             if ($this->aUserRelatedByCreatedBy instanceof Persistent) {
               $this->aUserRelatedByCreatedBy->clearAllReferences($deep);
@@ -2247,11 +2015,8 @@ abstract class BaseNews extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        if ($this->collClassNewss instanceof PropelCollection) {
-            $this->collClassNewss->clearIterator();
-        }
-        $this->collClassNewss = null;
         $this->aNewsType = null;
+        $this->aSchoolClass = null;
         $this->aUserRelatedByCreatedBy = null;
         $this->aUserRelatedByUpdatedBy = null;
     }

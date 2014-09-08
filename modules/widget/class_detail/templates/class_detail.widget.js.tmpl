@@ -200,11 +200,11 @@ Widget.types.class_detail = {
 		var _this = this;
 		this.add_news_button.addClass('ui-loading-add');
 		Widget.create('news_detail', function(widget){
+			widget.settings.predefined_school_class_id = _this.current_detail_id;
 			widget.settings.predefined_news_type_id = _this.settings.class_news_type_id;
 		}, function(widget) {
 			widget.open();
 			widget.save_callback = function(news_id) {
-				_this.addClassNews(news_id);
 				_this.reload_news(true);
 			};
 			_this.add_news_button.removeClass('ui-loading-add');
@@ -284,6 +284,7 @@ Widget.types.class_detail = {
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				widget.settings.school_class_news_type_id = _this.settings.class_news_type_id;
+				widget.settings.predefined_school_class_id = _this.current_detail_id;
 				_this.news_list = widget;
 				widget._element.insertBefore(_this.add_news_button.show());
 			}, this.settings.news_list_session);

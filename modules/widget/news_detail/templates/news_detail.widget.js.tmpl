@@ -33,6 +33,9 @@ Widget.types['news_detail'] = {
 			if(this.news_type_is_predefined()) {
 				data.news_type_id = _this.settings.predefined_news_type_id;
 			}
+			if(this.school_class_id_is_predefined()) {
+				data.school_class_id = _this.settings.predefined_school_class_id;
+			}
 		}.bind(_this));
 		this.handle('saved', function(event, id) {
 			this.setNewsId(id);
@@ -42,6 +45,10 @@ Widget.types['news_detail'] = {
 
 	news_type_is_predefined: function() {
 		return this.settings.predefined_news_type_id !== null;
+	},
+
+	school_class_id_is_predefined: function() {
+		return this.settings.predefined_school_class_id !== null;
 	},
 
 	fill_data: function() {
@@ -88,6 +95,7 @@ Widget.types['news_detail'] = {
 			title: "{{writeString=wns.news.create}}",
 			width: 890
 		},
-		predefined_news_type_id: null
+		predefined_news_type_id: null,
+		predefined_school_class_id: null
 	}
 };

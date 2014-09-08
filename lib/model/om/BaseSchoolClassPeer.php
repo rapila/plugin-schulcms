@@ -466,9 +466,6 @@ abstract class BaseSchoolClassPeer
         // Invalidate objects in ClassStudentPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ClassStudentPeer::clearInstancePool();
-        // Invalidate objects in ClassNewsPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ClassNewsPeer::clearInstancePool();
         // Invalidate objects in ClassLinkPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ClassLinkPeer::clearInstancePool();
@@ -481,6 +478,9 @@ abstract class BaseSchoolClassPeer
         // Invalidate objects in EventPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         EventPeer::clearInstancePool();
+        // Invalidate objects in NewsPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        NewsPeer::clearInstancePool();
     }
 
     /**
@@ -4770,12 +4770,6 @@ abstract class BaseSchoolClassPeer
             $criteria->add(ClassStudentPeer::SCHOOL_CLASS_ID, $obj->getId());
             $affectedRows += ClassStudentPeer::doDelete($criteria, $con);
 
-            // delete related ClassNews objects
-            $criteria = new Criteria(ClassNewsPeer::DATABASE_NAME);
-
-            $criteria->add(ClassNewsPeer::SCHOOL_CLASS_ID, $obj->getId());
-            $affectedRows += ClassNewsPeer::doDelete($criteria, $con);
-
             // delete related ClassLink objects
             $criteria = new Criteria(ClassLinkPeer::DATABASE_NAME);
 
@@ -4799,6 +4793,12 @@ abstract class BaseSchoolClassPeer
 
             $criteria->add(EventPeer::SCHOOL_CLASS_ID, $obj->getId());
             $affectedRows += EventPeer::doDelete($criteria, $con);
+
+            // delete related News objects
+            $criteria = new Criteria(NewsPeer::DATABASE_NAME);
+
+            $criteria->add(NewsPeer::SCHOOL_CLASS_ID, $obj->getId());
+            $affectedRows += NewsPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

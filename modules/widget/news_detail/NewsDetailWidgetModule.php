@@ -48,6 +48,9 @@ class NewsDetailWidgetModule extends PersistentWidgetModule {
 		$oNews->setDateEnd($aData['date_end'] == null ? null : $aData['date_end']);
 		$oNews->setNewsTypeId($aData['news_type_id']);
 		$oNews->setHeadline($aData['headline']);
+		if(isset($aData['school_class_id'])) {
+			$oNews->setSchoolClassId($aData['school_class_id']);
+		}
 
 		$oRichtextUtil = new RichtextUtil();
 		$oRichtextUtil->setTrackReferences($oNews);
