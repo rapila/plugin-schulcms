@@ -51,7 +51,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 
 		$iClassNewsTypeId = SchoolPeer::getNewsTypeConfig('school_class_news_type_id');
 		if(NewsTypeQuery::create()->findPk($iClassNewsTypeId) === null) {
-			throw new Exception('Config error: school_settings > externally_managed_news_types > school_class_news_type');
+			throw new Exception('Config error: school_settings > externally_managed_news_types > school_class_news_type_id');
 		}
 		$this->setSetting('class_news_type_id', $iClassNewsTypeId);
 

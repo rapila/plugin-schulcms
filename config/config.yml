@@ -26,7 +26,6 @@ school_settings:
     school_class_weekplans: 103
     school_class_documents: 104
     event_documents: 105
-    note_images: 106
     service_documents: 107
     team_member_portraits: 108
 
