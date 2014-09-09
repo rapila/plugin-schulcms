@@ -20,7 +20,7 @@ WIP: IMPORTATN : update with each migration step of wettingen-devel and wettinge
   (Info: add new field body_short)
   run “rap migrate-model.sh -p schulcms”
   run “rap generate-model.sh” and “rap clear-caches.sh”
-• checkout plugin/schulcms (or master?) commit a446ffebbc026703093bc42893a06b232e2ded39
+• checkout plugin/schulcms (or master?) commit 85b6a25ebc62498629916d749aa0447d17631227
   (Info: update all body_short)
   run “rap migrate-model.sh -p schulcms”
   run “rap generate-model.sh” and “rap clear-caches.sh”
