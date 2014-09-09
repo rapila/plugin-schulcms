@@ -85,7 +85,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['ClassTypeName'] = $oSchoolClass->getClassType()->getName();
 		$aResult['ClassTeacher'] = $oSchoolClass->getClassTeacherNames();
 		$aResult['YearPeriod'] = $oSchoolClass->getYearPeriod();
-		$aResult['CountNews'] = $oSchoolClass->countNews();
+		$aResult['NewsCountInfo'] = $oSchoolClass->countNews().' / '.StringPeer::getString('school_class.current_news_shown', null, 'Default', array('headline' => $oSchoolClass->getCurrentNewsHeadline()));
 		$aResult['CountEvents'] = $oSchoolClass->countEvents();
 		$aResult['CountStudents'] = $oSchoolClass->countStudentsByUnitName();
 		$aResult['CountDocuments'] = $oSchoolClass->countClassDocuments();

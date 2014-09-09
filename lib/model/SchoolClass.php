@@ -131,6 +131,14 @@ class SchoolClass extends BaseSchoolClass {
 		return $this->countNewss();
 	}
 
+	public function getCurrentNewsHeadline() {
+		$oNews = FrontendNewsQuery::create()->current()->filterBySchoolClassId($this->getId())->orderByDateStart('desc')->findOne();
+		if($oNews) {
+			return $oNews->getHeadline();
+		}
+		return 'Standard';
+	}
+
 	public function isClassEvent($iEventId) {
 		$iEventId = (int) $iEventId;
 		foreach($this->getEvents() as $oEvent) {
