@@ -8,7 +8,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 	public static $DISPLAY_MODES = array('klassen_liste', 'klassen_with_detail', 'klassen_kontext_detail', 'klassen_main_detail');
 	public static $EVENT;
 	public static $CLASS;
-	public $oTeamPage;
+	public $oTeacherPage;
 
 	const MODE_SELECT_KEY = 'display_mode';
 	const DETAIL_IDENTIFIER_EVENT = 'anlass';
@@ -19,7 +19,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 	}
 
 	public function renderFrontend() {
-		$this->oTeamPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('team'));
+		$this->oTeacherPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('teachers'));
 		$aOptions = @unserialize($this->getData());
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
 			return null;
@@ -66,7 +66,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
     				if($sFunctionAddon != ''){
     				  $sFunctionAddon = ', '. $sFunctionAddon;
     				}
-    				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => $oClassTeacher->getTeamMember()->getFullName().$sFunctionAddon, 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug())))), $oClassTeacher->getTeamMember()->getFullNameShort()), null, Template::NO_NEWLINE);
+    				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => $oClassTeacher->getTeamMember()->getFullName().$sFunctionAddon, 'href' => LinkUtil::link(array_merge($this->oTeacherPage->getFullPathArray(), array($oClassTeacher->getTeamMember()->getSlug())))), $oClassTeacher->getTeamMember()->getFullNameShort()), null, Template::NO_NEWLINE);
     				if($i < $iCountMax-1) {
     					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ', null, Template::NO_NEWLINE);
     				}
@@ -126,7 +126,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		$oTemplate->replaceIdentifier('label_class_teacher', StringPeer::getString('wns.class.class_teachers'));
 		$oClassTeacherTempl = $this->constructTemplate('class_teacher');
 		foreach(self::getClassTeachersOrdered($aClasses[0]->getTeachersByUnitName()) as $iTeamMemberId => $aParams) {
-			$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aParams['team_member']->getTeamMemberLink($this->oTeamPage))), $aParams['team_member']->getFullName());
+			$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aParams['team_member']->getTeamMemberLink($this->oTeacherPage))), $aParams['team_member']->getFullName());
 			$oClassTeacherTemplate = clone $oClassTeacherTempl;
 			$oClassTeacherTemplate->replaceIdentifier('class_teacher_name', $oTeacherLink);
 			$sKlassenlehrerin = $aParams['is_class_teacher'] ? $aParams['team_member']->getClassTeacherTitle().', ': '';
