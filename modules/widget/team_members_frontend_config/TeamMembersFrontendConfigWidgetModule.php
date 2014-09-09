@@ -7,7 +7,7 @@ class TeamMembersFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 		}
 		return WidgetJsonFileModule::jsonBaseObjects($oTeamMemberQuery->orderByLastName()->orderByFirstName()->find(), array('id', 'full_name_inverted'));
 	}
-	
+
 	public function displayModes() {
 		$aResult = array();
 		foreach(TeamMembersFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
