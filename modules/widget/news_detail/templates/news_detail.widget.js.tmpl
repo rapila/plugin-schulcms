@@ -71,7 +71,7 @@ Widget.types['news_detail'] = {
 			});
 			this._element.find('input[name="date_start"]').val(data.DateStart);
 			this._element.find('input[name="date_end"]').val(data.DateEnd);
-			this._element.find('input[name="is_active"]').prop(data.IsActive);
+			this._element.find('input[name="is_active"]').prop('checked', data.IsActive);
 			this._element.find('span.created_info').text(data.CreatedInfo);
 			this._element.find('span.updated_info').text(data.UpdatedInfo);
 			this._element.find('span.detail_id').text(data.Id);

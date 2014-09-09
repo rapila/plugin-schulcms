@@ -8,7 +8,7 @@ Widget.types['news_type_detail'] = {
 	fill_data: function() {
 		this.loadData(function(data) {
 			this._element.find("input[name='name']").val(data.Name);
-			this._element.find("input[name='is_externally_managed']").val(data.IsExternallyManaged);
+			this._element.find("input[name='is_externally_managed']").prop('checked', data.IsExternallyManaged);
 			this._element.find(".updated_info").text(data.UpdatedInfo);
 			this._element.find(".created_info").text(data.CreatedInfo);
 			this._element.find("span[class='detail_id']").text(data.Id);
@@ -23,6 +23,6 @@ Widget.types['news_type_detail'] = {
 	settings: {
 		"detail_widget": {
 			title: "{{writeString=wns.note_type.create}}",
-			width: 530
+			width: 560
 	}}
 };
