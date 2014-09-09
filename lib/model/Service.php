@@ -39,7 +39,7 @@ class Service extends BaseService {
 	// alias for body short for consistency
 	public function getTeaser() {
 		if(is_resource($this->getBodyShort())) {
-			return stream_get_contents($this->getBodyShort());
+			return RichtextUtil::parseStorageForFrontendOutput(stream_get_contents($this->getBodyShort()));
 		}
 		return null;
 	}

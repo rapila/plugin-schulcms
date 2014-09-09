@@ -149,7 +149,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 
 	public function renderTeaserDetail($iServiceId = null) {
 		if(self::$SERVICE === null) {
-			self::$SERVICE =  ServiceQuery::create()->filterByIsActive(true)->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL)->filterByTeaser(null, Criteria::ISNOTNULL)->orderByRand()->findOne();
+			self::$SERVICE =  ServiceQuery::create()->filterByIsActive(true)->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL)->filterByBodyShort(null, Criteria::ISNOTNULL)->orderByRand()->findOne();
 		}
 		if(self::$SERVICE !== null) {
 			$oTemplate = $this->constructTemplate('teaser_aktuell_detail');
