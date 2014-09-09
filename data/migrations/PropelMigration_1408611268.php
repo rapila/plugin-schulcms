@@ -54,7 +54,7 @@ CREATE INDEX `news_FI_2` ON `news` (`created_by`);
 
 ALTER TABLE `team_members` CHANGE `gender_id` `gender_id` CHAR(1);
 
-UPDATE `objects` SET `object_type` = 'news' WHERE `object_type` = 'notes';
+UPDATE `objects` SET `object_type` = "news" WHERE `object_type` = "notes";
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
@@ -120,7 +120,7 @@ CREATE TABLE `notes`
     INDEX `notes_FI_4` (`updated_by`)
 ) ENGINE=MyISAM;
 
-UPDATE `objects` SET `object_type` = 'notes' WHERE `object_type` = 'news';
+UPDATE `objects` SET `object_type` = 'notes' WHERE `object_type` = "news";
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
