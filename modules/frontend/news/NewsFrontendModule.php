@@ -10,7 +10,6 @@ class NewsFrontendModule extends DynamicFrontendModule {
 	const MODE_SELECT_KEY = 'display_mode';
 
 	public function renderFrontend() {
-		return '<p>TO BE REFACTORED ENTIRELY</p>';
 		$aOptions = $this->widgetData();
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
 			return null;
@@ -23,11 +22,10 @@ class NewsFrontendModule extends DynamicFrontendModule {
 	}
 
 	public function renderCurrentNews($iNewsTypeId=null, $iLimit=null) {
-		$oQuery = NewsQuery::create()->filterByIsInactive(false);
+		$oQuery = FrontendNewsQuery::create()->current()->orderByDateStart();
 		if($iNewsTypeId !== null) {
 			$oQuery->filterByNewsTypeId($iNewsTypeId);
 		}
-		$oQuery->filterByDateStart()->orderByDateStart();
 		if($iLimit) {
 			$oQuery->limit($iLimit);
 		}
@@ -35,11 +33,9 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		foreach($oQuery->find() as $oNews) {
 			if($oNews && is_resource($oNews->getBody())) {
 				$oTemplate = $this->constructTemplate('news');
-				if($oNewsType = $oNews->getNewsType()){
-					$oTemplate->replaceIdentifier('news_type_name', $oNewsType->getName());
-				}
 				$sContent = stream_get_contents($oNews->getBody());
 				if($sContent != '') {
+					$oTemplate->replaceIdentifier('headline', $oNews->getHeadline());
 					$oTemplate->replaceIdentifier('content', RichtextUtil::parseStorageForFrontendOutput($sContent));
 				}
 				return $oTemplate;
