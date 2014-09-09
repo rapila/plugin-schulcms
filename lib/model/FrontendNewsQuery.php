@@ -17,7 +17,7 @@ class FrontendNewsQuery extends NewsQuery {
 		if ($oCriteria instanceof Criteria) {
 			$oQuery->mergeWith($oCriteria);
 		}
-		$oQuery->filterByIsInactive(false);
+		$oQuery->filterByIsActive(true);
 		return $oQuery;
 	}
 }
