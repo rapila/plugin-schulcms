@@ -8,6 +8,7 @@ WIP: IMPORTATN : update with each migration step of wettingen-devel and wettinge
 
 3. Checkout last commit 2c67814ba00fda69494eb1324c52666483a7b3d4
 	 Test it, run all necessary scripts, including migrate-model.sh
+   run “rap generate-model.sh” and “rap clear-caches.sh”
 
 4. Propel Migrationen bezüglich Event Teaser in folgender Reihenfolge laufen lassen
 • checkout plugin/schulcms commit 889a9e183c2cbe4091c1a256785d78aaffd0bbfe
