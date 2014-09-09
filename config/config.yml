@@ -58,6 +58,9 @@ school_settings:
   # display image name allows to hide meaningless names from automatic upload
   gallery_display_image_name: true
 
+frontend:
+  inherit_contents: false
+  protect_email_addresses: true
 
 # example navigation like in pilot project
 navigations:

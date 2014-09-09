@@ -85,13 +85,21 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['ClassTypeName'] = $oSchoolClass->getClassType()->getName();
 		$aResult['ClassTeacher'] = $oSchoolClass->getClassTeacherNames();
 		$aResult['YearPeriod'] = $oSchoolClass->getYearPeriod();
-		$aResult['NewsCountInfo'] = $oSchoolClass->countNews().' / '.StringPeer::getString('school_class.current_news_shown', null, 'Default', array('headline' => $oSchoolClass->getCurrentNewsHeadline()));
+		$aResult['NewsCountInfo'] = $this->getNewsCountInfo($oSchoolClass);
 		$aResult['CountEvents'] = $oSchoolClass->countEvents();
 		$aResult['CountStudents'] = $oSchoolClass->countStudentsByUnitName();
 		$aResult['CountDocuments'] = $oSchoolClass->countClassDocuments();
 		$aResult['CountLinks'] = $oSchoolClass->countClassLinks();
 		$aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getClassLink(), 'FrontendManager');
 		return $aResult;
+	}
+
+	public function getNewsCountInfo($mSchoolClass) {
+		$oSchoolClass = $mSchoolClass;
+		if(!is_object($mSchoolClass)){
+			$oSchoolClass = SchoolClassQuery::create()->findPk($mSchoolClass);
+		}
+		return $oSchoolClass->countNews().' / '.StringPeer::getString('school_class.current_news_shown', null, 'Default', array('headline' => $oSchoolClass->getCurrentNewsHeadline()));
 	}
 
 	public function addClassLink($iLinkId = null) {

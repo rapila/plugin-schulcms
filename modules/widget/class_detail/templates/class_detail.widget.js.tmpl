@@ -196,6 +196,13 @@ Widget.types.class_detail = {
 		});
 	},
 
+	update_news_info: function() {
+		var _this = this;
+		this.getNewsCountInfo(this.current_detail_id, function(news_count_info) {
+			_this._element.find("span.news_count_info").text(news_count_info);
+		});
+	},
+
 	create_news: function() {
 		var _this = this;
 		this.add_news_button.addClass('ui-loading-add');
@@ -281,6 +288,7 @@ Widget.types.class_detail = {
 		reload = this.list_requires_loading('news', reload);
 		if(this.news_list) {
 			reload && this.news_list.reload();
+			_this.update_news_info();
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				widget.settings.school_class_news_type_id = _this.settings.class_news_type_id;
