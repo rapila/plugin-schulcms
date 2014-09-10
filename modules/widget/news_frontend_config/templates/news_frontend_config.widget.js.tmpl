@@ -45,7 +45,7 @@ Widget.types.news_frontend_config = {
 		var data = this.save();
 		this.listNews(data, function(news) {
 			jQuery.each(news, function(i, news) {
-				result_list.append(jQuery('<li/>').text(news.body_truncated).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', news.id));
+				result_list.append(jQuery('<li/>').text(news.headline).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', news.id));
 			});
 		});
 	},

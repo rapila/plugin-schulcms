@@ -5,7 +5,7 @@
 
 class ServicesFrontendModule extends DynamicFrontendModule {
 
-	public static $DISPLAY_MODES = array('service_liste', 'service_detail', 'service_intern_detail', 'service_teaser', 'team_member_portraits');
+	public static $DISPLAY_MODES = array('service_liste', 'short_intro', 'service_detail', 'service_intern_detail', 'service_teaser', 'team_member_portraits');
 	public static $SERVICE;
 	public $aServiceCategoryIds;
 	public $iExcludeInternalCategoryId;
@@ -32,6 +32,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 			case 'service_detail' : return $this->renderDetail();
 			case 'service_intern_detail' : return $this->renderDetail(true);
 			case 'service_teaser' : return $this->renderTeaserDetail();
+			case 'short_intro' : return $this->renderShortIntro();
 			case 'team_member_portraits' : return $this->renderTeamMemberPortraits();
 			default: return $this->renderList();
 		}
@@ -147,7 +148,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		return $oTemplate;
 	}
 
-	public function renderTeaserDetail($iServiceId = null) {
+	public function renderTeaserDetail() {
 		if(self::$SERVICE === null) {
 			self::$SERVICE =  ServiceQuery::create()->filterByIsActive(true)->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL)->filterByBodyShort(null, Criteria::ISNOTNULL)->orderByRand()->findOne();
 		}
@@ -161,6 +162,28 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 			return $oTemplate;
 		}
 		return;
+	}
+
+	public function renderShortIntro($iServiceId = null) {
+		if(self::$SERVICE === null) {
+			self::$SERVICE =  FrontendServiceQuery::create()->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL)->filterByBodyShort(null, Criteria::ISNOTNULL)->orderByRand()->findOne();
+		}
+		if(self::$SERVICE !== null) {
+			$oTemplate = $this->constructTemplate('short_intro');
+			$oTemplate->replaceIdentifier('detail_link', LinkUtil::link(self::$SERVICE->getServiceLink()));
+			$oTemplate->replaceIdentifier('name', self::$SERVICE->getName());
+			$oTemplate->replaceIdentifier('body_short', self::renderResource(self::$SERVICE->getBodyShort()));
+			return $oTemplate;
+		}
+		return;
+	}
+
+	private static function renderResource($mResource, $mTruncate = null) {
+		$sContent = RichtextUtil::parseStorageForFrontendOutput($mResource);
+		if(!$mTruncate) {
+			return strip_tags($sContent);
+		}
+		return StringUtil::truncate(strip_tags($sContent), $mTruncate);
 	}
 
 	private function renderTeamMemberPortraits() {

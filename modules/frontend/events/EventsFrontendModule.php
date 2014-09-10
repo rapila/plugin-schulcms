@@ -5,7 +5,7 @@
 
 class EventsFrontendModule extends DynamicFrontendModule {
 
-	public static $DISPLAY_MODES = array('list', 'list_with_reports', 'list_reports', 'list_archive', 'detail_context', 'recent_event_report_teaser');
+	public static $DISPLAY_MODES = array('list', 'list_overview_new', 'list_new', 'list_with_reports', 'list_reports', 'list_archive', 'detail_context', 'recent_event_report_teaser');
 
 	public static $EVENT;
 	public $iEventTypeId;
@@ -39,9 +39,55 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			case 'list_reports': return $this->renderReportList();
 			case 'list_with_reports': return $this->renderUpcomingListWithReports();
 			case 'list_archive': return $this->renderArchiveList(true);
-			case 'recent_event_report_teaser': return $this->renderRecentEventReportTeaser();
+			case 'list_overview_new': return $this->renderListOverviewNew();
+			case 'recent_event_report_teaser': return $this->renderRecentReport();
 		}
 		return '';
+	}
+
+	public function renderListOverviewNew() {
+		$oTemplate = $this->constructTemplate('overview_list');
+		$oItemPrototype = $this->constructTemplate('overview_item');
+		$oDatePrototype = $this->constructTemplate('date');
+		$oQuery = $this->baseQuery()->orderByDateStart();
+		if($this->iLimit) {
+			$oQuery->limit($this->iLimit);
+		}
+		foreach($oQuery->find() as $oEvent) {
+			$oItemTemplate = clone $oItemPrototype;
+			$oDate = clone $oDatePrototype;
+			$oDate->replaceIdentifier('date_day', strftime("%d",$oEvent->getDateStart('U')));
+			$oDate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
+			$oItemTemplate->replaceIdentifier('date_item', $oDate);
+			$oItemTemplate->replaceIdentifier('title', $oEvent->getTitle());
+			$oItemTemplate->replaceIdentifier('description', $this->renderResource($oEvent->getBodyShort()));
+			$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
+		}
+		return $oTemplate;
+	}
+
+	private static function renderResource($mResource, $mTruncate = null) {
+		$sContent = RichtextUtil::parseStorageForFrontendOutput($mResource);
+		if(!$mTruncate) {
+			return $sContent;
+		}
+		return StringUtil::truncate(strip_tags($sContent), $mTruncate);
+	}
+
+	private function renderRecentReport() {
+		$oEvent = $this->pastQuery(true)->joinEventDocument()->orderByUpdatedAt(Criteria::DESC)->findOne();
+		if($oEvent === null) {
+			return;
+		}
+		$oTemplate = $this->constructTemplate('report_short');
+		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getEventPageLink()));
+		$oTemplate->replaceIdentifier('title', $oEvent->getTitle());
+		$oImage = $oEvent->getFirstImage()->getDocument();
+		if($oImage) {
+			$oTemplate->replaceIdentifier('image', TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => 264)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle())));
+			return $oTemplate;
+		}
+		return null;
 	}
 
  /** renderRecentEventReportTeaser()

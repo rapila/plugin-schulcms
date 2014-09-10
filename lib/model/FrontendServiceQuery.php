@@ -4,13 +4,13 @@
  * @package model
  * @subpackage rapila-plugin-schulcms
  */
-class FrontendNewsQuery extends NewsQuery {
+class FrontendServiceQuery extends ServiceQuery {
 
 	public static function create($sModelAlias = null, $oCriteria = null) {
-		if ($oCriteria instanceof FrontendNewsQuery) {
+		if ($oCriteria instanceof FrontendServiceQuery) {
 			return $oCriteria;
 		}
-		$oQuery = new FrontendNewsQuery();
+		$oQuery = new FrontendServiceQuery();
 		if (null !== $sModelAlias) {
 			$oQuery->setModelAlias($sModelAlias);
 		}

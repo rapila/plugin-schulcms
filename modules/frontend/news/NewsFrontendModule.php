@@ -5,7 +5,7 @@
 
 class NewsFrontendModule extends DynamicFrontendModule {
 
-	public static $DISPLAY_MODES = array('current_note');
+	public static $DISPLAY_MODES = array('current_news');
 
 	const MODE_SELECT_KEY = 'display_mode';
 
@@ -15,7 +15,7 @@ class NewsFrontendModule extends DynamicFrontendModule {
 			return null;
 		}
 		switch($aOptions[self::MODE_SELECT_KEY]) {
-			case 'current_note': return $this->renderCurrentNews(@$aOptions['news_type_id'], @$aOptions['limit']);
+			case 'current_news': return $this->renderCurrentNews(@$aOptions['news_type_id'], @$aOptions['limit']);
 			default:
 				return null;
 		}
