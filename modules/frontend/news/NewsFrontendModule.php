@@ -29,7 +29,6 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		if($iLimit) {
 			$oQuery->limit($iLimit);
 		}
-
 		foreach($oQuery->find() as $oNews) {
 			if($oNews && is_resource($oNews->getBody())) {
 				$oTemplate = $this->constructTemplate('news');

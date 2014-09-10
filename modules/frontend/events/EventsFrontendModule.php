@@ -50,6 +50,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$oItemPrototype = $this->constructTemplate('overview_item');
 		$oDatePrototype = $this->constructTemplate('date');
 		$oQuery = $this->baseQuery()->orderByDateStart();
+
 		if($this->iLimit) {
 			$oQuery->limit($this->iLimit);
 		}

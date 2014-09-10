@@ -16,12 +16,12 @@ jQuery(function() {
 	}.deferred(handlers));
 
 	jQuery.when.apply(jQuery, handlers).then(function() {
-		
+
 		// Add info_bar elements
 		info_bar.add_button('add-new-item', function() {
 			Widget.create('news_detail', function(widget) {
 				widget.settings.initial_type_id = sidebar.active_row().data('news_type_id');
-				widget.content.find("select[name='news_type_id']").val(content_list.getOption('news_type_id'));
+				widget._element.find("select[name='news_type_id']").val(content_list.getOption('news_type_id'));
 				widget.open();
 				widget.save_callback = function() {
 					content_list.reload();
@@ -36,7 +36,7 @@ jQuery(function() {
 				content_list.reload();
 			}
 		}).add_row_count_info_for_list(content_list);
-		
+
 		var remove_item = info_bar.add_button('remove-item', function() {
 			var rowData = sidebar.collect_row_data(sidebar.active_row());
 			if(rowData.news_type_id) {
@@ -53,7 +53,7 @@ jQuery(function() {
 				});
 			}
 		}).disable();
-		
+
 		var edit_item = info_bar.add_button('edit-item', function() {
 			Widget.create('news_type_detail', function(widget) {
 				widget.setNewsTypeId(sidebar.active_row_datas()[0].news_type_id);
@@ -80,6 +80,6 @@ jQuery(function() {
 			content_list.setOption('news_type_id', news_type_id);
 			content_list.reload();
 		});
-		
+
 	});
 });
