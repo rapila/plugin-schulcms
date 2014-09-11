@@ -164,9 +164,9 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		return;
 	}
 
-	public function renderShortIntro($iServiceId = null) {
+	public function renderShortIntro() {
 		if(self::$SERVICE === null) {
-			self::$SERVICE =  FrontendServiceQuery::create()->filterByServiceCategoryId($this->iExcludeInternalCategoryId, Criteria::NOT_EQUAL)->filterByBodyShort(null, Criteria::ISNOTNULL)->orderByRand()->findOne();
+			self::$SERVICE =  FrontendServiceQuery::create()->filterByBodyShort(null, Criteria::ISNOTNULL)->orderByRand()->findOne();
 		}
 		if(self::$SERVICE !== null) {
 			$oTemplate = $this->constructTemplate('short_intro');

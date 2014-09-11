@@ -5,7 +5,7 @@
 
 class NewsFrontendModule extends DynamicFrontendModule {
 
-	public static $DISPLAY_MODES = array('current_news');
+	public static $DISPLAY_MODES = array('current_news', 'current_news_teaser');
 
 	const MODE_SELECT_KEY = 'display_mode';
 
@@ -14,14 +14,18 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
 			return null;
 		}
+		// Util::dumpAll($aNewsTypeIds);
 		switch($aOptions[self::MODE_SELECT_KEY]) {
-			case 'current_news': return $this->renderCurrentNews(@$aOptions['news_type_id'], @$aOptions['limit']);
+			case 'current_news': return $this->renderCurrentNews(@$aOptions['news_type'], @$aOptions['limit']);
+			case 'current_news_teaser': return $this->renderCurrentNews(@$aOptions['news_type'], @$aOptions['limit'], true);
 			default:
 				return null;
 		}
 	}
 
-	public function renderCurrentNews($iNewsTypeId=null, $iLimit=null) {
+	public function renderCurrentNews($iNewsTypeId=null, $iLimit=null, $bTeaserOnly = false) {
+		$sContainerName = $this->oLanguageObject->getContentObject()->getContainerName();
+
 		$oQuery = FrontendNewsQuery::create()->current()->orderByDateStart();
 		if($iNewsTypeId !== null) {
 			$oQuery->filterByNewsTypeId($iNewsTypeId);
@@ -29,13 +33,18 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		if($iLimit) {
 			$oQuery->limit($iLimit);
 		}
+		$oNewsPrototype = $this->constructTemplate($bTeaserOnly? 'news_short' : 'news');
 		foreach($oQuery->find() as $oNews) {
 			if($oNews && is_resource($oNews->getBody())) {
-				$oTemplate = $this->constructTemplate('news');
+				$oTemplate = clone $oNewsPrototype;
 				$sContent = stream_get_contents($oNews->getBody());
 				if($sContent != '') {
 					$oTemplate->replaceIdentifier('headline', $oNews->getHeadline());
-					$oTemplate->replaceIdentifier('content', RichtextUtil::parseStorageForFrontendOutput($sContent));
+					$sContent = RichtextUtil::parseStorageForFrontendOutput($sContent);
+					if($bTeaserOnly) {
+						$sContent = strip_tags($sContent);
+					}
+					$oTemplate->replaceIdentifier('content', $sContent);
 				}
 				return $oTemplate;
 			}
