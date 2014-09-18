@@ -43,6 +43,13 @@ WIP: IMPORTATN : update with each migration step of wettingen-devel and wettinge
 
 7. Migration pages > objects > container_name depending on container_name changes
 
+8. Change name of pages or add new pages
+	 – Anlässe > Aktuell
+	 		add News? Ferienplan?
+
+9. Move pages
+	 – Lehrpersonen > Über uns
+
 Create Example dumps for easy development of new sites
 • Including: Home, School Class page, Custom 404 page, Search page etc.
 
