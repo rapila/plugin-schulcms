@@ -16,11 +16,12 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		}
 		$aNewsTypes = @$aOptions['news_type'];
 		$iLimit = @$aOptions['limit'];
-		// Util::dumpAll($aNewsTypeIds);
+
 		switch($aOptions[self::MODE_SELECT_KEY]) {
 			case 'current_news': return $this->renderCurrentNews($aNewsTypes, $iLimit);
 			case 'current_news_short': return $this->renderCurrentNews($aNewsTypes, $iLimit, true);
 			case 'news_home_list': return $this->renderMainNews($aNewsTypes, $iLimit, true);
+			case 'news_carousel': return $this->renderNewsCarousel($aNewsTypes, $iLimit);
 			default:
 				return null;
 		}
@@ -31,6 +32,31 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		$oItemPrototype = $this->constructTemplate($bShort ? 'short' : 'full');
 		foreach($this->query($iNewsTypeId, $iLimit)->find() as $oNews) {
 			$oTemplate->replaceIdentifierMultiple('item', $this->renderItem($oNews, clone $oItemPrototype, $bShort));
+		}
+		return $oTemplate;
+	}
+
+	public function renderMainNews($iNewsTypeId = null, $iLimit = null) {
+		$oTemplate = $this->constructTemplate('list');
+		$oItemPrototype = $this->constructTemplate('short');
+		foreach($this->query($iNewsTypeId, $iLimit)->find() as $i => $oNews) {
+			if($i === 0) {
+				$oItemTemplate = $this->renderItem($oNews, $this->constructTemplate('full'), false);
+				$oItemTemplate->replaceIdentifier('footer', $oNews->getUserRelatedByCreatedBy()->getFullName() . ' ' . LocaleUtil::localizeDate($oNews->getUpdatedAt()));
+				$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
+			} else {
+				$oTemplate->replaceIdentifierMultiple('item', $this->renderItem($oNews, clone $oItemPrototype));
+			}
+		}
+		return $oTemplate;
+	}
+
+	public function renderNewsCarousel($iNewsTypeId = null, $iLimit = null) {
+		// load carousel js
+		$oTemplate = $this->constructTemplate('list');
+		$oItemPrototype = $this->constructTemplate('truncated');
+		foreach($this->query($iNewsTypeId, $iLimit)->find() as $i => $oNews) {
+			$oTemplate->replaceIdentifierMultiple('item', $this->renderItem($oNews, clone $oItemPrototype));
 		}
 		return $oTemplate;
 	}
@@ -57,24 +83,5 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		$oItemTemplate->replaceIdentifier('content', RichtextUtil::parseStorageForFrontendOutput($sContent));
 		$oItemTemplate->replaceIdentifier('date_start', LocaleUtil::localizeDate($oNews->getDateStart()));
 		return $oItemTemplate;
-	}
-
-	public function renderMainNews($iNewsTypeId = null, $iLimit = null) {
-		$oTemplate = $this->constructTemplate('list');
-		$oItemPrototype = $this->constructTemplate('short');
-		foreach($this->query($iNewsTypeId, $iLimit)->find() as $i => $oNews) {
-			if($i === 0) {
-				$oItemTemplate = $this->renderItem($oNews, $this->constructTemplate('full'), false);
-				// $oItemTemplate->replaceIdentifier('footer', $oNews->getUserRelatedByCreatedBy()->getFullName() . ' ' . L)
-				$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
-			} else {
-				$oTemplate->replaceIdentifierMultiple('item', $this->renderItem($oNews, clone $oItemPrototype, true));
-			}
-		}
-		return $oTemplate;
-	}
-
-	public function renderNewsCarousel() {
-
 	}
 }
