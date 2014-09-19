@@ -1,7 +1,7 @@
 <?php
 
-class ClassEventsOutput extends ClassOutput {
-	public function __construct(NavigationItem $oNavigationItem, ClassPageTypeModule $oPageType) {
+class ClassDocumentationOutput extends ClassOutput {
+	public function __construct(NavigationItem $oNavigationItem, ClassesPageTypeModule $oPageType) {
 		parent::__construct($oNavigationItem, $oPageType);
 	}
 

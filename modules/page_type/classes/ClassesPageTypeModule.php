@@ -4,7 +4,7 @@ abstract class ClassOutput {
 	protected $oNavigationItem;
 	protected $oPageType;
 
-	public function __construct(NavigationItem $oNavigationItem, ClassPageTypeModule $oPageType) {
+	public function __construct(NavigationItem $oNavigationItem, ClassesPageTypeModule $oPageType) {
 		$this->oNavigationItem = $oNavigationItem;
 		$this->oPageType = $oPageType;
 	}
@@ -32,8 +32,8 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 	public function display(Template $oTemplate, $bIsPreview = false) {
 		$sMode = 'list';
 
-		if($oNavigationItem instanceof ClassNavigationItem) {
-			$sMode = $oNavigationItem->getMode();
+		if($this->oNavigationItem instanceof ClassNavigationItem) {
+			$sMode = $this->oNavigationItem->getMode();
 		}
 
 		$sClassName = 'Class'.ucfirst($sMode).'Output';

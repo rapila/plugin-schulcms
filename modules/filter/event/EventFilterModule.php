@@ -13,6 +13,7 @@ class EventFilterModule extends FilterModule {
 	public function onNavigationItemChildrenRequested(NavigationItem $oNavigationItem) {
 		$mIdentifier = $oNavigationItem->getIdentifier();
 		if($oNavigationItem instanceof PageNavigationItem) {
+			// Events page
 			if($mIdentifier === SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS)) {
 				$aYears = self::selectNames(array(), 'YEAR(DATE_START)');
 				foreach($aYears as $iYear) {
@@ -20,28 +21,31 @@ class EventFilterModule extends FilterModule {
 						$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_YEAR, $iYear, self::NAV_TITLE_PREFIX.$iYear, null, array('year' => $iYear)));
 					}
 				}
-				// add feed
+				// Events feed
 				$oFeedItem = new HiddenVirtualNavigationItem(self::EVENT_FEED_ITEM, 'feed', StringPeer::getString('wns.events.feed', null, 'Feed').' '.$oNavigationItem->getLinkText());
 				$oFeedItem->bIsIndexed = false; //Don’t index the feed item or else you’ll be exit()-ed before finishing the index
 				$oNavigationItem->addChild($oFeedItem);
 			}
-		} else if($oNavigationItem instanceof VirtualNavigationItem
+		} // Events year
+			else if($oNavigationItem instanceof VirtualNavigationItem
 							&& $oNavigationItem->getType() === self::ITEM_EVENT_YEAR) {
 			$aData = $oNavigationItem->getData();
 			foreach(self::selectNames($aData, 'MONTH(DATE_START)') as $iMonth) {
 				$oNavigationItem->addChild(new HiddenVirtualNavigationItem(self::ITEM_EVENT_MONTH, $iMonth, $iMonth, null, array_merge($aData, array('month' => $iMonth))));
 			}
-		} else if($oNavigationItem instanceof VirtualNavigationItem
+		} // Events month
+			else if($oNavigationItem instanceof VirtualNavigationItem
 							&& $oNavigationItem->getType() === self::ITEM_EVENT_MONTH) {
 			$aData = $oNavigationItem->getData();
 			foreach(self::selectNames($aData, 'DAY(DATE_START)') as $iDay) {
 				$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT_DAY, $iDay, $iDay, null, array_merge($aData, array('day' => $iDay))));
 			}
-		} else if($oNavigationItem instanceof VirtualNavigationItem
+		} // Events day
+			else if($oNavigationItem instanceof VirtualNavigationItem
 							&& $oNavigationItem->getType() === self::ITEM_EVENT_DAY) {
 			$aData = $oNavigationItem->getData();
-			foreach(self::selectNames($aData, array(EventPeer::TITLE_NORMALIZED, EventPeer::TITLE)) as $oNames) {
-				$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT, $oNames->title_normalized, $oNames->title, null, array_merge($aData, array('title_normalized' => $oNames->title_normalized))));
+			foreach(self::selectNames($aData, array(EventPeer::SLUG, EventPeer::TITLE)) as $oNames) {
+				$oNavigationItem->addChild(new VirtualNavigationItem(self::ITEM_EVENT, $oNames->slug, $oNames->title, null, array_merge($aData, array('slug' => $oNames->slug))));
 			}
 		}
 	}

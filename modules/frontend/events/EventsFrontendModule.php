@@ -12,7 +12,6 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	private $bIsSidebar;
 	private $oEventPage;
 
-
 	const DETAIL_IDENTIFIER = 'id';
 	const SESSION_BACK_TO_LIST_LINK = 'back_to_list_link';
 	const MODE_SELECT_KEY = 'display_mode';
@@ -38,7 +37,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			case 'list': return $this->renderUpcomingList();
 			case 'list_reports': return $this->renderReportList();
 			case 'list_with_reports': return $this->renderUpcomingListWithReports();
-			case 'list_archive': return $this->renderArchiveList(true);
+			case 'list_archive': return $this->renderArchiveList();
 			case 'list_overview_new': return $this->renderListOverviewNew();
 			case 'recent_event_report_teaser': return $this->renderRecentReport();
 		}

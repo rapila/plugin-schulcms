@@ -9,7 +9,7 @@ class ClassesFilterModule extends FilterModule {
 
 			foreach(SchoolClassPeer::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_COLUMN) as $sSlug) {
 				$oClass = SchoolClassQuery::create()->filterBySlug($sSlug)->findOne();
-				$oNavItem = new ClassNavigationItem($sSlug, 'Klasse '.$oClass->getUnitName().' Home', null, 'root', $oClass->getUnitName(), true);
+				$oNavItem = new ClassNavigationItem($sSlug, $oClass->getFullClassName().' Home', null, 'root', $oClass->getUnitName(), true);
 				$oNavigationItem->addChild($oNavItem);
 			}
 		}
@@ -20,7 +20,7 @@ class ClassesFilterModule extends FilterModule {
 			$sSlug = $oNavigationItem->getName();
 			$oCriteria = SchoolClassQuery::create()->filterBySlug($sSlug)->filterByHasStudents()->orderByYear(Criteria::DESC);
 			foreach($oCriteria->find() as $oClass) {
-				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), 'Home', $oClass, 'home'));
+				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), 'Klasse '.$oClass->getUnitName().' Home', $oClass, 'home', $oClass->getFullClassName()));
 			}
 		} else if($oNavigationItem->getMode() === 'home') {
 			$oClass = $oNavigationItem->getClass();

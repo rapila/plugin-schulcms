@@ -5,19 +5,19 @@
 class ClassNavigationItem extends VirtualNavigationItem {
 	private $bIsFolder;
 
-	public function __construct($sName, $sPageName, SchoolClass $oSchoolClass = null, $sMode, $sTitle = null, $bIsFolder = false) {
+	public function __construct($sName, $sLinkText, SchoolClass $oSchoolClass = null, $sMode, $sTitle = null, $bIsFolder = false) {
 		$oData = new stdClass();
 		$oData->schoolClass = $oSchoolClass;
 		$oData->mode = $sMode;
 		if($sTitle === null) {
-			$sTitle = "Klasse ".$oSchoolClass->getUnitName().$sPageName;
+			$sTitle = "Klasse ".$oSchoolClass->getUnitName().' '.$sLinkText;
 		}
 		$this->bIsFolder = $bIsFolder;
-		parent::__construct(get_class(), $sPageName, $sTitle, $sLinkText, $aData);
+		parent::__construct(get_class(), $sName, $sTitle, $sLinkText, $oData);
 	}
 
-	public static function create($sName, $sPageName, SchoolClass $oSchoolClass = null, $sMode, $sTitle = null, $bIsFolder = false) {
-		return new ClassNavigationItem($sName, $sPageName, $oSchoolClass, $sMode, $sTitle, $bIsFolder);
+	public static function create($sName, $sLinkText, SchoolClass $oSchoolClass = null, $sMode, $sTitle = null, $bIsFolder = false) {
+		return new ClassNavigationItem($sName, $sLinkText, $oSchoolClass, $sMode, $sTitle, $bIsFolder);
 	}
 
 	public function setEvent(Event $oEvent) {
@@ -38,7 +38,7 @@ class ClassNavigationItem extends VirtualNavigationItem {
 		return $this->getData()->mode;
 	}
 
-	public function getSchoolClass() {
+	public function getClass() {
 		return $this->getData()->schoolClass;
 	}
 

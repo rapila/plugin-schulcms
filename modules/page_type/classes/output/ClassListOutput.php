@@ -1,7 +1,7 @@
 <?php
 
 class ClassListOutput extends ClassOutput {
-	public function __construct(NavigationItem $oNavigationItem, ClassPageTypeModule $oPageType) {
+	public function __construct(NavigationItem $oNavigationItem, ClassesPageTypeModule $oPageType) {
 		parent::__construct($oNavigationItem, $oPageType);
 	}
 
