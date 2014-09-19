@@ -23,25 +23,25 @@ class ClassesFilterModule extends FilterModule {
 				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), 'Home', $oClass, 'home'));
 			}
 		} else if($oNavigationItem->getMode() === 'home') {
-			$oClass => $oNavigationItem->getClass();
+			$oClass = $oNavigationItem->getClass();
 			$oNavigationItem->addChild(ClassNavigationItem::create('anlaesse', 'Anlässe', $oClass, 'events'));
 			$oNavigationItem->addChild(ClassNavigationItem::create('faecher', 'Fächer', $oClass, 'subjects'));
 			$oNavigationItem->addChild(ClassNavigationItem::create('dokumente', 'Dokumente', $oClass, 'documents'));
 			$oNavigationItem->addChild(ClassNavigationItem::create('links', 'Links', $oClass, 'links'));
 			$oNavigationItem->addChild(ClassNavigationItem::create('feed', 'RSS-Feed', $oClass, 'feed')->setIndexed(false));
 		} else if($oNavigationItem->getMode() === 'events') {
-			$oClass => $oNavigationItem->getClass();
+			$oClass = $oNavigationItem->getClass();
 			foreach(FrontendEventQuery::create()->filterBySchoolClass($oClass)->find() as $oEvent) {
 				$oNavigationItem->addChild(ClassNavigationItem::create($oEvent->getSlug(), $oEvent->getTitle(), $oClass, 'event')->setEvent($oEvent));
 			}
 		}
 	}
 
-	public function onPageHasBeenSet($oCurrentPage, $bIsNotFound, $oCurrentNavigationItem) {
+	public function onPageHasBeenSet($oCurrentPage, $bIsNotFound, $oNavigationItem) {
 		if($bIsNotFound || !($oNavigationItem instanceof ClassNavigationItem) || $oNavigationItem->getMode() === 'root') {
 			return;
 		}
-		$oClass => $oNavigationItem->getClass();
+		$oClass = $oNavigationItem->getClass();
 		// Add the feed
 		if($oNavigationItem->getMode() === 'feed') {
 			$oQuery = FrontendEventQuery::create()->filterBySchoolClass($oClass);
