@@ -1,51 +1,80 @@
 <?php
 class ClassesFilterModule extends FilterModule {
-
-
-	public function onFillPageAttributes($oCurrentPage, $oTemplate) {
-
-	}
-
 	public function onNavigationItemChildrenRequested($oNavigationItem) {
+		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getMe()->getPageType() === 'classes') {
 
-		if($oNavigationItem instanceof PageNavigationItem &&
-			($oNavigationItem->getIdentifier() === 'classes' || in_array($oNavigationItem->getIdentifier(), $aSubpagesIdentifier))) {
 			$oCriteria = SchoolClassQuery::create()->distinct();
 			$oCriteria->clearSelectColumns()->addSelectColumn(SchoolClassPeer::SLUG);
 			$oCriteria->filterByHasStudents()->orderByUnitName(Criteria::ASC);
 
 			foreach(SchoolClassPeer::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_COLUMN) as $sSlug) {
 				$oClass = SchoolClassQuery::create()->filterBySlug($sSlug)->findOne();
-				$oNavItem = new HiddenVirtualNavigationItem(self::CLASS_ITEM_TYPE, $sSlug, $oClass->getUnitName(), null, null);
+				$oNavItem = new ClassNavigationItem($sSlug, 'Klasse '.$oClass->getUnitName().' Home', null, 'root', $oClass->getUnitName(), true);
 				$oNavigationItem->addChild($oNavItem);
-
-				$oFeedItem = new HiddenVirtualNavigationItem(self::EVENT_FEED_ITEM, 'feed', StringPeer::getString('wns.school_class.feed', null, 'Feed'), null, $sSlug);
-				$oFeedItem->bIsIndexed = false; //Don’t index the feed item or else you’ll be exit()-ed before finishing the index
-				$oNavItem->addChild($oFeedItem);
 			}
 		}
-		else if($oNavigationItem instanceof VirtualNavigationItem && $oNavigationItem->getType() === self::CLASS_ITEM_TYPE) {
+		if(!($oNavigationItem instanceof ClassNavigationItem)) {
+			return;
+		}
+		if($oNavigationItem->getMode() === 'root') {
 			$sSlug = $oNavigationItem->getName();
-			$oClass = SchoolClassQuery::create()->filterBySlug($sSlug)->findOne();
-
-			$oCriteria = SchoolClassQuery::create()->distinct();
-			$oCriteria->clearSelectColumns()->addSelectColumn(SchoolClassPeer::YEAR);
-			$oCriteria->filterByIsCurrent(false)->filterBySlug($sSlug)->filterByHasStudents()->orderByYear(Criteria::ASC);
-
-			foreach(SchoolClassPeer::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_COLUMN) as $iYear) {
-				$oNavItem = new HiddenVirtualNavigationItem(self::CLASS_ARCHIVE_ITEM_TYPE, $iYear, "{$oClass->getUnitName()} ($iYear)", null, array($sSlug, $iYear));
-				$oNavigationItem->addChild($oNavItem);
+			$oCriteria = SchoolClassQuery::create()->filterBySlug($sSlug)->filterByHasStudents()->orderByYear(Criteria::DESC);
+			foreach($oCriteria->find() as $oClass) {
+				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), 'Home', $oClass, 'home'));
+			}
+		} else if($oNavigationItem->getMode() === 'home') {
+			$oClass => $oNavigationItem->getClass();
+			$oNavigationItem->addChild(ClassNavigationItem::create('anlaesse', 'Anlässe', $oClass, 'events'));
+			$oNavigationItem->addChild(ClassNavigationItem::create('faecher', 'Fächer', $oClass, 'subjects'));
+			$oNavigationItem->addChild(ClassNavigationItem::create('dokumente', 'Dokumente', $oClass, 'documents'));
+			$oNavigationItem->addChild(ClassNavigationItem::create('links', 'Links', $oClass, 'links'));
+			$oNavigationItem->addChild(ClassNavigationItem::create('feed', 'RSS-Feed', $oClass, 'feed')->setIndexed(false));
+		} else if($oNavigationItem->getMode() === 'events') {
+			$oClass => $oNavigationItem->getClass();
+			foreach(FrontendEventQuery::create()->filterBySchoolClass($oClass)->find() as $oEvent) {
+				$oNavigationItem->addChild(ClassNavigationItem::create($oEvent->getSlug(), $oEvent->getTitle(), $oClass, 'event')->setEvent($oEvent));
 			}
 		}
-
 	}
 
 	public function onPageHasBeenSet($oCurrentPage, $bIsNotFound, $oCurrentNavigationItem) {
+		if($bIsNotFound || !($oNavigationItem instanceof ClassNavigationItem) || $oNavigationItem->getMode() === 'root') {
+			return;
+		}
+		$oClass => $oNavigationItem->getClass();
+		// Add the feed
+		if($oNavigationItem->getMode() === 'feed') {
+			$oQuery = FrontendEventQuery::create()->filterBySchoolClass($oClass);
+			$oFeed = new EventsFileModule(null, $oNavigationItem, $oQuery);
+			$oFeed->renderFile();exit;
+		}
+		// Link to the feed
+		$oHomeNavigationItem = $oNavigationItem;
+		while($oNavigationItem->getMode() !== 'home') {
+			$oHomeNavigationItem = $oHomeNavigationItem->getParent();
+		}
+		$oFeedItem = $oHomeNavigationItem->namedChild('feed');
 
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'location' => LinkUtil::link($oFeedItem->getLink())));
 	}
 
-	public function onPageNotFound() {
+	public function onLinkOperationCheck($sOperation, $oOnObject, $oUser, $aContainer) {
+		$bIsAllowed = &$aContainer[0];
+		if($bIsAllowed) {
+			return;
+		}
+		if($oOnObject->getLinkCategoryId() !== SchoolPeer::getLinkCategoryConfig('school_class_links')) {
+			return;
+		}
 
+		if($sOperation === 'insert') {
+			$bIsAllowed = true;
+			return;
+		}
+		$oClassLink = $oOnObject->getClassLinks();
+		if(!count($oClassLink)) {
+			return;
+		}
+		$bIsAllowed = $oClassLink[0]->mayOperate($sOperation, $oUser);
 	}
-
 }
