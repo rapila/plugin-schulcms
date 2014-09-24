@@ -3,10 +3,17 @@
 abstract class ClassOutput {
 	protected $oNavigationItem;
 	protected $oPageType;
+	protected $oPage;
+	protected $oTeamPage;
+
 
 	public function __construct(NavigationItem $oNavigationItem, ClassesPageTypeModule $oPageType) {
 		$this->oNavigationItem = $oNavigationItem;
 		$this->oPageType = $oPageType;
+		$this->oPage = FrontendManager::$CURRENT_PAGE;
+		// change this to get by page_type “teachers”?
+		$this->oTeamPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('team'));
+
 	}
 
 	public abstract function renderContent();
@@ -55,6 +62,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 	}
 
 	public function constructTemplate($sTemplateName = null, $bForceGlobalTemplatesDir = false) {
-		parent::constructTemplate($sTemplateName, $bForceGlobalTemplatesDir);
+		return new Template($sTemplateName, array(DIRNAME_MODULES, self::getType(), self::moduleName(), 'templates'));
 	}
+
 }
