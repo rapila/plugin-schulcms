@@ -31,7 +31,6 @@ class ClassListOutput extends ClassOutput {
 		$iLimit = 2;
 		$aClassTeachers = $oClass->getTeachersByUnitName(true, $iLimit+1);
 		$iCountTeachers = count($aClassTeachers);
-		ErrorHandler::log('$iCountTeachers', $iCountTeachers);
 		$iCountMax = $iCountTeachers < $iLimit ? $iCountTeachers : $iLimit;
 		foreach($aClassTeachers as $i => $oTeacher) {
 			if($i < $iLimit) {
@@ -39,7 +38,7 @@ class ClassListOutput extends ClassOutput {
 				if($sFunctionAddon != ''){
 				  $sFunctionAddon = ', '. $sFunctionAddon;
 				}
-				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => $oTeacher->getTeamMember()->getFullName().$sFunctionAddon, 'href' => LinkUtil::link(array_merge($this->oTeamPage->getFullPathArray(), array($oTeacher->getTeamMember()->getSlug())))), $oTeacher->getTeamMember()->getFullNameShort()), null, Template::NO_NEWLINE);
+				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => $oTeacher->getTeamMember()->getFullName().$sFunctionAddon, 'href' => LinkUtil::link(array_merge($this->oTeacherPage->getFullPathArray(), array($oTeacher->getTeamMember()->getSlug())))), $oTeacher->getTeamMember()->getFullNameShort()), null, Template::NO_NEWLINE);
 				if($i < $iCountMax-1) {
 					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ', null, Template::NO_NEWLINE);
 				}

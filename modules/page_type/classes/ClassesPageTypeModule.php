@@ -4,15 +4,14 @@ abstract class ClassOutput {
 	protected $oNavigationItem;
 	protected $oPageType;
 	protected $oPage;
-	protected $oTeamPage;
-
+	protected $oTeacherPage;
 
 	public function __construct(NavigationItem $oNavigationItem, ClassesPageTypeModule $oPageType) {
 		$this->oNavigationItem = $oNavigationItem;
 		$this->oPageType = $oPageType;
 		$this->oPage = FrontendManager::$CURRENT_PAGE;
 		// change this to get by page_type “teachers”?
-		$this->oTeamPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('team'));
+		$this->oTeacherPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('teachers'));
 
 	}
 
