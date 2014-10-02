@@ -19,6 +19,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 	}
 
 	public function renderFrontend() {
+		return null;
 		$this->oTeacherPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('teachers'));
 		$aOptions = @unserialize($this->getData());
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {

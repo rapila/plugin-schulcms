@@ -60,7 +60,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 		parent::display($oTemplate, $bIsPreview);
 	}
 
-	public function constructTemplate($sTemplateName = null, $bForceGlobalTemplatesDir = false) {
+	public function constructTemplate($sTemplateName = null, $bForceGlobalTemplatesDir = true) {
 		return new Template($sTemplateName, array(DIRNAME_MODULES, self::getType(), self::moduleName(), 'templates'));
 	}
 
