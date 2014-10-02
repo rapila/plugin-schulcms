@@ -23,12 +23,12 @@ require_once __DIR__.'/output/ClassDocumentsOutput.php';
 require_once __DIR__.'/output/ClassEventsOutput.php';
 require_once __DIR__.'/output/ClassHomeOutput.php';
 require_once __DIR__.'/output/ClassLinksOutput.php';
-require_once __DIR__.'/output/ClassNewsOutput.php';
 require_once __DIR__.'/output/ClassListOutput.php';
 require_once __DIR__.'/output/ClassNewsOutput.php';
 require_once __DIR__.'/output/ClassSubjectsOutput.php';
 
 require_once __DIR__.'/ClassNavigationItem.php';
+
 
 class ClassesPageTypeModule extends DefaultPageTypeModule {
 	public function __construct(Page $oPage = null, NavigationItem $oNavigationItem = null) {
