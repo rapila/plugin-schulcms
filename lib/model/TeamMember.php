@@ -171,7 +171,7 @@ class TeamMember extends BaseTeamMember {
 		parent::delete($con);
 	}
 
-	public function getTeamMemberLink($oTeamMemberPage = null) {
+	public function getLink($oTeamMemberPage = null) {
 		if($oTeamMemberPage === null) {
 			$oTeamMemberPage = PageQuery::create()->filterByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_TEAM));
 		}

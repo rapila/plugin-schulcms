@@ -4,8 +4,9 @@
  */
 class ClassNavigationItem extends VirtualNavigationItem {
 	private $bIsFolder;
+	private $bIsVisible;
 
-	public function __construct($sName, $sLinkText, SchoolClass $oSchoolClass = null, $sMode, $sTitle = null, $bIsFolder = false) {
+	public function __construct($sName, $sLinkText, SchoolClass $oSchoolClass = null, $sMode, $sTitle = null, $bIsFolder = false, $bIsVisible = true) {
 		$oData = new stdClass();
 		$oData->schoolClass = $oSchoolClass;
 		$oData->mode = $sMode;
@@ -13,7 +14,12 @@ class ClassNavigationItem extends VirtualNavigationItem {
 			$sTitle = "Klasse ".$oSchoolClass->getUnitName().' '.$sLinkText;
 		}
 		$this->bIsFolder = $bIsFolder;
+		$this->bIsVisible = $bIsVisible;
 		parent::__construct(get_class(), $sName, $sTitle, $sLinkText, $oData);
+	}
+
+	public function isVisible() {
+		return $this->bIsVisible;
 	}
 
 	public static function create($sName, $sLinkText, SchoolClass $oSchoolClass = null, $sMode, $sTitle = null, $bIsFolder = false) {

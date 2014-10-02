@@ -11,7 +11,7 @@ class ClassesFilterModule extends FilterModule {
 
 			foreach(SchoolClassPeer::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_COLUMN) as $sSlug) {
 				$oClass = SchoolClassQuery::create()->filterBySlug($sSlug)->findOne();
-				$oNavItem = new ClassNavigationItem($sSlug, $oClass->getFullClassName().' Home', null, 'root', $oClass->getUnitName(), true);
+				$oNavItem = new ClassNavigationItem($sSlug, $oClass->getFullClassName().' Home', null, 'root', $oClass->getUnitName(), true, false);
 				$oNavigationItem->addChild($oNavItem);
 			}
 		}
@@ -53,6 +53,7 @@ class ClassesFilterModule extends FilterModule {
 		// Link to the feed
 		$oHomeNavigationItem = $oNavigationItem;
 		while($oNavigationItem->getMode() !== 'home') {
+			ErrorHandler::log('nav item !home', $oHomeNavigationItem);
 			$oHomeNavigationItem = $oHomeNavigationItem->getParent();
 		}
 		$oFeedItem = $oHomeNavigationItem->namedChild('feed');
