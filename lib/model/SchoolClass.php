@@ -8,6 +8,11 @@ class SchoolClass extends BaseSchoolClass {
 	public static $CLASS_TYPES = array();
 	private static $CLASS_PAGE;
 
+	const CLASS_EVENTS_IDENTIFIER = 'events';
+	const CLASS_LINKS_IDENTIFIER = 'links';
+	const CLASS_DOCUMENTS_IDENTIFIER = 'documents';
+	const CLASS_SUBJECTS_IDENTIFIER = 'subjects';
+
 	public function getClassTeachersOrdered($bIsClassTeacher = true) {
 		$oCriteria = new Criteria();
 		$oCriteria->add(ClassTeacherPeer::IS_CLASS_TEACHER, $bIsClassTeacher);

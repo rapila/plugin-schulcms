@@ -26,10 +26,10 @@ class ClassesFilterModule extends FilterModule {
 			}
 		} else if($oNavigationItem->getMode() === 'home') {
 			$oClass = $oNavigationItem->getClass();
-			$oNavigationItem->addChild(ClassNavigationItem::create('anlaesse', 'Anlässe', $oClass, 'events'));
-			$oNavigationItem->addChild(ClassNavigationItem::create('faecher', 'Fächer', $oClass, 'subjects'));
-			$oNavigationItem->addChild(ClassNavigationItem::create('dokumente', 'Dokumente', $oClass, 'documents'));
-			$oNavigationItem->addChild(ClassNavigationItem::create('links', 'Links', $oClass, 'links'));
+			$oNavigationItem->addChild(ClassNavigationItem::create('anlaesse', 'Anlässe', $oClass, SchoolClass::CLASS_EVENTS_IDENTIFIER));
+			$oNavigationItem->addChild(ClassNavigationItem::create('faecher', 'Fächer', $oClass, SchoolClass::CLASS_SUBJECTS_IDENTIFIER));
+			$oNavigationItem->addChild(ClassNavigationItem::create('dokumente', 'Dokumente', $oClass, SchoolClass::CLASS_DOCUMENTS_IDENTIFIER));
+			$oNavigationItem->addChild(ClassNavigationItem::create('links', 'Links', $oClass, SchoolClass::CLASS_LINKS_IDENTIFIER));
 			$oNavigationItem->addChild(ClassNavigationItem::create('feed', 'RSS-Feed', $oClass, 'feed')->setIndexed(false));
 		} else if($oNavigationItem->getMode() === 'events') {
 			$oClass = $oNavigationItem->getClass();

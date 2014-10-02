@@ -5,6 +5,7 @@ abstract class ClassOutput {
 	protected $oPageType;
 	protected $oPage;
 	protected $oTeacherPage;
+	protected $oClass;
 
 	public function __construct(NavigationItem $oNavigationItem, ClassesPageTypeModule $oPageType) {
 		$this->oNavigationItem = $oNavigationItem;

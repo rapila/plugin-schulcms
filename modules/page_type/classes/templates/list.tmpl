@@ -1,9 +1,13 @@
-<div class="list table classes">
-	<div class="head">
-			<div>{{writeString=class.heading.name}}</div>
-			<div>{{writeString=class.heading.class_type}}</div>
-			<div>{{writeString=class.heading.children_count}}</div>
-			<div>{{writeString=class.heading.teachers}}</div>
-		</div>
-	{{items}}
-</div>
+<table class="classes">
+	<thead>
+		<tr>
+			<th>{{writeString=class.heading.name}}</th>
+			<th>{{writeString=class.heading.class_type}}</th>
+			<th>{{writeString=class.heading.children_count}}</th>
+			<th>{{writeString=class.heading.teachers}}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{items}}
+	</tbody>
+</table>
