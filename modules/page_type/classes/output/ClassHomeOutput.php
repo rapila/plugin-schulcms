@@ -87,8 +87,8 @@ class ClassHomeOutput extends ClassOutput {
 			$oRowTemplate = clone $oRowPrototype;
 			$oRowTemplate->replaceIdentifier('detail_link_teacher', LinkUtil::link($oTeacher->getLink($this->oTeacherPage)));
 			$oRowTemplate->replaceIdentifier('teacher_name', $oTeacher->getFullName());
+			$oRowTemplate->replaceIdentifier('subject_name', $oClassTeacher->getFunctionName());
 			$oRowTemplate->replaceIdentifier('detail_link_subject', '#');
-			$oRowTemplate->replaceIdentifier('subject_name', 'Fachname');
 			$oTemplate->replaceIdentifierMultiple('teacher_and_subject', $oRowTemplate);
 		}
 	}
