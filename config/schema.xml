@@ -70,10 +70,7 @@
 	<foreign-key foreignTable="subjects" onDelete="setnull">
 		<reference local="subject_id" foreign="id" />
 	</foreign-key>
-	<column name="class_type_id" type="tinyint" />
-	<foreign-key foreignTable="class_types" onDelete="setnull">
-		<reference local="class_type_id" foreign="id" />
-	</foreign-key>
+	<column name="class_type" type="varchar" size="80" />
 	<column name="class_schedule_id" type="integer" />
 	<foreign-key foreignTable="documents" onDelete="setnull">
 		<reference local="class_schedule_id" foreign="id" />
@@ -117,13 +114,6 @@
 	<unique>
 		<unique-column name="slug" />
 	</unique>
-</table>
-
-<table name="class_types" phpName="ClassType">
-	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-	<column name="original_name" type="varchar" required="true" size="100" />
-	<column name="name" type="varchar" size="100" />
-	<column name="slug" type="varchar" required="true" size="100" />
 </table>
 
 <table name="team_members" phpName="TeamMember">
