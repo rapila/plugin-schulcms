@@ -62,7 +62,7 @@ Widget.types.event_detail = {
 		});
 
 		this.handle('saving', function(event, data) {
-			data.body_preview = _this.event_text_editor.get_data();
+			data.body = _this.event_text_editor.get_data();
 			data.body_review = _this.event_review_editor.get_data();
 			if(this.school_class_is_predefined()) {
 				data.school_class_id = this.settings.predefined_school_class_id;
