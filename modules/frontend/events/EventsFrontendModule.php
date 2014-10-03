@@ -60,18 +60,10 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oDate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
 			$oItemTemplate->replaceIdentifier('date_item', $oDate);
 			$oItemTemplate->replaceIdentifier('title', $oEvent->getTitle());
-			$oItemTemplate->replaceIdentifier('description', $this->renderResource($oEvent->getBodyShort()));
+			$oItemTemplate->replaceIdentifier('description', RichtextUtil::parseStorageForFrontendOutput($oEvent->getBodyShort()));
 			$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
 		}
 		return $oTemplate;
-	}
-
-	private static function renderResource($mResource, $mTruncate = null) {
-		$sContent = RichtextUtil::parseStorageForFrontendOutput($mResource);
-		if(!$mTruncate) {
-			return $sContent;
-		}
-		return StringUtil::truncate(strip_tags($sContent), $mTruncate);
 	}
 
 	private function renderRecentReport() {

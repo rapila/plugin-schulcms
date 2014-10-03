@@ -26,12 +26,30 @@ class ClassHomeOutput extends ClassOutput {
 	}
 
 	private function renderClassInfo($oTemplate) {
+		// Students count info
 		$oTemplate->replaceIdentifier('count_students', $this->oClass->countStudentsByUnitName());
-		// add main class teachers
+
+		// Class portrait
+		$oPortrait = $this->oClass->getDocumentRelatedByClassPortraitId();
+		$sLabel = 'Klassenfoto '.$this->oClass->getUnitName();
+		if(!$oPortrait) {
+			$oDocument = DocumentQuery::create()->filterByName('school_class_portrait')->findOne();
+			if($oDocument) {
+				$oPortrait = $oDocument->getImage();
+			}
+			$sLabel = 'Bitte Klassenfoto hochladen';
+		}
+		if($oPortrait) {
+			$oImageTag = TagWriter::quickTag('img', array('src' => $oPortrait->getDisplayUrl(array('max_width' => 500))));
+			$oTemplate->replaceIdentifier('class_portrait', $oImageTag);
+		}
+		$oTemplate->replaceIdentifier('class_portrait_label', $sLabel);
+
+		// Main class teachers
 		foreach($this->oClass->getTeachersByUnitName(true) as $i => $oClassTeacher) {
 			$oTeacher = $oClassTeacher->getTeamMember();
 			$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oTeacher->getLink($this->oTeacherPage)), 'title' => StringPeer::getString('team_member.link_to'). ' '. $oTeacher->getFullName()), $oTeacher->getFullName());
-			$oTemplate->replaceIdentifierMultiple('class_teacher', $oTeacherLink);
+			$oTemplate->replaceIdentifierMultiple('class_teacher', TagWriter::quickTag('li', array(), $oTeacherLink));
 		}
 	}
 
@@ -86,7 +104,7 @@ class ClassHomeOutput extends ClassOutput {
 		}
 		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($this->getClassEventLink($oEvent)));
 		$oTemplate->replaceIdentifier('detail_link_title', $oEvent->getTitle());
-		$oTemplate->replaceIdentifier('recent_report_image', TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => 264)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle())));
+		$oTemplate->replaceIdentifier('recent_report_image', TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => 300)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle())));
 	}
 
 	private function getClassEventLink($oEvent) {
@@ -105,8 +123,8 @@ class ClassHomeOutput extends ClassOutput {
 			$oDate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
 			$oItemTemplate->replaceIdentifier('date_item', $oDate);
 			$oItemTemplate->replaceIdentifier('title', $oEvent->getTitle());
-			$oItemTemplate->replaceIdentifier('description', $this->renderResource($oEvent->getBodyShort()));
-			$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
+			$oItemTemplate->replaceIdentifier('description', RichtextUtil::parseStorageForFrontendOutput($oEvent->getBodyShort()));
+			$oTemplate->replaceIdentifierMultiple('event_items', $oItemTemplate);
 		}
 	}
 
