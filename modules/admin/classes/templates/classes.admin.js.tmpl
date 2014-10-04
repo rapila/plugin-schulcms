@@ -8,7 +8,7 @@ jQuery(document).ready(function() {
 			sidebar = widget;
 			sidebar.settings.row_click_active_mode = 'activate';
 			sidebar.handle('list-selection_changed', function(event, selection) {
-				class_list.setOption('class_type_id', selection[0] && selection[0].class_type_id);
+				class_list.setOption('class_type', selection[0] && selection[0].class_type);
 				class_list.reload();
 			});
 		});

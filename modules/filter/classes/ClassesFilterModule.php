@@ -20,7 +20,7 @@ class ClassesFilterModule extends FilterModule {
 		}
 		if($oNavigationItem->getMode() === 'root') {
 			$sSlug = $oNavigationItem->getName();
-			$oCriteria = SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool()->filterBySlug($sSlug)->filterByHasStudents()->orderByYear(Criteria::DESC);
+			$oCriteria = SchoolClassQuery::create()->filterByClassTypeYearAndSchool()->filterBySlug($sSlug)->filterByHasStudents()->orderByYear(Criteria::DESC);
 			foreach($oCriteria->find() as $oClass) {
 				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), 'Klasse '.$oClass->getUnitName().' Home', $oClass, 'home', $oClass->getFullClassName()));
 			}

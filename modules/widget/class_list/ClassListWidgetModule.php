@@ -28,7 +28,7 @@ class ClassListWidgetModule extends WidgetModule {
 	}
 
 	public function getColumnIdentifiers() {
-		return array('id', 'name', 'teaching_unit_name', 'class_type_id', 'year_period', 'level', 'count_students', 'class_teacher_names', 'has_class_portrait', 'has_class_schedule', 'count_events');
+		return array('id', 'name', 'teaching_unit_name', 'class_type', 'year_period', 'level', 'count_students', 'class_teacher_names', 'has_class_portrait', 'has_class_schedule', 'count_events');
 	}
 
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -40,9 +40,8 @@ class ClassListWidgetModule extends WidgetModule {
 			case 'teaching_unit_name':
 				$aResult['heading'] = StringPeer::getString('wns.class.teaching_unit_short');
 				break;
-			case 'class_type_id':
+			case 'class_type':
 				$aResult['heading'] = StringPeer::getString('wns.class.type');
-				$aResult['field_name'] = 'class_type_name';
 				break;
 			case 'year_period':
 				$aResult['heading'] = '';
@@ -90,7 +89,7 @@ class ClassListWidgetModule extends WidgetModule {
 			return SchoolClassPeer::YEAR;
 		}
 		if($sColumnIdentifier === 'class_type_name') {
-			return SchoolClassPeer::CLASS_TYPE_ID;
+			return SchoolClassPeer::CLASS_TYPE;
 		}
 		if($sColumnIdentifier === 'has_class_portrait') {
 			return SchoolClassPeer::CLASS_PORTRAIT_ID;
@@ -108,7 +107,7 @@ class ClassListWidgetModule extends WidgetModule {
 	}
 
 	public function getFilterTypeForColumn($sColumnIdentifier) {
-		if($sColumnIdentifier === 'class_type_id') {
+		if($sColumnIdentifier === 'class_type') {
 			return CriteriaListWidgetDelegate::FILTER_TYPE_IS;
 		}
 		if($sColumnIdentifier === 'year_period') {
@@ -122,11 +121,10 @@ class ClassListWidgetModule extends WidgetModule {
 	}
 
 	public function getClassTypeName() {
-		if($this->oDelegateProxy->getClassTypeId() === CriteriaListWidgetDelegate::SELECT_ALL) {
+		if($this->oDelegateProxy->getClassType() === CriteriaListWidgetDelegate::SELECT_ALL) {
 			return null;
 		}
-		$oClassType = ClassTypeQuery::create()->findPk($this->oDelegateProxy->getClassTypeId());
-		return $oClassType->getName();
+		return $this->oDelegateProxy->getClassType();
 	}
 
 	public function getCriteria() {

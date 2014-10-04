@@ -19,7 +19,9 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 	}
 
 	public function renderFrontend() {
-		return null;
+		// any need for this frontend module? ClassPageTypeModule has replaced all this.
+		throw new Exception("the usage of ClassesFrontendModule is deprecated. Use the new ClassPageType to configure your school class pages");
+
 		$this->oTeacherPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('teachers'));
 		$aOptions = @unserialize($this->getData());
 		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
@@ -36,7 +38,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 
 	private function renderKlassenliste($iClassTypeId = null) {
 		$oPage = FrontendManager::$CURRENT_PAGE;
-		$aClasses = SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool($iClassTypeId)->find();
+		$aClasses = SchoolClassQuery::create()->filterByClassTypeYearAndSchool($iClassTypeId)->find();
 		$oTemplate = $this->constructTemplate('list');
 		$bShowClassTeachersOnly = Settings::getSetting('school_settings', 'show_class_teachers_only_in_class_list', true);
 		$oTemplate->replaceIdentifier('header_col_teachers', StringPeer::getString('wns.col_header_teachers.'.($bShowClassTeachersOnly ? 'class_teachers' : 'teachers')));
@@ -44,7 +46,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 			$oItemTemplate = $this->constructTemplate('list_item');
 			// get all infos that are independent of teaching unit
 			$oItemTemplate->replaceIdentifier('name', $oClass->getUnitName());
-			$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassTypeName());
+			$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassType());
 			$oItemTemplate->replaceIdentifier('year', $oClass->getYearPeriod());
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getClassLink($oPage)));
 			$oItemTemplate->replaceIdentifier('detail_title', StringPeer::getString('wns.class.view_detail').$oClass->getUnitName());

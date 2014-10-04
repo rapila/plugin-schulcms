@@ -1,15 +1,15 @@
 Widget.types.classes_frontend_config = {
 	prepare: function() {
 		var _this = this;
-		
+
 		var config = this.getConfigData() || {};
-		
+
 		this.mode_dropdown = jQuery("<select/>").addClass('ui-widget-content');
 		this.mode_dropdown.populate(this.getDisplayModes(), config.display_mode);
 		this.mode_dropdown.change(function() {
 			_this.reload_preview(_this.mode_dropdown.val());
 		});
-		
+
 		var detail_widget;
 		Widget.create('class_detail', function(widget) {
 			_this.detail_widget = widget;
@@ -18,7 +18,7 @@ Widget.types.classes_frontend_config = {
 
 		this._element.append(jQuery('<label/>').text('{{writeString=wns.classes.display_options}}'));
 		this._element.append(this.mode_dropdown);
-		
+
 		this.result_list = jQuery('<ol/>').addClass('ui-editable-items-list');
 		this._element.append(this.result_list);
 		this.result_list.delegate('li', 'click', function() {
@@ -27,28 +27,27 @@ Widget.types.classes_frontend_config = {
 			_this.detail_widget.fill_data();
 			_this.detail_widget.open();
 		});
-		
+
 		this.mode_dropdown.change();
 	},
-	
+
 	reload_preview: function(display_mode) {
 		var _this = this;
 		this.result_list.empty();
 		if(display_mode == 'klassen_kontext_detail' || display_mode == 'schul_statistik'){
 			return;
 		}
-		var class_type_id =  isNaN(display_mode) ? null : parseInt(display_mode, 10);
-		this.allClasses(class_type_id, function(classes) {
+		this.allClasses(display_mode, function(classes) {
 			jQuery.each(classes, function(id, name) {
 				_this.result_list.append(jQuery('<li/>').text(name).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', id));
 			});
 		});
 	},
-	
+
 	save: function() {
 		return {display_mode: this.mode_dropdown.val()};
 	},
-	
+
 	additional_buttons: [
 		{
 			text: '{{writeString=classes.do_admin}}',

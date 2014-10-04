@@ -10,7 +10,7 @@ class ClassListOutput extends ClassOutput {
 		$aClassTypes = null;
 		$oTemplate = $this->oPageType->constructTemplate('list', true);
 		$oItemPrototype = $this->oPageType->constructTemplate('list_item', true);
-		$aClasses = SchoolClassQuery::create()->filterByClassTypeIdYearAndSchool($aClassTypes)->find();
+		$aClasses = SchoolClassQuery::create()->filterByClassTypeYearAndSchool($aClassTypes)->find();
 		foreach($aClasses as $oClass) {
 			// get all infos that are independent of teaching unit
 			$oTemplate->replaceIdentifierMultiple('items', $this->renderItem($oClass, clone $oItemPrototype));
@@ -21,7 +21,7 @@ class ClassListOutput extends ClassOutput {
 	private function renderItem($oClass, $oItemTemplate) {
 		// add more identifiers for flexibility if necessary
 		$oItemTemplate->replaceIdentifier('name', $oClass->getUnitName());
-		$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassTypeName());
+		$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassType());
 		$oItemTemplate->replaceIdentifier('year', $oClass->getYearPeriod());
 		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getClassLink($this->oPage)));
 		$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.class.view_detail').$oClass->getUnitName());

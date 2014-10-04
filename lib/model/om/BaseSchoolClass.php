@@ -102,10 +102,10 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     protected $subject_id;
 
     /**
-     * The value for the class_type_id field.
-     * @var        int
+     * The value for the class_type field.
+     * @var        string
      */
-    protected $class_type_id;
+    protected $class_type;
 
     /**
      * The value for the class_schedule_id field.
@@ -164,11 +164,6 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      * @var        Subject
      */
     protected $aSubject;
-
-    /**
-     * @var        ClassType
-     */
-    protected $aClassType;
 
     /**
      * @var        Document
@@ -449,14 +444,14 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [class_type_id] column value.
+     * Get the [class_type] column value.
      *
-     * @return int
+     * @return string
      */
-    public function getClassTypeId()
+    public function getClassType()
     {
 
-        return $this->class_type_id;
+        return $this->class_type;
     }
 
     /**
@@ -866,29 +861,25 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     } // setSubjectId()
 
     /**
-     * Set the value of [class_type_id] column.
+     * Set the value of [class_type] column.
      *
-     * @param  int $v new value
+     * @param  string $v new value
      * @return SchoolClass The current object (for fluent API support)
      */
-    public function setClassTypeId($v)
+    public function setClassType($v)
     {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
+        if ($v !== null) {
+            $v = (string) $v;
         }
 
-        if ($this->class_type_id !== $v) {
-            $this->class_type_id = $v;
-            $this->modifiedColumns[] = SchoolClassPeer::CLASS_TYPE_ID;
-        }
-
-        if ($this->aClassType !== null && $this->aClassType->getId() !== $v) {
-            $this->aClassType = null;
+        if ($this->class_type !== $v) {
+            $this->class_type = $v;
+            $this->modifiedColumns[] = SchoolClassPeer::CLASS_TYPE;
         }
 
 
         return $this;
-    } // setClassTypeId()
+    } // setClassType()
 
     /**
      * Set the value of [class_schedule_id] column.
@@ -1130,7 +1121,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $this->student_count = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
             $this->class_portrait_id = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
             $this->subject_id = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
-            $this->class_type_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
+            $this->class_type = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
             $this->class_schedule_id = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
             $this->week_schedule_id = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
             $this->school_building_id = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
@@ -1176,9 +1167,6 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         }
         if ($this->aSubject !== null && $this->subject_id !== $this->aSubject->getId()) {
             $this->aSubject = null;
-        }
-        if ($this->aClassType !== null && $this->class_type_id !== $this->aClassType->getId()) {
-            $this->aClassType = null;
         }
         if ($this->aDocumentRelatedByClassScheduleId !== null && $this->class_schedule_id !== $this->aDocumentRelatedByClassScheduleId->getId()) {
             $this->aDocumentRelatedByClassScheduleId = null;
@@ -1239,7 +1227,6 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
 
             $this->aDocumentRelatedByClassPortraitId = null;
             $this->aSubject = null;
-            $this->aClassType = null;
             $this->aDocumentRelatedByClassScheduleId = null;
             $this->aDocumentRelatedByWeekScheduleId = null;
             $this->aSchoolBuilding = null;
@@ -1436,13 +1423,6 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     $affectedRows += $this->aSubject->save($con);
                 }
                 $this->setSubject($this->aSubject);
-            }
-
-            if ($this->aClassType !== null) {
-                if ($this->aClassType->isModified() || $this->aClassType->isNew()) {
-                    $affectedRows += $this->aClassType->save($con);
-                }
-                $this->setClassType($this->aClassType);
             }
 
             if ($this->aDocumentRelatedByClassScheduleId !== null) {
@@ -1696,8 +1676,8 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         if ($this->isColumnModified(SchoolClassPeer::SUBJECT_ID)) {
             $modifiedColumns[':p' . $index++]  = '`subject_id`';
         }
-        if ($this->isColumnModified(SchoolClassPeer::CLASS_TYPE_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`class_type_id`';
+        if ($this->isColumnModified(SchoolClassPeer::CLASS_TYPE)) {
+            $modifiedColumns[':p' . $index++]  = '`class_type`';
         }
         if ($this->isColumnModified(SchoolClassPeer::CLASS_SCHEDULE_ID)) {
             $modifiedColumns[':p' . $index++]  = '`class_schedule_id`';
@@ -1770,8 +1750,8 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     case '`subject_id`':
                         $stmt->bindValue($identifier, $this->subject_id, PDO::PARAM_INT);
                         break;
-                    case '`class_type_id`':
-                        $stmt->bindValue($identifier, $this->class_type_id, PDO::PARAM_INT);
+                    case '`class_type`':
+                        $stmt->bindValue($identifier, $this->class_type, PDO::PARAM_STR);
                         break;
                     case '`class_schedule_id`':
                         $stmt->bindValue($identifier, $this->class_schedule_id, PDO::PARAM_INT);
@@ -1905,12 +1885,6 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             if ($this->aSubject !== null) {
                 if (!$this->aSubject->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aSubject->getValidationFailures());
-                }
-            }
-
-            if ($this->aClassType !== null) {
-                if (!$this->aClassType->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aClassType->getValidationFailures());
                 }
             }
 
@@ -2092,7 +2066,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                 return $this->getSubjectId();
                 break;
             case 12:
-                return $this->getClassTypeId();
+                return $this->getClassType();
                 break;
             case 13:
                 return $this->getClassScheduleId();
@@ -2159,7 +2133,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $keys[9] => $this->getStudentCount(),
             $keys[10] => $this->getClassPortraitId(),
             $keys[11] => $this->getSubjectId(),
-            $keys[12] => $this->getClassTypeId(),
+            $keys[12] => $this->getClassType(),
             $keys[13] => $this->getClassScheduleId(),
             $keys[14] => $this->getWeekScheduleId(),
             $keys[15] => $this->getSchoolBuildingId(),
@@ -2180,9 +2154,6 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             }
             if (null !== $this->aSubject) {
                 $result['Subject'] = $this->aSubject->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aClassType) {
-                $result['ClassType'] = $this->aClassType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aDocumentRelatedByClassScheduleId) {
                 $result['DocumentRelatedByClassScheduleId'] = $this->aDocumentRelatedByClassScheduleId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -2297,7 +2268,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                 $this->setSubjectId($value);
                 break;
             case 12:
-                $this->setClassTypeId($value);
+                $this->setClassType($value);
                 break;
             case 13:
                 $this->setClassScheduleId($value);
@@ -2359,7 +2330,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         if (array_key_exists($keys[9], $arr)) $this->setStudentCount($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setClassPortraitId($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setSubjectId($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setClassTypeId($arr[$keys[12]]);
+        if (array_key_exists($keys[12], $arr)) $this->setClassType($arr[$keys[12]]);
         if (array_key_exists($keys[13], $arr)) $this->setClassScheduleId($arr[$keys[13]]);
         if (array_key_exists($keys[14], $arr)) $this->setWeekScheduleId($arr[$keys[14]]);
         if (array_key_exists($keys[15], $arr)) $this->setSchoolBuildingId($arr[$keys[15]]);
@@ -2391,7 +2362,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         if ($this->isColumnModified(SchoolClassPeer::STUDENT_COUNT)) $criteria->add(SchoolClassPeer::STUDENT_COUNT, $this->student_count);
         if ($this->isColumnModified(SchoolClassPeer::CLASS_PORTRAIT_ID)) $criteria->add(SchoolClassPeer::CLASS_PORTRAIT_ID, $this->class_portrait_id);
         if ($this->isColumnModified(SchoolClassPeer::SUBJECT_ID)) $criteria->add(SchoolClassPeer::SUBJECT_ID, $this->subject_id);
-        if ($this->isColumnModified(SchoolClassPeer::CLASS_TYPE_ID)) $criteria->add(SchoolClassPeer::CLASS_TYPE_ID, $this->class_type_id);
+        if ($this->isColumnModified(SchoolClassPeer::CLASS_TYPE)) $criteria->add(SchoolClassPeer::CLASS_TYPE, $this->class_type);
         if ($this->isColumnModified(SchoolClassPeer::CLASS_SCHEDULE_ID)) $criteria->add(SchoolClassPeer::CLASS_SCHEDULE_ID, $this->class_schedule_id);
         if ($this->isColumnModified(SchoolClassPeer::WEEK_SCHEDULE_ID)) $criteria->add(SchoolClassPeer::WEEK_SCHEDULE_ID, $this->week_schedule_id);
         if ($this->isColumnModified(SchoolClassPeer::SCHOOL_BUILDING_ID)) $criteria->add(SchoolClassPeer::SCHOOL_BUILDING_ID, $this->school_building_id);
@@ -2474,7 +2445,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         $copyObj->setStudentCount($this->getStudentCount());
         $copyObj->setClassPortraitId($this->getClassPortraitId());
         $copyObj->setSubjectId($this->getSubjectId());
-        $copyObj->setClassTypeId($this->getClassTypeId());
+        $copyObj->setClassType($this->getClassType());
         $copyObj->setClassScheduleId($this->getClassScheduleId());
         $copyObj->setWeekScheduleId($this->getWeekScheduleId());
         $copyObj->setSchoolBuildingId($this->getSchoolBuildingId());
@@ -2691,58 +2662,6 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         }
 
         return $this->aSubject;
-    }
-
-    /**
-     * Declares an association between this object and a ClassType object.
-     *
-     * @param                  ClassType $v
-     * @return SchoolClass The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setClassType(ClassType $v = null)
-    {
-        if ($v === null) {
-            $this->setClassTypeId(NULL);
-        } else {
-            $this->setClassTypeId($v->getId());
-        }
-
-        $this->aClassType = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ClassType object, it will not be re-added.
-        if ($v !== null) {
-            $v->addSchoolClass($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ClassType object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return ClassType The associated ClassType object.
-     * @throws PropelException
-     */
-    public function getClassType(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aClassType === null && ($this->class_type_id !== null) && $doQuery) {
-            $this->aClassType = ClassTypeQuery::create()->findPk($this->class_type_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aClassType->addSchoolClasss($this);
-             */
-        }
-
-        return $this->aClassType;
     }
 
     /**
@@ -5504,7 +5423,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         $this->student_count = null;
         $this->class_portrait_id = null;
         $this->subject_id = null;
-        $this->class_type_id = null;
+        $this->class_type = null;
         $this->class_schedule_id = null;
         $this->week_schedule_id = null;
         $this->school_building_id = null;
@@ -5581,9 +5500,6 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             if ($this->aSubject instanceof Persistent) {
               $this->aSubject->clearAllReferences($deep);
             }
-            if ($this->aClassType instanceof Persistent) {
-              $this->aClassType->clearAllReferences($deep);
-            }
             if ($this->aDocumentRelatedByClassScheduleId instanceof Persistent) {
               $this->aDocumentRelatedByClassScheduleId->clearAllReferences($deep);
             }
@@ -5640,7 +5556,6 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         $this->collNewss = null;
         $this->aDocumentRelatedByClassPortraitId = null;
         $this->aSubject = null;
-        $this->aClassType = null;
         $this->aDocumentRelatedByClassScheduleId = null;
         $this->aDocumentRelatedByWeekScheduleId = null;
         $this->aSchoolBuilding = null;

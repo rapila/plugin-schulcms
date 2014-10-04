@@ -18,7 +18,7 @@
  * @method SchoolClassQuery orderByStudentCount($order = Criteria::ASC) Order by the student_count column
  * @method SchoolClassQuery orderByClassPortraitId($order = Criteria::ASC) Order by the class_portrait_id column
  * @method SchoolClassQuery orderBySubjectId($order = Criteria::ASC) Order by the subject_id column
- * @method SchoolClassQuery orderByClassTypeId($order = Criteria::ASC) Order by the class_type_id column
+ * @method SchoolClassQuery orderByClassType($order = Criteria::ASC) Order by the class_type column
  * @method SchoolClassQuery orderByClassScheduleId($order = Criteria::ASC) Order by the class_schedule_id column
  * @method SchoolClassQuery orderByWeekScheduleId($order = Criteria::ASC) Order by the week_schedule_id column
  * @method SchoolClassQuery orderBySchoolBuildingId($order = Criteria::ASC) Order by the school_building_id column
@@ -40,7 +40,7 @@
  * @method SchoolClassQuery groupByStudentCount() Group by the student_count column
  * @method SchoolClassQuery groupByClassPortraitId() Group by the class_portrait_id column
  * @method SchoolClassQuery groupBySubjectId() Group by the subject_id column
- * @method SchoolClassQuery groupByClassTypeId() Group by the class_type_id column
+ * @method SchoolClassQuery groupByClassType() Group by the class_type column
  * @method SchoolClassQuery groupByClassScheduleId() Group by the class_schedule_id column
  * @method SchoolClassQuery groupByWeekScheduleId() Group by the week_schedule_id column
  * @method SchoolClassQuery groupBySchoolBuildingId() Group by the school_building_id column
@@ -61,10 +61,6 @@
  * @method SchoolClassQuery leftJoinSubject($relationAlias = null) Adds a LEFT JOIN clause to the query using the Subject relation
  * @method SchoolClassQuery rightJoinSubject($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Subject relation
  * @method SchoolClassQuery innerJoinSubject($relationAlias = null) Adds a INNER JOIN clause to the query using the Subject relation
- *
- * @method SchoolClassQuery leftJoinClassType($relationAlias = null) Adds a LEFT JOIN clause to the query using the ClassType relation
- * @method SchoolClassQuery rightJoinClassType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ClassType relation
- * @method SchoolClassQuery innerJoinClassType($relationAlias = null) Adds a INNER JOIN clause to the query using the ClassType relation
  *
  * @method SchoolClassQuery leftJoinDocumentRelatedByClassScheduleId($relationAlias = null) Adds a LEFT JOIN clause to the query using the DocumentRelatedByClassScheduleId relation
  * @method SchoolClassQuery rightJoinDocumentRelatedByClassScheduleId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DocumentRelatedByClassScheduleId relation
@@ -136,7 +132,7 @@
  * @method SchoolClass findOneByStudentCount(int $student_count) Return the first SchoolClass filtered by the student_count column
  * @method SchoolClass findOneByClassPortraitId(int $class_portrait_id) Return the first SchoolClass filtered by the class_portrait_id column
  * @method SchoolClass findOneBySubjectId(int $subject_id) Return the first SchoolClass filtered by the subject_id column
- * @method SchoolClass findOneByClassTypeId(int $class_type_id) Return the first SchoolClass filtered by the class_type_id column
+ * @method SchoolClass findOneByClassType(string $class_type) Return the first SchoolClass filtered by the class_type column
  * @method SchoolClass findOneByClassScheduleId(int $class_schedule_id) Return the first SchoolClass filtered by the class_schedule_id column
  * @method SchoolClass findOneByWeekScheduleId(int $week_schedule_id) Return the first SchoolClass filtered by the week_schedule_id column
  * @method SchoolClass findOneBySchoolBuildingId(int $school_building_id) Return the first SchoolClass filtered by the school_building_id column
@@ -158,7 +154,7 @@
  * @method array findByStudentCount(int $student_count) Return SchoolClass objects filtered by the student_count column
  * @method array findByClassPortraitId(int $class_portrait_id) Return SchoolClass objects filtered by the class_portrait_id column
  * @method array findBySubjectId(int $subject_id) Return SchoolClass objects filtered by the subject_id column
- * @method array findByClassTypeId(int $class_type_id) Return SchoolClass objects filtered by the class_type_id column
+ * @method array findByClassType(string $class_type) Return SchoolClass objects filtered by the class_type column
  * @method array findByClassScheduleId(int $class_schedule_id) Return SchoolClass objects filtered by the class_schedule_id column
  * @method array findByWeekScheduleId(int $week_schedule_id) Return SchoolClass objects filtered by the week_schedule_id column
  * @method array findBySchoolBuildingId(int $school_building_id) Return SchoolClass objects filtered by the school_building_id column
@@ -274,7 +270,7 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `original_id`, `name`, `unit_name`, `slug`, `year`, `level`, `room_number`, `teaching_unit`, `student_count`, `class_portrait_id`, `subject_id`, `class_type_id`, `class_schedule_id`, `week_schedule_id`, `school_building_id`, `school_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `school_classes` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `original_id`, `name`, `unit_name`, `slug`, `year`, `level`, `room_number`, `teaching_unit`, `student_count`, `class_portrait_id`, `subject_id`, `class_type`, `class_schedule_id`, `week_schedule_id`, `school_building_id`, `school_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `school_classes` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -807,47 +803,32 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the class_type_id column
+     * Filter the query on the class_type column
      *
      * Example usage:
      * <code>
-     * $query->filterByClassTypeId(1234); // WHERE class_type_id = 1234
-     * $query->filterByClassTypeId(array(12, 34)); // WHERE class_type_id IN (12, 34)
-     * $query->filterByClassTypeId(array('min' => 12)); // WHERE class_type_id >= 12
-     * $query->filterByClassTypeId(array('max' => 12)); // WHERE class_type_id <= 12
+     * $query->filterByClassType('fooValue');   // WHERE class_type = 'fooValue'
+     * $query->filterByClassType('%fooValue%'); // WHERE class_type LIKE '%fooValue%'
      * </code>
      *
-     * @see       filterByClassType()
-     *
-     * @param     mixed $classTypeId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $classType The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return SchoolClassQuery The current query, for fluid interface
      */
-    public function filterByClassTypeId($classTypeId = null, $comparison = null)
+    public function filterByClassType($classType = null, $comparison = null)
     {
-        if (is_array($classTypeId)) {
-            $useMinMax = false;
-            if (isset($classTypeId['min'])) {
-                $this->addUsingAlias(SchoolClassPeer::CLASS_TYPE_ID, $classTypeId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($classTypeId['max'])) {
-                $this->addUsingAlias(SchoolClassPeer::CLASS_TYPE_ID, $classTypeId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
+        if (null === $comparison) {
+            if (is_array($classType)) {
                 $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $classType)) {
+                $classType = str_replace('*', '%', $classType);
+                $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(SchoolClassPeer::CLASS_TYPE_ID, $classTypeId, $comparison);
+        return $this->addUsingAlias(SchoolClassPeer::CLASS_TYPE, $classType, $comparison);
     }
 
     /**
@@ -1350,82 +1331,6 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
         return $this
             ->joinSubject($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Subject', 'SubjectQuery');
-    }
-
-    /**
-     * Filter the query by a related ClassType object
-     *
-     * @param   ClassType|PropelObjectCollection $classType The related object(s) to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 SchoolClassQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByClassType($classType, $comparison = null)
-    {
-        if ($classType instanceof ClassType) {
-            return $this
-                ->addUsingAlias(SchoolClassPeer::CLASS_TYPE_ID, $classType->getId(), $comparison);
-        } elseif ($classType instanceof PropelObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(SchoolClassPeer::CLASS_TYPE_ID, $classType->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByClassType() only accepts arguments of type ClassType or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the ClassType relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return SchoolClassQuery The current query, for fluid interface
-     */
-    public function joinClassType($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('ClassType');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'ClassType');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the ClassType relation ClassType object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   ClassTypeQuery A secondary query class using the current class as primary query
-     */
-    public function useClassTypeQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinClassType($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'ClassType', 'ClassTypeQuery');
     }
 
     /**

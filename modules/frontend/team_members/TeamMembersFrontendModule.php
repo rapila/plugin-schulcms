@@ -4,12 +4,12 @@
  */
 
 class TeamMembersFrontendModule extends FrontendModule {
-	
+
 	public static $DISPLAY_MODES = array('team_liste', 'team_mitglied_detail');
 	public static $TEAM_MEMBER;
 	public $aFunctionGroupIds;
 	public $oClassPage;
-	
+
 	const MODE_SELECT_KEY = 'display_mode';
 	const GROUPS_SELECT_KEY = 'function_groups';
 	const PORTRAIT_DUMMY_ID = 7;
@@ -25,8 +25,8 @@ class TeamMembersFrontendModule extends FrontendModule {
 		}
 		return parent::getWords();
 	}
-	
-	public function renderFrontend() { 
+
+	public function renderFrontend() {
 		$this->oClassPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('classes'));
 		$aOptions = @unserialize($this->getData());
 		$this->aFunctionGroupIds = @$aOptions[self::GROUPS_SELECT_KEY];
@@ -36,13 +36,13 @@ class TeamMembersFrontendModule extends FrontendModule {
 			default: return $this->renderTeamliste();
 		}
 	}
-	
+
 	private function renderTeamliste() {
 		$oPage = FrontendManager::$CURRENT_PAGE;
-		
+
 		$oTemplate = $this->constructTemplate('list');
 		$aTeamMembers = $this->listQuery()->find();
-		
+
 		$sOddEven = 'odd';
 		foreach($aTeamMembers as $oTeamMember) {
 			$oItemTemplate = $this->constructTemplate('list_item');
@@ -68,13 +68,13 @@ class TeamMembersFrontendModule extends FrontendModule {
 			} else {
 				$oItemTemplate->replaceIdentifier('school_class', '-');
 			}
-			
+
 			$oItemTemplate->replaceIdentifier('profession', $oTeamMember->getProfession());
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
 		return $oTemplate;
 	}
-	
+
 	public function renderDetail() {
 		if(!self::$TEAM_MEMBER) {
 			return null;
@@ -97,7 +97,7 @@ class TeamMembersFrontendModule extends FrontendModule {
 					$bChange = $oSchoolClass->getIsClassTeacher();
 					if($oSchoolClass->getIsClassTeacher()) {
 						$oTemplate->replaceIdentifier('class_teacher', self::$TEAM_MEMBER->getClassTeacherTitle(). ' von: ');
-					} 
+					}
 				}
 				$oItemTemplate = $this->constructTemplate('class_item');
 				$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link(array_merge($this->oClassPage->getFullPathArray(), array($oSchoolClass->getSchoolClass()->getSlug())))), $oSchoolClass->getSchoolClass()->getFullClassName()));
@@ -115,7 +115,7 @@ class TeamMembersFrontendModule extends FrontendModule {
 		}
 		return $oTemplate;
 	}
-	
+
 	public function listQuery() {
 		$oTeamMemberQuery = TeamMemberQuery::create()->excludeInactive();
 		if($this->aFunctionGroupIds !== null) {

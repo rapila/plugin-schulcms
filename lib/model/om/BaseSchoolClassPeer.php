@@ -68,8 +68,8 @@ abstract class BaseSchoolClassPeer
     /** the column name for the subject_id field */
     const SUBJECT_ID = 'school_classes.subject_id';
 
-    /** the column name for the class_type_id field */
-    const CLASS_TYPE_ID = 'school_classes.class_type_id';
+    /** the column name for the class_type field */
+    const CLASS_TYPE = 'school_classes.class_type';
 
     /** the column name for the class_schedule_id field */
     const CLASS_SCHEDULE_ID = 'school_classes.class_schedule_id';
@@ -116,11 +116,11 @@ abstract class BaseSchoolClassPeer
      * e.g. SchoolClassPeer::$fieldNames[SchoolClassPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'OriginalId', 'Name', 'UnitName', 'Slug', 'Year', 'Level', 'RoomNumber', 'TeachingUnit', 'StudentCount', 'ClassPortraitId', 'SubjectId', 'ClassTypeId', 'ClassScheduleId', 'WeekScheduleId', 'SchoolBuildingId', 'SchoolId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'originalId', 'name', 'unitName', 'slug', 'year', 'level', 'roomNumber', 'teachingUnit', 'studentCount', 'classPortraitId', 'subjectId', 'classTypeId', 'classScheduleId', 'weekScheduleId', 'schoolBuildingId', 'schoolId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-        BasePeer::TYPE_COLNAME => array (SchoolClassPeer::ID, SchoolClassPeer::ORIGINAL_ID, SchoolClassPeer::NAME, SchoolClassPeer::UNIT_NAME, SchoolClassPeer::SLUG, SchoolClassPeer::YEAR, SchoolClassPeer::LEVEL, SchoolClassPeer::ROOM_NUMBER, SchoolClassPeer::TEACHING_UNIT, SchoolClassPeer::STUDENT_COUNT, SchoolClassPeer::CLASS_PORTRAIT_ID, SchoolClassPeer::SUBJECT_ID, SchoolClassPeer::CLASS_TYPE_ID, SchoolClassPeer::CLASS_SCHEDULE_ID, SchoolClassPeer::WEEK_SCHEDULE_ID, SchoolClassPeer::SCHOOL_BUILDING_ID, SchoolClassPeer::SCHOOL_ID, SchoolClassPeer::CREATED_AT, SchoolClassPeer::UPDATED_AT, SchoolClassPeer::CREATED_BY, SchoolClassPeer::UPDATED_BY, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ORIGINAL_ID', 'NAME', 'UNIT_NAME', 'SLUG', 'YEAR', 'LEVEL', 'ROOM_NUMBER', 'TEACHING_UNIT', 'STUDENT_COUNT', 'CLASS_PORTRAIT_ID', 'SUBJECT_ID', 'CLASS_TYPE_ID', 'CLASS_SCHEDULE_ID', 'WEEK_SCHEDULE_ID', 'SCHOOL_BUILDING_ID', 'SCHOOL_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'original_id', 'name', 'unit_name', 'slug', 'year', 'level', 'room_number', 'teaching_unit', 'student_count', 'class_portrait_id', 'subject_id', 'class_type_id', 'class_schedule_id', 'week_schedule_id', 'school_building_id', 'school_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+        BasePeer::TYPE_PHPNAME => array ('Id', 'OriginalId', 'Name', 'UnitName', 'Slug', 'Year', 'Level', 'RoomNumber', 'TeachingUnit', 'StudentCount', 'ClassPortraitId', 'SubjectId', 'ClassType', 'ClassScheduleId', 'WeekScheduleId', 'SchoolBuildingId', 'SchoolId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'originalId', 'name', 'unitName', 'slug', 'year', 'level', 'roomNumber', 'teachingUnit', 'studentCount', 'classPortraitId', 'subjectId', 'classType', 'classScheduleId', 'weekScheduleId', 'schoolBuildingId', 'schoolId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+        BasePeer::TYPE_COLNAME => array (SchoolClassPeer::ID, SchoolClassPeer::ORIGINAL_ID, SchoolClassPeer::NAME, SchoolClassPeer::UNIT_NAME, SchoolClassPeer::SLUG, SchoolClassPeer::YEAR, SchoolClassPeer::LEVEL, SchoolClassPeer::ROOM_NUMBER, SchoolClassPeer::TEACHING_UNIT, SchoolClassPeer::STUDENT_COUNT, SchoolClassPeer::CLASS_PORTRAIT_ID, SchoolClassPeer::SUBJECT_ID, SchoolClassPeer::CLASS_TYPE, SchoolClassPeer::CLASS_SCHEDULE_ID, SchoolClassPeer::WEEK_SCHEDULE_ID, SchoolClassPeer::SCHOOL_BUILDING_ID, SchoolClassPeer::SCHOOL_ID, SchoolClassPeer::CREATED_AT, SchoolClassPeer::UPDATED_AT, SchoolClassPeer::CREATED_BY, SchoolClassPeer::UPDATED_BY, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ORIGINAL_ID', 'NAME', 'UNIT_NAME', 'SLUG', 'YEAR', 'LEVEL', 'ROOM_NUMBER', 'TEACHING_UNIT', 'STUDENT_COUNT', 'CLASS_PORTRAIT_ID', 'SUBJECT_ID', 'CLASS_TYPE', 'CLASS_SCHEDULE_ID', 'WEEK_SCHEDULE_ID', 'SCHOOL_BUILDING_ID', 'SCHOOL_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'original_id', 'name', 'unit_name', 'slug', 'year', 'level', 'room_number', 'teaching_unit', 'student_count', 'class_portrait_id', 'subject_id', 'class_type', 'class_schedule_id', 'week_schedule_id', 'school_building_id', 'school_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
     );
 
@@ -131,11 +131,11 @@ abstract class BaseSchoolClassPeer
      * e.g. SchoolClassPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OriginalId' => 1, 'Name' => 2, 'UnitName' => 3, 'Slug' => 4, 'Year' => 5, 'Level' => 6, 'RoomNumber' => 7, 'TeachingUnit' => 8, 'StudentCount' => 9, 'ClassPortraitId' => 10, 'SubjectId' => 11, 'ClassTypeId' => 12, 'ClassScheduleId' => 13, 'WeekScheduleId' => 14, 'SchoolBuildingId' => 15, 'SchoolId' => 16, 'CreatedAt' => 17, 'UpdatedAt' => 18, 'CreatedBy' => 19, 'UpdatedBy' => 20, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'originalId' => 1, 'name' => 2, 'unitName' => 3, 'slug' => 4, 'year' => 5, 'level' => 6, 'roomNumber' => 7, 'teachingUnit' => 8, 'studentCount' => 9, 'classPortraitId' => 10, 'subjectId' => 11, 'classTypeId' => 12, 'classScheduleId' => 13, 'weekScheduleId' => 14, 'schoolBuildingId' => 15, 'schoolId' => 16, 'createdAt' => 17, 'updatedAt' => 18, 'createdBy' => 19, 'updatedBy' => 20, ),
-        BasePeer::TYPE_COLNAME => array (SchoolClassPeer::ID => 0, SchoolClassPeer::ORIGINAL_ID => 1, SchoolClassPeer::NAME => 2, SchoolClassPeer::UNIT_NAME => 3, SchoolClassPeer::SLUG => 4, SchoolClassPeer::YEAR => 5, SchoolClassPeer::LEVEL => 6, SchoolClassPeer::ROOM_NUMBER => 7, SchoolClassPeer::TEACHING_UNIT => 8, SchoolClassPeer::STUDENT_COUNT => 9, SchoolClassPeer::CLASS_PORTRAIT_ID => 10, SchoolClassPeer::SUBJECT_ID => 11, SchoolClassPeer::CLASS_TYPE_ID => 12, SchoolClassPeer::CLASS_SCHEDULE_ID => 13, SchoolClassPeer::WEEK_SCHEDULE_ID => 14, SchoolClassPeer::SCHOOL_BUILDING_ID => 15, SchoolClassPeer::SCHOOL_ID => 16, SchoolClassPeer::CREATED_AT => 17, SchoolClassPeer::UPDATED_AT => 18, SchoolClassPeer::CREATED_BY => 19, SchoolClassPeer::UPDATED_BY => 20, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ORIGINAL_ID' => 1, 'NAME' => 2, 'UNIT_NAME' => 3, 'SLUG' => 4, 'YEAR' => 5, 'LEVEL' => 6, 'ROOM_NUMBER' => 7, 'TEACHING_UNIT' => 8, 'STUDENT_COUNT' => 9, 'CLASS_PORTRAIT_ID' => 10, 'SUBJECT_ID' => 11, 'CLASS_TYPE_ID' => 12, 'CLASS_SCHEDULE_ID' => 13, 'WEEK_SCHEDULE_ID' => 14, 'SCHOOL_BUILDING_ID' => 15, 'SCHOOL_ID' => 16, 'CREATED_AT' => 17, 'UPDATED_AT' => 18, 'CREATED_BY' => 19, 'UPDATED_BY' => 20, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'original_id' => 1, 'name' => 2, 'unit_name' => 3, 'slug' => 4, 'year' => 5, 'level' => 6, 'room_number' => 7, 'teaching_unit' => 8, 'student_count' => 9, 'class_portrait_id' => 10, 'subject_id' => 11, 'class_type_id' => 12, 'class_schedule_id' => 13, 'week_schedule_id' => 14, 'school_building_id' => 15, 'school_id' => 16, 'created_at' => 17, 'updated_at' => 18, 'created_by' => 19, 'updated_by' => 20, ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OriginalId' => 1, 'Name' => 2, 'UnitName' => 3, 'Slug' => 4, 'Year' => 5, 'Level' => 6, 'RoomNumber' => 7, 'TeachingUnit' => 8, 'StudentCount' => 9, 'ClassPortraitId' => 10, 'SubjectId' => 11, 'ClassType' => 12, 'ClassScheduleId' => 13, 'WeekScheduleId' => 14, 'SchoolBuildingId' => 15, 'SchoolId' => 16, 'CreatedAt' => 17, 'UpdatedAt' => 18, 'CreatedBy' => 19, 'UpdatedBy' => 20, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'originalId' => 1, 'name' => 2, 'unitName' => 3, 'slug' => 4, 'year' => 5, 'level' => 6, 'roomNumber' => 7, 'teachingUnit' => 8, 'studentCount' => 9, 'classPortraitId' => 10, 'subjectId' => 11, 'classType' => 12, 'classScheduleId' => 13, 'weekScheduleId' => 14, 'schoolBuildingId' => 15, 'schoolId' => 16, 'createdAt' => 17, 'updatedAt' => 18, 'createdBy' => 19, 'updatedBy' => 20, ),
+        BasePeer::TYPE_COLNAME => array (SchoolClassPeer::ID => 0, SchoolClassPeer::ORIGINAL_ID => 1, SchoolClassPeer::NAME => 2, SchoolClassPeer::UNIT_NAME => 3, SchoolClassPeer::SLUG => 4, SchoolClassPeer::YEAR => 5, SchoolClassPeer::LEVEL => 6, SchoolClassPeer::ROOM_NUMBER => 7, SchoolClassPeer::TEACHING_UNIT => 8, SchoolClassPeer::STUDENT_COUNT => 9, SchoolClassPeer::CLASS_PORTRAIT_ID => 10, SchoolClassPeer::SUBJECT_ID => 11, SchoolClassPeer::CLASS_TYPE => 12, SchoolClassPeer::CLASS_SCHEDULE_ID => 13, SchoolClassPeer::WEEK_SCHEDULE_ID => 14, SchoolClassPeer::SCHOOL_BUILDING_ID => 15, SchoolClassPeer::SCHOOL_ID => 16, SchoolClassPeer::CREATED_AT => 17, SchoolClassPeer::UPDATED_AT => 18, SchoolClassPeer::CREATED_BY => 19, SchoolClassPeer::UPDATED_BY => 20, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ORIGINAL_ID' => 1, 'NAME' => 2, 'UNIT_NAME' => 3, 'SLUG' => 4, 'YEAR' => 5, 'LEVEL' => 6, 'ROOM_NUMBER' => 7, 'TEACHING_UNIT' => 8, 'STUDENT_COUNT' => 9, 'CLASS_PORTRAIT_ID' => 10, 'SUBJECT_ID' => 11, 'CLASS_TYPE' => 12, 'CLASS_SCHEDULE_ID' => 13, 'WEEK_SCHEDULE_ID' => 14, 'SCHOOL_BUILDING_ID' => 15, 'SCHOOL_ID' => 16, 'CREATED_AT' => 17, 'UPDATED_AT' => 18, 'CREATED_BY' => 19, 'UPDATED_BY' => 20, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'original_id' => 1, 'name' => 2, 'unit_name' => 3, 'slug' => 4, 'year' => 5, 'level' => 6, 'room_number' => 7, 'teaching_unit' => 8, 'student_count' => 9, 'class_portrait_id' => 10, 'subject_id' => 11, 'class_type' => 12, 'class_schedule_id' => 13, 'week_schedule_id' => 14, 'school_building_id' => 15, 'school_id' => 16, 'created_at' => 17, 'updated_at' => 18, 'created_by' => 19, 'updated_by' => 20, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
     );
 
@@ -222,7 +222,7 @@ abstract class BaseSchoolClassPeer
             $criteria->addSelectColumn(SchoolClassPeer::STUDENT_COUNT);
             $criteria->addSelectColumn(SchoolClassPeer::CLASS_PORTRAIT_ID);
             $criteria->addSelectColumn(SchoolClassPeer::SUBJECT_ID);
-            $criteria->addSelectColumn(SchoolClassPeer::CLASS_TYPE_ID);
+            $criteria->addSelectColumn(SchoolClassPeer::CLASS_TYPE);
             $criteria->addSelectColumn(SchoolClassPeer::CLASS_SCHEDULE_ID);
             $criteria->addSelectColumn(SchoolClassPeer::WEEK_SCHEDULE_ID);
             $criteria->addSelectColumn(SchoolClassPeer::SCHOOL_BUILDING_ID);
@@ -244,7 +244,7 @@ abstract class BaseSchoolClassPeer
             $criteria->addSelectColumn($alias . '.student_count');
             $criteria->addSelectColumn($alias . '.class_portrait_id');
             $criteria->addSelectColumn($alias . '.subject_id');
-            $criteria->addSelectColumn($alias . '.class_type_id');
+            $criteria->addSelectColumn($alias . '.class_type');
             $criteria->addSelectColumn($alias . '.class_schedule_id');
             $criteria->addSelectColumn($alias . '.week_schedule_id');
             $criteria->addSelectColumn($alias . '.school_building_id');
@@ -666,57 +666,6 @@ abstract class BaseSchoolClassPeer
         }
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $stmt = BasePeer::doCount($criteria, $con);
-
-        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $count = (int) $row[0];
-        } else {
-            $count = 0; // no rows returned; we infer that means 0 matches.
-        }
-        $stmt->closeCursor();
-
-        return $count;
-    }
-
-
-    /**
-     * Returns the number of rows matching criteria, joining the related ClassType table
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return int Number of matching rows.
-     */
-    public static function doCountJoinClassType(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        // we're going to modify criteria, so copy it first
-        $criteria = clone $criteria;
-
-        // We need to set the primary table name, since in the case that there are no WHERE columns
-        // it will be impossible for the BasePeer::createSelectSql() method to determine which
-        // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(SchoolClassPeer::TABLE_NAME);
-
-        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-            $criteria->setDistinct();
-        }
-
-        if (!$criteria->hasSelectClause()) {
-            SchoolClassPeer::addSelectColumns($criteria);
-        }
-
-        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-
-        // Set the correct dbName
-        $criteria->setDbName(SchoolClassPeer::DATABASE_NAME);
-
-        if ($con === null) {
-            $con = Propel::getConnection(SchoolClassPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-        }
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1172,73 +1121,6 @@ abstract class BaseSchoolClassPeer
 
 
     /**
-     * Selects a collection of SchoolClass objects pre-filled with their ClassType objects.
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of SchoolClass objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinClassType(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(SchoolClassPeer::DATABASE_NAME);
-        }
-
-        SchoolClassPeer::addSelectColumns($criteria);
-        $startcol = SchoolClassPeer::NUM_HYDRATE_COLUMNS;
-        ClassTypePeer::addSelectColumns($criteria);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = SchoolClassPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-
-                $cls = SchoolClassPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                SchoolClassPeer::addInstanceToPool($obj1, $key1);
-            } // if $obj1 already loaded
-
-            $key2 = ClassTypePeer::getPrimaryKeyHashFromRow($row, $startcol);
-            if ($key2 !== null) {
-                $obj2 = ClassTypePeer::getInstanceFromPool($key2);
-                if (!$obj2) {
-
-                    $cls = ClassTypePeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol);
-                    ClassTypePeer::addInstanceToPool($obj2, $key2);
-                } // if obj2 already loaded
-
-                // Add the $obj1 (SchoolClass) to $obj2 (ClassType)
-                $obj2->addSchoolClass($obj1);
-
-            } // if joined row was not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
      * Selects a collection of SchoolClass objects pre-filled with their Document objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
@@ -1680,8 +1562,6 @@ abstract class BaseSchoolClassPeer
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
 
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
-
         $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::WEEK_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
@@ -1734,32 +1614,27 @@ abstract class BaseSchoolClassPeer
         SubjectPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + SubjectPeer::NUM_HYDRATE_COLUMNS;
 
-        ClassTypePeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + ClassTypePeer::NUM_HYDRATE_COLUMNS;
+        DocumentPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
         DocumentPeer::addSelectColumns($criteria);
         $startcol6 = $startcol5 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
-        DocumentPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + DocumentPeer::NUM_HYDRATE_COLUMNS;
-
         SchoolBuildingPeer::addSelectColumns($criteria);
-        $startcol8 = $startcol7 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
 
         SchoolPeer::addSelectColumns($criteria);
-        $startcol9 = $startcol8 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+        $startcol8 = $startcol7 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol9 = $startcol8 + UserPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol10 = $startcol9 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        UserPeer::addSelectColumns($criteria);
-        $startcol11 = $startcol10 + UserPeer::NUM_HYDRATE_COLUMNS;
-
         $criteria->addJoin(SchoolClassPeer::CLASS_PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
 
@@ -1826,22 +1701,22 @@ abstract class BaseSchoolClassPeer
                 $obj3->addSchoolClass($obj1);
             } // if joined row not null
 
-            // Add objects for joined ClassType rows
+            // Add objects for joined Document rows
 
-            $key4 = ClassTypePeer::getPrimaryKeyHashFromRow($row, $startcol4);
+            $key4 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol4);
             if ($key4 !== null) {
-                $obj4 = ClassTypePeer::getInstanceFromPool($key4);
+                $obj4 = DocumentPeer::getInstanceFromPool($key4);
                 if (!$obj4) {
 
-                    $cls = ClassTypePeer::getOMClass();
+                    $cls = DocumentPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    ClassTypePeer::addInstanceToPool($obj4, $key4);
+                    DocumentPeer::addInstanceToPool($obj4, $key4);
                 } // if obj4 loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj4 (ClassType)
-                $obj4->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj4 (Document)
+                $obj4->addSchoolClassRelatedByClassScheduleId($obj1);
             } // if joined row not null
 
             // Add objects for joined Document rows
@@ -1859,61 +1734,61 @@ abstract class BaseSchoolClassPeer
                 } // if obj5 loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj5 (Document)
-                $obj5->addSchoolClassRelatedByClassScheduleId($obj1);
-            } // if joined row not null
-
-            // Add objects for joined Document rows
-
-            $key6 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-            if ($key6 !== null) {
-                $obj6 = DocumentPeer::getInstanceFromPool($key6);
-                if (!$obj6) {
-
-                    $cls = DocumentPeer::getOMClass();
-
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    DocumentPeer::addInstanceToPool($obj6, $key6);
-                } // if obj6 loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj6 (Document)
-                $obj6->addSchoolClassRelatedByWeekScheduleId($obj1);
+                $obj5->addSchoolClassRelatedByWeekScheduleId($obj1);
             } // if joined row not null
 
             // Add objects for joined SchoolBuilding rows
 
-            $key7 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-            if ($key7 !== null) {
-                $obj7 = SchoolBuildingPeer::getInstanceFromPool($key7);
-                if (!$obj7) {
+            $key6 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+            if ($key6 !== null) {
+                $obj6 = SchoolBuildingPeer::getInstanceFromPool($key6);
+                if (!$obj6) {
 
                     $cls = SchoolBuildingPeer::getOMClass();
 
-                    $obj7 = new $cls();
-                    $obj7->hydrate($row, $startcol7);
-                    SchoolBuildingPeer::addInstanceToPool($obj7, $key7);
-                } // if obj7 loaded
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SchoolBuildingPeer::addInstanceToPool($obj6, $key6);
+                } // if obj6 loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj7 (SchoolBuilding)
-                $obj7->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj6 (SchoolBuilding)
+                $obj6->addSchoolClass($obj1);
             } // if joined row not null
 
             // Add objects for joined School rows
 
-            $key8 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol8);
-            if ($key8 !== null) {
-                $obj8 = SchoolPeer::getInstanceFromPool($key8);
-                if (!$obj8) {
+            $key7 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+            if ($key7 !== null) {
+                $obj7 = SchoolPeer::getInstanceFromPool($key7);
+                if (!$obj7) {
 
                     $cls = SchoolPeer::getOMClass();
 
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    SchoolPeer::addInstanceToPool($obj7, $key7);
+                } // if obj7 loaded
+
+                // Add the $obj1 (SchoolClass) to the collection in $obj7 (School)
+                $obj7->addSchoolClass($obj1);
+            } // if joined row not null
+
+            // Add objects for joined User rows
+
+            $key8 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol8);
+            if ($key8 !== null) {
+                $obj8 = UserPeer::getInstanceFromPool($key8);
+                if (!$obj8) {
+
+                    $cls = UserPeer::getOMClass();
+
                     $obj8 = new $cls();
                     $obj8->hydrate($row, $startcol8);
-                    SchoolPeer::addInstanceToPool($obj8, $key8);
+                    UserPeer::addInstanceToPool($obj8, $key8);
                 } // if obj8 loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj8 (School)
-                $obj8->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj8 (User)
+                $obj8->addSchoolClassRelatedByCreatedBy($obj1);
             } // if joined row not null
 
             // Add objects for joined User rows
@@ -1931,25 +1806,7 @@ abstract class BaseSchoolClassPeer
                 } // if obj9 loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj9 (User)
-                $obj9->addSchoolClassRelatedByCreatedBy($obj1);
-            } // if joined row not null
-
-            // Add objects for joined User rows
-
-            $key10 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol10);
-            if ($key10 !== null) {
-                $obj10 = UserPeer::getInstanceFromPool($key10);
-                if (!$obj10) {
-
-                    $cls = UserPeer::getOMClass();
-
-                    $obj10 = new $cls();
-                    $obj10->hydrate($row, $startcol10);
-                    UserPeer::addInstanceToPool($obj10, $key10);
-                } // if obj10 loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj10 (User)
-                $obj10->addSchoolClassRelatedByUpdatedBy($obj1);
+                $obj9->addSchoolClassRelatedByUpdatedBy($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -1997,8 +1854,6 @@ abstract class BaseSchoolClassPeer
         }
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::SCHOOL_BUILDING_ID, SchoolBuildingPeer::ID, $join_behavior);
 
@@ -2058,73 +1913,6 @@ abstract class BaseSchoolClassPeer
         }
 
         $criteria->addJoin(SchoolClassPeer::CLASS_PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::WEEK_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::SCHOOL_BUILDING_ID, SchoolBuildingPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::SCHOOL_ID, SchoolPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CREATED_BY, UserPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
-
-        $stmt = BasePeer::doCount($criteria, $con);
-
-        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $count = (int) $row[0];
-        } else {
-            $count = 0; // no rows returned; we infer that means 0 matches.
-        }
-        $stmt->closeCursor();
-
-        return $count;
-    }
-
-
-    /**
-     * Returns the number of rows matching criteria, joining the related ClassType table
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return int Number of matching rows.
-     */
-    public static function doCountJoinAllExceptClassType(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        // we're going to modify criteria, so copy it first
-        $criteria = clone $criteria;
-
-        // We need to set the primary table name, since in the case that there are no WHERE columns
-        // it will be impossible for the BasePeer::createSelectSql() method to determine which
-        // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(SchoolClassPeer::TABLE_NAME);
-
-        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-            $criteria->setDistinct();
-        }
-
-        if (!$criteria->hasSelectClause()) {
-            SchoolClassPeer::addSelectColumns($criteria);
-        }
-
-        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
-
-        // Set the correct dbName
-        $criteria->setDbName(SchoolClassPeer::DATABASE_NAME);
-
-        if ($con === null) {
-            $con = Propel::getConnection(SchoolClassPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-        }
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
 
@@ -2189,8 +1977,6 @@ abstract class BaseSchoolClassPeer
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
 
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
-
         $criteria->addJoin(SchoolClassPeer::SCHOOL_BUILDING_ID, SchoolBuildingPeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::SCHOOL_ID, SchoolPeer::ID, $join_behavior);
@@ -2249,8 +2035,6 @@ abstract class BaseSchoolClassPeer
         }
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::SCHOOL_BUILDING_ID, SchoolBuildingPeer::ID, $join_behavior);
 
@@ -2312,8 +2096,6 @@ abstract class BaseSchoolClassPeer
         $criteria->addJoin(SchoolClassPeer::CLASS_PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
 
@@ -2378,8 +2160,6 @@ abstract class BaseSchoolClassPeer
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
 
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
-
         $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::WEEK_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
@@ -2443,8 +2223,6 @@ abstract class BaseSchoolClassPeer
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
 
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
-
         $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::WEEK_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
@@ -2506,8 +2284,6 @@ abstract class BaseSchoolClassPeer
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
 
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
-
         $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::WEEK_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
@@ -2556,24 +2332,19 @@ abstract class BaseSchoolClassPeer
         SubjectPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + SubjectPeer::NUM_HYDRATE_COLUMNS;
 
-        ClassTypePeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + ClassTypePeer::NUM_HYDRATE_COLUMNS;
-
         SchoolBuildingPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
 
         SchoolPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        UserPeer::addSelectColumns($criteria);
-        $startcol8 = $startcol7 + UserPeer::NUM_HYDRATE_COLUMNS;
-
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::SCHOOL_BUILDING_ID, SchoolBuildingPeer::ID, $join_behavior);
 
@@ -2620,60 +2391,60 @@ abstract class BaseSchoolClassPeer
 
             } // if joined row is not null
 
-                // Add objects for joined ClassType rows
-
-                $key3 = ClassTypePeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = ClassTypePeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = ClassTypePeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    ClassTypePeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj3 (ClassType)
-                $obj3->addSchoolClass($obj1);
-
-            } // if joined row is not null
-
                 // Add objects for joined SchoolBuilding rows
 
-                $key4 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = SchoolBuildingPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
+                $key3 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = SchoolBuildingPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
 
                         $cls = SchoolBuildingPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    SchoolBuildingPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    SchoolBuildingPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj4 (SchoolBuilding)
-                $obj4->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj3 (SchoolBuilding)
+                $obj3->addSchoolClass($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined School rows
 
-                $key5 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = SchoolPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
+                $key4 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SchoolPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
 
                         $cls = SchoolPeer::getOMClass();
 
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SchoolPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (SchoolClass) to the collection in $obj4 (School)
+                $obj4->addSchoolClass($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined User rows
+
+                $key5 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = UserPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = UserPeer::getOMClass();
+
                     $obj5 = new $cls();
                     $obj5->hydrate($row, $startcol5);
-                    SchoolPeer::addInstanceToPool($obj5, $key5);
+                    UserPeer::addInstanceToPool($obj5, $key5);
                 } // if $obj5 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj5 (School)
-                $obj5->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj5 (User)
+                $obj5->addSchoolClassRelatedByCreatedBy($obj1);
 
             } // if joined row is not null
 
@@ -2692,26 +2463,7 @@ abstract class BaseSchoolClassPeer
                 } // if $obj6 already loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj6 (User)
-                $obj6->addSchoolClassRelatedByCreatedBy($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key7 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-                if ($key7 !== null) {
-                    $obj7 = UserPeer::getInstanceFromPool($key7);
-                    if (!$obj7) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj7 = new $cls();
-                    $obj7->hydrate($row, $startcol7);
-                    UserPeer::addInstanceToPool($obj7, $key7);
-                } // if $obj7 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj7 (User)
-                $obj7->addSchoolClassRelatedByUpdatedBy($obj1);
+                $obj6->addSchoolClassRelatedByUpdatedBy($obj1);
 
             } // if joined row is not null
 
@@ -2750,30 +2502,25 @@ abstract class BaseSchoolClassPeer
         DocumentPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
-        ClassTypePeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + ClassTypePeer::NUM_HYDRATE_COLUMNS;
+        DocumentPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
         DocumentPeer::addSelectColumns($criteria);
         $startcol5 = $startcol4 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
-        DocumentPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + DocumentPeer::NUM_HYDRATE_COLUMNS;
-
         SchoolBuildingPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
 
         SchoolPeer::addSelectColumns($criteria);
-        $startcol8 = $startcol7 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol8 = $startcol7 + UserPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol9 = $startcol8 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        UserPeer::addSelectColumns($criteria);
-        $startcol10 = $startcol9 + UserPeer::NUM_HYDRATE_COLUMNS;
-
         $criteria->addJoin(SchoolClassPeer::CLASS_PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
 
@@ -2824,22 +2571,22 @@ abstract class BaseSchoolClassPeer
 
             } // if joined row is not null
 
-                // Add objects for joined ClassType rows
+                // Add objects for joined Document rows
 
-                $key3 = ClassTypePeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                $key3 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol3);
                 if ($key3 !== null) {
-                    $obj3 = ClassTypePeer::getInstanceFromPool($key3);
+                    $obj3 = DocumentPeer::getInstanceFromPool($key3);
                     if (!$obj3) {
 
-                        $cls = ClassTypePeer::getOMClass();
+                        $cls = DocumentPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    ClassTypePeer::addInstanceToPool($obj3, $key3);
+                    DocumentPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj3 (ClassType)
-                $obj3->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj3 (Document)
+                $obj3->addSchoolClassRelatedByClassScheduleId($obj1);
 
             } // if joined row is not null
 
@@ -2858,64 +2605,64 @@ abstract class BaseSchoolClassPeer
                 } // if $obj4 already loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj4 (Document)
-                $obj4->addSchoolClassRelatedByClassScheduleId($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Document rows
-
-                $key5 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = DocumentPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
-
-                        $cls = DocumentPeer::getOMClass();
-
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    DocumentPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj5 (Document)
-                $obj5->addSchoolClassRelatedByWeekScheduleId($obj1);
+                $obj4->addSchoolClassRelatedByWeekScheduleId($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined SchoolBuilding rows
 
-                $key6 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-                if ($key6 !== null) {
-                    $obj6 = SchoolBuildingPeer::getInstanceFromPool($key6);
-                    if (!$obj6) {
+                $key5 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = SchoolBuildingPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
 
                         $cls = SchoolBuildingPeer::getOMClass();
 
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    SchoolBuildingPeer::addInstanceToPool($obj6, $key6);
-                } // if $obj6 already loaded
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    SchoolBuildingPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj6 (SchoolBuilding)
-                $obj6->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj5 (SchoolBuilding)
+                $obj5->addSchoolClass($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined School rows
 
-                $key7 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-                if ($key7 !== null) {
-                    $obj7 = SchoolPeer::getInstanceFromPool($key7);
-                    if (!$obj7) {
+                $key6 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SchoolPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
 
                         $cls = SchoolPeer::getOMClass();
 
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SchoolPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (SchoolClass) to the collection in $obj6 (School)
+                $obj6->addSchoolClass($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined User rows
+
+                $key7 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = UserPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
+
+                        $cls = UserPeer::getOMClass();
+
                     $obj7 = new $cls();
                     $obj7->hydrate($row, $startcol7);
-                    SchoolPeer::addInstanceToPool($obj7, $key7);
+                    UserPeer::addInstanceToPool($obj7, $key7);
                 } // if $obj7 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj7 (School)
-                $obj7->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj7 (User)
+                $obj7->addSchoolClassRelatedByCreatedBy($obj1);
 
             } // if joined row is not null
 
@@ -2934,268 +2681,7 @@ abstract class BaseSchoolClassPeer
                 } // if $obj8 already loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj8 (User)
-                $obj8->addSchoolClassRelatedByCreatedBy($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key9 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol9);
-                if ($key9 !== null) {
-                    $obj9 = UserPeer::getInstanceFromPool($key9);
-                    if (!$obj9) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj9 = new $cls();
-                    $obj9->hydrate($row, $startcol9);
-                    UserPeer::addInstanceToPool($obj9, $key9);
-                } // if $obj9 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj9 (User)
-                $obj9->addSchoolClassRelatedByUpdatedBy($obj1);
-
-            } // if joined row is not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Selects a collection of SchoolClass objects pre-filled with all related objects except ClassType.
-     *
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of SchoolClass objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinAllExceptClassType(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        // $criteria->getDbName() will return the same object if not set to another value
-        // so == check is okay and faster
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(SchoolClassPeer::DATABASE_NAME);
-        }
-
-        SchoolClassPeer::addSelectColumns($criteria);
-        $startcol2 = SchoolClassPeer::NUM_HYDRATE_COLUMNS;
-
-        DocumentPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + DocumentPeer::NUM_HYDRATE_COLUMNS;
-
-        SubjectPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + SubjectPeer::NUM_HYDRATE_COLUMNS;
-
-        DocumentPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + DocumentPeer::NUM_HYDRATE_COLUMNS;
-
-        DocumentPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + DocumentPeer::NUM_HYDRATE_COLUMNS;
-
-        SchoolBuildingPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
-
-        SchoolPeer::addSelectColumns($criteria);
-        $startcol8 = $startcol7 + SchoolPeer::NUM_HYDRATE_COLUMNS;
-
-        UserPeer::addSelectColumns($criteria);
-        $startcol9 = $startcol8 + UserPeer::NUM_HYDRATE_COLUMNS;
-
-        UserPeer::addSelectColumns($criteria);
-        $startcol10 = $startcol9 + UserPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::WEEK_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::SCHOOL_BUILDING_ID, SchoolBuildingPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::SCHOOL_ID, SchoolPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CREATED_BY, UserPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::UPDATED_BY, UserPeer::ID, $join_behavior);
-
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = SchoolClassPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = SchoolClassPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = SchoolClassPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                SchoolClassPeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-                // Add objects for joined Document rows
-
-                $key2 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = DocumentPeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = DocumentPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    DocumentPeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj2 (Document)
-                $obj2->addSchoolClassRelatedByClassPortraitId($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Subject rows
-
-                $key3 = SubjectPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = SubjectPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = SubjectPeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    SubjectPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj3 (Subject)
-                $obj3->addSchoolClass($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Document rows
-
-                $key4 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = DocumentPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
-
-                        $cls = DocumentPeer::getOMClass();
-
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    DocumentPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj4 (Document)
-                $obj4->addSchoolClassRelatedByClassScheduleId($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Document rows
-
-                $key5 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = DocumentPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
-
-                        $cls = DocumentPeer::getOMClass();
-
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    DocumentPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj5 (Document)
-                $obj5->addSchoolClassRelatedByWeekScheduleId($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined SchoolBuilding rows
-
-                $key6 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-                if ($key6 !== null) {
-                    $obj6 = SchoolBuildingPeer::getInstanceFromPool($key6);
-                    if (!$obj6) {
-
-                        $cls = SchoolBuildingPeer::getOMClass();
-
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    SchoolBuildingPeer::addInstanceToPool($obj6, $key6);
-                } // if $obj6 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj6 (SchoolBuilding)
-                $obj6->addSchoolClass($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined School rows
-
-                $key7 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-                if ($key7 !== null) {
-                    $obj7 = SchoolPeer::getInstanceFromPool($key7);
-                    if (!$obj7) {
-
-                        $cls = SchoolPeer::getOMClass();
-
-                    $obj7 = new $cls();
-                    $obj7->hydrate($row, $startcol7);
-                    SchoolPeer::addInstanceToPool($obj7, $key7);
-                } // if $obj7 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj7 (School)
-                $obj7->addSchoolClass($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key8 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol8);
-                if ($key8 !== null) {
-                    $obj8 = UserPeer::getInstanceFromPool($key8);
-                    if (!$obj8) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj8 = new $cls();
-                    $obj8->hydrate($row, $startcol8);
-                    UserPeer::addInstanceToPool($obj8, $key8);
-                } // if $obj8 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj8 (User)
-                $obj8->addSchoolClassRelatedByCreatedBy($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key9 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol9);
-                if ($key9 !== null) {
-                    $obj9 = UserPeer::getInstanceFromPool($key9);
-                    if (!$obj9) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj9 = new $cls();
-                    $obj9->hydrate($row, $startcol9);
-                    UserPeer::addInstanceToPool($obj9, $key9);
-                } // if $obj9 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj9 (User)
-                $obj9->addSchoolClassRelatedByUpdatedBy($obj1);
+                $obj8->addSchoolClassRelatedByUpdatedBy($obj1);
 
             } // if joined row is not null
 
@@ -3234,24 +2720,19 @@ abstract class BaseSchoolClassPeer
         SubjectPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + SubjectPeer::NUM_HYDRATE_COLUMNS;
 
-        ClassTypePeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + ClassTypePeer::NUM_HYDRATE_COLUMNS;
-
         SchoolBuildingPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
 
         SchoolPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        UserPeer::addSelectColumns($criteria);
-        $startcol8 = $startcol7 + UserPeer::NUM_HYDRATE_COLUMNS;
-
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::SCHOOL_BUILDING_ID, SchoolBuildingPeer::ID, $join_behavior);
 
@@ -3298,60 +2779,60 @@ abstract class BaseSchoolClassPeer
 
             } // if joined row is not null
 
-                // Add objects for joined ClassType rows
-
-                $key3 = ClassTypePeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = ClassTypePeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = ClassTypePeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    ClassTypePeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj3 (ClassType)
-                $obj3->addSchoolClass($obj1);
-
-            } // if joined row is not null
-
                 // Add objects for joined SchoolBuilding rows
 
-                $key4 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = SchoolBuildingPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
+                $key3 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = SchoolBuildingPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
 
                         $cls = SchoolBuildingPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    SchoolBuildingPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    SchoolBuildingPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj4 (SchoolBuilding)
-                $obj4->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj3 (SchoolBuilding)
+                $obj3->addSchoolClass($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined School rows
 
-                $key5 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = SchoolPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
+                $key4 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SchoolPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
 
                         $cls = SchoolPeer::getOMClass();
 
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SchoolPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (SchoolClass) to the collection in $obj4 (School)
+                $obj4->addSchoolClass($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined User rows
+
+                $key5 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = UserPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = UserPeer::getOMClass();
+
                     $obj5 = new $cls();
                     $obj5->hydrate($row, $startcol5);
-                    SchoolPeer::addInstanceToPool($obj5, $key5);
+                    UserPeer::addInstanceToPool($obj5, $key5);
                 } // if $obj5 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj5 (School)
-                $obj5->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj5 (User)
+                $obj5->addSchoolClassRelatedByCreatedBy($obj1);
 
             } // if joined row is not null
 
@@ -3370,26 +2851,7 @@ abstract class BaseSchoolClassPeer
                 } // if $obj6 already loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj6 (User)
-                $obj6->addSchoolClassRelatedByCreatedBy($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key7 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-                if ($key7 !== null) {
-                    $obj7 = UserPeer::getInstanceFromPool($key7);
-                    if (!$obj7) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj7 = new $cls();
-                    $obj7->hydrate($row, $startcol7);
-                    UserPeer::addInstanceToPool($obj7, $key7);
-                } // if $obj7 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj7 (User)
-                $obj7->addSchoolClassRelatedByUpdatedBy($obj1);
+                $obj6->addSchoolClassRelatedByUpdatedBy($obj1);
 
             } // if joined row is not null
 
@@ -3428,24 +2890,19 @@ abstract class BaseSchoolClassPeer
         SubjectPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + SubjectPeer::NUM_HYDRATE_COLUMNS;
 
-        ClassTypePeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + ClassTypePeer::NUM_HYDRATE_COLUMNS;
-
         SchoolBuildingPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
 
         SchoolPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + UserPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol7 = $startcol6 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        UserPeer::addSelectColumns($criteria);
-        $startcol8 = $startcol7 + UserPeer::NUM_HYDRATE_COLUMNS;
-
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::SCHOOL_BUILDING_ID, SchoolBuildingPeer::ID, $join_behavior);
 
@@ -3492,60 +2949,60 @@ abstract class BaseSchoolClassPeer
 
             } // if joined row is not null
 
-                // Add objects for joined ClassType rows
-
-                $key3 = ClassTypePeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = ClassTypePeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = ClassTypePeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    ClassTypePeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj3 (ClassType)
-                $obj3->addSchoolClass($obj1);
-
-            } // if joined row is not null
-
                 // Add objects for joined SchoolBuilding rows
 
-                $key4 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = SchoolBuildingPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
+                $key3 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = SchoolBuildingPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
 
                         $cls = SchoolBuildingPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    SchoolBuildingPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    SchoolBuildingPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj4 (SchoolBuilding)
-                $obj4->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj3 (SchoolBuilding)
+                $obj3->addSchoolClass($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined School rows
 
-                $key5 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = SchoolPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
+                $key4 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SchoolPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
 
                         $cls = SchoolPeer::getOMClass();
 
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SchoolPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (SchoolClass) to the collection in $obj4 (School)
+                $obj4->addSchoolClass($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined User rows
+
+                $key5 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = UserPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = UserPeer::getOMClass();
+
                     $obj5 = new $cls();
                     $obj5->hydrate($row, $startcol5);
-                    SchoolPeer::addInstanceToPool($obj5, $key5);
+                    UserPeer::addInstanceToPool($obj5, $key5);
                 } // if $obj5 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj5 (School)
-                $obj5->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj5 (User)
+                $obj5->addSchoolClassRelatedByCreatedBy($obj1);
 
             } // if joined row is not null
 
@@ -3564,26 +3021,7 @@ abstract class BaseSchoolClassPeer
                 } // if $obj6 already loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj6 (User)
-                $obj6->addSchoolClassRelatedByCreatedBy($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key7 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-                if ($key7 !== null) {
-                    $obj7 = UserPeer::getInstanceFromPool($key7);
-                    if (!$obj7) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj7 = new $cls();
-                    $obj7->hydrate($row, $startcol7);
-                    UserPeer::addInstanceToPool($obj7, $key7);
-                } // if $obj7 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj7 (User)
-                $obj7->addSchoolClassRelatedByUpdatedBy($obj1);
+                $obj6->addSchoolClassRelatedByUpdatedBy($obj1);
 
             } // if joined row is not null
 
@@ -3625,29 +3063,24 @@ abstract class BaseSchoolClassPeer
         SubjectPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + SubjectPeer::NUM_HYDRATE_COLUMNS;
 
-        ClassTypePeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + ClassTypePeer::NUM_HYDRATE_COLUMNS;
+        DocumentPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
         DocumentPeer::addSelectColumns($criteria);
         $startcol6 = $startcol5 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
-        DocumentPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + DocumentPeer::NUM_HYDRATE_COLUMNS;
-
         SchoolPeer::addSelectColumns($criteria);
-        $startcol8 = $startcol7 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol8 = $startcol7 + UserPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol9 = $startcol8 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        UserPeer::addSelectColumns($criteria);
-        $startcol10 = $startcol9 + UserPeer::NUM_HYDRATE_COLUMNS;
-
         $criteria->addJoin(SchoolClassPeer::CLASS_PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
 
@@ -3715,22 +3148,22 @@ abstract class BaseSchoolClassPeer
 
             } // if joined row is not null
 
-                // Add objects for joined ClassType rows
+                // Add objects for joined Document rows
 
-                $key4 = ClassTypePeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                $key4 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol4);
                 if ($key4 !== null) {
-                    $obj4 = ClassTypePeer::getInstanceFromPool($key4);
+                    $obj4 = DocumentPeer::getInstanceFromPool($key4);
                     if (!$obj4) {
 
-                        $cls = ClassTypePeer::getOMClass();
+                        $cls = DocumentPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    ClassTypePeer::addInstanceToPool($obj4, $key4);
+                    DocumentPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj4 (ClassType)
-                $obj4->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj4 (Document)
+                $obj4->addSchoolClassRelatedByClassScheduleId($obj1);
 
             } // if joined row is not null
 
@@ -3749,45 +3182,45 @@ abstract class BaseSchoolClassPeer
                 } // if $obj5 already loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj5 (Document)
-                $obj5->addSchoolClassRelatedByClassScheduleId($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Document rows
-
-                $key6 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-                if ($key6 !== null) {
-                    $obj6 = DocumentPeer::getInstanceFromPool($key6);
-                    if (!$obj6) {
-
-                        $cls = DocumentPeer::getOMClass();
-
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    DocumentPeer::addInstanceToPool($obj6, $key6);
-                } // if $obj6 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj6 (Document)
-                $obj6->addSchoolClassRelatedByWeekScheduleId($obj1);
+                $obj5->addSchoolClassRelatedByWeekScheduleId($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined School rows
 
-                $key7 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-                if ($key7 !== null) {
-                    $obj7 = SchoolPeer::getInstanceFromPool($key7);
-                    if (!$obj7) {
+                $key6 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SchoolPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
 
                         $cls = SchoolPeer::getOMClass();
 
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SchoolPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (SchoolClass) to the collection in $obj6 (School)
+                $obj6->addSchoolClass($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined User rows
+
+                $key7 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = UserPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
+
+                        $cls = UserPeer::getOMClass();
+
                     $obj7 = new $cls();
                     $obj7->hydrate($row, $startcol7);
-                    SchoolPeer::addInstanceToPool($obj7, $key7);
+                    UserPeer::addInstanceToPool($obj7, $key7);
                 } // if $obj7 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj7 (School)
-                $obj7->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj7 (User)
+                $obj7->addSchoolClassRelatedByCreatedBy($obj1);
 
             } // if joined row is not null
 
@@ -3806,26 +3239,7 @@ abstract class BaseSchoolClassPeer
                 } // if $obj8 already loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj8 (User)
-                $obj8->addSchoolClassRelatedByCreatedBy($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key9 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol9);
-                if ($key9 !== null) {
-                    $obj9 = UserPeer::getInstanceFromPool($key9);
-                    if (!$obj9) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj9 = new $cls();
-                    $obj9->hydrate($row, $startcol9);
-                    UserPeer::addInstanceToPool($obj9, $key9);
-                } // if $obj9 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj9 (User)
-                $obj9->addSchoolClassRelatedByUpdatedBy($obj1);
+                $obj8->addSchoolClassRelatedByUpdatedBy($obj1);
 
             } // if joined row is not null
 
@@ -3867,29 +3281,24 @@ abstract class BaseSchoolClassPeer
         SubjectPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + SubjectPeer::NUM_HYDRATE_COLUMNS;
 
-        ClassTypePeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + ClassTypePeer::NUM_HYDRATE_COLUMNS;
+        DocumentPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
         DocumentPeer::addSelectColumns($criteria);
         $startcol6 = $startcol5 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
-        DocumentPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + DocumentPeer::NUM_HYDRATE_COLUMNS;
-
         SchoolBuildingPeer::addSelectColumns($criteria);
-        $startcol8 = $startcol7 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
+
+        UserPeer::addSelectColumns($criteria);
+        $startcol8 = $startcol7 + UserPeer::NUM_HYDRATE_COLUMNS;
 
         UserPeer::addSelectColumns($criteria);
         $startcol9 = $startcol8 + UserPeer::NUM_HYDRATE_COLUMNS;
 
-        UserPeer::addSelectColumns($criteria);
-        $startcol10 = $startcol9 + UserPeer::NUM_HYDRATE_COLUMNS;
-
         $criteria->addJoin(SchoolClassPeer::CLASS_PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
 
@@ -3957,22 +3366,22 @@ abstract class BaseSchoolClassPeer
 
             } // if joined row is not null
 
-                // Add objects for joined ClassType rows
+                // Add objects for joined Document rows
 
-                $key4 = ClassTypePeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                $key4 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol4);
                 if ($key4 !== null) {
-                    $obj4 = ClassTypePeer::getInstanceFromPool($key4);
+                    $obj4 = DocumentPeer::getInstanceFromPool($key4);
                     if (!$obj4) {
 
-                        $cls = ClassTypePeer::getOMClass();
+                        $cls = DocumentPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    ClassTypePeer::addInstanceToPool($obj4, $key4);
+                    DocumentPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj4 (ClassType)
-                $obj4->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj4 (Document)
+                $obj4->addSchoolClassRelatedByClassScheduleId($obj1);
 
             } // if joined row is not null
 
@@ -3991,45 +3400,45 @@ abstract class BaseSchoolClassPeer
                 } // if $obj5 already loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj5 (Document)
-                $obj5->addSchoolClassRelatedByClassScheduleId($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Document rows
-
-                $key6 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-                if ($key6 !== null) {
-                    $obj6 = DocumentPeer::getInstanceFromPool($key6);
-                    if (!$obj6) {
-
-                        $cls = DocumentPeer::getOMClass();
-
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    DocumentPeer::addInstanceToPool($obj6, $key6);
-                } // if $obj6 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj6 (Document)
-                $obj6->addSchoolClassRelatedByWeekScheduleId($obj1);
+                $obj5->addSchoolClassRelatedByWeekScheduleId($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined SchoolBuilding rows
 
-                $key7 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-                if ($key7 !== null) {
-                    $obj7 = SchoolBuildingPeer::getInstanceFromPool($key7);
-                    if (!$obj7) {
+                $key6 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SchoolBuildingPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
 
                         $cls = SchoolBuildingPeer::getOMClass();
 
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SchoolBuildingPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (SchoolClass) to the collection in $obj6 (SchoolBuilding)
+                $obj6->addSchoolClass($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined User rows
+
+                $key7 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = UserPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
+
+                        $cls = UserPeer::getOMClass();
+
                     $obj7 = new $cls();
                     $obj7->hydrate($row, $startcol7);
-                    SchoolBuildingPeer::addInstanceToPool($obj7, $key7);
+                    UserPeer::addInstanceToPool($obj7, $key7);
                 } // if $obj7 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj7 (SchoolBuilding)
-                $obj7->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj7 (User)
+                $obj7->addSchoolClassRelatedByCreatedBy($obj1);
 
             } // if joined row is not null
 
@@ -4048,26 +3457,7 @@ abstract class BaseSchoolClassPeer
                 } // if $obj8 already loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj8 (User)
-                $obj8->addSchoolClassRelatedByCreatedBy($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined User rows
-
-                $key9 = UserPeer::getPrimaryKeyHashFromRow($row, $startcol9);
-                if ($key9 !== null) {
-                    $obj9 = UserPeer::getInstanceFromPool($key9);
-                    if (!$obj9) {
-
-                        $cls = UserPeer::getOMClass();
-
-                    $obj9 = new $cls();
-                    $obj9->hydrate($row, $startcol9);
-                    UserPeer::addInstanceToPool($obj9, $key9);
-                } // if $obj9 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj9 (User)
-                $obj9->addSchoolClassRelatedByUpdatedBy($obj1);
+                $obj8->addSchoolClassRelatedByUpdatedBy($obj1);
 
             } // if joined row is not null
 
@@ -4109,26 +3499,21 @@ abstract class BaseSchoolClassPeer
         SubjectPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + SubjectPeer::NUM_HYDRATE_COLUMNS;
 
-        ClassTypePeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + ClassTypePeer::NUM_HYDRATE_COLUMNS;
+        DocumentPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
         DocumentPeer::addSelectColumns($criteria);
         $startcol6 = $startcol5 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
-        DocumentPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + DocumentPeer::NUM_HYDRATE_COLUMNS;
-
         SchoolBuildingPeer::addSelectColumns($criteria);
-        $startcol8 = $startcol7 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
 
         SchoolPeer::addSelectColumns($criteria);
-        $startcol9 = $startcol8 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+        $startcol8 = $startcol7 + SchoolPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(SchoolClassPeer::CLASS_PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
 
@@ -4194,22 +3579,22 @@ abstract class BaseSchoolClassPeer
 
             } // if joined row is not null
 
-                // Add objects for joined ClassType rows
+                // Add objects for joined Document rows
 
-                $key4 = ClassTypePeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                $key4 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol4);
                 if ($key4 !== null) {
-                    $obj4 = ClassTypePeer::getInstanceFromPool($key4);
+                    $obj4 = DocumentPeer::getInstanceFromPool($key4);
                     if (!$obj4) {
 
-                        $cls = ClassTypePeer::getOMClass();
+                        $cls = DocumentPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    ClassTypePeer::addInstanceToPool($obj4, $key4);
+                    DocumentPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj4 (ClassType)
-                $obj4->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj4 (Document)
+                $obj4->addSchoolClassRelatedByClassScheduleId($obj1);
 
             } // if joined row is not null
 
@@ -4228,64 +3613,45 @@ abstract class BaseSchoolClassPeer
                 } // if $obj5 already loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj5 (Document)
-                $obj5->addSchoolClassRelatedByClassScheduleId($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Document rows
-
-                $key6 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-                if ($key6 !== null) {
-                    $obj6 = DocumentPeer::getInstanceFromPool($key6);
-                    if (!$obj6) {
-
-                        $cls = DocumentPeer::getOMClass();
-
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    DocumentPeer::addInstanceToPool($obj6, $key6);
-                } // if $obj6 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj6 (Document)
-                $obj6->addSchoolClassRelatedByWeekScheduleId($obj1);
+                $obj5->addSchoolClassRelatedByWeekScheduleId($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined SchoolBuilding rows
 
-                $key7 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-                if ($key7 !== null) {
-                    $obj7 = SchoolBuildingPeer::getInstanceFromPool($key7);
-                    if (!$obj7) {
+                $key6 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SchoolBuildingPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
 
                         $cls = SchoolBuildingPeer::getOMClass();
 
-                    $obj7 = new $cls();
-                    $obj7->hydrate($row, $startcol7);
-                    SchoolBuildingPeer::addInstanceToPool($obj7, $key7);
-                } // if $obj7 already loaded
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SchoolBuildingPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj7 (SchoolBuilding)
-                $obj7->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj6 (SchoolBuilding)
+                $obj6->addSchoolClass($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined School rows
 
-                $key8 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol8);
-                if ($key8 !== null) {
-                    $obj8 = SchoolPeer::getInstanceFromPool($key8);
-                    if (!$obj8) {
+                $key7 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = SchoolPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
 
                         $cls = SchoolPeer::getOMClass();
 
-                    $obj8 = new $cls();
-                    $obj8->hydrate($row, $startcol8);
-                    SchoolPeer::addInstanceToPool($obj8, $key8);
-                } // if $obj8 already loaded
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    SchoolPeer::addInstanceToPool($obj7, $key7);
+                } // if $obj7 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj8 (School)
-                $obj8->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj7 (School)
+                $obj7->addSchoolClass($obj1);
 
             } // if joined row is not null
 
@@ -4327,26 +3693,21 @@ abstract class BaseSchoolClassPeer
         SubjectPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + SubjectPeer::NUM_HYDRATE_COLUMNS;
 
-        ClassTypePeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + ClassTypePeer::NUM_HYDRATE_COLUMNS;
+        DocumentPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
         DocumentPeer::addSelectColumns($criteria);
         $startcol6 = $startcol5 + DocumentPeer::NUM_HYDRATE_COLUMNS;
 
-        DocumentPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + DocumentPeer::NUM_HYDRATE_COLUMNS;
-
         SchoolBuildingPeer::addSelectColumns($criteria);
-        $startcol8 = $startcol7 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + SchoolBuildingPeer::NUM_HYDRATE_COLUMNS;
 
         SchoolPeer::addSelectColumns($criteria);
-        $startcol9 = $startcol8 + SchoolPeer::NUM_HYDRATE_COLUMNS;
+        $startcol8 = $startcol7 + SchoolPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(SchoolClassPeer::CLASS_PORTRAIT_ID, DocumentPeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::SUBJECT_ID, SubjectPeer::ID, $join_behavior);
-
-        $criteria->addJoin(SchoolClassPeer::CLASS_TYPE_ID, ClassTypePeer::ID, $join_behavior);
 
         $criteria->addJoin(SchoolClassPeer::CLASS_SCHEDULE_ID, DocumentPeer::ID, $join_behavior);
 
@@ -4412,22 +3773,22 @@ abstract class BaseSchoolClassPeer
 
             } // if joined row is not null
 
-                // Add objects for joined ClassType rows
+                // Add objects for joined Document rows
 
-                $key4 = ClassTypePeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                $key4 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol4);
                 if ($key4 !== null) {
-                    $obj4 = ClassTypePeer::getInstanceFromPool($key4);
+                    $obj4 = DocumentPeer::getInstanceFromPool($key4);
                     if (!$obj4) {
 
-                        $cls = ClassTypePeer::getOMClass();
+                        $cls = DocumentPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    ClassTypePeer::addInstanceToPool($obj4, $key4);
+                    DocumentPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj4 (ClassType)
-                $obj4->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj4 (Document)
+                $obj4->addSchoolClassRelatedByClassScheduleId($obj1);
 
             } // if joined row is not null
 
@@ -4446,64 +3807,45 @@ abstract class BaseSchoolClassPeer
                 } // if $obj5 already loaded
 
                 // Add the $obj1 (SchoolClass) to the collection in $obj5 (Document)
-                $obj5->addSchoolClassRelatedByClassScheduleId($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Document rows
-
-                $key6 = DocumentPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-                if ($key6 !== null) {
-                    $obj6 = DocumentPeer::getInstanceFromPool($key6);
-                    if (!$obj6) {
-
-                        $cls = DocumentPeer::getOMClass();
-
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    DocumentPeer::addInstanceToPool($obj6, $key6);
-                } // if $obj6 already loaded
-
-                // Add the $obj1 (SchoolClass) to the collection in $obj6 (Document)
-                $obj6->addSchoolClassRelatedByWeekScheduleId($obj1);
+                $obj5->addSchoolClassRelatedByWeekScheduleId($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined SchoolBuilding rows
 
-                $key7 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-                if ($key7 !== null) {
-                    $obj7 = SchoolBuildingPeer::getInstanceFromPool($key7);
-                    if (!$obj7) {
+                $key6 = SchoolBuildingPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SchoolBuildingPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
 
                         $cls = SchoolBuildingPeer::getOMClass();
 
-                    $obj7 = new $cls();
-                    $obj7->hydrate($row, $startcol7);
-                    SchoolBuildingPeer::addInstanceToPool($obj7, $key7);
-                } // if $obj7 already loaded
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SchoolBuildingPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj7 (SchoolBuilding)
-                $obj7->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj6 (SchoolBuilding)
+                $obj6->addSchoolClass($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined School rows
 
-                $key8 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol8);
-                if ($key8 !== null) {
-                    $obj8 = SchoolPeer::getInstanceFromPool($key8);
-                    if (!$obj8) {
+                $key7 = SchoolPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = SchoolPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
 
                         $cls = SchoolPeer::getOMClass();
 
-                    $obj8 = new $cls();
-                    $obj8->hydrate($row, $startcol8);
-                    SchoolPeer::addInstanceToPool($obj8, $key8);
-                } // if $obj8 already loaded
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    SchoolPeer::addInstanceToPool($obj7, $key7);
+                } // if $obj7 already loaded
 
-                // Add the $obj1 (SchoolClass) to the collection in $obj8 (School)
-                $obj8->addSchoolClass($obj1);
+                // Add the $obj1 (SchoolClass) to the collection in $obj7 (School)
+                $obj7->addSchoolClass($obj1);
 
             } // if joined row is not null
 

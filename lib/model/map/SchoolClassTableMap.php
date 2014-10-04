@@ -50,7 +50,7 @@ class SchoolClassTableMap extends TableMap
         $this->addColumn('student_count', 'StudentCount', 'TINYINT', false, null, null);
         $this->addForeignKey('class_portrait_id', 'ClassPortraitId', 'INTEGER', 'documents', 'id', false, null, null);
         $this->addForeignKey('subject_id', 'SubjectId', 'INTEGER', 'subjects', 'id', false, null, null);
-        $this->addForeignKey('class_type_id', 'ClassTypeId', 'TINYINT', 'class_types', 'id', false, null, null);
+        $this->addColumn('class_type', 'ClassType', 'VARCHAR', false, 80, null);
         $this->addForeignKey('class_schedule_id', 'ClassScheduleId', 'INTEGER', 'documents', 'id', false, null, null);
         $this->addForeignKey('week_schedule_id', 'WeekScheduleId', 'INTEGER', 'documents', 'id', false, null, null);
         $this->addForeignKey('school_building_id', 'SchoolBuildingId', 'INTEGER', 'school_buildings', 'id', false, null, null);
@@ -69,7 +69,6 @@ class SchoolClassTableMap extends TableMap
     {
         $this->addRelation('DocumentRelatedByClassPortraitId', 'Document', RelationMap::MANY_TO_ONE, array('class_portrait_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('Subject', 'Subject', RelationMap::MANY_TO_ONE, array('subject_id' => 'id', ), 'SET NULL', null);
-        $this->addRelation('ClassType', 'ClassType', RelationMap::MANY_TO_ONE, array('class_type_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('DocumentRelatedByClassScheduleId', 'Document', RelationMap::MANY_TO_ONE, array('class_schedule_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('DocumentRelatedByWeekScheduleId', 'Document', RelationMap::MANY_TO_ONE, array('week_schedule_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('SchoolBuilding', 'SchoolBuilding', RelationMap::MANY_TO_ONE, array('school_building_id' => 'id', ), 'SET NULL', null);

@@ -15,16 +15,20 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 		return $this->distinct();
 	}
 
+	/**
+	* @todo should be reconsidered
+	*				School classes should only be synced according to "white lists" and displayed if they have students
+	*/
 	public function includeClassTypesIfConfigured() {
 		$mIncludeClassTypes = Settings::getSetting("school_settings", 'include_class_types', null);
 		if($mIncludeClassTypes !== null) {
 			$mIncludeClassTypes = is_array($mIncludeClassTypes) ? $mIncludeClassTypes : array($mIncludeClassTypes);
-			$this->filterByClassTypeId($mIncludeClassTypes, Criteria::IN);
+			$this->filterByClassType($mIncludeClassTypes, Criteria::IN);
 		}
 		return $this;
 	}
 
-	public function filterByClassTypeIdYearAndSchool($iClassTypeId = null, $iYear = null, $oSchool = null) {
+	public function filterByClassTypeYearAndSchool($sClassType = null, $iYear = null, $oSchool = null) {
 		if($oSchool === null) $oSchool = SchoolPeer::getSchool();
 		if($oSchool === null) {
 			throw new Exception(__METHOD__.' valid school object required. Please check configuration or Sync');
@@ -33,8 +37,8 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 		// Limiting the result by $this->filterBySchool($oSchool)->distinct() can't be used since some schools operate with multiple school_ids
 		// Should be no problem since generally only the data are synced that are related to preconfigured school_ids
 		$this->orderByName()->includeClassTypesIfConfigured()->filterByYear($iYear);
-		if($iClassTypeId) {
-			$this->filterByClassTypeId($iClassTypeId);
+		if($sClassType) {
+			$this->filterByClassType($sClassType);
 		}
 		$this->groupByUnitName()->joinClassStudent();
 		return $this;

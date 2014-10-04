@@ -5,7 +5,6 @@
  */
 class SchoolClass extends BaseSchoolClass {
 
-	public static $CLASS_TYPES = array();
 	private static $CLASS_PAGE;
 
 	const CLASS_EVENTS_IDENTIFIER = 'events';
@@ -33,22 +32,15 @@ class SchoolClass extends BaseSchoolClass {
 		return implode(', ', $aResult);
 	}
 
+	/**
+	* @deprecated use string getClassType()
+	*/
 	public function getClassTypeName() {
-		if($this->getClassTypeId() === null) {
-			return null;
-		}
-		if(!isset(self::$CLASS_TYPES[$this->getClassTypeId()])) {
-			self::$CLASS_TYPES[$this->getClassTypeId()] = $this->getClassType();
-		}
-		if(self::$CLASS_TYPES[$this->getClassTypeId()] instanceof ClassType) {
-			return self::$CLASS_TYPES[$this->getClassTypeId()]->getName();
-		}
-		return null;
+		return $this->getClassType();
 	}
 
 	public function getFullClassName() {
-		$sClassName = $this->getClassTypeName() ? $this->getClassTypeName(). ' ' : '';
-		return $sClassName.$this->getUnitName();
+		return $this->getClassType().' '.$this->getUnitName();
 	}
 
 	public function getHasClassPortrait() {
