@@ -6,12 +6,12 @@ class ClassesInputWidgetModule extends WidgetModule {
 
   public function listClasses($bWithStudentsOnly = false) {
 		$aResult = array();
-		$oQuery = SchoolClassQuery::create()->joinClassType(null, Criteria::INNER_JOIN)->orderByName();
+		$oQuery = SchoolClassQuery::create()->orderByName();
 		if($bWithStudentsOnly) {
 			$oQuery->filterByHasStudents();
 		}
-		foreach($oQuery->select(array('Id', 'Name', 'ClassType.Name'))->find() as $i => $aClass) {
-			$aResult[] = array('key' => $aClass['Id'], 'value' => $aClass['ClassType.Name']. ' '. $aClass['Name']);
+		foreach($oQuery->select(array('Id', 'Name', 'ClassType'))->find() as $i => $aClass) {
+			$aResult[] = array('key' => $aClass['Id'], 'value' => $aClass['ClassType']. ' '. $aClass['Name']);
 		}
 		return $aResult;
 	}

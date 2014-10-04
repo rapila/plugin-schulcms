@@ -189,7 +189,7 @@ Widget.types.class_detail = {
 			this.class_schedule_id = class_data.ClassScheduleId;
 			this.week_schedule_id = class_data.WeekScheduleId;
 
-			this.detail_widget.set_title(this.detail_widget.settings.title = class_data.ClassTypeName+' '+class_data.Name);
+			this.detail_widget.set_title(this.detail_widget.settings.title = class_data.ClassType+' '+class_data.Name);
 
 			this.detail_widget.enable();
 			this.reload_active_panel_content(this._element.accordion("option", "active"));
@@ -355,7 +355,7 @@ Widget.types.class_detail = {
 
 	settings: {
 		detail_widget: {
-			title: "{{writeString=create}}",
+			title: "{{writeString=school_class.create}}",
 			width: 700
 		},
 		accordion_active: 0

@@ -82,7 +82,6 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 			return array();
 		}
 		$aResult = $oSchoolClass->toArray(BasePeer::TYPE_PHPNAME, false);
-		$aResult['ClassTypeName'] = $oSchoolClass->getClassType()->getName();
 		$aResult['ClassTeacher'] = $oSchoolClass->getClassTeacherNames();
 		$aResult['YearPeriod'] = $oSchoolClass->getYearPeriod();
 		$aResult['NewsCountInfo'] = $this->getNewsCountInfo($oSchoolClass);
