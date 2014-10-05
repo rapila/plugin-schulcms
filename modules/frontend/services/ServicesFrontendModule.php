@@ -10,10 +10,8 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 	public $aServiceCategoryIds;
 	public $iExcludeInternalCategoryId;
 
-	const DETAIL_IDENTIFIER = 'id';
 	const MODE_SELECT_KEY = 'display_mode';
 	const SERVICE_CATEGORY_IDS = "service_category_id";
-	const SERVICE_ID = "service_id";
 
 	public function __construct($oLanguageObject = null, $aPath = null, $iId = 1) {
 		$this->iExcludeInternalCategoryId = Settings::getSetting("school_settings", 'internally_used_service_category', null);
