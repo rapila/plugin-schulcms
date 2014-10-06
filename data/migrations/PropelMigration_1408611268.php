@@ -120,7 +120,7 @@ CREATE TABLE `notes`
     INDEX `notes_FI_4` (`updated_by`)
 ) ENGINE=MyISAM;
 
-UPDATE `objects` SET `object_type` = `notes` WHERE `object_type` = "news";
+UPDATE `objects` SET `object_type` = "notes" WHERE `object_type` = "news";
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
