@@ -312,7 +312,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		// Add service link if event is related to service
 		if(self::$EVENT->getServiceId() !== null) {
 			if($oService = self::$EVENT->getService()) {
-				$oTemplate->replaceIdentifier('service_link', TagWriter::quickTag('a', array('href' => LinkUtil::link($oService->getServiceLink()) , 'class' => 'event_service_link', 'title' => StringPeer::getString('wns.link.to_service_detail')), $oService->getName()));
+				$oTemplate->replaceIdentifier('service_link', TagWriter::quickTag('a', array('href' => LinkUtil::link($oService->getLink()) , 'class' => 'event_service_link', 'title' => StringPeer::getString('wns.link.to_service_detail')), $oService->getName()));
 			}
 		}
 

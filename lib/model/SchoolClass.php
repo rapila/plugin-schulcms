@@ -59,9 +59,9 @@ class SchoolClass extends BaseSchoolClass {
 		return SchoolPeer::getPeriodFromYear($this->getYear());
 	}
 
-	public function getClassLink($oClassesPage = null) {
+	public function getLink($oClassesPage = null) {
 		if($oClassesPage === null && self::$CLASS_PAGE === null) {
-			self::$CLASS_PAGE = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_CLASSES));
+			self::$CLASS_PAGE = PageQuery::create()->filterByPageType('classes')->findOne();
 		} else {
 			self::$CLASS_PAGE = $oClassesPage;
 		}

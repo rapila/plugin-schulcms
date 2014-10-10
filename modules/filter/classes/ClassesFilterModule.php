@@ -66,7 +66,7 @@ class ClassesFilterModule extends FilterModule {
 		if($bIsAllowed) {
 			return;
 		}
-		if($oOnObject->getLinkCategoryId() !== SchoolPeer::getLinkCategoryConfig('school_class_links')) {
+		if($oOnObject->getLinkCategoryId() !== SchoolSiteConfig::getClassLinkCategoryId()) {
 			return;
 		}
 

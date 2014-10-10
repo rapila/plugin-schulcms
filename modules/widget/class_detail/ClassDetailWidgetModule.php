@@ -12,48 +12,14 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 
 	public function __construct($sWidgetId) {
 		parent::__construct($sWidgetId);
-    // config section 'school_settings'
-		$iClassPortraitCategoryId = SchoolPeer::getDocumentCategoryConfig('school_class_portraits');
-		if(DocumentCategoryQuery::create()->findPk($iClassPortraitCategoryId) === null) {
-			throw new Exception('Config error: school_settings > externally_managed_document_categories > school_class_portraits');
-		}
-		$this->setSetting('class_portrait_category_id', $iClassPortraitCategoryId);
 
-		$iClassScheduleCategoryId = SchoolPeer::getDocumentCategoryConfig('school_class_schedules');
-		if(DocumentCategoryQuery::create()->findPk($iClassScheduleCategoryId) === null) {
-			throw new Exception('Config error: school_settings > externally_managed_document_categories > school_class_schedules');
-		}
-		$this->setSetting('class_schedule_category_id', $iClassScheduleCategoryId);
-
-		$iClassWeekplanCategory = SchoolPeer::getDocumentCategoryConfig('school_class_weekplans');
-		if(DocumentCategoryQuery::create()->findPk($iClassWeekplanCategory) === null) {
-			throw new Exception('Config error: school_settings > externally_managed_document_categories > school_class_weekplans');
-		}
-		$this->setSetting('week_plan_category_id', $iClassWeekplanCategory);
-
-		$iClassLinkCategoryId = SchoolPeer::getLinkCategoryConfig('school_class_links');
-		if(LinkCategoryQuery::create()->findPk($iClassLinkCategoryId) === null) {
-			throw new Exception('Config error: school_settings > externally_managed_link_categories > school_class_links');
-		}
-		$this->setSetting('class_link_category_id', $iClassLinkCategoryId);
-
-		$iClassEventTypeId = Settings::getSetting('school_settings', 'class_default_event_type_id', 1);
-		if(EventTypeQuery::create()->findPk($iClassEventTypeId) === null) {
-			throw new Exception('Config error: school_settings > class_default_event_type_id');
-		}
-		$this->setSetting('class_event_type_id', $iClassEventTypeId);
-
-		$iClassDocumentCategoryId = SchoolPeer::getDocumentCategoryConfig('school_class_documents');
-		if(DocumentCategoryQuery::create()->findPk($iClassDocumentCategoryId) === null) {
-			throw new Exception('Config error: school_settings > externally_managed_document_categories > school_class_documents');
-		}
-		$this->setSetting('class_document_category_id', $iClassDocumentCategoryId);
-
-		$iClassNewsTypeId = SchoolPeer::getNewsTypeConfig('school_class_news_type_id');
-		if(NewsTypeQuery::create()->findPk($iClassNewsTypeId) === null) {
-			throw new Exception('Config error: school_settings > externally_managed_news_types > school_class_news_type_id');
-		}
-		$this->setSetting('class_news_type_id', $iClassNewsTypeId);
+		// Set externally managed categories or types to save related data
+		$this->setSetting('class_portrait_category_id', SchoolSiteConfig::getClassPortraitDocumentCategoryId());
+		$this->setSetting('class_schedule_category_id', SchoolSiteConfig::getClassScheduleDocumentCategoryId());
+		$this->setSetting('class_document_category_id', SchoolSiteConfig::getClassDocumentCategoryId());
+		$this->setSetting('class_link_category_id', SchoolSiteConfig::getClassLinkCategoryId());
+		$this->setSetting('class_event_type_id', SchoolSiteConfig::getClassEventTypeId());
+		$this->setSetting('class_news_type_id', SchoolSiteConfig::getClassNewsTypeId());
 
 		$this->oNewsListWidget = new ClassNewsListWidgetModule();
 		$this->setSetting('news_list_session', $this->oNewsListWidget->getSessionKey());
@@ -66,6 +32,12 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 
 		$this->oDocumentListWidget = new ClassDocumentListWidgetModule();
 		$this->setSetting('document_list_session', $this->oDocumentListWidget->getSessionKey());
+	}
+
+	private function createDocumentCategory($sDocumentCategory) {
+		$oDocumentCategory = new DocumentCategory();
+		$oDocumentCategory->setName($sDocumentCategory)->setIsExternallyManaged(true)->save();
+		return $oDocumentCategory->getId();
 	}
 
 	public function setSchoolClassId($iSchoolClassId) {
@@ -89,7 +61,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['CountStudents'] = $oSchoolClass->countStudentsByUnitName();
 		$aResult['CountDocuments'] = $oSchoolClass->countClassDocuments();
 		$aResult['CountLinks'] = $oSchoolClass->countClassLinks();
-		$aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getClassLink(), 'FrontendManager');
+		$aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getLink(), 'FrontendManager');
 		return $aResult;
 	}
 

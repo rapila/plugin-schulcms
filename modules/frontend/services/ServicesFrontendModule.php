@@ -53,7 +53,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		foreach($aServices as $oService) {
 			$oItemTemplate = $this->constructTemplate('list_item');
 			$oItemTemplate->replaceIdentifier('oddeven', $sOddEven = $sOddEven === 'even' ? 'odd' : 'even');
-			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oService->getServiceLink($oPage)));
+			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oService->getLink($oPage)));
 			$oItemTemplate->replaceIdentifier('detail_link_text', $oService->getName());
 			$oItemTemplate->replaceIdentifier('detail_link_title', 'Details von '.$oService->getName());
 			$oItemTemplate->replaceIdentifier('phone', $oService->getPhone());
@@ -152,7 +152,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		}
 		if(self::$SERVICE !== null) {
 			$oTemplate = $this->constructTemplate('teaser_aktuell_detail');
-			$oTemplate->replaceIdentifier('detail_link', LinkUtil::link(self::$SERVICE->getServiceLink()));
+			$oTemplate->replaceIdentifier('detail_link', LinkUtil::link(self::$SERVICE->getLink()));
 			$oTemplate->replaceIdentifier('name', self::$SERVICE->getName());
 			$oTemplate->replaceIdentifier('teaser', self::$SERVICE->getTeaser());
 			$oTemplate->replaceIdentifier('goto_title', "mehr zu Details des Angebots ".self::$SERVICE->getName());
@@ -168,7 +168,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 		}
 		if(self::$SERVICE !== null) {
 			$oTemplate = $this->constructTemplate('short_intro');
-			$oTemplate->replaceIdentifier('detail_link', LinkUtil::link(self::$SERVICE->getServiceLink()));
+			$oTemplate->replaceIdentifier('detail_link', LinkUtil::link(self::$SERVICE->getLink()));
 			$oTemplate->replaceIdentifier('name', self::$SERVICE->getName());
 			$oTemplate->replaceIdentifier('body_short', self::renderResource(self::$SERVICE->getBodyShort()));
 			return $oTemplate;

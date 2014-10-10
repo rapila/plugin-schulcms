@@ -23,7 +23,7 @@ class ClassListOutput extends ClassOutput {
 		$oItemTemplate->replaceIdentifier('name', $oClass->getUnitName());
 		$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassType());
 		$oItemTemplate->replaceIdentifier('year', $oClass->getYearPeriod());
-		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getClassLink($this->oPage)));
+		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getLink($this->oPage)));
 		$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.class.view_detail').$oClass->getUnitName());
 		$oItemTemplate->replaceIdentifier('count_students', $oClass->countStudentsByUnitName());
 

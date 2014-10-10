@@ -128,7 +128,7 @@ Widget.types.class_detail = {
 				Widget.notifyUser(Widget.logSeverity.ALERT, 'Der Wochenplan muss eine Datei vom Typ «PDF» sein');
 				return false;
 			}
-			return {document_kind: 'application', document_id: _this.week_schedule_id, document_category_id: _this.settings.week_plan_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this), class_document_type: 'week_schedule'};
+			return {document_kind: 'application', document_id: _this.week_schedule_id, document_category_id: _this.settings.class_schedule_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this), class_document_type: 'week_schedule'};
 		}, true);
 
 		var week_schedule_id = null;

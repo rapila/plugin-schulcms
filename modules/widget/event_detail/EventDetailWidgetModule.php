@@ -10,11 +10,16 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 	public function __construct($sSessionKey = null) {
 		parent::__construct($sSessionKey);
 
-		// config section 'school_settings' :'externally_managed_document_categories'
-		$iEventDocumentCategory = SchoolPeer::getDocumentCategoryConfig('event_documents');
-		if(DocumentCategoryQuery::create()->filterById($iEventDocumentCategory)->count() === 0) {
-			throw new Exception('Config error: school_settings > externally_managed_document_categories > event_documents');
+		// Set / create document category for the event images to be saved in
+		$sEventDocumentCategory = Settings::getSetting('externally_managed_categories', 'event_images', "Event Images");
+		$iEventDocumentCategoryId = DocumentCategoryQuery::create()->select('Id')->findOneByName($sEventDocumentCategory);
+		if($iEventDocumentCategoryId === null) {
+			$oDocumentCategory = new DocumentCategory();
+			$oDocumentCategory->setName($sEventDocumentCategory)->setIsExternallyManaged(true)->save();
+			$iEventDocumentCategoryId = $oDocumentCategory->getId();
 		}
+		$this->setSetting('events_document_category_id', $iEventDocumentCategoryId);
+
 		$oRichtext = WidgetModule::getWidget('rich_text', null, null, 'events');
 		// in order to include event related css to richtext editor, connect the event related page by configuring the custom page propery "page identifier"
 		$oEventPage = PagePeer::getPageByIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS);
@@ -22,7 +27,6 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 			$oRichtext->setTemplate($oEventPage->getTemplate());
 		}
 		$this->setSetting('richtext_session', $oRichtext->getSessionKey());
-		$this->setSetting('events_document_category_id', $iEventDocumentCategory);
 	}
 
 	public function setEventId($iEventId) {

@@ -63,6 +63,29 @@ Test here
     $ rap migrate-model.sh -p schulcms
     $ rap generate-model.sh && rap clear-caches.sh
 
+Migrate ClassDetail, TeamMemberDetail and EventDetail related category / type configurations
+
+		$ (cd plugins/schulcms && git checkout "tobeadded")
+
+	Info: Change from abstact ids to readable names and create missing categories/types automatically.
+	IMPORTENT: In order to prevent broken code, change the following category/type names in the database
+						 before you instantiate the detail widgets in admin!
+	Change the names to the corresponding category/type name used in the new SchoolSiteConfig class
+		or configure the old names according to the pattern the settings are called in these config methods.
+
+  document_categories:
+    school_class_portraits: n
+    school_class_schedules: n
+    school_class_documents: n
+    event_documents: 105
+    team_member_portraits: 108
+
+  externally_managed_link_categories:
+    school_class_links: n
+
+  externally_managed_news_types:
+    school_class_news_type_id: n
+
 ## Further steps
 
 - Remove content objects if page_type is other than default any more (SchoolHome / PortalHome / Classes / Aktuell / FAQ etc.)

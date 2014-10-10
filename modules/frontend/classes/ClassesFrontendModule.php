@@ -48,7 +48,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 			$oItemTemplate->replaceIdentifier('name', $oClass->getUnitName());
 			$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassType());
 			$oItemTemplate->replaceIdentifier('year', $oClass->getYearPeriod());
-			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getClassLink($oPage)));
+			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getLink($oPage)));
 			$oItemTemplate->replaceIdentifier('detail_title', StringPeer::getString('wns.class.view_detail').$oClass->getUnitName());
 			if($oClass->getDocumentRelatedByClassScheduleId()) {
 				$oItemTemplate->replaceIdentifier('stundenplan', TagWriter::quickTag('a', array('href' => $oClass->getDocumentRelatedByClassScheduleId()->getDisplayUrl(), 'class' => "stundenplan", 'title' => StringPeer::getString('wns.download_stundenplan')), ' '));
