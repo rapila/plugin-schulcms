@@ -11,9 +11,6 @@ school_settings:
   # display recently added report or images to event
   event_is_recent_report_day_count: 120
 
-  # exclude "internally" used services and category from displaying
-  internally_used_service_category: null
-
   # display stundent names setting
   display_student_names: false
 
@@ -26,7 +23,6 @@ school_settings:
     school_class_weekplans: 103
     school_class_documents: 104
     event_documents: 105
-    service_documents: 107
     team_member_portraits: 108
 
   # registry for externally used links, are not displayed by default in admin module "links"
@@ -40,7 +36,6 @@ school_settings:
   page_identifiers:
     classes:  'classes'
     team:     'team'
-    services: 'services'
     events: 'events'
 
   # function_groups of functions displayed in team_member list [function_group_ids in sort order]
