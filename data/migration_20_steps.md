@@ -63,13 +63,15 @@ Test here
     $ rap migrate-model.sh -p schulcms
     $ rap generate-model.sh && rap clear-caches.sh
 
-Migrate ClassDetail, TeamMemberDetail and EventDetail related category / type configurations
+## Refactor configuration related code
 
-		$ (cd plugins/schulcms && git checkout "tobeadded")
+*Info: Change from abstact ids to readable names and create missing categories/types automatically.*
 
-	Info: Change from abstact ids to readable names and create missing categories/types automatically.
+		$ (cd plugins/schulcms && git checkout "6f0aa279a2bb4c01062aef8fb5d5834ed6eb9495")
+
 	IMPORTENT: In order to prevent broken code, change the following category/type names in the database
-						 before you instantiate the detail widgets in admin!
+						 before you instantiate the detail widgets in admin! this concerns ClassDetail, TeamMemberDetail
+						 ServiceDetail and EventDetail related category / type configurations
 	Change the names to the corresponding category/type name used in the new SchoolSiteConfig class
 		or configure the old names according to the pattern the settings are called in these config methods.
 
