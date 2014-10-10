@@ -2057,9 +2057,7 @@ abstract class BaseSubject extends BaseObject implements Persistent
 
     // denyable behavior
     public function mayOperate($sOperation, $oUser = false) {
-        if($oUser === false) {
-            $oUser = Session::getSession()->getUser();
-        }
+        $oUser = SubjectPeer::getRightsUser($oUser);
         $bIsAllowed = false;
         if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && SubjectPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
             $bIsAllowed = true;

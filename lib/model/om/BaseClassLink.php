@@ -1581,9 +1581,7 @@ abstract class BaseClassLink extends BaseObject implements Persistent
 
     // denyable behavior
     public function mayOperate($sOperation, $oUser = false) {
-        if($oUser === false) {
-            $oUser = Session::getSession()->getUser();
-        }
+        $oUser = ClassLinkPeer::getRightsUser($oUser);
         $bIsAllowed = false;
         if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && ClassLinkPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
             $bIsAllowed = true;

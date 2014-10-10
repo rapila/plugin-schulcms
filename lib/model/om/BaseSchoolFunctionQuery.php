@@ -1101,6 +1101,12 @@ abstract class BaseSchoolFunctionQuery extends ModelCriteria
     {
         return $this->addAscendingOrderByColumn(SchoolFunctionPeer::CREATED_AT);
     }
+    public function findMostRecentUpdate() {
+        $oQuery = clone $this;
+        $sDate = $oQuery->lastUpdatedFirst()->select("UpdatedAt")->findOne();
+        return new DateTime($sDate);
+    }
+
     // extended_keyable behavior
 
     public function filterByPKArray($pkArray) {

@@ -1728,9 +1728,7 @@ abstract class BaseClassStudent extends BaseObject implements Persistent
 
     // denyable behavior
     public function mayOperate($sOperation, $oUser = false) {
-        if($oUser === false) {
-            $oUser = Session::getSession()->getUser();
-        }
+        $oUser = ClassStudentPeer::getRightsUser($oUser);
         $bIsAllowed = false;
         if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && ClassStudentPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
             $bIsAllowed = true;

@@ -1637,9 +1637,7 @@ abstract class BaseSchoolClassSubjectClasses extends BaseObject implements Persi
 
     // denyable behavior
     public function mayOperate($sOperation, $oUser = false) {
-        if($oUser === false) {
-            $oUser = Session::getSession()->getUser();
-        }
+        $oUser = SchoolClassSubjectClassesPeer::getRightsUser($oUser);
         $bIsAllowed = false;
         if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && SchoolClassSubjectClassesPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
             $bIsAllowed = true;

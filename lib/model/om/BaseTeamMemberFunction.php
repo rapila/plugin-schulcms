@@ -1742,9 +1742,7 @@ abstract class BaseTeamMemberFunction extends BaseObject implements Persistent
 
     // denyable behavior
     public function mayOperate($sOperation, $oUser = false) {
-        if($oUser === false) {
-            $oUser = Session::getSession()->getUser();
-        }
+        $oUser = TeamMemberFunctionPeer::getRightsUser($oUser);
         $bIsAllowed = false;
         if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && TeamMemberFunctionPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
             $bIsAllowed = true;

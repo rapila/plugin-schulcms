@@ -5651,9 +5651,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
 
     // denyable behavior
     public function mayOperate($sOperation, $oUser = false) {
-        if($oUser === false) {
-            $oUser = Session::getSession()->getUser();
-        }
+        $oUser = SchoolClassPeer::getRightsUser($oUser);
         $bIsAllowed = false;
         if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && SchoolClassPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
             $bIsAllowed = true;

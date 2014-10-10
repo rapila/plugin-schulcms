@@ -1572,9 +1572,7 @@ abstract class BaseEventDocument extends BaseObject implements Persistent
 
     // denyable behavior
     public function mayOperate($sOperation, $oUser = false) {
-        if($oUser === false) {
-            $oUser = Session::getSession()->getUser();
-        }
+        $oUser = EventDocumentPeer::getRightsUser($oUser);
         $bIsAllowed = false;
         if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && EventDocumentPeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
             $bIsAllowed = true;
