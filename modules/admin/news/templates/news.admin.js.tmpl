@@ -21,7 +21,6 @@ jQuery(function() {
 		info_bar.add_button('add-new-item', function() {
 			Widget.create('news_detail', function(widget) {
 				widget.settings.initial_type_id = sidebar.active_row().data('news_type_id');
-				widget._element.find("select[name='news_type_id']").val(content_list.getOption('news_type_id'));
 				widget.open();
 				widget.save_callback = function() {
 					content_list.reload();

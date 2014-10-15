@@ -18,7 +18,7 @@ Widget.types['news_detail'] = {
 		if(!this.news_type_is_predefined()) {
 			this.news_type_dropdown = this._element.find("select[name='news_type_id']");
 			this.news_type_dropdown.prepareWidget(function(widget) {
-				widget.settings.initial_selection = _this.settings.initial_type_id || '';
+				widget.settings.initial_selection = _this.settings.initial_type_id;
 			}, jQuery.noop);
 		} else {
 			this._element.find('div.news_type_elements').hide();
