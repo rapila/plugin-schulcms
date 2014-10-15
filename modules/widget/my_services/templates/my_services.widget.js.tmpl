@@ -6,7 +6,7 @@ Widget.types.my_services = {
 		this.settings.row_prototype = Widget.parseHTML("{{includeTemplate=service_item}}", false, 'tbody');
 		this.reload_list();
 	},
-	
+
 	reload_list: function() {
 		var _this = this;
 		this.list.empty();
@@ -18,7 +18,6 @@ Widget.types.my_services = {
 				var row = _this.settings.row_prototype.clone();
 				row.find('.name').text(row_data.Name);
 				row.find('.category').text(row_data.Category);
-				row.find('.has_logo div').addClass(row_data.HasLogo ? 'ui-icon ui-icon-image' : '' );
 				_this.fill_count(row_data.CountDocuments, 'Dokumente', row.find('.count_documents'));
 				_this.fill_count(row_data.CountMembers, 'Teammitglieder', row.find('.count_members'));
 				row.find('.preview a').attr('href', row_data.ServiceLink).click(function(event) {
@@ -38,7 +37,7 @@ Widget.types.my_services = {
 			});
 		});
 	},
-	
+
 	fill_count: function(number, name, element) {
 		if(number === 0) {
 			element.addClass('no-entry');

@@ -26,7 +26,6 @@ class MyServicesWidgetModule extends PersistentWidgetModule {
 			$aServiceInfo['Name'] = $oService->getName();
 			$aServiceInfo['CountDocuments']	= $oService->countServiceDocuments();
 			$aServiceInfo['CountMembers']	= $oService->countServiceMembers();
-			$aServiceInfo['HasLogo'] = $oService->getLogoId() != null;
 			$aServiceInfo['Category']	= $oService->getServiceCategory()->getName();
 			$aServiceInfo['ServiceLink'] = LinkUtil::link($oService->getLink($oServicesPage), 'FrontendManager');
 			$aResult[] = $aServiceInfo;
