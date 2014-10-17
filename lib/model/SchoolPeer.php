@@ -18,7 +18,7 @@ class SchoolPeer extends BaseSchoolPeer {
 
 	public static function getPageIdentifier($sKey) {
 		if(!is_array(self::$PAGE_IDENTIFIERS)) {
-			self::$PAGE_IDENTIFIERS = Settings::getSetting('school_settings', 'page_identifiers', array());
+			self::$PAGE_IDENTIFIERS = Settings::getSetting('schulcms', 'page_identifiers', array());
 		}
 		if(isset(self::$PAGE_IDENTIFIERS[$sKey])) {
 			return self::$PAGE_IDENTIFIERS[$sKey];
@@ -28,7 +28,7 @@ class SchoolPeer extends BaseSchoolPeer {
 
 	public static function getActiveFunctionGroupIds($sKey) {
 		if(!is_array(self::$ACTIVE_FUNCTION_GROUPS)) {
-			self::$ACTIVE_FUNCTION_GROUPS = Settings::getSetting('school_settings', 'active_function_groups', array());
+			self::$ACTIVE_FUNCTION_GROUPS = Settings::getSetting('schulcms', 'active_function_groups', array());
 		}
 		if(isset(self::$ACTIVE_FUNCTION_GROUPS[$sKey])) {
 			return self::$ACTIVE_FUNCTION_GROUPS[$sKey];
@@ -50,10 +50,10 @@ class SchoolPeer extends BaseSchoolPeer {
 	}
 
 	public static function getSchoolId() {
-		$iSchoolId = Settings::getSetting("school_settings", 'main_school_id', null);
+		$iSchoolId = Settings::getSetting("schulcms", 'main_school_id', null);
 		if($iSchoolId) {
 			return $iSchoolId;
 		}
-		throw new LocalizedException('configuration.error.school_id_required', array('config_file_path' => 'site/config/config.yml > school_settings'));
+		throw new LocalizedException('configuration.error.school_id_required', array('config_file_path' => 'site/config/config.yml > schulcms'));
 	}
 }

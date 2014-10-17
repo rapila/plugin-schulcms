@@ -14,7 +14,7 @@ class ServicesFrontendModule extends DynamicFrontendModule {
 	const SERVICE_CATEGORY_IDS = "service_category_id";
 
 	public function __construct($oLanguageObject = null, $aPath = null, $iId = 1) {
-		$this->iExcludeInternalCategoryId = Settings::getSetting("school_settings", 'internally_used_service_category', null);
+		$this->iExcludeInternalCategoryId = Settings::getSetting("schulcms", 'internally_used_service_category', null);
 		parent::__construct($oLanguageObject, $aPath, $iId);
 	}
 

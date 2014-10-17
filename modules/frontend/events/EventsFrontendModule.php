@@ -122,7 +122,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 
 	private function pastQuery($bLimitAge = false) {
 		if($bLimitAge) {
-			$sDate = date('Y-m-d', time() - (Settings::getSetting('school_settings', 'event_is_recent_report_day_count', 60) * 24 * 60 * 60));
+			$sDate = date('Y-m-d', time() - (Settings::getSetting('schulcms', 'event_is_recent_report_day_count', 60) * 24 * 60 * 60));
 			$oQuery = $this->baseQuery()->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
 			$oQuery->past($sDate);
 		}
@@ -353,7 +353,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 				$mDescription = null;
 				if($oEventDocument->getDocument()->getDescription() != null) {
 					$mDescription = $oEventDocument->getDocument()->getDescription();
-				} elseif(Settings::getSetting('school_settings', 'gallery_display_image_name', true)) {
+				} elseif(Settings::getSetting('schulcms', 'gallery_display_image_name', true)) {
 					$mDescription = $oEventDocument->getDocument()->getName();
 				}
   			$oDocumentTemplate->replaceIdentifier('description', $mDescription);

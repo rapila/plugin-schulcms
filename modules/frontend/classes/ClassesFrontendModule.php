@@ -40,7 +40,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		$oPage = FrontendManager::$CURRENT_PAGE;
 		$aClasses = SchoolClassQuery::create()->filterByClassTypeYearAndSchool($iClassTypeId)->find();
 		$oTemplate = $this->constructTemplate('list');
-		$bShowClassTeachersOnly = Settings::getSetting('school_settings', 'show_class_teachers_only_in_class_list', true);
+		$bShowClassTeachersOnly = Settings::getSetting('schulcms', 'show_class_teachers_only_in_class_list', true);
 		$oTemplate->replaceIdentifier('header_col_teachers', StringPeer::getString('wns.col_header_teachers.'.($bShowClassTeachersOnly ? 'class_teachers' : 'teachers')));
 		foreach($aClasses as $i => $oClass) {
 			$oItemTemplate = $this->constructTemplate('list_item');
@@ -116,7 +116,7 @@ class ClassesFrontendModule extends DynamicFrontendModule {
 		// students
 		$iCountStudents = $aClasses[0]->countStudentsByUnitName();
 		if($iCountStudents > 0) {
-			if(Settings::getSetting('school_settings', 'display_student_names', true)) {
+			if(Settings::getSetting('schulcms', 'display_student_names', true)) {
 				foreach($aClasses[0]->getStudentsByUnitName() as $i => $oClassStudent) {
 					$aStudents[] = $oClassStudent->getStudent()->getFirstName();
 				}

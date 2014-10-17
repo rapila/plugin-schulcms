@@ -20,7 +20,7 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 	*				School classes should only be synced according to "white lists" and displayed if they have students
 	*/
 	public function includeClassTypesIfConfigured() {
-		$mIncludeClassTypes = Settings::getSetting("school_settings", 'include_class_types', null);
+		$mIncludeClassTypes = Settings::getSetting("schulcms", 'include_class_types', null);
 		if($mIncludeClassTypes !== null) {
 			$mIncludeClassTypes = is_array($mIncludeClassTypes) ? $mIncludeClassTypes : array($mIncludeClassTypes);
 			$this->filterByClassType($mIncludeClassTypes, Criteria::IN);

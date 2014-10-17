@@ -2,7 +2,7 @@
 # if you want these documents and links "externally managed", ie not visible as a default behaviour in the links and documents module
 # create the respective categories and enter the ids here
 
-school_settings:
+schulcms:
   # school id for data synchronisation
   main_school_id: null
 
