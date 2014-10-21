@@ -41,9 +41,19 @@ Widget.types.my_classes = {
 				_this.fill_count(row_data.Links, 'Links', row.find('.links'));
 				row.dblclick(function(event) {
 					Widget.create('class_detail', function(widget) {
-						if(jQuery(event.target).hasClass('events') || jQuery(event.target).hasClass('links')) {
+						if(jQuery(event.target).hasClass('news')) {
 							widget.settings.accordion_active = 1;
 						}
+						if(jQuery(event.target).hasClass('events')) {
+							widget.settings.accordion_active = 2;
+						}
+						if(jQuery(event.target).hasClass('documents')) {
+							widget.settings.accordion_active = 3;
+						}
+						if(jQuery(event.target).hasClass('links')) {
+							widget.settings.accordion_active = 4;
+						}
+
 					}, function(widget) {
 						widget.setSchoolClassId(row_data.Id);
 						widget.fill_data();

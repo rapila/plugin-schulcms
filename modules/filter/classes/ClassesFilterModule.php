@@ -53,7 +53,6 @@ class ClassesFilterModule extends FilterModule {
 		// Link to the feed
 		$oHomeNavigationItem = $oNavigationItem;
 		while($oNavigationItem->getMode() !== 'home') {
-			ErrorHandler::log('nav item !home', $oHomeNavigationItem);
 			$oHomeNavigationItem = $oHomeNavigationItem->getParent();
 		}
 		$oFeedItem = $oHomeNavigationItem->namedChild('feed');
