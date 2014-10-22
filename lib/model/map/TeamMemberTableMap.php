@@ -70,6 +70,7 @@ class TeamMemberTableMap extends TableMap
         $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
         $this->addRelation('TeamMemberFunction', 'TeamMemberFunction', RelationMap::ONE_TO_MANY, array('id' => 'team_member_id', ), 'CASCADE', null, 'TeamMemberFunctions');
         $this->addRelation('ClassTeacher', 'ClassTeacher', RelationMap::ONE_TO_MANY, array('id' => 'team_member_id', ), 'CASCADE', null, 'ClassTeachers');
+        $this->addRelation('ServiceMember', 'ServiceMember', RelationMap::ONE_TO_MANY, array('id' => 'team_member_id', ), 'CASCADE', null, 'ServiceMembers');
     } // buildRelations()
 
     /**
