@@ -28,7 +28,7 @@ jQuery(function() {
 			});
 		}, 'n', true).add_button('add-new-item', function() {
 			Widget.create('sidebar_input', function(widget) {
-				widget.add_new_sidebar_input("{{writeString=wns.news_type.default_name}}", 'NewsType', sidebar, 'rapila-news_type_changed');
+				widget.add_new_sidebar_input("{{writeString=wns.news_type.default_name}}", 'NewsType', sidebar, 'schulcms-news_type_changed');
 			});
 		}).add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
 			if(content_list.setSearch(search)) {
