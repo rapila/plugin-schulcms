@@ -14,7 +14,7 @@ Widget.types.news_type_input = {
 			if(current) {
 				this._element.val(current);
 			} else {
-				this._element.val(_this.settings.initial_selection || '');
+				this._element.val(jQuery.isNumeric(_this.settings.initial_selection) ? _this.settings.initial_selection : '');
 			}
 		});
 	},
