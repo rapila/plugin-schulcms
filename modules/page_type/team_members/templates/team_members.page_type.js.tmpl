@@ -1,9 +1,36 @@
 Widget.types.page_type.types.team_members = {
+
 	handle_preview: function(page_id, page_type) {
 
 	},
 
 	handle_admin: function(page_id, container, page_type) {
+		this.form = Widget.parseHTML('{{includeTemplate=config}}');
+		this.container = container;
+		this.page_type = page_type;
+		this.container.append(this.form);
+
+		this.function_group_dropdown = this.form.find('select[name=function_group_ids\\[\\]]');
+		this.update_function_group_input();
+
+		this.page_type.methods.saveTeamMembersPageConfiguration(this.form.serializeArrayKV(), function(result, error) {
+			if(error) {
+			} else {
+				// _this.reload();
+			}
+		});
+	},
+
+	update_function_group_input: function() {
+		var _this = this;
+		var option = jQuery('<option/>');
+		this.page_type.methods.listFunctionGroups(function(function_groups) {
+			jQuery.each(function_groups, function(i, data) {
+				option.clone().text(data.value).attr('value', data.key).appendTo(_this.function_group_dropdown);
+			});
+			_this.function_group_dropdown.val(_this.page_type.methods.config());
+		});
 
 	}
+
 };

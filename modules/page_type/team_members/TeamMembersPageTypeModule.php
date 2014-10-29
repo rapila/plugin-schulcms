@@ -1,9 +1,11 @@
 <?php
 class TeamMembersPageTypeModule extends PageTypeModule {
-	private function $aFunctionGroupIds;
+	private $aFunctionGroupIds;
 
 	public function __construct(Page $oPage = null, NavigationItem $oNavigationItem = null) {
 		parent::__construct($oPage, $oNavigationItem);
+		$this->oClassPage = PageQuery::create()->active()->filterByPageType('classes')->findOne();
+		$this->aFunctionGroupIds = $this->oPage->getPagePropertyValue('team_members:function_group_ids', null);
 	}
 
 	public function display(Template $oTemplate, $bIsPreview = false) {
@@ -30,7 +32,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 					if($i > 0) {
 						$oItemTemplate->replaceIdentifierMultiple('school_class', ', ', null, Template::NO_NEWLINE);
 					}
-					$aLink = $oClassTeacher->getSchoolClass()->getClassLink($this->oClassPage);
+					$aLink = $oClassTeacher->getSchoolClass()->getLink($this->oClassPage);
 					$oItemTemplate->replaceIdentifierMultiple('school_class', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.class.link_title_prefix').$oClassTeacher->getSchoolClass()->getName(), 'href' => LinkUtil::link($aLink)), $oClassTeacher->getSchoolClass()->getName()), null, Template::NO_NEWLINE);
 				}
 			} else {
@@ -57,6 +59,16 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		return $oQuery;
 	}
 
+	public function listFunctionGroups() {
+		return WidgetJsonFileModule::jsonOrderedObject(FunctionGroupQuery::create()->orderByName()->select(array('Id', 'Name'))->find()->toKeyValue('Id', 'Name'));
+	}
 
+	public function saveTeamMembersPageConfiguration($aData) {
+		$this->aFunctionGroupIds = $aData['function_group_ids'];
+		$this->oPage->updatePageProperty('team_members:function_group_ids', $this->aFunctionGroupIds);
+	}
 
+	public function config() {
+		return $this->aFunctionGroupIds;
+	}
 }
