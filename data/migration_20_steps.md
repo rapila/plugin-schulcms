@@ -90,7 +90,7 @@ Test here
 
 ## Further steps
 
-- Remove content objects if page_type is other than default any more (SchoolHome / PortalHome / Classes / Aktuell / FAQ etc.)
+- migrate all deprecated default page_type with frontend modules content to use new TeamMembers / Classes / Aktuell / FAQ / SchoolHome / PortalHome page_types
 
 - Rename `container_name`s in `objects` (ContentObjects) to match new template’s container identifier if necessary
 
@@ -102,7 +102,12 @@ Test here
 
 - Move pages
 
-  * Change parent of Lehrpersonen from `root` to newly created `Über uns`
+  * Change parent of Lehrpersonen from `root` to newly created about-us `Über uns`
+
+- replace instances of TeamMember->getTeamMemberLink() by TeamMember->getLink()
+- replace instances of Class->getSchoolClassLink() by Class->getLink()
+
+- replace default pages with content objects of type of team_members by page_type team_members
 
 ## Create Example dumps for easy development of new sites
 

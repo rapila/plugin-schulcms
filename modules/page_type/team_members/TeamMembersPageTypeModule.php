@@ -40,7 +40,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			}
 
 			$oItemTemplate->replaceIdentifier('profession', $oTeamMember->getProfession());
-			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
+			$oListTemplate->replaceIdentifierMultiple('items', $oItemTemplate);
 		}
 		$oTemplate->replaceIdentifier('container', $oListTemplate, 'content');
 		$oTemplate->replaceIdentifier('container_filled_types', 'faqs', 'content');
