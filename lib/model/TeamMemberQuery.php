@@ -4,16 +4,16 @@
  * @package		 propel.generator.model
  */
 class TeamMemberQuery extends BaseTeamMemberQuery {
-	
+
 	private $oPrevCrit;
-		
+
 	public function orderByRand() {
 		return $this->addAscendingOrderByColumn(' RAND()');;
 	}
-	
+
 	public function filterByTeamMemberFunctionGroup($mFunctionGroup) {
 		$this->setDistinct();
-		
+
 		$this->addJoin(TeamMemberPeer::ID, TeamMemberFunctionPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
 		$this->addJoin(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID, SchoolFunctionPeer::ID, Criteria::INNER_JOIN);
 		if(is_array($mFunctionGroup)) {
@@ -28,10 +28,10 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		}
 		return $this;
 	}
-	
+
 	/**
 	* Excludes all team members that are not part of the configured active_function_groups
-	* they can be 
+	* they can be
 	* - team_members with classes
 	* - other team_members, any other function group s.a. admin, services, teacher without defined class relationships
 	*/
@@ -41,7 +41,7 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		$this->addJoin(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID, SchoolFunctionPeer::ID, Criteria::INNER_JOIN);
 		$this->addJoin(TeamMemberPeer::ID, ClassTeacherPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
 		$this->addJoin(ClassTeacherPeer::SCHOOL_CLASS_ID, SchoolClassPeer::ID, Criteria::LEFT_JOIN);
-		
+
 		// get team_members that require active classes
 		if(count(FunctionGroupPeer::getFunctionGroupIdsForTeamMembersWithClasses())) {
 			$oTeacherWithClassesCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeamMembersWithClasses(), Criteria::IN);
@@ -49,7 +49,7 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 			$oTeacherWithClassesCrit->addAnd($this->getNewCriterion(ClassTeacherPeer::TEAM_MEMBER_ID, null, self::ISNOTNULL));
 			$this->addToFunctionGroupCriterion($oTeacherWithClassesCrit);
 		}
-		
+
 		// get other team_members
 		if(count(FunctionGroupPeer::getFunctionGroupIdsForOtherTeamMembers())) {
 			$oOtherCrit = $this->getNewCriterion(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForOtherTeamMembers(), Criteria::IN);
@@ -61,7 +61,7 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		}
 		return $this;
 	}
-	
+
 	private function addToFunctionGroupCriterion(Criterion $oCriterion) {
 		if($this->oPrevCrit === null) {
 			$this->oPrevCrit = $oCriterion;
@@ -69,11 +69,11 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 			$this->oPrevCrit->addOr($oCriterion);
 		}
 	}
-	
+
 	public function filterByHasPortrait() {
 		return $this->filterByPortraitId(null, Criteria::ISNOTNULL);
 	}
-	
+
 	public function filterByFunctionId($iFunctionId = null) {
 		if($iFunctionId !== null) {
 			$this->joinTeamMemberFunction()->useQuery('TeamMemberFunction')->filterBySchoolFunctionId($iFunctionId)->endUse();
