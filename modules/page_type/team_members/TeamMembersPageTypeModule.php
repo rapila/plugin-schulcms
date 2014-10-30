@@ -60,18 +60,18 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			$oDetailTemplate->replaceIdentifier('profession', $this->oTeamMember->getProfession());
 		}
 		//Add is_class_teacher classes with links
-		$aSchoolClasses = $this->oTeamMember->getClassTeacherClasses(true);
-		if(count($aSchoolClasses) > 0) {
+		$aClassTeachers = $this->oTeamMember->getClassTeacherClasses(true);
+		if(count($aClassTeachers) > 0) {
 			$bIsClassTeacher = null;
-			foreach($aSchoolClasses as $oSchoolClass) {
-				if($oSchoolClass->getIsClassTeacher() !== $bIsClassTeacher) {
-					$bIsClassTeacher = $oSchoolClass->getIsClassTeacher();
-					if($oSchoolClass->getIsClassTeacher()) {
+			foreach($aClassTeachers as $oClassTeacher) {
+				if($oClassTeacher->getIsClassTeacher() !== $bIsClassTeacher) {
+					$bIsClassTeacher = $oClassTeacher->getIsClassTeacher();
+					if($oClassTeacher->getIsClassTeacher()) {
 						$oDetailTemplate->replaceIdentifier('class_teacher', $this->oTeamMember->getClassTeacherTitle(). ' von: ');
 					}
 				}
 				$oItemTemplate = $this->constructTemplate('class_item');
-				$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link($oSchoolClass->getLink())), $oSchoolClass->getSchoolClass()->getFullClassName()));
+				$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link($oClassTeacher->getSchoolClass()->getLink())), $oClassTeacher->getSchoolClass()->getFullClassName()));
 				$oDetailTemplate->replaceIdentifierMultiple('klassenlehrer_info', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
 			}
 		}
@@ -88,7 +88,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'content');
 	}
 
-	private static function listQuery($aFunctionGroupIds) {
+	public static function listQuery($aFunctionGroupIds) {
 		$oQuery = TeamMemberQuery::create()->excludeInactive();
 		if($aFunctionGroupIds !== null) {
 			$oQuery->filterByTeamMemberFunctionGroup($aFunctionGroupIds);

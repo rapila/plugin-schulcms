@@ -6,8 +6,9 @@ class TeamMembersFilterModule extends FilterModule {
 	public function onNavigationItemChildrenRequested($oNavigationItem) {
 		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getMe()->getPageType() === 'team_members') {
 			$oQuery = TeamMembersPageTypeModule::listQuery($oNavigationItem->getMe()->getPagePropertyValue('team_members:function_group_ids', null));
-			foreach($oQuery->select('Slug', 'FirstName', 'LastName')->find() as $aData) {
-				$oNavItem = new TeamMemberNavigationItem($sSlug, $aData['LastName'].', '.$aData['FirstName']);
+
+			foreach($oQuery->select(array('Slug', 'FirstName', 'LastName'))->find() as $aData) {
+				$oNavItem = new TeamMemberNavigationItem($aData['Slug'], $aData['LastName'].', '.$aData['FirstName']);
 				$oNavigationItem->addChild($oNavItem);
 			}
 		}
