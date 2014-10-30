@@ -7,11 +7,10 @@ Widget.types.class_news_list = {
 				detail.settings.predefined_school_class_id = widget.settings.predefined_school_class_id;
 			}
 		});
-
 		widget.handle('list-cell_click', function(event, rowIndex, col, row, cell) {
 			if(col.identifier === 'delete') {
-				var title = widget.cell_for_identifier('title', row).text();
-				var delete_message = AdminInterface.strings.get_string('wns.news.delete_warning', { news: title});
+				var headline = widget.cell_for_identifier('headline', row).text();
+				var delete_message = AdminInterface.strings.get_string('wns.news.delete_warning', { headline: headline});
 				Widget.confirm("{{writeString=wns.delete_warning_title}}", delete_message, function(confirmed) {
 					if(confirmed) {
 						this.delete_row(row);
