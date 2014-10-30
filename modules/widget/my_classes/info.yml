@@ -2,3 +2,4 @@ aspects:
   - dashboard
 allowed_roles: [team_members]
 tutorial_url: "http://www.rapi.la/schul-cms/meine-klassen"
+enabled: true
