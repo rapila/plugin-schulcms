@@ -10,7 +10,10 @@ class SchoolSiteConfig {
 			return $oObject;
 		}
 		$oObject= new $sModel();
-		$oObject->setName($sName)->setIsExternallyManaged(true)->save();
+		$oObject->setName($sName);
+		if(method_exists ($oObject, 'setIsExternallyManaged')) {
+			$oObject->setIsExternallyManaged(true)->save();
+		}
 		return $oObject;
 	}
 
