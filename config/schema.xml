@@ -1,3 +1,4 @@
+
 <table name="schools" phpName="School">
 	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
 	<column name="original_id" type="varchar" size="50" required="true" />
@@ -54,6 +55,10 @@
 <table name="school_classes" phpName="SchoolClass">
 	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
 	<column name="original_id" type="integer" />
+	<column name="ancestor_class_id" type="integer" />
+	<foreign-key foreignTable="school_classes" onDelete="setnull">
+		<reference local="ancestor_class_id" foreign="id" />
+	</foreign-key>
 	<column name="name" type="varchar" size="80" />
 	<column name="unit_name" type="varchar" size="80" />
 	<column name="slug" type="varchar" size="80" />
