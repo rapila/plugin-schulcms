@@ -182,6 +182,10 @@ class SchoolClass extends BaseSchoolClass {
 		return $this->getTeachingUnit();
 	}
 
+	public function getAncestorClass() {
+		return $this->getSchoolClassRelatedByAncestorClassId();
+	}
+
 	public function preDelete(PropelPDO $con = null) {
 		parent::preDelete($con);
 		if($oDocument = $this->getDocumentRelatedByClassPortraitId()) {
