@@ -31,13 +31,15 @@ class ClassHomeOutput extends ClassOutput {
 
 		// Class portrait
 		$oPortrait = $this->oClass->getDocumentRelatedByClassPortraitId();
-		$sLabel = 'Klassenfoto '.$this->oClass->getUnitName();
+		$sLabel = '';
+
 		if(!$oPortrait) {
-			$oDocument = DocumentQuery::create()->filterByName('school_class_portrait')->findOne();
-			if($oDocument) {
-				$oPortrait = $oDocument->getImage();
+			$oPortrait = DocumentQuery::create()->filterByName('klassenbild_platzhalter')->findOne();
+			if(Session::getSession()->isAuthenticated() && Session::getSession()->getUser()->getIsBackendLoginEnabled()) {
+				$sLabel = '(Bitte eigenes Klassenfoto hochladen)';
 			}
-			$sLabel = 'Bitte Klassenfoto hochladen';
+		} else {
+			$sLabel = 'Klassenfoto '.$this->oClass->getUnitName();
 		}
 		if($oPortrait) {
 			$oImageTag = TagWriter::quickTag('img', array('src' => $oPortrait->getDisplayUrl(array('max_width' => 500))));
