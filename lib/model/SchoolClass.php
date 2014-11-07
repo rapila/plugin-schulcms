@@ -169,6 +169,14 @@ class SchoolClass extends BaseSchoolClass {
 		}
 		return false;
 	}
+	
+	public function getSubjectClasses() {
+		return SchoolClassQuery::create()->useSchoolClassSubjectClassesRelatedBySubjectClassIdQuery()->filterBySchoolClassRelatedBySchoolClassId($this)->endUse()->find();
+	}
+	
+	public function getSubjects() {
+		return SubjectQuery::create()->useSchoolClassQuery()->useSchoolClassSubjectClassesRelatedBySubjectClassIdQuery()->filterBySchoolClassRelatedBySchoolClassId($this)->endUse()->endUse()->find();
+	}
 
 	public function setUnitName($sName) {
 		$this->setSlug(StringUtil::normalize(str_replace('-', '', $sName), '-', '-'));
