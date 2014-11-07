@@ -1,6 +1,6 @@
 <?php
 
-class ClassDocumentationOutput extends ClassOutput {
+class ClassDocumentsOutput extends ClassOutput {
 	public function __construct(NavigationItem $oNavigationItem, ClassesPageTypeModule $oPageType) {
 		parent::__construct($oNavigationItem, $oPageType);
 	}

@@ -36,6 +36,11 @@ class ClassNavigationItem extends VirtualNavigationItem {
 		return $this;
 	}
 
+	public function setVisible($bIsVisible) {
+		$this->bIsVisible = $bIsVisible;
+		return $this;
+	}
+
 	public function getEvent() {
 		return $this->getData()->event;
 	}

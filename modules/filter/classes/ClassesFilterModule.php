@@ -34,7 +34,7 @@ class ClassesFilterModule extends FilterModule {
 		} else if($oNavigationItem->getMode() === 'events') {
 			$oClass = $oNavigationItem->getClass();
 			foreach(FrontendEventQuery::create()->filterBySchoolClass($oClass)->find() as $oEvent) {
-				$oNavigationItem->addChild(ClassNavigationItem::create($oEvent->getSlug(), $oEvent->getTitle(), $oClass, 'event')->setEvent($oEvent));
+				$oNavigationItem->addChild(ClassNavigationItem::create($oEvent->getSlug(), $oEvent->getTitle(), $oClass, 'event')->setEvent($oEvent)->setVisible(false));
 			}
 		}
 	}
@@ -52,7 +52,7 @@ class ClassesFilterModule extends FilterModule {
 		}
 		// Link to the feed
 		$oHomeNavigationItem = $oNavigationItem;
-		while($oNavigationItem->getMode() !== 'home') {
+		while($oHomeNavigationItem->getMode() !== 'home') {
 			$oHomeNavigationItem = $oHomeNavigationItem->getParent();
 		}
 		$oFeedItem = $oHomeNavigationItem->namedChild('feed');
