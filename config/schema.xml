@@ -116,9 +116,9 @@
 	<column name="name" type="varchar" size="80" required="true"/>
 	<column name="short_name" type="varchar" size="40" />
 	<column name="slug" type="varchar" size="80" />
-	<unique>
+	<!-- <unique>
 		<unique-column name="slug" />
-	</unique>
+	</unique> -->
 </table>
 
 <table name="team_members" phpName="TeamMember">
