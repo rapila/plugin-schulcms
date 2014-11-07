@@ -172,6 +172,12 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     protected $collClassTeachersPartial;
 
     /**
+     * @var        PropelObjectCollection|ServiceMember[] Collection to store aggregation of ServiceMember objects.
+     */
+    protected $collServiceMembers;
+    protected $collServiceMembersPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -202,6 +208,12 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $classTeachersScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $serviceMembersScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -1106,6 +1118,8 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
 
             $this->collClassTeachers = null;
 
+            $this->collServiceMembers = null;
+
         } // if (deep)
     }
 
@@ -1335,6 +1349,23 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
 
             if ($this->collClassTeachers !== null) {
                 foreach ($this->collClassTeachers as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->serviceMembersScheduledForDeletion !== null) {
+                if (!$this->serviceMembersScheduledForDeletion->isEmpty()) {
+                    ServiceMemberQuery::create()
+                        ->filterByPrimaryKeys($this->serviceMembersScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->serviceMembersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collServiceMembers !== null) {
+                foreach ($this->collServiceMembers as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1631,6 +1662,14 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collServiceMembers !== null) {
+                    foreach ($this->collServiceMembers as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -1791,6 +1830,9 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
             }
             if (null !== $this->collClassTeachers) {
                 $result['ClassTeachers'] = $this->collClassTeachers->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collServiceMembers) {
+                $result['ServiceMembers'] = $this->collServiceMembers->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -2048,6 +2090,12 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
             foreach ($this->getClassTeachers() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addClassTeacher($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getServiceMembers() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addServiceMember($relObj->copy($deepCopy));
                 }
             }
 
@@ -2325,6 +2373,9 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
         }
         if ('ClassTeacher' == $relationName) {
             $this->initClassTeachers();
+        }
+        if ('ServiceMember' == $relationName) {
+            $this->initServiceMembers();
         }
     }
 
@@ -2935,6 +2986,309 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collServiceMembers collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return TeamMember The current object (for fluent API support)
+     * @see        addServiceMembers()
+     */
+    public function clearServiceMembers()
+    {
+        $this->collServiceMembers = null; // important to set this to null since that means it is uninitialized
+        $this->collServiceMembersPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collServiceMembers collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialServiceMembers($v = true)
+    {
+        $this->collServiceMembersPartial = $v;
+    }
+
+    /**
+     * Initializes the collServiceMembers collection.
+     *
+     * By default this just sets the collServiceMembers collection to an empty array (like clearcollServiceMembers());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initServiceMembers($overrideExisting = true)
+    {
+        if (null !== $this->collServiceMembers && !$overrideExisting) {
+            return;
+        }
+        $this->collServiceMembers = new PropelObjectCollection();
+        $this->collServiceMembers->setModel('ServiceMember');
+    }
+
+    /**
+     * Gets an array of ServiceMember objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this TeamMember is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|ServiceMember[] List of ServiceMember objects
+     * @throws PropelException
+     */
+    public function getServiceMembers($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collServiceMembersPartial && !$this->isNew();
+        if (null === $this->collServiceMembers || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collServiceMembers) {
+                // return empty collection
+                $this->initServiceMembers();
+            } else {
+                $collServiceMembers = ServiceMemberQuery::create(null, $criteria)
+                    ->filterByTeamMember($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collServiceMembersPartial && count($collServiceMembers)) {
+                      $this->initServiceMembers(false);
+
+                      foreach ($collServiceMembers as $obj) {
+                        if (false == $this->collServiceMembers->contains($obj)) {
+                          $this->collServiceMembers->append($obj);
+                        }
+                      }
+
+                      $this->collServiceMembersPartial = true;
+                    }
+
+                    $collServiceMembers->getInternalIterator()->rewind();
+
+                    return $collServiceMembers;
+                }
+
+                if ($partial && $this->collServiceMembers) {
+                    foreach ($this->collServiceMembers as $obj) {
+                        if ($obj->isNew()) {
+                            $collServiceMembers[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collServiceMembers = $collServiceMembers;
+                $this->collServiceMembersPartial = false;
+            }
+        }
+
+        return $this->collServiceMembers;
+    }
+
+    /**
+     * Sets a collection of ServiceMember objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $serviceMembers A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return TeamMember The current object (for fluent API support)
+     */
+    public function setServiceMembers(PropelCollection $serviceMembers, PropelPDO $con = null)
+    {
+        $serviceMembersToDelete = $this->getServiceMembers(new Criteria(), $con)->diff($serviceMembers);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->serviceMembersScheduledForDeletion = clone $serviceMembersToDelete;
+
+        foreach ($serviceMembersToDelete as $serviceMemberRemoved) {
+            $serviceMemberRemoved->setTeamMember(null);
+        }
+
+        $this->collServiceMembers = null;
+        foreach ($serviceMembers as $serviceMember) {
+            $this->addServiceMember($serviceMember);
+        }
+
+        $this->collServiceMembers = $serviceMembers;
+        $this->collServiceMembersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related ServiceMember objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related ServiceMember objects.
+     * @throws PropelException
+     */
+    public function countServiceMembers(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collServiceMembersPartial && !$this->isNew();
+        if (null === $this->collServiceMembers || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collServiceMembers) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getServiceMembers());
+            }
+            $query = ServiceMemberQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByTeamMember($this)
+                ->count($con);
+        }
+
+        return count($this->collServiceMembers);
+    }
+
+    /**
+     * Method called to associate a ServiceMember object to this object
+     * through the ServiceMember foreign key attribute.
+     *
+     * @param    ServiceMember $l ServiceMember
+     * @return TeamMember The current object (for fluent API support)
+     */
+    public function addServiceMember(ServiceMember $l)
+    {
+        if ($this->collServiceMembers === null) {
+            $this->initServiceMembers();
+            $this->collServiceMembersPartial = true;
+        }
+
+        if (!in_array($l, $this->collServiceMembers->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddServiceMember($l);
+
+            if ($this->serviceMembersScheduledForDeletion and $this->serviceMembersScheduledForDeletion->contains($l)) {
+                $this->serviceMembersScheduledForDeletion->remove($this->serviceMembersScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	ServiceMember $serviceMember The serviceMember object to add.
+     */
+    protected function doAddServiceMember($serviceMember)
+    {
+        $this->collServiceMembers[]= $serviceMember;
+        $serviceMember->setTeamMember($this);
+    }
+
+    /**
+     * @param	ServiceMember $serviceMember The serviceMember object to remove.
+     * @return TeamMember The current object (for fluent API support)
+     */
+    public function removeServiceMember($serviceMember)
+    {
+        if ($this->getServiceMembers()->contains($serviceMember)) {
+            $this->collServiceMembers->remove($this->collServiceMembers->search($serviceMember));
+            if (null === $this->serviceMembersScheduledForDeletion) {
+                $this->serviceMembersScheduledForDeletion = clone $this->collServiceMembers;
+                $this->serviceMembersScheduledForDeletion->clear();
+            }
+            $this->serviceMembersScheduledForDeletion[]= clone $serviceMember;
+            $serviceMember->setTeamMember(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this TeamMember is new, it will return
+     * an empty collection; or if this TeamMember has previously
+     * been saved, it will retrieve related ServiceMembers from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in TeamMember.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|ServiceMember[] List of ServiceMember objects
+     */
+    public function getServiceMembersJoinService($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ServiceMemberQuery::create(null, $criteria);
+        $query->joinWith('Service', $join_behavior);
+
+        return $this->getServiceMembers($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this TeamMember is new, it will return
+     * an empty collection; or if this TeamMember has previously
+     * been saved, it will retrieve related ServiceMembers from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in TeamMember.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|ServiceMember[] List of ServiceMember objects
+     */
+    public function getServiceMembersJoinUserRelatedByCreatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ServiceMemberQuery::create(null, $criteria);
+        $query->joinWith('UserRelatedByCreatedBy', $join_behavior);
+
+        return $this->getServiceMembers($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this TeamMember is new, it will return
+     * an empty collection; or if this TeamMember has previously
+     * been saved, it will retrieve related ServiceMembers from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in TeamMember.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|ServiceMember[] List of ServiceMember objects
+     */
+    public function getServiceMembersJoinUserRelatedByUpdatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ServiceMemberQuery::create(null, $criteria);
+        $query->joinWith('UserRelatedByUpdatedBy', $join_behavior);
+
+        return $this->getServiceMembers($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -2990,6 +3344,11 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collServiceMembers) {
+                foreach ($this->collServiceMembers as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aDocument instanceof Persistent) {
               $this->aDocument->clearAllReferences($deep);
             }
@@ -3014,6 +3373,10 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
             $this->collClassTeachers->clearIterator();
         }
         $this->collClassTeachers = null;
+        if ($this->collServiceMembers instanceof PropelCollection) {
+            $this->collServiceMembers->clearIterator();
+        }
+        $this->collServiceMembers = null;
         $this->aDocument = null;
         $this->aUserRelatedByUserId = null;
         $this->aUserRelatedByCreatedBy = null;

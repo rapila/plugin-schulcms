@@ -450,6 +450,9 @@ abstract class BaseTeamMemberPeer
         // Invalidate objects in ClassTeacherPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ClassTeacherPeer::clearInstancePool();
+        // Invalidate objects in ServiceMemberPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ServiceMemberPeer::clearInstancePool();
     }
 
     /**
@@ -2014,6 +2017,12 @@ abstract class BaseTeamMemberPeer
 
             $criteria->add(ClassTeacherPeer::TEAM_MEMBER_ID, $obj->getId());
             $affectedRows += ClassTeacherPeer::doDelete($criteria, $con);
+
+            // delete related ServiceMember objects
+            $criteria = new Criteria(ServiceMemberPeer::DATABASE_NAME);
+
+            $criteria->add(ServiceMemberPeer::TEAM_MEMBER_ID, $obj->getId());
+            $affectedRows += ServiceMemberPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;
