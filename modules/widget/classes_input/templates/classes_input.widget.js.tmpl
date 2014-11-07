@@ -22,6 +22,10 @@ Widget.types.classes_input = {
 		}
 	},
 
+	no_classes_available: function() {
+		return this._element.find('option').length === 0;
+	},
+
 	val: function(value) {
 		if(arguments.length) {
 			this._element.val(value);

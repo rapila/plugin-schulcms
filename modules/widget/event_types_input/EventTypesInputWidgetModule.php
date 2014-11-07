@@ -5,10 +5,11 @@
 class EventTypesInputWidgetModule extends WidgetModule {
 
 	private $aEventTypes = array();
-	
+
 	public function __construct() {
 		$this->aEventTypes = EventTypeQuery::create()->orderById()->select(array('Id', 'Name'))->find()->toKeyValue('Id', 'Name');
-		if(count($this->aEventTypes) === 1) {
+		$iCount = count($this->aEventTypes);
+		if($iCount === 1) {
 			reset($this->aEventTypes);
 			$this->setSetting('initial_selection', (string) key($this->aEventTypes));
 		}
