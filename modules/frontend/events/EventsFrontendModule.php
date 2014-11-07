@@ -45,20 +45,23 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	}
 
 	public function renderListOverviewNew() {
-		$oTemplate = $this->constructTemplate('overview_list');
-		$oItemPrototype = $this->constructTemplate('overview_item');
-		$oDatePrototype = $this->constructTemplate('date');
 		$oQuery = $this->baseQuery()->orderByDateStart();
-
 		if($this->iLimit) {
 			$oQuery->limit($this->iLimit);
 		}
-		foreach($oQuery->find() as $oEvent) {
+		return self::renderOverviewList($oQuery->find());
+	}
+
+	public static function renderOverviewList($aEvents) {
+		$oTemplate = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'overview_list', false);
+		$oItemPrototype = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'overview_item', false);
+		$oDatePrototype = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'date', false);
+		foreach($aEvents as $oEvent) {
 			$oItemTemplate = clone $oItemPrototype;
-			$oDate = clone $oDatePrototype;
-			$oDate->replaceIdentifier('date_day', strftime("%d",$oEvent->getDateStart('U')));
-			$oDate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
-			$oItemTemplate->replaceIdentifier('date_item', $oDate);
+			$oDateTemplate = clone $oDatePrototype;
+			$oDateTemplate->replaceIdentifier('date_day', strftime("%d",$oEvent->getDateStart('U')));
+			$oDateTemplate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
+			$oItemTemplate->replaceIdentifier('date_item', $oDateTemplate);
 			$oItemTemplate->replaceIdentifier('title', $oEvent->getTitle());
 			$oItemTemplate->replaceIdentifier('description', RichtextUtil::parseStorageForFrontendOutput($oEvent->getBodyShort()));
 			$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
@@ -130,7 +133,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	}
 
 	private function baseQuery() {
-		$oQuery = FrontendEventQuery::create()->excludeClassEvents();
+		$oQuery = self::commonQuery();
 		if($this->iLimit) {
 			$oQuery->limit($this->iLimit);
 		}
@@ -138,6 +141,10 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oQuery->filterByEventTypeId($this->iEventTypeId);
 		}
 		return $oQuery;
+	}
+
+	public static function commonQuery() {
+		return FrontendEventQuery::create()->excludeClassEvents();
 	}
 
 	private function reportQuery($bLimitAge = true) {
