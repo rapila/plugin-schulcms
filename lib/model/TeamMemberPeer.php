@@ -6,6 +6,7 @@
 class TeamMemberPeer extends BaseTeamMemberPeer {
   
   const TEACHERS_USER_GROUP_NAME = 'teachers';
+  const TEAM_MEMBERS_USER_GROUP_NAME = 'team_members';
 
 	public static function addSearchToCriteria($sSearch, $oCriteria) {
 		$oSearchCriterion = $oCriteria->getNewCriterion(TeamMemberPeer::FIRST_NAME, 'CONCAT(' . TeamMemberPeer::FIRST_NAME . '," ",' . TeamMemberPeer::LAST_NAME.') LIKE ("%' . $sSearch. '%")', Criteria::CUSTOM);

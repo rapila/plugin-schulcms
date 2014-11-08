@@ -63,7 +63,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oDateTemplate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
 			$oItemTemplate->replaceIdentifier('date_item', $oDateTemplate);
 			$oItemTemplate->replaceIdentifier('title', $oEvent->getTitle());
-			$oItemTemplate->replaceIdentifier('description', RichtextUtil::parseStorageForFrontendOutput($oEvent->getBodyShort()));
+			$oItemTemplate->replaceIdentifier('description', self::getContentForFrontend($oEvent->getBodyShort()));
 			$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
 		}
 		return $oTemplate;
@@ -287,25 +287,12 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		// Display body depending on context
 		$sBody = null;
 		if (self::$EVENT->hasBericht()) {
-			$sReviewContent = stream_get_contents(self::$EVENT->getBodyReview());
-			if($sReviewContent != '') {
-				$sBody = RichtextUtil::parseStorageForFrontendOutput($sReviewContent);
-			}
+			$sBody = self::getContentForFrontend(self::$EVENT->getBodyReview());
 		}
 
 		// If there is no body review (bericht), get body preview
 		if ($sBody === null && self::$EVENT->getBody()) {
-			$sContent = stream_get_contents(self::$EVENT->getBody());
-			if($sContent != '') {
-				$sBody = RichtextUtil::parseStorageForFrontendOutput($sContent);
-			}
-		}
-
-		// Fallback: if is not preview and no body is given, display teaser instead of body
-		if(!self::$EVENT->isPreview() && $sBody === null) {
-			$sBody = self::$EVENT->getTeaser();
-		} else if($sBody == null) {
-  		$oTemplate->replaceIdentifier('teaser', self::$EVENT->getTeaser());
+			$sBody = self::getContentForFrontend(self::$EVENT->getBody());
 		}
 
 		$oTemplate->replaceIdentifier('title', self::$EVENT->getTitle());
@@ -314,13 +301,6 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getWeekdayName().', '.self::$EVENT->getDatumWithMonthName());
 		} else {
 			$oTemplate->replaceIdentifier('date_info', self::$EVENT->getDateFromTo());
-		}
-
-		// Add service link if event is related to service
-		if(self::$EVENT->getServiceId() !== null) {
-			if($oService = self::$EVENT->getService()) {
-				$oTemplate->replaceIdentifier('service_link', TagWriter::quickTag('a', array('href' => LinkUtil::link($oService->getLink()) , 'class' => 'event_service_link', 'title' => StringPeer::getString('wns.link.to_service_detail')), $oService->getName()));
-			}
 		}
 
 		// Back to list link
@@ -335,6 +315,14 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		// Display image gallery
 		self::renderGallery(self::$EVENT, $oTemplate);
 		return $oTemplate;
+	}
+
+	private static function getContentForFrontend($oBlob) {
+		$sContent = stream_get_contents($oBlob);
+		if($sContent != '') {
+			$sContent = RichtextUtil::parseStorageForFrontendOutput($sContent);
+		}
+		return $sContent;
 	}
 
  /**
