@@ -12,7 +12,9 @@ Widget.types.page_type.types.team_members = {
 
 		this.function_group_dropdown = this.form.find('select[name=function_group_ids\\[\\]]');
 		this.update_function_group_input();
+	},
 
+	will_save: function() {
 		this.page_type.methods.saveTeamMembersPageConfiguration(this.form.serializeArrayKV(), function(result, error) {
 			if(error) {
 			} else {
