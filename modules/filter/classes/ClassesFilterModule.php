@@ -2,14 +2,12 @@
 require_once PLUGINS_DIR.'/schulcms/modules/page_type/classes/ClassNavigationItem.php';
 
 class ClassesFilterModule extends FilterModule {
+
 	public function onNavigationItemChildrenRequested($oNavigationItem) {
 		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getMe()->getPageType() === 'classes') {
 
-			$oCriteria = SchoolClassQuery::create()->distinct();
-			$oCriteria->clearSelectColumns()->addSelectColumn(SchoolClassPeer::SLUG);
-			$oCriteria->filterByHasStudents()->orderByUnitName(Criteria::ASC);
-
-			foreach(SchoolClassPeer::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_COLUMN) as $sSlug) {
+			$oQuery = SchoolClassQuery::create()->filterByClassTypeYearAndSchool(null)->filterBySubjectId(null, Criteria::ISNULL)->select('Slug');
+			foreach($oQuery->find() as $sSlug) {
 				$oClass = SchoolClassQuery::create()->filterBySlug($sSlug)->findOne();
 				$oNavItem = new ClassNavigationItem($sSlug, $oClass->getFullClassName().' Home', null, 'root', $oClass->getUnitName(), true, false);
 				$oNavigationItem->addChild($oNavItem);
