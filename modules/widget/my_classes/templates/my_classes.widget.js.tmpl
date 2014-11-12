@@ -27,7 +27,7 @@ Widget.types.my_classes = {
 					_this.has_old_classes = true;
 				}
 				row.find('.name').text(row_data.Name);
-				row.find('.type').text(row_data.Type);
+				row.find('.class_type').text(row_data.ClassType);
 				row.find('.period').text(row_data.Year);
 				row.find('.preview a').attr('href', row_data.ClassLink).click(function(event) {
 					event.stopPropagation();
@@ -36,8 +36,9 @@ Widget.types.my_classes = {
 				row.find('.class_schedule div').addClass(row_data.ClassSchedule ? 'ui-icon ui-icon-document' : '' );
 				row.find('.week_schedule div').addClass(row_data.WeekSchedule ? 'ui-icon ui-icon-document' : '' );
 				_this.fill_count(row_data.Amount, 'SchülerInnen', row.find('.amount'));
-				_this.fill_count(row_data.Events, 'Dokumente', row.find('.documents'));
+				_this.fill_count(row_data.Events, 'Texte', row.find('.news'));
 				_this.fill_count(row_data.Events, 'Anlässe', row.find('.events'));
+				_this.fill_count(row_data.Events, 'Dokumente', row.find('.documents'));
 				_this.fill_count(row_data.Links, 'Links', row.find('.links'));
 				row.dblclick(function(event) {
 					Widget.create('class_detail', function(widget) {
@@ -53,7 +54,6 @@ Widget.types.my_classes = {
 						if(jQuery(event.target).hasClass('links')) {
 							widget.settings.accordion_active = 4;
 						}
-
 					}, function(widget) {
 						widget.setSchoolClassId(row_data.Id);
 						widget.fill_data();

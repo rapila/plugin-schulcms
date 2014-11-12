@@ -26,7 +26,7 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 			$aClassInfo['Name'] = $oClassTeacher->getSchoolClass()->getName();
 			$aClassInfo['Year'] = $oClassTeacher->getSchoolClass()->getYear();
 			$aClassInfo['IsCurrent'] = $oClassTeacher->getSchoolClass()->IsCurrent();
-			$aClassInfo['Type'] = $oClassTeacher->getSchoolClass()->getClassType()->getName();
+			$aClassInfo['ClassType'] = $oClassTeacher->getSchoolClass()->getClassType();
 			$aClassInfo['Id'] = $oClassTeacher->getSchoolClassId();
 			$aClassInfo['Amount'] = $oClassTeacher->getSchoolClass()->getCountStudents();
 			$aClassInfo['Events'] = $oClassTeacher->getSchoolClass()->countEvents();

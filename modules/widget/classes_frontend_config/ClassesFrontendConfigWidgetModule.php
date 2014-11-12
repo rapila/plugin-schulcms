@@ -15,8 +15,8 @@ class ClassesFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	  }
 	  $aClassTypes = SchoolClassQuery::create()->filterByHasClassesWithStudents()->distinct()->orderByClassType()->select(array('ClassType'))->find();
 		if(count($aClassTypes) > 0) {
-			foreach($aClassTypes as $oClassType) {
-				$aResult[$oClassType->getId()] = $oClassType->getName();
+			foreach($aClassTypes as $sClassType) {
+				$aResult[$sClassType] = $sClassType;
 			}
 		}
 		return $aResult;
