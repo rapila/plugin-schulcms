@@ -169,11 +169,11 @@ class SchoolClass extends BaseSchoolClass {
 		}
 		return false;
 	}
-	
+
 	public function getSubjectClasses() {
 		return SchoolClassQuery::create()->useSchoolClassSubjectClassesRelatedBySubjectClassIdQuery()->filterBySchoolClassRelatedBySchoolClassId($this)->endUse()->find();
 	}
-	
+
 	public function getSubjects() {
 		return SubjectQuery::create()->useSchoolClassQuery()->useSchoolClassSubjectClassesRelatedBySubjectClassIdQuery()->filterBySchoolClassRelatedBySchoolClassId($this)->endUse()->endUse()->find();
 	}
@@ -192,10 +192,6 @@ class SchoolClass extends BaseSchoolClass {
 
 	public function getAncestorClass() {
 		return $this->getSchoolClassRelatedByAncestorClassId();
-	}
-
-	public function getRelatedSubjectClasses() {
-		//
 	}
 
 	public function preDelete(PropelPDO $con = null) {
