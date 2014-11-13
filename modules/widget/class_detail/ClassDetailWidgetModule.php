@@ -34,12 +34,6 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$this->setSetting('document_list_session', $this->oDocumentListWidget->getSessionKey());
 	}
 
-	private function createDocumentCategory($sDocumentCategory) {
-		$oDocumentCategory = new DocumentCategory();
-		$oDocumentCategory->setName($sDocumentCategory)->setIsExternallyManaged(true)->save();
-		return $oDocumentCategory->getId();
-	}
-
 	public function setSchoolClassId($iSchoolClassId) {
 		$this->iSchoolClassId = $iSchoolClassId;
 		$this->oNewsListWidget->iSchoolClassId = $iSchoolClassId;

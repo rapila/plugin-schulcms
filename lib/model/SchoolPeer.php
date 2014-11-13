@@ -54,6 +54,6 @@ class SchoolPeer extends BaseSchoolPeer {
 		if($iSchoolId) {
 			return $iSchoolId;
 		}
-		throw new LocalizedException('configuration.error.school_id_required', array('config_file_path' => 'site/config/config.yml > schulcms'));
+		// throw new LocalizedException('configuration.error.school_id_required', array('config_file_path' => 'site/config/config.yml > schulcms'));
 	}
 }
