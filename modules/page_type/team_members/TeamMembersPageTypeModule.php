@@ -7,7 +7,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 	public function __construct(Page $oPage = null, NavigationItem $oNavigationItem = null) {
 		parent::__construct($oPage, $oNavigationItem);
 		$this->oClassPage = PageQuery::create()->active()->filterByPageType('classes')->findOne();
-		$this->aFunctionGroupIds = $this->oPage->getPagePropertyValue('team_members:function_group_ids', null);
+		$this->aFunctionGroupIds = explode(',', $this->oPage->getPagePropertyValue('team_members:function_group_ids', ''));
 	}
 
 	public function display(Template $oTemplate, $bIsPreview = false) {
@@ -22,7 +22,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		$oListTemplate = $this->constructTemplate('list');
 		$oListTemplate->replaceIdentifier('class_news', $this->includeClassNews());
 		$oItemPrototype = $this->constructTemplate('list_item');
-		foreach(self::listQuery($this->aFunctionGroupIds)->find() as $oTeamMember) {
+		foreach($this->listQuery()->find() as $oTeamMember) {
 			$oItemTemplate = clone $oItemPrototype;
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oTeamMember->getLink($this->oPage)));
 			$oItemTemplate->replaceIdentifier('name', $oTeamMember->getFullNameInverted());
@@ -89,10 +89,10 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'content');
 	}
 
-	public static function listQuery($aFunctionGroupIds) {
+	public function listQuery() {
 		$oQuery = TeamMemberQuery::create()->excludeInactive();
-		if($aFunctionGroupIds !== null) {
-			$oQuery->filterByTeamMemberFunctionGroup($aFunctionGroupIds);
+		if($this->aFunctionGroupIds !== null) {
+			$oQuery->filterByTeamMemberFunctionGroup($this->aFunctionGroupIds);
 		}
 		$oQuery->orderByLastName()->orderByFirstName();
 		return $oQuery;
@@ -104,7 +104,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 
 	public function saveTeamMembersPageConfiguration($aData) {
 		$this->aFunctionGroupIds = $aData['function_group_ids'];
-		$this->oPage->updatePageProperty('team_members:function_group_ids', $this->aFunctionGroupIds);
+		$this->oPage->updatePageProperty('team_members:function_group_ids', implode(',', array_filter($this->aFunctionGroupIds)));
 	}
 
 	public function config() {
