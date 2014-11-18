@@ -9,7 +9,7 @@ class NewsTypeInputWidgetModule extends WidgetModule {
 		if(!$bIncludeExternallyManaged || Settings::getSetting('admin', 'hide_externally_managed_link_categories', true)) {
 			$oQuery->filterByIsExternallyManaged(false);
 		}
-		return $oQuery->select(array('Id', 'Name'))->find()->toKeyValue('Id', 'Name');
+		return WidgetJsonFileModule::jsonOrderedObject($oQuery->select(array('Id', 'Name'))->orderByName()->find()->toKeyValue('Id', 'Name'));
 	}
 
 }

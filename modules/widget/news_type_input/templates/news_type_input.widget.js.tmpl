@@ -10,7 +10,7 @@ Widget.types.news_type_input = {
 		this._element.empty();
 		this.listNewsTypes(function(news_types) {
 			this._element.populate({'': "{{writeString=wns.choose}}"});
-			this._element.populate(news_types);
+			this._element.populate(news_types, null, false);
 			if(current) {
 				this._element.val(current);
 			} else {
