@@ -2,6 +2,8 @@
 
 class SchoolSiteConfig {
 
+	const DOWNLOAD_DOCUMENT_CATEGORY_NAME = "Dokumente Allgemein";
+
 	private static function findOrCreateEntryByName($sIdentifier, $sModel, $sDefaultName) {
 		$sName = Settings::getSetting('externally_managed_categories', $sIdentifier, $sDefaultName);
 		$sMethod = $sModel.'Query';
