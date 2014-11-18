@@ -51,7 +51,7 @@ class ClassHomeOutput extends ClassOutput {
 		foreach($this->oClass->getTeachersByUnitName(true) as $i => $oClassTeacher) {
 			$oTeacher = $oClassTeacher->getTeamMember();
 			$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oTeacher->getLink($this->oTeacherPage)), 'title' => StringPeer::getString('team_member.link_to'). ' '. $oTeacher->getFullName()), $oTeacher->getFullName());
-			$oTemplate->replaceIdentifierMultiple('class_teacher', TagWriter::quickTag('li', array(), $oTeacherLink));
+			$oTemplate->replaceIdentifierMultiple('class_teacher', $oTeacherLink);
 		}
 	}
 

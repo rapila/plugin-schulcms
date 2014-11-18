@@ -3,6 +3,8 @@
 /**
  * @package    propel.generator.model
  */
+
+
 class NewsQuery extends BaseNewsQuery
 {
 	public function excludeExternallyManaged() {
@@ -13,6 +15,10 @@ class NewsQuery extends BaseNewsQuery
 		$sDateToday = date('Y-m-d');
 		$this->filterByDateStart($sDateToday, Criteria::LESS_EQUAL)->_and()->filterByDateEnd($sDateToday, Criteria::GREATER_EQUAL)->_or()->filterByDateEnd(null, Criteria::ISNULL);
 		return $this;
+	}
+
+	public function filterByNewsTypeName($mName) {
+		return $this->useNewsTypeQuery(null, Criteria::INNER_JOIN)->filterByName($mName)->endUse();
 	}
 
 	/**
