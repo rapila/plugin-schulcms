@@ -42,7 +42,7 @@ class News extends BaseNews {
 		return self::truncateBlob($this->getBody(), $iLength);
 	}
 
-	public function getBodyShortTruncated($iLength = 20) {
+	public function getBodyShortTruncated($iLength = 80) {
 		return self::truncateBlob($this->getBodyShort(), $iLength);
 	}
 
