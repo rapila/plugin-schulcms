@@ -1,18 +1,28 @@
 <?php
 
-
-
 /**
- * Skeleton subclass for performing query and update operations on the 'news' table.
- *
- *
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- *
  * @package    propel.generator.model
  */
 class NewsPeer extends BaseNewsPeer
 {
+	public static function mayOperateOn($oUser, $mObject, $sOperation) {
+		// allow all users with module rights
+		if(parent::mayOperateOn($oUser, $mObject, $sOperation)) {
+			return true;
+		}
+		if($oUser === null) {
+			return false;
+		}
+		// allow all users that are team members and class teachers to handle their own events
+		$aTeamMembers = $oUser->getTeamMembersRelatedByUserId();
+		if(isset($aTeamMembers[0])) {
+			foreach($aTeamMembers[0]->getClassTeachersJoinSchoolClassesForPermissions(true) as $oClassTeacher) {
+				if($oClassTeacher->getSchoolClass()->getId() === $mObject->getSchoolClassId()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 }
