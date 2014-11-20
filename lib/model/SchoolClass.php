@@ -129,9 +129,9 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getCurrentNewsHeadline() {
-		$oNews = FrontendNewsQuery::create()->current()->filterBySchoolClassId($this->getId())->orderByDateStart('desc')->findOne();
-		if($oNews) {
-			return $oNews->getHeadline();
+		$sHeadline = FrontendNewsQuery::create()->current()->filterBySchoolClassId($this->getId())->select('Headline')->orderByDateStart('desc')->findOne();
+		if($sHeadline) {
+			return $sHeadline;
 		}
 		return 'Standard';
 	}
