@@ -40,15 +40,6 @@ class EventPeer extends BaseEventPeer {
 					return true;
 				}
 			}
-
-			// allow all users that are team members and service members to handle their own events
-			foreach($aTeamMembers[0]->getServiceMembers() as $oServiceMember) {
-				if($oServiceMember->getServiceId() === $mObject->getServiceId()) {
-					if(ServicePeer::mayOperateOn($oUser, $mObject->getService(), $sOperation)) {
-						return true;
-					}
-				}
-			}
 		}
 		return false;
 	}
