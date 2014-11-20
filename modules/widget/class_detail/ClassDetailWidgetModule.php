@@ -64,7 +64,21 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		if(!is_object($mSchoolClass)){
 			$oSchoolClass = SchoolClassQuery::create()->findPk($mSchoolClass);
 		}
-		return $oSchoolClass->countNews().' / '.StringPeer::getString('school_class.current_news_shown', null, 'Default', array('headline' => $oSchoolClass->getCurrentNewsHeadline()));
+		if($oSchoolClass) {
+			return $oSchoolClass->countNews().' / '.StringPeer::getString('school_class.current_news_shown', null, 'Default', array('headline' => $oSchoolClass->getCurrentNewsHeadline()));
+		}
+	}
+
+	public function countEvents($iSchoolClassId) {
+		return EventQuery::create()->filterBySchoolClassId($iSchoolClassId)->count();
+	}
+
+	public function countDocuments($iSchoolClassId) {
+		return ClassDocumentQuery::create()->filterBySchoolClassId($iSchoolClassId)->count();
+	}
+
+	public function countLinks($iSchoolClassId) {
+		return ClassLinkQuery::create()->filterBySchoolClassId($iSchoolClassId)->count();
 	}
 
 	public function addClassLink($iLinkId = null) {

@@ -179,6 +179,7 @@ Widget.types.class_detail = {
 			this._element.find("span.room_number").text(class_data.RoomNumber);
 			this._element.find("span.original_id").text(class_data.OriginalId);
 			this._element.find("a.page_link").attr('href', class_data.ClassPageUrl);
+
 			this._element.find("span.news_count_info").text(class_data.NewsCountInfo);
 			this._element.find("span.events_count").text(class_data.CountEvents);
 			this._element.find("span.documents_count").text(class_data.CountDocuments);
@@ -200,6 +201,27 @@ Widget.types.class_detail = {
 		var _this = this;
 		this.getNewsCountInfo(this.current_detail_id, function(news_count_info) {
 			_this._element.find("span.news_count_info").text(news_count_info);
+		});
+	},
+
+	update_events_count: function() {
+		var _this = this;
+		this.countEvents(this.current_detail_id, function(count) {
+			_this._element.find("span.events_count").text(count);
+		});
+	},
+
+	update_documents_count: function() {
+		var _this = this;
+		this.countDocuments(this.current_detail_id, function(count) {
+			_this._element.find("span.documents_count").text(count);
+		});
+	},
+
+	update_links_count: function() {
+		var _this = this;
+		this.countLinks(this.current_detail_id, function(count) {
+			_this._element.find("span.links_count").text(count);
 		});
 	},
 
@@ -287,7 +309,9 @@ Widget.types.class_detail = {
 		var _this = this;
 		reload = this.list_requires_loading('news', reload);
 		if(this.news_list) {
-			reload && this.news_list.reload();
+			if(reload) {
+				this.news_list.reload();
+			}
 			_this.update_news_info();
 		} else {
 			Widget.createWithElement('list', function(widget) {
@@ -303,7 +327,10 @@ Widget.types.class_detail = {
 		var _this = this;
 		reload = this.list_requires_loading('events', reload);
 		if(this.event_list) {
-			reload && this.event_list.reload();
+			if(reload) {
+				this.event_list.reload();
+			}
+			_this.update_events_count();
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				widget.settings.school_class_event_type_id = _this.settings.class_event_type_id;
@@ -318,7 +345,10 @@ Widget.types.class_detail = {
 		var _this = this;
 		reload = this.list_requires_loading('documents', reload);
 		if(this.document_list) {
-			reload && this.document_list.reload();
+			if(reload) {
+				this.document_list.reload();
+			}
+			_this.update_documents_count();
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				widget.settings.school_class_document_category_id = _this.settings.class_document_category_id;
@@ -333,7 +363,10 @@ Widget.types.class_detail = {
 		var _this = this;
 		reload = this.list_requires_loading('links', reload);
 		if(this.link_list) {
-			reload && this.link_list.reload();
+			if(reload) {
+				this.link_list.reload();
+			}
+			_this.update_links_count();
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				widget.settings.school_class_link_category_id = _this.settings.class_link_category_id;
