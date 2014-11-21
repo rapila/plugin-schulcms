@@ -1,6 +1,4 @@
 aspects:
   - detail
   - persistent
-  
 enabled: true
-allowed_roles: [news]
