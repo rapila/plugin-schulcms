@@ -115,8 +115,8 @@ Widget.types.event_detail = {
 			this._element.find("input[name='date_end']").val(data.DateEnd);
 			this._element.find("input[name='time_details']").val(data.TimeDetails);
 			this._element.find("input[name='location_info']").val(data.LocationInfo);
-			this._element.find("input[name='is_active']").attr('checked', data.IsActive);
-			this._element.find("input[name='ignore_on_frontpage']").attr('checked', data.IgnoreOnFrontpage);
+			this._element.find("input[name='is_active']").prop('checked', data.IsActive);
+			this._element.find("input[name='ignore_on_frontpage']").prop('checked', data.IgnoreOnFrontpage);
 			this._element.find(".updated_info").text(data.UpdatedInfo);
 			this._element.find(".created_info").text(data.CreatedInfo);
 			this._element.find(".detail_id").text(data.Id);
