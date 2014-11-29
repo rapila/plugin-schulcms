@@ -77,7 +77,7 @@ class EventQuery extends BaseEventQuery {
 		if($bIncludeCommon) {
 			return $this->filterBySchoolClassId(null, Criteria::ISNULL);
 		}
-		return $this->excludeClassEvents()->_or()->filterIsCommon();
+		return $this->filterBySchoolClassId(null, Criteria::ISNULL)->_or()->filterByIsCommon(true);
 	}
 
 	public function filterbyHasImagesOrReview() {
