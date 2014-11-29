@@ -207,7 +207,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			Session::getSession()->setAttribute(self::SESSION_BACK_TO_LIST_LINK, $oNavigationItem->getLink());
 		} else {
 			$this->oEventPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS));
-			$oQuery->upcomingOrOngoing()->filterByIgnoreOnFrontpage(false);
+			$oQuery->upcomingOrOngoing();
 			Session::getSession()->setAttribute(self::SESSION_BACK_TO_LIST_LINK, null);
 		}
 	}

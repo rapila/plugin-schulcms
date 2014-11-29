@@ -17,7 +17,7 @@
  * @method EventQuery orderByDateEnd($order = Criteria::ASC) Order by the date_end column
  * @method EventQuery orderByTimeDetails($order = Criteria::ASC) Order by the time_details column
  * @method EventQuery orderByIsActive($order = Criteria::ASC) Order by the is_active column
- * @method EventQuery orderByIgnoreOnFrontpage($order = Criteria::ASC) Order by the ignore_on_frontpage column
+ * @method EventQuery orderByIsCommon($order = Criteria::ASC) Order by the is_common column
  * @method EventQuery orderByEventTypeId($order = Criteria::ASC) Order by the event_type_id column
  * @method EventQuery orderBySchoolClassId($order = Criteria::ASC) Order by the school_class_id column
  * @method EventQuery orderByGalleryId($order = Criteria::ASC) Order by the gallery_id column
@@ -37,7 +37,7 @@
  * @method EventQuery groupByDateEnd() Group by the date_end column
  * @method EventQuery groupByTimeDetails() Group by the time_details column
  * @method EventQuery groupByIsActive() Group by the is_active column
- * @method EventQuery groupByIgnoreOnFrontpage() Group by the ignore_on_frontpage column
+ * @method EventQuery groupByIsCommon() Group by the is_common column
  * @method EventQuery groupByEventTypeId() Group by the event_type_id column
  * @method EventQuery groupBySchoolClassId() Group by the school_class_id column
  * @method EventQuery groupByGalleryId() Group by the gallery_id column
@@ -87,7 +87,7 @@
  * @method Event findOneByDateEnd(string $date_end) Return the first Event filtered by the date_end column
  * @method Event findOneByTimeDetails(string $time_details) Return the first Event filtered by the time_details column
  * @method Event findOneByIsActive(boolean $is_active) Return the first Event filtered by the is_active column
- * @method Event findOneByIgnoreOnFrontpage(boolean $ignore_on_frontpage) Return the first Event filtered by the ignore_on_frontpage column
+ * @method Event findOneByIsCommon(boolean $is_common) Return the first Event filtered by the is_common column
  * @method Event findOneByEventTypeId(int $event_type_id) Return the first Event filtered by the event_type_id column
  * @method Event findOneBySchoolClassId(int $school_class_id) Return the first Event filtered by the school_class_id column
  * @method Event findOneByGalleryId(int $gallery_id) Return the first Event filtered by the gallery_id column
@@ -107,7 +107,7 @@
  * @method array findByDateEnd(string $date_end) Return Event objects filtered by the date_end column
  * @method array findByTimeDetails(string $time_details) Return Event objects filtered by the time_details column
  * @method array findByIsActive(boolean $is_active) Return Event objects filtered by the is_active column
- * @method array findByIgnoreOnFrontpage(boolean $ignore_on_frontpage) Return Event objects filtered by the ignore_on_frontpage column
+ * @method array findByIsCommon(boolean $is_common) Return Event objects filtered by the is_common column
  * @method array findByEventTypeId(int $event_type_id) Return Event objects filtered by the event_type_id column
  * @method array findBySchoolClassId(int $school_class_id) Return Event objects filtered by the school_class_id column
  * @method array findByGalleryId(int $gallery_id) Return Event objects filtered by the gallery_id column
@@ -222,7 +222,7 @@ abstract class BaseEventQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `title`, `slug`, `body`, `body_short`, `body_review`, `location_info`, `date_start`, `date_end`, `time_details`, `is_active`, `ignore_on_frontpage`, `event_type_id`, `school_class_id`, `gallery_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `events` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `title`, `slug`, `body`, `body_short`, `body_review`, `location_info`, `date_start`, `date_end`, `time_details`, `is_active`, `is_common`, `event_type_id`, `school_class_id`, `gallery_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `events` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -625,15 +625,15 @@ abstract class BaseEventQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the ignore_on_frontpage column
+     * Filter the query on the is_common column
      *
      * Example usage:
      * <code>
-     * $query->filterByIgnoreOnFrontpage(true); // WHERE ignore_on_frontpage = true
-     * $query->filterByIgnoreOnFrontpage('yes'); // WHERE ignore_on_frontpage = true
+     * $query->filterByIsCommon(true); // WHERE is_common = true
+     * $query->filterByIsCommon('yes'); // WHERE is_common = true
      * </code>
      *
-     * @param     boolean|string $ignoreOnFrontpage The value to use as filter.
+     * @param     boolean|string $isCommon The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -642,13 +642,13 @@ abstract class BaseEventQuery extends ModelCriteria
      *
      * @return EventQuery The current query, for fluid interface
      */
-    public function filterByIgnoreOnFrontpage($ignoreOnFrontpage = null, $comparison = null)
+    public function filterByIsCommon($isCommon = null, $comparison = null)
     {
-        if (is_string($ignoreOnFrontpage)) {
-            $ignoreOnFrontpage = in_array(strtolower($ignoreOnFrontpage), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        if (is_string($isCommon)) {
+            $isCommon = in_array(strtolower($isCommon), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(EventPeer::IGNORE_ON_FRONTPAGE, $ignoreOnFrontpage, $comparison);
+        return $this->addUsingAlias(EventPeer::IS_COMMON, $isCommon, $comparison);
     }
 
     /**

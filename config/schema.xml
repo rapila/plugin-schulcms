@@ -215,7 +215,7 @@
 	<column name="date_end" type="date"/>
 	<column name="time_details" type="varchar" size="255"/>
 	<column name="is_active" type="boolean" size="1" default="0" />
-	<column name="ignore_on_frontpage" type="boolean" size="1" default="0" />
+	<column name="is_common" type="boolean" size="1" default="0" />
 	<column name="event_type_id" type="integer" />
 	<foreign-key foreignTable="event_types" onDelete="cascade">
 		<reference local="event_type_id" foreign="id" />

@@ -28,7 +28,7 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 	}
 
 	public function getColumnIdentifiers() {
-		return array('id', 'title', 'body_truncated', 'date_start_formatted', 'is_class_event', 'is_active', 'ignore_on_frontpage', 'has_bericht', 'has_images', 'delete');
+		return array('id', 'title', 'body_truncated', 'date_start_formatted', 'is_class_event', 'is_active', 'is_common', 'has_bericht', 'has_images', 'delete');
 	}
 
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -48,8 +48,8 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 				$aResult['heading_filter'] = array('boolean_input', $this->oBooleanInputFilter->getSessionKey());
 				$aResult['is_sortable'] = false;
 				break;
-			case 'ignore_on_frontpage':
-				$aResult['heading'] = StringPeer::getString('wns.event.ignore_on_frontpage_list');
+			case 'is_common':
+				$aResult['heading'] = StringPeer::getString('wns.event.is_common_list');
 				break;
 			case 'is_active':
 				$aResult['heading'] = StringPeer::getString('wns.event.is_online');
@@ -100,10 +100,10 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 		return false;
 	}
 
-  public function toggleIgnoreOnFrontpage($aRowData) {
+  public function toggleIsCommon($aRowData) {
 		$oEvent = EventQuery::create()->findPk($aRowData['id']);
 		if($oEvent && $oEvent->getIsActive()) {
-			$oEvent->setIgnoreOnFrontpage(!$oEvent->getIgnoreOnFrontpage());
+			$oEvent->setIsCommon(!$oEvent->getIsCommon());
 			return $oEvent->save();
 		}
 		return false;

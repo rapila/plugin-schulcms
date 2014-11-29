@@ -17,7 +17,7 @@ Widget.types.event_list = {
 				this.toggle_boolean(row, col.identifier);
 				event.stopPropagation();
 			}
-			if(col.identifier === 'ignore_on_frontpage') {
+			if(col.identifier === 'is_common') {
 				this.toggle_boolean(row, col.identifier, true);
 				event.stopPropagation();
 			}
