@@ -14,7 +14,7 @@ class ClassHomeOutput extends ClassOutput {
 		$this->renderClassInfo($oTemplate);
 		$this->renderSchedules($oTemplate);
 		$this->renderClassNews($oTemplate);
-		$this->renderTeachersAndSubjects($oTemplate);
+		$this->renderSubjectsAndTeachers($oTemplate);
 		return $oTemplate;
 	}
 
@@ -80,7 +80,32 @@ class ClassHomeOutput extends ClassOutput {
 		$oTemplate->replaceIdentifier('news', $oNewsTemplate);
 	}
 
+	private function renderSubjectsAndTeachers($oTemplate) {
+		$oTemplate->replaceIdentifier('teacher_and_subjects_title', StringPeer::getString('class_detail.heading.subjects_and_teachers'));
+		$oRowPrototype = $this->oPageType->constructTemplate('subject_class_item');
+		foreach($this->oClass->getSubjectClasses() as $oClass) {
+			$oRowTemplate = clone $oRowPrototype;
+			foreach($oClass->getClassTeachersOrdered() as $i => $oClassTeacher) {
+				if($i === 0) {
+					$oTeacher = $oClassTeacher->getTeamMember();
+					$oRowTemplate->replaceIdentifier('detail_link_teacher', LinkUtil::link(array_merge($this->oTeacherPage->getFullPathArray(), array($oTeacher->getSlug()))));
+					$oRowTemplate->replaceIdentifier('teacher_name', $oTeacher->getFullName());
+				}
+			}
+			$oRowTemplate->replaceIdentifier('text', $oClass->countNews());
+			$oRowTemplate->replaceIdentifier('events', $oClass->countEvents());
+			$oRowTemplate->replaceIdentifier('documents', $oClass->countClassDocuments());
+			$oRowTemplate->replaceIdentifier('links', $oClass->countClassLinks());
+			$oRowTemplate->replaceIdentifier('class_name', $oClass->getName());
+			$oRowTemplate->replaceIdentifier('subject_name', $oClass->getSubjectName());
+			$oRowTemplate->replaceIdentifier('ist_aktuell', ""); // anzeigen, ob sich eine Besuch lohnt
+			$oRowTemplate->replaceIdentifier('detail_link_subject', '#');
+			$oTemplate->replaceIdentifierMultiple('teacher_and_subject', $oRowTemplate);
+		}
+	}
+
 	private function renderTeachersAndSubjects($oTemplate) {
+		$oTemplate->replaceIdentifier('teacher_and_subjects_title', StringPeer::getString('class_detail.heading.teachers_and_subjects'));
 		$oQuery = ClassTeacherQuery::create()->filterByUnitFromClass($this->oClass, false)->useTeamMemberQuery()->orderByLastName()->orderByFirstName()->endUse();
 		$oRowPrototype = $this->oPageType->constructTemplate('teacher_and_subject');
 

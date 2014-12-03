@@ -171,11 +171,18 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getSubjectClasses() {
-		return SchoolClassQuery::create()->useSchoolClassSubjectClassesRelatedBySubjectClassIdQuery()->filterBySchoolClassRelatedBySchoolClassId($this)->endUse()->find();
+		return SchoolClassQuery::create()->useSchoolClassSubjectClassesRelatedBySubjectClassIdQuery()->filterBySchoolClassRelatedBySchoolClassId($this)->endUse()->orderByName()->find();
 	}
 
 	public function getSubjects() {
-		return SubjectQuery::create()->useSchoolClassQuery()->useSchoolClassSubjectClassesRelatedBySubjectClassIdQuery()->filterBySchoolClassRelatedBySchoolClassId($this)->endUse()->endUse()->find();
+		return SubjectQuery::create()->useSchoolClassQuery()->useSchoolClassSubjectClassesRelatedBySubjectClassIdQuery()->filterBySchoolClassRelatedBySchoolClassId($this)->endUse()->endUse()->orderByName()->find();
+	}
+
+	public function getSubjectName() {
+		if($this->getSubject()) {
+			return $this->getSubject()->getName();
+		}
+		return null;
 	}
 
 	public function setUnitName($sName) {
