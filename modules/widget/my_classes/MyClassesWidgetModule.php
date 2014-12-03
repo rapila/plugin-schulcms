@@ -11,6 +11,10 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 		}
 	}
 
+	public function teacherName() {
+		return $this->oTeamMember->getFullName();
+	}
+
 	public function listClasses($bOnlyMainClasses = true) {
 		$aResult = array();
 		if(!$this->oTeamMember) {
@@ -21,24 +25,25 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 		if($bOnlyMainClasses) {
 			$oQuery->filterByIsClassTeacher(true);
 		}
-		foreach($oQuery->find() as $oClassTeacher) {
+		foreach($oQuery->find() as $i => $oClassTeacher) {
+			$oClass = $oClassTeacher->getSchoolClass();
 			$aClassInfo = array();
-			$aClassInfo['Name'] = $oClassTeacher->getSchoolClass()->getName();
-			$aClassInfo['Year'] = $oClassTeacher->getSchoolClass()->getYear();
-			$aClassInfo['IsCurrent'] = $oClassTeacher->getSchoolClass()->IsCurrent();
-			$aClassInfo['ClassType'] = $oClassTeacher->getSchoolClass()->getClassType();
+			$aClassInfo['Name'] = $oClass->getName();
+			$aClassInfo['Year'] = $oClass->getYear();
+			$aClassInfo['IsCurrent'] = $oClass->IsCurrent();
+			$aClassInfo['ClassType'] = $oClass->getClassType();
 			$aClassInfo['Id'] = $oClassTeacher->getSchoolClassId();
-			$aClassInfo['Amount'] = $oClassTeacher->getSchoolClass()->getCountStudents();
-			$aClassInfo['Events'] = $oClassTeacher->getSchoolClass()->countEvents();
-			$aClassInfo['News'] = $oClassTeacher->getSchoolClass()->countNews();
-			$aClassInfo['Documents'] = ' ('.$oClassTeacher->getSchoolClass()->countClassDocuments().')';
-			$aClassInfo['Links'] = $oClassTeacher->getSchoolClass()->countClassLinks();
-			$aClassInfo['ClassSchedule'] = $oClassTeacher->getSchoolClass()->getHasClassSchedule();
-			$aClassInfo['WeekSchedule'] = $oClassTeacher->getSchoolClass()->getHasWeekSchedule();
-			$aClassInfo['ClassPortrait'] = $oClassTeacher->getSchoolClass()->getHasClassPortrait();
+			$aClassInfo['Amount'] = $oClass->getCountStudents();
+			$aClassInfo['Events'] = $oClass->countEvents();
+			$aClassInfo['News'] = $oClass->countNews();
+			$aClassInfo['Documents'] = $oClass->countClassDocuments();
+			$aClassInfo['Links'] = $oClass->countClassLinks();
+			$aClassInfo['ClassSchedule'] = $oClass->getHasClassSchedule();
+			$aClassInfo['WeekSchedule'] = $oClass->getHasWeekSchedule();
+			$aClassInfo['ClassPortrait'] = $oClass->getHasClassPortrait();
 
-			$aClassInfo['ClassLink'] = LinkUtil::link($oClassTeacher->getSchoolClass()->getLink($oClassesPage), 'FrontendManager');
-			$aResult[] = $aClassInfo;
+			$aClassInfo['ClassLink'] = LinkUtil::link($oClass->getLink($oClassesPage), 'FrontendManager');
+			$aResult[$i] = $aClassInfo;
 		}
 		return $aResult;
 	}

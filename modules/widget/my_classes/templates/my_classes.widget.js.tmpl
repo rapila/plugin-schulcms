@@ -2,15 +2,10 @@ Widget.types.my_classes = {
 	prepare: function() {
 		var _this = this;
 		this._element.append(Widget.parseHTML("{{includeTemplate=edit}}"));
-		this.list =	this._element.find('table.my_classes_list');
+
 		this.settings.row_prototype = Widget.parseHTML("{{includeTemplate=class_item}}", false, 'tbody');
-		this.has_old_classes = false;
-		this.show_old_button = this._element.find('span.toggle_show_all').hide();
+		this.list =	this._element.find('table.my_classes_list');
 		this.reload_list();
-		this.show_old_button.click(function() {
-			jQuery(this).toggleClass('closed');
-			_this.list.find('tr.is_not_current').toggleClass('hidden');
-		});
 	},
 
 	reload_list: function() {
@@ -22,36 +17,35 @@ Widget.types.my_classes = {
 			}
 			jQuery.each(result, function(class_id, row_data) {
 				var row = _this.settings.row_prototype.clone();
-				if(!row_data.IsCurrent) {
-					row.addClass('is_not_current hidden');
-					_this.has_old_classes = true;
-				}
+
 				row.find('.name').text(row_data.Name);
 				row.find('.class_type').text(row_data.ClassType);
 				row.find('.period').text(row_data.Year);
-				row.find('.preview a').attr('href', row_data.ClassLink).click(function(event) {
-					event.stopPropagation();
-				});
 				row.find('.portrait div').addClass(row_data.ClassPortrait ? 'ui-icon ui-icon-image' : '' );
 				row.find('.class_schedule div').addClass(row_data.ClassSchedule ? 'ui-icon ui-icon-document' : '' );
 				row.find('.week_schedule div').addClass(row_data.WeekSchedule ? 'ui-icon ui-icon-document' : '' );
+
 				_this.fill_count(row_data.Amount, 'SchülerInnen', row.find('.amount'));
-				_this.fill_count(row_data.Events, 'Texte', row.find('.news'));
+				_this.fill_count(row_data.News, 'Texte', row.find('.news'));
 				_this.fill_count(row_data.Events, 'Anlässe', row.find('.events'));
-				_this.fill_count(row_data.Events, 'Dokumente', row.find('.documents'));
+				_this.fill_count(row_data.Documents, 'Dokumente', row.find('.documents'));
 				_this.fill_count(row_data.Links, 'Links', row.find('.links'));
+
+				row.find('.preview a').attr('href', row_data.ClassLink).click(function(event) {
+					event.stopPropagation();
+				});
+				if(!row_data.IsCurrent) {
+					row.addClass('is_not_current');
+				}
+
 				row.dblclick(function(event) {
 					var targetClasses = event.target.classList;
 					Widget.createOnce('class_detail', function apply(widget) {
 						var tab = 0;
-						if(targetClasses.contains('news')) {
-							tab = 1;
-						} else if(targetClasses.contains('events')) {
-							tab = 2;
-						} else if(targetClasses.contains('documents')) {
-							tab = 3;
-						} else if(targetClasses.contains('links')) {
-							tab = 4;
+						if(targetClasses.contains('news')) {					   tab = 1;
+						} else if(targetClasses.contains('events')) {    tab = 2;
+						} else if(targetClasses.contains('documents')) { tab = 3;
+						} else if(targetClasses.contains('links')) {     tab = 4;
 						}
 						widget.handle('opened', function() {
 							widget._element.accordion('option', 'active', tab);
@@ -69,9 +63,6 @@ Widget.types.my_classes = {
 				});
 				_this.list.append(row);
 			});
-			if(_this.has_old_classes) {
-				_this.show_old_button.show();
-			}
 		});
 	},
 
@@ -82,7 +73,7 @@ Widget.types.my_classes = {
 		}
 		element.text(number + ' ' + name);
 	},
-	
+
 	settings: {
 		documentation_key: 'widget.my_classes'
 	}
