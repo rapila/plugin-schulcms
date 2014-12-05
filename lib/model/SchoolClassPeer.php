@@ -8,9 +8,10 @@ class SchoolClassPeer extends BaseSchoolClassPeer {
 	public static function addSearchToCriteria($sSearch, $oCriteria) {
 		$oSearchCriterion = $oCriteria->getNewCriterion(SchoolClassPeer::NAME, "%$sSearch%", Criteria::LIKE);
 		$oSearchCriterion->addOr($oCriteria->getNewCriterion(SchoolClassPeer::YEAR, "%$sSearch%", Criteria::LIKE));
+		$oSearchCriterion->addOr($oCriteria->getNewCriterion(SchoolClassPeer::ID, $sSearch, Criteria::EQUAL));
 		$oCriteria->add($oSearchCriterion);
 	}
-	
+
 	public static function mayOperateOn($oUser, $mObject, $sOperation) {
 		// allow all users with module rights
 		if(parent::mayOperateOn($oUser, $mObject, $sOperation)) {
