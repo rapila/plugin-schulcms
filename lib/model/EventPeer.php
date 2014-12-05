@@ -10,6 +10,7 @@ class EventPeer extends BaseEventPeer {
 		$oSearchCriterion = $oCriteria->getNewCriterion(self::TITLE, "%$sSearch%", Criteria::LIKE);
 		$oSearchCriterion->addOr($oCriteria->getNewCriterion(self::BODY, "%$sSearch%", Criteria::LIKE));
 		$oSearchCriterion->addOr($oCriteria->getNewCriterion(self::BODY_REVIEW, "%$sSearch%", Criteria::LIKE));
+		$oSearchCriterion->addOr($oCriteria->getNewCriterion(self::ID, $sSearch, Criteria::EQUAL));
 		$oCriteria->add($oSearchCriterion);
 	}
 

@@ -84,7 +84,7 @@ class SchoolFrontendModule extends FrontendModule {
 	}
 
 	public function renderInfoManagement() {
-		$oTemplate = $this->constructTemplate('about_us_context');
+		$oTemplate = $this->constructTemplate('management_context');
 		$oSchoolSite = SchoolSiteQuery::currentSchoolSite();
 		$oImage = DocumentQuery::create()->filterByName('schulhaus_ueber_uns')->findOne();
 		if($oImage) {
@@ -92,6 +92,7 @@ class SchoolFrontendModule extends FrontendModule {
 			$oTemplate->replaceIdentifier('image', $oImageTag);
 		}
 		if($oSchoolSite) {
+			$oTemplate->replaceIdentifier('position', $oSchoolSite->isPortalSite() ? 'Geschäftsleitung' : 'Schulleitung', null, Template::NO_HTML_ESCAPE);
 			$oTemplate->replaceIdentifier('school_name', $oSchoolSite->getName());
 			$oTemplate->replaceIdentifier('address', implode('<br />', $oSchoolSite->getAddressInfoArray()), null, Template::NO_HTML_ESCAPE);
 		}
@@ -101,7 +102,6 @@ class SchoolFrontendModule extends FrontendModule {
 	public function renderSignatureOffice() {
 		$oTemplate = $this->constructTemplate('signature');
 		$aPersons = self::getTeamMembersByFunctionGroupName('Sekretariate');
-		Util::dumpAll($aPersons);
 		$bPlural = count($aPersons) > 1;
 		// add signature like "Ihr Schulleiter, etc Ihre SchulleiterInnen" ?
 		$this->renderSignature($aPersons, $oTemplate);
@@ -111,6 +111,7 @@ class SchoolFrontendModule extends FrontendModule {
 	public function renderSignatureManagement() {
 		$oTemplate = $this->constructTemplate('signature');
 		$aPersons = self::getTeamMembersByFunctionGroupName('Schulleitung');
+
 		$bPlural = count($aPersons) > 1;
 		// add signature like "Ihr Schulleiter, etc Ihre SchulleiterInnen" ?
 		$this->renderSignature($aPersons, $oTemplate);
@@ -127,7 +128,7 @@ class SchoolFrontendModule extends FrontendModule {
 	}
 
 	private static function getTeamMembersByFunctionGroupName($sName) {
-		$oFunctionGroup = FunctionGroupQuery::create()->filterByName($sName)->findOne();
+		$oFunctionGroup = FunctionGroupQuery::create()->filterByName($sName)->select('Id')->findOne();
 		if($oFunctionGroup) {
 			return TeamMemberQuery::create()->filterByTeamMemberFunctionGroup($oFunctionGroup)->find();
 		}
@@ -144,11 +145,12 @@ class SchoolFrontendModule extends FrontendModule {
 			$oPortraitTemplate = clone $oPortraitPrototype;
 			$oPortraitTemplate->replaceIdentifier('name', $oTeamMember->getFullName());
 			if($oImage = $oTeamMember->getDocument()) {
-				$oImage = TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => $iWidth)), 'alt' => 'Portrait von '.$oTeamMember->getFullName()));
+				$oImage = TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => $sMaxWidth)), 'alt' => 'Portrait von '.$oTeamMember->getFullName()));
 				$oPortraitTemplate->replaceIdentifier('image', $oImage);
 			}
 			$oTemplate->replaceIdentifierMultiple('portraits', $oPortraitTemplate);
 		}
+		return $oTemplate;
 	}
 
 	public function renderInfoContact() {
