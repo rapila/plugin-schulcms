@@ -28,13 +28,13 @@ class ClassListWidgetModule extends WidgetModule {
 	}
 
 	public function getColumnIdentifiers() {
-		return array('id', 'name', 'teaching_unit_name', 'class_type', 'year_period', 'level', 'count_students', 'class_teacher_names', 'has_class_portrait', 'has_class_schedule', 'count_events');
+		return array('id', 'class_name', 'teaching_unit_name', 'class_type', 'year_period', 'level', 'count_students', 'class_teacher_names', 'has_class_portrait', 'has_class_schedule', 'count_events');
 	}
 
 	public function getMetadataForColumn($sColumnIdentifier) {
 		$aResult = array('is_sortable' => true);
 		switch($sColumnIdentifier) {
-			case 'name':
+			case 'class_name':
 				$aResult['heading'] = StringPeer::getString('wns.class.name');
 				break;
 			case 'teaching_unit_name':
@@ -90,6 +90,9 @@ class ClassListWidgetModule extends WidgetModule {
 		}
 		if($sColumnIdentifier === 'class_type_name') {
 			return SchoolClassPeer::CLASS_TYPE;
+		}
+		if($sColumnIdentifier === 'class_name') {
+			return SchoolClassPeer::NAME;
 		}
 		if($sColumnIdentifier === 'has_class_portrait') {
 			return SchoolClassPeer::CLASS_PORTRAIT_ID;

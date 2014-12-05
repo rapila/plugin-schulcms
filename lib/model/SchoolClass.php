@@ -20,6 +20,13 @@ class SchoolClass extends BaseSchoolClass {
 		return $this->getClassTeachersJoinTeamMember($oCriteria);
 	}
 
+	public function getClassName() {
+		if($this->getSubject()) {
+			return $this->getName(). ' ('.$this->getSubject()->getName().')';
+		}
+		return $this->getName();
+	}
+
 	public function hasClassTeachers($bIsClassTeacher = true) {
 		return count($this->getClassTeachersOrdered($bIsClassTeacher)) > 0;
 	}
