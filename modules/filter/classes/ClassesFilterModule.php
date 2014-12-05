@@ -34,6 +34,11 @@ class ClassesFilterModule extends FilterModule {
 			foreach(FrontendEventQuery::create()->filterBySchoolClass($oClass)->find() as $oEvent) {
 				$oNavigationItem->addChild(ClassNavigationItem::create($oEvent->getSlug(), $oEvent->getTitle(), $oClass, 'event')->setEvent($oEvent)->setVisible(false));
 			}
+		} else if($oNavigationItem->getMode() === 'faecher') {
+			// refactor to improve performance, check url, etc
+			foreach($oNavigationItem->getClass()->getSubjectClasses() as $oClass) {
+				$oNavigationItem->addChild(ClassNavigationItem::create($oClass->getSlug(), $oClass->getName(), $oClass, 'faecher')->setEvent($oEvent)->setVisible(false));
+			}
 		}
 	}
 

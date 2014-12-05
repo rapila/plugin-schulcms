@@ -99,7 +99,7 @@ class ClassHomeOutput extends ClassOutput {
 			$oRowTemplate->replaceIdentifier('class_name', $oClass->getName());
 			$oRowTemplate->replaceIdentifier('subject_name', $oClass->getSubjectName());
 			$oRowTemplate->replaceIdentifier('ist_aktuell', ""); // anzeigen, ob sich eine Besuch lohnt
-			$oRowTemplate->replaceIdentifier('detail_link_subject', '#');
+			$oRowTemplate->replaceIdentifier('detail_link_subject', LinkUtil::link(array_merge($this->oNavigationItem->getLink(), array('faecher', $oClass->getSlug()))));
 			$oTemplate->replaceIdentifierMultiple('teacher_and_subject', $oRowTemplate);
 		}
 	}
