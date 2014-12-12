@@ -16,14 +16,19 @@ admin_menu:
       - ~
       - module.users
     - module.dashboard
-    - ~
-    - tag
-    - documentation
   right:
     - activity
-    - domain_name
     - logo
-    - user
+    - domain_name
+      - ~
+    - tag
+    - documentation
+    -
+      - type.menu # Configure the kind of menu
+      - icon.action # The menu’s icon
+      - user
+      - clear_caches
+      - reset_user_settings
     - logout
 
 dashboard:
