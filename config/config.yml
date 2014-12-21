@@ -35,6 +35,12 @@ schulcms:
   # display image name allows to hide meaningless names from automatic upload
   gallery_display_image_name: true
 
+documentation:
+  support_info:
+    heading: 'Support SchulCMS'
+    link_text: 'Support und Vorgehen'
+    link: 'http://www.schulcms.ch/support'
+
 frontend:
   inherit_contents: false
   protect_email_addresses: true
