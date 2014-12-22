@@ -2,7 +2,7 @@
 /**
  * @package modules.admin
  */
-class ClassesAdminModule extends AdminModule {
+class ClassesAdminModule extends AdminModule implements ListWidgetDelegate {
 	private $oListWidget;
 	private $oSidebarWidget;
 
@@ -55,7 +55,7 @@ class ClassesAdminModule extends AdminModule {
 						);
 	}
 
-	public static function getListContents($iRowStart = 0, $iRowCount = null) {
+	public function getListContents($iRowStart = 0, $iRowCount = null) {
 		$aResult = array();
 		foreach(SchoolClassQuery::create()->select(array('ClassType'))->distinct()->orderByClassType()->find() as $aClassType) {
 			$aResult[] = array('class_type' => $aClassType, 'name' => $aClassType);
@@ -65,6 +65,10 @@ class ClassesAdminModule extends AdminModule {
 		}
 		$aResult = array_merge(self::getCustomListElements(), $aResult);
 		return $aResult;
+	}
+
+	public function numberOfRows() {
+		return count($this->getListContents());
 	}
 
 	public function usedWidgets() {

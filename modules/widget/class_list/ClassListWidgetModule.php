@@ -123,6 +123,10 @@ class ClassListWidgetModule extends WidgetModule {
 		$this->bShowWithStudentsOnly = $bShowWithStudentsOnly;
 	}
 
+	public function getCountStudents() {
+		return $this->bShowWithStudentsOnly ? "Ja" : "Nein";
+	}
+
 	public function getClassTypeName() {
 		if($this->oDelegateProxy->getClassType() === CriteriaListWidgetDelegate::SELECT_ALL) {
 			return null;
