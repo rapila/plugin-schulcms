@@ -7,6 +7,7 @@ class NewsAdminModule extends AdminModule {
 
 	public function __construct() {
 		$this->oListWidget = new NewsListWidgetModule();
+		$this->oListWidget->addPaging();
 		$this->oSidebarWidget = new ListWidgetModule();
 		$this->oSidebarWidget->setListTag(new TagWriter('ul'));
 		$this->oSidebarWidget->setDelegate(new CriteriaListWidgetDelegate($this, 'NewsType', 'name'));

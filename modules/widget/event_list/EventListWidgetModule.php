@@ -11,11 +11,11 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 	public $iSchoolClassId = null;
 
 	protected function createListWidget() {
-		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "Event", "date_start", "desc");
-		$this->oBooleanInputFilter = WidgetModule::getWidget('boolean_input', null, true);
-		$this->oDelegateProxy->setIsClassEvent(true);
 		$oListWidget = new ListWidgetModule();
+		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "Event", "date_start", "desc");
+		$this->oDelegateProxy->setIsClassEvent(true);
 		$oListWidget->setDelegate($this->oDelegateProxy);
+		$this->oBooleanInputFilter = WidgetModule::getWidget('boolean_input', null, true);
 		return $oListWidget;
 	}
 

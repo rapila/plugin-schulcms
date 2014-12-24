@@ -4,9 +4,10 @@
  */
 class EventsAdminModule extends AdminModule {
 	private $oListWidget;
-	
+
 	public function __construct() {
 		$this->oListWidget = new EventListWidgetModule();
+		$this->oListWidget->addPaging();
 		$iRequestedId = Manager::peekNextPathItem();
 		if($iRequestedId !== null && is_numeric($iRequestedId)) {
 			$this->oListWidget->setSetting('initial_detail_id', $iRequestedId);
@@ -19,18 +20,18 @@ class EventsAdminModule extends AdminModule {
 		}
 		$this->oSidebarWidget->setSetting('initial_selection', array('event_type_id' => $this->oListWidget->oDelegateProxy->getEventTypeId()));
 	}
-	
+
 	public function mainContent() {
 		return $this->oListWidget->doWidget();
 	}
 	public function sidebarContent() {
 		return $this->oSidebarWidget->doWidget();
 	}
-	
+
 	public function getColumnIdentifiers() {
 		return array('event_type_id', 'name', 'magic_column');
 	}
-	
+
 	public function getMetadataForColumn($sColumnIdentifier) {
 		$aResult = array();
 		switch($sColumnIdentifier) {
@@ -48,7 +49,7 @@ class EventsAdminModule extends AdminModule {
 		}
 		return $aResult;
 	}
-	
+
 	public function getCustomListElements() {
 		if(EventTypePeer::doCount(new Criteria()) > 0) {
 			return array(
