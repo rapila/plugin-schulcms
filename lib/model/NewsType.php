@@ -10,10 +10,10 @@ class NewsType extends BaseNewsType
 	const NAME_PARENTS = "Eltern-News";
 	const NAME_SERVICES = "Angebots-News";
 	const NAME_FAQS = "FAQ-News";
-	const NAME_CLASSES = "Klassen-News";
+	const NAME_CLASSES = "Allgemeine Klassen-News";
 
 	public static function createDefaultTypesIfNotExist() {
-		if(NewsTypeQuery::create()->count() > 0) {
+		if(NewsTypeQuery::create()->count() > 1) {
 			return;
 		}
 		$oRC = new ReflectionClass(__CLASS__);
