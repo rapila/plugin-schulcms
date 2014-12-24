@@ -16,7 +16,7 @@ class NewsType extends BaseNewsType
 		if(NewsTypeQuery::create()->count() > 0) {
 			return;
 		}
-		$oRC = new ReflectionClass('NewsType');
+		$oRC = new ReflectionClass(__CLASS__);
 		foreach($oRC->getConstants() as $sKey => $sName) {
 			if(StringUtil::startsWith($sKey, 'NAME_')
 			&& NewsTypeQuery::create()->filterByName($sName)->select('Name')->findOne() === null) {
