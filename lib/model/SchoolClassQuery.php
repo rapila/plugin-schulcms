@@ -36,7 +36,7 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 		$iYear = $iYear === null ? $oSchool->getCurrentYear() : $iYear;
 		// Limiting the result by $this->filterBySchool($oSchool)->distinct() can't be used since some schools operate with multiple school_ids
 		// Should be no problem since generally only the data are synced that are related to preconfigured school_ids
-		$this->orderByName()->includeClassTypesIfConfigured()->filterByYear($iYear);
+		$this->includeClassTypesIfConfigured()->filterByYear($iYear);
 		if($sClassType) {
 			$this->filterByClassType($sClassType);
 		}

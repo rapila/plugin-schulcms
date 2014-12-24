@@ -2,7 +2,7 @@
 class ClassesFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	public function allClasses($iClassType = null) {
 		$aResult = array();
-		foreach(SchoolClassQuery::create()->filterByClassTypeYearAndSchool($iClassType)->orderByName()->find() as $oSchoolClass) {
+		foreach(SchoolClassQuery::create()->filterByClassTypeYearAndSchool($iClassType)->->orderByUnitName()->find() as $oSchoolClass) {
 			$aResult[$oSchoolClass->getId()] = $oSchoolClass->getFullClassName();
 		}
 		return $aResult;
