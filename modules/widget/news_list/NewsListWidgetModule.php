@@ -1,18 +1,17 @@
 <?php
+/**
+ * @package modules.widget
+ */
 class NewsListWidgetModule extends SpecializedListWidgetModule {
 
 	protected $oListWidget;
 	public $oDelegateProxy;
 
 	protected function createListWidget() {
-		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, 'News', 'date_start_formatted', 'desc');
 		$oListWidget = new ListWidgetModule();
+		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, 'News', 'date_start_formatted', 'desc');
 		$oListWidget->setDelegate($this->oDelegateProxy);
 		return $oListWidget;
-	}
-
-	public function doWidget() {
-		return $this->oListWidget->doWidget('news_list');
 	}
 
 	public function getColumnIdentifiers() {
