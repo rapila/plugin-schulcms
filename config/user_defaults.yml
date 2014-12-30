@@ -20,7 +20,7 @@ admin_menu:
     - activity
     - logo
     - domain_name
-      - ~
+    - ~
     - tag
     - documentation
     -
