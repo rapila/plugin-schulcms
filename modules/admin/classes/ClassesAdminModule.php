@@ -57,7 +57,7 @@ class ClassesAdminModule extends AdminModule implements ListWidgetDelegate {
 
 	public function getListContents($iRowStart = 0, $iRowCount = null) {
 		$aResult = array();
-		foreach(SchoolClassQuery::create()->select(array('ClassType'))->distinct()->orderByClassType()->find() as $aClassType) {
+		foreach(ClassListWidgetModule::listQuery()->select(array('ClassType'))->distinct()->orderByClassType()->find() as $aClassType) {
 			$aResult[] = array('class_type' => $aClassType, 'name' => $aClassType);
 		}
 		if($iRowCount === null) {

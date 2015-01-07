@@ -134,13 +134,15 @@ class ClassListWidgetModule extends WidgetModule {
 		return $this->oDelegateProxy->getClassType();
 	}
 
+	public static function listQuery() {
+		return SchoolClassQuery::create()->distinct()->hasTeachers();
+	}
+
 	public function getCriteria() {
-		$oCriteria = new Criteria();
-		$oCriteria->setDistinct();
-		$oCriteria->addJoin(SchoolClassPeer::ID, ClassTeacherPeer::SCHOOL_CLASS_ID, Criteria::LEFT_JOIN);
+		$oQuery = static::listQuery();
 		if($this->bShowWithStudentsOnly) {
-			$oCriteria->addJoin(SchoolClassPeer::ID, ClassStudentPeer::SCHOOL_CLASS_ID, Criteria::INNER_JOIN);
+			$oQuery->joinClassStudent();
 		}
-		return $oCriteria;
+		return $oQuery;
 	}
 }
