@@ -10,7 +10,7 @@ class ClassListOutput extends ClassOutput {
 		$aClassTypes = null;
 		$oTemplate = $this->oPageType->constructTemplate('list', true);
 		$oItemPrototype = $this->oPageType->constructTemplate('list_item', true);
-		$aClasses = SchoolClassQuery::create()->filterByClassTypeYearAndSchool($aClassTypes)->filterBySubjectId(null, Criteria::ISNULL)->orderByUnitName()->find();
+		$aClasses = SchoolClassQuery::create()->filterByClassTypeYearAndSchool($aClassTypes)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers()->orderByUnitName()->find();
 		foreach($aClasses as $oClass) {
 			// get all infos that are independent of teaching unit
 			$oTemplate->replaceIdentifierMultiple('items', $this->renderItem($oClass, clone $oItemPrototype));
@@ -36,7 +36,7 @@ class ClassListOutput extends ClassOutput {
 			if($i < $iLimit) {
 				$sFunctionAddon = $oTeacher->getIsClassTeacher() ? $oTeacher->getTeamMember()->getClassTeacherTitle() : $oTeacher->getFunctionName(true);
 				if($sFunctionAddon != ''){
-				  $sFunctionAddon = ', '. $sFunctionAddon;
+					$sFunctionAddon = ', '. $sFunctionAddon;
 				}
 				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => $oTeacher->getTeamMember()->getFullName().$sFunctionAddon, 'href' => LinkUtil::link(array_merge($this->oTeacherPage->getFullPathArray(), array($oTeacher->getTeamMember()->getSlug())))), $oTeacher->getTeamMember()->getFullNameShort()), null, Template::NO_NEWLINE);
 				if($i < $iCountMax-1) {

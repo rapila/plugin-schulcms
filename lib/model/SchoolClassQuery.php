@@ -15,6 +15,10 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 		return $this->distinct();
 	}
 
+	public function hasTeachers() {
+		return $this->joinClassTeacher();
+	}
+
 	/**
 	* @todo should be reconsidered
 	*				School classes should only be synced according to "white lists" and displayed if they have students
