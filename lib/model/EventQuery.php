@@ -13,6 +13,14 @@ class EventQuery extends BaseEventQuery {
 		return $this->filterByDateStart(date('Y-m-d'), Criteria::GREATER_EQUAL);
 	}
 
+	public function fromYear($iYear) {
+		$this->addCond('betweenStart', 'YEAR(DATE_START)', $iYear, Criteria::LESS_EQUAL);
+		$this->addCond('betweenEnd', 'YEAR(DATE_END)', $iYear, Criteria::GREATER_EQUAL);
+		$this->combine(array('betweenStart', 'betweenEnd'), 'and');
+		$this->_or()->addUsingOperator('YEAR(DATE_START)', $iYear, Criteria::EQUAL, false)->_or()->addUsingOperator('YEAR(DATE_END)', $iYear, Criteria::EQUAL, false);
+		return $this;
+	}
+
 	public function past($sDate = null) {
 		$sDateToday = date('Y-m-d');
 		$oDateStart = $this->getNewCriterion(EventPeer::DATE_START, $sDateToday, Criteria::LESS_THAN);
