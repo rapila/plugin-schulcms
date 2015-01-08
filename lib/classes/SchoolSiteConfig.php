@@ -3,6 +3,7 @@
 class SchoolSiteConfig {
 
 	const DOWNLOAD_DOCUMENT_CATEGORY_NAME = "Dokumente Allgemein";
+	const CLASS_EVENT_TYPE_NAME = "Class Events";
 
 	private static function findOrCreateEntryByName($sIdentifier, $sModel, $sDefaultName) {
 		$sName = Settings::getSetting('externally_managed_categories', $sIdentifier, $sDefaultName);
@@ -21,7 +22,7 @@ class SchoolSiteConfig {
 	}
 
 	public static function getClassEventTypeId() {
-		return self::findOrCreateEntryByName('class_event_type', 'EventType', 'Class Events')->getId();
+		return self::findOrCreateEntryByName('class_event_type', 'EventType', self::CLASS_EVENT_TYPE_NAME)->getId();
 	}
 
 	public static function getClassNewsTypeId() {
