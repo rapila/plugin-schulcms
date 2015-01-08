@@ -41,7 +41,7 @@ class SchoolSiteConfig {
 	}
 
 	public static function getClassLinkCategoryId() {
-		return self::findOrCreateEntryByName('class_link_category', 'DocumentCategory', 'Class Links')->getId();
+		return self::findOrCreateEntryByName('class_link_category', 'LinkCategory', 'Class Links')->getId();
 	}
 
 	public static function getServiceDocumentCategoryId() {
