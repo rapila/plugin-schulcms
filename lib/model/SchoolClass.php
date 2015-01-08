@@ -11,6 +11,7 @@ class SchoolClass extends BaseSchoolClass {
 	const CLASS_LINKS_IDENTIFIER = 'links';
 	const CLASS_DOCUMENTS_IDENTIFIER = 'documents';
 	const CLASS_SUBJECTS_IDENTIFIER = 'subjects';
+	const CLASS_LOCATION_IDENTIFIER = 'location';
 
 	public function getClassTeachersOrdered($bIsClassTeacher = true) {
 		$oCriteria = new Criteria();

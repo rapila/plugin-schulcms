@@ -1,12 +1,12 @@
 <?php
 
-class ClassHomeOutput extends ClassOutput {
+class ClassKindergartenOutput extends ClassOutput {
 	public function __construct(NavigationItem $oNavigationItem, ClassesPageTypeModule $oPageType) {
 		parent::__construct($oNavigationItem, $oPageType);
 	}
 
 	public function renderContent() {
-		$oTemplate = $this->oPageType->constructTemplate('detail.home_content');
+		$oTemplate = $this->oPageType->constructTemplate('detail.kindergarten_content');
 		$this->oClass = $this->oNavigationItem->getClass();
 		if(!$this->oClass) {
 			return null;
@@ -14,7 +14,7 @@ class ClassHomeOutput extends ClassOutput {
 		$this->renderClassInfo($oTemplate);
 		$this->renderSchedules($oTemplate);
 		$this->renderClassNews($oTemplate);
-		$this->renderSubjectsAndTeachers($oTemplate);
+		$this->renderDocumentsAndLinks($oTemplate);
 		return $oTemplate;
 	}
 
@@ -60,7 +60,7 @@ class ClassHomeOutput extends ClassOutput {
 			$oTemplate->replaceIdentifier('schedule', TagWriter::quickTag('a', array('href' => $oSchedule->getDisplayUrl(), 'class' => 'pdf', 'rel' => 'document', 'title' => StringPeer::getString('class_detail.schedule_download')), StringPeer::getString('class_detail.schedule')));
 		}
 		if($oScheduleExtra = $this->oClass->getDocumentRelatedByWeekScheduleId()) {
-			$oTemplate->replaceIdentifier('schedule_extra', TagWriter::quickTag('a', array('href' => $oScheduleExtra->getDisplayUrl(), 'class' => 'pdf', 'rel' => 'document', 'title' => StringPeer::getString('class_detail.schedule_extra_download')), StringPeer::getString('class_detail.schedule_extra')));
+			$oTemplate->replaceIdentifier('schedule_extra', TagWriter::quickTag('a', array('href' => $oSchedule->getDisplayUrl(), 'class' => 'pdf', 'rel' => 'document', 'title' => StringPeer::getString('class_detail.schedule_extra_download')), StringPeer::getString('class_detail.schedule_extra')));
 		}
 	}
 
@@ -80,43 +80,35 @@ class ClassHomeOutput extends ClassOutput {
 		$oTemplate->replaceIdentifier('news', $oNewsTemplate);
 	}
 
-	private function renderSubjectsAndTeachers($oTemplate) {
-		$oTemplate->replaceIdentifier('teacher_and_subjects_title', StringPeer::getString('class_detail.heading.subjects_and_teachers'));
-		$oRowPrototype = $this->oPageType->constructTemplate('subject_class_item');
-		foreach($this->oClass->getSubjectClasses() as $oClass) {
-			$oRowTemplate = clone $oRowPrototype;
-			foreach($oClass->getClassTeachersOrdered() as $i => $oClassTeacher) {
-				if($i === 0) {
-					$oTeacher = $oClassTeacher->getTeamMember();
-					$oRowTemplate->replaceIdentifier('detail_link_teacher', LinkUtil::link(array_merge($this->oTeacherPage->getFullPathArray(), array($oTeacher->getSlug()))));
-					$oRowTemplate->replaceIdentifier('teacher_name', $oTeacher->getFullName());
-				}
+	private function renderDocumentsAndLinks($oTemplate) {
+		// Display documents if available
+		$aDocuments = $this->oClass->getClassDocuments();
+		if(count($aDocuments) > 0) {
+			$oTemplate->replaceIdentifier('documents_title', StringPeer::getString('class_detail.heading.documents'));
+			$oDocPrototype = $this->oPageType->constructTemplate('document');
+			foreach($aDocuments as $oClassDocument) {
+				$oDocument = $oClassDocument->getDocument();
+				$oDocTemplate = clone $oDocPrototype;
+				$oDocTemplate->replaceIdentifier('href', $oDocument->getDisplayUrl());
+				$oDocTemplate->replaceIdentifier('title', "Dokument anschauen / runterladen");
+				$oDocTemplate->replaceIdentifier('name', $oDocument->getName());
+				$oTemplate->replaceIdentifierMultiple('documents', $oDocTemplate);
 			}
-			$oRowTemplate->replaceIdentifier('text', $oClass->countNews());
-			$oRowTemplate->replaceIdentifier('events', $oClass->countEvents());
-			$oRowTemplate->replaceIdentifier('documents', $oClass->countClassDocuments());
-			$oRowTemplate->replaceIdentifier('links', $oClass->countClassLinks());
-			$oRowTemplate->replaceIdentifier('class_name', $oClass->getName());
-			$oRowTemplate->replaceIdentifier('subject_name', $oClass->getSubjectName());
-			$oRowTemplate->replaceIdentifier('ist_aktuell', ""); // anzeigen, ob sich eine Besuch lohnt
-			$oRowTemplate->replaceIdentifier('detail_link_subject', LinkUtil::link(array_merge($this->oNavigationItem->getLink(), array('faecher', $oClass->getSlug()))));
-			$oTemplate->replaceIdentifierMultiple('teacher_and_subject', $oRowTemplate);
 		}
-	}
 
-	private function renderTeachersAndSubjects($oTemplate) {
-		$oTemplate->replaceIdentifier('teacher_and_subjects_title', StringPeer::getString('class_detail.heading.teachers_and_subjects'));
-		$oQuery = ClassTeacherQuery::create()->filterByUnitFromClass($this->oClass, false)->useTeamMemberQuery()->orderByLastName()->orderByFirstName()->endUse();
-		$oRowPrototype = $this->oPageType->constructTemplate('teacher_and_subject');
-
-		foreach($oQuery->find() as $oClassTeacher) {
-			$oTeacher = $oClassTeacher->getTeamMember();
-			$oRowTemplate = clone $oRowPrototype;
-			$oRowTemplate->replaceIdentifier('detail_link_teacher', LinkUtil::link($oTeacher->getLink($this->oTeacherPage)));
-			$oRowTemplate->replaceIdentifier('teacher_name', $oTeacher->getFullName());
-			$oRowTemplate->replaceIdentifier('subject_name', $oClassTeacher->getFunctionName());
-			$oRowTemplate->replaceIdentifier('detail_link_subject', '#');
-			$oTemplate->replaceIdentifierMultiple('teacher_and_subject', $oRowTemplate);
+		// Display links if available
+		$aLinks = $this->oClass->getClassLinks();
+		if(count($aLinks) > 0) {
+			$oTemplate->replaceIdentifier('links_title', StringPeer::getString('class_detail.heading.links'));
+			$oLinkPrototype = $this->oPageType->constructTemplate('link');
+			foreach($aLinks as $oClassLink) {
+				$oLink = $oClassLink->getLink();
+				$oLinkTemplate = clone $oLinkPrototype;
+				$oLinkTemplate->replaceIdentifier('href', $oLink->getUrl());
+				$oLinkTemplate->replaceIdentifier('title', "Link öffnen");
+				$oLinkTemplate->replaceIdentifier('name', $oLink->getName());
+				$oTemplate->replaceIdentifierMultiple('links', $oLinkTemplate);
+			}
 		}
 	}
 
