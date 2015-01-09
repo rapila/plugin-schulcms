@@ -318,6 +318,9 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	}
 
 	private static function getContentForFrontend($oBlob) {
+		if(!$oBlob) {
+			return '';
+		}
 		$sContent = stream_get_contents($oBlob);
 		if($sContent != '') {
 			$sContent = RichtextUtil::parseStorageForFrontendOutput($sContent);
