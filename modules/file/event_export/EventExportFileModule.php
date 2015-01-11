@@ -24,6 +24,7 @@ class EventExportFileModule extends FileModule {
 		if(!$iPageId) {
 			throw new UserError("wettingen.event_export.no_page_given");
 		}
+		$oPage = PageQuery::create()->findPk($iPageId);
 		$oDateQuery = SchoolDateQuery::create();
 		$oEventQuery = EventQuery::create();
 		$iTimestamp = max($oDateQuery->findMostRecentUpdate(), $oEventQuery->findMostRecentUpdate());
@@ -43,7 +44,7 @@ class EventExportFileModule extends FileModule {
 				'id' => $oEvent->getId(),
 				'name' => $oEvent->getTitle(),
 				'slug' => $oEvent->getSlug(),
-				'link' => LinkUtil::link($oEvent->getEventPageLink()),
+				'link' => LinkUtil::link($oEvent->getEventPageLink($oPage), 'FrontendManager'),
 				'date_start' => $oEvent->getDateStart('Y-m-d'),
 				'date_end' => $oEvent->getDateEnd('Y-m-d'),
 				'type' => $oEvent->getEventTypeId()
