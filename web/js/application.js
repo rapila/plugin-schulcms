@@ -29,47 +29,8 @@ jQuery(document).ready(function(){
 });
 
 //Ajax stuff
-jQuery.fn.extend({
-	getClassValue: function(classStart) {
-		var defaultValue = arguments[1] || false;
-		classStart+='-';
-		var result = defaultValue;
-		jQuery.each(this.get(0).className.toString().split(/\s+/), function(i, val) {
-			if(val.indexOf(classStart) === 0) {
-				result = val.substring(classStart.length);
-				return false;
-			}
-		});
-		return result;
-	}
-});
-
-var AjaxLoader = function(options) {
-	this.options = {
-		loader: "#ajax_loader"
-	};
-	this.options = jQuery.extend(this.options, options);
-	this.active_request_count = 0;
-	this.loader = jQuery(this.options.loader);
-};
-
-AjaxLoader.prototype = {
-	showLoader: function() {
-		this.active_request_count++;
-		this.loader.show();
-	},
-	
-	hideLoader: function() {
-		this.active_request_count--;
-		if(this.active_request_count<=0) {
-			this.loader.hide();
-			this.active_request_count = 0;
-		}
-	}
-};
-
 jQuery(document).ready(function() {
-	var ajax_loader = new AjaxLoader();
+	var ajax_loader = window.loader;
 	var load_into = jQuery('div.load-into');
 	
 	jQuery('.load-ajax a').live('click', function() {
@@ -78,7 +39,7 @@ jQuery(document).ready(function() {
 			return true;
 		}
 		var load_ajax = link.closest('.load-ajax');
-		ajax_loader.showLoader();		
+		ajax_loader.show();
 		var load_handler = function(what) {
 			jQuery('table.list_view tr').each(function(i, row) {
 				jQuery(row).removeClass('active');
@@ -88,7 +49,7 @@ jQuery(document).ready(function() {
 		var detail_title = link.text();
 		link.blur();
 		load_into.load(link.attr('href'), {container_only: 'context'}, load_handler);
-		ajax_loader.hideLoader();		
+		ajax_loader.hide();
 		return false;
 	});
 });

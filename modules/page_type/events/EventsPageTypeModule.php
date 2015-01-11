@@ -9,9 +9,10 @@ class EventsPageTypeModule extends PageTypeModule {
 		$oResourceIncluder->startDependencies();
 		$oResourceIncluder->startDependencies();
 		$oResourceIncluder->addResource('Wok.js');
+		$oResourceIncluder->addResource('ajax.js');
 		$oResourceIncluder->addResourceEndingDependency('app.js');
 		$oResourceIncluder->addResourceEndingDependency('events.js');
-		$oResourceIncluder->addResource(LinkUtil::link(array('event_export', '{year}', $oPage->getId()), 'FileManager'), ResourceIncluder::RESOURCE_TYPE_LINK, null, array('type' => 'application/json', 'template' => 'source_link', 'source' => '/eventData'));
+		$oResourceIncluder->addResource(LinkUtil::link(array('event_export', '{year}', $this->oPage->getId()), 'FileManager'), ResourceIncluder::RESOURCE_TYPE_LINK, null, array('type' => 'application/json', 'template' => 'source_link', 'source' => '/eventData'));
 		$oTemplate->replaceIdentifierMultiple('container', $this->constructTemplate('content/filter'), 'content');
 		$oTemplate->replaceIdentifierMultiple('container', $this->constructTemplate('content/calendar-content'), 'content');
 	}
