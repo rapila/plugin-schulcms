@@ -43,6 +43,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 		if($this->oNavigationItem instanceof ClassNavigationItem) {
 			$sMode = $this->oNavigationItem->getMode();
 		}
+		// Caching?
 
 		$sClassName = 'Class'.ucfirst($sMode).'Output';
 		$oOutput = new $sClassName($this->oNavigationItem, $this);

@@ -28,7 +28,7 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 		foreach($oQuery->find() as $i => $oClassTeacher) {
 			$oClass = $oClassTeacher->getSchoolClass();
 			$aClassInfo = array();
-			$aClassInfo['Name'] = $oClass->getName();
+			$aClassInfo['Name'] = $oClass->getClassName();
 			$aClassInfo['Year'] = $oClass->getYear();
 			$aClassInfo['IsCurrent'] = $oClass->IsCurrent();
 			$aClassInfo['ClassType'] = $oClass->getClassType();

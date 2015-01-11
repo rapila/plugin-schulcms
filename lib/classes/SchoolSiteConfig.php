@@ -2,7 +2,9 @@
 
 class SchoolSiteConfig {
 
-	const DOWNLOAD_DOCUMENT_CATEGORY_NAME = "Dokumente Allgemein";
+	const FOOTER_DOCUMENT_CATEGORY_NAME = "Dokumente Fusszeile";
+	const FOOTER_LINK_CATEGORY_NAME = "Links Fusszeile";
+
 	const CLASS_EVENT_TYPE_NAME = "Class Events";
 
 	private static function findOrCreateEntryByName($sIdentifier, $sModel, $sDefaultName) {
