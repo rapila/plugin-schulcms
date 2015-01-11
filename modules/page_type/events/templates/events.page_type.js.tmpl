@@ -1,0 +1,9 @@
+Widget.types.page_type.types['events'] = {
+	handle_preview: function(page_id, page_type) {
+
+	},
+
+	handle_admin: function(page_id, container, page_type) {
+		container.html('<p>{{writeString=page_type.content_is_managed_automatically}}</p>');
+	}
+};
