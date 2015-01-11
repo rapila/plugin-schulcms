@@ -65,7 +65,7 @@ class ClassKindergartenOutput extends ClassOutput {
 	}
 
 	private function renderClassNews($oTemplate) {
-		$oNews = FrontendNewsQuery::create()->current()->filterBySchoolClass($this->oClass)->findOne();
+		$oNews = FrontendNewsQuery::create()->current()->filterBySchoolClass($this->oClass)->orderByDateStart('desc')->findOne();
 		$oNewsTemplate = $this->oPageType->constructTemplate('news_detail');
 		if($oNews) {
 			$oNewsTemplate->replaceIdentifier('headline', $oNews->getHeadline());
