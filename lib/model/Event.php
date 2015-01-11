@@ -145,9 +145,9 @@ class Event extends BaseEvent {
 	public function getEventPageLink($oEventPage = null) {
 		if($oEventPage === null) {
 			if(!self::$EVENTPAGE) {
-				self::$EVENTPAGE = PagePeer::getPageByIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS);
+				self::$EVENTPAGE = PageQuery::create()->filterByPageType('events')->findOne();
 				if(!self::$EVENTPAGE) {
-					throw new Exception("Error: Your current event page requires a page-identifier SchoolPeer::PAGE_IDENTIFIER_EVENTS");
+					throw new Exception("Error: Your current event page requires a page with type “events”");
 				}
 			}
 			$oEventPage = self::$EVENTPAGE;
