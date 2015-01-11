@@ -182,8 +182,27 @@
 		},
 		view: function(element) {
 			var _this = this;
+			function clicked() {
+				var button = this;
+				var view = button.getAttribute('data-value');
+				_this.request({view: view});
+			}
+			var buttons = element.querySelectorAll('[data-value]');
+			for(var i=0;i<buttons.length;i++) {
+				buttons[i].addEventListener('click', clicked, false);
+			}
 			return {
-				render: function() {}
+				render: function(configuration) {
+					for(var i=0;i<buttons.length;i++) {
+						var view = buttons[i].getAttribute('data-value');
+						if(view === configuration.view) {
+							buttons[i].className += ' active';
+						} else {
+							buttons[i].className = buttons[i].className.replace(/\bactive\b/g, '');
+						}
+					}
+				},
+				request: true
 			}
 		}
 	};
@@ -207,7 +226,7 @@
 		}
 
 		// Data we got from upstream
-		var data = {};
+		var data = null;
 		// Data we pass downstream
 		var filteredData = {};
 
@@ -243,8 +262,10 @@
 						configuration[key] = updatedConfiguration[key];
 					}
 				}
-				// display the existing data with the new filters
-				update();
+				if(data === null) {
+					// something while data is loaded
+					render({});
+				}
 				// Request new data (request filters may have changed)
 				request();
 			}]
