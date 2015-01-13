@@ -11,6 +11,7 @@ class ClassListOutput extends ClassOutput {
 		$oTemplate = $this->oPageType->constructTemplate('list', true);
 		$oItemPrototype = $this->oPageType->constructTemplate('list_item', true);
 		$aClasses = SchoolClassQuery::create()->filterByClassTypeYearAndSchool($aClassTypes)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers()->orderByUnitName()->find();
+		$oTemplate->replaceIdentifier('class_news', $this->includeClassNews());
 		foreach($aClasses as $oClass) {
 			// get all infos that are independent of teaching unit
 			$oTemplate->replaceIdentifierMultiple('items', $this->renderItem($oClass, clone $oItemPrototype));
@@ -48,6 +49,15 @@ class ClassListOutput extends ClassOutput {
 			$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ' '.StringPeer::getString('class.and_others_teachers'));
 		}
 		return $oItemTemplate;
+	}
+
+	private function includeClassNews() {
+		$oNews = FrontendNewsQuery::create()->findLatestByNewsTypeName(NewsType::NAME_CLASSES);
+		if($oNews) {
+			$oTemplate = $this->oPageType->constructTemplate('list_news', true);
+			$oNews->renderItem($oTemplate);
+			return $oTemplate;
+		}
 	}
 
 	public function renderContext() {

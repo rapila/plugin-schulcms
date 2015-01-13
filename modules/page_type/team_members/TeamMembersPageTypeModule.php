@@ -20,7 +20,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 
 	private function renderList($oTemplate) {
 		$oListTemplate = $this->constructTemplate('list');
-		$oListTemplate->replaceIdentifier('class_news', $this->includeClassNews());
+		$oListTemplate->replaceIdentifier('team_member_news', $this->includeTeamMemberNews());
 		$oItemPrototype = $this->constructTemplate('list_item');
 		foreach($this->listQuery()->find() as $oTeamMember) {
 			$oItemTemplate = clone $oItemPrototype;
@@ -111,13 +111,12 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		return $this->aFunctionGroupIds;
 	}
 
-	private function includeClassNews() {
-		$aNews = FrontendNewsQuery::create()->useNewsTypeQuery(null, Criteria::INNER_JOIN)->filterByName('Mitarbeiternews')->endUse()->current()->find();
-		if(count($aNews) === 0) {
-			return;
-		}
-		foreach($aNews as $oNews) {
-
+	private function includeTeamMemberNews() {
+		$oNews = FrontendNewsQuery::create()->findLatestByNewsTypeName(NewsType::NAME_TEAM_MEMBERS);
+		if($oNews) {
+			$oTemplate = $this->constructTemplate('news');
+			$oNews->renderItem($oTemplate);
+			return $oTemplate;
 		}
 	}
 }

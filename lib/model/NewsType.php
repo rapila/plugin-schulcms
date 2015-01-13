@@ -9,8 +9,9 @@ class NewsType extends BaseNewsType
 	const NAME_HOME = "Schul-News Home";
 	const NAME_PARENTS = "Eltern-News";
 	const NAME_SERVICES = "Angebots-News";
+	const NAME_TEAM_MEMBERS = "Mitarbeiter-News";
 	const NAME_FAQS = "FAQ-News";
-	const NAME_CLASSES = "Allgemeine Klassen-News";
+	const NAME_CLASSES = "Klassen-News";
 
 	public static function createDefaultTypesIfNotExist() {
 		if(NewsTypeQuery::create()->count() > 1) {

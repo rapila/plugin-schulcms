@@ -57,4 +57,11 @@ class News extends BaseNews {
 		}
 	}
 
+	public function renderItem($oTemplate) {
+		$oTemplate->replaceIdentifier("id", $this->getId());
+		$oTemplate->replaceIdentifier("headline", $this->getHeadline());
+		$oTemplate->replaceIdentifier('content', RichtextUtil::parseStorageForFrontendOutput(is_resource($this->getBody()) ? stream_get_contents($this->getBody()) : ''));
+	}
+
+
 }

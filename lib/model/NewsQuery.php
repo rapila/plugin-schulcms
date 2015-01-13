@@ -21,6 +21,10 @@ class NewsQuery extends BaseNewsQuery
 		return $this->useNewsTypeQuery(null, Criteria::INNER_JOIN)->filterByName($mName)->endUse();
 	}
 
+	public function findLatestByNewsTypeName($mName) {
+		return $this->filterByNewsTypeName($mName)->current()->orderByDateStart('desc')->findOne();
+	}
+
 	/**
 	* @deprecated use NewsQuery::current();
 	*/
