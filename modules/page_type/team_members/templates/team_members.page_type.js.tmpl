@@ -30,7 +30,9 @@ Widget.types.page_type.types.team_members = {
 			jQuery.each(function_groups, function(i, data) {
 				option.clone().text(data.value).attr('value', data.key).appendTo(_this.function_group_dropdown);
 			});
-			_this.function_group_dropdown.val(_this.page_type.methods.config());
+			_this.page_type.methods.config(function(result) {
+				_this.function_group_dropdown.val(result);
+			});
 		});
 	}
 
