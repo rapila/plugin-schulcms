@@ -16,12 +16,12 @@ class News extends BaseNews {
 		$this->setBody($oTag->__toString());
 	}
 
-	public function getDateStartFormatted($sFormat = 'd.m.Y') {
-		return $this->getDateStart($sFormat);
+	public function getDateStartFormatted() {
+		return LocaleUtil::localizeDate($this->getDateStart());
 	}
 
-	public function getDateEndFormatted($sFormat = 'd.m.Y') {
-		return $this->getDateEnd($sFormat);
+	public function getDateEndFormatted() {
+		return LocaleUtil::localizeDate($this->getDateEnd());
 	}
 
 	public function getHasImage() {
