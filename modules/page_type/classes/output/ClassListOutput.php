@@ -29,7 +29,7 @@ class ClassListOutput extends ClassOutput {
 		$oItemTemplate->replaceIdentifier('count_students', $oClass->countStudentsByUnitName());
 
 		// get related class teacher links, in case there are 3 class teachers, to be just ;=)
-		$iLimit = 2;
+		$iLimit = 3;
 		$aClassTeachers = $oClass->getTeachersByUnitName(true, $iLimit+1);
 		$iCountTeachers = count($aClassTeachers);
 		$iCountMax = $iCountTeachers < $iLimit ? $iCountTeachers : $iLimit;
