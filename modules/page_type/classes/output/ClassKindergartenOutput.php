@@ -89,7 +89,7 @@ class ClassKindergartenOutput extends ClassOutput {
 			foreach($aDocuments as $oClassDocument) {
 				$oDocument = $oClassDocument->getDocument();
 				$oDocTemplate = clone $oDocPrototype;
-				$oDocTemplate->replaceIdentifier('href', $oDocument->getDisplayUrl());
+				$oDocTemplate->replaceIdentifier('link', $oDocument->getDisplayUrl());
 				$oDocTemplate->replaceIdentifier('title', "Dokument anschauen / runterladen");
 				$oDocTemplate->replaceIdentifier('name', $oDocument->getName());
 				$oTemplate->replaceIdentifierMultiple('documents', $oDocTemplate);
@@ -104,7 +104,7 @@ class ClassKindergartenOutput extends ClassOutput {
 			foreach($aLinks as $oClassLink) {
 				$oLink = $oClassLink->getLink();
 				$oLinkTemplate = clone $oLinkPrototype;
-				$oLinkTemplate->replaceIdentifier('href', $oLink->getUrl());
+				$oLinkTemplate->replaceIdentifier('link', $oLink->getUrl());
 				$oLinkTemplate->replaceIdentifier('title', "Link öffnen");
 				$oLinkTemplate->replaceIdentifier('name', $oLink->getName());
 				$oTemplate->replaceIdentifierMultiple('links', $oLinkTemplate);
