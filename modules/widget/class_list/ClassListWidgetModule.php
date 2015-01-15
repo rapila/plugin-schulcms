@@ -49,6 +49,7 @@ class ClassListWidgetModule extends WidgetModule {
 			case 'count_students':
 				$aResult['heading'] = StringPeer::getString('wns.class.with_students');
 				$aResult['heading_filter'] = array('classes_with_students_input', $this->oClassesWithStudentsInputFilter->getSessionKey());
+				$aResult['display_type'] = ListWidgetModule::DISPLAY_TYPE_NUMERIC;
 				$aResult['is_sortable'] = false;
 				break;
 			case 'class_teacher_names':
