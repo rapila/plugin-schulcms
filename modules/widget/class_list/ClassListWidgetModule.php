@@ -28,7 +28,7 @@ class ClassListWidgetModule extends WidgetModule {
 	}
 
 	public function getColumnIdentifiers() {
-		return array('id', 'class_name', 'teaching_unit_name', 'class_type', 'year_period', 'level', 'count_students', 'class_teacher_names', 'has_class_portrait', 'has_class_schedule', 'count_events');
+		return array('id', 'class_name', 'year_period', 'level', 'count_students', 'class_teacher_names', 'has_class_portrait', 'has_class_schedule', 'count_events');
 	}
 
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -36,12 +36,6 @@ class ClassListWidgetModule extends WidgetModule {
 		switch($sColumnIdentifier) {
 			case 'class_name':
 				$aResult['heading'] = StringPeer::getString('wns.class.name');
-				break;
-			case 'teaching_unit_name':
-				$aResult['heading'] = StringPeer::getString('wns.class.teaching_unit_short');
-				break;
-			case 'class_type':
-				$aResult['heading'] = StringPeer::getString('wns.class.type');
 				break;
 			case 'year_period':
 				$aResult['heading'] = '';
