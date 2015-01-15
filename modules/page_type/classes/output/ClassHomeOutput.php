@@ -83,9 +83,11 @@ class ClassHomeOutput extends ClassOutput {
 	private function renderSubjectsAndTeachers($oTemplate) {
 		$oTemplate->replaceIdentifier('teacher_and_subjects_title', StringPeer::getString('class_detail.heading.subjects_and_teachers'));
 		$oRowPrototype = $this->oPageType->constructTemplate('subject_class_item');
-		$aHasContents = array();
 		foreach($this->oClass->getSubjectClasses() as $oClass) {
 			$oRowTemplate = clone $oRowPrototype;
+			$oRowTemplate->replaceIdentifier('class_name', $oClass->getName());
+			$oRowTemplate->replaceIdentifier('subject_name', $oClass->getSubjectName());
+			$oRowTemplate->replaceIdentifier('detail_link_subject', LinkUtil::link(array_merge($this->oNavigationItem->getLink(), array('faecher', $oClass->getSlug()))));
 			foreach($oClass->getClassTeachersOrdered() as $i => $oClassTeacher) {
 				if($i === 0) {
 					$oTeacher = $oClassTeacher->getTeamMember();
@@ -98,10 +100,7 @@ class ClassHomeOutput extends ClassOutput {
 			$aHasContents[$oClass->getId()]['documents'] = $oClass->countClassDocuments();
 			$aHasContents[$oClass->getId()]['links'] = $oClass->countClassLinks();
 			$oRowTemplate->replaceIdentifier('has_content', array_sum($aHasContents[$oClass->getId()]) > 0 ? "✓" : "-");
-			$oRowTemplate->replaceIdentifier('class_name', $oClass->getName());
-			$oRowTemplate->replaceIdentifier('subject_name', $oClass->getSubjectName());
-			$oRowTemplate->replaceIdentifier('ist_aktuell', ""); // anzeigen, ob sich eine Besuch lohnt
-			$oRowTemplate->replaceIdentifier('detail_link_subject', LinkUtil::link(array_merge($this->oNavigationItem->getLink(), array('faecher', $oClass->getSlug()))));
+
 			$oTemplate->replaceIdentifierMultiple('teacher_and_subject', $oRowTemplate);
 		}
 	}
