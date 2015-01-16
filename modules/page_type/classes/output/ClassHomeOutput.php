@@ -25,7 +25,7 @@ class ClassHomeOutput extends ClassOutput {
 		return $oTemplate;
 	}
 
-	private function renderClassInfo($oTemplate) {
+	protected function renderClassInfo($oTemplate) {
 		// Students count info
 		$oTemplate->replaceIdentifier('count_students', $this->oClass->countStudentsByUnitName());
 
@@ -55,7 +55,7 @@ class ClassHomeOutput extends ClassOutput {
 		}
 	}
 
-	private function renderSchedules($oTemplate) {
+	protected function renderSchedules($oTemplate) {
 		if($oSchedule = $this->oClass->getDocumentRelatedByClassScheduleId()) {
 			$oTemplate->replaceIdentifier('schedule', TagWriter::quickTag('a', array('href' => $oSchedule->getDisplayUrl(), 'class' => 'pdf', 'rel' => 'document', 'title' => StringPeer::getString('class_detail.schedule_download')), StringPeer::getString('class_detail.schedule')));
 		}
@@ -64,7 +64,7 @@ class ClassHomeOutput extends ClassOutput {
 		}
 	}
 
-	private function renderClassNews($oTemplate) {
+	protected function renderClassNews($oTemplate) {
 		$oNews = FrontendNewsQuery::create()->current()->filterBySchoolClass($this->oClass)->orderByDateStart('desc')->findOne();
 		$oNewsTemplate = $this->oPageType->constructTemplate('news_detail');
 		if($oNews) {
@@ -80,7 +80,7 @@ class ClassHomeOutput extends ClassOutput {
 		$oTemplate->replaceIdentifier('news', $oNewsTemplate);
 	}
 
-	private function renderSubjectsAndTeachers($oTemplate) {
+	protected function renderSubjectsAndTeachers($oTemplate) {
 		$oTemplate->replaceIdentifier('teacher_and_subjects_title', StringPeer::getString('class_detail.heading.subjects_and_teachers'));
 		$oRowPrototype = $this->oPageType->constructTemplate('subject_class_item');
 		foreach($this->oClass->getSubjectClasses() as $oClass) {
@@ -105,7 +105,7 @@ class ClassHomeOutput extends ClassOutput {
 		}
 	}
 
-	private function renderTeachersAndSubjects($oTemplate) {
+	protected function renderTeachersAndSubjects($oTemplate) {
 		$oTemplate->replaceIdentifier('teacher_and_subjects_title', StringPeer::getString('class_detail.heading.teachers_and_subjects'));
 		$oQuery = ClassTeacherQuery::create()->filterByUnitFromClass($this->oClass, false)->useTeamMemberQuery()->orderByLastName()->orderByFirstName()->endUse();
 		$oRowPrototype = $this->oPageType->constructTemplate('teacher_and_subject');
@@ -121,7 +121,7 @@ class ClassHomeOutput extends ClassOutput {
 		}
 	}
 
-	private function renderRecentReport($oTemplate) {
+	protected function renderRecentReport($oTemplate) {
 		$oEvent = FrontendEventQuery::create()->filterBySchoolClass($this->oClass)->joinEventDocument()->orderByUpdatedAt(Criteria::DESC)->findOne();
 		if($oEvent === null) {
 			return;
@@ -135,11 +135,11 @@ class ClassHomeOutput extends ClassOutput {
 		$oTemplate->replaceIdentifier('recent_report_image', TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => 300)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle())));
 	}
 
-	private function getClassEventLink($oEvent) {
+	protected function getClassEventLink($oEvent) {
 		return array_merge($this->oNavigationItem->getLink(), explode('-', $oEvent->getDateStart('Y-n-j')), array($oEvent->getSlug()));
 	}
 
-	private function renderUpcomingEvents($oTemplate, $iCount = 10) {
+	protected function renderUpcomingEvents($oTemplate, $iCount = 10) {
 		$oItemPrototype = $this->oPageType->constructTemplate('event_teaser');
 		$oDatePrototype = $this->oPageType->constructTemplate('date');
 

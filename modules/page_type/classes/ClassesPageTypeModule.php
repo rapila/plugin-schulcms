@@ -20,14 +20,9 @@ abstract class ClassOutput {
 	public abstract function renderContext();
 }
 
-require_once __DIR__.'/output/ClassDocumentsOutput.php';
-require_once __DIR__.'/output/ClassEventsOutput.php';
-require_once __DIR__.'/output/ClassHomeOutput.php';
-require_once __DIR__.'/output/ClassKindergartenOutput.php';
-require_once __DIR__.'/output/ClassLinksOutput.php';
-require_once __DIR__.'/output/ClassListOutput.php';
-require_once __DIR__.'/output/ClassNewsOutput.php';
-require_once __DIR__.'/output/ClassSubjectsOutput.php';
+foreach(ResourceFinder::create()->addPath(DIRNAME_MODULES, 'page_type', 'classes', 'output')->addFilePath()->baseFirst()->find() as $sOutputPath) {
+	require_once($sOutputPath);
+}
 
 require_once __DIR__.'/ClassNavigationItem.php';
 
@@ -45,7 +40,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 		}
 		// Caching?
 
-		$sClassName = 'Class'.ucfirst($sMode).'Output';
+		$sClassName = 'Class'.StringUtil::camelize($sMode, true).'Output';
 		$oOutput = new $sClassName($this->oNavigationItem, $this);
 
 		$mContent = $oOutput->renderContent();
