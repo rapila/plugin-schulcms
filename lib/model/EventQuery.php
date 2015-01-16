@@ -47,16 +47,9 @@ class EventQuery extends BaseEventQuery {
 			$aData = $oNavigationItem;
 		} else if($oNavigationItem instanceof VirtualNavigationItem) {
 			$aData = $oNavigationItem->getData();
-		} else {
-			$aData = array();
-		}
-		if(isset($aData['event_type'])) {
-			$oQuery = $this->filterByEventTypeId($aData['event_type']);
 		}
 		if(isset($aData['year'])) {
 			$this->add('YEAR(DATE_START)', $aData['year']);
-		} else {
-			return $this->upcomingOrOngoing();
 		}
 		if(isset($aData['month'])) {
 			$this->add('MONTH(DATE_START)', $aData['month']);

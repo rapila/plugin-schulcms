@@ -26,7 +26,7 @@ class EventExportFileModule extends FileModule {
 		}
 		$oPage = PageQuery::create()->findPk($iPageId);
 		$oDateQuery = SchoolDateQuery::create();
-		$oEventQuery = EventQuery::create();
+		$oEventQuery = FrontendEventQuery::create();
 		$iTimestamp = max($oDateQuery->findMostRecentUpdate(), $oEventQuery->findMostRecentUpdate());
 		LinkUtil::sendCacheControlHeaders($iTimestamp);
 		$aResult = array();
