@@ -1,15 +1,18 @@
-<div class="filter standalone" data-wok-filter='eventData/eventData.filtered/{"year": 2014}'>
-	<div data-wok-filter-date-pager='filter//"date_start","date_end","year"'>
-		<span class="prev">&lt;</span>
-		<span class="current"></span>
-		<span class="next">&gt;</span>
-	</div>
-	<div data-wok-filter-view="filter/">
-		<div data-value="month">{{writeString=month}}</div>
-		<div data-value="year">{{writeString=year}}</div>
-	</div>
-	<div data-wok-filter-view="filter/">
-		<div data-value="thumbnails" class="wett-icon">thumbnails</div>
-		<div data-value="list" class="wett-icon">list</div>
+<div data-wok-filter='eventData/eventData.filtered/{"year": {{writeDate=Y}}, "view": "month"}'>
+	<h1 data-wok-filter-title='filter//"year"'></h1>
+	<div class="filters">
+		<div data-wok-filter-date-pager='filter//"date_start","date_end","year"'>
+			<span class="prev wett-icon">&lt;</span>
+			<span class="current"></span>
+			<span class="next wett-icon">&gt;</span>
+		</div>
+		<div data-wok-filter-view="filter/">
+			<div data-value="month">{{writeString=month}}</div>
+			<div data-value="year">{{writeString=year}}</div>
+		</div>
+		<div data-wok-filter-view="filter/">
+			<div data-value="thumbnails" class="wett-icon">grid</div>
+			<div data-value="list" class="wett-icon">list</div>
+		</div>
 	</div>
 </div>
