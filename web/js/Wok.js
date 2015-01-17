@@ -1,7 +1,11 @@
 (function() {
 	'use strict';
 
-	function Wok() {
+	function Wok(config) {
+		this.config = config || {
+			pluginClass: 'wok-'
+		};
+
 		this.pipes = {};
 
 		this.plugins = {};
@@ -77,6 +81,10 @@
 		}
 		if(renderImmediately) {
 			stage.render();
+		}
+
+		if(this.config.pluginClass !== null) {
+			element.className += ' '+this.config.pluginClass+name;
 		}
 	};
 	
