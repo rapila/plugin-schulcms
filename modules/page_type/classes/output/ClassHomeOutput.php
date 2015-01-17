@@ -95,12 +95,12 @@ class ClassHomeOutput extends ClassOutput {
 					$oRowTemplate->replaceIdentifier('teacher_name', $oTeacher->getFullName());
 				}
 			}
-			$aHasContents[$oClass->getId()]['text'] = $oClass->countNews();
-			$aHasContents[$oClass->getId()]['events'] = $oClass->countEvents();
-			$aHasContents[$oClass->getId()]['documents'] = $oClass->countClassDocuments();
-			$aHasContents[$oClass->getId()]['links'] = $oClass->countClassLinks();
-			$oRowTemplate->replaceIdentifier('has_content', array_sum($aHasContents[$oClass->getId()]) > 0 ? "✓" : "-");
-
+			$aHasContents[$oClass->getId()]['text'] = $oClass->latestUpdatedNews();
+			$aHasContents[$oClass->getId()]['events'] = $oClass->latestUpdatedEvent();
+			$aHasContents[$oClass->getId()]['documents'] = $oClass->latestUpdatedDocument();
+			$aHasContents[$oClass->getId()]['links'] = $oClass->latestUpdatedLink();
+			$sMaxUpdated = max($aHasContents[$oClass->getId()]);
+			$oRowTemplate->replaceIdentifier('has_content', $sMaxUpdated == null ? "-" : LocaleUtil::localizeDate($sMaxUpdated));
 			$oTemplate->replaceIdentifierMultiple('teacher_and_subject', $oRowTemplate);
 		}
 	}

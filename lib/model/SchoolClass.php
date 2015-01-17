@@ -209,6 +209,38 @@ class SchoolClass extends BaseSchoolClass {
 		return $this->getSchoolClassRelatedByAncestorClassId();
 	}
 
+	public function latestUpdatedLink($bObject = false) {
+		$oQuery = LinkQuery::create()->useClassLinkQuery()->filterBySchoolClassId($this->getId())->endUse()->orderByUpdatedAt('desc');
+		if($bObject) {
+			return $oQuery->findOne();
+		}
+		return $oQuery->select('UpdatedAt')->findOne();
+	}
+
+	public function latestUpdatedDocument($bObject = false) {
+		$oQuery = DocumentQuery::create()->useClassDocumentQuery()->filterBySchoolClassId($this->getId())->endUse()->orderByUpdatedAt('desc');
+		if($bObject) {
+			return $oQuery->findOne();
+		}
+		return $oQuery->select('UpdatedAt')->findOne();
+	}
+
+	public function latestUpdatedEvent($bObject = false) {
+		$oQuery = EventQuery::create()->filterBySchoolClassId($this->getId())->orderByUpdatedAt('desc');
+		if($bObject) {
+			return $oQuery->findOne();
+		}
+		return $oQuery->select('UpdatedAt')->findOne();
+	}
+
+	public function latestUpdatedNews($bObject = false) {
+		$oQuery = NewsQuery::create()->filterBySchoolClassId($this->getId())->orderByUpdatedAt('desc');
+		if($bObject) {
+			return $oQuery->findOne();
+		}
+		return $oQuery->select('UpdatedAt')->findOne();
+	}
+
 	public function preDelete(PropelPDO $con = null) {
 		parent::preDelete($con);
 		if($oDocument = $this->getDocumentRelatedByClassPortraitId()) {
