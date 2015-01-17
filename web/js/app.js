@@ -224,7 +224,9 @@
 		var configuration = defaultConfiguration || {};
 
 		// The inner wok with the individual filter modules
-		var filterWok = element.filterWok = new Wok();
+		var filterWok = element.filterWok = new Wok({
+			pluginClass: 'filter wok-'
+		});
 		if(document.location.hash === '#debug') {
 			filterWok.debug = true;
 		}
