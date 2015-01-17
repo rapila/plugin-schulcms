@@ -1,17 +1,17 @@
-<div data-wok-filter='eventData/eventData.filtered/{"year": {{writeDate=Y}}, "view": "month"}'>
+<div data-wok-filter='eventData/eventData.filtered/{"year": {{writeDate=Y}}, "view": "calendar", "granularity": "year"}'>
 	<h1 data-wok-filter-title='filter//"year"'></h1>
 	<div class="filters">
-		<div data-wok-filter-date-pager='filter//"date_start","date_end","year"'>
+		<div data-wok-filter-date-pager='filter//"date_start","date_end","year","granularity"'>
 			<span class="prev wett-icon">&lt;</span>
 			<span class="current"></span>
 			<span class="next wett-icon">&gt;</span>
 		</div>
-		<div data-wok-filter-view="filter/">
+		<div data-wok-filter-view='filter//"granularity"'>
 			<div data-value="month">{{writeString=month}}</div>
 			<div data-value="year">{{writeString=year}}</div>
 		</div>
 		<div data-wok-filter-view="filter/">
-			<div data-value="thumbnails" class="wett-icon">grid</div>
+			<div data-value="calendar" class="wett-icon">grid</div>
 			<div data-value="list" class="wett-icon">list</div>
 		</div>
 	</div>

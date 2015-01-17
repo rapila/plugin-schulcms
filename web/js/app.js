@@ -180,12 +180,15 @@
 				request: true
 			}
 		},
-		view: function(element) {
+		view: function(element, prop) {
+			prop = prop || 'view';
 			var _this = this;
 			function clicked() {
 				var button = this;
 				var view = button.getAttribute('data-value');
-				_this.request({view: view});
+				var configuration = {};
+				configuration[prop] = view;
+				_this.request(configuration);
 			}
 			var buttons = element.querySelectorAll('[data-value]');
 			for(var i=0;i<buttons.length;i++) {
@@ -195,7 +198,7 @@
 				render: function(configuration) {
 					for(var i=0;i<buttons.length;i++) {
 						var view = buttons[i].getAttribute('data-value');
-						if(view === configuration.view) {
+						if(view === configuration[prop]) {
 							buttons[i].className += ' active';
 						} else {
 							buttons[i].className = buttons[i].className.replace(/\bactive\b/g, '');
