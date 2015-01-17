@@ -13,7 +13,6 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 
 	public function filterByTeamMemberFunctionGroup($mFunctionGroup) {
 		$this->setDistinct();
-
 		$this->addJoin(TeamMemberPeer::ID, TeamMemberFunctionPeer::TEAM_MEMBER_ID, Criteria::LEFT_JOIN);
 		$this->addJoin(TeamMemberFunctionPeer::SCHOOL_FUNCTION_ID, SchoolFunctionPeer::ID, Criteria::INNER_JOIN);
 		if(is_array($mFunctionGroup)) {
