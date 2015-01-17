@@ -204,6 +204,14 @@
 				},
 				request: true
 			}
+		},
+		title: function(element, prop) {
+			return {
+				request: true,
+				render: function(data) {
+					element.textContent = data[prop];
+				}
+			};
 		}
 	};
 
