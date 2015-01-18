@@ -35,9 +35,14 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 					if($i > 0) {
 						$oItemTemplate->replaceIdentifierMultiple('school_class', ', ', null, Template::NO_NEWLINE);
 					}
-					// display only class links with active classes
 					$aLink = $oClassTeacher->getSchoolClass()->getLink($this->oClassPage);
-					$oItemTemplate->replaceIdentifierMultiple('school_class', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.class.link_title_prefix').$oClassTeacher->getSchoolClass()->getName(), 'href' => LinkUtil::link($aLink)), $oClassTeacher->getSchoolClass()->getName()), null, Template::NO_NEWLINE);
+					if($aLink === null) {
+						$oLink = $oClassTeacher->getSchoolClass()->getName();
+					} else {
+						$oLink = TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.class.link_title_prefix').$oClassTeacher->getSchoolClass()->getName(), 'href' => LinkUtil::link($aLink)), $oClassTeacher->getSchoolClass()->getName());
+					}
+					// display only class links with active classes
+					$oItemTemplate->replaceIdentifierMultiple('school_class', $oLink, null, Template::NO_NEWLINE);
 				}
 			} else {
 				$oItemTemplate->replaceIdentifier('school_class', '-');

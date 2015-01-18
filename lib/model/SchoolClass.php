@@ -68,6 +68,9 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getLink($oClassesPage = null) {
+		if($this->getSubjectId() != null) {
+			return null;
+		}
 		if($oClassesPage === null && self::$CLASS_PAGE === null) {
 			self::$CLASS_PAGE = PageQuery::create()->filterByPageType('classes')->findOne();
 		} elseif($oClassesPage) {
