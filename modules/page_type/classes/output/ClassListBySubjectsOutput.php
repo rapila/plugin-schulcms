@@ -1,6 +1,6 @@
 <?php
 
-class ClassSubjectsOutput extends ClassOutput {
+class ClassListBySubjectsOutput extends ClassOutput {
 	public function __construct(NavigationItem $oNavigationItem, ClassesPageTypeModule $oPageType) {
 		parent::__construct($oNavigationItem, $oPageType);
 	}

@@ -8,6 +8,6 @@ class SubjectsPageTypeModule extends ClassesPageTypeModule {
 	}
 
 	public function display(Template $oTemplate, $bIsPreview = false) {
-		parent::display($oTemplate, $bIsPreview, 'subjects');
+		parent::display($oTemplate, $bIsPreview, 'list_by_subjects');
 	}
 }
