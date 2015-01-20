@@ -1,7 +1,6 @@
 <?php
 
 class ClassSubjectsOutput extends ClassOutput {
-
 	public function __construct(NavigationItem $oNavigationItem, ClassesPageTypeModule $oPageType) {
 		parent::__construct($oNavigationItem, $oPageType);
 	}
@@ -25,7 +24,7 @@ class ClassSubjectsOutput extends ClassOutput {
 			$oItemTemplate->replaceIdentifierMultiple('classes', TagWriter::quickTag('a', array('href' => "#"), $oClass->getClassName()));
 			foreach($oClass->getClassTeachersOrdered() as $i => $oClassTeacher) {
 				if($i === 0) {
-					$oItemTemplate->replaceIdentifierMultiple('teachers', TagWriter::quickTag('a', array('href' => '#'), $oClassTeacher->getTeamMember()->getFullName()));
+					$oItemTemplate->replaceIdentifierMultiple('teachers', TagWriter::quickTag('a', array('href' => LinkUtil::link($oClassTeacher->getTeamMember()->getLink($this->oTeacherPage))), $oClassTeacher->getTeamMember()->getFullName()));
 				}
 			}
 		}
