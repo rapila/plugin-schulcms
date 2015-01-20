@@ -21,7 +21,6 @@ abstract class ClassOutput {
 }
 
 foreach(ResourceFinder::create()->addPath(DIRNAME_MODULES, 'page_type', 'classes', 'output')->addFilePath()->baseFirst()->find() as $sOutputPath) {
-	ErrorHandler::log('$sOutputPath', $sOutputPath);
 	require_once($sOutputPath);
 }
 
