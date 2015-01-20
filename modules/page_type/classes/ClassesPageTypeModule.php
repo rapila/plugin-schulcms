@@ -21,6 +21,7 @@ abstract class ClassOutput {
 }
 
 foreach(ResourceFinder::create()->addPath(DIRNAME_MODULES, 'page_type', 'classes', 'output')->addFilePath()->baseFirst()->find() as $sOutputPath) {
+	ErrorHandler::log('$sOutputPath', $sOutputPath);
 	require_once($sOutputPath);
 }
 
@@ -32,14 +33,13 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 		parent::__construct($oPage, $oNavigationItem);
 	}
 
-	public function display(Template $oTemplate, $bIsPreview = false) {
-		$sMode = 'list';
+	public function display(Template $oTemplate, $bIsPreview = false, $sMode = null) {
+		$sMode = $sMode ? $sMode : 'list';
 
 		if($this->oNavigationItem instanceof ClassNavigationItem) {
 			$sMode = $this->oNavigationItem->getMode();
 		}
 		// Caching?
-
 		$sClassName = 'Class'.StringUtil::camelize($sMode, true).'Output';
 		$oOutput = new $sClassName($this->oNavigationItem, $this);
 
