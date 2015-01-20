@@ -1,9 +1,8 @@
-Widget.types.page_type.types.subjects= {
-	handle_preview: function(page_id, page_type) {
+Widget.types.page_type.types.subjects = {
+	handle_admin: function(page_id, container) {
 		container.append(jQuery('<p/>').text("{{writeString=wns.subjects_page_type.config_message}}"));
 	},
-
-	handle_admin: function(page_id, container, page_type) {
-
+	handle_preview: function() {
+		//Do nothing
 	}
 };
