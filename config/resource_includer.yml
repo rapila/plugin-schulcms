@@ -1,0 +1,11 @@
+libraries:
+  wok:
+    url: 'Wok.js'
+  rivets:
+    url: 'rivets/dist/rivets.min.js'
+    url_uncompressed: 'rivets/dist/rivets.js'
+  sightglass:
+    url: 'sightglass/index.js'
+
+library_dependencies:
+  rivets: {sightglass: 1}
