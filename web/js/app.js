@@ -66,7 +66,7 @@
 	});
 	
 	var filterPlugins = {
-		'date-pager': function(element, start_field, end_field, granularity, granularity_changer) {
+		'date-pager': function datePager(element, start_field, end_field, granularity, granularity_changer, months) {
 			var _this = this;
 			var prev = element.querySelector('.prev');
 			var next = element.querySelector('.next');
@@ -76,19 +76,22 @@
 				month: 0,
 				day: 1
 			};
+			rivets.formatters.month = function(value) {
+				return months[value];
+			};
+			var binding = rivets.bind(current, {value: currentValue});
 			function currentValueDate() {
 				// Using the string syntax parses the date as a local date while passing the arguments individually would try to create the date in the UTC time zone.
 				// Which one we use does not matter much, we just have to be consistent.
 				return new Date(Date.UTC(currentValue.year, currentValue.month, currentValue.day));
 			}
-			granularity = granularity in currentValue ? granularity : 'year';
 			function update(delta) {
 				currentValue[granularity] += delta;
 				if(granularity === 'year' || granularity === 'month') {
 					currentValue.day = 1;
 				}
 				if(granularity === 'year') {
-					currentValue.month = 1;
+					currentValue.month = 0;
 				}
 				var d = currentValueDate();
 				currentValue.year = d.getFullYear();
@@ -104,13 +107,19 @@
 			}, false);
 			function updateGranularity(newGranularity) {
 				if(newGranularity in currentValue) {
+					if(granularity) {
+						currentValue["granularity_"+granularity] = false;
+						element.className = (' '+element.className+' ').replace(' granularity-'+granularity+' ', '');
+					}
+					currentValue["granularity_"+newGranularity] = true;
+					element.className += ' granularity-'+newGranularity;
 					granularity = newGranularity;
 				}
 			}
 			return {
 				render: function(configuration, data) {
 					for(var dateKey in currentValue) {
-						if(configuration[dateKey]) {
+						if(dateKey in configuration) {
 							currentValue[dateKey] = configuration[dateKey];
 						}
 					}
@@ -118,7 +127,6 @@
 					if(granularity_changer && granularity_changer in configuration) {
 						updateGranularity(configuration[granularity_changer]);
 					}
-					current.textContent = currentValue[granularity];
 					var d = currentValueDate().getTime();
 					for(var key in data) {
 						var start = data[key][start_field];
@@ -149,7 +157,7 @@
 				request: true
 			}
 		},
-		pager: function(element, field, step) {
+		pager: function pager(element, field, step) {
 			var _this = this;
 			var prev = element.querySelector('.prev');
 			var next = element.querySelector('.next');
@@ -180,7 +188,7 @@
 				request: true
 			}
 		},
-		view: function(element, prop) {
+		view: function view(element, prop) {
 			prop = prop || 'view';
 			var _this = this;
 			function clicked() {
@@ -208,7 +216,7 @@
 				request: true
 			}
 		},
-		title: function(element, prop) {
+		title: function title(element, prop) {
 			return {
 				request: true,
 				render: function(data) {
