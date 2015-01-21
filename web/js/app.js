@@ -111,9 +111,9 @@
 						currentValue["granularity_"+granularity] = false;
 						element.className = (' '+element.className+' ').replace(' granularity-'+granularity+' ', '');
 					}
+					granularity = newGranularity;
 					currentValue["granularity_"+newGranularity] = true;
 					element.className += ' granularity-'+newGranularity;
-					granularity = newGranularity;
 				}
 			}
 			return {
