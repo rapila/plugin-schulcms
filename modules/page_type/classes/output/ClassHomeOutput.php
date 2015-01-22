@@ -140,20 +140,8 @@ class ClassHomeOutput extends ClassOutput {
 	}
 
 	protected function renderUpcomingEvents($oTemplate, $iCount = 10) {
-		$oItemPrototype = $this->oPageType->constructTemplate('event_teaser');
-		$oDatePrototype = $this->oPageType->constructTemplate('date');
-
-		$oQuery = FrontendEventQuery::create()->filterBySchoolClass($this->oClass)->upcomingOrOngoing()->orderByUpdatedAt()->limit($iCount);
-		foreach($oQuery->find() as $oEvent) {
-			$oItemTemplate = clone $oItemPrototype;
-			$oDate = clone $oDatePrototype;
-			$oDate->replaceIdentifier('date_day', strftime("%d",$oEvent->getDateStart('U')));
-			$oDate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
-			$oItemTemplate->replaceIdentifier('date_item', $oDate);
-			$oItemTemplate->replaceIdentifier('title', $oEvent->getTitle());
-			$oItemTemplate->replaceIdentifier('description', RichtextUtil::parseStorageForFrontendOutput($oEvent->getBodyShort()));
-			$oTemplate->replaceIdentifierMultiple('event_items', $oItemTemplate);
-		}
+		$aEvents = FrontendEventQuery::create()->filterBySchoolClass($this->oClass)->upcomingOrOngoing()->orderByUpdatedAt()->limit($iCount)->find();
+		$oTemplate->replaceIdentifier('events_overview', EventsFrontendModule::renderOverviewList($aEvents));
 	}
 
 }
