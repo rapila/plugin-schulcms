@@ -142,7 +142,7 @@ class Event extends BaseEvent {
 		return $oCriteria->findOne();
 	}
 
-	public function getEventPageLink($oEventPage = null) {
+	public function getLink($oEventPage = null) {
 		if($oEventPage === null) {
 			if(!self::$EVENTPAGE) {
 				self::$EVENTPAGE = PageQuery::create()->filterByPageType('events')->findOne();
@@ -172,7 +172,7 @@ class Event extends BaseEvent {
 		if($oBaseNavigationItem) {
 			$aLink = array_merge($oBaseNavigationItem->getLink(), array(ClassesFrontendModule::DETAIL_IDENTIFIER_EVENT, $this->getId()));
 		} else {
-			$aLink = $this->getEventPageLink();
+			$aLink = $this->getLink();
 		}
 		$aResult['link'] = LinkUtil::absoluteLink(LinkUtil::link($aLink), 'FrontendManager');
 		if($bForReview) {

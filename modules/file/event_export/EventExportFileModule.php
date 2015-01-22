@@ -44,7 +44,7 @@ class EventExportFileModule extends FileModule {
 				'id' => $oEvent->getId(),
 				'name' => $oEvent->getTitle(),
 				'slug' => $oEvent->getSlug(),
-				'link' => LinkUtil::link($oEvent->getEventPageLink($oPage), 'FrontendManager'),
+				'link' => LinkUtil::link($oEvent->getLink($oPage), 'FrontendManager'),
 				'date_start' => $oEvent->getDateStart('Y-m-d'),
 				'date_end' => $oEvent->getDateEnd('Y-m-d'),
 				'type' => $oEvent->getEventTypeId()

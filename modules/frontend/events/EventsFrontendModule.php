@@ -26,7 +26,6 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		if(self::$EVENT === null && isset($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY])) {
 			self::$EVENT = EventQuery::create()->findPk($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY]);
 		}
-
 		$this->bIsSidebar = $this->oLanguageObject->getContentObject()->getContainerName() === 'context';
 		if(self::$EVENT) {
 			return $this->renderDetail();
@@ -56,6 +55,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$oTemplate = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'overview_list', false);
 		$oItemPrototype = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'overview_item', false);
 		$oDatePrototype = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'date', false);
+		$oEventPage =	PageQuery::create()->filterByPageType('events')->findOne();
 		foreach($aEvents as $oEvent) {
 			$oItemTemplate = clone $oItemPrototype;
 			$oDateTemplate = clone $oDatePrototype;
@@ -63,7 +63,8 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oDateTemplate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
 			$oItemTemplate->replaceIdentifier('date_item', $oDateTemplate);
 			$oItemTemplate->replaceIdentifier('title', $oEvent->getTitle());
-			$oItemTemplate->replaceIdentifier('description', self::getContentForFrontend($oEvent->getBodyShort()));
+			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink($oEventPage)));
+			$oItemTemplate->replaceIdentifier('description', self::getContentForFrontend($oEvent->getBodyShort(), true));
 			$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
 		}
 		return $oTemplate;
@@ -75,7 +76,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			return;
 		}
 		$oTemplate = $this->constructTemplate('report_short');
-		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getEventPageLink()));
+		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink()));
 		$oTemplate->replaceIdentifier('title', $oEvent->getTitle());
 		$oImage = $oEvent->getFirstImage()->getDocument();
 		if($oImage) {
@@ -98,7 +99,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			return;
 		}
 		$oTemplate = $this->constructTemplate('recent_report_teaser');
-		$sEventLink = LinkUtil::link($oEvent->getEventPageLink());
+		$sEventLink = LinkUtil::link($oEvent->getLink());
 		$oTemplate->replaceIdentifier('detail_link', $sEventLink);
 		$oTemplate->replaceIdentifier('detail_link_title', 'Zu den Details');
 		$oTemplate->replaceIdentifier('event_title', $oEvent->getTitle());
@@ -246,7 +247,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	}
 
 	private function renderEvent($oEvent, $oItemTemplate, $oDateTemplate) {
-		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getEventPageLink($this->oEventPage)));
+		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink($this->oEventPage)));
 		$oItemTemplate->replaceIdentifier('detail_link_text', $oEvent->getTitle());
 		$oItemTemplate->replaceIdentifier('detail_link_title', 'Details von '.$oEvent->getTitle());
 		$oItemTemplate->replaceIdentifier('has_images_class', $oEvent->hasImages() ? ' has_images' : '');
@@ -317,13 +318,16 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		return $oTemplate;
 	}
 
-	private static function getContentForFrontend($oBlob) {
+	private static function getContentForFrontend($oBlob, $bStripTags = false) {
 		if(!$oBlob) {
 			return '';
 		}
 		$sContent = stream_get_contents($oBlob);
 		if($sContent != '') {
 			$sContent = RichtextUtil::parseStorageForFrontendOutput($sContent);
+		}
+		if($bStripTags) {
+			$sContent = strip_tags($sContent);
 		}
 		return $sContent;
 	}
@@ -412,7 +416,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oTemplate->replaceIdentifier('class_link', $sClassLink);
 		}
 		$oTemplate->replaceIdentifier('teaser', $oEvent->getTeaser());
-		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getEventPageLink($oEventPage)));
+		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink($oEventPage)));
 		$oTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.event.goto_detail').$oEvent->getTitle());
 		return $oTemplate;
 	}
