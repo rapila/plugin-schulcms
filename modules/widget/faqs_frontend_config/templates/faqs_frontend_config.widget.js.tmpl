@@ -1,0 +1,24 @@
+Widget.types.faqs_frontend_config = {
+	prepare: function() {
+		this.content = Widget.parseHTML("{{includeTemplate=config}}");
+		this._element.append(this.content);
+
+		var config = this.getConfigData() || {};
+
+		//Elements
+		this.mode_dropdown = this._element.find('select[name=display_mode]');
+		this.displayModes(function(modes) {
+			this.mode_dropdown.populate(modes, config.display_mode);
+		});
+
+		this.school_site_input = this.content.find("select[name='school_site_id']").prepareWidget(function(widget) {
+			widget.settings.default_option_text = "{{writeString=faq.config.option.school_site_default}}";
+			widget.val(config.school_site_id);
+		}, jQuery.noop);
+	},
+
+	save: function() {
+		return this._element.serializeArrayKV();
+	}
+};
+
