@@ -1,5 +1,5 @@
 <?php
-class EventFilterModule extends FilterModule {
+class EventsFilterModule extends FilterModule {
 
 	const ITEM_EVENT_YEAR = 'event_year';
 	const ITEM_EVENT_MONTH = 'event_month';
