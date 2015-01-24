@@ -91,8 +91,16 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 				$oDetailTemplate->replaceIdentifierMultiple('functions', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
 			}
 		}
+
+		$oContextTemplate = $this->constructTemplate('detail_context');
+		if($this->oTeamMember->getEmailG()) {
+			$oContextTemplate->replaceIdentifier('email_link', TagWriter::getEmailLinkWriter($this->oTeamMember->getEmailG(), "E-Mail senden"), null, Template::NO_HTML_ESCAPE);
+		}
+
 		$oTemplate->replaceIdentifier('container', $oDetailTemplate, 'content');
 		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'content');
+		$oTemplate->replaceIdentifier('container', $oContextTemplate, 'context');
+		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'context');
 	}
 
 	public function listQuery() {
