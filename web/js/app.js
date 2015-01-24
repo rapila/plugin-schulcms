@@ -64,7 +64,7 @@
 			request: request
 		};
 	});
-	
+
 	var filterPlugins = {
 		'date-pager': function datePager(element, start_field, end_field, granularity, granularity_changer, months) {
 			var _this = this;
@@ -188,7 +188,7 @@
 				request: true
 			}
 		},
-		view: function view(element, prop) {
+		toggle: function view(element, prop) {
 			prop = prop || 'view';
 			var _this = this;
 			function clicked() {
@@ -219,8 +219,108 @@
 		title: function title(element, prop) {
 			return {
 				request: true,
-				render: function(data) {
-					element.textContent = data[prop];
+				render: function(configuration, data) {
+					element.textContent = configuration[prop];
+				}
+			};
+		},
+		// Renders a list of options from which one can be chosen
+		options: function options(element, prop) {
+			var _this = this;
+			var selected = element.querySelector('.selected');
+			var available = element.querySelectorAll('.available > *');
+
+			function selectAvailable() {
+				var id = this.getAttribute('data-id');
+				var configuration = {};
+				configuration[prop] = id;
+				_this.request(configuration);
+			}
+
+			for(var i=0;i<available.length;i++) {
+				available[i].addEventListener('click', selectAvailable, false);
+			}
+
+			return {
+				request: true,
+				render: function(configuration, data) {
+					// Rendering
+					var id = configuration[prop];
+					var displayName = id;
+					for(var i=0;i<available.length;i++) {
+						if(available[i].getAttribute('data-id') === id) {
+							displayName = available[i].textContent;
+						}
+					}
+					selected.textContent = displayName;
+
+					if(!id) {
+						return;
+					}
+
+					// Filtering
+					for(var key in data) {
+						var item = data[key];
+						var value = item[prop];
+						var found = false;
+						if(Array.isArray(value)) {
+							found = value.indexOf(id);
+						} else {
+							found = value === id;
+						}
+						if(!found) {
+							delete data[key];
+						}
+					}
+				}
+			};
+		},
+		// Renders a search field
+		search: function search(element, props) {
+			var _this = this;
+
+			element.addEventListener('input', function() {
+				_this.request();
+			}, false);
+
+			function match(value, search) {
+				if(!value) {
+					return false;
+				}
+				if(value.toLowerCase) {
+					value = value.toLowerCase();
+				}
+				if(search.toLowerCase) {
+					search = search.toLowerCase();
+				}
+				if(value.indexOf) {
+					return value.indexOf(search) > -1;
+				}
+				return value === search;
+			}
+
+			return {
+				request: true,
+				render: function(configuration, data) {
+					var search = element.value.trim()
+					if(!search) {
+						// Do not filter empty search term
+						return;
+					}
+					for(var key in data) {
+						var found = false;
+						var item = data[key];
+						for(var i=0;i<props.length;i++) {
+							var prop = props[i];
+							if(match(item[prop], search)) {
+								found = true;
+								break;
+							}
+						}
+						if(!found) {
+							delete data[key];
+						}
+					}
 				}
 			};
 		}
@@ -297,6 +397,30 @@
 		return {
 			request: request,
 			render: render
+		}
+	});
+
+	wok.use('faq', function(element) {
+		var output = {
+			faqs: []
+		};
+		rivets.bind(element, {data: output});
+
+		function render(data, configuration) {
+			var faqs = [];
+			for(var id in data) {
+				faqs.push(data[id]);
+				faqs.sort(function(faq1, faq2) {
+					return faq1.Title == faq2.Title ? 0 : faq1.Title > faq2.Title ? 1 : -1;
+				});
+			}
+			console.log('faqs', faqs);
+			output.faqs = faqs;
+		}
+
+		return {
+			render: render,
+			request: true
 		}
 	});
 
