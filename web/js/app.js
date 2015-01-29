@@ -66,7 +66,7 @@
 	});
 
 	var filterPlugins = {
-		'date-pager': function datePager(element, start_field, end_field, granularity, granularity_changer, months) {
+		'date-pager': function datePager(element, startField, endField, initialGranularity, granularityChanger, months) {
 			var _this = this;
 			var prev = element.querySelector('.prev');
 			var next = element.querySelector('.next');
@@ -81,7 +81,7 @@
 			};
 			var binding = rivets.bind(current, {value: currentValue});
 			function currentValueDate() {
-				// Using the string syntax parses the date as a local date while passing the arguments individually would try to create the date in the UTC time zone.
+				// Using the string syntax parses the date as a UTC date while passing the arguments individually would try to create the date in the local time zone.
 				// Which one we use does not matter much, we just have to be consistent.
 				return new Date(Date.UTC(currentValue.year, currentValue.month, currentValue.day));
 			}
@@ -124,13 +124,13 @@
 						}
 					}
 					// If the granularity has changed (from month to year)
-					if(granularity_changer && granularity_changer in configuration) {
-						updateGranularity(configuration[granularity_changer]);
+					if(granularityChanger && granularityChanger in configuration) {
+						updateGranularity(configuration[granularityChanger]);
 					}
 					var d = currentValueDate().getTime();
 					for(var key in data) {
-						var start = data[key][start_field];
-						var end = data[key][end_field];
+						var start = data[key][startField];
+						var end = data[key][endField];
 						if(!end) {
 							end = start;
 						}
