@@ -5,6 +5,7 @@
  */
 class NewsType extends BaseNewsType
 {
+	// these configurations should be community specific and defined independently of this generic class
 	const NAME_JOBS = "Offene Stellen";
 	const NAME_HOME = "Schul-News Home";
 	const NAME_PARENTS = "Eltern-News";
