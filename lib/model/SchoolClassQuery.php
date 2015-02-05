@@ -2,7 +2,7 @@
 
 
 /**
- * @package		 propel.generator.model
+ * @package propel.generator.model
  */
 class SchoolClassQuery extends BaseSchoolClassQuery {
 

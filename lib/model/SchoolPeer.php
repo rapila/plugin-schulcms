@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package		 propel.generator.model
+ * @package propel.generator.model
  */
 class SchoolPeer extends BaseSchoolPeer {
 
