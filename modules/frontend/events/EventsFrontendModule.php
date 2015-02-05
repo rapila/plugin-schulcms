@@ -23,8 +23,8 @@ class EventsFrontendModule extends DynamicFrontendModule {
 
 		$this->iEventTypeId = $aOptions[self::MODE_EVENT_TYPE_ID];
 		// Consider retrieving event differently without $_REQUEST param, check filter
-		if(self::$EVENT === null && isset($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY])) {
-			self::$EVENT = EventQuery::create()->findPk($_REQUEST[EventFilterModule::EVENT_REQUEST_KEY]);
+		if(self::$EVENT === null && isset($_REQUEST[EventsFilterModule::EVENT_REQUEST_KEY])) {
+			self::$EVENT = EventQuery::create()->findPk($_REQUEST[EventsFilterModule::EVENT_REQUEST_KEY]);
 		}
 		$this->bIsSidebar = $this->oLanguageObject->getContentObject()->getContainerName() === 'context';
 		if(self::$EVENT) {
