@@ -22,7 +22,7 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		} else {
 			$this->addJoin(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::ID, Criteria::INNER_JOIN);
 			if($mFunctionGroup != null) {
-  			$this->addAnd(FunctionGroupPeer::SLUG, $mFunctionGroup);
+				$this->addAnd(FunctionGroupPeer::SLUG, $mFunctionGroup);
 			}
 		}
 		return $this;
