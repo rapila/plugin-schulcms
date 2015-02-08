@@ -66,7 +66,7 @@
 	});
 
 	var filterPlugins = {
-		'date-pager': function datePager(element, startField, endField, initialGranularity, granularityChanger, months) {
+		'date-pager': function datePager(element, startField, endField, granularity, granularityChanger, months) {
 			var _this = this;
 			var prev = element.querySelector('.prev');
 			var next = element.querySelector('.next');
@@ -123,7 +123,7 @@
 							currentValue[dateKey] = configuration[dateKey];
 						}
 					}
-					// If the granularity has changed (from month to year)
+					// If the granularity has changed (from month to year or vice versa)
 					if(granularityChanger && granularityChanger in configuration) {
 						updateGranularity(configuration[granularityChanger]);
 					}
