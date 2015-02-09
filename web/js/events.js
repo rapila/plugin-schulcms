@@ -16,7 +16,10 @@
 			var appointments = this.props.appointments.map(function(date) {
 				return React.createElement(
 					Appointment,
-					{date: date}
+					{
+						date: date,
+						key: date.__key
+					}
 				);
 			});
 			return React.createElement(
@@ -33,14 +36,20 @@
 			var elements = [
 				React.createElement(
 					'div',
-					{className: 'date'},
+					{
+						className: 'date',
+						key: 'date'
+					},
 					day.date.getDate()
 				)
 			];
 			if(!this.props.minify) {
 				elements.push(React.createElement(
 					Appointments,
-					{appointments: day.appointments}
+					{
+						appointments: day.appointments,
+						key: 'appointments'
+					}
 				));
 			}
 			return React.createElement(
@@ -58,12 +67,14 @@
 	var Month = React.createClass({
 		render: function() {
 			var _this = this;
-			var days = this.props.days.map(function(day) {
+			var month = this.props.month;
+			var days = month.days.map(function(day) {
 				return React.createElement(
 					Day,
 					{
 						day: day,
-						minify: _this.props.minify
+						minify: _this.props.minify,
+						key: 'toISOString' in day.date ? day.date.toISOString() : day.date.toString()
 					}
 				)
 			});
@@ -77,12 +88,14 @@
 	
 	var Year = React.createClass({
 		render: function() {
-			var months = this.props.months.map(function(month) {
+			var year = this.props.year;
+			var months = year.months.map(function(month) {
 				return React.createElement(
 					Month,
 					{
-						days: month,
-						minify: true
+						month: month,
+						minify: true,
+						key: month.year+'-'+month.month
 					}
 				)
 			});
@@ -97,8 +110,8 @@
 	var Calendar = React.createClass({
 		getInitialState: function() {
 			return {
-				months: [],
-				days: [],
+				month: null,
+				year: null,
 				granularity: null,
 				view: null
 			};
@@ -108,14 +121,14 @@
 				return React.createElement(
 					Month,
 					{
-						days: this.state.days
+						month: this.state.month
 					}
 				);
 			} else if(this.state.granularity === 'year') {
 				return React.createElement(
 					Year,
 					{
-						months: this.state.months
+						year: this.state.year
 					}
 				);
 			} else {
@@ -131,7 +144,7 @@
 		);
 
 		function prepareDays(appointments, year, month) {
-			var days = [];
+			var result = {month: month, year: year, days: []};
 			var day = new Date(Date.UTC(year, month, 1));
 			var blinds = Math.abs(day.getDay() - startingDay);
 			if(day.getDay() < startingDay) {
@@ -139,7 +152,7 @@
 			}
 			day.setDate(day.getDate()-blinds);
 			while(blinds-- > 0) {
-				days.push({
+				result.days.push({
 					type: 'blind-date',
 					date: new Date(+day),
 					appointments: []
@@ -172,7 +185,7 @@
 				}
 				// Re-add the used appointments for the next iteration
 				appointments = usedAppointments.concat(appointments);
-				days.push({
+				result.days.push({
 					type: 'date',
 					date: new Date(+day),
 					appointments: usedAppointments
@@ -180,13 +193,13 @@
 				// Increment day
 				day.setDate(day.getDate()+1);
 			}
-			return days;
+			return result;
 		}
 
 		function prepareMonths(appointments, year) {
-			var result = [];
+			var result = {year: year, months: []};
 			for(var month=0;month<12;month++) {
-				result.push(prepareDays(appointments, year, month));
+				result.months.push(prepareDays(appointments, year, month));
 			}
 			return result;
 		}
@@ -201,15 +214,15 @@
 				return new Date(a1[startField]) - new Date(a2[startField]);
 			});
 
-			var days = [], months = [];
+			var year, month;
 
 			if(configuration.granularity === 'year') {
-				months = prepareMonths(appointments, configuration.year);
+				year = prepareMonths(appointments, configuration.year);
 			} else {
-				days = prepareDays(appointments.slice(), configuration.year, configuration.month);
+				month = prepareDays(appointments.slice(), configuration.year, configuration.month);
 			}
 
-			cal.setState({view: configuration.view, granularity: configuration.granularity, days: days, months: months});
+			cal.setState({view: configuration.view, granularity: configuration.granularity, year: year, month: month});
 		}
 		return {
 			render: render,
