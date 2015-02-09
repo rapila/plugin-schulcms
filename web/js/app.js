@@ -47,6 +47,7 @@
 				var result = JSON.parse(this.responseText);
 				for(var key in result) {
 					data[key] = result[key];
+					data[key].__key = key;
 				}
 				loaded[requestUrl] = true;
 				render();
