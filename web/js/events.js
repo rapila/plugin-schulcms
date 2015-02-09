@@ -80,7 +80,7 @@
 			});
 			return React.createElement(
 				'div',
-				{className: 'month'},
+				{className: 'month '+(this.props.minify ? 'minified' : 'expanded')},
 				days
 			);
 		}
