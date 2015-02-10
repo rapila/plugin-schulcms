@@ -371,7 +371,12 @@
 			update();
 		}
 
-		function request() {
+		function request(updatedConfiguration) {
+			if(updatedConfiguration) {
+				for(var key in updatedConfiguration) {
+					configuration[key] = updatedConfiguration[key];
+				}
+			}
 			// Request data from upstream, passing the current filter configuration
 			// FIXME: maybe we should distinguish between filter and loader criteria
 			_this.request(configuration);
