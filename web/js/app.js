@@ -154,6 +154,8 @@
 							delete data[key];
 						}
 					}
+					// Put the month names into the configuration
+					configuration.monthNames = months;
 				},
 				request: true
 			}
