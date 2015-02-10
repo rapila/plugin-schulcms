@@ -49,6 +49,9 @@ class EventExportFileModule extends FileModule {
 				'date_start' => $oEvent->getDateStart('Y-m-d'),
 				'date_end' => $oEvent->getDateEnd('Y-m-d'),
 				'type' => $oEvent->getEventTypeId(),
+				'has_bericht' => $oEvent->hasBericht(),
+				'has_images' => $oEvent->hasImages(),
+				'type' => $oEvent->getEventTypeId(),
 				'kind' => 'event'
 			);
 		}
