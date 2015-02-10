@@ -3,10 +3,43 @@
 	
 	var Appointment = React.createClass({
 		render: function() {
+			var link = React.createElement(
+				this.props.date.link ? 'a' : 'span',
+				{
+					href: this.props.date.link,
+					key: 'link'
+				},
+				this.props.date.name
+			);
+			var elements = [];
+			if(this.props.date.has_images) {
+				elements.push(React.createElement(
+					'span',
+					{
+						className: 'wett-icon',
+						key: 'has_images'
+					},
+					'grid'
+				));
+			}
+			if(this.props.date.has_bericht) {
+				elements.push(React.createElement(
+					'span',
+					{
+						className: 'wett-icon',
+						key: 'has_bericht'
+					},
+					'details'
+				));
+			}
+			elements.push(link);
 			return React.createElement(
 				'div',
-				{className: 'appointment appointment-'+(this.props.date.kind)},
-				this.props.date.name
+				{
+					className: 'appointment appointment-'+(this.props.date.kind),
+					title: this.props.date.name
+				},
+				elements
 			);
 		}
 	});
@@ -33,11 +66,13 @@
 	var Day = React.createClass({
 		render: function() {
 			var day = this.props.day;
+			var d = new Date();
+			var today = this.props.day.date.getTime() === Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
 			var elements = [
 				React.createElement(
 					'div',
 					{
-						className: 'date',
+						className: 'date '+(today ? 'today' : ''),
 						key: 'date'
 					},
 					day.date.getDate()
@@ -55,9 +90,9 @@
 			return React.createElement(
 				'div',
 				{
-					className: 'day',
-					dataDateCount: day.appointments.length,
-					dataDay: day.date.getDate()
+					className: 'day '+(day.appointments.length ? 'has-appointments' : '')+' '+day.type,
+					'data-appointment-count': day.appointments.length,
+					'data-day': day.date.getDate()
 				},
 				elements
 			);
@@ -88,15 +123,34 @@
 	
 	var Year = React.createClass({
 		render: function() {
+			var _this = this;
 			var year = this.props.year;
 			var months = year.months.map(function(month) {
 				return React.createElement(
-					Month,
+					'div',
 					{
-						month: month,
-						minify: true,
-						key: month.year+'-'+month.month
-					}
+						className: 'month-wrapper',
+						key: month.year+'-'+month.month,
+						onClick: _this.props.focusMonth.bind(null, month.year, month.month)
+					},
+					[
+						React.createElement(
+							'div',
+							{
+								key: 'month-label',
+								className: 'label'
+							},
+							_this.props.monthNames[month.month]
+						),
+						React.createElement(
+							Month,
+							{
+								month: month,
+								minify: true,
+								key: 'month'
+							}
+						)
+					]
 				)
 			});
 			return React.createElement(
@@ -128,7 +182,9 @@
 				return React.createElement(
 					Year,
 					{
-						year: this.state.year
+						year: this.state.year,
+						monthNames: this.state.monthNames,
+						focusMonth: this.props.focusMonth
 					}
 				);
 			} else {
@@ -138,29 +194,41 @@
 	});
 
 	function calendar(element, startingDay, startField, endField) {
+		var _this = this;
+
 		var cal = React.render(
-			React.createElement(Calendar, null),
+			React.createElement(
+				Calendar,
+				{
+					focusMonth: function(year, month) {
+						_this.request({year: year, month: month, granularity: 'month'});
+					}
+				}
+			),
 			element
 		);
 
 		function prepareDays(appointments, year, month) {
-			var result = {month: month, year: year, days: []};
+			function pushBlinds(amount) {
+				while(amount-- > 0) {
+					result.days.push({
+						type: 'blind-date',
+						date: new Date(+day),
+						appointments: []
+					});
+					// Increment day
+					day.setDate(day.getDate()+1);
+				}
+			}
 			var day = new Date(Date.UTC(year, month, 1));
+			var result = {month: month, year: year, days: []};
+			// Calculate blinds before start of the month
 			var blinds = Math.abs(day.getDay() - startingDay);
 			if(day.getDay() < startingDay) {
 				blinds = 7 - blinds;
 			}
 			day.setDate(day.getDate()-blinds);
-			while(blinds-- > 0) {
-				result.days.push({
-					type: 'blind-date',
-					date: new Date(+day),
-					appointments: []
-				});
-				// Increment day
-				day.setDate(day.getDate()+1);
-			}
-			var day = new Date(Date.UTC(year, month, 1));
+			pushBlinds(blinds);
 			while(day.getMonth() === month) {
 				var usedAppointments = [];
 				while(appointments.length) {
@@ -193,6 +261,12 @@
 				// Increment day
 				day.setDate(day.getDate()+1);
 			}
+			// Calculate blinds after end of the month
+			blinds = Math.abs(day.getDay() - startingDay);
+			if(day.getDay() > startingDay) {
+				blinds = 7 - blinds;
+			}
+			pushBlinds(blinds);
 			return result;
 		}
 
@@ -222,7 +296,7 @@
 				month = prepareDays(appointments.slice(), configuration.year, configuration.month);
 			}
 
-			cal.setState({view: configuration.view, granularity: configuration.granularity, year: year, month: month});
+			cal.setState({view: configuration.view, granularity: configuration.granularity, year: year, month: month, monthNames: configuration.monthNames});
 		}
 		return {
 			render: render,
