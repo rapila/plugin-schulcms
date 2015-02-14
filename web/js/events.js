@@ -4,8 +4,9 @@
 	var Appointment = React.createClass({
 		render: function() {
 			var elements = [];
+			var content = [];
 			if(this.props.appointment.has_images) {
-				elements.push(React.createElement(
+				content.push(React.createElement(
 					'span',
 					{
 						className: 'wett-icon',
@@ -15,7 +16,7 @@
 				));
 			}
 			if(this.props.appointment.has_bericht) {
-				elements.push(React.createElement(
+				content.push(React.createElement(
 					'span',
 					{
 						className: 'wett-icon',
@@ -24,7 +25,6 @@
 					'details'
 				));
 			}
-			var content = [];
 			content.push(React.createElement(
 				this.props.appointment.link ? 'a' : 'span',
 				{
@@ -69,7 +69,7 @@
 								className: 'event-day',
 								key: 'end-event-day'
 							},
-							sameMonth ? (start.getUTCDate() === end.getUTCDate() ? end.getUTCDate() : (start.getUTCDate() + ' – ' + end.getUTCDate())) : end.getUTCDate()
+							sameMonth ? (start.getUTCDate() === end.getUTCDate() ? end.getUTCDate() : (start.getUTCDate() + '–' + end.getUTCDate())) : end.getUTCDate()
 						)
 					]
 				));
