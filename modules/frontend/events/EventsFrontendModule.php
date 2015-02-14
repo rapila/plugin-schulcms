@@ -318,7 +318,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		return $oTemplate;
 	}
 
-	private static function getContentForFrontend($oBlob, $bStripTags = false) {
+	public static function getContentForFrontend($oBlob, $bStripTags = false) {
 		if(!$oBlob) {
 			return '';
 		}

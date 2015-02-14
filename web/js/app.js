@@ -95,9 +95,9 @@
 					currentValue.month = 0;
 				}
 				var d = currentValueDate();
-				currentValue.year = d.getFullYear();
-				currentValue.month = d.getMonth();
-				currentValue.day = d.getDate();
+				currentValue.year = d.getUTCFullYear();
+				currentValue.month = d.getUTCMonth();
+				currentValue.day = d.getUTCDate();
 				_this.request(currentValue);
 			}
 			prev.addEventListener('click', function() {
@@ -138,17 +138,17 @@
 						start = new Date(start);
 						end = new Date(end);
 						if(granularity === 'day') {
-							end.setDate(end.getDate()+1);
+							end.setUTCDate(end.getUTCDate()+1);
 						} else if(granularity === 'month') {
-							start.setDate(1);
-							end.setDate(1);
-							end.setMonth(end.getMonth()+1);
+							start.setUTCDate(1);
+							end.setUTCDate(1);
+							end.setUTCMonth(end.getUTCMonth()+1);
 						} else if(granularity === 'year') {
-							start.setDate(1);
-							end.setDate(1);
-							start.setMonth(0);
-							end.setMonth(0);
-							end.setFullYear(end.getFullYear()+1);
+							start.setUTCDate(1);
+							end.setUTCDate(1);
+							start.setUTCMonth(0);
+							end.setUTCMonth(0);
+							end.setUTCFullYear(end.getUTCFullYear()+1);
 						}
 						if(!(start.getTime() <= d && d < end.getTime())) {
 							delete data[key];
@@ -210,7 +210,9 @@
 					for(var i=0;i<buttons.length;i++) {
 						var view = buttons[i].getAttribute('data-value');
 						if(view === configuration[prop]) {
-							buttons[i].className += ' active';
+							if((' '+buttons[i].className+' ').indexOf(' active ') === -1) {
+								buttons[i].className += ' active';
+							}
 						} else {
 							buttons[i].className = buttons[i].className.replace(/\bactive\b/g, '');
 						}

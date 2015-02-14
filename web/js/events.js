@@ -3,16 +3,8 @@
 	
 	var Appointment = React.createClass({
 		render: function() {
-			var link = React.createElement(
-				this.props.date.link ? 'a' : 'span',
-				{
-					href: this.props.date.link,
-					key: 'link'
-				},
-				this.props.date.name
-			);
 			var elements = [];
-			if(this.props.date.has_images) {
+			if(this.props.appointment.has_images) {
 				elements.push(React.createElement(
 					'span',
 					{
@@ -22,7 +14,7 @@
 					'grid'
 				));
 			}
-			if(this.props.date.has_bericht) {
+			if(this.props.appointment.has_bericht) {
 				elements.push(React.createElement(
 					'span',
 					{
@@ -32,12 +24,96 @@
 					'details'
 				));
 			}
-			elements.push(link);
+			var content = [];
+			content.push(React.createElement(
+				this.props.appointment.link ? 'a' : 'span',
+				{
+					href: this.props.appointment.link,
+					className: 'link',
+					key: 'link'
+				},
+				this.props.appointment.name
+			));
+			if(this.props.detailed) {
+				var start = new Date(this.props.appointment.date_start);
+				var end = new Date(this.props.appointment.date_end || this.props.appointment.date_start);
+				var sameMonth = start.getUTCMonth() === end.getUTCMonth() && start.getUTCFullYear() === end.getUTCFullYear();
+				if(this.props.appointment.description) {
+					content.push(React.createElement(
+						'p',
+						{
+							className: 'description',
+							key: 'description'
+						},
+						this.props.appointment.description
+					));
+				}
+				elements.unshift(React.createElement(
+					'div',
+					{
+						className: 'event-date',
+						key: 'end-event-date'
+					},
+					[
+						React.createElement(
+							'div',
+							{
+								className: 'event-month',
+								key: 'end-event-month'
+							},
+							this.props.monthNames[end.getUTCMonth()].length > 5 ? this.props.monthNames[end.getUTCMonth()].substr(0, 3) : this.props.monthNames[end.getUTCMonth()]
+						),
+						React.createElement(
+							'div',
+							{
+								className: 'event-day',
+								key: 'end-event-day'
+							},
+							sameMonth ? (start.getUTCDate() === end.getUTCDate() ? end.getUTCDate() : (start.getUTCDate() + ' – ' + end.getUTCDate())) : end.getUTCDate()
+						)
+					]
+				));
+				if(!sameMonth) {
+					elements.unshift(React.createElement(
+						'div',
+						{
+							className: 'event-date',
+							key: 'start-event-date'
+						},
+						[
+							React.createElement(
+								'div',
+								{
+									className: 'event-month',
+									key: 'start-event-month'
+								},
+								this.props.monthNames[start.getUTCMonth()].length > 5 ? this.props.monthNames[start.getUTCMonth()].substr(0, 3) : this.props.monthNames[start.getUTCMonth()]
+							),
+							React.createElement(
+								'div',
+								{
+									className: 'event-day',
+									key: 'start-event-day'
+								},
+								start.getUTCDate()
+							)
+						]
+					));
+				}
+			}
+			elements.push(React.createElement(
+				'div',
+				{
+					className: 'content',
+					key: 'content'
+				},
+				content
+			));
 			return React.createElement(
 				'div',
 				{
-					className: 'appointment appointment-'+(this.props.date.kind),
-					title: this.props.date.name
+					className: 'appointment appointment-'+(this.props.appointment.kind),
+					title: this.props.appointment.name
 				},
 				elements
 			);
@@ -46,18 +122,23 @@
 	
 	var Appointments = React.createClass({
 		render: function() {
-			var appointments = this.props.appointments.map(function(date) {
+			var _this = this;
+			var appointments = this.props.appointments.map(function(appointment) {
 				return React.createElement(
 					Appointment,
 					{
-						date: date,
-						key: date.__key
+						appointment: appointment,
+						detailed: _this.props.detailed,
+						monthNames: _this.props.monthNames,
+						key: appointment.__key
 					}
 				);
 			});
 			return React.createElement(
 				'div',
-				{className: 'appointments'},
+				{
+					className: 'appointments'+(this.props.detailed ? ' appointments-detailed' : '')
+				},
 				appointments
 			);
 		}
@@ -67,6 +148,7 @@
 		render: function() {
 			var day = this.props.day;
 			var d = new Date();
+			// Don’t use UTC getters here as we want the UTC-equvalent of the local date
 			var today = this.props.day.date.getTime() === Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
 			var elements = [
 				React.createElement(
@@ -75,7 +157,7 @@
 						className: 'date '+(today ? 'today' : ''),
 						key: 'date'
 					},
-					day.date.getDate()
+					day.date.getUTCDate()
 				)
 			];
 			if(!this.props.minify) {
@@ -92,7 +174,7 @@
 				{
 					className: 'day '+(day.appointments.length ? 'has-appointments' : '')+' '+day.type,
 					'data-appointment-count': day.appointments.length,
-					'data-day': day.date.getDate()
+					'data-day': day.date.getUTCDate()
 				},
 				elements
 			);
@@ -171,6 +253,16 @@
 			};
 		},
 		render: function() {
+			if(this.state.view === 'list') {
+				return React.createElement(
+					Appointments,
+					{
+						appointments: this.state.appointments,
+						monthNames: this.state.monthNames,
+						detailed: true
+					}
+				);
+			}
 			if(this.state.granularity === 'month') {
 				return React.createElement(
 					Month,
@@ -217,19 +309,19 @@
 						appointments: []
 					});
 					// Increment day
-					day.setDate(day.getDate()+1);
+					day.setUTCDate(day.getUTCDate()+1);
 				}
 			}
 			var day = new Date(Date.UTC(year, month, 1));
 			var result = {month: month, year: year, days: []};
 			// Calculate blinds before start of the month
-			var blinds = Math.abs(day.getDay() - startingDay);
-			if(day.getDay() < startingDay) {
+			var blinds = Math.abs(day.getUTCDay() - startingDay);
+			if(day.getUTCDay() < startingDay) {
 				blinds = 7 - blinds;
 			}
-			day.setDate(day.getDate()-blinds);
+			day.setUTCDate(day.getUTCDate()-blinds);
 			pushBlinds(blinds);
-			while(day.getMonth() === month) {
+			while(day.getUTCMonth() === month) {
 				var usedAppointments = [];
 				while(appointments.length) {
 					var date = appointments.shift();
@@ -259,11 +351,11 @@
 					appointments: usedAppointments
 				});
 				// Increment day
-				day.setDate(day.getDate()+1);
+				day.setUTCDate(day.getUTCDate()+1);
 			}
 			// Calculate blinds after end of the month
-			blinds = Math.abs(day.getDay() - startingDay);
-			if(day.getDay() > startingDay) {
+			blinds = Math.abs(day.getUTCDay() - startingDay);
+			if(day.getUTCDay() > startingDay) {
 				blinds = 7 - blinds;
 			}
 			pushBlinds(blinds);
@@ -290,13 +382,23 @@
 
 			var year, month;
 
-			if(configuration.granularity === 'year') {
-				year = prepareMonths(appointments, configuration.year);
-			} else {
-				month = prepareDays(appointments.slice(), configuration.year, configuration.month);
+			if(configuration.view === 'calendar') {
+				// Calendar view needs to group the appointments into dates
+				if(configuration.granularity === 'year') {
+					year = prepareMonths(appointments, configuration.year);
+				} else {
+					month = prepareDays(appointments.slice(), configuration.year, configuration.month);
+				}
 			}
 
-			cal.setState({view: configuration.view, granularity: configuration.granularity, year: year, month: month, monthNames: configuration.monthNames});
+			cal.setState({
+				view: configuration.view,
+				granularity: configuration.granularity,
+				year: year,
+				month: month,
+				monthNames: configuration.monthNames,
+				appointments: appointments
+			});
 		}
 		return {
 			render: render,
