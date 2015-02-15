@@ -207,8 +207,15 @@
 			return React.createElement(
 				'div',
 				{
-					className: 'day '+(day.appointments.length ? 'has-appointments' : '')+' '+day.type+(today ? ' today' : ''),
+					className: 'day'
+					           +(day.appointments.length ? ' has-appointments' : '')
+					           +(day.counts.event ? ' has-events' : '')
+					           +(day.counts.date ? ' has-dates' : '')
+					           +' '+day.type
+					           +(today ? ' today' : ''),
 					'data-appointment-count': day.appointments.length,
+					'data-event-count': day.counts.event || 0,
+					'data-date-count': day.counts.date || 0,
 					'data-day': day.date.getUTCDate()
 				},
 				elements
@@ -344,7 +351,8 @@
 					result.days.push({
 						type: 'blind-date',
 						date: new Date(+day),
-						appointments: []
+						appointments: [],
+						counts: {}
 					});
 					// Increment day
 					day.setUTCDate(day.getUTCDate()+1);
@@ -361,6 +369,7 @@
 			pushBlinds(blinds);
 			while(day.getUTCMonth() === month) {
 				var usedAppointments = [];
+				var counts = {};
 				while(appointments.length) {
 					var date = appointments.shift();
 					// If end date is nil, set to same as start
@@ -379,6 +388,7 @@
 						break;
 					}
 					// Date is interesting
+					counts[date.kind] = (counts[date.kind] || 0) + 1;
 					usedAppointments.push(date);
 				}
 				// Re-add the used appointments for the next iteration
@@ -386,7 +396,8 @@
 				result.days.push({
 					type: 'date',
 					date: new Date(+day),
-					appointments: usedAppointments
+					appointments: usedAppointments,
+					counts: counts
 				});
 				// Increment day
 				day.setUTCDate(day.getUTCDate()+1);
