@@ -3,10 +3,16 @@
 	
 	var Appointment = React.createClass({
 		render: function() {
+			function shortMonth(month) {
+				return _this.props.monthNames[month].length > 5 ? _this.props.monthNames[month].substr(0, 3) : _this.props.monthNames[month];
+			}
+			var _this = this;
 			var elements = [];
+			var title = [];
+			var icons = [];
 			var content = [];
 			if(this.props.appointment.has_images) {
-				content.push(React.createElement(
+				icons.push(React.createElement(
 					'span',
 					{
 						className: 'wett-icon',
@@ -16,7 +22,7 @@
 				));
 			}
 			if(this.props.appointment.has_bericht) {
-				content.push(React.createElement(
+				icons.push(React.createElement(
 					'span',
 					{
 						className: 'wett-icon',
@@ -25,7 +31,7 @@
 					'details'
 				));
 			}
-			content.push(React.createElement(
+			title.push(React.createElement(
 				this.props.appointment.link ? 'a' : 'span',
 				{
 					href: this.props.appointment.link,
@@ -35,9 +41,22 @@
 				this.props.appointment.name
 			));
 			if(this.props.detailed) {
+				title.push(icons);
+			} else {
+				title.unshift(icons);
+			}
+			content.push(React.createElement(
+				'span',
+				{
+					className: 'title',
+					key: 'title'
+				},
+				title
+			));
+			if(this.props.detailed) {
 				var start = new Date(this.props.appointment.date_start);
 				var end = new Date(this.props.appointment.date_end || this.props.appointment.date_start);
-				var sameMonth = start.getUTCMonth() === end.getUTCMonth() && start.getUTCFullYear() === end.getUTCFullYear();
+				var sameDay = +start === +end;
 				if(this.props.appointment.description) {
 					content.push(React.createElement(
 						'p',
@@ -48,58 +67,74 @@
 						this.props.appointment.description
 					));
 				}
-				elements.unshift(React.createElement(
+				var dates = [];
+				dates.push(React.createElement(
 					'div',
 					{
 						className: 'event-date',
-						key: 'end-event-date'
+						key: 'start-event-date'
 					},
 					[
 						React.createElement(
 							'div',
 							{
 								className: 'event-month',
-								key: 'end-event-month'
+								key: 'start-event-month'
 							},
-							this.props.monthNames[end.getUTCMonth()].length > 5 ? this.props.monthNames[end.getUTCMonth()].substr(0, 3) : this.props.monthNames[end.getUTCMonth()]
+							shortMonth(start.getUTCMonth())
 						),
 						React.createElement(
 							'div',
 							{
 								className: 'event-day',
-								key: 'end-event-day'
+								key: 'start-event-day'
 							},
-							sameMonth ? (start.getUTCDate() === end.getUTCDate() ? end.getUTCDate() : (start.getUTCDate() + '–' + end.getUTCDate())) : end.getUTCDate()
+							start.getUTCDate()
 						)
 					]
 				));
-				if(!sameMonth) {
-					elements.unshift(React.createElement(
+				if(!sameDay) {
+					dates.push(React.createElement(
+						'span',
+						{
+							key: 'until'
+						},
+						'–'
+					));
+					dates.push(React.createElement(
 						'div',
 						{
 							className: 'event-date',
-							key: 'start-event-date'
+							key: 'end-event-date'
 						},
 						[
 							React.createElement(
 								'div',
 								{
 									className: 'event-month',
-									key: 'start-event-month'
+									key: 'end-event-month'
 								},
-								this.props.monthNames[start.getUTCMonth()].length > 5 ? this.props.monthNames[start.getUTCMonth()].substr(0, 3) : this.props.monthNames[start.getUTCMonth()]
+								shortMonth(end.getUTCMonth())
 							),
 							React.createElement(
 								'div',
 								{
 									className: 'event-day',
-									key: 'start-event-day'
+									key: 'end-event-day'
 								},
-								start.getUTCDate()
+								end.getUTCDate()
 							)
 						]
 					));
 				}
+				elements.unshift(React.createElement(
+					'div',
+					{
+						className: 'dates',
+						key: 'dates'
+					},
+					dates
+				));
 			}
 			elements.push(React.createElement(
 				'div',
@@ -154,7 +189,7 @@
 				React.createElement(
 					'div',
 					{
-						className: 'date '+(today ? 'today' : ''),
+						className: 'date',
 						key: 'date'
 					},
 					day.date.getUTCDate()
@@ -172,7 +207,7 @@
 			return React.createElement(
 				'div',
 				{
-					className: 'day '+(day.appointments.length ? 'has-appointments' : '')+' '+day.type,
+					className: 'day '+(day.appointments.length ? 'has-appointments' : '')+' '+day.type+(today ? ' today' : ''),
 					'data-appointment-count': day.appointments.length,
 					'data-day': day.date.getUTCDate()
 				},
@@ -207,11 +242,14 @@
 		render: function() {
 			var _this = this;
 			var year = this.props.year;
+			var d = new Date();
 			var months = year.months.map(function(month) {
+				// Don’t use UTC getters here as we want the UTC-equvalent of the local date
+				var current = month.month === d.getMonth() && month.year === d.getFullYear();
 				return React.createElement(
 					'div',
 					{
-						className: 'month-wrapper',
+						className: 'month-wrapper'+(current ? ' current' : ''),
 						key: month.year+'-'+month.month,
 						onClick: _this.props.focusMonth.bind(null, month.year, month.month)
 					},
