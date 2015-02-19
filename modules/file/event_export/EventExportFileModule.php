@@ -36,18 +36,24 @@ class EventExportFileModule extends FileModule {
 				'name' => $oDate->getName(),
 				'date_start' => $oDate->getDateStart('Y-m-d'),
 				'date_end' => $oDate->getDateEnd('Y-m-d'),
-				'type' => $oDate->getType()
+				'type' => $oDate->getType(),
+				'kind' => 'date'
 			);
 		}
 		foreach($oEventQuery->fromYear($iYear)->find() as $oEvent) {
 			$aResult["event-{$oEvent->getId()}"] = array(
 				'id' => $oEvent->getId(),
 				'name' => $oEvent->getTitle(),
+				'description' => EventsFrontendModule::getContentForFrontend($oEvent->getBody(), true),
 				'slug' => $oEvent->getSlug(),
 				'link' => LinkUtil::link($oEvent->getLink($oPage), 'FrontendManager'),
 				'date_start' => $oEvent->getDateStart('Y-m-d'),
 				'date_end' => $oEvent->getDateEnd('Y-m-d'),
-				'type' => $oEvent->getEventTypeId()
+				'type' => $oEvent->getEventTypeId(),
+				'has_bericht' => $oEvent->hasBericht(),
+				'has_images' => $oEvent->hasImages(),
+				'type' => $oEvent->getEventTypeId(),
+				'kind' => 'event'
 			);
 		}
 		return $aResult;

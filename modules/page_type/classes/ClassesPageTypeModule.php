@@ -13,7 +13,9 @@ abstract class ClassOutput {
 		$this->oPage = FrontendManager::$CURRENT_PAGE;
 		// change this to get by page_type “teachers”?
 		$this->oTeacherPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('teachers'));
-
+		if(!$this->oTeacherPage) {
+			throw new Exception('No page with identifier `teachers` found');
+		}
 	}
 
 	public abstract function renderContent();

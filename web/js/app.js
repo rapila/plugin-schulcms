@@ -47,6 +47,7 @@
 				var result = JSON.parse(this.responseText);
 				for(var key in result) {
 					data[key] = result[key];
+					data[key].__key = key;
 				}
 				loaded[requestUrl] = true;
 				render();
@@ -66,7 +67,7 @@
 	});
 
 	var filterPlugins = {
-		'date-pager': function datePager(element, startField, endField, initialGranularity, granularityChanger, months) {
+		'date-pager': function datePager(element, startField, endField, granularity, granularityChanger, months) {
 			var _this = this;
 			var prev = element.querySelector('.prev');
 			var next = element.querySelector('.next');
@@ -94,9 +95,9 @@
 					currentValue.month = 0;
 				}
 				var d = currentValueDate();
-				currentValue.year = d.getFullYear();
-				currentValue.month = d.getMonth();
-				currentValue.day = d.getDate();
+				currentValue.year = d.getUTCFullYear();
+				currentValue.month = d.getUTCMonth();
+				currentValue.day = d.getUTCDate();
 				_this.request(currentValue);
 			}
 			prev.addEventListener('click', function() {
@@ -123,7 +124,7 @@
 							currentValue[dateKey] = configuration[dateKey];
 						}
 					}
-					// If the granularity has changed (from month to year)
+					// If the granularity has changed (from month to year or vice versa)
 					if(granularityChanger && granularityChanger in configuration) {
 						updateGranularity(configuration[granularityChanger]);
 					}
@@ -137,22 +138,24 @@
 						start = new Date(start);
 						end = new Date(end);
 						if(granularity === 'day') {
-							end.setDate(end.getDate()+1);
+							end.setUTCDate(end.getUTCDate()+1);
 						} else if(granularity === 'month') {
-							start.setDate(1);
-							end.setDate(1);
-							end.setMonth(end.getMonth()+1);
+							start.setUTCDate(1);
+							end.setUTCDate(1);
+							end.setUTCMonth(end.getUTCMonth()+1);
 						} else if(granularity === 'year') {
-							start.setDate(1);
-							end.setDate(1);
-							start.setMonth(0);
-							end.setMonth(0);
-							end.setFullYear(end.getFullYear()+1);
+							start.setUTCDate(1);
+							end.setUTCDate(1);
+							start.setUTCMonth(0);
+							end.setUTCMonth(0);
+							end.setUTCFullYear(end.getUTCFullYear()+1);
 						}
 						if(!(start.getTime() <= d && d < end.getTime())) {
 							delete data[key];
 						}
 					}
+					// Put the month names into the configuration
+					configuration.monthNames = months;
 				},
 				request: true
 			}
@@ -207,7 +210,9 @@
 					for(var i=0;i<buttons.length;i++) {
 						var view = buttons[i].getAttribute('data-value');
 						if(view === configuration[prop]) {
-							buttons[i].className += ' active';
+							if((' '+buttons[i].className+' ').indexOf(' active ') === -1) {
+								buttons[i].className += ' active';
+							}
 						} else {
 							buttons[i].className = buttons[i].className.replace(/\bactive\b/g, '');
 						}
@@ -368,7 +373,12 @@
 			update();
 		}
 
-		function request() {
+		function request(updatedConfiguration) {
+			if(updatedConfiguration) {
+				for(var key in updatedConfiguration) {
+					configuration[key] = updatedConfiguration[key];
+				}
+			}
 			// Request data from upstream, passing the current filter configuration
 			// FIXME: maybe we should distinguish between filter and loader criteria
 			_this.request(configuration);

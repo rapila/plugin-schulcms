@@ -1,29 +1,377 @@
 (function(wok) {
 	'use strict';
+	
+	var Appointment = React.createClass({
+		render: function() {
+			function shortMonth(month) {
+				return _this.props.monthNames[month].length > 5 ? _this.props.monthNames[month].substr(0, 3) : _this.props.monthNames[month];
+			}
+			var _this = this;
+			var elements = [];
+			var title = [];
+			var icons = [];
+			var content = [];
+			if(this.props.appointment.has_images) {
+				icons.push(React.createElement(
+					'span',
+					{
+						className: 'wett-icon',
+						key: 'has_images'
+					},
+					'grid'
+				));
+			}
+			if(this.props.appointment.has_bericht) {
+				icons.push(React.createElement(
+					'span',
+					{
+						className: 'wett-icon',
+						key: 'has_bericht'
+					},
+					'details'
+				));
+			}
+			title.push(React.createElement(
+				this.props.appointment.link ? 'a' : 'span',
+				{
+					href: this.props.appointment.link,
+					className: 'link',
+					key: 'link'
+				},
+				this.props.appointment.name
+			));
+			if(this.props.detailed) {
+				title.push(icons);
+			} else {
+				title.unshift(icons);
+			}
+			content.push(React.createElement(
+				'span',
+				{
+					className: 'title',
+					key: 'title'
+				},
+				title
+			));
+			if(this.props.detailed) {
+				var start = new Date(this.props.appointment.date_start);
+				var end = new Date(this.props.appointment.date_end || this.props.appointment.date_start);
+				var sameDay = +start === +end;
+				if(this.props.appointment.description) {
+					content.push(React.createElement(
+						'p',
+						{
+							className: 'description',
+							key: 'description'
+						},
+						this.props.appointment.description
+					));
+				}
+				var dates = [];
+				dates.push(React.createElement(
+					'div',
+					{
+						className: 'event-date',
+						key: 'start-event-date'
+					},
+					[
+						React.createElement(
+							'div',
+							{
+								className: 'event-month',
+								key: 'start-event-month'
+							},
+							shortMonth(start.getUTCMonth())
+						),
+						React.createElement(
+							'div',
+							{
+								className: 'event-day',
+								key: 'start-event-day'
+							},
+							start.getUTCDate()
+						)
+					]
+				));
+				if(!sameDay) {
+					dates.push(React.createElement(
+						'span',
+						{
+							key: 'until'
+						},
+						'–'
+					));
+					dates.push(React.createElement(
+						'div',
+						{
+							className: 'event-date',
+							key: 'end-event-date'
+						},
+						[
+							React.createElement(
+								'div',
+								{
+									className: 'event-month',
+									key: 'end-event-month'
+								},
+								shortMonth(end.getUTCMonth())
+							),
+							React.createElement(
+								'div',
+								{
+									className: 'event-day',
+									key: 'end-event-day'
+								},
+								end.getUTCDate()
+							)
+						]
+					));
+				}
+				elements.unshift(React.createElement(
+					'div',
+					{
+						className: 'dates',
+						key: 'dates'
+					},
+					dates
+				));
+			}
+			elements.push(React.createElement(
+				'div',
+				{
+					className: 'content',
+					key: 'content'
+				},
+				content
+			));
+			return React.createElement(
+				'div',
+				{
+					className: 'appointment appointment-'+(this.props.appointment.kind),
+					title: this.props.appointment.name
+				},
+				elements
+			);
+		}
+	});
+	
+	var Appointments = React.createClass({
+		render: function() {
+			var _this = this;
+			var appointments = this.props.appointments.map(function(appointment) {
+				return React.createElement(
+					Appointment,
+					{
+						appointment: appointment,
+						detailed: _this.props.detailed,
+						monthNames: _this.props.monthNames,
+						key: appointment.__key
+					}
+				);
+			});
+			return React.createElement(
+				'div',
+				{
+					className: 'appointments'+(this.props.detailed ? ' appointments-detailed' : '')
+				},
+				appointments
+			);
+		}
+	});
+	
+	var Day = React.createClass({
+		render: function() {
+			var day = this.props.day;
+			var d = new Date();
+			// Don’t use UTC getters here as we want the UTC-equvalent of the local date
+			var today = this.props.day.date.getTime() === Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+			var elements = [
+				React.createElement(
+					'div',
+					{
+						className: 'date',
+						key: 'date'
+					},
+					day.date.getUTCDate()
+				)
+			];
+			if(!this.props.minify) {
+				elements.push(React.createElement(
+					Appointments,
+					{
+						appointments: day.appointments,
+						key: 'appointments'
+					}
+				));
+			}
+			return React.createElement(
+				'div',
+				{
+					className: 'day'
+					           +(day.appointments.length ? ' has-appointments' : '')
+					           +(day.counts.event ? ' has-events' : '')
+					           +(day.counts.date ? ' has-dates' : '')
+					           +' '+day.type
+					           +(today ? ' today' : ''),
+					'data-appointment-count': day.appointments.length,
+					'data-event-count': day.counts.event || 0,
+					'data-date-count': day.counts.date || 0,
+					'data-day': day.date.getUTCDate()
+				},
+				elements
+			);
+		}
+	});
+	
+	var Month = React.createClass({
+		render: function() {
+			var _this = this;
+			var month = this.props.month;
+			var days = month.days.map(function(day) {
+				return React.createElement(
+					Day,
+					{
+						day: day,
+						minify: _this.props.minify,
+						key: 'toISOString' in day.date ? day.date.toISOString() : day.date.toString()
+					}
+				)
+			});
+			return React.createElement(
+				'div',
+				{className: 'month '+(this.props.minify ? 'minified' : 'expanded')},
+				days
+			);
+		}
+	});
+	
+	var Year = React.createClass({
+		render: function() {
+			var _this = this;
+			var year = this.props.year;
+			var d = new Date();
+			var months = year.months.map(function(month) {
+				// Don’t use UTC getters here as we want the UTC-equvalent of the local date
+				var current = month.month === d.getMonth() && month.year === d.getFullYear();
+				return React.createElement(
+					'div',
+					{
+						className: 'month-wrapper'+(current ? ' current' : ''),
+						key: month.year+'-'+month.month,
+						onClick: _this.props.focusMonth.bind(null, month.year, month.month)
+					},
+					[
+						React.createElement(
+							'div',
+							{
+								key: 'month-label',
+								className: 'label'
+							},
+							_this.props.monthNames[month.month]
+						),
+						React.createElement(
+							Month,
+							{
+								month: month,
+								minify: true,
+								key: 'month'
+							}
+						)
+					]
+				)
+			});
+			return React.createElement(
+				'div',
+				{className: 'year'},
+				months
+			)
+		}
+	});
+	
+	var Calendar = React.createClass({
+		getInitialState: function() {
+			return {
+				month: null,
+				year: null,
+				granularity: null,
+				view: null
+			};
+		},
+		render: function() {
+			if(this.state.view === 'list') {
+				return React.createElement(
+					Appointments,
+					{
+						appointments: this.state.appointments,
+						monthNames: this.state.monthNames,
+						detailed: true
+					}
+				);
+			}
+			if(this.state.granularity === 'month') {
+				return React.createElement(
+					Month,
+					{
+						month: this.state.month
+					}
+				);
+			} else if(this.state.granularity === 'year') {
+				return React.createElement(
+					Year,
+					{
+						year: this.state.year,
+						monthNames: this.state.monthNames,
+						focusMonth: this.props.focusMonth
+					}
+				);
+			} else {
+				return React.createElement('div');
+			}
+		}
+	});
 
 	function calendar(element, startingDay, startField, endField) {
-		var data = {
-			configuration: null,
-			granularity: null,
-			days: []
-		};
+		var _this = this;
 
-		rivets.bind(element, {data: data});
+		var cal = React.render(
+			React.createElement(
+				Calendar,
+				{
+					focusMonth: function(year, month) {
+						_this.request({year: year, month: month, granularity: 'month'});
+					}
+				}
+			),
+			element
+		);
 
-		function prepareDays(dates, year, month) {
-			var days = [];
+		function prepareDays(appointments, year, month) {
+			function pushBlinds(amount) {
+				while(amount-- > 0) {
+					result.days.push({
+						type: 'blind-date',
+						date: new Date(+day),
+						appointments: [],
+						counts: {}
+					});
+					// Increment day
+					day.setUTCDate(day.getUTCDate()+1);
+				}
+			}
 			var day = new Date(Date.UTC(year, month, 1));
-			var blinds = Math.abs(day.getDay() - startingDay);
-			if(day.getDay() < startingDay) {
+			var result = {month: month, year: year, days: []};
+			// Calculate blinds before start of the month
+			var blinds = Math.abs(day.getUTCDay() - startingDay);
+			if(day.getUTCDay() < startingDay) {
 				blinds = 7 - blinds;
 			}
-			while(blinds-- > 0) {
-				days.push({type: 'blind-date'});
-			}
-			while(day.getMonth() === month) {
-				var dayDates = [];
-				while(dates.length) {
-					var date = dates.shift();
+			day.setUTCDate(day.getUTCDate()-blinds);
+			pushBlinds(blinds);
+			while(day.getUTCMonth() === month) {
+				var usedAppointments = [];
+				var counts = {};
+				while(appointments.length) {
+					var date = appointments.shift();
 					// If end date is nil, set to same as start
 					if(!date[endField]) {
 						date[endField] = date[startField];
@@ -34,57 +382,72 @@
 					if(end - day < 0) {
 						continue;
 					}
-					// If start date is after interest, no more dates are to be found; end loop
+					// If start date is after interest, no more appointments are to be found; end loop
 					if(start - day > 0) {
-						dates.unshift(date);
+						appointments.unshift(date);
 						break;
 					}
 					// Date is interesting
-					dayDates.push(date);
+					counts[date.kind] = (counts[date.kind] || 0) + 1;
+					usedAppointments.push(date);
 				}
-				// Re-add the used dates for the next iteration
-				dates = dayDates.concat(dates);
-				days.push({
-					date: day.getDate(),
-					dates: dayDates,
-					type: 'date'
+				// Re-add the used appointments for the next iteration
+				appointments = usedAppointments.concat(appointments);
+				result.days.push({
+					type: 'date',
+					date: new Date(+day),
+					appointments: usedAppointments,
+					counts: counts
 				});
 				// Increment day
-				day.setDate(day.getDate()+1);
+				day.setUTCDate(day.getUTCDate()+1);
 			}
-			return days;
+			// Calculate blinds after end of the month
+			blinds = Math.abs(day.getUTCDay() - startingDay);
+			if(day.getUTCDay() > startingDay) {
+				blinds = 7 - blinds;
+			}
+			pushBlinds(blinds);
+			return result;
 		}
 
-		function prepareMonths(dates, year) {
-			var result = [];
+		function prepareMonths(appointments, year) {
+			var result = {year: year, months: []};
 			for(var month=0;month<12;month++) {
-				result.push(prepareDays(dates, year, month));
+				result.months.push(prepareDays(appointments, year, month));
 			}
 			return result;
 		}
 
 		function render(d, configuration) {
-			// Create an array copy of dates to use up
-			var dates = [];
+			// Create an array copy of appointments to use up
+			var appointments = [];
 			for(var k in d) {
-				dates.push(d[k]);
+				appointments.push(d[k]);
 			}
-			dates.sort(function(d1, d2) {
-				return new Date(d1[startField]) - new Date(d2[startField]);
+			appointments.sort(function(a1, a2) {
+				return new Date(a1[startField]) - new Date(a2[startField]);
 			});
 
-			if(configuration.granularity === 'year') {
-				data.months = prepareMonths(dates, configuration.year);
-			} else {
-				data.days = prepareDays(dates, configuration.year, configuration.month);
+			var year, month;
+
+			if(configuration.view === 'calendar') {
+				// Calendar view needs to group the appointments into dates
+				if(configuration.granularity === 'year') {
+					year = prepareMonths(appointments, configuration.year);
+				} else {
+					month = prepareDays(appointments.slice(), configuration.year, configuration.month);
+				}
 			}
 
-			var granularity = {};
-			granularity[configuration.granularity] = true;
-
-			data.granularity = granularity;
-			data.days = days;
-			data.configuration = configuration;
+			cal.setState({
+				view: configuration.view,
+				granularity: configuration.granularity,
+				year: year,
+				month: month,
+				monthNames: configuration.monthNames,
+				appointments: appointments
+			});
 		}
 		return {
 			render: render,

@@ -26,8 +26,7 @@ class EventsPageTypeModule extends PageTypeModule {
 		$oResourceIncluder = ResourceIncluder::defaultIncluder();
 		$oResourceIncluder->startDependencies();
 		$oResourceIncluder->startDependencies();
-		$oResourceIncluder->addJavaScriptLibrary('rivets', 1);
-		$oResourceIncluder->addJavaScriptLibrary('wok', 1);
+		$oResourceIncluder->addJavaScriptLibrary('react', '0.12.2');
 		$oResourceIncluder->addResource('ajax.js');
 		$oResourceIncluder->addResourceEndingDependency('app.js');
 		$oResourceIncluder->addResourceEndingDependency('events.js');

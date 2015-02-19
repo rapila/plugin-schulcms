@@ -6,6 +6,9 @@ libraries:
     url_uncompressed: 'rivets/dist/rivets.js'
   sightglass:
     url: 'sightglass/index.js'
+  react:
+    url: 'http://fb.me/react-${version}.min.js'
+    url_uncompressed: 'http://fb.me/react-${version}.js'
 
 library_dependencies:
   rivets: {sightglass: 1}
