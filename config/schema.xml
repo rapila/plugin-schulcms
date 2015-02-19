@@ -1,15 +1,38 @@
+<!-- Synced by iCampus -->
 
-<table name="schools" phpName="School">
+<table name="class_students" phpName="ClassStudent">
+	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="school_classes" onDelete="cascade">
+		<reference local="school_class_id" foreign="id" />
+	</foreign-key>
+	<column name="function_name" type="varchar" size="80" />
+	<column name="student_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="students" onDelete="cascade">
+		<reference local="student_id" foreign="id" />
+	</foreign-key>
+	<column name="is_newly_updated" type="boolean" size="1" default="0" />
+</table>
+
+<table name="class_teachers" phpName="ClassTeacher">
+	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="school_classes" onDelete="cascade">
+		<reference local="school_class_id" foreign="id" />
+	</foreign-key>
+	<column name="team_member_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="team_members" onDelete="cascade">
+		<reference local="team_member_id" foreign="id" />
+	</foreign-key>
+	<column name="function_name" type="varchar" size="80" required="true" primaryKey="true" />
+	<column name="sort_order" type="integer" />
+	<column name="is_class_teacher" type="boolean" size="1" default="0" />
+	<column name="is_newly_updated" type="boolean" size="1" default="0" />
+</table>
+
+<table name="function_groups" phpName="FunctionGroup">
 	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-	<column name="original_id" type="varchar" size="50" required="true" />
-	<column name="name" type="varchar" size="80" />
-	<column name="school_unit" type="varchar" size="80" />
-	<column name="address" type="varchar" size="255" />
-	<column name="zip_code" type="varchar" size="5" />
-	<column name="city" type="varchar" size="255" />
-	<column name="phone_schulleitung" type="varchar" size="14" />
-	<column name="phone_lehrerzimmer" type="varchar" size="14" />
-	<column name="current_year" type="smallint" />
+	<column name="original_name" type="varchar" required="true" size="100" />
+	<column name="slug" type="varchar" required="true" size="100" />
+	<column name="name" type="varchar" size="100" />
 </table>
 
 <table name="school_buildings" phpName="SchoolBuilding">
@@ -18,38 +41,16 @@
 	<column name="name" type="varchar" size="255" />
 </table>
 
-<table name="team_member_functions" phpName="TeamMemberFunction">
-	<column name="team_member_id" type="integer" required="true" primaryKey="true" />
-	<foreign-key foreignTable="team_members" onDelete="cascade">
-		<reference local="team_member_id" foreign="id" />
+<table name="school_class_subject_classes" phpName="SchoolClassSubjectClasses">
+	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="school_classes" onDelete="cascade">
+		<reference local="school_class_id" foreign="id" />
 	</foreign-key>
-	<column name="school_function_id" type="integer" required="true" primaryKey="true" />
-	<foreign-key foreignTable="school_functions" onDelete="cascade">
-		<reference local="school_function_id" foreign="id" />
+	<column name="subject_class_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="school_classes" onDelete="cascade">
+		<reference local="subject_class_id" foreign="id" />
 	</foreign-key>
-	<column name="is_main_function" type="boolean" size="1" default="0" />
-	<column name="is_newly_updated" type="boolean" size="1" default="0" />
-</table>
-
-<table name="school_functions" phpName="SchoolFunction">
-	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-	<column name="original_id" type="integer" required="true" />
-	<column name="title" type="varchar" size="255" />
-	<column name="function_group_id" type="integer" />
-	<foreign-key foreignTable="function_groups" onDelete="setnull">
-		<reference local="function_group_id" foreign="id" />
-	</foreign-key>
-	<column name="school_id" type="integer" />
-	<foreign-key foreignTable="schools" onDelete="cascade">
-		<reference local="school_id" foreign="id" />
-	</foreign-key>
-</table>
-
-<table name="function_groups" phpName="FunctionGroup">
-	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-	<column name="original_name" type="varchar" required="true" size="100" />
-	<column name="slug" type="varchar" required="true" size="100" />
-	<column name="name" type="varchar" size="100" />
+	<column name="student_count" description="only students that belong to both school_class and subject class" type="tinyint" />
 </table>
 
 <table name="school_classes" phpName="SchoolClass">
@@ -98,16 +99,43 @@
 	</unique>
 </table>
 
-<table name="school_class_subject_classes" phpName="SchoolClassSubjectClasses">
-	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
-	<foreign-key foreignTable="school_classes" onDelete="cascade">
-		<reference local="school_class_id" foreign="id" />
+<table name="school_functions" phpName="SchoolFunction">
+	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+	<column name="original_id" type="integer" required="true" />
+	<column name="title" type="varchar" size="255" />
+	<column name="function_group_id" type="integer" />
+	<foreign-key foreignTable="function_groups" onDelete="setnull">
+		<reference local="function_group_id" foreign="id" />
 	</foreign-key>
-	<column name="subject_class_id" type="integer" required="true" primaryKey="true" />
-	<foreign-key foreignTable="school_classes" onDelete="cascade">
-		<reference local="subject_class_id" foreign="id" />
+	<column name="school_id" type="integer" />
+	<foreign-key foreignTable="schools" onDelete="cascade">
+		<reference local="school_id" foreign="id" />
 	</foreign-key>
-	<column name="student_count" description="only students that belong to both school_class and subject class" type="tinyint" />
+</table>
+
+<table name="schools" phpName="School">
+	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+	<column name="original_id" type="varchar" size="50" required="true" />
+	<column name="name" type="varchar" size="80" />
+	<column name="school_unit" type="varchar" size="80" />
+	<column name="address" type="varchar" size="255" />
+	<column name="zip_code" type="varchar" size="5" />
+	<column name="city" type="varchar" size="255" />
+	<column name="phone_schulleitung" type="varchar" size="14" />
+	<column name="phone_lehrerzimmer" type="varchar" size="14" />
+	<column name="current_year" type="smallint" />
+</table>
+
+<table name="students" phpName="Student">
+	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+	<column name="original_id" type="integer" />
+	<column name="last_name" type="varchar" size="40" />
+	<column name="first_name" type="varchar" size="40" />
+	<column name="date_of_birth" type="date" />
+	<column name="portrait_id" type="integer" />
+	<foreign-key foreignTable="documents" onDelete="setnull">
+		<reference local="portrait_id" foreign="id" />
+	</foreign-key>
 </table>
 
 <table name="subjects" phpName="Subject">
@@ -116,6 +144,19 @@
 	<column name="name" type="varchar" size="80" required="true"/>
 	<column name="short_name" type="varchar" size="40" />
 	<column name="slug" type="varchar" size="80" />
+</table>
+
+<table name="team_member_functions" phpName="TeamMemberFunction">
+	<column name="team_member_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="team_members" onDelete="cascade">
+		<reference local="team_member_id" foreign="id" />
+	</foreign-key>
+	<column name="school_function_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="school_functions" onDelete="cascade">
+		<reference local="school_function_id" foreign="id" />
+	</foreign-key>
+	<column name="is_main_function" type="boolean" size="1" default="0" />
+	<column name="is_newly_updated" type="boolean" size="1" default="0" />
 </table>
 
 <table name="team_members" phpName="TeamMember">
@@ -141,21 +182,10 @@
 	<column name="is_newly_updated" type="boolean" size="1" default="0" />
 </table>
 
-<table name="class_students" phpName="ClassStudent">
-	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
-	<foreign-key foreignTable="school_classes" onDelete="cascade">
-		<reference local="school_class_id" foreign="id" />
-	</foreign-key>
-	<column name="function_name" type="varchar" size="80" />
-	<column name="student_id" type="integer" required="true" primaryKey="true" />
-	<foreign-key foreignTable="students" onDelete="cascade">
-		<reference local="student_id" foreign="id" />
-	</foreign-key>
-	<column name="is_newly_updated" type="boolean" size="1" default="0" />
-</table>
+<!-- Extra -->
 
 <table name="class_links" phpName="ClassLink">
-	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
+		<column name="school_class_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="school_classes" onDelete="cascade">
 		<reference local="school_class_id" foreign="id" />
 	</foreign-key>
@@ -173,33 +203,6 @@
 	<column name="document_id" type="integer" required="true" primaryKey="true" />
 	<foreign-key foreignTable="documents" onDelete="cascade">
 		<reference local="document_id" foreign="id" />
-	</foreign-key>
-</table>
-
-<table name="class_teachers" phpName="ClassTeacher">
-	<column name="school_class_id" type="integer" required="true" primaryKey="true" />
-	<foreign-key foreignTable="school_classes" onDelete="cascade">
-		<reference local="school_class_id" foreign="id" />
-	</foreign-key>
-	<column name="team_member_id" type="integer" required="true" primaryKey="true" />
-	<foreign-key foreignTable="team_members" onDelete="cascade">
-		<reference local="team_member_id" foreign="id" />
-	</foreign-key>
-	<column name="function_name" type="varchar" size="80" required="true" primaryKey="true" />
-	<column name="sort_order" type="integer" />
-	<column name="is_class_teacher" type="boolean" size="1" default="0" />
-	<column name="is_newly_updated" type="boolean" size="1" default="0" />
-</table>
-
-<table name="students" phpName="Student">
-	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-	<column name="original_id" type="integer" />
-	<column name="last_name" type="varchar" size="40" />
-	<column name="first_name" type="varchar" size="40" />
-	<column name="date_of_birth" type="date" />
-	<column name="portrait_id" type="integer" />
-	<foreign-key foreignTable="documents" onDelete="setnull">
-		<reference local="portrait_id" foreign="id" />
 	</foreign-key>
 </table>
 
