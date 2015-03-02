@@ -424,7 +424,6 @@
 					return faq1.Title == faq2.Title ? 0 : faq1.Title > faq2.Title ? 1 : -1;
 				});
 			}
-			console.log('faqs', faqs);
 			output.faqs = faqs;
 		}
 
