@@ -71,7 +71,7 @@
 				dates.push(React.createElement(
 					'div',
 					{
-						className: 'event-date',
+						className: 'event-date from',
 						key: 'start-event-date'
 					},
 					[
@@ -93,44 +93,43 @@
 						)
 					]
 				));
-				if(!sameDay) {
-					dates.push(React.createElement(
-						'span',
-						{
-							key: 'until'
-						},
-						'–'
-					));
-					dates.push(React.createElement(
-						'div',
-						{
-							className: 'event-date',
-							key: 'end-event-date'
-						},
-						[
-							React.createElement(
-								'div',
-								{
-									className: 'event-month',
-									key: 'end-event-month'
-								},
-								shortMonth(end.getUTCMonth())
-							),
-							React.createElement(
-								'div',
-								{
-									className: 'event-day',
-									key: 'end-event-day'
-								},
-								end.getUTCDate()
-							)
-						]
-					));
-				}
+				dates.push(React.createElement(
+					'span',
+					{
+						className: 'until',
+						key: 'until'
+					},
+					'–'
+				));
+				dates.push(React.createElement(
+					'div',
+					{
+						className: 'event-date to',
+						key: 'end-event-date'
+					},
+					[
+						React.createElement(
+							'div',
+							{
+								className: 'event-month',
+								key: 'end-event-month'
+							},
+							shortMonth(end.getUTCMonth())
+						),
+						React.createElement(
+							'div',
+							{
+								className: 'event-day',
+								key: 'end-event-day'
+							},
+							end.getUTCDate()
+						)
+					]
+				));
 				elements.unshift(React.createElement(
 					'div',
 					{
-						className: 'dates',
+						className: 'dates '+(sameDay ? 'same-day' : ''),
 						key: 'dates'
 					},
 					dates
