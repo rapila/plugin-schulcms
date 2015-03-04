@@ -53,9 +53,9 @@
 				},
 				title
 			));
+			var start = new Date(this.props.appointment.date_start);
+			var end = new Date(this.props.appointment.date_end || this.props.appointment.date_start);
 			if(this.props.detailed) {
-				var start = new Date(this.props.appointment.date_start);
-				var end = new Date(this.props.appointment.date_end || this.props.appointment.date_start);
 				var sameDay = +start === +end;
 				if(this.props.appointment.description) {
 					content.push(React.createElement(
@@ -144,10 +144,13 @@
 				},
 				content
 			));
+			var d = new Date();
+			// Don’t use UTC getters here as we want the UTC-equvalent of the local date
+			var past = +end < Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
 			return React.createElement(
 				'div',
 				{
-					className: 'appointment appointment-'+(this.props.appointment.kind),
+					className: 'appointment appointment-'+(this.props.appointment.kind)+' '+(past ? 'past' : 'future'),
 					title: this.props.appointment.name
 				},
 				elements
@@ -184,7 +187,7 @@
 			var day = this.props.day;
 			var d = new Date();
 			// Don’t use UTC getters here as we want the UTC-equvalent of the local date
-			var today = this.props.day.date.getTime() === Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+			var today = +this.props.day.date === Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
 			var elements = [
 				React.createElement(
 					'div',
