@@ -32,7 +32,7 @@ admin_menu:
     - logout
 
 dashboard:
-  layout: 2cols2thirds
+  layout: head3cols
   widgets:
     -
       config: [ ]
@@ -40,11 +40,11 @@ dashboard:
       collapsed: false
       type: my_classes
       title: 'Meine Klassen'
-      container: 'column-1'
+      container: 'head-column'
     -
       config:
       color: 'rgb(242, 188, 0)'
       collapsed: false
       type: documentation
       title: 'Benutzer-Dokumentation'
-      container: 'column-2'
+      container: 'column-3'
