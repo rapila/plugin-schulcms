@@ -37,6 +37,7 @@ dashboard:
     -
       config: [ ]
       color: 'rgb(20, 142, 164)'
+      contrastColor: '#333'
       collapsed: false
       type: my_classes
       title: 'Meine Klassen'
@@ -44,6 +45,7 @@ dashboard:
     -
       config:
       color: 'rgb(242, 188, 0)'
+      contrastColor: '#333'
       collapsed: false
       type: documentation
       title: 'Benutzer-Dokumentation'
