@@ -1,6 +1,24 @@
 (function() {
 	'use strict';
 
+	function classList(element) {
+		return {
+			add: function(className) {
+				if(!this.contains(className)) {
+					element.className = (element.className + ' ' + className).trim();
+				}
+			},
+			contains: function(className) {
+				return (' '+element.className+' ').indexOf(' '+className+' ') > -1;
+			},
+			remove: function(className) {
+				while(this.contains(className)) {
+					element.className = (' '+element.className+' ').replace(' '+className+' ', ' ').trim();
+				}
+			}
+		};
+	}
+
 	// A global Wok instance
 	var wok = window.wok = new Wok();
 	if(document.location.hash === '#debug') {
@@ -77,10 +95,7 @@
 				month: 0,
 				day: 1
 			};
-			rivets.formatters.month = function(value) {
-				return months[value];
-			};
-			var binding = rivets.bind(current, {value: currentValue});
+			element.cl = classList(element);
 			function currentValueDate() {
 				// Using the string syntax parses the date as a UTC date while passing the arguments individually would try to create the date in the local time zone.
 				// Which one we use does not matter much, we just have to be consistent.
@@ -110,11 +125,11 @@
 				if(newGranularity in currentValue) {
 					if(granularity) {
 						currentValue["granularity_"+granularity] = false;
-						element.className = (' '+element.className+' ').replace(' granularity-'+granularity+' ', '');
+						element.cl.remove('granularity-'+granularity);
 					}
 					granularity = newGranularity;
 					currentValue["granularity_"+newGranularity] = true;
-					element.className += ' granularity-'+newGranularity;
+					element.cl.add('granularity-'+newGranularity);
 				}
 			}
 			return {
@@ -127,6 +142,12 @@
 					// If the granularity has changed (from month to year or vice versa)
 					if(granularityChanger && granularityChanger in configuration) {
 						updateGranularity(configuration[granularityChanger]);
+					}
+					// Update the text inside the “current” element
+					if(granularity === 'year') {
+						current.textContent = currentValue.year;
+					} else {
+						current.textContent = months[currentValue.month];
 					}
 					var d = currentValueDate().getTime();
 					for(var key in data) {
@@ -210,11 +231,9 @@
 					for(var i=0;i<buttons.length;i++) {
 						var view = buttons[i].getAttribute('data-value');
 						if(view === configuration[prop]) {
-							if((' '+buttons[i].className+' ').indexOf(' active ') === -1) {
-								buttons[i].className += ' active';
-							}
+							classList(buttons[i]).add('active');
 						} else {
-							buttons[i].className = buttons[i].className.replace(/\bactive\b/g, '');
+							classList(buttons[i]).remove('active');
 						}
 					}
 				},
@@ -233,18 +252,33 @@
 		options: function options(element, prop) {
 			var _this = this;
 			var selected = element.querySelector('.selected');
-			var available = element.querySelectorAll('.available > *');
+			var available = element.querySelector('.available');
+			available.cl = classList(available);
+			var availables = available.children;
+
+			function toggle(open) {
+				if(open !== true && open !== false) {
+					open = !available.cl.contains('open');
+				}
+				if(open) {
+					available.cl.add('open');
+				} else {
+					available.cl.remove('open');
+				}
+			};
 
 			function selectAvailable() {
 				var id = this.getAttribute('data-id');
 				var configuration = {};
 				configuration[prop] = id;
+				toggle(false);
 				_this.request(configuration);
 			}
 
-			for(var i=0;i<available.length;i++) {
-				available[i].addEventListener('click', selectAvailable, false);
+			for(var i=0;i<availables.length;i++) {
+				availables[i].addEventListener('click', selectAvailable, false);
 			}
+			selected.addEventListener('click', toggle, false);
 
 			return {
 				request: true,
@@ -252,9 +286,12 @@
 					// Rendering
 					var id = configuration[prop];
 					var displayName = id;
-					for(var i=0;i<available.length;i++) {
-						if(available[i].getAttribute('data-id') === id) {
-							displayName = available[i].textContent;
+					for(var i=0;i<availables.length;i++) {
+						if(availables[i].getAttribute('data-id') === id) {
+							displayName = availables[i].textContent;
+							classList(availables[i]).add('selected');
+						} else {
+							classList(availables[i]).remove('selected');
 						}
 					}
 					selected.textContent = displayName;
@@ -407,29 +444,6 @@
 		return {
 			request: request,
 			render: render
-		}
-	});
-
-	wok.use('faq', function(element) {
-		var output = {
-			faqs: []
-		};
-		rivets.bind(element, {data: output});
-
-		function render(data, configuration) {
-			var faqs = [];
-			for(var id in data) {
-				faqs.push(data[id]);
-				faqs.sort(function(faq1, faq2) {
-					return faq1.Title == faq2.Title ? 0 : faq1.Title > faq2.Title ? 1 : -1;
-				});
-			}
-			output.faqs = faqs;
-		}
-
-		return {
-			render: render,
-			request: true
 		}
 	});
 

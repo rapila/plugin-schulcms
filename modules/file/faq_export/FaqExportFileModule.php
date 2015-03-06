@@ -12,10 +12,14 @@ class FaqExportFileModule extends FileModule {
 
 	public function renderFile() {
 		$aResult = array();
-		foreach($this->listQuery()->find() as $oFAQ) {
-			$aResult[$oFAQ->getId()] = $oFAQ->toArray();
-			$aResult[$oFAQ->getId()]['tag'] = $oFAQ->getTagNames(false);
-			$aResult[$oFAQ->getId()]['type'] = $oFAQ->getSchoolSiteTypeIds();
+		$oQuery = $this->listQuery();
+		LinkUtil::sendCacheControlHeaders($oQuery);
+		foreach($oQuery->find() as $oFAQ) {
+			$aFAQ = $oFAQ->toArray();
+			unset($aFAQ['Id']);
+			$aFAQ['tags'] = $oFAQ->getTagNames(false);
+			$aFAQ['type'] = $oFAQ->getSchoolSiteTypeIds();
+			$aResult[$oFAQ->getId()] = $aFAQ;
 		}
 		print json_encode($aResult);
 	}
