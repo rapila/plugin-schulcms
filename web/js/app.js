@@ -251,7 +251,9 @@
 		// Renders a list of options from which one can be chosen
 		options: function options(element, prop) {
 			var _this = this;
-			var selected = element.querySelector('.selected');
+			var selected = document.createElement('div');
+			selected.className = 'selected';
+			element.insertBefore(selected, element.firstChild);
 			var available = element.querySelector('.available');
 			available.cl = classList(available);
 			var availables = available.children;
@@ -268,7 +270,7 @@
 			};
 
 			function selectAvailable() {
-				var id = this.getAttribute('data-id');
+				var id = this.getAttribute('data-value');
 				var configuration = {};
 				configuration[prop] = id;
 				toggle(false);
@@ -285,9 +287,10 @@
 				render: function(configuration, data) {
 					// Rendering
 					var id = configuration[prop];
-					var displayName = id;
+					// Add a dummy text in case something goes wrong with the stored value
+					var displayName = id||' ';
 					for(var i=0;i<availables.length;i++) {
-						if(availables[i].getAttribute('data-id') === id) {
+						if(availables[i].getAttribute('data-value') === id) {
 							displayName = availables[i].textContent;
 							classList(availables[i]).add('selected');
 						} else {
@@ -296,6 +299,7 @@
 					}
 					selected.textContent = displayName;
 
+					// Don’t filter if id is empty string, 0 or null (allows filter value showing all)
 					if(!id) {
 						return;
 					}
