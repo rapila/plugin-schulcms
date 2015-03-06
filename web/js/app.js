@@ -370,11 +370,27 @@
 
 	// A Wok plugin providing filtering.
 	// Designed to work as a client of a pipe created by the source plugin
-	wok.use('filter', function(element, defaultConfiguration) {
+	wok.use('filter', function(element, defaultConfiguration, storage, storageKey) {
 		var _this = this;
 
 		// Take the configuration from the element’s data attribute
 		var configuration = defaultConfiguration || {};
+
+		// Init the storage mechanism
+		if(storage === 'local') {
+			storage = window.localStorage;
+		} else if(storage === 'session') {
+			storage = window.sessionStorage;
+		}
+		if(!storageKey) {
+			storageKey = ['filter', this.inputName, this.outputName, 'configuration'].join('/');
+		}
+		if(storage) {
+			var storedConfig = JSON.parse(storage.getItem(storageKey)||'{}')
+			for(var key in storedConfig) {
+				configuration[key] = storedConfig[key];
+			}
+		}
 
 		// The inner wok with the individual filter modules
 		var filterWok = element.filterWok = new Wok({
@@ -401,6 +417,10 @@
 			}
 			// Let the child controls update themselves and filter data depending on the current configuration
 			filterControls.render(configuration, filteredData);
+			// Store the current settings in the storage container
+			if(storage) {
+				storage.setItem(storageKey, JSON.stringify(configuration));
+			}
 			// Pass the filtered data on to our output pipe
 			_this.render(filteredData, configuration);
 		}
