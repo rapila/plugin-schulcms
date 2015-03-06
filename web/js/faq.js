@@ -3,10 +3,23 @@
 
 	var FAQTagList = React.createClass({
 		render: function() {
+			var tags = this.props.tags.map(function(tag) {
+				return React.createElement(
+					'span',
+					{
+						className: 'tag',
+						key: tag,
+						onClick: this.focusTag.bind(null, tag)
+					},
+					tag
+				)
+			});
 			return React.createElement(
 				'div',
-				{},
-				this.props.tags.join(', ')
+				{
+					className: 'tags'
+				},
+				tags
 			);
 		}
 	});
@@ -17,8 +30,8 @@
 				{},
 				[
 					React.createElement('h3', {key: 'title'}, this.props.faq.Title),
-					React.createElement('content', {key: 'content', dangerouslySetInnerHTML: {__html: this.props.faq.Content}}),
-					React.createElement(FAQTagList, {key: 'tags', tags: this.props.faq.tags})
+					React.createElement('div', {key: 'content', dangerouslySetInnerHTML: {__html: this.props.faq.Content}}),
+					React.createElement(FAQTagList, {key: 'tags', tags: this.props.faq.tags, focusTag: this.props.focusTag})
 				]
 			);
 		}
@@ -31,12 +44,15 @@
 			};
 		},
 		render: function() {
+			var _this = this;
 			var faqs = this.state.faqs.map(function(faq) {
 				return React.createElement(
 					FAQ,
 					{
 						faq: faq,
-						key: faq.__key
+						key: faq.__key,
+						focusTag: _this.props.focusTag,
+						focusType: _this.props.focusType
 					}
 				);
 			});
@@ -51,10 +67,22 @@
 	});
 
 	function faq(element) {
+		var _this = this;
 		var list = React.render(
 			React.createElement(
 				FAQList,
-				{}
+				{
+					focusTag: function(tag) {
+						_this.request({
+							tag: tag
+						});
+					},
+					focusType: function(type) {
+						_this.request({
+							type: type
+						});
+					}
+				}
 			),
 			element
 		);
