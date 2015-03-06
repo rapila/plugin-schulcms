@@ -1,9 +1,3 @@
 [submodule "web/js/davis"]
 	path = web/js/davis
 	url = git://github.com/olivernn/davis.js.git
-[submodule "web/js/rivets"]
-	path = web/js/rivets
-	url = git://github.com/mikeric/rivets.git
-[submodule "web/js/sightglass"]
-	path = web/js/sightglass
-	url = git://github.com/mikeric/sightglass.git
