@@ -1,8 +1,38 @@
 Widget.types.page_type.types.classes = {
-	handle_admin: function(page_id, container) {
-		container.append(jQuery('<p/>').text("{{writeString=wns.classes_page_type.config_message}}"));
+
+	handle_preview: function(page_id, page_type) {
 	},
-	handle_preview: function() {
-		//Do nothing
+
+	handle_admin: function(page_id, container, page_type) {
+		this.form = Widget.parseHTML('{{includeTemplate=config}}');
+		this.container = container;
+		this.page_type = page_type;
+		this.container.append(this.form);
+
+		this.display_type = this.form.find('select[name=display_type]');
+		this.update_display_type_input();
+	},
+
+	will_save: function() {
+		this.page_type.methods.saveClassesPageConfiguration(this.form.serializeArrayKV(), function(result, error) {
+			if(error) {
+			} else {
+				// _this.reload();
+			}
+		});
+	},
+
+	update_display_type_input: function() {
+		var _this = this;
+		var option = jQuery('<option/>');
+		this.page_type.methods.listDisplayTypes(function(display_types) {
+			jQuery.each(display_types, function(i, data) {
+				option.clone().text(data.value).attr('value', data.key).appendTo(_this.display_type);
+			});
+			_this.page_type.methods.config(function(result) {
+				_this.display_type.val(result);
+			});
+		});
 	}
+
 };

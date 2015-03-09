@@ -6,11 +6,28 @@ class ClassHomeOutput extends ClassOutput {
 	}
 
 	public function renderContent() {
-		$oTemplate = $this->oPageType->constructTemplate('detail.home_content');
 		$this->oClass = $this->oNavigationItem->getClass();
 		if(!$this->oClass) {
 			return null;
 		}
+		// render content depending on display_type
+		switch($this->oPageType->config()) {
+			case 'full': return $this->renderContentWithSubjects();
+			default: return $this->renderContentDefault();
+		}
+	}
+
+	private function renderContentDefault() {
+		$oTemplate = $this->oPageType->constructTemplate('detail.home_content.default');
+		$this->renderClassInfo($oTemplate);
+		$this->renderSchedules($oTemplate);
+		$this->renderClassNews($oTemplate);
+		$this->renderDocumentsAndLinks($oTemplate);
+		return $oTemplate;
+	}
+
+	private function renderContentWithSubjects() {
+		$oTemplate = $this->oPageType->constructTemplate('detail.home_content.subjects');
 		$this->renderClassInfo($oTemplate);
 		$this->renderSchedules($oTemplate);
 		$this->renderClassNews($oTemplate);
@@ -25,7 +42,7 @@ class ClassHomeOutput extends ClassOutput {
 		return $oTemplate;
 	}
 
-	protected function renderClassInfo($oTemplate) {
+	private function renderClassInfo($oTemplate) {
 		// Students count info
 		$oTemplate->replaceIdentifier('count_students', $this->oClass->countStudentsByUnitName());
 
@@ -55,7 +72,7 @@ class ClassHomeOutput extends ClassOutput {
 		}
 	}
 
-	protected function renderSchedules($oTemplate) {
+	private function renderSchedules($oTemplate) {
 		if($oSchedule = $this->oClass->getDocumentRelatedByClassScheduleId()) {
 			$oTemplate->replaceIdentifier('schedule', TagWriter::quickTag('a', array('href' => $oSchedule->getDisplayUrl(), 'class' => 'pdf', 'rel' => 'document', 'title' => StringPeer::getString('class_detail.schedule_download')), StringPeer::getString('class_detail.schedule')));
 		}
@@ -64,7 +81,7 @@ class ClassHomeOutput extends ClassOutput {
 		}
 	}
 
-	protected function renderClassNews($oTemplate) {
+	private function renderClassNews($oTemplate) {
 		$oNews = FrontendNewsQuery::create()->current()->filterBySchoolClass($this->oClass)->orderByDateStart('desc')->findOne();
 		$oNewsTemplate = $this->oPageType->constructTemplate('news_detail');
 		if($oNews) {
@@ -80,7 +97,7 @@ class ClassHomeOutput extends ClassOutput {
 		$oTemplate->replaceIdentifier('news', $oNewsTemplate);
 	}
 
-	protected function renderSubjectsAndTeachers($oTemplate) {
+	private function renderSubjectsAndTeachers($oTemplate) {
 		$oTemplate->replaceIdentifier('teacher_and_subjects_title', StringPeer::getString('class_detail.heading.subjects_and_teachers'));
 		$oRowPrototype = $this->oPageType->constructTemplate('subject_class_item');
 		foreach($this->oClass->getSubjectClasses() as $oClass) {
@@ -105,7 +122,7 @@ class ClassHomeOutput extends ClassOutput {
 		}
 	}
 
-	protected function renderTeachersAndSubjects($oTemplate) {
+	private function renderTeachersAndSubjects($oTemplate) {
 		$oTemplate->replaceIdentifier('teacher_and_subjects_title', StringPeer::getString('class_detail.heading.teachers_and_subjects'));
 		$oQuery = ClassTeacherQuery::create()->filterByUnitFromClass($this->oClass, false)->useTeamMemberQuery()->orderByLastName()->orderByFirstName()->endUse();
 		$oRowPrototype = $this->oPageType->constructTemplate('teacher_and_subject');
@@ -121,7 +138,7 @@ class ClassHomeOutput extends ClassOutput {
 		}
 	}
 
-	protected function renderRecentReport($oTemplate) {
+	private function renderRecentReport($oTemplate) {
 		$oEvent = FrontendEventQuery::create()->filterBySchoolClass($this->oClass)->joinEventDocument()->orderByUpdatedAt(Criteria::DESC)->findOne();
 		if($oEvent === null) {
 			return;
@@ -135,13 +152,45 @@ class ClassHomeOutput extends ClassOutput {
 		$oTemplate->replaceIdentifier('recent_report_image', TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => 300)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle())));
 	}
 
-	protected function getClassEventLink($oEvent) {
+	private function getClassEventLink($oEvent) {
 		return array_merge($this->oNavigationItem->getLink(), explode('-', $oEvent->getDateStart('Y-n-j')), array($oEvent->getSlug()));
 	}
 
-	protected function renderUpcomingEvents($oTemplate, $iCount = 10) {
+	private function renderUpcomingEvents($oTemplate, $iCount = 10) {
 		$aEvents = FrontendEventQuery::create()->filterBySchoolClass($this->oClass)->upcomingOrOngoing()->orderByUpdatedAt()->limit($iCount)->find();
 		$oTemplate->replaceIdentifier('events_overview', EventsFrontendModule::renderOverviewList($aEvents));
 	}
+
+	private function renderDocumentsAndLinks($oTemplate) {
+		// Display documents if available
+		$aDocuments = $this->oClass->getClassDocuments();
+		if(count($aDocuments) > 0) {
+			$oTemplate->replaceIdentifier('documents_title', StringPeer::getString('class_detail.heading.documents'));
+			$oDocPrototype = $this->oPageType->constructTemplate('document');
+			foreach($aDocuments as $oClassDocument) {
+				$oDocument = $oClassDocument->getDocument();
+				$oDocTemplate = clone $oDocPrototype;
+				$oDocTemplate->replaceIdentifier('link', $oDocument->getDisplayUrl());
+				$oDocTemplate->replaceIdentifier('title', "Dokument anschauen / runterladen");
+				$oDocTemplate->replaceIdentifier('name', $oDocument->getName());
+				$oTemplate->replaceIdentifierMultiple('documents', $oDocTemplate);
+			}
+		}
+		// Display links if available
+		$aLinks = $this->oClass->getClassLinks();
+		if(count($aLinks) > 0) {
+			$oTemplate->replaceIdentifier('links_title', StringPeer::getString('class_detail.heading.links'));
+			$oLinkPrototype = $this->oPageType->constructTemplate('link');
+			foreach($aLinks as $oClassLink) {
+				$oLink = $oClassLink->getLink();
+				$oLinkTemplate = clone $oLinkPrototype;
+				$oLinkTemplate->replaceIdentifier('link', $oLink->getUrl());
+				$oLinkTemplate->replaceIdentifier('title', "Link öffnen");
+				$oLinkTemplate->replaceIdentifier('name', $oLink->getName());
+				$oTemplate->replaceIdentifierMultiple('links', $oLinkTemplate);
+			}
+		}
+	}
+
 
 }

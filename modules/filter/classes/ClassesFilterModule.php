@@ -5,7 +5,6 @@ class ClassesFilterModule extends FilterModule {
 
 	public function onNavigationItemChildrenRequested($oNavigationItem) {
 		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getMe()->getPageType() === 'classes') {
-
 			$oQuery = SchoolClassQuery::create()->filterByClassTypeYearAndSchool(null)->filterBySubjectId(null, Criteria::ISNULL)->select('Slug');
 			foreach($oQuery->find() as $sSlug) {
 				$oClass = SchoolClassQuery::create()->filterBySlug($sSlug)->findOne();
@@ -16,29 +15,53 @@ class ClassesFilterModule extends FilterModule {
 		if(!($oNavigationItem instanceof ClassNavigationItem)) {
 			return;
 		}
-		if($oNavigationItem->getMode() === 'root') {
+		$aMode = explode('_', $oNavigationItem->getMode());
+
+		// Render all years of current class
+		if($aMode[0] === 'root') {
+			$oPageType = PageTypeModule::getModuleInstance('classes', $oNavigationItem->getParent()->getMe(), $oNavigationItem);
+			$sDisplayType = $oPageType->config();
 			$sSlug = $oNavigationItem->getName();
 			$oCriteria = SchoolClassQuery::create()->filterByClassTypeYearAndSchool()->filterBySlug($sSlug)->filterByHasStudents()->orderByYear(Criteria::DESC);
 			foreach($oCriteria->find() as $oClass) {
-				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), 'Klasse '.$oClass->getUnitName().' Home', $oClass, 'home', $oClass->getFullClassName()));
+				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), 'Klasse '.$oClass->getUnitName().' Home', $oClass, 'home_'.$sDisplayType, $oClass->getFullClassName()));
 			}
-		} else if($oNavigationItem->getMode() === 'home') {
-			$oClass = $oNavigationItem->getClass();
-			$oNavigationItem->addChild(ClassNavigationItem::create('anlaesse', 'Anlässe', $oClass, SchoolClass::CLASS_EVENTS_IDENTIFIER));
+		} else if($aMode[0] === 'home') {
+			// Render specific class year subpage items
+			$this->renderClassNavigationItems($oNavigationItem, $aMode[1]);
+		} else if($oNavigationItem->getMode() === 'events') {
+			// Render related events
+			$this->renderEventNavigationItems($oNavigationItem);
+		} else if($oNavigationItem->getMode() === 'faecher') {
+			// Render related subjects
+			$this->renderSubjectNavigationItems($oNavigationItem);
+		}
+	}
+
+	private function renderClassNavigationItems($oNavigationItem, $sHomeMode) {
+		$oClass = $oNavigationItem->getClass();
+		// always display as navigation items
+		$oNavigationItem->addChild(ClassNavigationItem::create('anlaesse', 'Anlässe', $oClass, SchoolClass::CLASS_EVENTS_IDENTIFIER));
+		$oNavigationItem->addChild(ClassNavigationItem::create('feed', 'RSS-Feed', $oClass, 'feed')->setIndexed(false));
+		// only display if display_mode is "full"
+		if($sHomeMode === 'full') {
 			$oNavigationItem->addChild(ClassNavigationItem::create('faecher', 'Fächer', $oClass, SchoolClass::CLASS_SUBJECTS_IDENTIFIER));
 			$oNavigationItem->addChild(ClassNavigationItem::create('dokumente', 'Dokumente', $oClass, SchoolClass::CLASS_DOCUMENTS_IDENTIFIER));
 			$oNavigationItem->addChild(ClassNavigationItem::create('links', 'Links', $oClass, SchoolClass::CLASS_LINKS_IDENTIFIER));
-			$oNavigationItem->addChild(ClassNavigationItem::create('feed', 'RSS-Feed', $oClass, 'feed')->setIndexed(false));
-		} else if($oNavigationItem->getMode() === 'events') {
-			$oClass = $oNavigationItem->getClass();
-			foreach(FrontendEventQuery::create()->filterBySchoolClass($oClass)->find() as $oEvent) {
-				$oNavigationItem->addChild(ClassNavigationItem::create($oEvent->getSlug(), $oEvent->getTitle(), $oClass, 'event')->setEvent($oEvent)->setVisible(false));
-			}
-		} else if($oNavigationItem->getMode() === 'faecher') {
-			// refactor to improve performance, check url, etc
-			foreach($oNavigationItem->getClass()->getSubjectClasses() as $oClass) {
-				$oNavigationItem->addChild(ClassNavigationItem::create($oClass->getSlug(), $oClass->getName(), $oClass, 'faecher')->setEvent($oEvent)->setVisible(false));
-			}
+		}
+	}
+
+	private function renderEventNavigationItems($oNavigationItem) {
+		$oClass = $oNavigationItem->getClass();
+		foreach(FrontendEventQuery::create()->filterBySchoolClass($oClass)->find() as $oEvent) {
+			$oNavigationItem->addChild(ClassNavigationItem::create($oEvent->getSlug(), $oEvent->getTitle(), $oClass, 'event')->setEvent($oEvent)->setVisible(false));
+		}
+	}
+
+	private function renderSubjectNavigationItems($oNavigationItem) {
+		// refactor to improve performance, check url, etc
+		foreach($oNavigationItem->getClass()->getSubjectClasses() as $oClass) {
+			$oNavigationItem->addChild(ClassNavigationItem::create($oClass->getSlug(), $oClass->getName(), $oClass, 'faecher')->setEvent($oEvent)->setVisible(false));
 		}
 	}
 
@@ -55,7 +78,7 @@ class ClassesFilterModule extends FilterModule {
 		}
 		// Link to the feed
 		$oHomeNavigationItem = $oNavigationItem;
-		while($oHomeNavigationItem->getMode() !== 'home') {
+		while(!StringUtil::startsWith($oHomeNavigationItem->getMode(), 'home_')) {
 			$oHomeNavigationItem = $oHomeNavigationItem->getParent();
 		}
 		$oFeedItem = $oHomeNavigationItem->namedChild('feed');

@@ -30,8 +30,12 @@ require_once __DIR__.'/ClassNavigationItem.php';
 
 
 class ClassesPageTypeModule extends DefaultPageTypeModule {
+
+	protected $sDisplayType;
+
 	public function __construct(Page $oPage = null, NavigationItem $oNavigationItem = null) {
 		parent::__construct($oPage, $oNavigationItem);
+		$this->sDisplayType = $this->oPage->getPagePropertyValue('classes:display_type');
 	}
 
 	public function display(Template $oTemplate, $bIsPreview = false, $sMode = null) {
@@ -41,6 +45,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 			$sMode = $this->oNavigationItem->getMode();
 		}
 		// Caching?
+		$sMode = StringUtil::startsWith($sMode, 'home_') ? 'home' : $sMode;
 		$sClassName = 'Class'.StringUtil::camelize($sMode, true).'Output';
 		$oOutput = new $sClassName($this->oNavigationItem, $this);
 
@@ -62,5 +67,23 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 	public function constructTemplate($sTemplateName = null, $bForceGlobalTemplatesDir = true) {
 		return new Template($sTemplateName, array(DIRNAME_MODULES, self::getType(), self::moduleName(), 'templates'));
 	}
+
+	public function saveClassesPageConfiguration($aData) {
+		$this->sDisplayType = $aData['display_type'];
+		$this->oPage->updatePageProperty('classes:display_type', $this->sDisplayType);
+	}
+
+	public function listDisplayTypes() {
+		$aOptions = array();
+		foreach(array('default' , 'full') as $sKey) {
+			$aOptions[$sKey] = StringPeer::getString('classes.display_type.'.$sKey);
+		}
+		return WidgetJsonFileModule::jsonOrderedObject($aOptions);
+	}
+
+	public function config() {
+		return ($this->sDisplayType !== null ? $this->sDisplayType : 'default');
+	}
+
 
 }
