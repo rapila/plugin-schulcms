@@ -42,10 +42,9 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 		$sMode = $sMode ? $sMode : 'list';
 
 		if($this->oNavigationItem instanceof ClassNavigationItem) {
-			$sMode = $this->oNavigationItem->getMode();
+			$sMode = StringUtil::startsWith($this->oNavigationItem->getMode(), 'home_') ? 'home' : $this->oNavigationItem->getMode();
 		}
 		// Caching?
-		$sMode = StringUtil::startsWith($sMode, 'home_') ? 'home' : $sMode;
 		$sClassName = 'Class'.StringUtil::camelize($sMode, true).'Output';
 		$oOutput = new $sClassName($this->oNavigationItem, $this);
 
@@ -60,7 +59,6 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 			$oTemplate->replaceIdentifier('container', $mContext, 'context');
 			$oTemplate->replaceIdentifier('container_filled_types', 'classes', 'context');
 		}
-
 		parent::display($oTemplate, $bIsPreview);
 	}
 

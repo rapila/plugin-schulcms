@@ -29,7 +29,7 @@ class ClassesFilterModule extends FilterModule {
 		} else if($aMode[0] === 'home') {
 			// Render specific class year subpage items
 			$this->renderClassNavigationItems($oNavigationItem, $aMode[1]);
-		} else if($oNavigationItem->getMode() === 'events') {
+		} else if($oNavigationItem->getMode() === 'anlaesse') {
 			// Render related events
 			$this->renderEventNavigationItems($oNavigationItem);
 		} else if($oNavigationItem->getMode() === 'faecher') {
