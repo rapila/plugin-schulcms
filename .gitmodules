@@ -1,3 +1,6 @@
 [submodule "web/js/davis"]
 	path = web/js/davis
 	url = git://github.com/olivernn/davis.js.git
+[submodule "web/js/wok"]
+	path = web/js/wok
+	url = git://github.com/sabberworm/Wok.js.git
