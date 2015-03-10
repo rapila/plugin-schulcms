@@ -5,7 +5,7 @@
  */
 class News extends BaseNews {
 
-	private static $NEWS_TYPES = array();
+	private static $NEWS_PAGE;
 
 	public function setBodyAsTag($oTag) {
 		if($oTag instanceof TagParser) {
@@ -29,13 +29,10 @@ class News extends BaseNews {
 	}
 
 	public function getNewsTypeName() {
-		if($this->getNewsTypeId() === null) {
+		if($this->getNewsType() === null) {
 			return null;
 		}
-		if(!isset(self::$NEWS_TYPES[$this->getNewsTypeId()])) {
-			self::$NEWS_TYPES[$this->getNewsTypeId()] = $this->getNewsType();
-		}
-		return self::$NEWS_TYPES[$this->getNewsTypeId()]->getName();
+		return $this->getNewsType()->getName();
 	}
 
 	public function getBodyTruncated($iLength = 70) {
@@ -62,6 +59,20 @@ class News extends BaseNews {
 		$oTemplate->replaceIdentifier("headline", $this->getHeadline());
 		$oTemplate->replaceIdentifier('content', RichtextUtil::parseStorageForFrontendOutput(is_resource($this->getBody()) ? stream_get_contents($this->getBody()) : ''));
 	}
+
+	public function getLink($oNewsPage = null) {
+		if($oNewsPage === null && self::$NEWS_PAGE === null) {
+			self::$NEWS_PAGE = PageQuery::create()->filterByPageType('news')->findOne();
+		} elseif($oNewsPage) {
+			self::$NEWS_PAGE = $oNewsPage;
+		}
+		if(!self::$NEWS_PAGE) {
+			return null;
+		}
+		$aParams = array($this->getId());
+		return array_merge(self::$NEWS_PAGE->getFullPathArray(), $aParams);
+	}
+
 
 
 }

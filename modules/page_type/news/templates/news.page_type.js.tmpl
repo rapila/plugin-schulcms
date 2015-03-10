@@ -1,0 +1,34 @@
+Widget.types.page_type.types.news = {
+	handle_preview: function(page_id, page_type) {
+	},
+
+	handle_admin: function(page_id, container, page_type) {
+		this.form = Widget.parseHTML('{{includeTemplate=config}}');
+		this.container = container;
+		this.page_type = page_type;
+		this.container.append(this.form);
+
+		this.news_types_dropdown = this.form.find('select[name=news_types\\[\\]]');
+		this.update_news_types_dropdown();
+	},
+
+	will_save: function() {
+		this.page_type.methods.saveNewsPageConfiguration(this.form.serializeArrayKV(), function(result, error) {
+			if(error) {
+			}
+		});
+	},
+
+	update_news_types_dropdown: function() {
+		var _this = this;
+		var option = jQuery('<option/>');
+		this.page_type.methods.listNewsTypes(function(news_types) {
+			jQuery.each(news_types, function(i, data) {
+				option.clone().text(data.value).attr('value', data.key).appendTo(_this.news_types_dropdown);
+			});
+			_this.page_type.methods.config(function(result) {
+				_this.news_types_dropdown.val(result);
+			});
+		});
+	}
+};
