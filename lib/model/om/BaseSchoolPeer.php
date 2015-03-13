@@ -424,12 +424,12 @@ abstract class BaseSchoolPeer
      */
     public static function clearRelatedInstancePool()
     {
-        // Invalidate objects in SchoolFunctionPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        SchoolFunctionPeer::clearInstancePool();
         // Invalidate objects in SchoolClassPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         SchoolClassPeer::clearInstancePool();
+        // Invalidate objects in SchoolFunctionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        SchoolFunctionPeer::clearInstancePool();
     }
 
     /**
@@ -1343,17 +1343,17 @@ abstract class BaseSchoolPeer
         foreach ($objects as $obj) {
 
 
-            // delete related SchoolFunction objects
-            $criteria = new Criteria(SchoolFunctionPeer::DATABASE_NAME);
-
-            $criteria->add(SchoolFunctionPeer::SCHOOL_ID, $obj->getId());
-            $affectedRows += SchoolFunctionPeer::doDelete($criteria, $con);
-
             // delete related SchoolClass objects
             $criteria = new Criteria(SchoolClassPeer::DATABASE_NAME);
 
             $criteria->add(SchoolClassPeer::SCHOOL_ID, $obj->getId());
             $affectedRows += SchoolClassPeer::doDelete($criteria, $con);
+
+            // delete related SchoolFunction objects
+            $criteria = new Criteria(SchoolFunctionPeer::DATABASE_NAME);
+
+            $criteria->add(SchoolFunctionPeer::SCHOOL_ID, $obj->getId());
+            $affectedRows += SchoolFunctionPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

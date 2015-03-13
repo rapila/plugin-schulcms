@@ -444,12 +444,15 @@ abstract class BaseTeamMemberPeer
      */
     public static function clearRelatedInstancePool()
     {
-        // Invalidate objects in TeamMemberFunctionPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        TeamMemberFunctionPeer::clearInstancePool();
         // Invalidate objects in ClassTeacherPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ClassTeacherPeer::clearInstancePool();
+        // Invalidate objects in TeamMemberFunctionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        TeamMemberFunctionPeer::clearInstancePool();
+        // Invalidate objects in ServiceMemberPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ServiceMemberPeer::clearInstancePool();
     }
 
     /**
@@ -2003,17 +2006,23 @@ abstract class BaseTeamMemberPeer
         foreach ($objects as $obj) {
 
 
+            // delete related ClassTeacher objects
+            $criteria = new Criteria(ClassTeacherPeer::DATABASE_NAME);
+
+            $criteria->add(ClassTeacherPeer::TEAM_MEMBER_ID, $obj->getId());
+            $affectedRows += ClassTeacherPeer::doDelete($criteria, $con);
+
             // delete related TeamMemberFunction objects
             $criteria = new Criteria(TeamMemberFunctionPeer::DATABASE_NAME);
 
             $criteria->add(TeamMemberFunctionPeer::TEAM_MEMBER_ID, $obj->getId());
             $affectedRows += TeamMemberFunctionPeer::doDelete($criteria, $con);
 
-            // delete related ClassTeacher objects
-            $criteria = new Criteria(ClassTeacherPeer::DATABASE_NAME);
+            // delete related ServiceMember objects
+            $criteria = new Criteria(ServiceMemberPeer::DATABASE_NAME);
 
-            $criteria->add(ClassTeacherPeer::TEAM_MEMBER_ID, $obj->getId());
-            $affectedRows += ClassTeacherPeer::doDelete($criteria, $con);
+            $criteria->add(ServiceMemberPeer::TEAM_MEMBER_ID, $obj->getId());
+            $affectedRows += ServiceMemberPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

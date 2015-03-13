@@ -464,27 +464,27 @@ abstract class BaseSchoolClassPeer
      */
     public static function clearRelatedInstancePool()
     {
-        // Invalidate objects in SchoolClassPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        SchoolClassPeer::clearInstancePool();
-        // Invalidate objects in SchoolClassSubjectClassesPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        SchoolClassSubjectClassesPeer::clearInstancePool();
-        // Invalidate objects in SchoolClassSubjectClassesPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        SchoolClassSubjectClassesPeer::clearInstancePool();
         // Invalidate objects in ClassStudentPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ClassStudentPeer::clearInstancePool();
+        // Invalidate objects in ClassTeacherPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ClassTeacherPeer::clearInstancePool();
+        // Invalidate objects in SchoolClassSubjectClassesPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        SchoolClassSubjectClassesPeer::clearInstancePool();
+        // Invalidate objects in SchoolClassSubjectClassesPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        SchoolClassSubjectClassesPeer::clearInstancePool();
+        // Invalidate objects in SchoolClassPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        SchoolClassPeer::clearInstancePool();
         // Invalidate objects in ClassLinkPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ClassLinkPeer::clearInstancePool();
         // Invalidate objects in ClassDocumentPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ClassDocumentPeer::clearInstancePool();
-        // Invalidate objects in ClassTeacherPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ClassTeacherPeer::clearInstancePool();
         // Invalidate objects in EventPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         EventPeer::clearInstancePool();
@@ -4416,6 +4416,18 @@ abstract class BaseSchoolClassPeer
         foreach ($objects as $obj) {
 
 
+            // delete related ClassStudent objects
+            $criteria = new Criteria(ClassStudentPeer::DATABASE_NAME);
+
+            $criteria->add(ClassStudentPeer::SCHOOL_CLASS_ID, $obj->getId());
+            $affectedRows += ClassStudentPeer::doDelete($criteria, $con);
+
+            // delete related ClassTeacher objects
+            $criteria = new Criteria(ClassTeacherPeer::DATABASE_NAME);
+
+            $criteria->add(ClassTeacherPeer::SCHOOL_CLASS_ID, $obj->getId());
+            $affectedRows += ClassTeacherPeer::doDelete($criteria, $con);
+
             // delete related SchoolClassSubjectClasses objects
             $criteria = new Criteria(SchoolClassSubjectClassesPeer::DATABASE_NAME);
 
@@ -4428,12 +4440,6 @@ abstract class BaseSchoolClassPeer
             $criteria->add(SchoolClassSubjectClassesPeer::SUBJECT_CLASS_ID, $obj->getId());
             $affectedRows += SchoolClassSubjectClassesPeer::doDelete($criteria, $con);
 
-            // delete related ClassStudent objects
-            $criteria = new Criteria(ClassStudentPeer::DATABASE_NAME);
-
-            $criteria->add(ClassStudentPeer::SCHOOL_CLASS_ID, $obj->getId());
-            $affectedRows += ClassStudentPeer::doDelete($criteria, $con);
-
             // delete related ClassLink objects
             $criteria = new Criteria(ClassLinkPeer::DATABASE_NAME);
 
@@ -4445,12 +4451,6 @@ abstract class BaseSchoolClassPeer
 
             $criteria->add(ClassDocumentPeer::SCHOOL_CLASS_ID, $obj->getId());
             $affectedRows += ClassDocumentPeer::doDelete($criteria, $con);
-
-            // delete related ClassTeacher objects
-            $criteria = new Criteria(ClassTeacherPeer::DATABASE_NAME);
-
-            $criteria->add(ClassTeacherPeer::SCHOOL_CLASS_ID, $obj->getId());
-            $affectedRows += ClassTeacherPeer::doDelete($criteria, $con);
 
             // delete related Event objects
             $criteria = new Criteria(EventPeer::DATABASE_NAME);

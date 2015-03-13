@@ -64,13 +64,17 @@
  * @method TeamMemberQuery rightJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByUpdatedBy relation
  * @method TeamMemberQuery innerJoinUserRelatedByUpdatedBy($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByUpdatedBy relation
  *
+ * @method TeamMemberQuery leftJoinClassTeacher($relationAlias = null) Adds a LEFT JOIN clause to the query using the ClassTeacher relation
+ * @method TeamMemberQuery rightJoinClassTeacher($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ClassTeacher relation
+ * @method TeamMemberQuery innerJoinClassTeacher($relationAlias = null) Adds a INNER JOIN clause to the query using the ClassTeacher relation
+ *
  * @method TeamMemberQuery leftJoinTeamMemberFunction($relationAlias = null) Adds a LEFT JOIN clause to the query using the TeamMemberFunction relation
  * @method TeamMemberQuery rightJoinTeamMemberFunction($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TeamMemberFunction relation
  * @method TeamMemberQuery innerJoinTeamMemberFunction($relationAlias = null) Adds a INNER JOIN clause to the query using the TeamMemberFunction relation
  *
- * @method TeamMemberQuery leftJoinClassTeacher($relationAlias = null) Adds a LEFT JOIN clause to the query using the ClassTeacher relation
- * @method TeamMemberQuery rightJoinClassTeacher($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ClassTeacher relation
- * @method TeamMemberQuery innerJoinClassTeacher($relationAlias = null) Adds a INNER JOIN clause to the query using the ClassTeacher relation
+ * @method TeamMemberQuery leftJoinServiceMember($relationAlias = null) Adds a LEFT JOIN clause to the query using the ServiceMember relation
+ * @method TeamMemberQuery rightJoinServiceMember($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ServiceMember relation
+ * @method TeamMemberQuery innerJoinServiceMember($relationAlias = null) Adds a INNER JOIN clause to the query using the ServiceMember relation
  *
  * @method TeamMember findOne(PropelPDO $con = null) Return the first TeamMember matching the query
  * @method TeamMember findOneOrCreate(PropelPDO $con = null) Return the first TeamMember matching the query, or a new TeamMember object populated from the query conditions when no match is found
@@ -1272,6 +1276,80 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related ClassTeacher object
+     *
+     * @param   ClassTeacher|PropelObjectCollection $classTeacher  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 TeamMemberQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByClassTeacher($classTeacher, $comparison = null)
+    {
+        if ($classTeacher instanceof ClassTeacher) {
+            return $this
+                ->addUsingAlias(TeamMemberPeer::ID, $classTeacher->getTeamMemberId(), $comparison);
+        } elseif ($classTeacher instanceof PropelObjectCollection) {
+            return $this
+                ->useClassTeacherQuery()
+                ->filterByPrimaryKeys($classTeacher->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByClassTeacher() only accepts arguments of type ClassTeacher or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ClassTeacher relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return TeamMemberQuery The current query, for fluid interface
+     */
+    public function joinClassTeacher($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ClassTeacher');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ClassTeacher');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ClassTeacher relation ClassTeacher object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ClassTeacherQuery A secondary query class using the current class as primary query
+     */
+    public function useClassTeacherQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinClassTeacher($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ClassTeacher', 'ClassTeacherQuery');
+    }
+
+    /**
      * Filter the query by a related TeamMemberFunction object
      *
      * @param   TeamMemberFunction|PropelObjectCollection $teamMemberFunction  the related object to use as filter
@@ -1346,41 +1424,41 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related ClassTeacher object
+     * Filter the query by a related ServiceMember object
      *
-     * @param   ClassTeacher|PropelObjectCollection $classTeacher  the related object to use as filter
+     * @param   ServiceMember|PropelObjectCollection $serviceMember  the related object to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return                 TeamMemberQuery The current query, for fluid interface
      * @throws PropelException - if the provided filter is invalid.
      */
-    public function filterByClassTeacher($classTeacher, $comparison = null)
+    public function filterByServiceMember($serviceMember, $comparison = null)
     {
-        if ($classTeacher instanceof ClassTeacher) {
+        if ($serviceMember instanceof ServiceMember) {
             return $this
-                ->addUsingAlias(TeamMemberPeer::ID, $classTeacher->getTeamMemberId(), $comparison);
-        } elseif ($classTeacher instanceof PropelObjectCollection) {
+                ->addUsingAlias(TeamMemberPeer::ID, $serviceMember->getTeamMemberId(), $comparison);
+        } elseif ($serviceMember instanceof PropelObjectCollection) {
             return $this
-                ->useClassTeacherQuery()
-                ->filterByPrimaryKeys($classTeacher->getPrimaryKeys())
+                ->useServiceMemberQuery()
+                ->filterByPrimaryKeys($serviceMember->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByClassTeacher() only accepts arguments of type ClassTeacher or PropelCollection');
+            throw new PropelException('filterByServiceMember() only accepts arguments of type ServiceMember or PropelCollection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the ClassTeacher relation
+     * Adds a JOIN clause to the query using the ServiceMember relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return TeamMemberQuery The current query, for fluid interface
      */
-    public function joinClassTeacher($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinServiceMember($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('ClassTeacher');
+        $relationMap = $tableMap->getRelation('ServiceMember');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -1395,14 +1473,14 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'ClassTeacher');
+            $this->addJoinObject($join, 'ServiceMember');
         }
 
         return $this;
     }
 
     /**
-     * Use the ClassTeacher relation ClassTeacher object
+     * Use the ServiceMember relation ServiceMember object
      *
      * @see       useQuery()
      *
@@ -1410,13 +1488,13 @@ abstract class BaseTeamMemberQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   ClassTeacherQuery A secondary query class using the current class as primary query
+     * @return   ServiceMemberQuery A secondary query class using the current class as primary query
      */
-    public function useClassTeacherQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useServiceMemberQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinClassTeacher($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'ClassTeacher', 'ClassTeacherQuery');
+            ->joinServiceMember($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ServiceMember', 'ServiceMemberQuery');
     }
 
     /**

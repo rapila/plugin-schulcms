@@ -77,13 +77,13 @@ class SchoolClassTableMap extends TableMap
         $this->addRelation('School', 'School', RelationMap::MANY_TO_ONE, array('school_id' => 'id', ), 'CASCADE', null);
         $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
         $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
-        $this->addRelation('SchoolClassRelatedById', 'SchoolClass', RelationMap::ONE_TO_MANY, array('id' => 'ancestor_class_id', ), 'SET NULL', null, 'SchoolClasssRelatedById');
+        $this->addRelation('ClassStudent', 'ClassStudent', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassStudents');
+        $this->addRelation('ClassTeacher', 'ClassTeacher', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassTeachers');
         $this->addRelation('SchoolClassSubjectClassesRelatedBySchoolClassId', 'SchoolClassSubjectClasses', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'SchoolClassSubjectClassessRelatedBySchoolClassId');
         $this->addRelation('SchoolClassSubjectClassesRelatedBySubjectClassId', 'SchoolClassSubjectClasses', RelationMap::ONE_TO_MANY, array('id' => 'subject_class_id', ), 'CASCADE', null, 'SchoolClassSubjectClassessRelatedBySubjectClassId');
-        $this->addRelation('ClassStudent', 'ClassStudent', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassStudents');
+        $this->addRelation('SchoolClassRelatedById', 'SchoolClass', RelationMap::ONE_TO_MANY, array('id' => 'ancestor_class_id', ), 'SET NULL', null, 'SchoolClasssRelatedById');
         $this->addRelation('ClassLink', 'ClassLink', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassLinks');
         $this->addRelation('ClassDocument', 'ClassDocument', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassDocuments');
-        $this->addRelation('ClassTeacher', 'ClassTeacher', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'ClassTeachers');
         $this->addRelation('Event', 'Event', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'Events');
         $this->addRelation('News', 'News', RelationMap::ONE_TO_MANY, array('id' => 'school_class_id', ), 'CASCADE', null, 'Newss');
     } // buildRelations()
