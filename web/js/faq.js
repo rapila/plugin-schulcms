@@ -3,13 +3,14 @@
 
 	var FAQTagList = React.createClass({
 		render: function() {
+			var _this = this;
 			var tags = this.props.tags.map(function(tag) {
 				return React.createElement(
 					'span',
 					{
 						className: 'tag',
 						key: tag,
-						onClick: this.focusTag.bind(null, tag)
+						onClick: _this.props.focusTag.bind(null, tag)
 					},
 					tag
 				)
