@@ -99,7 +99,7 @@ class ClassHomeOutput extends ClassOutput {
 
 	private function renderSubjectsAndTeachers($oTemplate) {
 		$oTemplate->replaceIdentifier('teacher_and_subjects_title', StringPeer::getString('class_detail.heading.subjects_and_teachers'));
-		$oRowPrototype = $this->oPageType->constructTemplate('subject_class_item');
+		$oRowPrototype = $this->oPageType->constructTemplate('subject_teaser_item');
 		foreach($this->oClass->getSubjectClasses() as $oClass) {
 			$oRowTemplate = clone $oRowPrototype;
 			$oRowTemplate->replaceIdentifier('class_name', $oClass->getName());

@@ -10,7 +10,9 @@ Widget.types.page_type.types.classes = {
 		this.container.append(this.form);
 
 		this.display_type = this.form.find('select[name=display_type]');
+		this.class_type = this.form.find('select[name=class_type]');
 		this.update_display_type_input();
+		this.update_class_type_input();
 	},
 
 	will_save: function() {
@@ -30,7 +32,22 @@ Widget.types.page_type.types.classes = {
 				option.clone().text(data.value).attr('value', data.key).appendTo(_this.display_type);
 			});
 			_this.page_type.methods.config(function(result) {
-				_this.display_type.val(result);
+				_this.display_type.val(result.display_type);
+			});
+		});
+	},
+
+	update_class_type_input: function() {
+		var _this = this;
+		var option = jQuery('<option/>');
+		this.page_type.methods.listClassTypes(function(class_types) {
+			jQuery.each(class_types, function(i, data) {
+				option.clone().text(data.value).attr('value', data.key).appendTo(_this.class_type);
+			});
+
+			_this.page_type.methods.config(function(result) {
+				console.info(result.class_type, result, _this.class_type);
+				_this.class_type.val(result.class_type);
 			});
 		});
 	}
