@@ -306,10 +306,18 @@ class EventsFrontendModule extends DynamicFrontendModule {
 
 		// Back to list link
 		if($oTemplate->hasIdentifier('back_to_list_link')) {
-			$aBackToListLink = Session::getSession()->getAttribute(self::SESSION_BACK_TO_LIST_LINK);
-			if(!is_array($aBackToListLink)) {
-				$aBackToListLink = FrontendManager::$CURRENT_PAGE->getFullPathArray();
+			if($oSchoolClass = self::$EVENT->getSchoolClass()) {
+				$aBackToListLink = array_merge($oSchoolClass->getLink(), array(SchoolClass::CLASS_EVENTS_IDENTIFIER));
+				$sLinkText = StringPeer::getString('class_event.back_to_class_link'). ' ' . $oSchoolClass->getUnitName();
+			} else {
+				$aBackToListLink = Session::getSession()->getAttribute(self::SESSION_BACK_TO_LIST_LINK);
+				if(!is_array($aBackToListLink)) {
+					$aBackToListLink = FrontendManager::$CURRENT_PAGE->getFullPathArray();
+					$sLinkText = StringPeer::getString('event.back_to_list_link');
+
+				}
 			}
+			$oTemplate->replaceIdentifier('link_text', $sLinkText);
 			$oTemplate->replaceIdentifier('back_to_list_link', LinkUtil::link($aBackToListLink));
 		}
 

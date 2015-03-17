@@ -18,6 +18,7 @@ class EventsPageTypeModule extends PageTypeModule {
 
 	private function displayDetail(Event $oEvent, Template $oTemplate) {
 		EventsFrontendModule::$EVENT = $oEvent;
+		// pass referrer to detail for return to event list/class home or class event list?
 		$oFrontendModule = new EventsFrontendModule(array());
 		$oTemplate->replaceIdentifierMultiple('container', $oFrontendModule->renderDetail(), 'content');
 	}
