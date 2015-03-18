@@ -114,12 +114,22 @@ class SchoolClass extends BaseSchoolClass {
 		return $oQuery->find();
 	}
 
+	public function getIsFeVisible() {
+		$iStudents = $this->countClassStudents();
+		$iClassTeachers = $this->getCountTeachers(true);
+		return $iStudents. 'S / '.$iClassTeachers.'KL '. (($iStudents > 0 && $iClassTeachers > 0) ? '✓' : '-');
+	}
+
 	public function getCountStudents() {
 		$iCount = $this->countClassStudents();
 		if($iCount === 0) {
 			return '-';
 		}
 		return $iCount;
+	}
+
+	public function getCountTeachers($bClassTeachersOnly = false) {
+		return ClassTeacherQuery::create()->filterByUnitFromClass($this, $bClassTeachersOnly)->count();
 	}
 
 	public function getCountEvents() {

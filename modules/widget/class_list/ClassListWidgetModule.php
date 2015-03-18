@@ -6,16 +6,16 @@ class ClassListWidgetModule extends WidgetModule {
 
 	private $oListWidget;
 	public $oDelegateProxy;
-	public $oClassesWithStudentsInputFilter;
+	public $oClassesFeVisiblesInputFilter;
 	public $oSchoolYearInputFilter;
-	public $bShowWithStudentsOnly;
+	public $bDisplayFeVisiblesOnly;
 
 	public function __construct() {
 		$this->oListWidget = new ListWidgetModule();
 		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "SchoolClass", "name", "asc");
 		$this->oListWidget->setDelegate($this->oDelegateProxy);
-		$this->oClassesWithStudentsInputFilter = WidgetModule::getWidget('classes_with_students_input', null, true);
-		$this->oDelegateProxy->setCountStudents(true);
+		$this->oClassesFeVisiblesInputFilter = WidgetModule::getWidget('classes_fe_visibles_input', null, true);
+		$this->oDelegateProxy->setIsFeVisible(true);
 		$this->oDelegateProxy->setYearPeriod(SchoolPeer::getCurrentYear());
 		$this->oSchoolYearInputFilter = WidgetModule::getWidget('year_input', null, $this->oDelegateProxy->getYearPeriod());
 	}
@@ -28,7 +28,7 @@ class ClassListWidgetModule extends WidgetModule {
 	}
 
 	public function getColumnIdentifiers() {
-		return array('id', 'class_name', 'year_period', 'level', 'count_students', 'class_teacher_names', 'has_class_portrait', 'has_class_schedule', 'count_events');
+		return array('id', 'class_name', 'year_period', 'level', 'is_fe_visible', 'class_teacher_names', 'has_class_portrait', 'has_class_schedule', 'count_events');
 	}
 
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -46,9 +46,9 @@ class ClassListWidgetModule extends WidgetModule {
 				$aResult['heading'] = StringPeer::getString('wns.class.level');
 				$aResult['display_type'] = ListWidgetModule::DISPLAY_TYPE_NUMERIC;
 				break;
-			case 'count_students':
-				$aResult['heading'] = StringPeer::getString('wns.class.with_students');
-				$aResult['heading_filter'] = array('classes_with_students_input', $this->oClassesWithStudentsInputFilter->getSessionKey());
+			case 'is_fe_visible':
+				$aResult['heading'] = StringPeer::getString('wns.class.is_fe_visible');
+				$aResult['heading_filter'] = array('classes_fe_visibles_input', $this->oClassesFeVisiblesInputFilter->getSessionKey());
 				$aResult['display_type'] = ListWidgetModule::DISPLAY_TYPE_NUMERIC;
 				$aResult['is_sortable'] = false;
 				break;
@@ -115,12 +115,12 @@ class ClassListWidgetModule extends WidgetModule {
 		return null;
 	}
 
-	public function setCountStudents($bShowWithStudentsOnly) {
-		$this->bShowWithStudentsOnly = $bShowWithStudentsOnly;
+	public function setIsFeVisible($bDisplayFeVisiblesOnly) {
+		$this->bDisplayFeVisiblesOnly = $bDisplayFeVisiblesOnly;
 	}
 
-	public function getCountStudents() {
-		return $this->bShowWithStudentsOnly ? "Ja" : "Nein";
+	public function getIsFeVisible() {
+		return $this->bDisplayFeVisiblesOnly ? "Ja" : "Nein";
 	}
 
 	public function getClassTypeName() {
@@ -136,8 +136,8 @@ class ClassListWidgetModule extends WidgetModule {
 
 	public function getCriteria() {
 		$oQuery = static::listQuery();
-		if($this->bShowWithStudentsOnly) {
-			$oQuery->joinClassStudent();
+		if($this->bDisplayFeVisiblesOnly) {
+			$oQuery->joinClassStudent()->hasTeachers(true);
 		}
 		return $oQuery;
 	}
