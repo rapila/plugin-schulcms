@@ -18,7 +18,7 @@ Widget.types.news_frontend_config = {
 		this.options(function(data) {
 			this.mode_dropdown.populate(data.display_options, config.display_mode);
 			this.news_type_dropdown.populate(data.news_type_options, config.news_type);
-			this.limit_dropdown.populate(data.limit_options, config.limit);
+			this.limit_dropdown.populate(data.limit_options, config.limit || "__all");
 		}.deferred(finish));
 
 		jQuery.when.apply(jQuery, finish).then(function() {

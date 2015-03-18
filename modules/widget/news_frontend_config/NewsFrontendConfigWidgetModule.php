@@ -7,7 +7,7 @@ class NewsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	public function options() {
 		$aData['display_options'] = $this->getDisplayOptions();
 		$aData['news_type_options'] = $this->getNewsTypeOptions();
-		$aData['limit_options'] = array(1 => 1, 2 => 3, 5 => 5, 10 => 10, "__all" => "Alle");
+		$aData['limit_options'] = array(1 => 1, 3 => 3, 5 => 5, 10 => 10, "__all" => "Alle");
 		return $aData;
 	}
 
