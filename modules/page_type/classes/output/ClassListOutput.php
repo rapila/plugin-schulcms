@@ -10,7 +10,7 @@ class ClassListOutput extends ClassOutput {
 		$aClassTypes = null;
 		$oTemplate = $this->oPageType->constructTemplate('list', true);
 		$oItemPrototype = $this->oPageType->constructTemplate('list_item', true);
-		$aClasses = SchoolClassQuery::create()->filterByClassTypeYearAndSchool($aClassTypes)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers()->orderByUnitName()->find();
+		$aClasses = SchoolClassQuery::create()->filterByClassTypeYearAndSchool($aClassTypes)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers(true)->orderByUnitName()->find();
 		$oTemplate->replaceIdentifier('class_news', $this->includeClassNews());
 		foreach($aClasses as $oClass) {
 			// get all infos that are independent of teaching unit

@@ -15,9 +15,13 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 		return $this->distinct();
 	}
 
-	public function hasTeachers() {
-		return $this->joinClassTeacher();
+	public function hasTeachers($bClassTeachersOnly = false) {
+		if(!$bClassTeachersOnly) {
+			return $this->joinClassTeacher();
+		}
+		return $this->useClassTeacherQuery()->filterByIsClassTeacher(true)->endUse();
 	}
+
 
 	/**
 	* @todo should be reconsidered
