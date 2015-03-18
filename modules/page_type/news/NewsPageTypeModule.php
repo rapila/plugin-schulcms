@@ -60,7 +60,7 @@ class NewsPageTypeModule extends PageTypeModule {
 	}
 
 	public function listNewsTypes() {
-		return WidgetJsonFileModule::jsonOrderedObject(NewsTypeQuery::create()->orderByName()->select(array('Id', 'Name'))->find()->toKeyValue('Id', 'Name'));
+		return WidgetJsonFileModule::jsonOrderedObject(NewsTypeQuery::create()->filterByIsExternallyManaged(false)->orderByName()->select(array('Id', 'Name'))->find()->toKeyValue('Id', 'Name'));
 	}
 
 	public function saveNewsPageConfiguration($aData) {
