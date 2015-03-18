@@ -9,14 +9,15 @@ class TeamMemberListWidgetModule extends WidgetModule {
 	private $oIsActiveTeamMemberInputFilter;
 	private $bIsActiveTeamMember;
 	private $iFunctionGroupId;
-	
-	
+
+
 	public function __construct() {
 		$this->oListWidget = new ListWidgetModule();
 		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "TeamMember", "full_name_inverted", "asc");
 		$this->oListWidget->setDelegate($this->oDelegateProxy);
-		$this->oIsActiveTeamMemberInputFilter = WidgetModule::getWidget('active_team_member_input', null, true);
-		$this->oDelegateProxy->setIsActiveTeamMember(true);
+		$bTeachersOnly = false;
+		$this->oIsActiveTeamMemberInputFilter = WidgetModule::getWidget('active_team_member_input', null, $bTeachersOnly);
+		$this->oDelegateProxy->setIsActiveTeamMember($bTeachersOnly);
 		$this->iFunctionGroupId = CriteriaListWidgetDelegate::SELECT_ALL;
 	}
 
@@ -26,11 +27,11 @@ class TeamMemberListWidgetModule extends WidgetModule {
 		$this->oListWidget->setListTag($oListTag);
 		return $this->oListWidget->doWidget();
 	}
-	
+
 	public function getColumnIdentifiers() {
 		return array('id', 'full_name_inverted', 'is_active_team_member', 'class_names', 'profession', 'has_portrait', 'age_and_date_of_birth');
 	}
-	
+
 	public function getMetadataForColumn($sColumnIdentifier) {
 		$aResult = array('is_sortable' => true);
 		switch($sColumnIdentifier) {
@@ -44,7 +45,7 @@ class TeamMemberListWidgetModule extends WidgetModule {
         $aResult['heading'] = StringPeer::getString('wns.team_member.is_active');
 				$aResult['heading_filter'] = array('active_team_member_input', $this->oIsActiveTeamMemberInputFilter->getSessionKey());
 				$aResult['is_sortable'] = false;
-				break;			
+				break;
 			case 'class_names':
 				$aResult['heading'] = StringPeer::getString('wns.team_member.classes');
 				$aResult['is_sortable'] = false;
@@ -66,7 +67,7 @@ class TeamMemberListWidgetModule extends WidgetModule {
 	public function getDatabaseColumnForColumn($sColumnIdentifier) {
 		if($sColumnIdentifier === 'full_name_inverted') {
 			return TeamMemberPeer::LAST_NAME;
-		}			
+		}
 		if($sColumnIdentifier === 'age_and_date_of_birth') {
 			return TeamMemberPeer::DATE_OF_BIRTH;
 		}
@@ -75,7 +76,7 @@ class TeamMemberListWidgetModule extends WidgetModule {
 		}
 		return null;
 	}
-	
+
 	public function setIsActiveTeamMember($bIsActiveTeamMember) {
 	  $this->bIsActiveTeamMember = $bIsActiveTeamMember;
 	}
@@ -83,7 +84,7 @@ class TeamMemberListWidgetModule extends WidgetModule {
 	public function getFunctionGroupId() {
 	  return $this->iFunctionGroupId;
 	}
-	
+
 	public function setFunctionGroupId($iFunctionGroupId) {
 	  $this->iFunctionGroupId = $iFunctionGroupId;
 	}
