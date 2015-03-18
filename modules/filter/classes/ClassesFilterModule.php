@@ -26,6 +26,7 @@ class ClassesFilterModule extends FilterModule {
 				$this->renderClassNavigationItems($oNavigationItem, $oQuery);
 			}
 		}
+
 		if(!($oNavigationItem instanceof SubjectNavigationItem)) {
 			// render subject classes
 		}
@@ -50,6 +51,7 @@ class ClassesFilterModule extends FilterModule {
 		} else if($aMode[0] === 'home') {
 			// Render specific class year subpage items
 			$this->renderClassPageItems($oNavigationItem, $aMode[1]);
+
 		} else if($oNavigationItem->getMode() === SchoolClass::CLASS_EVENTS_IDENTIFIER) {
 			// Render related events
 			$this->renderEventNavigationItems($oNavigationItem);
