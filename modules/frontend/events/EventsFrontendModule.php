@@ -305,16 +305,18 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		}
 
 		// Back to list link
+		/**
+		 * @todo replace by js history back link or include referrer
+		*/
 		if($oTemplate->hasIdentifier('back_to_list_link')) {
 			if($oSchoolClass = self::$EVENT->getSchoolClass()) {
-				$aBackToListLink = array_merge($oSchoolClass->getLink(), array(SchoolClass::CLASS_EVENTS_IDENTIFIER));
+				$aBackToListLink = array_merge($oSchoolClass->getLink(), array('anlaesse'));
 				$sLinkText = StringPeer::getString('class_event.back_to_class_link'). ' ' . $oSchoolClass->getUnitName();
 			} else {
 				$aBackToListLink = Session::getSession()->getAttribute(self::SESSION_BACK_TO_LIST_LINK);
 				if(!is_array($aBackToListLink)) {
 					$aBackToListLink = FrontendManager::$CURRENT_PAGE->getFullPathArray();
 					$sLinkText = StringPeer::getString('event.back_to_list_link');
-
 				}
 			}
 			$oTemplate->replaceIdentifier('link_text', $sLinkText);
