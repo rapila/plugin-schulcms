@@ -139,7 +139,17 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 
 		ArrayUtil::trimStringsInArray($aData);
 		$oEvent->setIsActive($aData['is_active']);
-		$oEvent->setEventTypeId($aData['event_type_id']);
+		$oEvent->setSchoolClassId($aData['school_class_id'] != null ? $aData['school_class_id'] : null);
+		$mEventTypeId = $aData['event_type_id'];
+
+		if($oEvent->getSchoolClassId()) {
+			if($mEventTypeId == null) {
+				$mEventTypeId = SchoolSiteConfig::getClassEventTypeId();
+			}
+		} else {
+			$mEventTypeId = null;
+		}
+		$oEvent->setEventTypeId($mEventTypeId);
 		$oEvent->setTitle($aData['title']);
 		$oEvent->setLocationInfo($aData['location_info']);
 		$oEvent->setTimeDetails($aData['time_details']);
@@ -149,7 +159,6 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$oEvent->setIsActive($aData['is_active']);
 		$oEvent->setDateStart($aData['date_start']);
 		$oEvent->setDateEnd($aData['date_end'] == null ? null : $aData['date_end']);
-		$oEvent->setSchoolClassId($aData['school_class_id'] != null ? $aData['school_class_id'] : null);
 		if($oEvent->getDateEnd() !== null && $oEvent->getDateEnd() < $oEvent->getDateStart()) {
 			$oEvent->setDateEnd(null);
 		}
