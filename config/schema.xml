@@ -90,6 +90,7 @@
 		<reference local="school_building_id" foreign="id" />
 	</foreign-key>
 	<column name="school_id" type="integer" />
+	<column name="is_regular_class" type="boolean" size="1" default="0"/>
 	<foreign-key foreignTable="schools" onDelete="cascade">
 		<reference local="school_id" foreign="id" />
 	</foreign-key>
@@ -239,6 +240,10 @@
 <table name="event_types" phpName="EventType">
 	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
 	<column name="name" type="varchar" size="100" />
+	<column name="is_externally_managed" type="boolean" size="1" default="0" />
+	<behavior name="denyable">
+		<parameter name="role_key" value="events" />
+	</behavior>
 </table>
 
 <table name="event_documents" phpName="EventDocument">
