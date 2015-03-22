@@ -56,6 +56,7 @@ class SchoolClassTableMap extends TableMap
         $this->addForeignKey('week_schedule_id', 'WeekScheduleId', 'INTEGER', 'documents', 'id', false, null, null);
         $this->addForeignKey('school_building_id', 'SchoolBuildingId', 'INTEGER', 'school_buildings', 'id', false, null, null);
         $this->addForeignKey('school_id', 'SchoolId', 'INTEGER', 'schools', 'id', false, null, null);
+        $this->addColumn('is_regular_class', 'IsRegularClass', 'BOOLEAN', false, 1, false);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addForeignKey('created_by', 'CreatedBy', 'INTEGER', 'users', 'id', false, null, null);

@@ -24,13 +24,13 @@ abstract class BaseSchoolClassPeer
     const TM_CLASS = 'SchoolClassTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 22;
+    const NUM_COLUMNS = 23;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 22;
+    const NUM_HYDRATE_COLUMNS = 23;
 
     /** the column name for the id field */
     const ID = 'school_classes.id';
@@ -86,6 +86,9 @@ abstract class BaseSchoolClassPeer
     /** the column name for the school_id field */
     const SCHOOL_ID = 'school_classes.school_id';
 
+    /** the column name for the is_regular_class field */
+    const IS_REGULAR_CLASS = 'school_classes.is_regular_class';
+
     /** the column name for the created_at field */
     const CREATED_AT = 'school_classes.created_at';
 
@@ -121,12 +124,12 @@ abstract class BaseSchoolClassPeer
      * e.g. SchoolClassPeer::$fieldNames[SchoolClassPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'OriginalId', 'AncestorClassId', 'Name', 'UnitName', 'Slug', 'Year', 'Level', 'RoomNumber', 'TeachingUnit', 'StudentCount', 'ClassPortraitId', 'SubjectId', 'ClassType', 'ClassScheduleId', 'WeekScheduleId', 'SchoolBuildingId', 'SchoolId', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'originalId', 'ancestorClassId', 'name', 'unitName', 'slug', 'year', 'level', 'roomNumber', 'teachingUnit', 'studentCount', 'classPortraitId', 'subjectId', 'classType', 'classScheduleId', 'weekScheduleId', 'schoolBuildingId', 'schoolId', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-        BasePeer::TYPE_COLNAME => array (SchoolClassPeer::ID, SchoolClassPeer::ORIGINAL_ID, SchoolClassPeer::ANCESTOR_CLASS_ID, SchoolClassPeer::NAME, SchoolClassPeer::UNIT_NAME, SchoolClassPeer::SLUG, SchoolClassPeer::YEAR, SchoolClassPeer::LEVEL, SchoolClassPeer::ROOM_NUMBER, SchoolClassPeer::TEACHING_UNIT, SchoolClassPeer::STUDENT_COUNT, SchoolClassPeer::CLASS_PORTRAIT_ID, SchoolClassPeer::SUBJECT_ID, SchoolClassPeer::CLASS_TYPE, SchoolClassPeer::CLASS_SCHEDULE_ID, SchoolClassPeer::WEEK_SCHEDULE_ID, SchoolClassPeer::SCHOOL_BUILDING_ID, SchoolClassPeer::SCHOOL_ID, SchoolClassPeer::CREATED_AT, SchoolClassPeer::UPDATED_AT, SchoolClassPeer::CREATED_BY, SchoolClassPeer::UPDATED_BY, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ORIGINAL_ID', 'ANCESTOR_CLASS_ID', 'NAME', 'UNIT_NAME', 'SLUG', 'YEAR', 'LEVEL', 'ROOM_NUMBER', 'TEACHING_UNIT', 'STUDENT_COUNT', 'CLASS_PORTRAIT_ID', 'SUBJECT_ID', 'CLASS_TYPE', 'CLASS_SCHEDULE_ID', 'WEEK_SCHEDULE_ID', 'SCHOOL_BUILDING_ID', 'SCHOOL_ID', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'original_id', 'ancestor_class_id', 'name', 'unit_name', 'slug', 'year', 'level', 'room_number', 'teaching_unit', 'student_count', 'class_portrait_id', 'subject_id', 'class_type', 'class_schedule_id', 'week_schedule_id', 'school_building_id', 'school_id', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'OriginalId', 'AncestorClassId', 'Name', 'UnitName', 'Slug', 'Year', 'Level', 'RoomNumber', 'TeachingUnit', 'StudentCount', 'ClassPortraitId', 'SubjectId', 'ClassType', 'ClassScheduleId', 'WeekScheduleId', 'SchoolBuildingId', 'SchoolId', 'IsRegularClass', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'originalId', 'ancestorClassId', 'name', 'unitName', 'slug', 'year', 'level', 'roomNumber', 'teachingUnit', 'studentCount', 'classPortraitId', 'subjectId', 'classType', 'classScheduleId', 'weekScheduleId', 'schoolBuildingId', 'schoolId', 'isRegularClass', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+        BasePeer::TYPE_COLNAME => array (SchoolClassPeer::ID, SchoolClassPeer::ORIGINAL_ID, SchoolClassPeer::ANCESTOR_CLASS_ID, SchoolClassPeer::NAME, SchoolClassPeer::UNIT_NAME, SchoolClassPeer::SLUG, SchoolClassPeer::YEAR, SchoolClassPeer::LEVEL, SchoolClassPeer::ROOM_NUMBER, SchoolClassPeer::TEACHING_UNIT, SchoolClassPeer::STUDENT_COUNT, SchoolClassPeer::CLASS_PORTRAIT_ID, SchoolClassPeer::SUBJECT_ID, SchoolClassPeer::CLASS_TYPE, SchoolClassPeer::CLASS_SCHEDULE_ID, SchoolClassPeer::WEEK_SCHEDULE_ID, SchoolClassPeer::SCHOOL_BUILDING_ID, SchoolClassPeer::SCHOOL_ID, SchoolClassPeer::IS_REGULAR_CLASS, SchoolClassPeer::CREATED_AT, SchoolClassPeer::UPDATED_AT, SchoolClassPeer::CREATED_BY, SchoolClassPeer::UPDATED_BY, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ORIGINAL_ID', 'ANCESTOR_CLASS_ID', 'NAME', 'UNIT_NAME', 'SLUG', 'YEAR', 'LEVEL', 'ROOM_NUMBER', 'TEACHING_UNIT', 'STUDENT_COUNT', 'CLASS_PORTRAIT_ID', 'SUBJECT_ID', 'CLASS_TYPE', 'CLASS_SCHEDULE_ID', 'WEEK_SCHEDULE_ID', 'SCHOOL_BUILDING_ID', 'SCHOOL_ID', 'IS_REGULAR_CLASS', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'original_id', 'ancestor_class_id', 'name', 'unit_name', 'slug', 'year', 'level', 'room_number', 'teaching_unit', 'student_count', 'class_portrait_id', 'subject_id', 'class_type', 'class_schedule_id', 'week_schedule_id', 'school_building_id', 'school_id', 'is_regular_class', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
     );
 
     /**
@@ -136,12 +139,12 @@ abstract class BaseSchoolClassPeer
      * e.g. SchoolClassPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OriginalId' => 1, 'AncestorClassId' => 2, 'Name' => 3, 'UnitName' => 4, 'Slug' => 5, 'Year' => 6, 'Level' => 7, 'RoomNumber' => 8, 'TeachingUnit' => 9, 'StudentCount' => 10, 'ClassPortraitId' => 11, 'SubjectId' => 12, 'ClassType' => 13, 'ClassScheduleId' => 14, 'WeekScheduleId' => 15, 'SchoolBuildingId' => 16, 'SchoolId' => 17, 'CreatedAt' => 18, 'UpdatedAt' => 19, 'CreatedBy' => 20, 'UpdatedBy' => 21, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'originalId' => 1, 'ancestorClassId' => 2, 'name' => 3, 'unitName' => 4, 'slug' => 5, 'year' => 6, 'level' => 7, 'roomNumber' => 8, 'teachingUnit' => 9, 'studentCount' => 10, 'classPortraitId' => 11, 'subjectId' => 12, 'classType' => 13, 'classScheduleId' => 14, 'weekScheduleId' => 15, 'schoolBuildingId' => 16, 'schoolId' => 17, 'createdAt' => 18, 'updatedAt' => 19, 'createdBy' => 20, 'updatedBy' => 21, ),
-        BasePeer::TYPE_COLNAME => array (SchoolClassPeer::ID => 0, SchoolClassPeer::ORIGINAL_ID => 1, SchoolClassPeer::ANCESTOR_CLASS_ID => 2, SchoolClassPeer::NAME => 3, SchoolClassPeer::UNIT_NAME => 4, SchoolClassPeer::SLUG => 5, SchoolClassPeer::YEAR => 6, SchoolClassPeer::LEVEL => 7, SchoolClassPeer::ROOM_NUMBER => 8, SchoolClassPeer::TEACHING_UNIT => 9, SchoolClassPeer::STUDENT_COUNT => 10, SchoolClassPeer::CLASS_PORTRAIT_ID => 11, SchoolClassPeer::SUBJECT_ID => 12, SchoolClassPeer::CLASS_TYPE => 13, SchoolClassPeer::CLASS_SCHEDULE_ID => 14, SchoolClassPeer::WEEK_SCHEDULE_ID => 15, SchoolClassPeer::SCHOOL_BUILDING_ID => 16, SchoolClassPeer::SCHOOL_ID => 17, SchoolClassPeer::CREATED_AT => 18, SchoolClassPeer::UPDATED_AT => 19, SchoolClassPeer::CREATED_BY => 20, SchoolClassPeer::UPDATED_BY => 21, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ORIGINAL_ID' => 1, 'ANCESTOR_CLASS_ID' => 2, 'NAME' => 3, 'UNIT_NAME' => 4, 'SLUG' => 5, 'YEAR' => 6, 'LEVEL' => 7, 'ROOM_NUMBER' => 8, 'TEACHING_UNIT' => 9, 'STUDENT_COUNT' => 10, 'CLASS_PORTRAIT_ID' => 11, 'SUBJECT_ID' => 12, 'CLASS_TYPE' => 13, 'CLASS_SCHEDULE_ID' => 14, 'WEEK_SCHEDULE_ID' => 15, 'SCHOOL_BUILDING_ID' => 16, 'SCHOOL_ID' => 17, 'CREATED_AT' => 18, 'UPDATED_AT' => 19, 'CREATED_BY' => 20, 'UPDATED_BY' => 21, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'original_id' => 1, 'ancestor_class_id' => 2, 'name' => 3, 'unit_name' => 4, 'slug' => 5, 'year' => 6, 'level' => 7, 'room_number' => 8, 'teaching_unit' => 9, 'student_count' => 10, 'class_portrait_id' => 11, 'subject_id' => 12, 'class_type' => 13, 'class_schedule_id' => 14, 'week_schedule_id' => 15, 'school_building_id' => 16, 'school_id' => 17, 'created_at' => 18, 'updated_at' => 19, 'created_by' => 20, 'updated_by' => 21, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OriginalId' => 1, 'AncestorClassId' => 2, 'Name' => 3, 'UnitName' => 4, 'Slug' => 5, 'Year' => 6, 'Level' => 7, 'RoomNumber' => 8, 'TeachingUnit' => 9, 'StudentCount' => 10, 'ClassPortraitId' => 11, 'SubjectId' => 12, 'ClassType' => 13, 'ClassScheduleId' => 14, 'WeekScheduleId' => 15, 'SchoolBuildingId' => 16, 'SchoolId' => 17, 'IsRegularClass' => 18, 'CreatedAt' => 19, 'UpdatedAt' => 20, 'CreatedBy' => 21, 'UpdatedBy' => 22, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'originalId' => 1, 'ancestorClassId' => 2, 'name' => 3, 'unitName' => 4, 'slug' => 5, 'year' => 6, 'level' => 7, 'roomNumber' => 8, 'teachingUnit' => 9, 'studentCount' => 10, 'classPortraitId' => 11, 'subjectId' => 12, 'classType' => 13, 'classScheduleId' => 14, 'weekScheduleId' => 15, 'schoolBuildingId' => 16, 'schoolId' => 17, 'isRegularClass' => 18, 'createdAt' => 19, 'updatedAt' => 20, 'createdBy' => 21, 'updatedBy' => 22, ),
+        BasePeer::TYPE_COLNAME => array (SchoolClassPeer::ID => 0, SchoolClassPeer::ORIGINAL_ID => 1, SchoolClassPeer::ANCESTOR_CLASS_ID => 2, SchoolClassPeer::NAME => 3, SchoolClassPeer::UNIT_NAME => 4, SchoolClassPeer::SLUG => 5, SchoolClassPeer::YEAR => 6, SchoolClassPeer::LEVEL => 7, SchoolClassPeer::ROOM_NUMBER => 8, SchoolClassPeer::TEACHING_UNIT => 9, SchoolClassPeer::STUDENT_COUNT => 10, SchoolClassPeer::CLASS_PORTRAIT_ID => 11, SchoolClassPeer::SUBJECT_ID => 12, SchoolClassPeer::CLASS_TYPE => 13, SchoolClassPeer::CLASS_SCHEDULE_ID => 14, SchoolClassPeer::WEEK_SCHEDULE_ID => 15, SchoolClassPeer::SCHOOL_BUILDING_ID => 16, SchoolClassPeer::SCHOOL_ID => 17, SchoolClassPeer::IS_REGULAR_CLASS => 18, SchoolClassPeer::CREATED_AT => 19, SchoolClassPeer::UPDATED_AT => 20, SchoolClassPeer::CREATED_BY => 21, SchoolClassPeer::UPDATED_BY => 22, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ORIGINAL_ID' => 1, 'ANCESTOR_CLASS_ID' => 2, 'NAME' => 3, 'UNIT_NAME' => 4, 'SLUG' => 5, 'YEAR' => 6, 'LEVEL' => 7, 'ROOM_NUMBER' => 8, 'TEACHING_UNIT' => 9, 'STUDENT_COUNT' => 10, 'CLASS_PORTRAIT_ID' => 11, 'SUBJECT_ID' => 12, 'CLASS_TYPE' => 13, 'CLASS_SCHEDULE_ID' => 14, 'WEEK_SCHEDULE_ID' => 15, 'SCHOOL_BUILDING_ID' => 16, 'SCHOOL_ID' => 17, 'IS_REGULAR_CLASS' => 18, 'CREATED_AT' => 19, 'UPDATED_AT' => 20, 'CREATED_BY' => 21, 'UPDATED_BY' => 22, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'original_id' => 1, 'ancestor_class_id' => 2, 'name' => 3, 'unit_name' => 4, 'slug' => 5, 'year' => 6, 'level' => 7, 'room_number' => 8, 'teaching_unit' => 9, 'student_count' => 10, 'class_portrait_id' => 11, 'subject_id' => 12, 'class_type' => 13, 'class_schedule_id' => 14, 'week_schedule_id' => 15, 'school_building_id' => 16, 'school_id' => 17, 'is_regular_class' => 18, 'created_at' => 19, 'updated_at' => 20, 'created_by' => 21, 'updated_by' => 22, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
     );
 
     /**
@@ -233,6 +236,7 @@ abstract class BaseSchoolClassPeer
             $criteria->addSelectColumn(SchoolClassPeer::WEEK_SCHEDULE_ID);
             $criteria->addSelectColumn(SchoolClassPeer::SCHOOL_BUILDING_ID);
             $criteria->addSelectColumn(SchoolClassPeer::SCHOOL_ID);
+            $criteria->addSelectColumn(SchoolClassPeer::IS_REGULAR_CLASS);
             $criteria->addSelectColumn(SchoolClassPeer::CREATED_AT);
             $criteria->addSelectColumn(SchoolClassPeer::UPDATED_AT);
             $criteria->addSelectColumn(SchoolClassPeer::CREATED_BY);
@@ -256,6 +260,7 @@ abstract class BaseSchoolClassPeer
             $criteria->addSelectColumn($alias . '.week_schedule_id');
             $criteria->addSelectColumn($alias . '.school_building_id');
             $criteria->addSelectColumn($alias . '.school_id');
+            $criteria->addSelectColumn($alias . '.is_regular_class');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
             $criteria->addSelectColumn($alias . '.created_by');

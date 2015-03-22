@@ -42,6 +42,13 @@ abstract class BaseEventType extends BaseObject implements Persistent
     protected $name;
 
     /**
+     * The value for the is_externally_managed field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $is_externally_managed;
+
+    /**
      * The value for the created_at field.
      * @var        string
      */
@@ -108,6 +115,27 @@ abstract class BaseEventType extends BaseObject implements Persistent
     protected $eventsScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->is_externally_managed = false;
+    }
+
+    /**
+     * Initializes internal state of BaseEventType object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
+
+    /**
      * Get the [id] column value.
      *
      * @return int
@@ -127,6 +155,17 @@ abstract class BaseEventType extends BaseObject implements Persistent
     {
 
         return $this->name;
+    }
+
+    /**
+     * Get the [is_externally_managed] column value.
+     *
+     * @return boolean
+     */
+    public function getIsExternallyManaged()
+    {
+
+        return $this->is_externally_managed;
     }
 
     /**
@@ -274,6 +313,35 @@ abstract class BaseEventType extends BaseObject implements Persistent
     } // setName()
 
     /**
+     * Sets the value of the [is_externally_managed] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return EventType The current object (for fluent API support)
+     */
+    public function setIsExternallyManaged($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->is_externally_managed !== $v) {
+            $this->is_externally_managed = $v;
+            $this->modifiedColumns[] = EventTypePeer::IS_EXTERNALLY_MANAGED;
+        }
+
+
+        return $this;
+    } // setIsExternallyManaged()
+
+    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
@@ -379,6 +447,10 @@ abstract class BaseEventType extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->is_externally_managed !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -403,10 +475,11 @@ abstract class BaseEventType extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->created_at = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->updated_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->created_by = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->updated_by = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->is_externally_managed = ($row[$startcol + 2] !== null) ? (boolean) $row[$startcol + 2] : null;
+            $this->created_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->updated_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->created_by = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->updated_by = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -416,7 +489,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 6; // 6 = EventTypePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = EventTypePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating EventType object", $e);
@@ -518,7 +591,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
             $ret = $this->preDelete($con);
             // denyable behavior
             if(!(EventTypePeer::isIgnoringRights() || $this->mayOperate("delete"))) {
-                throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "event_types")));
+                throw new PropelException(new NotPermittedException("delete.by_role", array("role_key" => "events")));
             }
 
             if ($ret) {
@@ -565,6 +638,11 @@ abstract class BaseEventType extends BaseObject implements Persistent
             $ret = $this->preSave($con);
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // denyable behavior
+                if(!(EventTypePeer::isIgnoringRights() || $this->mayOperate("insert"))) {
+                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "events")));
+                }
+
                 // extended_timestampable behavior
                 if (!$this->isColumnModified(EventTypePeer::CREATED_AT)) {
                     $this->setCreatedAt(time());
@@ -583,13 +661,13 @@ abstract class BaseEventType extends BaseObject implements Persistent
                     }
                 }
 
-                // denyable behavior
-                if(!(EventTypePeer::isIgnoringRights() || $this->mayOperate("insert"))) {
-                    throw new PropelException(new NotPermittedException("insert.by_role", array("role_key" => "event_types")));
-                }
-
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // denyable behavior
+                if(!(EventTypePeer::isIgnoringRights() || $this->mayOperate("update"))) {
+                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "events")));
+                }
+
                 // extended_timestampable behavior
                 if ($this->isModified() && !$this->isColumnModified(EventTypePeer::UPDATED_AT)) {
                     $this->setUpdatedAt(time());
@@ -601,11 +679,6 @@ abstract class BaseEventType extends BaseObject implements Persistent
                         $this->setUpdatedBy(Session::getSession()->getUser()->getId());
                     }
                 }
-                // denyable behavior
-                if(!(EventTypePeer::isIgnoringRights() || $this->mayOperate("update"))) {
-                    throw new PropelException(new NotPermittedException("update.by_role", array("role_key" => "event_types")));
-                }
-
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -724,6 +797,9 @@ abstract class BaseEventType extends BaseObject implements Persistent
         if ($this->isColumnModified(EventTypePeer::NAME)) {
             $modifiedColumns[':p' . $index++]  = '`name`';
         }
+        if ($this->isColumnModified(EventTypePeer::IS_EXTERNALLY_MANAGED)) {
+            $modifiedColumns[':p' . $index++]  = '`is_externally_managed`';
+        }
         if ($this->isColumnModified(EventTypePeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
         }
@@ -752,6 +828,9 @@ abstract class BaseEventType extends BaseObject implements Persistent
                         break;
                     case '`name`':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                        break;
+                    case '`is_externally_managed`':
+                        $stmt->bindValue($identifier, (int) $this->is_externally_managed, PDO::PARAM_INT);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -932,15 +1011,18 @@ abstract class BaseEventType extends BaseObject implements Persistent
                 return $this->getName();
                 break;
             case 2:
-                return $this->getCreatedAt();
+                return $this->getIsExternallyManaged();
                 break;
             case 3:
-                return $this->getUpdatedAt();
+                return $this->getCreatedAt();
                 break;
             case 4:
-                return $this->getCreatedBy();
+                return $this->getUpdatedAt();
                 break;
             case 5:
+                return $this->getCreatedBy();
+                break;
+            case 6:
                 return $this->getUpdatedBy();
                 break;
             default:
@@ -974,10 +1056,11 @@ abstract class BaseEventType extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getName(),
-            $keys[2] => $this->getCreatedAt(),
-            $keys[3] => $this->getUpdatedAt(),
-            $keys[4] => $this->getCreatedBy(),
-            $keys[5] => $this->getUpdatedBy(),
+            $keys[2] => $this->getIsExternallyManaged(),
+            $keys[3] => $this->getCreatedAt(),
+            $keys[4] => $this->getUpdatedAt(),
+            $keys[5] => $this->getCreatedBy(),
+            $keys[6] => $this->getUpdatedBy(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1035,15 +1118,18 @@ abstract class BaseEventType extends BaseObject implements Persistent
                 $this->setName($value);
                 break;
             case 2:
-                $this->setCreatedAt($value);
+                $this->setIsExternallyManaged($value);
                 break;
             case 3:
-                $this->setUpdatedAt($value);
+                $this->setCreatedAt($value);
                 break;
             case 4:
-                $this->setCreatedBy($value);
+                $this->setUpdatedAt($value);
                 break;
             case 5:
+                $this->setCreatedBy($value);
+                break;
+            case 6:
                 $this->setUpdatedBy($value);
                 break;
         } // switch()
@@ -1072,10 +1158,11 @@ abstract class BaseEventType extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setCreatedAt($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setUpdatedAt($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setCreatedBy($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setUpdatedBy($arr[$keys[5]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIsExternallyManaged($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setCreatedAt($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setUpdatedAt($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setCreatedBy($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setUpdatedBy($arr[$keys[6]]);
     }
 
     /**
@@ -1089,6 +1176,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
 
         if ($this->isColumnModified(EventTypePeer::ID)) $criteria->add(EventTypePeer::ID, $this->id);
         if ($this->isColumnModified(EventTypePeer::NAME)) $criteria->add(EventTypePeer::NAME, $this->name);
+        if ($this->isColumnModified(EventTypePeer::IS_EXTERNALLY_MANAGED)) $criteria->add(EventTypePeer::IS_EXTERNALLY_MANAGED, $this->is_externally_managed);
         if ($this->isColumnModified(EventTypePeer::CREATED_AT)) $criteria->add(EventTypePeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(EventTypePeer::UPDATED_AT)) $criteria->add(EventTypePeer::UPDATED_AT, $this->updated_at);
         if ($this->isColumnModified(EventTypePeer::CREATED_BY)) $criteria->add(EventTypePeer::CREATED_BY, $this->created_by);
@@ -1157,6 +1245,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setName($this->getName());
+        $copyObj->setIsExternallyManaged($this->getIsExternallyManaged());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setCreatedBy($this->getCreatedBy());
@@ -1677,6 +1766,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
     {
         $this->id = null;
         $this->name = null;
+        $this->is_externally_managed = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->created_by = null;
@@ -1685,6 +1775,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -1744,6 +1835,28 @@ abstract class BaseEventType extends BaseObject implements Persistent
     public function isAlreadyInSave()
     {
         return $this->alreadyInSave;
+    }
+
+    // denyable behavior
+    public function mayOperate($sOperation, $oUser = false) {
+        $oUser = EventTypePeer::getRightsUser($oUser);
+        $bIsAllowed = false;
+        if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && EventTypePeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
+            $bIsAllowed = true;
+        } else if(EventTypePeer::mayOperateOn($oUser, $this, $sOperation)) {
+            $bIsAllowed = true;
+        }
+        FilterModule::getFilters()->handleEventTypeOperationCheck($sOperation, $this, $oUser, array(&$bIsAllowed));
+        return $bIsAllowed;
+    }
+    public function mayBeInserted($oUser = false) {
+        return $this->mayOperate("insert", $oUser);
+    }
+    public function mayBeUpdated($oUser = false) {
+        return $this->mayOperate("update", $oUser);
+    }
+    public function mayBeDeleted($oUser = false) {
+        return $this->mayOperate("delete", $oUser);
     }
 
     // extended_timestampable behavior
@@ -1809,28 +1922,6 @@ abstract class BaseEventType extends BaseObject implements Persistent
     {
         $this->modifiedColumns[] = EventTypePeer::UPDATED_BY;
         return $this;
-    }
-
-    // denyable behavior
-    public function mayOperate($sOperation, $oUser = false) {
-        $oUser = EventTypePeer::getRightsUser($oUser);
-        $bIsAllowed = false;
-        if($oUser && ($this->isNew() || $this->getCreatedBy() === $oUser->getId()) && EventTypePeer::mayOperateOnOwn($oUser, $this, $sOperation)) {
-            $bIsAllowed = true;
-        } else if(EventTypePeer::mayOperateOn($oUser, $this, $sOperation)) {
-            $bIsAllowed = true;
-        }
-        FilterModule::getFilters()->handleEventTypeOperationCheck($sOperation, $this, $oUser, array(&$bIsAllowed));
-        return $bIsAllowed;
-    }
-    public function mayBeInserted($oUser = false) {
-        return $this->mayOperate("insert", $oUser);
-    }
-    public function mayBeUpdated($oUser = false) {
-        return $this->mayOperate("update", $oUser);
-    }
-    public function mayBeDeleted($oUser = false) {
-        return $this->mayOperate("delete", $oUser);
     }
 
     // extended_keyable behavior

@@ -24,6 +24,7 @@
  * @method SchoolClassQuery orderByWeekScheduleId($order = Criteria::ASC) Order by the week_schedule_id column
  * @method SchoolClassQuery orderBySchoolBuildingId($order = Criteria::ASC) Order by the school_building_id column
  * @method SchoolClassQuery orderBySchoolId($order = Criteria::ASC) Order by the school_id column
+ * @method SchoolClassQuery orderByIsRegularClass($order = Criteria::ASC) Order by the is_regular_class column
  * @method SchoolClassQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method SchoolClassQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method SchoolClassQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
@@ -47,6 +48,7 @@
  * @method SchoolClassQuery groupByWeekScheduleId() Group by the week_schedule_id column
  * @method SchoolClassQuery groupBySchoolBuildingId() Group by the school_building_id column
  * @method SchoolClassQuery groupBySchoolId() Group by the school_id column
+ * @method SchoolClassQuery groupByIsRegularClass() Group by the is_regular_class column
  * @method SchoolClassQuery groupByCreatedAt() Group by the created_at column
  * @method SchoolClassQuery groupByUpdatedAt() Group by the updated_at column
  * @method SchoolClassQuery groupByCreatedBy() Group by the created_by column
@@ -148,6 +150,7 @@
  * @method SchoolClass findOneByWeekScheduleId(int $week_schedule_id) Return the first SchoolClass filtered by the week_schedule_id column
  * @method SchoolClass findOneBySchoolBuildingId(int $school_building_id) Return the first SchoolClass filtered by the school_building_id column
  * @method SchoolClass findOneBySchoolId(int $school_id) Return the first SchoolClass filtered by the school_id column
+ * @method SchoolClass findOneByIsRegularClass(boolean $is_regular_class) Return the first SchoolClass filtered by the is_regular_class column
  * @method SchoolClass findOneByCreatedAt(string $created_at) Return the first SchoolClass filtered by the created_at column
  * @method SchoolClass findOneByUpdatedAt(string $updated_at) Return the first SchoolClass filtered by the updated_at column
  * @method SchoolClass findOneByCreatedBy(int $created_by) Return the first SchoolClass filtered by the created_by column
@@ -171,6 +174,7 @@
  * @method array findByWeekScheduleId(int $week_schedule_id) Return SchoolClass objects filtered by the week_schedule_id column
  * @method array findBySchoolBuildingId(int $school_building_id) Return SchoolClass objects filtered by the school_building_id column
  * @method array findBySchoolId(int $school_id) Return SchoolClass objects filtered by the school_id column
+ * @method array findByIsRegularClass(boolean $is_regular_class) Return SchoolClass objects filtered by the is_regular_class column
  * @method array findByCreatedAt(string $created_at) Return SchoolClass objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return SchoolClass objects filtered by the updated_at column
  * @method array findByCreatedBy(int $created_by) Return SchoolClass objects filtered by the created_by column
@@ -282,7 +286,7 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `original_id`, `ancestor_class_id`, `name`, `unit_name`, `slug`, `year`, `level`, `room_number`, `teaching_unit`, `student_count`, `class_portrait_id`, `subject_id`, `class_type`, `class_schedule_id`, `week_schedule_id`, `school_building_id`, `school_id`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `school_classes` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `original_id`, `ancestor_class_id`, `name`, `unit_name`, `slug`, `year`, `level`, `room_number`, `teaching_unit`, `student_count`, `class_portrait_id`, `subject_id`, `class_type`, `class_schedule_id`, `week_schedule_id`, `school_building_id`, `school_id`, `is_regular_class`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `school_classes` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1061,6 +1065,33 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SchoolClassPeer::SCHOOL_ID, $schoolId, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_regular_class column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsRegularClass(true); // WHERE is_regular_class = true
+     * $query->filterByIsRegularClass('yes'); // WHERE is_regular_class = true
+     * </code>
+     *
+     * @param     boolean|string $isRegularClass The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return SchoolClassQuery The current query, for fluid interface
+     */
+    public function filterByIsRegularClass($isRegularClass = null, $comparison = null)
+    {
+        if (is_string($isRegularClass)) {
+            $isRegularClass = in_array(strtolower($isRegularClass), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(SchoolClassPeer::IS_REGULAR_CLASS, $isRegularClass, $comparison);
     }
 
     /**

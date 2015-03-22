@@ -138,6 +138,13 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     protected $school_id;
 
     /**
+     * The value for the is_regular_class field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $is_regular_class;
+
+    /**
      * The value for the created_at field.
      * @var        string
      */
@@ -335,6 +342,27 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     protected $newssScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->is_regular_class = false;
+    }
+
+    /**
+     * Initializes internal state of BaseSchoolClass object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
+
+    /**
      * Get the [id] column value.
      *
      * @return int
@@ -530,6 +558,17 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     {
 
         return $this->school_id;
+    }
+
+    /**
+     * Get the [is_regular_class] column value.
+     *
+     * @return boolean
+     */
+    public function getIsRegularClass()
+    {
+
+        return $this->is_regular_class;
     }
 
     /**
@@ -1041,6 +1080,35 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     } // setSchoolId()
 
     /**
+     * Sets the value of the [is_regular_class] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return SchoolClass The current object (for fluent API support)
+     */
+    public function setIsRegularClass($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->is_regular_class !== $v) {
+            $this->is_regular_class = $v;
+            $this->modifiedColumns[] = SchoolClassPeer::IS_REGULAR_CLASS;
+        }
+
+
+        return $this;
+    } // setIsRegularClass()
+
+    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
@@ -1146,6 +1214,10 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->is_regular_class !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -1186,10 +1258,11 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $this->week_schedule_id = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
             $this->school_building_id = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
             $this->school_id = ($row[$startcol + 17] !== null) ? (int) $row[$startcol + 17] : null;
-            $this->created_at = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
-            $this->updated_at = ($row[$startcol + 19] !== null) ? (string) $row[$startcol + 19] : null;
-            $this->created_by = ($row[$startcol + 20] !== null) ? (int) $row[$startcol + 20] : null;
-            $this->updated_by = ($row[$startcol + 21] !== null) ? (int) $row[$startcol + 21] : null;
+            $this->is_regular_class = ($row[$startcol + 18] !== null) ? (boolean) $row[$startcol + 18] : null;
+            $this->created_at = ($row[$startcol + 19] !== null) ? (string) $row[$startcol + 19] : null;
+            $this->updated_at = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
+            $this->created_by = ($row[$startcol + 21] !== null) ? (int) $row[$startcol + 21] : null;
+            $this->updated_by = ($row[$startcol + 22] !== null) ? (int) $row[$startcol + 22] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1199,7 +1272,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 22; // 22 = SchoolClassPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 23; // 23 = SchoolClassPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating SchoolClass object", $e);
@@ -1785,6 +1858,9 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         if ($this->isColumnModified(SchoolClassPeer::SCHOOL_ID)) {
             $modifiedColumns[':p' . $index++]  = '`school_id`';
         }
+        if ($this->isColumnModified(SchoolClassPeer::IS_REGULAR_CLASS)) {
+            $modifiedColumns[':p' . $index++]  = '`is_regular_class`';
+        }
         if ($this->isColumnModified(SchoolClassPeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
         }
@@ -1861,6 +1937,9 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                         break;
                     case '`school_id`':
                         $stmt->bindValue($identifier, $this->school_id, PDO::PARAM_INT);
+                        break;
+                    case '`is_regular_class`':
+                        $stmt->bindValue($identifier, (int) $this->is_regular_class, PDO::PARAM_INT);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -2195,15 +2274,18 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                 return $this->getSchoolId();
                 break;
             case 18:
-                return $this->getCreatedAt();
+                return $this->getIsRegularClass();
                 break;
             case 19:
-                return $this->getUpdatedAt();
+                return $this->getCreatedAt();
                 break;
             case 20:
-                return $this->getCreatedBy();
+                return $this->getUpdatedAt();
                 break;
             case 21:
+                return $this->getCreatedBy();
+                break;
+            case 22:
                 return $this->getUpdatedBy();
                 break;
             default:
@@ -2253,10 +2335,11 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $keys[15] => $this->getWeekScheduleId(),
             $keys[16] => $this->getSchoolBuildingId(),
             $keys[17] => $this->getSchoolId(),
-            $keys[18] => $this->getCreatedAt(),
-            $keys[19] => $this->getUpdatedAt(),
-            $keys[20] => $this->getCreatedBy(),
-            $keys[21] => $this->getUpdatedBy(),
+            $keys[18] => $this->getIsRegularClass(),
+            $keys[19] => $this->getCreatedAt(),
+            $keys[20] => $this->getUpdatedAt(),
+            $keys[21] => $this->getCreatedBy(),
+            $keys[22] => $this->getUpdatedBy(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -2407,15 +2490,18 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                 $this->setSchoolId($value);
                 break;
             case 18:
-                $this->setCreatedAt($value);
+                $this->setIsRegularClass($value);
                 break;
             case 19:
-                $this->setUpdatedAt($value);
+                $this->setCreatedAt($value);
                 break;
             case 20:
-                $this->setCreatedBy($value);
+                $this->setUpdatedAt($value);
                 break;
             case 21:
+                $this->setCreatedBy($value);
+                break;
+            case 22:
                 $this->setUpdatedBy($value);
                 break;
         } // switch()
@@ -2460,10 +2546,11 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         if (array_key_exists($keys[15], $arr)) $this->setWeekScheduleId($arr[$keys[15]]);
         if (array_key_exists($keys[16], $arr)) $this->setSchoolBuildingId($arr[$keys[16]]);
         if (array_key_exists($keys[17], $arr)) $this->setSchoolId($arr[$keys[17]]);
-        if (array_key_exists($keys[18], $arr)) $this->setCreatedAt($arr[$keys[18]]);
-        if (array_key_exists($keys[19], $arr)) $this->setUpdatedAt($arr[$keys[19]]);
-        if (array_key_exists($keys[20], $arr)) $this->setCreatedBy($arr[$keys[20]]);
-        if (array_key_exists($keys[21], $arr)) $this->setUpdatedBy($arr[$keys[21]]);
+        if (array_key_exists($keys[18], $arr)) $this->setIsRegularClass($arr[$keys[18]]);
+        if (array_key_exists($keys[19], $arr)) $this->setCreatedAt($arr[$keys[19]]);
+        if (array_key_exists($keys[20], $arr)) $this->setUpdatedAt($arr[$keys[20]]);
+        if (array_key_exists($keys[21], $arr)) $this->setCreatedBy($arr[$keys[21]]);
+        if (array_key_exists($keys[22], $arr)) $this->setUpdatedBy($arr[$keys[22]]);
     }
 
     /**
@@ -2493,6 +2580,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         if ($this->isColumnModified(SchoolClassPeer::WEEK_SCHEDULE_ID)) $criteria->add(SchoolClassPeer::WEEK_SCHEDULE_ID, $this->week_schedule_id);
         if ($this->isColumnModified(SchoolClassPeer::SCHOOL_BUILDING_ID)) $criteria->add(SchoolClassPeer::SCHOOL_BUILDING_ID, $this->school_building_id);
         if ($this->isColumnModified(SchoolClassPeer::SCHOOL_ID)) $criteria->add(SchoolClassPeer::SCHOOL_ID, $this->school_id);
+        if ($this->isColumnModified(SchoolClassPeer::IS_REGULAR_CLASS)) $criteria->add(SchoolClassPeer::IS_REGULAR_CLASS, $this->is_regular_class);
         if ($this->isColumnModified(SchoolClassPeer::CREATED_AT)) $criteria->add(SchoolClassPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(SchoolClassPeer::UPDATED_AT)) $criteria->add(SchoolClassPeer::UPDATED_AT, $this->updated_at);
         if ($this->isColumnModified(SchoolClassPeer::CREATED_BY)) $criteria->add(SchoolClassPeer::CREATED_BY, $this->created_by);
@@ -2577,6 +2665,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         $copyObj->setWeekScheduleId($this->getWeekScheduleId());
         $copyObj->setSchoolBuildingId($this->getSchoolBuildingId());
         $copyObj->setSchoolId($this->getSchoolId());
+        $copyObj->setIsRegularClass($this->getIsRegularClass());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setCreatedBy($this->getCreatedBy());
@@ -6042,6 +6131,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         $this->week_schedule_id = null;
         $this->school_building_id = null;
         $this->school_id = null;
+        $this->is_regular_class = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->created_by = null;
@@ -6050,6 +6140,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

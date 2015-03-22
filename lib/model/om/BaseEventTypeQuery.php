@@ -8,6 +8,7 @@
  *
  * @method EventTypeQuery orderById($order = Criteria::ASC) Order by the id column
  * @method EventTypeQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method EventTypeQuery orderByIsExternallyManaged($order = Criteria::ASC) Order by the is_externally_managed column
  * @method EventTypeQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method EventTypeQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method EventTypeQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
@@ -15,6 +16,7 @@
  *
  * @method EventTypeQuery groupById() Group by the id column
  * @method EventTypeQuery groupByName() Group by the name column
+ * @method EventTypeQuery groupByIsExternallyManaged() Group by the is_externally_managed column
  * @method EventTypeQuery groupByCreatedAt() Group by the created_at column
  * @method EventTypeQuery groupByUpdatedAt() Group by the updated_at column
  * @method EventTypeQuery groupByCreatedBy() Group by the created_by column
@@ -40,6 +42,7 @@
  * @method EventType findOneOrCreate(PropelPDO $con = null) Return the first EventType matching the query, or a new EventType object populated from the query conditions when no match is found
  *
  * @method EventType findOneByName(string $name) Return the first EventType filtered by the name column
+ * @method EventType findOneByIsExternallyManaged(boolean $is_externally_managed) Return the first EventType filtered by the is_externally_managed column
  * @method EventType findOneByCreatedAt(string $created_at) Return the first EventType filtered by the created_at column
  * @method EventType findOneByUpdatedAt(string $updated_at) Return the first EventType filtered by the updated_at column
  * @method EventType findOneByCreatedBy(int $created_by) Return the first EventType filtered by the created_by column
@@ -47,6 +50,7 @@
  *
  * @method array findById(int $id) Return EventType objects filtered by the id column
  * @method array findByName(string $name) Return EventType objects filtered by the name column
+ * @method array findByIsExternallyManaged(boolean $is_externally_managed) Return EventType objects filtered by the is_externally_managed column
  * @method array findByCreatedAt(string $created_at) Return EventType objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return EventType objects filtered by the updated_at column
  * @method array findByCreatedBy(int $created_by) Return EventType objects filtered by the created_by column
@@ -158,7 +162,7 @@ abstract class BaseEventTypeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `event_types` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `name`, `is_externally_managed`, `created_at`, `updated_at`, `created_by`, `updated_by` FROM `event_types` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -316,6 +320,33 @@ abstract class BaseEventTypeQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EventTypePeer::NAME, $name, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_externally_managed column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsExternallyManaged(true); // WHERE is_externally_managed = true
+     * $query->filterByIsExternallyManaged('yes'); // WHERE is_externally_managed = true
+     * </code>
+     *
+     * @param     boolean|string $isExternallyManaged The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return EventTypeQuery The current query, for fluid interface
+     */
+    public function filterByIsExternallyManaged($isExternallyManaged = null, $comparison = null)
+    {
+        if (is_string($isExternallyManaged)) {
+            $isExternallyManaged = in_array(strtolower($isExternallyManaged), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(EventTypePeer::IS_EXTERNALLY_MANAGED, $isExternallyManaged, $comparison);
     }
 
     /**

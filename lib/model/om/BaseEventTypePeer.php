@@ -24,19 +24,22 @@ abstract class BaseEventTypePeer
     const TM_CLASS = 'EventTypeTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /** the column name for the id field */
     const ID = 'event_types.id';
 
     /** the column name for the name field */
     const NAME = 'event_types.name';
+
+    /** the column name for the is_externally_managed field */
+    const IS_EXTERNALLY_MANAGED = 'event_types.is_externally_managed';
 
     /** the column name for the created_at field */
     const CREATED_AT = 'event_types.created_at';
@@ -73,12 +76,12 @@ abstract class BaseEventTypePeer
      * e.g. EventTypePeer::$fieldNames[EventTypePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
-        BasePeer::TYPE_COLNAME => array (EventTypePeer::ID, EventTypePeer::NAME, EventTypePeer::CREATED_AT, EventTypePeer::UPDATED_AT, EventTypePeer::CREATED_BY, EventTypePeer::UPDATED_BY, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'IsExternallyManaged', 'CreatedAt', 'UpdatedAt', 'CreatedBy', 'UpdatedBy', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'isExternallyManaged', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', ),
+        BasePeer::TYPE_COLNAME => array (EventTypePeer::ID, EventTypePeer::NAME, EventTypePeer::IS_EXTERNALLY_MANAGED, EventTypePeer::CREATED_AT, EventTypePeer::UPDATED_AT, EventTypePeer::CREATED_BY, EventTypePeer::UPDATED_BY, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'IS_EXTERNALLY_MANAGED', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'is_externally_managed', 'created_at', 'updated_at', 'created_by', 'updated_by', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -88,12 +91,12 @@ abstract class BaseEventTypePeer
      * e.g. EventTypePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, 'CreatedBy' => 4, 'UpdatedBy' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'createdAt' => 2, 'updatedAt' => 3, 'createdBy' => 4, 'updatedBy' => 5, ),
-        BasePeer::TYPE_COLNAME => array (EventTypePeer::ID => 0, EventTypePeer::NAME => 1, EventTypePeer::CREATED_AT => 2, EventTypePeer::UPDATED_AT => 3, EventTypePeer::CREATED_BY => 4, EventTypePeer::UPDATED_BY => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'CREATED_AT' => 2, 'UPDATED_AT' => 3, 'CREATED_BY' => 4, 'UPDATED_BY' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'created_at' => 2, 'updated_at' => 3, 'created_by' => 4, 'updated_by' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'IsExternallyManaged' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, 'CreatedBy' => 5, 'UpdatedBy' => 6, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'isExternallyManaged' => 2, 'createdAt' => 3, 'updatedAt' => 4, 'createdBy' => 5, 'updatedBy' => 6, ),
+        BasePeer::TYPE_COLNAME => array (EventTypePeer::ID => 0, EventTypePeer::NAME => 1, EventTypePeer::IS_EXTERNALLY_MANAGED => 2, EventTypePeer::CREATED_AT => 3, EventTypePeer::UPDATED_AT => 4, EventTypePeer::CREATED_BY => 5, EventTypePeer::UPDATED_BY => 6, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'IS_EXTERNALLY_MANAGED' => 2, 'CREATED_AT' => 3, 'UPDATED_AT' => 4, 'CREATED_BY' => 5, 'UPDATED_BY' => 6, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'is_externally_managed' => 2, 'created_at' => 3, 'updated_at' => 4, 'created_by' => 5, 'updated_by' => 6, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -169,6 +172,7 @@ abstract class BaseEventTypePeer
         if (null === $alias) {
             $criteria->addSelectColumn(EventTypePeer::ID);
             $criteria->addSelectColumn(EventTypePeer::NAME);
+            $criteria->addSelectColumn(EventTypePeer::IS_EXTERNALLY_MANAGED);
             $criteria->addSelectColumn(EventTypePeer::CREATED_AT);
             $criteria->addSelectColumn(EventTypePeer::UPDATED_AT);
             $criteria->addSelectColumn(EventTypePeer::CREATED_BY);
@@ -176,6 +180,7 @@ abstract class BaseEventTypePeer
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.is_externally_managed');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
             $criteria->addSelectColumn($alias . '.created_by');
@@ -1426,10 +1431,10 @@ abstract class BaseEventTypePeer
         if($oUser->getIsAdmin()) {
             return true;
         }
-        return $oUser->hasRole("event_types");
+        return $oUser->hasRole("events");
     }
     public static function mayOperateOnOwn($oUser, $mObject, $sOperation) {
-        return $oUser->hasRole("event_types-own");
+        return $oUser->hasRole("events-own");
     }
 
 } // BaseEventTypePeer
