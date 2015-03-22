@@ -60,6 +60,10 @@ class EventsAdminModule extends AdminModule {
 		return array();
 	}
 
+	public function getCriteria() {
+		return EventTypeQuery::create()->filterByIsExternallyManaged(false);
+	}
+
 	public function usedWidgets() {
 		return array($this->oListWidget, $this->oSidebarWidget);
 	}

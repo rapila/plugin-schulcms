@@ -5,17 +5,13 @@
 class EventListWidgetModule extends SpecializedListWidgetModule {
 
 	public $oDelegateProxy;
-	public $oBooleanInputFilter;
 	public $iEventTypeId;
-	public $bShowClassEvent;
 	public $iSchoolClassId = null;
 
 	protected function createListWidget() {
 		$oListWidget = new ListWidgetModule();
 		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "Event", "date_start", "desc");
-		$this->oDelegateProxy->setIsClassEvent(true);
 		$oListWidget->setDelegate($this->oDelegateProxy);
-		$this->oBooleanInputFilter = WidgetModule::getWidget('boolean_input', null, true);
 		return $oListWidget;
 	}
 
@@ -28,7 +24,7 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 	}
 
 	public function getColumnIdentifiers() {
-		return array('id', 'title', 'body_truncated', 'date_start_formatted', 'is_class_event', 'is_active', 'is_common', 'has_bericht', 'has_images', 'delete');
+		return array('id', 'title', 'body_truncated', 'date_start_formatted', 'is_active', 'is_common', 'has_bericht', 'has_images', 'delete');
 	}
 
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -42,11 +38,6 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 				break;
 			case 'date_start_formatted':
 				$aResult['heading'] = StringPeer::getString('wns.event.date_start');
-				break;
-			case 'is_class_event':
-        $aResult['heading'] = StringPeer::getString('wns.events.general');
-				$aResult['heading_filter'] = array('boolean_input', $this->oBooleanInputFilter->getSessionKey());
-				$aResult['is_sortable'] = false;
 				break;
 			case 'is_common':
 				$aResult['heading'] = StringPeer::getString('wns.event.is_common_list');
@@ -72,9 +63,6 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 	}
 
 	public function getDatabaseColumnForColumn($sColumnIdentifier) {
-		if($sColumnIdentifier === 'is_class_event') {
-			return EventPeer::SCHOOL_CLASS_ID;
-		}
 		if($sColumnIdentifier === 'date_start_formatted') {
 			return EventPeer::DATE_START;
 		}
@@ -118,16 +106,7 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 		}
 		return $this->oDelegateProxy->getEventTypeId();
 	}
-
-	public function setIsClassEvent($bShowClassEvent) {
-	  $this->bShowClassEvent = !$bShowClassEvent;
-	}
-
 	public function getCriteria() {
-    $oQuery = EventQuery::create();
-		if(!$this->bShowClassEvent) {
-			$oQuery->excludeExternallyManaged();
-		}
-		return $oQuery;
+    return EventQuery::create()->excludeExternallyManaged();
 	}
 }
