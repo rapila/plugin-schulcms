@@ -310,7 +310,7 @@
 						var value = item[prop];
 						var found = false;
 						if(Array.isArray(value)) {
-							found = value.indexOf(id);
+							found = value.indexOf(id) > -1;
 						} else {
 							found = value === id;
 						}
