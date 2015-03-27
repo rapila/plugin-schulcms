@@ -254,18 +254,26 @@
 			var selected = document.createElement('div');
 			selected.className = 'selected';
 			element.insertBefore(selected, element.firstChild);
+			element.cl = classList(element);
 			var available = element.querySelector('.available');
-			available.cl = classList(available);
 			var availables = available.children;
 
 			function toggle(open) {
 				if(open !== true && open !== false) {
-					open = !available.cl.contains('open');
+					open = !element.cl.contains('open');
 				}
 				if(open) {
-					available.cl.add('open');
+					element.cl.add('open');
+					// Close all other option filters in the same filter bar
+					var bar = element.parentNode;
+					var others = bar.querySelectorAll('[data-wok-filter-options]');
+					for(var i=0;i<others.length;i++) {
+						if(others[i] !== element) {
+							classList(others[i]).remove('open');
+						}
+					}
 				} else {
-					available.cl.remove('open');
+					element.cl.remove('open');
 				}
 			};
 
