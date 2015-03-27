@@ -75,7 +75,7 @@
 				{
 					focusTag: function(tag) {
 						_this.request({
-							tag: tag
+							tags: tag
 						});
 					},
 					focusType: function(type) {

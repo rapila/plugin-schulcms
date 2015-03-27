@@ -84,6 +84,66 @@
 		};
 	});
 
+	wok.use('htmlSource', function(element, useJSON) {
+		var _this = this;
+
+		var data;
+		function prepare() {
+			data = {};
+			var items = element.children;
+			for(var i=0;i<items.length;i++) {
+				var attrs = [].slice.call(items[i].attributes);
+				var id = null;
+				var ob = {};
+				for(var j=0;j<attrs.length;j++) {
+					var name = attrs[j].nodeName;
+					var value = attrs[j].nodeValue;
+					if(useJSON) {
+						value = JSON.parse(value);
+					}
+					if(name === 'data-id') {
+						id = value;
+					}
+					if(name.indexOf('data-') === 0) {
+						name = name.substring('data-'.length);
+						ob[name] = value;
+					}
+				}
+				data[id] = ob;
+			}
+			return data;
+		}
+
+
+		return {
+			request: function() {
+				prepare();
+				_this.render(data);
+			}
+		};
+	});
+
+	wok.use('htmlFiltered', function(element) {
+		var items = element.children;
+
+		return {
+			render: function(data) {
+				for(var i=0;i<items.length;i++) {
+					var item = items[i];
+					if(!item.cl) {
+						item.cl = classList(item);
+					}
+					var id = item.getAttribute('data-id');
+					if(id in data) {
+						item.cl.remove('hidden');
+					} else {
+						item.cl.add('hidden');
+					}
+				}
+			}
+		}
+	});
+
 	var filterPlugins = {
 		'date-pager': function datePager(element, startField, endField, granularity, granularityChanger, months) {
 			var _this = this;
