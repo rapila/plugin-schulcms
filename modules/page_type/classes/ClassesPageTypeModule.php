@@ -40,11 +40,11 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 		$this->sClassType = $this->oPage->getPagePropertyValue('classes:class_type');
 	}
 
-	public function display(Template $oTemplate, $bIsPreview = false, $sMode = null) {
-		$sMode = $sMode ? $sMode : 'list';
+	public function display(Template $oTemplate, $bIsPreview = false) {
+		$sMode = 'list';
 
 		if($this->oNavigationItem instanceof ClassNavigationItem) {
-			$sMode = StringUtil::startsWith($this->oNavigationItem->getMode(), 'home_') ? 'home' : $this->oNavigationItem->getMode();
+			$sMode = $this->oNavigationItem->getMode();
 		}
 		// Caching?
 		$sClassName = 'Class'.StringUtil::camelize($sMode, true).'Output';
@@ -92,9 +92,17 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 	}
 
 	public function config() {
-		$aResult['display_type'] = $this->sDisplayType ? $this->sDisplayType : 'default';
-		$aResult['class_type'] = $this->sClassType ? $this->sClassType : 'standard';
+		$aResult['display_type'] = $this->getDisplayType();
+		$aResult['class_type'] = $this->getDisplayType();
 		return $aResult;
+	}
+
+	public function getDisplayType() {
+		return $this->sDisplayType ? $this->sDisplayType : 'default';
+	}
+
+	public function getClassType() {
+		return $this->sClassType ? $this->sClassType : 'standard';
 	}
 
 

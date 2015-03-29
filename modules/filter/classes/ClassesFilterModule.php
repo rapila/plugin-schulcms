@@ -22,8 +22,7 @@ class ClassesFilterModule extends FilterModule {
 					$oNavigationItem->addChild(SubjectNavigationItem::create($aData['Slug'], $aData['Name'], $aData['Id']));
 				}
 			} else {
-				$oQuery = SchoolClassQuery::create()->filterByClassTypeYearAndSchool(null)->filterBySubjectId(null, Criteria::ISNULL)->select('Slug');
-				$this->renderClassNavigationItems($oNavigationItem, $oQuery);
+				$this->renderClassNavigationItems($oNavigationItem, $sDisplayType);
 			}
 		}
 
@@ -34,46 +33,34 @@ class ClassesFilterModule extends FilterModule {
 		if(!($oNavigationItem instanceof ClassNavigationItem)) {
 			return;
 		}
-		$aMode = explode('_', $oNavigationItem->getMode());
 
 		// Render all years of current class
-		if($aMode[0] === 'root') {
-			$oPageType = PageTypeModule::getModuleInstance('classes', $oNavigationItem->getParent()->getMe(), $oNavigationItem);
-			$aOptions = $oPageType->config();
-			$sDisplayType = @$aOptions['display_type'];
-			$sClassType = @$aOptions['class_type'];
+		if($oNavigationItem->getMode() === 'root') {
 			$sSlug = $oNavigationItem->getName();
 			$oCriteria = SchoolClassQuery::create()->filterByClassTypeYearAndSchool()->filterBySlug($sSlug)->filterByHasStudents()->orderByYear(Criteria::DESC);
-
 			foreach($oCriteria->find() as $oClass) {
-				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), 'Klasse '.$oClass->getUnitName().' Home', $oClass, 'home_'.$sDisplayType, $oClass->getFullClassName()));
+				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), 'Klasse '.$oClass->getUnitName().' Home', $oClass, 'home', $oNavigationItem->getDisplayType(), $oClass->getFullClassName()));
 			}
-		} else if($aMode[0] === 'home') {
+		} else if($oNavigationItem->getMode() === 'home') {
 			// Render specific class year subpage items
-			$this->renderClassPageItems($oNavigationItem, $aMode[1]);
+			$this->renderClassPageItems($oNavigationItem);
 
-		} else if($oNavigationItem->getMode() === SchoolClass::CLASS_EVENTS_IDENTIFIER) {
-			// Render related events
-			$this->renderEventNavigationItems($oNavigationItem);
-		} else if($oNavigationItem->getMode() === SchoolClass::CLASS_SUBJECTS_IDENTIFIER) {
-			// Render related subjects
-			$this->renderSubjectNavigationItems($oNavigationItem);
 		}
 	}
 
-	private function renderClassNavigationItems($oNavigationItem, SchoolClassQuery $oQuery) {
-		foreach($oQuery->find() as $sSlug) {
+	private function renderClassNavigationItems($oNavigationItem, $sDisplayType) {
+		foreach(SchoolClassQuery::create()->filterByClassTypeYearAndSchool(null)->filterBySubjectId(null, Criteria::ISNULL)->select('Slug')->find() as $sSlug) {
 			$oClass = SchoolClassQuery::create()->filterBySlug($sSlug)->findOne();
-			$oNavItem = new ClassNavigationItem($sSlug, $oClass->getFullClassName().' Home', null, 'root', $oClass->getUnitName(), true, false);
+			$oNavItem = new ClassNavigationItem($sSlug, $oClass->getFullClassName().' Home', null, 'root', $sDisplayType, $oClass->getUnitName(), true, false);
 			$oNavigationItem->addChild($oNavItem);
 		}
 	}
 
-	private function renderClassPageItems($oNavigationItem, $sHomeMode) {
+	private function renderClassPageItems($oNavigationItem) {
 		$oClass = $oNavigationItem->getClass();
 		$oNavigationItem->addChild(ClassNavigationItem::create('anlaesse', 'Anlässe', $oClass, SchoolClass::CLASS_EVENTS_IDENTIFIER));
 		// only display if display_mode is "full"
-		if($sHomeMode === 'full') {
+		if($oNavigationItem->getDisplayType() === 'full') {
 			$oNavigationItem->addChild(ClassNavigationItem::create('faecher', 'Fächer', $oClass, SchoolClass::CLASS_SUBJECTS_IDENTIFIER));
 			$oNavigationItem->addChild(ClassNavigationItem::create('dokumente', 'Dokumente', $oClass, SchoolClass::CLASS_DOCUMENTS_IDENTIFIER));
 			$oNavigationItem->addChild(ClassNavigationItem::create('links', 'Links', $oClass, SchoolClass::CLASS_LINKS_IDENTIFIER));
@@ -96,7 +83,7 @@ class ClassesFilterModule extends FilterModule {
 	}
 
 	public function onPageHasBeenSet($oCurrentPage, $bIsNotFound, $oNavigationItem) {
-		if($bIsNotFound || !($oNavigationItem instanceof ClassNavigationItem)) {
+		if($bIsNotFound && !($oNavigationItem instanceof ClassNavigationItem)) {
 			return;
 		}
 		$oClass = $oNavigationItem->getClass();
@@ -108,7 +95,7 @@ class ClassesFilterModule extends FilterModule {
 		}
 		// Link to the feed
 		$oHomeNavigationItem = $oNavigationItem;
-		while(!StringUtil::startsWith($oHomeNavigationItem->getMode(), 'home_')) {
+		while(!StringUtil::startsWith($oHomeNavigationItem->getMode(), 'home')) {
 			$oHomeNavigationItem = $oHomeNavigationItem->getParent();
 		}
 		$oFeedItem = $oHomeNavigationItem->namedChild('feed');
