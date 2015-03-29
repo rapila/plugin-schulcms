@@ -11,7 +11,7 @@ class ClassHomeOutput extends ClassOutput {
 			return null;
 		}
 		// render content depending on display_type
-		switch($this->oPageType->config()) {
+		switch($this->oPageType->getDisplayType()) {
 			case 'full': return $this->renderContentWithSubjects();
 			default: return $this->renderContentDefault();
 		}
@@ -67,6 +67,9 @@ class ClassHomeOutput extends ClassOutput {
 		// Main class teachers
 		foreach($this->oClass->getTeachersByUnitName(true) as $i => $oClassTeacher) {
 			$oTeacher = $oClassTeacher->getTeamMember();
+			if($i > 0) {
+				$oTemplate->replaceIdentifierMultiple('class_teacher', '<br />', null, Template::NO_HTML_ESCAPE);
+			}
 			$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oTeacher->getLink($this->oTeacherPage)), 'title' => StringPeer::getString('team_member.link_to'). ' '. $oTeacher->getFullName()), $oTeacher->getFullName());
 			$oTemplate->replaceIdentifierMultiple('class_teacher', $oTeacherLink);
 		}
@@ -98,7 +101,7 @@ class ClassHomeOutput extends ClassOutput {
 	}
 
 	private function renderSubjectsAndTeachers($oTemplate) {
-		$oTemplate->replaceIdentifier('teacher_and_subjects_title', StringPeer::getString('class_detail.heading.subjects_and_teachers'));
+		$oTemplate->replaceIdentifier('subject_teasers_title', StringPeer::getString('class_detail.heading.subjects_and_teachers'));
 		$oRowPrototype = $this->oPageType->constructTemplate('subject_teaser_item');
 		foreach($this->oClass->getSubjectClasses() as $oClass) {
 			$oRowTemplate = clone $oRowPrototype;
@@ -118,14 +121,14 @@ class ClassHomeOutput extends ClassOutput {
 			$aHasContents[$oClass->getId()]['links'] = $oClass->latestUpdatedLink();
 			$sMaxUpdated = max($aHasContents[$oClass->getId()]);
 			$oRowTemplate->replaceIdentifier('has_content', $sMaxUpdated == null ? "-" : LocaleUtil::localizeDate($sMaxUpdated));
-			$oTemplate->replaceIdentifierMultiple('teacher_and_subject', $oRowTemplate);
+			$oTemplate->replaceIdentifierMultiple('subject_teasers', $oRowTemplate);
 		}
 	}
 
 	private function renderTeachersAndSubjects($oTemplate) {
-		$oTemplate->replaceIdentifier('teacher_and_subjects_title', StringPeer::getString('class_detail.heading.teachers_and_subjects'));
+		$oTemplate->replaceIdentifier('subject_teasers_title', StringPeer::getString('class_detail.heading.teachers_and_subjects'));
 		$oQuery = ClassTeacherQuery::create()->filterByUnitFromClass($this->oClass, false)->useTeamMemberQuery()->orderByLastName()->orderByFirstName()->endUse();
-		$oRowPrototype = $this->oPageType->constructTemplate('teacher_and_subject');
+		$oRowPrototype = $this->oPageType->constructTemplate('subject_teasers');
 
 		foreach($oQuery->find() as $oClassTeacher) {
 			$oTeacher = $oClassTeacher->getTeamMember();
@@ -134,7 +137,7 @@ class ClassHomeOutput extends ClassOutput {
 			$oRowTemplate->replaceIdentifier('teacher_name', $oTeacher->getFullName());
 			$oRowTemplate->replaceIdentifier('subject_name', $oClassTeacher->getFunctionName());
 			$oRowTemplate->replaceIdentifier('detail_link_subject', '#');
-			$oTemplate->replaceIdentifierMultiple('teacher_and_subject', $oRowTemplate);
+			$oTemplate->replaceIdentifierMultiple('subject_teasers', $oRowTemplate);
 		}
 	}
 
