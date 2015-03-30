@@ -83,9 +83,10 @@ class ClassesFilterModule extends FilterModule {
 	}
 
 	public function onPageHasBeenSet($oCurrentPage, $bIsNotFound, $oNavigationItem) {
-		if($bIsNotFound && !($oNavigationItem instanceof ClassNavigationItem)) {
+		if($bIsNotFound || !($oNavigationItem instanceof ClassNavigationItem)) {
 			return;
 		}
+
 		$oClass = $oNavigationItem->getClass();
 		// Add the feed
 		if($oNavigationItem->getMode() === 'feed') {
