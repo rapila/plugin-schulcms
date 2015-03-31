@@ -142,9 +142,12 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$oEvent->setSchoolClassId($aData['school_class_id'] != null ? $aData['school_class_id'] : null);
 		$mEventTypeId = $aData['event_type_id'];
 
+		// Make sure "Class Events" type id is stored, if it is a class event
+		// Discuss removing of this type since it's confusing and since class events should be handled indespendently of other events (exception request id)
 		if($oEvent->getSchoolClassId()) {
-			if($mEventTypeId == null) {
-				$mEventTypeId = SchoolSiteConfig::getClassEventTypeId();
+			$iClassEventTypeId = SchoolSiteConfig::getClassEventTypeId();
+			if($mEventTypeId !== $iClassEventTypeId) {
+				$mEventTypeId = $iClassEventTypeId;
 			}
 		}
 		$oEvent->setEventTypeId($mEventTypeId);
