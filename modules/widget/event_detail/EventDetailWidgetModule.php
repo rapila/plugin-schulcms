@@ -146,8 +146,6 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 			if($mEventTypeId == null) {
 				$mEventTypeId = SchoolSiteConfig::getClassEventTypeId();
 			}
-		} else {
-			$mEventTypeId = null;
 		}
 		$oEvent->setEventTypeId($mEventTypeId);
 		$oEvent->setTitle($aData['title']);

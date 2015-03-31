@@ -8,8 +8,8 @@ class EventTypesInputWidgetModule extends WidgetModule {
 
 	public function __construct() {
 		$this->aEventTypes = EventTypeQuery::create()->orderById()->select(array('Id', 'Name'))->find()->toKeyValue('Id', 'Name');
-		$iCount = count($this->aEventTypes);
-		if($iCount === 1) {
+
+		if($this->countTypes() === 1) {
 			reset($this->aEventTypes);
 			$this->setSetting('initial_selection', (string) key($this->aEventTypes));
 		}
@@ -17,6 +17,10 @@ class EventTypesInputWidgetModule extends WidgetModule {
 
 	public function allEventTypes() {
 		return $this->aEventTypes;
+	}
+
+	public function countTypes() {
+		return count($this->aEventTypes);
 	}
 
 	public function getElementType() {

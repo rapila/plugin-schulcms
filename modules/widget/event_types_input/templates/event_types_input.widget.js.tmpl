@@ -17,10 +17,6 @@ Widget.types.event_types_input = {
 		});
 	},
 
-	no_types_available: function() {
-		return this._element.find('option').length === 0;
-	},
-
 	val: function(value) {
 		if(arguments.length) {
 			if(value == '__all') {
