@@ -17,7 +17,7 @@ Widget.types.event_detail = {
 		if(!this.event_type_is_predefined()) {
 			this.event_type_dropdown = this._element.find("select[name='event_type_id']").prepareWidget(function(widget) {
 				widget.settings.initial_selection = _this.settings.initial_type_id;
-				if(widget.countTypes() === 0) {
+				if(widget.settings.available_type_coount === 0) {
 					_this._element.find('div.event_type_elements').hide();
 				}
 			}, jQuery.noop);
