@@ -6,7 +6,7 @@ class NewsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 
 	public function options() {
 		$aData['display_options'] = $this->getDisplayOptions();
-		$aData['news_type_options'] = $this->getNewsTypeOptions();
+		$aData['news_type_options'] = NewsTypeInputWidgetModule::getNewsTypes();
 		$aData['limit_options'] = array(1 => 1, 3 => 3, 5 => 5, 10 => 10, "__all" => "Alle");
 		return $aData;
 	}
@@ -28,9 +28,5 @@ class NewsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 			$aResult[$sDisplayMode] = StringPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);
 		}
 		return $aResult;
-	}
-
-	private function getNewsTypeOptions() {
-		return NewsTypeQuery::create()->orderByName()->find()->toKeyValue('Id', 'Name');
 	}
 }

@@ -24,6 +24,7 @@ class EventsAdminModule extends AdminModule {
 	public function mainContent() {
 		return $this->oListWidget->doWidget();
 	}
+
 	public function sidebarContent() {
 		return $this->oSidebarWidget->doWidget();
 	}
