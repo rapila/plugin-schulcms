@@ -1,5 +1,5 @@
 ---
 aspects:
-- widget_based
+  - widget_based
 enabled: true
 #<File:0x007fca3215b040>
