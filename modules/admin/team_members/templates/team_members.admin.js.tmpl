@@ -1,6 +1,6 @@
 jQuery(document).ready(function() {
 	AdminInterface.content.find('table.team_member_list').prepareWidget(function(team_member_list) {
-		
+
 		// Sidebar
 		var sidebar;
 		AdminInterface.sidebar.find('.ui-list').prepareWidget(function(widget) {
@@ -11,14 +11,14 @@ jQuery(document).ready(function() {
 				team_member_list.reload();
 			});
 		});
-		
+
 		// Add info_bar elements
 		AdminInterface.info_bar.prepareWidget(function(info_bar) {
 			info_bar.add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
 				if(team_member_list.setSearch(search)) {
 					team_member_list.reload();
 				}
-			}).add_row_count_info_for_list(team_member_list);
+			}).add_row_count_info_for_list(team_member_list).add_pager_for_list(team_member_list);
 		});
 	});
 });
