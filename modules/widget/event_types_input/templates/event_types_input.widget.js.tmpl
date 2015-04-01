@@ -1,6 +1,7 @@
 Widget.types.event_types_input = {
 	prepare: function() {
 		this.reload();
+		Widget.handle('rapila-event_type_changed', this.reload.bind(this));
 	},
 
 	reload: function() {

@@ -1,33 +1,96 @@
 jQuery(document).ready(function() {
-	AdminInterface.content.find('table.event_list').prepareWidget(function(event_list) {
-		AdminInterface.strings.handle_strings_for_list_result('wns.events.no_result', ['event_type_name'], event_list);
 
-		// Sidebar
-		var sidebar;
-		AdminInterface.sidebar.find('.ui-list').prepareWidget(function(widget) {
-			sidebar = widget;
-			sidebar.settings.row_click_active_mode = 'activate';
-			sidebar.handle('list-selection_changed', function(event, selection) {
-				event_list.setOption('event_type_id', selection[0] && selection[0].event_type_id);
-				event_list.reload();
+	var sidebar = AdminInterface.sidebar;
+	var content_list = AdminInterface.content;
+	var info_bar = AdminInterface.info_bar;
+
+	var handlers = [];
+
+	sidebar.children('[data-widget-type]').prepareWidget(function(widget) {
+		sidebar = widget;
+	}.deferred(handlers));
+	content_list.children('[data-widget-type]').prepareWidget(function(widget) {
+		content_list = widget;
+	}.deferred(handlers));
+	info_bar.prepareWidget(function(widget) {
+		info_bar = widget;
+	}.deferred(handlers));
+
+	jQuery.when.apply(jQuery, handlers).then(function() {
+		AdminInterface.strings.handle_strings_for_list_result('wns.events.no_result', ['event_type_name'], content_list);
+
+		// add buttons and search_input
+		info_bar.add_button('add-new-item', function() {
+			Widget.create('event_detail', function(widget) {
+				widget.settings.initial_type_id = sidebar.active_row().data('event_type_id');
+				widget.open();
+				widget.save_callback = function() {
+					content_list.reload();
+				};
 			});
+		}, 'n', true).add_button('add-new-item', function() {
+			Widget.create('sidebar_input', function(widget) {
+				widget.add_new_sidebar_input("{{writeString=wns.event_type.default_name}}", 'EventType', sidebar, 'rapila-event_type_changed');
+			});
+		}).add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
+			if(content_list.setSearch(search)) {
+				content_list.reload();
+			}
+		}).add_row_count_info_for_list(content_list).add_pager_for_list(content_list);
+
+		// sidebar items edit and delete buttons
+		var remove_item = info_bar.add_button('remove-item', function() {
+			var row = sidebar.active_row();
+			var rowData = sidebar.collect_row_data(row);
+			if(rowData.event_type_id) {
+				remove_active_event_type = function () {
+					sidebar.delete_row(row);
+					Widget.fire('rapila-event_type_changed', {removed: true, id: rowData.event_type_id});
+				};
+				content_list.getOption('eventTypeHasEvents', rowData.event_type_id, function(has_events) {
+					if(has_events) {
+						Widget.confirm("{{writeString=wns.rapila_alert.information}}", "{{writeString=wns.event_type.delete_information}}", function(confirmed) {
+							if(confirmed) {
+								remove_active_event_type();
+								content_list.setOption('event_type_id', null);
+								content_list.reload();
+							}
+						});
+					} else {
+						remove_active_event_type();
+					}
+				});
+			}
+		}).disable();
+
+		var edit_item = info_bar.add_button('edit-item', function() {
+			Widget.create('event_type_detail', function(widget) {
+				widget.setEventTypeId(sidebar.active_row_datas()[0].event_type_id);
+				widget.open();
+				widget.fill_data();
+			});
+		}).disable();
+
+		Widget.handle('rapila-link_category_changed', function(event, info) {
+			if(info.updated) {
+				sidebar.update_row(sidebar.row_from_row_data({event_type_id: info.id}));
+			} else if (info.removed) {
+				var row = sidebar.row_from_row_data({event_type_id: info.id});
+				if(row) {
+					row.remove();
+				}
+			}
 		});
 
-		// Add info_bar elements
-		AdminInterface.info_bar.prepareWidget(function(info_bar) {
-			info_bar.add_button('add-new-item', function() {
-				Widget.create('event_detail', function(widget) {
-					widget.settings.initial_type_id = sidebar.active_row().data('event_type_id');
-					widget.open();
-					widget.save_callback = function() {
-						event_list.reload();
-					};
-				});
-			}, 'n', true).add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
-				if(event_list.setSearch(search)) {
-					event_list.reload();
-				}
-			}).add_row_count_info_for_list(event_list).add_pager_for_list(event_list);
+		// sidebar selection change handler
+		sidebar.settings.row_click_active_mode = 'activate';
+		sidebar.handle('list-selection_changed', function(event, selection) {
+			var event_type_id = selection[0] && selection[0].event_type_id;
+			var has_detail = selection.length === 1 && event_type_id.constructor === Number;
+			remove_item[has_detail ? 'enable' : 'disable']();
+			edit_item[has_detail ? 'enable' : 'disable']();
+			content_list.setOption('event_type_id', event_type_id);
+			content_list.reload();
 		});
 	});
 });

@@ -97,6 +97,10 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 		return false;
 	}
 
+	public function getEventTypeHasEvents($iEventTypeId) {
+		return EventQuery::create()->filterByEventTypeId($iEventTypeId)->count() > 0;
+	}
+
 	public function getEventTypeName() {
 		if($this->oDelegateProxy->getEventTypeId() !== CriteriaListWidgetDelegate::SELECT_ALL) {
 			$oEventType = EventTypeQuery::create()->findPk($this->oDelegateProxy->getEventTypeId());
