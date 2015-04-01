@@ -5,66 +5,73 @@
 
 class NewsFrontendModule extends DynamicFrontendModule {
 
-	public static $DISPLAY_MODES = array('current_news', 'current_news_short', 'news_home_list', 'news_carousel');
+	public static $DISPLAY_MODES = array(
+		'detail',
+		'list_short',
+		'list_title',
+		'list_full',
+		'list_without_first',
+		'carousel'
+	);
 
+	public $sDisplayMode;
 	const MODE_SELECT_KEY = 'display_mode';
 
 	public function renderFrontend() {
 		$aOptions = $this->widgetData();
-		if(!isset($aOptions[self::MODE_SELECT_KEY])) {
-			return null;
-		}
+		$this->sDisplayMode = @$aOptions[self::MODE_SELECT_KEY];
+
 		$aNewsTypes = @$aOptions['news_type'];
 		$iLimit = @$aOptions['limit'];
-
-		switch($aOptions[self::MODE_SELECT_KEY]) {
-			case 'current_news': return $this->renderCurrentNews($aNewsTypes, $iLimit);
-			case 'current_news_short': return $this->renderCurrentNews($aNewsTypes, $iLimit, true);
-			case 'news_home_list': return $this->renderMainNews($aNewsTypes, $iLimit, true);
-			case 'news_carousel': return $this->renderNewsCarousel($aNewsTypes, $iLimit);
+		switch($this->sDisplayMode) {
+			case 'list_full': return $this->renderCurrentList($aNewsTypes, $iLimit);
+			case 'list_short': return $this->renderCurrentList($aNewsTypes, $iLimit, 'short');
+			case 'list_title': return $this->renderCurrentList($aNewsTypes, $iLimit, 'title');
+			case 'list_without_first': return $this->renderCurrentListWithoutFirst($aNewsTypes, $iLimit);
+			case 'carousel': return $this->renderCurrentList($aNewsTypes, $iLimit);
+			case 'detail': return $this->renderDetail($aNewsTypes);
 			default:
 				return null;
 		}
 	}
 
-	public function renderCurrentNews($iNewsTypeId = null, $iLimit = null, $bShort = false) {
-		$oTemplate = $this->constructTemplate('list');
-		$oItemPrototype = $this->constructTemplate($bShort ? 'short' : 'full');
-		foreach($this->query($iNewsTypeId, $iLimit)->find() as $oNews) {
-			$oTemplate->replaceIdentifierMultiple('item', $this->renderItem($oNews, clone $oItemPrototype, $bShort));
+	public function renderDetail($aNewsTypes) {
+		$oItemTemplate = self::constructTempl('detail');
+		return self::renderItem($this->query($aNewsTypes, 1)->findOne(), $oItemTemplate, 'full');
+	}
+
+	public function renderNewsSidebar($aNewsTypes, $iLimit) {
+		$oItemTemplate = self::constructTempl('item_short');
+		return self::renderList($this->query($aNewsTypes, $iLimit)->find(), $oItemTemplate, $iLimit);
+	}
+
+	public function renderMainNews($aNews, $iLimit) {
+		$oItemTemplate = self::constructTempl('item_full');
+		return self::renderList($this->query($aNewsTypes, $iLimit)->find(), $oItemTemplate, $iLimit);
+	}
+
+	public function renderCurrentListWithoutFirst($aNewsTypes, $iLimit = null) {
+		$oItemTemplate = self::constructTempl('item_title');
+		return self::renderList($this->query($aNewsTypes, $iLimit)->offset(1)->find(), $oItemTemplate, $iLimit);
+	}
+
+	public function renderCurrentList($aNewsTypes, $iLimit = null, $sContentType = 'short') {
+		$oItemTemplate = self::constructTempl('item_'.$sContentType);
+		return self::renderList($this->query($aNewsTypes, $iLimit)->find(), $oItemTemplate, $sContentType);
+	}
+
+	public static function renderList($aNews, $oItemTemplate, $sContentType = null) {
+		$oTemplate = self::constructTempl('list');
+		foreach($aNews as $oNews) {
+			$oTemplate->replaceIdentifierMultiple('item', self::renderItem($oNews, clone $oItemTemplate, $sContentType));
 		}
 		return $oTemplate;
 	}
 
-	public function renderMainNews($iNewsTypeId = null, $iLimit = null) {
-		$oTemplate = $this->constructTemplate('list');
-		$oItemPrototype = $this->constructTemplate('short');
-		foreach($this->query($iNewsTypeId, $iLimit)->find() as $i => $oNews) {
-			if($i === 0) {
-				$oItemTemplate = $this->renderItem($oNews, $this->constructTemplate('full'), false);
-				$oItemTemplate->replaceIdentifier('footer', $oNews->getUserRelatedByCreatedBy()->getFullName() . ' ' . LocaleUtil::localizeDate($oNews->getUpdatedAt()));
-				$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
-			} else {
-				$oTemplate->replaceIdentifierMultiple('item', $this->renderItem($oNews, clone $oItemPrototype));
-			}
-		}
-		return $oTemplate;
-	}
-
-	public function renderNewsCarousel($iNewsTypeId = null, $iLimit = null) {
-		// load carousel js
-		$oTemplate = $this->constructTemplate('list');
-		$oItemPrototype = $this->constructTemplate('truncated');
-		foreach($this->query($iNewsTypeId, $iLimit)->find() as $i => $oNews) {
-			$oTemplate->replaceIdentifierMultiple('item', $this->renderItem($oNews, clone $oItemPrototype));
-		}
-		return $oTemplate;
-	}
-
-	private function query($iNewsTypeId, $iLimit) {
-		$oQuery = FrontendNewsQuery::create()->current()->orderByDateStart();
-		if($iNewsTypeId !== null) {
-			$oQuery->filterByNewsTypeId($iNewsTypeId);
+	private function query($aNewsTypes, $iLimit) {
+		$oQuery = FrontendNewsQuery::create()->current()->orderByDateStart('desc');
+		if($aNewsTypes !== null) {
+			$oQuery->filterByNewsTypeId($aNewsTypes);
 		}
 		if($iLimit) {
 			$oQuery->limit($iLimit);
@@ -72,16 +79,25 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		return $oQuery;
 	}
 
-	private function renderItem($oNews, $oItemTemplate, $bShort = true) {
-		$sContent = '';
-		if($bShort && is_resource($oNews->getBodyShort())) {
-			$sContent = stream_get_contents($oNews->getBodyShort());
-		} else if (is_resource($oNews->getBody())) {
-			$sContent = stream_get_contents($oNews->getBody());
+	public static function renderItem($oNews, $oItemTemplate, $sContentType) {
+		$sBody = '';
+		if($sContentType === 'short' && is_resource($oNews->getBodyShort())) {
+			$sBody = stream_get_contents($oNews->getBodyShort());
+			$sBody = strip_tags($sBody);
+		} else if ($sContentType = 'full' && is_resource($oNews->getBody())) {
+			$sBody = stream_get_contents($oNews->getBody());
 		}
 		$oItemTemplate->replaceIdentifier('headline', $oNews->getHeadline());
-		$oItemTemplate->replaceIdentifier('content', RichtextUtil::parseStorageForFrontendOutput($sContent));
-		$oItemTemplate->replaceIdentifier('date_start', LocaleUtil::localizeDate($oNews->getDateStart()));
+		$oItemTemplate->replaceIdentifier('date', LocaleUtil::localizeDate($oNews->getDateStart()));
+		if($sContentType !== 'title') {
+			$oItemTemplate->replaceIdentifier('content', RichtextUtil::parseStorageForFrontendOutput($sBody));
+			$oItemTemplate->replaceIdentifier('name', $oNews->getUserRelatedByCreatedBy()->getFullName());
+		}
 		return $oItemTemplate;
 	}
+
+	public static function constructTempl($sTemplateName = null) {
+		return self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), $sTemplateName);
+	}
+
 }

@@ -5,7 +5,7 @@
 
 class EventsFrontendModule extends DynamicFrontendModule {
 
-	public static $DISPLAY_MODES = array('list', 'list_overview_new', 'list_new', 'list_with_reports', 'list_reports', 'list_archive', 'detail_context', 'recent_event_report_teaser');
+	public static $DISPLAY_MODES = array('list_context', 'list');
 
 	public static $EVENT;
 	public $iEventTypeId;
@@ -22,6 +22,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$aOptions = @unserialize($this->getData());
 
 		$this->iEventTypeId = $aOptions[self::MODE_EVENT_TYPE_ID];
+		$this->oEventPage = PageQuery::create()->filterByPageType('events')->findOne();
 		// Consider retrieving event differently without $_REQUEST param, check filter
 		if(self::$EVENT === null && isset($_REQUEST[EventsFilterModule::EVENT_REQUEST_KEY])) {
 			self::$EVENT = EventQuery::create()->findPk($_REQUEST[EventsFilterModule::EVENT_REQUEST_KEY]);
@@ -30,14 +31,13 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		if(self::$EVENT) {
 			return $this->renderDetail();
 		}
-
 		$this->iLimit = is_numeric($aOptions[self::MODE_EVENT_LIMIT]) && ($aOptions[self::MODE_EVENT_LIMIT] != '0') ? $aOptions[self::MODE_EVENT_LIMIT] : null;
 		switch($aOptions[self::MODE_SELECT_KEY]) {
 			case 'list': return $this->renderUpcomingList();
+			case 'list_context': return $this->renderListOverviewNew();
 			case 'list_reports': return $this->renderReportList();
 			case 'list_with_reports': return $this->renderUpcomingListWithReports();
 			case 'list_archive': return $this->renderArchiveList();
-			case 'list_overview_new': return $this->renderListOverviewNew();
 			case 'recent_event_report_teaser': return $this->renderRecentReport();
 		}
 		return '';
@@ -196,9 +196,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 
 	private function prepareList($oQuery) {
 		// this needs to be improved if there is another event page, f.e. a event_archive, or event_report page
-		$this->oEventPage = FrontendManager::$CURRENT_PAGE;
-		$bIsEventPage = StringUtil::startsWith($this->oEventPage->getIdentifier(), SchoolPeer::PAGE_IDENTIFIER_EVENTS);
-		if($bIsEventPage) {
+		if($this->oEventPage === FrontendManager::$CURRENT_PAGE) {
 			$oNavigationItem = FrontendManager::$CURRENT_NAVIGATION_ITEM;
 			if($oNavigationItem instanceof PageNavigationItem) {
 				$oQuery->upcomingOrOngoing();
@@ -207,7 +205,6 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			}
 			Session::getSession()->setAttribute(self::SESSION_BACK_TO_LIST_LINK, $oNavigationItem->getLink());
 		} else {
-			$this->oEventPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_EVENTS));
 			$oQuery->upcomingOrOngoing();
 			Session::getSession()->setAttribute(self::SESSION_BACK_TO_LIST_LINK, null);
 		}

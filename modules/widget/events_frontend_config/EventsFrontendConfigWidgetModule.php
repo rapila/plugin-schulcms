@@ -21,7 +21,7 @@ class EventsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 
 		// Display list limit
 		$aResult['event_limits'] = array('' => StringPeer::getString('wns.events.display_all'));
-		foreach(range(1,4) as $iCount) {
+		foreach(range(1,5) as $iCount) {
 			$aResult['event_limits'][$iCount] = $iCount;
 			$aResult['event_limits'][10] = 10;
 		}
