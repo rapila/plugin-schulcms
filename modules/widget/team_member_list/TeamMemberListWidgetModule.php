@@ -2,30 +2,22 @@
 /**
  * @package modules.widget
  */
-class TeamMemberListWidgetModule extends WidgetModule {
+class TeamMemberListWidgetModule extends SpecializedListWidgetModule {
 
-	private $oListWidget;
 	public $oDelegateProxy;
 	private $oIsActiveTeamMemberInputFilter;
 	private $bIsActiveTeamMember;
 	private $iFunctionGroupId;
 
-
-	public function __construct() {
-		$this->oListWidget = new ListWidgetModule();
+	protected function createListWidget() {
+		$oListWidget = new ListWidgetModule();
 		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "TeamMember", "full_name_inverted", "asc");
-		$this->oListWidget->setDelegate($this->oDelegateProxy);
+		$oListWidget->setDelegate($this->oDelegateProxy);
 		$bTeachersOnly = false;
 		$this->oIsActiveTeamMemberInputFilter = WidgetModule::getWidget('active_team_member_input', null, $bTeachersOnly);
 		$this->oDelegateProxy->setIsActiveTeamMember($bTeachersOnly);
 		$this->iFunctionGroupId = CriteriaListWidgetDelegate::SELECT_ALL;
-	}
-
-	public function doWidget() {
-		$aTagAttributes = array('class' => 'team_member_list');
-		$oListTag = new TagWriter('table', $aTagAttributes);
-		$this->oListWidget->setListTag($oListTag);
-		return $this->oListWidget->doWidget();
+		return $oListWidget;
 	}
 
 	public function getColumnIdentifiers() {
