@@ -2,29 +2,22 @@
 /**
  * @package modules.widget
  */
-class ClassListWidgetModule extends WidgetModule {
+class ClassListWidgetModule extends SpecializedListWidgetModule {
 
-	private $oListWidget;
 	public $oDelegateProxy;
 	public $oClassesFeVisiblesInputFilter;
 	public $oSchoolYearInputFilter;
 	public $bDisplayFeVisiblesOnly;
 
-	public function __construct() {
-		$this->oListWidget = new ListWidgetModule();
+	protected function createListWidget() {
+		$oListWidget = new ListWidgetModule();
 		$this->oDelegateProxy = new CriteriaListWidgetDelegate($this, "SchoolClass", "name", "asc");
-		$this->oListWidget->setDelegate($this->oDelegateProxy);
+		$oListWidget->setDelegate($this->oDelegateProxy);
 		$this->oClassesFeVisiblesInputFilter = WidgetModule::getWidget('classes_fe_visibles_input', null, true);
 		$this->oDelegateProxy->setIsFeVisible(true);
 		$this->oDelegateProxy->setYearPeriod(SchoolPeer::getCurrentYear());
 		$this->oSchoolYearInputFilter = WidgetModule::getWidget('year_input', null, $this->oDelegateProxy->getYearPeriod());
-	}
-
-	public function doWidget() {
-		$aTagAttributes = array('class' => 'class_list');
-		$oListTag = new TagWriter('table', $aTagAttributes);
-		$this->oListWidget->setListTag($oListTag);
-		return $this->oListWidget->doWidget();
+		return $oListWidget;
 	}
 
 	public function getColumnIdentifiers() {

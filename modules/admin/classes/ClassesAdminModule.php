@@ -8,6 +8,7 @@ class ClassesAdminModule extends AdminModule implements ListWidgetDelegate {
 
 	public function __construct() {
 		$this->oListWidget = new ClassListWidgetModule();
+		$this->oListWidget->addPaging();
 		if(isset($_REQUEST['class_type'])) {
 			$this->oListWidget->oDelegateProxy->setClassType($_REQUEST['class_type']);
 		}
