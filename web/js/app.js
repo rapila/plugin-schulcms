@@ -458,7 +458,7 @@
 			storageKey = ['filter', this.inputName, this.outputName, 'configuration'].join('/');
 		}
 		if(storage) {
-			var storedConfig = JSON.parse(storage.getItem(storageKey)||'{}')
+			var storedConfig = JSON.parse(storage.getItem(storageKey)||'{}');
 			for(var key in storedConfig) {
 				configuration[key] = storedConfig[key];
 			}
