@@ -4,12 +4,12 @@
 */
 class YearInputWidgetModule extends PersistentWidgetModule {
 	public $sYear;
-	
+
 	public function __construct($sSessionKey, $sYear = null) {
 		$this->setSelectedYear($sYear);
 		parent::__construct($sSessionKey);
 	}
-			
+
   public function allSchoolYears() {
 		$aResult = array();
 		$oCriteria = SchoolClassQuery::create()->groupByYear(SchoolClassPeer::YEAR)->orderByYear(Criteria::DESC);
@@ -20,15 +20,15 @@ class YearInputWidgetModule extends PersistentWidgetModule {
 		}
 		return $aResult;
 	}
-	
+
 	public function setSelectedYear($sYear) {
 		$this->sYear = $sYear;
 	}
-	
+
 	public function getSelectedYear() {
 		return $this->sYear;
 	}
-	
+
 	public function getElementType() {
 		return 'select';
 	}
