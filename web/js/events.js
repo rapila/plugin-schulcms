@@ -267,7 +267,7 @@
 							'div',
 							{
 								key: 'month-label',
-								className: 'label'
+								className: 'month-label'
 							},
 							_this.props.monthNames[month.month]
 						),
