@@ -26,9 +26,6 @@ foreach(ResourceFinder::create()->addPath(DIRNAME_MODULES, 'page_type', 'classes
 	require_once($sOutputPath);
 }
 
-require_once __DIR__.'/ClassNavigationItem.php';
-
-
 class ClassesPageTypeModule extends DefaultPageTypeModule {
 
 	protected $sDisplayType;

@@ -1,6 +1,4 @@
 <?php
-require_once PLUGINS_DIR.'/schulcms/modules/page_type/news/NewsNavigationItem.php';
-
 class NewsFilterModule extends FilterModule {
 	public function onNavigationItemChildrenRequested($oNavigationItem) {
 		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getMe()->getPageType() === 'news') {

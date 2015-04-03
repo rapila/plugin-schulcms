@@ -1,7 +1,4 @@
 <?php
-require_once PLUGINS_DIR.'/schulcms/modules/page_type/classes/ClassNavigationItem.php';
-require_once PLUGINS_DIR.'/schulcms/modules/page_type/classes/SubjectNavigationItem.php';
-
 class ClassesFilterModule extends FilterModule {
 
 	public function onNavigationItemChildrenRequested($oNavigationItem) {

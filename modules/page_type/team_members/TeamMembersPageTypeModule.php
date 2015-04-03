@@ -1,6 +1,4 @@
 <?php
-require_once PLUGINS_DIR.'/schulcms/modules/page_type/team_members/TeamMemberNavigationItem.php';
-
 class TeamMembersPageTypeModule extends PageTypeModule {
 	private $aFunctionGroupIds;
 

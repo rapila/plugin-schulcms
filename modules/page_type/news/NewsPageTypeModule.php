@@ -1,6 +1,4 @@
 <?php
-require_once PLUGINS_DIR.'/schulcms/modules/page_type/news/NewsNavigationItem.php';
-
 class NewsPageTypeModule extends PageTypeModule {
 
 	private $aNewsTypes;
