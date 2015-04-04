@@ -18,27 +18,35 @@ class EventExportFileModule extends FileModule {
 	private function getEvents() {
 		$iYear = Manager::usePath();
 		if(!$iYear) {
-			throw new UserError("wettingen.event_export.no_year_given");
+			throw new UserError("schulcms.event_export.no_year_given");
 		}
 		$iPageId = Manager::usePath();
 		if(!$iPageId) {
-			throw new UserError("wettingen.event_export.no_page_given");
+			throw new UserError("schulcms.event_export.no_page_given");
 		}
 		$oPage = PageQuery::create()->findPk($iPageId);
-		$oDateQuery = SchoolDateQuery::create();
 		$oEventQuery = FrontendEventQuery::create();
-		$iTimestamp = max($oDateQuery->findMostRecentUpdate(), $oEventQuery->findMostRecentUpdate());
+		$oDateQuery = null;
+		if(class_exists('SchoolDate')) {
+			$oDateQuery = SchoolDateQuery::create();
+		}
+		if($oDateQuery !== null) {
+			$iTimestamp = max($iTimestamp, $oDateQuery);
+		}
+		$iTimestamp = $oEventQuery->findMostRecentUpdate();
 		LinkUtil::sendCacheControlHeaders($iTimestamp);
 		$aResult = array();
-		foreach($oDateQuery->fromYear($iYear)->find() as $oDate) {
-			$aResult["date-{$oDate->getId()}"] = array(
-				'id' => $oDate->getId(),
-				'name' => $oDate->getName(),
-				'date_start' => $oDate->getDateStart('Y-m-d'),
-				'date_end' => $oDate->getDateEnd('Y-m-d'),
-				'type' => $oDate->getType(),
-				'kind' => 'date'
-			);
+		if($oDateQuery !== null) {
+			foreach($oDateQuery->fromYear($iYear)->find() as $oDate) {
+				$aResult["date-{$oDate->getId()}"] = array(
+					'id' => $oDate->getId(),
+					'name' => $oDate->getName(),
+					'date_start' => $oDate->getDateStart('Y-m-d'),
+					'date_end' => $oDate->getDateEnd('Y-m-d'),
+					'type' => $oDate->getType(),
+					'kind' => 'date'
+				);
+			}
 		}
 		foreach($oEventQuery->fromYear($iYear)->find() as $oEvent) {
 			$aResult["event-{$oEvent->getId()}"] = array(

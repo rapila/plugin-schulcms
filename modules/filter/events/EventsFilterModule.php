@@ -27,7 +27,7 @@ class EventsFilterModule extends FilterModule {
 				$oFeedItem->bIsIndexed = false; //Don’t index the feed item or else you’ll be exit()-ed before finishing the index
 				$oNavigationItem->addChild($oFeedItem);
 				// Events ics feed
-				$oFeedItem = new HiddenVirtualNavigationItem(self::EVENT_FEED_ITEM, 'ics', StringPeer::getString('wns.events.feed', null, 'Calendar-Feed').' '.$oNavigationItem->getLinkText());
+				$oFeedItem = new HiddenVirtualNavigationItem(self::EVENT_ICS_ITEM, 'calendar.ics', StringPeer::getString('wns.events.feed', null, 'Calendar-Feed').' '.$oNavigationItem->getLinkText());
 				$oFeedItem->bIsIndexed = false; //Don’t index the feed item or else you’ll be exit()-ed before finishing the index
 				$oNavigationItem->addChild($oFeedItem);
 			}
@@ -60,7 +60,10 @@ class EventsFilterModule extends FilterModule {
 		}
 		if($oNavigationItem instanceof VirtualNavigationItem) {
 			if($oNavigationItem->getType() === self::EVENT_FEED_ITEM) {
-				$oFeed = new EventsFileModule(null, $oNavigationItem, EventQuery::create()->filterBySchoolClassId(null));
+				$oFeed = new EventsFileModule();
+				$oFeed->renderFile();exit;
+			} else if($oNavigationItem->getType() === self::EVENT_ICS_ITEM) {
+				$oFeed = new EventCalendarFileModule();
 				$oFeed->renderFile();exit;
 			} else {
 				if(self::selectNames($oNavigationItem->getData()) === 1) {
@@ -75,9 +78,8 @@ class EventsFilterModule extends FilterModule {
 	public function handleNewsFeed($oPage) {
 		$aLink = array_merge($oPage->getLink(), array('feed'));
 		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'title' => 'Alle Anlässe', 'location' => LinkUtil::link($aLink)));
-		foreach(EventTypeQuery::create()->find() as $oEventType) {
-			ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'title' => $oEventType->getName(), 'location' => LinkUtil::link($aLink)."?event_type={$oEventType->getId()}"));
-		}
+		$aLink = array_merge($oPage->getLink(), array('calendar.ics'));
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'ical', 'title' => 'Alle Anlässe', 'location' => LinkUtil::link($aLink)));
 	}
 
 	private static function selectNames($aData, $sColumn = null) {

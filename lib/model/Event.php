@@ -143,7 +143,7 @@ class Event extends BaseEvent {
 	}
 
 	public function getLink($oEventPage = null) {
-		if($oEventPage === null) {
+		if($oEventPage === null || $oEventPage->getPageType() !== 'events') {
 			if(!self::$EVENTPAGE) {
 				self::$EVENTPAGE = PageQuery::create()->filterByPageType('events')->findOne();
 				if(!self::$EVENTPAGE) {
@@ -165,15 +165,11 @@ class Event extends BaseEvent {
 		return parent::delete($oConnection);
 	}
 
-	public function getRssAttributes($bForReview = false, $oBaseNavigationItem = null) {
+	public function getRssAttributes($bForReview = false) {
 		$aResult = array();
 		$aResult['title'] = $this->getTitle();
 		$aLink = array();
-		if($oBaseNavigationItem) {
-			$aLink = array_merge($oBaseNavigationItem->getLink(), array(ClassesFrontendModule::DETAIL_IDENTIFIER_EVENT, $this->getId()));
-		} else {
-			$aLink = $this->getLink();
-		}
+		$aLink = $this->getLink();
 		$aResult['link'] = LinkUtil::absoluteLink(LinkUtil::link($aLink), 'FrontendManager');
 		if($bForReview) {
 			// if there is a bericht, display bericht hier
@@ -181,7 +177,9 @@ class Event extends BaseEvent {
 		} else {
 			$aResult['description'] = $this->getTeaser();
 		}
-		$aResult['author'] = $this->getUserRelatedByCreatedBy()->getEmail().' ('.$this->getUserRelatedByCreatedBy()->getFullName().')';
+		if($this->getUserRelatedByCreatedBy()) {
+			$aResult['author'] = $this->getUserRelatedByCreatedBy()->getEmail().' ('.$this->getUserRelatedByCreatedBy()->getFullName().')';
+		}
 		$aResult['guid'] = $aResult['link'];
 		$aResult['pubDate'] = date(DATE_RSS, (int)$this->getDateStartTimeStamp());
 		$aResult['category'] = $this->getEventType()->getName();

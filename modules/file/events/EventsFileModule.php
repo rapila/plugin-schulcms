@@ -1,22 +1,17 @@
 <?php
 class EventsFileModule extends FileModule {
 
-	private $oBaseNavigationItem = null;
 	private $oQuery = null;
 
-	public function __construct($aRequestPath = null, $oNavigationItem = null, $oQuery = null) {
+	public function __construct($aRequestPath = null, $oQuery = null) {
 		parent::__construct($aRequestPath);
-		if($oNavigationItem !== null) {
-			$this->oBaseNavigationItem = $oNavigationItem->getParent();
-		} else {
-			$this->oBaseNavigationItem = NavigationItem::navigationItemForPage(PageQuery::create()->filterByPageType('events')->findOne());
-		}
 		if($oQuery) {
 			$this->oQuery = $oQuery;
 		} else {
 			$this->oQuery = FrontendEventQuery::create()->excludeClassEvents();
 		}
-		header("Content-Type: application/rss+xml;charset=".Settings::getSetting('encoding', 'db', 'utf-8'));
+		$this->oQuery->upcomingOrOngoing()->filterByIsActive(true);
+		// header("Content-Type: application/rss+xml;charset=".Settings::getSetting('encoding', 'db', 'utf-8'));
 		header("Cache-Control: Private", true);
 		RichtextUtil::$USE_ABSOLUTE_LINKS = true;
 	}
@@ -25,13 +20,13 @@ class EventsFileModule extends FileModule {
 		$sKey = 'event-feed/'.md5(serialize($this->oQuery)).'/'.Session::language();
 		$oCache = new Cache($sKey, 'events');
 		if($oCache->entryExists() && !$oCache->isOlderThan($this->oQuery)) {
-			$oCache->sendCacheControlHeaders();
+			LinkUtil::sendCacheControlHeaders($this->oQuery);
 			$oCache->passContents(true);
 			return;
 		}
 		$sResult = $this->getFeed();
 		$oCache->setContents($sResult);
-		$oCache->sendCacheControlHeaders();
+		LinkUtil::sendCacheControlHeaders($this->oQuery);
 		print $sResult;
 	}
 	
@@ -41,27 +36,18 @@ class EventsFileModule extends FileModule {
 		$oRoot->setAttribute('version', "2.0");
 		$oDocument->appendChild($oRoot);
 		$oChannel = $oDocument->createElement("channel");
-		self::addSimpleAttribute($oDocument, $oChannel, 'title', $this->oBaseNavigationItem->getTitle());
-		self::addSimpleAttribute($oDocument, $oChannel, 'description', $this->oBaseNavigationItem->getDescription());
-		self::addSimpleAttribute($oDocument, $oChannel, 'link', LinkUtil::absoluteLink(LinkUtil::link($this->oBaseNavigationItem->getLink(), 'FrontendManager')));
+		self::addSimpleAttribute($oDocument, $oChannel, 'title', PageQuery::create()->filterByPageType('events')->findOne()->getPageTitle());
+		self::addSimpleAttribute($oDocument, $oChannel, 'description', PageQuery::create()->filterByPageType('events')->findOne()->getDescription());
+		self::addSimpleAttribute($oDocument, $oChannel, 'link', LinkUtil::absoluteLink(LinkUtil::link(PageQuery::create()->filterByPageType('events')->findOne()->getLink(), 'FrontendManager')));
 		self::addSimpleAttribute($oDocument, $oChannel, 'language', Session::language());
 		self::addSimpleAttribute($oDocument, $oChannel, 'ttl', "15");
 		$oRoot->appendChild($oChannel);
 
-		// get upcoming events, show only period
-		// FIXME periods for school_class and normal event the same
-		// FIXME add events with reports and images, update
-
-		$iPeriod = 14;
-		$sDateAhead = mktime(0, 0, 0, date("m"), date("d")+$iPeriod, date("y"));
-
-		// get events related to classes or others
-		$oQuery = $this->oQuery->upcomingOrOngoing()->filterByDateStart($sDateAhead, Criteria::LESS_EQUAL)->filterByIsActive(true);
-		$aEvents = $oQuery->find();
+		$aEvents = $this->oQuery->find();
 
 		foreach($aEvents as $oEvent) {
 			$oItem = $oDocument->createElement('item');
-			foreach($oEvent->getRssAttributes(false, $this->oBaseNavigationItem) as $sAttributeName => $mAttributeValue) {
+			foreach($oEvent->getRssAttributes(false) as $sAttributeName => $mAttributeValue) {
 				if(is_array($mAttributeValue)) {
 					if(ArrayUtil::arrayIsAssociative($mAttributeValue)) {
 						//Add one elements with attributes
