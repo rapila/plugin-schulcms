@@ -30,6 +30,7 @@ class EventExportFileModule extends FileModule {
 		if(class_exists('SchoolDate')) {
 			$oDateQuery = SchoolDateQuery::create();
 		}
+		$iTimestamp = $oEventQuery->findMostRecentUpdate();
 		if($oDateQuery !== null) {
 			$iTimestamp = max($iTimestamp, $oDateQuery);
 		}
