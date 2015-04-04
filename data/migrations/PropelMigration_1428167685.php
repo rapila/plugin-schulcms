@@ -48,7 +48,6 @@ ALTER TABLE `events` CHANGE `date_end` `date_end` DATE NOT NULL;
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
 ',
-  'common' => '',
 );
     }
 
@@ -71,7 +70,6 @@ ALTER TABLE `events` CHANGE `date_end` `date_end` DATE;
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
 ',
-  'common' => '',
 );
     }
 
