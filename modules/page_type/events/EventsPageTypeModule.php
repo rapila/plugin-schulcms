@@ -27,6 +27,11 @@ class EventsPageTypeModule extends PageTypeModule {
 		$oResourceIncluder = ResourceIncluder::namedIncluder('additional_js');
 		$oResourceIncluder->addResource('events.js');
 		$oResourceIncluder->addResource(LinkUtil::link(array('event_export', '{year}', $this->oPage->getId()), 'FileManager'), ResourceIncluder::RESOURCE_TYPE_LINK, null, array('type' => 'application/json', 'template' => 'source_link', 'source' => '/eventData'));
+		$oDownload = $this->constructTemplate('content/downloads');
+		$oDownload->replaceIdentifier('download_ical', LinkUtil::link($this->oNavigationItem->namedChild('calendar.ics', null, false, true)->getLink()));
+		$oDownload->replaceIdentifier('subscribe_rss', LinkUtil::link($this->oNavigationItem->namedChild('feed', null, false, true)->getLink()));
+		$oDownload->replaceIdentifier('subscribe_ical', LinkUtil::absoluteLink(LinkUtil::link($this->oNavigationItem->namedChild('calendar.ics', null, false, true)->getLink()), null, 'webcal://'));
+		$oTemplate->replaceIdentifierMultiple('container', $oDownload, 'content');
 		$oTemplate->replaceIdentifierMultiple('container', $this->constructTemplate('content/filter'), 'content');
 		$oTemplate->replaceIdentifierMultiple('container', $this->constructTemplate('content/calendar-content'), 'content');
 	}

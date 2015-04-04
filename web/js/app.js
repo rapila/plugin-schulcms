@@ -312,7 +312,7 @@
 		options: function options(element, prop) {
 			var _this = this;
 			var selected = document.createElement('div');
-			selected.className = 'selected';
+			selected.className = 'link-label selected';
 			element.insertBefore(selected, element.firstChild);
 			element.cl = classList(element);
 			var available = element.querySelector('.available');
