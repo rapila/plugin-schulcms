@@ -190,9 +190,14 @@ class Event extends BaseEvent {
 
 	public function getDateStartTimeStamp() {
 		return (int)$this->getDateStart('U');
-		// why not return $this->date_start;
 	}
-
-
+	
+	public function save(PropelPDO $con = null) {
+		if($this->getDateEnd() === null) {
+			$this->setDateEnd($this->getDateStart());
+		}
+		return parent::save($con);
+	}
+	
 
 }

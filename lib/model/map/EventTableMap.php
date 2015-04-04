@@ -46,7 +46,7 @@ class EventTableMap extends TableMap
         $this->addColumn('body_review', 'BodyReview', 'BLOB', false, null, null);
         $this->addColumn('location_info', 'LocationInfo', 'VARCHAR', false, 255, null);
         $this->addColumn('date_start', 'DateStart', 'DATE', true, null, null);
-        $this->addColumn('date_end', 'DateEnd', 'DATE', false, null, null);
+        $this->addColumn('date_end', 'DateEnd', 'DATE', true, null, null);
         $this->addColumn('time_details', 'TimeDetails', 'VARCHAR', false, 255, null);
         $this->addColumn('is_active', 'IsActive', 'BOOLEAN', false, 1, false);
         $this->addColumn('is_common', 'IsCommon', 'BOOLEAN', false, 1, false);
