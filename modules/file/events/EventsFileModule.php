@@ -9,7 +9,7 @@ class EventsFileModule extends FileModule {
 		if($oNavigationItem !== null) {
 			$this->oBaseNavigationItem = $oNavigationItem->getParent();
 		} else {
-			$this->oEventPage = $oPage;
+			$this->oBaseNavigationItem = NavigationItem::navigationItemForPage(PageQuery::create()->filterByPageType('events')->findOne());
 		}
 		if($oQuery) {
 			$this->oQuery = $oQuery;
@@ -17,10 +17,25 @@ class EventsFileModule extends FileModule {
 			$this->oQuery = FrontendEventQuery::create()->excludeClassEvents();
 		}
 		header("Content-Type: application/rss+xml;charset=".Settings::getSetting('encoding', 'db', 'utf-8'));
+		header("Cache-Control: Private", true);
 		RichtextUtil::$USE_ABSOLUTE_LINKS = true;
 	}
 
 	public function renderFile() {
+		$sKey = 'event-feed/'.md5(serialize($this->oQuery)).'/'.Session::language();
+		$oCache = new Cache($sKey, 'events');
+		if($oCache->entryExists() && !$oCache->isOlderThan($this->oQuery)) {
+			$oCache->sendCacheControlHeaders();
+			$oCache->passContents(true);
+			return;
+		}
+		$sResult = $this->getFeed();
+		$oCache->setContents($sResult);
+		$oCache->sendCacheControlHeaders();
+		print $sResult;
+	}
+	
+	private function getFeed() {
 		$oDocument = new DOMDocument();
 		$oRoot = $oDocument->createElement("rss");
 		$oRoot->setAttribute('version', "2.0");
@@ -67,7 +82,7 @@ class EventsFileModule extends FileModule {
 			}
 			$oChannel->appendChild($oItem);
 		}
-		print $oDocument->saveXML();
+		return $oDocument->saveXML();
 	}
 
 	private static function addSimpleAttribute($oDocument, $oChannel, $sAttributeName, $sAttributeValue, $sNamespace = null) {
