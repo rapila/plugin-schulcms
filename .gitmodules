@@ -4,3 +4,6 @@
 [submodule "web/js/wok"]
 	path = web/js/wok
 	url = git://github.com/sabberworm/Wok.js.git
+[submodule "lib/vendor/eluceo/ical"]
+	path = lib/vendor/eluceo/ical
+	url = git://github.com/markuspoerschke/iCal.git
