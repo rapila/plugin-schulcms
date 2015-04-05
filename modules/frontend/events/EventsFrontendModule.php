@@ -51,7 +51,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		return self::renderOverviewList($oQuery->find());
 	}
 
-	public static function renderOverviewList($aEvents) {
+	public static function renderOverviewList($aEvents, $iTruncate = 100) {
 		$oTemplate = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'overview_list', false);
 		$oItemPrototype = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'overview_item', false);
 		$oDatePrototype = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'date', false);
@@ -64,7 +64,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oItemTemplate->replaceIdentifier('date_item', $oDateTemplate);
 			$oItemTemplate->replaceIdentifier('title', $oEvent->getTitle());
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink($oEventPage)));
-			$oItemTemplate->replaceIdentifier('description', self::getContentForFrontend($oEvent->getBodyShort(), true));
+			$oItemTemplate->replaceIdentifier('description', self::getContentForFrontend($oEvent->getBodyShort(), true, $iTruncate));
 			$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
 		}
 		return $oTemplate;
@@ -325,7 +325,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		return $oTemplate;
 	}
 
-	public static function getContentForFrontend($oBlob, $bStripTags = false) {
+	public static function getContentForFrontend($oBlob, $bStripTags = false, $iTruncate = null) {
 		if(!$oBlob) {
 			return '';
 		}
@@ -333,8 +333,11 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		if($sContent != '') {
 			$sContent = RichtextUtil::parseStorageForFrontendOutput($sContent);
 		}
-		if($bStripTags) {
+		if($bStripTags || $iTruncate) {
 			$sContent = strip_tags($sContent);
+			if($iTruncate) {
+				$sContent = StringUtil::truncate($sContent, $iTruncate);
+			}
 		}
 		return $sContent;
 	}
