@@ -14,53 +14,8 @@ In case we omitted some important information from the file *migration_20_steps.
     $ git remote rm git@rapi.la:/var/server/git/plugin-schulcms.git
     $ git remote add git@github.com:rapila/plugin-schulcms.git
     $ (cd plugins/schulcms && git pull)
-    $ rap migrate-model.sh -p schulcms
-    $ rap generate-model.sh && rap clear-caches.sh
-
-## Model changes
-
-    $ git checkout 85b6a25ebc62498629916d749aa0447d17631227
-    $ rap migrate-model.sh -p schulcms
-    $ rap generate-model.sh && rap clear-caches.sh
-
-Test here
-
-    $ git checkout 889a9e183c2cbe4091c1a256785d78aaffd0bbfe
-    $ rap migrate-model.sh -p schulcms
-    $ rap generate-model.sh && rap clear-caches.sh
-
-Test here
-
-    $ (cd plugin/schulcms && git checkout 12c62fa4d7a24eeae285512223a3dcca8de7d49e)
-
-Test here
-
-    $ git checkout 85b6a25ebc62498629916d749aa0447d17631227
-
-    $ rap migrate-model.sh -p schulcms
-    $ rap generate-model.sh && rap clear-caches.sh
-
-Test here
-
-    $ rap migrate-model.sh -p schulcms
-    $ rap generate-model.sh && rap clear-caches.sh
-
-Test here
-
-    $ (cd plugins/schulcms && git checkout 8b11bbf91fca8b3e97ae4ab212e33ad8e931ed12)
-    $ rap migrate-model.sh -p schulcms
-    $ rap generate-model.sh && rap clear-caches.sh
-
-Test here
-
-    $ (cd plugins/schulcms && git checkout e55129bdd595f04fd58b106dcfc44447571b86de)
-    $ rap migrate-model.sh -p schulcms
-    $ rap generate-model.sh && rap clear-caches.sh
-
-Test here
-
-    $ (cd plugins/schulcms && git checkout defc2b73b51965a47061f5a45ffa3c42b4c9fd46)
-    $ rap migrate-model.sh -p schulcms
+		$ git checkout master
+    $ rap migrate-model.sh -p schulcms up
     $ rap generate-model.sh && rap clear-caches.sh
 
 ## Refactor configuration related code
