@@ -42,7 +42,7 @@ class PropelMigration_1400840759
 # It "suspends judgement" for fkey relationships until are tables are set.
 SET FOREIGN_KEY_CHECKS = 0;
 
-CREATE TABLE `class_documents`
+CREATE TABLE `class_documents` IF NOT EXISTS
 (
     `school_class_id` INTEGER NOT NULL,
     `document_id` INTEGER NOT NULL,

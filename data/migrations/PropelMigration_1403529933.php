@@ -16,38 +16,6 @@ class PropelMigration_1403529933
 		public function postUp($manager)
 		{
 			// add the post-migration code here
-			// var_dump(__DIR__); exit;
-
-			require_once realpath(__DIR__.'/../../base/lib/inc.php');
-			Propel::disableInstancePooling();
-
-			// migrate note_types to news_types
-			foreach(NoteTypeQuery::create()->orderByCreatedAt()->find() as $oNoteType) {
-				$oNewsType = new NewsType();
-				$oNewsType->setName($oNoteType->getName());
-				$oNewsType->setCreatedAt($oNoteType->getCreatedAt());
-				$oNewsType->setCreatedBy($oNoteType->getCreatedBy());
-				$oNewsType->setUpdatedAt($oNoteType->getUpdatedAt());
-				$oNewsType->setUpdatedBy($oNoteType->getUpdatedBy());
-				$oNewsType->save();
-			}
-			// migrate notes > news
-			foreach(NoteQuery::create()->orderByCreatedAt()->find() as $oNote) {
-				$oNews = new News();
-				$oNews->setBody($oNote->getBody());
-				$oNews->setNewsTypeId($oNote->getNoteTypeId());
-				if($oNoteType = $oNote->getNoteType()) {
-					$oNews->setHeadline($oNoteType->getName());
-				}
-				$oNews->setDateStart($oNote->getDateStart());
-				$oNews->setDateEnd($oNote->getDateEnd());
-				$oNews->setIsInactive($oNote->getIsInactive());
-				$oNews->setCreatedAt($oNote->getCreatedAt());
-				$oNews->setCreatedBy($oNote->getCreatedBy());
-				$oNews->setUpdatedAt($oNote->getUpdatedAt());
-				$oNews->setUpdatedBy($oNote->getUpdatedBy());
-				$oNews->save();
-			}
 		}
 
 		public function preDown($manager)
@@ -111,6 +79,25 @@ CREATE TABLE `news_types`
 		INDEX `news_types_FI_1` (`created_by`),
 		INDEX `news_types_FI_2` (`updated_by`)
 ) ENGINE=MyISAM;
+
+INSERT INTO `news_types`
+(`id`, `name`, `is_externally_managed`, `created_at`, `updated_at`, `created_by`, `updated_by`)
+SELECT
+`id`, `name`, "0", `created_at`, `updated_at`, `created_by`, `updated_by`
+FROM `note_types`;
+
+INSERT INTO `news`
+(`id`, `news_type_id`, `headline`, `body`, `body_short`, `date_start`, `date_end`, `is_inactive`, `school_class_id`, `image_id`, `created_at`, `updated_at`, `created_by`, `updated_by`)
+SELECT
+`id`, `note_type_id`, "", `body`, "", `date_start`, `date_end`, `is_inactive`, "", `image_id`, `created_at`, `updated_at`, `created_by`, `updated_by`
+FROM `notes`;
+
+UPDATE `news`, `news_types`
+SET `news`.`headline` = `news_types`.`name`
+WHERE `news`.`news_type_id` = `news_types`.`id`;
+
+UPDATE `news`
+SET `body_short` = (SELECT CONCAT(SUBSTRING_INDEX(`body`, "</p>", 1), "\n</p>") FROM `news`);
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

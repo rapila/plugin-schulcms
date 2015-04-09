@@ -64,7 +64,16 @@ class PropelMigration_1409750445
 # It "suspends judgement" for fkey relationships until are tables are set.
 SET FOREIGN_KEY_CHECKS = 0;
 
-	ALTER TABLE `events` DROP `teaser`;
+ALTER TABLE `events`
+    CHANGE `body_preview` `body` MEDIUMBLOB AFTER `teaser`;
+
+ALTER TABLE `events`
+    ADD `body_short` BLOB AFTER `body`;
+
+UPDATE `events`
+	SET `body_short` = IF(`teaser` IS NULL OR `teaser` = "", IF(SUBSTRING_INDEX(`body`, "</p>", 1) != "", CONCAT(SUBSTRING_INDEX(`body`, "</p>", 1), "\n</p>"), NULL), CONCAT("<p>\n", "\t", REPLACE(`teaser`, "\n", "<br />\n\t"), "\n</p>"))
+
+ALTER TABLE `events` DROP COLUMN `teaser`;
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
@@ -85,9 +94,6 @@ SET FOREIGN_KEY_CHECKS = 1;
 # This is a fix for InnoDB in MySQL >= 4.1.x
 # It "suspends judgement" for fkey relationships until are tables are set.
 SET FOREIGN_KEY_CHECKS = 0;
-
-	ALTER TABLE `events`
-	ADD `teaser` VARCHAR(514) AFTER `slug`;
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

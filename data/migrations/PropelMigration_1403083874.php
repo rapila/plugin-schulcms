@@ -44,7 +44,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 ALTER TABLE `team_members` CHANGE `gender_id` `gender_id` CHAR(1);
 
-CREATE TABLE `class_documents`
+CREATE TABLE `class_documents` IF NOT EXISTS
 (
     `school_class_id` INTEGER NOT NULL,
     `document_id` INTEGER NOT NULL,
