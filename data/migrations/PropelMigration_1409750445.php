@@ -10,29 +10,7 @@ class PropelMigration_1409750445
 
 		public function preUp($manager)
 		{
-			require_once realpath(__DIR__.'/../../base/lib/inc.php');
-			Propel::disableInstancePooling();
-
-			// migrate note_types to news_types
-			foreach(EventQuery::create()->find() as $oEvent) {
-				$sTeaserContent = self::teaserToHTML($oEvent->getTeaser());
-				$sReviewContent = '';
-				if(is_resource($oEvent->getBodyPreview())) {
-					$sReviewContent = stream_get_contents($oEvent->getBodyPreview());
-				}
-				$oEvent->setBodyPreview($sTeaserContent.$sReviewContent);
-				$oEvent->save();
-			}
-		}
-
-		private static function teaserToHTML($sTeaser) {
-			$sMultipleNlPattern = '/[\n\r]{2,}/';
-			$aString = preg_split($sMultipleNlPattern, trim($sTeaser));
-			return trim(implode(array_map(function($sParagraph) {
-			  $sParagraph = trim($sParagraph);
-			  $sParagraph = preg_replace('/ *[\n\r] */', '<br />' . PHP_EOL, $sParagraph);
-			  return '<p>' . $sParagraph . '</p>' . PHP_EOL;
-			}, $aString)));
+			// add the pre-migration code here
 		}
 
 		public function postUp($manager)
@@ -73,7 +51,7 @@ ALTER TABLE `events`
 UPDATE `events`
 	SET `body_short` = IF(`teaser` IS NULL OR `teaser` = "", IF(SUBSTRING_INDEX(`body`, "</p>", 1) != "", CONCAT(SUBSTRING_INDEX(`body`, "</p>", 1), "\n</p>"), NULL), CONCAT("<p>\n", "\t", REPLACE(`teaser`, "\n", "<br />\n\t"), "\n</p>"))
 
-ALTER TABLE `events` DROP COLUMN `teaser`;
+ALTER TABLE `events` DROP `teaser`;
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

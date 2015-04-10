@@ -14,9 +14,14 @@ In case we omitted some important information from the file *migration_20_steps.
     $ git remote rm git@rapi.la:/var/server/git/plugin-schulcms.git
     $ git remote add git@github.com:rapila/plugin-schulcms.git
     $ (cd plugins/schulcms && git pull)
-		$ git checkout master
+		$ git checkout master (fetch all)
     $ rap migrate-model.sh -p schulcms up
     $ rap generate-model.sh && rap clear-caches.sh
+
+		# handle indices in a last migration for each site schulcms individually
+
+## write_migration and migrate_model for schulcms
+		// for final touch up
 
 ## Refactor configuration related code
 

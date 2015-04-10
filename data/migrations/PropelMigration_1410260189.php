@@ -49,37 +49,7 @@ CREATE INDEX `news_FI_2` ON `news` (`school_class_id`);
 
 ALTER TABLE `news_types` CHANGE `is_externally_managed` `is_externally_managed` TINYINT(1) DEFAULT 0;
 
-DROP INDEX `school_classes_FI_2` ON `school_classes`;
-
-DROP INDEX `school_classes_FI_3` ON `school_classes`;
-
-DROP INDEX `school_classes_FI_4` ON `school_classes`;
-
-DROP INDEX `school_classes_FI_5` ON `school_classes`;
-
-DROP INDEX `school_classes_FI_6` ON `school_classes`;
-
-DROP INDEX `school_classes_FI_7` ON `school_classes`;
-
-DROP INDEX `school_classes_FI_8` ON `school_classes`;
-
-CREATE INDEX `school_classes_FI_2` ON `school_classes` (`subject_id`);
-
-CREATE INDEX `school_classes_FI_3` ON `school_classes` (`class_type_id`);
-
-CREATE INDEX `school_classes_FI_4` ON `school_classes` (`class_schedule_id`);
-
-CREATE INDEX `school_classes_FI_5` ON `school_classes` (`week_schedule_id`);
-
-CREATE INDEX `school_classes_FI_6` ON `school_classes` (`school_building_id`);
-
-CREATE INDEX `school_classes_FI_7` ON `school_classes` (`school_id`);
-
-CREATE INDEX `school_classes_FI_8` ON `school_classes` (`created_by`);
-
-CREATE INDEX `school_classes_FI_9` ON `school_classes` (`updated_by`);
-
-
+# handle indices in a last migration for each site schulcms individually
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
 ',
