@@ -87,9 +87,9 @@ SELECT
 FROM `note_types`;
 
 INSERT INTO `news`
-(`id`, `news_type_id`, `headline`, `body`, `body_short`, `date_start`, `date_end`, `is_inactive`, `school_class_id`, `image_id`, `created_at`, `updated_at`, `created_by`, `updated_by`)
+(`id`, `news_type_id`, `headline`, `body`, `body_short`, `date_start`, `date_end`, `is_inactive`, `school_class_id`, `created_at`, `updated_at`, `created_by`, `updated_by`)
 SELECT
-`id`, `note_type_id`, "", `body`, "", `date_start`, `date_end`, `is_inactive`, "", `image_id`, `created_at`, `updated_at`, `created_by`, `updated_by`
+`id`, `note_type_id`, "", `body`, "", `date_start`, `date_end`, `is_inactive`, "", `created_at`, `updated_at`, `created_by`, `updated_by`
 FROM `notes`;
 
 UPDATE `news`, `news_types`

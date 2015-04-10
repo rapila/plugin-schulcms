@@ -43,7 +43,6 @@ class PropelMigration_1407157579
 SET FOREIGN_KEY_CHECKS = 0;
 
 ALTER TABLE `news_types` CHANGE `name` `name` VARCHAR(100) NOT NULL;
-ALTER TABLE `news` DROP `image_id`;
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

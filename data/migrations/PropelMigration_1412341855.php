@@ -49,7 +49,6 @@ ALTER TABLE `school_classes`
 UPDATE `school_classes` SET `class_type` = (SELECT `name` FROM `class_types` WHERE `class_types`.`id` = `school_classes`.`class_type_id`);
 
 ALTER TABLE `school_classes` DROP `class_type_id`;
-CREATE INDEX `school_classes_FI_3` ON `school_classes` (`class_schedule_id`);
 
 DROP TABLE `class_types`;
 

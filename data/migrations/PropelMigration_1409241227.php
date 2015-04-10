@@ -42,13 +42,7 @@ class PropelMigration_1409241227
 # It "suspends judgement" for fkey relationships until are tables are set.
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP INDEX `service_id` ON `events`;
-
-DROP INDEX `events_FI_2` ON `events`;
-
 ALTER TABLE `events` DROP `service_id`;
-
-CREATE INDEX `events_FI_2` ON `events` (`school_class_id`);
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

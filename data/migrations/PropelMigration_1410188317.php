@@ -45,7 +45,6 @@ SET FOREIGN_KEY_CHECKS = 0;
 ALTER TABLE `news`
     ADD `school_class_id` INTEGER AFTER `is_active`;
 
-CREATE INDEX `news_FI_2` ON `news` (`school_class_id`);
 
 UPDATE news
 	INNER JOIN class_news

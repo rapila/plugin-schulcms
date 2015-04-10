@@ -42,54 +42,6 @@ class PropelMigration_1428658383
 # It "suspends judgement" for fkey relationships until are tables are set.
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP INDEX `title_normalized` ON `events`;
-
-DROP INDEX `events_FI_2` ON `events`;
-
-DROP INDEX `events_FI_3` ON `events`;
-
-DROP INDEX `events_FI_4` ON `events`;
-
-CREATE INDEX `events_FI_2` ON `events` (`school_class_id`);
-
-CREATE INDEX `events_FI_3` ON `events` (`gallery_id`);
-
-CREATE INDEX `events_FI_4` ON `events` (`created_by`);
-
-DROP INDEX `school_classes_FI_3` ON `school_classes`;
-
-CREATE INDEX `school_classes_FI_3` ON `school_classes` (`subject_id`);
-
-CREATE INDEX `school_classes_FI_1` ON `school_classes` (`ancestor_class_id`);
-
-DROP INDEX `school_functions_FI_1` ON `school_functions`;
-
-DROP INDEX `school_functions_FI_2` ON `school_functions`;
-
-DROP INDEX `school_functions_FI_3` ON `school_functions`;
-
-CREATE INDEX `school_functions_FI_1` ON `school_functions` (`function_group_id`);
-
-CREATE INDEX `school_functions_FI_2` ON `school_functions` (`school_id`);
-
-CREATE INDEX `school_functions_FI_3` ON `school_functions` (`created_by`);
-
-CREATE INDEX `school_functions_FI_4` ON `school_functions` (`updated_by`);
-
-DROP INDEX `is_newly_updated` ON `team_member_functions`;
-
-DROP INDEX `is_newly_updated` ON `team_members`;
-
-DROP INDEX `team_members_FI_2` ON `team_members`;
-
-DROP INDEX `team_members_FI_3` ON `team_members`;
-
-CREATE INDEX `team_members_FI_2` ON `team_members` (`user_id`);
-
-CREATE INDEX `team_members_FI_3` ON `team_members` (`created_by`);
-
-CREATE INDEX `team_members_FI_4` ON `team_members` (`updated_by`);
-
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
 ',

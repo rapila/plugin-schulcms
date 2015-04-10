@@ -44,20 +44,6 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 ALTER TABLE `team_members` CHANGE `gender_id` `gender_id` CHAR(1);
 
-CREATE TABLE `class_documents` IF NOT EXISTS
-(
-    `school_class_id` INTEGER NOT NULL,
-    `document_id` INTEGER NOT NULL,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    `created_by` INTEGER,
-    `updated_by` INTEGER,
-    PRIMARY KEY (`school_class_id`,`document_id`),
-    INDEX `class_documents_FI_2` (`document_id`),
-    INDEX `class_documents_FI_3` (`created_by`),
-    INDEX `class_documents_FI_4` (`updated_by`)
-) ENGINE=MyISAM;
-
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
 ',
