@@ -12,7 +12,7 @@ In case we omitted some important information from the file *migration_20_steps.
 ## New upstream repo: SchulCMS Plugin on *github*
 
     $ git remote set-url origin git://github.com/rapila/plugin-schulcms.git
-    $ (cd plugins/schulcms && git pull)
+    $ git pull
 		$ git checkout master (fetch all)
     $ rap migrate-model.sh -p schulcms up
     $ rap generate-model.sh && rap clear-caches.sh
