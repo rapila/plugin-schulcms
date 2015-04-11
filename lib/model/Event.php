@@ -40,12 +40,12 @@ class Event extends BaseEvent {
 		return $this->getSchoolClassId() !== null;
 	}
 
-	public function getBodyTruncated() {
+	public function getBodyShortTruncated($iLength = 40) {
 		// refactor to use body short when implemented
 		$sContent = null;
-		if($this->getBody() != null) {
-			$sContent = stream_get_contents($this->getBody());
-			return StringUtil::truncate(strip_tags($sContent), 40);
+		if($this->getBodyShort() != null) {
+			$sContent = stream_get_contents($this->getBodyShort());
+			return StringUtil::truncate(strip_tags($sContent), $iLength);
 		}
 		return null;
 	}
@@ -189,13 +189,13 @@ class Event extends BaseEvent {
 	public function getDateStartTimeStamp() {
 		return (int)$this->getDateStart('U');
 	}
-	
+
 	public function save(PropelPDO $con = null) {
 		if($this->getDateEnd() === null) {
 			$this->setDateEnd($this->getDateStart());
 		}
 		return parent::save($con);
 	}
-	
+
 
 }

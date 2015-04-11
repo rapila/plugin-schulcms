@@ -24,7 +24,7 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 	}
 
 	public function getColumnIdentifiers() {
-		return array('id', 'title', 'body_truncated', 'date_start_formatted', 'is_active', 'is_common', 'has_bericht', 'has_images', 'delete');
+		return array('id', 'title', 'body_short_truncated', 'date_start_formatted', 'is_active', 'is_common', 'has_bericht', 'has_images', 'delete');
 	}
 
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -33,7 +33,7 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 			case 'title':
 				$aResult['heading'] = StringPeer::getString('wns.event.title');
 				break;
-			case 'body_truncated':
+			case 'body_short_truncated':
 				$aResult['heading'] = StringPeer::getString('wns.event.body_short');
 				break;
 			case 'date_start_formatted':
@@ -66,8 +66,8 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 		if($sColumnIdentifier === 'date_start_formatted') {
 			return EventPeer::DATE_START;
 		}
-		if($sColumnIdentifier === 'body_truncated') {
-			return EventPeer::BODY;
+		if($sColumnIdentifier === 'body_short_truncated') {
+			return EventPeer::BODY_SHORT;
 		}
 		return null;
 	}

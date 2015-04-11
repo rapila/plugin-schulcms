@@ -4,7 +4,7 @@ class ClassNewsListWidgetModule extends NewsListWidgetModule {
 
 	public function getColumnIdentifiers() {
 		$aResult = parent::getColumnIdentifiers();
-		$aResult = array_diff($aResult, array('body_truncated'));
+		$aResult = array_diff($aResult, array('body_short_truncated'));
 		return $aResult;
 	}
 
