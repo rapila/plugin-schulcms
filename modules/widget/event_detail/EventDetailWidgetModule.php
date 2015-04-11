@@ -81,6 +81,9 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$aResult = $oEvent->toArray(BasePeer::TYPE_PHPNAME, false);
 		$aResult['DateStart'] = $oEvent->getDateStart('d.m.Y');
 		$aResult['DateEnd'] = $oEvent->getDateEnd('d.m.Y');
+		if($aResult['DateStart'] === $aResult['DateEnd']) {
+			$aResult['DateEnd'] = null;
+		}
 		$aResult['CreatedInfo'] = Util::formatCreatedInfo($oEvent);
 		$aResult['UpdatedInfo'] = Util::formatUpdatedInfo($oEvent);
 		$oEventType = EventTypeQuery::create()->findPk($oEvent->getEventTypeId() ? $oEvent->getEventTypeId() : 1);
