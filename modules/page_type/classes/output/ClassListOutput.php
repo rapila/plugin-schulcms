@@ -10,19 +10,45 @@ class ClassListOutput extends ClassOutput {
 		$aClassTypes = null;
 		$oTemplate = $this->oPageType->constructTemplate('list', true);
 		$oItemPrototype = $this->oPageType->constructTemplate('list_item', true);
+
+
 		$aClasses = SchoolClassQuery::create()->filterByClassTypeYearAndSchool($aClassTypes)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers(true)->orderByUnitName()->find();
 		$oTemplate->replaceIdentifier('class_news', $this->includeClassNews());
+
+		// Prepare class type filter
+		$aClassTypes = array();
 		foreach($aClasses as $oClass) {
+			if(!in_array($oClass->getClassType(), $aClassTypes)) {
+				$aClassTypes[] = $oClass->getClassType();
+			}
 			// get all infos that are independent of teaching unit
 			$oTemplate->replaceIdentifierMultiple('items', $this->renderItem($oClass, clone $oItemPrototype));
+		}
+
+		// Implement class type filter
+		if($oTemplate->hasIdentifier('filters') && count($aClassTypes) > 1) {
+			$oOptionPrototype = $this->oPageType->constructTemplate('filter_option', true);
+			$oItemTemplate = clone $oOptionPrototype;
+			$oItemTemplate->replaceIdentifier('id', '');
+			$oItemTemplate->replaceIdentifier('name', StringPeer::getString('classes.filter.class_type.default'));
+			$oTemplate->replaceIdentifierMultiple('filters', $oItemTemplate, null, Template::NO_NEWLINE);
+
+			foreach($aClassTypes as $sClassType) {
+				$oItemTemplate = clone $oOptionPrototype;
+				$oItemTemplate->replaceIdentifier('id', StringUtil::normalizeToASCII($sClassType));
+				$oItemTemplate->replaceIdentifier('name', $sClassType);
+				$oTemplate->replaceIdentifierMultiple('filters', $oItemTemplate, null, Template::NO_NEWLINE);
+			}
 		}
 		return $oTemplate;
 	}
 
 	private function renderItem($oClass, $oItemTemplate) {
 		// add more identifiers for flexibility if necessary
+		$oItemTemplate->replaceIdentifier('id', $oClass->getId());
 		$oItemTemplate->replaceIdentifier('name', $oClass->getUnitName());
 		$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassType());
+		$oItemTemplate->replaceIdentifier('class_type_key', StringUtil::normalizeToASCII($oClass->getClassType()));
 		$oItemTemplate->replaceIdentifier('year', $oClass->getYearPeriod());
 		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getLink($this->oPage)));
 		$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('class.view_detail').' '.$oClass->getUnitName());
