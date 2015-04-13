@@ -37,8 +37,8 @@ schulcms:
 
 documentation:
   support_info:
-    heading: 'Support SchulCMS'
-    link_text: 'Support und Vorgehen'
+    heading: 'Support-Infos SchulCMS'
+    link_text: 'Infos Supportablauf & E-Mail-Adresse'
     link: 'http://www.schulcms.ch/support'
 
 frontend:

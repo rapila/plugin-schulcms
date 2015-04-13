@@ -1,6 +1,5 @@
---- 
+---
 enabled: true
-aspects: 
-  - dashboard
+aspects:
   - persistent
 allowed_roles: [classes]
