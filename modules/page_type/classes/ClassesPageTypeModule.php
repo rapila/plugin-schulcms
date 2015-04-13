@@ -90,7 +90,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 
 	public function config() {
 		$aResult['display_type'] = $this->getDisplayType();
-		$aResult['class_type'] = $this->getDisplayType();
+		$aResult['class_type'] = $this->getClassType();
 		return $aResult;
 	}
 
