@@ -10,21 +10,17 @@ class ClassesFilterModule extends FilterModule {
 
 			// render subject & subject classes items
 			if($sClassType === 'subject') {
-				$oSubjectPage = PageQuery::create()->findOneByIdentifier('subjects-page');
-				if(!$oSubjectPage) {
-					return;
-				}
 				$oQuery = SubjectQuery::create()->filterByHasClasses()->select(array('Id', 'Slug', 'Name'));
 				foreach($oQuery->find() as $aData) {
-					$oNavigationItem->addChild(SubjectNavigationItem::create($aData['Slug'], $aData['Name'], $aData['Id']));
+					$oNavigationItem->addChild(SubjectNavigationItem::create($aData['Slug'], $aData['Name'], $aData['Id'], $sClassType));
 				}
 			} else {
 				$this->renderClassNavigationItems($oNavigationItem, $sDisplayType);
 			}
 		}
 
-		if(!($oNavigationItem instanceof SubjectNavigationItem)) {
-			// render subject classes
+		if($oNavigationItem instanceof SubjectNavigationItem) {
+			$this->renderClassNavigationItems($oNavigationItem, $oNavigationItem->getMode());
 		}
 
 		if(!($oNavigationItem instanceof ClassNavigationItem)) {
@@ -41,14 +37,18 @@ class ClassesFilterModule extends FilterModule {
 		} else if($oNavigationItem->getMode() === 'home') {
 			// Render specific class year subpage items
 			$this->renderClassPageItems($oNavigationItem);
-
 		}
 	}
 
-	private function renderClassNavigationItems($oNavigationItem, $sDisplayType) {
-		foreach(SchoolClassQuery::create()->filterByClassTypeYearAndSchool(null)->filterBySubjectId(null, Criteria::ISNULL)->select('Slug')->find() as $sSlug) {
-			$oClass = SchoolClassQuery::create()->filterBySlug($sSlug)->findOne();
-			$oNavItem = new ClassNavigationItem($sSlug, $oClass->getFullClassName().' Home', null, 'root', $sDisplayType, $oClass->getUnitName(), true, false);
+	private function renderClassNavigationItems($oNavigationItem, $sDisplayType, $bSubjectClasses=false) {
+		$oQuery = SchoolClassQuery::create()->filterByClassTypeYearAndSchool(null);
+		if(!$bSubjectClasses) {
+			$oQuery->filterBySubjectId(null, Criteria::ISNULL);
+		} else {
+			$oQuery->filterBySubjectId(null, Criteria::ISNOTNULL);
+		}
+		foreach($oQuery->find() as $oClass) {
+			$oNavItem = new ClassNavigationItem($oClass->getSlug(), $oClass->getFullClassName().' Home', null, 'root', $sDisplayType, $oClass->getUnitName(), true, false);
 			$oNavigationItem->addChild($oNavItem);
 		}
 	}

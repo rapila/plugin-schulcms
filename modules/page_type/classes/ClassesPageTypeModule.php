@@ -45,6 +45,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 		}
 		// Caching?
 		$sClassName = 'Class'.StringUtil::camelize($sMode, true).'Output';
+		// $sClassName = 'ClassListBySubjectsOutput';
 		$oOutput = new $sClassName($this->oNavigationItem, $this);
 
 		$mContent = $oOutput->renderContent();

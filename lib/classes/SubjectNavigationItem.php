@@ -6,9 +6,9 @@ class SubjectNavigationItem extends VirtualNavigationItem {
 	private $bIsFolder;
 	private $bIsVisible;
 
-	public function __construct($sName, $sLinkText, Subject $oSubject = null, $sMode, $sTitle = null, $bIsFolder = false, $bIsVisible = true) {
+	public function __construct($sName, $sLinkText, $iId, $sMode, $bIsVisible = true) {
 		$oData = new stdClass();
-		$oData->subject = $oSubject;
+		$oData->id = $iId;
 		$oData->mode = $sMode;
 		if($sTitle === null) {
 			$sTitle = $sLinkText;
@@ -22,8 +22,8 @@ class SubjectNavigationItem extends VirtualNavigationItem {
 		return $this->bIsVisible;
 	}
 
-	public static function create($sName, $sLinkText, Subject $oSubject = null, $sMode, $sTitle = null, $bIsFolder = false) {
-		return new SubjectNavigationItem($sName, $sLinkText, $oSubject, $sMode, $sTitle, $bIsFolder);
+	public static function create($sName, $sLinkText, $iId, $sMode, $bIsFolder = false) {
+		return new SubjectNavigationItem($sName, $sLinkText, $iId, $sMode, $bIsFolder);
 	}
 
 	public function setIndexed($bIsIndexed) {
@@ -40,8 +40,8 @@ class SubjectNavigationItem extends VirtualNavigationItem {
 		return $this->getData()->mode;
 	}
 
-	public function getSubject() {
-		return $this->getData()->subject;
+	public function getId() {
+		return $this->getData()->id;
 	}
 
 	public function isFolder() {
