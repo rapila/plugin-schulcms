@@ -8,7 +8,7 @@ class Subject extends BaseSubject
 	private static $SUBJECT_PAGE;
 
 	public function setName($sName) {
-		$this->setSlug(StringUtil::normalize(str_replace('-', '', $sName), '-', '-'));
+		$this->setSlug(StringUtil::normalizePath($sName));
 		return parent::setName($sName);
 	}
 
@@ -26,6 +26,14 @@ class Subject extends BaseSubject
 	}
 
 	public function getSchoolClasses() {
-		return SchoolClassQuery::create()->filterBySubjectId($this->getId())->hasTeachers()->find();
+		return $this->getSchoolClassesQuery()->find();
+	}
+
+	public function countSchoolClasses() {
+		return $this->getSchoolClassesQuery()->count();
+	}
+
+	private function getSchoolClassesQuery() {
+		return SchoolClassQuery::create()->filterBySubjectId($this->getId())->hasTeachers();
 	}
 }

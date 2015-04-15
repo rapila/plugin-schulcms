@@ -1,7 +1,6 @@
 <?php
 
-class ClassListBySubjectsOutput extends ClassOutput {
-	private $oClassItemPrototype;
+class SubjectListOutput extends ClassOutput {
 
 	public function __construct(NavigationItem $oNavigationItem, ClassesPageTypeModule $oPageType) {
 		parent::__construct($oNavigationItem, $oPageType);
@@ -10,7 +9,6 @@ class ClassListBySubjectsOutput extends ClassOutput {
 	public function renderContent() {
 		$oTemplate = $this->oPageType->constructTemplate('subject_list', true);
 		$oItemPrototype = $this->oPageType->constructTemplate('subject_list_item', true);
-		$this->oClassItemPrototype = $this->oPageType->constructTemplate('subject_list_class_item', true);
 		$aSubjects = SubjectQuery::create()->filterByHasClasses()->distinct()->find();
 		foreach($aSubjects as $oSubject) {
 			// get all infos that are independent of teaching unit
@@ -23,14 +21,17 @@ class ClassListBySubjectsOutput extends ClassOutput {
 		// add more identifiers for flexibility if necessary
 		$oItemTemplate->replaceIdentifier('name', $oSubject->getName());
 		$oItemTemplate->replaceIdentifier('short_name', $oSubject->getShortName());
-		foreach($oSubject->getSchoolClasses() as $i => $oClass) {
-			$oItemTemplate->replaceIdentifierMultiple('items', $this->renderClassItem($oClass));
-			foreach($oClass->getClassTeachersOrdered() as $i => $oClassTeacher) {
-				if($i === 0) {
-					$oItemTemplate->replaceIdentifierMultiple('teachers', TagWriter::quickTag('a', array('href' => LinkUtil::link($oClassTeacher->getTeamMember()->getLink($this->oTeacherPage))), $oClassTeacher->getTeamMember()->getFullName()));
-				}
-			}
-		}
+		$oItemTemplate->replaceIdentifier('count_classes', $oSubject->countSchoolClasses());
+		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($this->oPage->getFullPathArray(array($oSubject->getSlug()))));
+
+		// foreach($oSubject->getSchoolClasses() as $i => $oClass) {
+		// 	$oItemTemplate->replaceIdentifierMultiple('items', $this->renderClassItem($oClass));
+		// 	foreach($oClass->getClassTeachersOrdered() as $i => $oClassTeacher) {
+		// 		if($i === 0) {
+		// 			$oItemTemplate->replaceIdentifierMultiple('teachers', TagWriter::quickTag('a', array('href' => LinkUtil::link($oClassTeacher->getTeamMember()->getLink($this->oTeacherPage))), $oClassTeacher->getTeamMember()->getFullName()));
+		// 		}
+		// 	}
+		// }
 		return $oItemTemplate;
 	}
 

@@ -10,10 +10,7 @@ class SubjectNavigationItem extends VirtualNavigationItem {
 		$oData = new stdClass();
 		$oData->id = $iId;
 		$oData->mode = $sMode;
-		if($sTitle === null) {
-			$sTitle = $sLinkText;
-		}
-		$this->bIsFolder = $bIsFolder;
+		$sTitle = $sLinkText;
 		$this->bIsVisible = $bIsVisible;
 		parent::__construct(get_class(), $sName, $sTitle, $sLinkText, $oData);
 	}
@@ -22,8 +19,8 @@ class SubjectNavigationItem extends VirtualNavigationItem {
 		return $this->bIsVisible;
 	}
 
-	public static function create($sName, $sLinkText, $iId, $sMode, $bIsFolder = false) {
-		return new SubjectNavigationItem($sName, $sLinkText, $iId, $sMode, $bIsFolder);
+	public static function create($sName, $sLinkText, $iId, $sMode, $bIsVisible = false) {
+		return new SubjectNavigationItem($sName, $sLinkText, $iId, $sMode, $bIsVisible);
 	}
 
 	public function setIndexed($bIsIndexed) {

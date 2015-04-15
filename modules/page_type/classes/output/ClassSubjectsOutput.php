@@ -22,7 +22,7 @@ class ClassSubjectsOutput extends ClassOutput {
 	private function renderSubjects($oTemplate) {
 		$oTemplate->replaceIdentifier('title', "Fächerübersicht");
 
-		$oItemPrototype = $this->oPageType->constructTemplate('subject_class_item');
+		$oItemPrototype = $this->oPageType->constructTemplate('class_subject_class_item');
 		foreach($this->oClass->getSubjectClasses() as $oClass) {
 			$oItemTemplate = clone $oItemPrototype;
 			$oItemTemplate->replaceIdentifier('class_name', $oClass->getName());

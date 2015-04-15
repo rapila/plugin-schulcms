@@ -39,12 +39,20 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 
 	public function display(Template $oTemplate, $bIsPreview = false) {
 		$sMode = 'list';
+		if($this->sClassType === 'subject') {
+			$sMode = 'subject_list';
+		}
 
-		if($this->oNavigationItem instanceof ClassNavigationItem) {
+		if($this->oNavigationItem instanceof ClassNavigationItem || $this->oNavigationItem instanceof SubjectNavigationItem) {
 			$sMode = $this->oNavigationItem->getMode();
 		}
 		// Caching?
-		$sClassName = 'Class'.StringUtil::camelize($sMode, true).'Output';
+		if($sMode === 'subject') {
+			$sClassName = StringUtil::camelize($sMode, true).'Output';
+		} else {
+			$sClassName = 'Class'.StringUtil::camelize($sMode, true).'Output';
+		}
+		ErrorHandler::log('NavigationItem', $sMode, $sClassName, $this->oNavigationItem->getName());
 		// $sClassName = 'ClassListBySubjectsOutput';
 		$oOutput = new $sClassName($this->oNavigationItem, $this);
 

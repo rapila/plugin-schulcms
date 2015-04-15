@@ -1,0 +1,12 @@
+<div>
+	<h3><a href="{{detail_link_subject}}">{{subject_name}} <span>{{class_name}}</span></a></h3>
+	<div><a href="{{detail_link_teacher}}" title="{{writeString=team_member.link_to}} {{teacher_name}}">{{teacher_name}}</a></div>
+	<div class="content">{{identifierContext=start;name=news}}
+		<div class="news">{{news}}</div>{{identifierContext=end;name=news}}{{identifierContext=start;name=documents}}
+		<div class="documents">{{documents}}</div>{{identifierContext=end;name=documents}}{{identifierContext=start;name=links}}
+		<div class="links">{{links}}</div>{{identifierContext=end;name=links}}
+	</div>
+	<div class="context">
+		{{events}}
+	</div>
+</div>
