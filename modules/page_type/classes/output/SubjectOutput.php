@@ -27,7 +27,7 @@ class SubjectOutput extends ClassOutput {
 		// add more identifiers for flexibility if necessary
 		$oItemTemplate->replaceIdentifier('id', $oClass->getId());
 		$oItemTemplate->replaceIdentifier('name', $oClass->getSubjectClassName(true));
-		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getLink($this->oPage)));
+		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link(array_merge($this->oNavigationItem->getLink(),array($oClass->getSlug()))));
 		$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('class.view_detail').' '.$oClass->getUnitName());
 		$oItemTemplate->replaceIdentifier('count_students', $oClass->countStudentsByUnitName());
 

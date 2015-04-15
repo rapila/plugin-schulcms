@@ -8,19 +8,22 @@ class ClassesFilterModule extends FilterModule {
 			$sDisplayType = @$aOptions['display_type'];
 			$sClassType = @$aOptions['class_type'];
 
-			// render subject & subject classes items
+			//Render subjects or school classes
 			if($sClassType === 'subject') {
 				$oQuery = SubjectQuery::create()->filterByHasClasses()->select(array('Id', 'Slug', 'Name'));
 				foreach($oQuery->find() as $aData) {
 					$oNavigationItem->addChild(SubjectNavigationItem::create($aData['Slug'], $aData['Name'], $aData['Id'], $sClassType));
 				}
 			} else {
-				$this->renderClassNavigationItems($oNavigationItem, $sDisplayType);
+				$aClasses = SchoolClassQuery::create()->filterByClassTypeYearAndSchool(null)->filterBySubjectId(null, Criteria::ISNULL)->find();
+				$this->renderClassNavigationItems($oNavigationItem, $aClasses, $sDisplayType);
 			}
 		}
 
+		// Render subject class navigation items
 		if($oNavigationItem instanceof SubjectNavigationItem) {
-			$this->renderClassNavigationItems($oNavigationItem, $oNavigationItem->getMode());
+			$oSubject = SubjectQuery::create()->findPk($oNavigationItem->getId());
+			$this->renderClassNavigationItems($oNavigationItem, $oSubject->getSchoolClasses(), $oNavigationItem->getMode());
 		}
 
 		if(!($oNavigationItem instanceof ClassNavigationItem)) {
@@ -40,14 +43,8 @@ class ClassesFilterModule extends FilterModule {
 		}
 	}
 
-	private function renderClassNavigationItems($oNavigationItem, $sDisplayType, $bSubjectClasses=false) {
-		$oQuery = SchoolClassQuery::create()->filterByClassTypeYearAndSchool(null);
-		if(!$bSubjectClasses) {
-			$oQuery->filterBySubjectId(null, Criteria::ISNULL);
-		} else {
-			$oQuery->filterBySubjectId(null, Criteria::ISNOTNULL);
-		}
-		foreach($oQuery->find() as $oClass) {
+	private function renderClassNavigationItems($oNavigationItem, $aClasses, $sDisplayType) {
+		foreach($aClasses as $oClass) {
 			$oNavItem = new ClassNavigationItem($oClass->getSlug(), $oClass->getFullClassName().' Home', null, 'root', $sDisplayType, $oClass->getUnitName(), true, false);
 			$oNavigationItem->addChild($oNavItem);
 		}

@@ -47,7 +47,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 			$sMode = $this->oNavigationItem->getMode();
 		}
 		// Caching?
-		if($sMode === 'subject') {
+		if(StringUtil::startsWith($sMode, 'subject')) {
 			$sClassName = StringUtil::camelize($sMode, true).'Output';
 		} else {
 			$sClassName = 'Class'.StringUtil::camelize($sMode, true).'Output';
