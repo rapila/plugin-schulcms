@@ -61,6 +61,9 @@ class ClassesFilterModule extends FilterModule {
 		if($oNavigationItem->getDisplayType() === 'full') {
 			$oNavigationItem->addChild(ClassNavigationItem::create('materialien', 'Materialien', $oClass, self::CLASS_MATERIALS_IDENTIFIER));
 		}
+		if($oNavigationItem->getDisplayType() === 'location') {
+			$oNavigationItem->addChild(ClassNavigationItem::create('standort', 'Standort', $oClass, self::CLASS_LOCATION_IDENTIFIER));
+		}
 		$oNavigationItem->addChild(ClassNavigationItem::create('feed', 'RSS-Feed', $oClass, 'feed')->setIndexed(false));
 	}
 

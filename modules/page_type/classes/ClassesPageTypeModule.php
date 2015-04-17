@@ -90,7 +90,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 
 	public function listClassTypes() {
 		$aOptions = array();
-		foreach(array('standard' , 'subject') as $sKey) {
+		foreach(array('standard' , 'subject', 'location') as $sKey) {
 			$aOptions[$sKey] = StringPeer::getString('classes.class_type.'.$sKey);
 		}
 		return WidgetJsonFileModule::jsonOrderedObject($aOptions);
