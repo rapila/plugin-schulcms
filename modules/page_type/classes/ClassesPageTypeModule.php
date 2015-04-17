@@ -47,12 +47,11 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 			$sMode = $this->oNavigationItem->getMode();
 		}
 		// Caching?
-		if(StringUtil::startsWith($sMode, 'subject')) {
+		if(!$this->oNavigationItem instanceof ClassNavigationItem && StringUtil::startsWith($sMode, 'subject')) {
 			$sClassName = StringUtil::camelize($sMode, true).'Output';
 		} else {
 			$sClassName = 'Class'.StringUtil::camelize($sMode, true).'Output';
 		}
-		ErrorHandler::log('NavigationItem', $sMode, $sClassName, $this->oNavigationItem->getName());
 		// $sClassName = 'ClassListBySubjectsOutput';
 		$oOutput = new $sClassName($this->oNavigationItem, $this);
 
