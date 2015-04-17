@@ -1,6 +1,10 @@
 <?php
 class ClassesFilterModule extends FilterModule {
 
+	const CLASS_EVENTS_IDENTIFIER = 'events';
+	const CLASS_LOCATION_IDENTIFIER = 'location';
+	const CLASS_MATERIALS_IDENTIFIER = 'materials';
+
 	public function onNavigationItemChildrenRequested($oNavigationItem) {
 		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getMe()->getPageType() === 'classes') {
 			$oPageType = PageTypeModule::getModuleInstance('classes', $oNavigationItem->getMe(), $oNavigationItem);
@@ -52,12 +56,10 @@ class ClassesFilterModule extends FilterModule {
 
 	private function renderClassPageItems($oNavigationItem) {
 		$oClass = $oNavigationItem->getClass();
-		$oNavigationItem->addChild(ClassNavigationItem::create('anlaesse', 'Anlässe', $oClass, SchoolClass::CLASS_EVENTS_IDENTIFIER));
+		$oNavigationItem->addChild(ClassNavigationItem::create('anlaesse', 'Anlässe', $oClass, self::CLASS_EVENTS_IDENTIFIER));
 		// only display if display_mode is "full"
 		if($oNavigationItem->getDisplayType() === 'full') {
-			$oNavigationItem->addChild(ClassNavigationItem::create('faecher', 'Fächer', $oClass, SchoolClass::CLASS_SUBJECTS_IDENTIFIER));
-			$oNavigationItem->addChild(ClassNavigationItem::create('dokumente', 'Dokumente', $oClass, SchoolClass::CLASS_DOCUMENTS_IDENTIFIER));
-			$oNavigationItem->addChild(ClassNavigationItem::create('links', 'Links', $oClass, SchoolClass::CLASS_LINKS_IDENTIFIER));
+			$oNavigationItem->addChild(ClassNavigationItem::create('materialien', 'Materialien', $oClass, self::CLASS_MATERIALS_IDENTIFIER));
 		}
 		$oNavigationItem->addChild(ClassNavigationItem::create('feed', 'RSS-Feed', $oClass, 'feed')->setIndexed(false));
 	}

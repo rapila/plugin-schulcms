@@ -125,22 +125,6 @@ class ClassHomeOutput extends ClassOutput {
 		}
 	}
 
-	private function renderTeachersAndSubjects($oTemplate) {
-		$oTemplate->replaceIdentifier('subject_teasers_title', StringPeer::getString('class_detail.heading.teachers_and_subjects'));
-		$oQuery = ClassTeacherQuery::create()->filterByUnitFromClass($this->oClass, false)->useTeamMemberQuery()->orderByLastName()->orderByFirstName()->endUse();
-		$oRowPrototype = $this->oPageType->constructTemplate('subject_teasers');
-
-		foreach($oQuery->find() as $oClassTeacher) {
-			$oTeacher = $oClassTeacher->getTeamMember();
-			$oRowTemplate = clone $oRowPrototype;
-			$oRowTemplate->replaceIdentifier('detail_link_teacher', LinkUtil::link($oTeacher->getLink($this->oTeacherPage)));
-			$oRowTemplate->replaceIdentifier('teacher_name', $oTeacher->getFullName());
-			$oRowTemplate->replaceIdentifier('subject_name', $oClassTeacher->getFunctionName());
-			$oRowTemplate->replaceIdentifier('detail_link_subject', '#');
-			$oTemplate->replaceIdentifierMultiple('subject_teasers', $oRowTemplate);
-		}
-	}
-
 	private function renderRecentReport($oTemplate) {
 		$oEvent = FrontendEventQuery::create()->filterBySchoolClass($this->oClass)->joinEventDocument()->orderByUpdatedAt(Criteria::DESC)->findOne();
 		if($oEvent === null) {
