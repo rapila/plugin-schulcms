@@ -7,6 +7,7 @@ Widget.types.event_detail = {
 
 		this.event_text = this._element.find('div.event_text');
 		this.review_text = this._element.find('div.event_review');
+		this.is_common_label = this._element.find('label[for="is_common"]');
 
 		// Format date field
 		this._element.find("input[name^='date_']").datepicker({
@@ -25,15 +26,7 @@ Widget.types.event_detail = {
 			this._element.find('div.event_type_elements').hide();
 		}
 
-		var is_common_label = this._element.find('label[for="is_common"]');
-		var is_common_school_event_text = '{{writeString=wns.event.is_common_school_event}}';
-		var is_common_class_event_text = '{{writeString=wns.event.is_common_class_event}}';
-		if(!this.school_class_is_predefined()) {
-			is_common_label.text(is_common_school_event_text);
-		} else {
-			is_common_label.text(is_common_class_event_text);
-		}
-
+		this.update_is_common_label();
 		// School class selection is only available if not predefined
 		if(!this.school_class_is_predefined()) {
 			this.school_class_dropdown = this._element.find("select[name='school_class_id']");
@@ -41,11 +34,7 @@ Widget.types.event_detail = {
 				widget.settings.initial_selection = _this.settings.predefined_school_class_id || '';
 				// hide if no classes are available
 			}, jQuery.noop).change(function() {
-				if(jQuery.isNumeric(jQuery(this).val())) {
-					is_common_label.text(is_common_class_event_text);
-				} else {
-					is_common_label.text(is_common_school_event_text);
-				}
+				_this.update_is_common_label(jQuery.isNumeric(jQuery(this).val()));
 			});
 		} else {
 			this._element.find('div.school_class_elements').hide();
@@ -92,6 +81,17 @@ Widget.types.event_detail = {
 		}.bind(_this));
 	},
 
+	update_is_common_label: function(has_class_event_label) {
+		has_class_event_label = has_class_event_label || this.school_class_is_predefined();
+		var is_common_school_event_text = '{{writeString=wns.event.is_common_school_event}}';
+		var is_common_class_event_text = '{{writeString=wns.event.is_common_class_event}}';
+		if(has_class_event_label) {
+			this.is_common_label.text(is_common_class_event_text);
+		} else {
+			this.is_common_label.text(is_common_school_event_text);
+		}
+	},
+
 	init_textareas: function() {
 		var _this = this;
 		if(!this.event_text.didPrepareWidget()) {
@@ -133,6 +133,7 @@ Widget.types.event_detail = {
 			this._element.find(".updated_info").text(data.UpdatedInfo);
 			this._element.find(".created_info").text(data.CreatedInfo);
 			this._element.find(".detail_id").text(data.Id);
+			this.update_is_common_label(data.SchoolClassId);
 
 			if(!this.school_class_is_predefined()) {
 				this.school_class_dropdown.ensureWidget(function(widget) {

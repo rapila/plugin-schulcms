@@ -186,6 +186,12 @@ class Event extends BaseEvent {
 		return $aResult;
 	}
 
+	public function getClassName() {
+		if($this->getSchoolClass()) {
+			return $this->getSchoolClass()->getClassName();
+		}
+	}
+
 	public function getDateStartTimeStamp() {
 		return (int)$this->getDateStart('U');
 	}
@@ -196,6 +202,5 @@ class Event extends BaseEvent {
 		}
 		return parent::save($con);
 	}
-
 
 }

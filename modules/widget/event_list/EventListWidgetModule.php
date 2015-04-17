@@ -24,7 +24,7 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 	}
 
 	public function getColumnIdentifiers() {
-		return array('id', 'title', 'body_short_truncated', 'date_start_formatted', 'is_active', 'is_common', 'has_bericht', 'has_images', 'delete');
+		return array('id', 'title', 'body_short_truncated', 'date_start_formatted', 'is_active', 'is_common', 'class_name', 'has_bericht', 'has_images', 'delete');
 	}
 
 	public function getMetadataForColumn($sColumnIdentifier) {
@@ -44,6 +44,9 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 				break;
 			case 'is_active':
 				$aResult['heading'] = StringPeer::getString('wns.event.is_online');
+				break;
+			case 'class_name':
+				$aResult['heading'] = StringPeer::getString('wns.event.is_class_event');
 				break;
 			case 'has_images':
 				$aResult['heading'] = StringPeer::getString('event.images');
@@ -68,6 +71,9 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 		}
 		if($sColumnIdentifier === 'body_short_truncated') {
 			return EventPeer::BODY_SHORT;
+		}
+		if($sColumnIdentifier === 'class_name') {
+			return EventPeer::SCHOOL_CLASS_ID;
 		}
 		return null;
 	}
