@@ -82,17 +82,19 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 
 	public function listDisplayTypes() {
 		$aOptions = array();
-		foreach(array('default' , 'full') as $sKey) {
+		foreach(array('default' , 'full', 'location') as $sKey) {
 			$aOptions[$sKey] = StringPeer::getString('classes.display_type.'.$sKey);
 		}
+		asort($aOptions);
 		return WidgetJsonFileModule::jsonOrderedObject($aOptions);
 	}
 
 	public function listClassTypes() {
 		$aOptions = array();
-		foreach(array('standard' , 'subject', 'location') as $sKey) {
+		foreach(array('standard' , 'subject') as $sKey) {
 			$aOptions[$sKey] = StringPeer::getString('classes.class_type.'.$sKey);
 		}
+		asort($aOptions);
 		return WidgetJsonFileModule::jsonOrderedObject($aOptions);
 	}
 
