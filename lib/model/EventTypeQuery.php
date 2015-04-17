@@ -5,5 +5,8 @@
  */
 class EventTypeQuery extends BaseEventTypeQuery {
 
+	public function excludeExternallyManaged() {
+		return $this->filterByIsExternallyManaged(false);
+	}
 }
 
