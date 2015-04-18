@@ -45,6 +45,13 @@ class ClassHomeOutput extends ClassOutput {
 	private function renderClassInfo($oTemplate) {
 		// Students count info
 		$oTemplate->replaceIdentifier('count_students', $this->oClass->countStudentsByUnitName());
+		if($this->oClass->getAncestorClassId() != null) {
+			$oAncestorClass = SchoolClassQuery::create()->findPk($this->oClass->getAncestorClassId());
+			if($oAncestorClass) {
+				$oLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oAncestorClass->getLink())), $oAncestorClass->getClassNameWithYear());
+				$oTemplate->replaceIdentifier('ancestor_class_link', $oLink);
+			}
+		}
 
 		// Class portrait
 		$oPortrait = $this->oClass->getDocumentRelatedByClassPortraitId();
@@ -134,25 +141,27 @@ class ClassHomeOutput extends ClassOutput {
 		if(!$oImage) {
 			return;
 		}
-		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($this->getClassEventLink($oEvent)));
+		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink()));
 		$oTemplate->replaceIdentifier('detail_link_title', $oEvent->getTitle());
 		$oTemplate->replaceIdentifier('recent_report_image', TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => 300)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle())));
 	}
 
-	private function getClassEventLink($oEvent) {
-		return array_merge($this->oNavigationItem->getLink(), explode('-', $oEvent->getDateStart('Y-n-j')), array($oEvent->getSlug()));
-	}
-
 	private function renderUpcomingEvents($oTemplate, $iCount = 10) {
 		$aEvents = FrontendEventQuery::create()->filterBySchoolClass($this->oClass)->upcomingOrOngoing()->orderByUpdatedAt()->limit($iCount)->find();
-		$oTemplate->replaceIdentifier('events_overview', EventsFrontendModule::renderOverviewList($aEvents));
+		$oTemplate->replaceIdentifier('events_overview', EventsFrontendModule::renderOverviewList($aEvents, 100, StringPeer::getString('class.no_future_events_available')));
 	}
 
 	private function renderDocumentsAndLinks($oTemplate) {
 		// Display documents if available
 		$aDocuments = $this->oClass->getClassDocuments();
-		if(count($aDocuments) > 0) {
+		$aLinks = $this->oClass->getClassLinks();
+		$iDocumentCount = count($aDocuments);
+		$iLinkCount = count($aLinks);
+		$iContainerClass = $iLinkCount === 0 || $iDocumentCount === 0 ? ' single_container' : '';
+
+		if($iDocumentCount > 0) {
 			$oTemplate->replaceIdentifier('documents_title', StringPeer::getString('class_detail.heading.documents'));
+			$oTemplate->replaceIdentifier('single_container_class', $iContainerClass);
 			$oDocPrototype = $this->oPageType->constructTemplate('document');
 			foreach($aDocuments as $oClassDocument) {
 				$oDocument = $oClassDocument->getDocument();
@@ -164,9 +173,9 @@ class ClassHomeOutput extends ClassOutput {
 			}
 		}
 		// Display links if available
-		$aLinks = $this->oClass->getClassLinks();
-		if(count($aLinks) > 0) {
+		if($iLinkCount > 0) {
 			$oTemplate->replaceIdentifier('links_title', StringPeer::getString('class_detail.heading.links'));
+			$oTemplate->replaceIdentifier('single_container_class', $iContainerClass);
 			$oLinkPrototype = $this->oPageType->constructTemplate('link');
 			foreach($aLinks as $oClassLink) {
 				$oLink = $oClassLink->getLink();

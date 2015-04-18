@@ -3,19 +3,21 @@
 	<div class="class_info info-box">
 		<div class="main_info">
 			<h4>{{writeString=class_detail.heading.teachers}}</h4>
-			<p>{{class_teacher}}</p>
+			<p>{{class_teacher}}</p>{{identifierContext=start;name=ancestor_class_link}}
+			<h4>{{writeString=class_detail.heading.ancestor_class}}</h4>
+			{{ancestor_class_link}}{{identifierContext=end;name=ancestor_class_link}}
 		</div>
 		<div>{{schedule}}<br />
 			{{schedule_extra}}</div>
 	</div>
 </div>
 <span>{{class_portrait_label}}</span>
-	{{news}}
-<div class="documents">
+	{{news}}{{identifierContext=start;name=document_title}}
+<div class="documents{{single_container_class}}">
 	<h2>{{documents_title}}</h2>
 	{{documents}}
-</div>
-<div class="links">
+</div>{{identifierContext=end;name=document_title}}{{identifierContext=start;name=links_title}}
+<div class="links{{single_container_class}}">
 	<h2>{{links_title}}</h2>
 	{{links}}
-</div>
+</div>{{identifierContext=end;name=links_title}}

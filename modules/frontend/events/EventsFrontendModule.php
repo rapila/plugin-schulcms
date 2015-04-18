@@ -51,7 +51,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		return self::renderOverviewList($oQuery->find());
 	}
 
-	public static function renderOverviewList($aEvents, $iTruncate = 100) {
+	public static function renderOverviewList($aEvents, $iTruncate = 100, $sNoEventMessage = null) {
 		$oTemplate = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'overview_list', false);
 		$oItemPrototype = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'overview_item', false);
 		$oDatePrototype = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'date', false);
@@ -66,6 +66,9 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink($oEventPage)));
 			$oItemTemplate->replaceIdentifier('description', self::getContentForFrontend($oEvent->getBodyShort(), true, $iTruncate));
 			$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
+		}
+		if(count($aEvents) === 0 && $sNoEventMessage) {
+			$oTemplate->replaceIdentifier('item', TagWriter::quickTag('p', array(), $sNoEventMessage));
 		}
 		return $oTemplate;
 	}
