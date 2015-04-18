@@ -45,11 +45,21 @@ class ClassHomeOutput extends ClassOutput {
 	private function renderClassInfo($oTemplate) {
 		// Students count info
 		$oTemplate->replaceIdentifier('count_students', $this->oClass->countStudentsByUnitName());
+
+		// Display ancestor class link
 		if($this->oClass->getAncestorClassId() != null) {
 			$oAncestorClass = SchoolClassQuery::create()->findPk($this->oClass->getAncestorClassId());
 			if($oAncestorClass) {
 				$oLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oAncestorClass->getLink())), $oAncestorClass->getClassNameWithYear());
 				$oTemplate->replaceIdentifier('ancestor_class_link', $oLink);
+			}
+		}
+		// Display successor class link
+		if(!$this->oClass->isCurrent()) {
+			$oChildPage = SchoolClassQuery::create()->findOneByAncestorClassId($this->oClass->getId());
+			if($oAncestorClass) {
+				$oLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oAncestorClass->getLink())), $oAncestorClass->getClassNameWithYear());
+				$oTemplate->replaceIdentifier('successor_class_link', $oLink);
 			}
 		}
 
