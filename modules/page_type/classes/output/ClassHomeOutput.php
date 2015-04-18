@@ -122,6 +122,11 @@ class ClassHomeOutput extends ClassOutput {
 					$oRowTemplate->replaceIdentifier('teacher_name', $oTeacher->getFullName());
 				}
 			}
+			$oRowTemplate->replaceIdentifier('count_news', $oClass->countNews());
+			$oRowTemplate->replaceIdentifier('count_events', $oClass->getCountEvents());
+			$oRowTemplate->replaceIdentifier('count_documents', $oClass->getCountDocuments());
+			$oRowTemplate->replaceIdentifier('count_links', $oClass->getCountLinks());
+
 			$aHasContents[$oClass->getId()]['text'] = $oClass->latestUpdatedNews();
 			$aHasContents[$oClass->getId()]['events'] = $oClass->latestUpdatedEvent();
 			$aHasContents[$oClass->getId()]['documents'] = $oClass->latestUpdatedDocument();

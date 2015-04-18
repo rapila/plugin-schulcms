@@ -153,6 +153,14 @@ class SchoolClass extends BaseSchoolClass {
 		return $iCount;
 	}
 
+	public function getCountDocuments() {
+		$iCount = $this->countClassDocuments();
+		if($iCount === 0) {
+			return '-';
+		}
+		return $iCount;
+	}
+
 	public function countNews() {
 		return $this->countNewss();
 	}
