@@ -6,6 +6,7 @@
 class SchoolClass extends BaseSchoolClass {
 
 	private static $CLASS_PAGE;
+	private static $SUBJECT_CLASS_PAGE;
 
 	public function getClassTeachersOrdered($bIsClassTeacher = true) {
 		$oCriteria = new Criteria();
@@ -23,7 +24,7 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getClassNameWithYear() {
-		return $this->getClassName(). '('.$this->getYear().')';
+		return $this->getClassName(). ' ('.$this->getYear().')';
 	}
 
 	public function getSubjectClassName($bFrontend = true) {
@@ -75,6 +76,7 @@ class SchoolClass extends BaseSchoolClass {
 	public function getLink($oClassesPage = null) {
 		if($this->getSubjectId() != null) {
 			return null;
+			// return $this->getSubjectClassLink();
 		}
 		if($oClassesPage === null && self::$CLASS_PAGE === null) {
 			self::$CLASS_PAGE = PageQuery::create()->filterByPageType('classes')->findOne();
@@ -89,6 +91,23 @@ class SchoolClass extends BaseSchoolClass {
 			array_push($aParams, $this->getYear());
 		}
 		return array_merge(self::$CLASS_PAGE->getFullPathArray(), $aParams);
+	}
+
+	public function getSubjectClassLink($oSubjectClass = null) {
+		if($oSubjectClass === null && self::$SUBJECT_CLASS_PAGE === null) {
+			self::$SUBJECT_CLASS_PAGE = PageQuery::create()->filterByPageType('subjects')->findOne();
+		} elseif($oSubjectClass) {
+			self::$SUBJECT_CLASS_PAGE = $oSubjectClass;
+		}
+		if(!self::$SUBJECT_CLASS_PAGE) {
+			return null;
+		}
+		$aParams = array($this->getSlug());
+		if(!$this->isCurrent()) {
+			// array_push($aParams, $this->getYear());
+		}
+		return array_merge(self::$SUBJECT_CLASS_PAGE->getFullPathArray(), $aParams);
+
 	}
 
 	public function getLinkToClassSchedule() {
