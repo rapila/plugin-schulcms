@@ -31,13 +31,13 @@ class ClassListOutput extends ClassOutput {
 			$oItemTemplate = clone $oOptionPrototype;
 			$oItemTemplate->replaceIdentifier('id', '');
 			$oItemTemplate->replaceIdentifier('name', StringPeer::getString('classes.filter.class_type.default'));
-			$oTemplate->replaceIdentifierMultiple('filters', $oItemTemplate, null, Template::NO_NEWLINE);
+			$oTemplate->replaceIdentifierMultiple('filters', $oItemTemplate, null, Template::NO_NEWLINE|Template::NO_NEW_CONTEXT);
 
 			foreach($aClassTypes as $sClassType) {
 				$oItemTemplate = clone $oOptionPrototype;
 				$oItemTemplate->replaceIdentifier('id', StringUtil::normalizeToASCII($sClassType));
 				$oItemTemplate->replaceIdentifier('name', $sClassType);
-				$oTemplate->replaceIdentifierMultiple('filters', $oItemTemplate, null, Template::NO_NEWLINE);
+				$oTemplate->replaceIdentifierMultiple('filters', $oItemTemplate, null, Template::NO_NEWLINE|Template::NO_NEW_CONTEXT);
 			}
 		}
 		return $oTemplate;
