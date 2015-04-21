@@ -19,6 +19,9 @@ class NewsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 		if($aData['limit']) {
 			$oNewsQuery->limit($aData['limit']);
 		}
+		if($aData['display_mode'] ==='list_without_first') {
+			$oNewsQuery->offset(1);
+		}
 		return WidgetJsonFileModule::jsonBaseObjects($oNewsQuery->current()->find(), array('id', 'headline'));
 	}
 
