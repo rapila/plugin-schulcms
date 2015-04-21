@@ -30,7 +30,7 @@ jQuery(document).ready(function() {
 			});
 		}, 'n', true).add_button('add-new-item', function() {
 			Widget.create('sidebar_input', function(widget) {
-				widget.add_new_sidebar_input("{{writeString=wns.event_type.default_name}}", 'EventType', sidebar, 'rapila-event_type_changed');
+				widget.add_new_sidebar_input("{{writeString=wns.event_type.default_name}}", 'EventType', sidebar, 'schulcms-event_type_changed');
 			});
 		}).add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
 			if(content_list.setSearch(search)) {
@@ -45,7 +45,7 @@ jQuery(document).ready(function() {
 			if(rowData.event_type_id) {
 				var remove_active_event_type = function remove_active_event_type() {
 					sidebar.delete_row(row);
-					Widget.fire('rapila-event_type_changed', {removed: true, id: rowData.event_type_id});
+					Widget.fire('schulcms-event_type_changed', {removed: true, id: rowData.event_type_id});
 				};
 				content_list.getOption('eventTypeHasEvents', rowData.event_type_id, function(has_events) {
 					if(has_events) {
@@ -71,7 +71,7 @@ jQuery(document).ready(function() {
 			});
 		}).disable();
 
-		Widget.handle('rapila-link_category_changed', function(event, info) {
+		Widget.handle('schulcms-event_type_changed', function(event, info) {
 			if(info.updated) {
 				sidebar.update_row(sidebar.row_from_row_data({event_type_id: info.id}));
 			} else if (info.removed) {
