@@ -24,6 +24,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			$oItemTemplate = clone $oItemPrototype;
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oTeamMember->getLink($this->oPage)));
 			$oItemTemplate->replaceIdentifier('name', $oTeamMember->getFullNameInverted());
+			$oItemTemplate->replaceIdentifier('email', TagWriter::getEmailLinkWriter($oTeamMember->getEmailG()), null, Template::NO_HTML_ESCAPE);
 			$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.team_member.link_title_prefix').$oTeamMember->getFullName());
 			$oItemTemplate->replaceIdentifier('first_function_name', $oTeamMember->getFirstTeamMemberFunctionName());
 
