@@ -4,6 +4,9 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 
 	public function __construct(Page $oPage = null, NavigationItem $oNavigationItem = null) {
 		parent::__construct($oPage, $oNavigationItem);
+		if(Settings::getSetting("frontend", "protect_email_addresses", false)) {
+			ResourceIncluder::defaultIncluder()->addResource('e-mail-defuscate.js');
+		}
 		$this->oClassPage = PageQuery::create()->active()->filterByPageType('classes')->findOne();
 		$this->aFunctionGroupIds = explode(',', $this->oPage->getPagePropertyValue('team_members:function_group_ids', ''));
 	}
