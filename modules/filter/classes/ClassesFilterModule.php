@@ -39,7 +39,7 @@ class ClassesFilterModule extends FilterModule {
 			$sSlug = $oNavigationItem->getName();
 			$oCriteria = SchoolClassQuery::create()->filterByClassTypeYearAndSchool()->filterBySlug($sSlug)->filterByHasStudents()->orderByYear(Criteria::DESC);
 			foreach($oCriteria->find() as $oClass) {
-				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), $oClass->getUnitName(), $oClass, 'home', $oNavigationItem->getDisplayType(), $oClass->getFullClassName()));
+				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), $oClass->getFullClassName(), $oClass, 'home', $oNavigationItem->getDisplayType(), $oClass->getFullClassName()));
 			}
 		} else if($oNavigationItem->getMode() === 'home') {
 			// Render specific class year subpage items
@@ -49,7 +49,7 @@ class ClassesFilterModule extends FilterModule {
 
 	private function renderClassNavigationItems($oNavigationItem, $aClasses, $sDisplayType) {
 		foreach($aClasses as $oClass) {
-			$oNavItem = new ClassNavigationItem($oClass->getSlug(), $oClass->getFullClassName().' Home', null, 'root', $sDisplayType, $oClass->getUnitName(), true, false);
+			$oNavItem = new ClassNavigationItem($oClass->getSlug(), $oClass->getFullClassName().' Home', null, 'root', $sDisplayType, $oClass->getFullClassName(), true, false);
 			$oNavigationItem->addChild($oNavItem);
 		}
 	}

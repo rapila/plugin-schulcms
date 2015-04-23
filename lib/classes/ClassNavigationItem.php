@@ -12,7 +12,7 @@ class ClassNavigationItem extends VirtualNavigationItem {
 		$oData->mode = $sMode;
 		$oData->display_type = $sDisplayType;
 		if($sTitle === null) {
-			$sTitle = $oSchoolClass->getUnitName().': '.$sLinkText;
+			$sTitle = $oSchoolClass->getFullClassName().': '.$sLinkText;
 		}
 		$this->bIsFolder = $bIsFolder;
 		$this->bIsVisible = $bIsVisible;
