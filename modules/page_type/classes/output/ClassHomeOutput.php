@@ -148,7 +148,7 @@ class ClassHomeOutput extends ClassOutput {
 	}
 
 	private function renderRecentReport($oTemplate) {
-		$oEvent = FrontendEventQuery::create()->filterBySchoolClass($this->oClass)->joinEventDocument()->orderByUpdatedAt(Criteria::DESC)->findOne();
+		$oEvent = FrontendEventQuery::create()->past()->filterBySchoolClass($this->oClass)->joinEventDocument()->orderByUpdatedAt(Criteria::DESC)->findOne();
 		if($oEvent === null) {
 			return;
 		}
