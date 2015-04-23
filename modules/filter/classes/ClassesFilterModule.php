@@ -39,7 +39,7 @@ class ClassesFilterModule extends FilterModule {
 			$sSlug = $oNavigationItem->getName();
 			$oCriteria = SchoolClassQuery::create()->filterByClassTypeYearAndSchool()->filterBySlug($sSlug)->filterByHasStudents()->orderByYear(Criteria::DESC);
 			foreach($oCriteria->find() as $oClass) {
-				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), 'Klasse '.$oClass->getUnitName().' Home', $oClass, 'home', $oNavigationItem->getDisplayType(), $oClass->getFullClassName()));
+				$oNavigationItem->addChild(new ClassNavigationItem($oClass->getYear(), $oClass->getUnitName(), $oClass, 'home', $oNavigationItem->getDisplayType(), $oClass->getFullClassName()));
 			}
 		} else if($oNavigationItem->getMode() === 'home') {
 			// Render specific class year subpage items
