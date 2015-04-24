@@ -83,7 +83,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$oTemplate->replaceIdentifier('title', $oEvent->getTitle());
 		$oImage = $oEvent->getFirstImage()->getDocument();
 		if($oImage) {
-			$oTemplate->replaceIdentifier('image', TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => 264)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle())));
+			$oTemplate->replaceIdentifier('image', TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => 300)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle())));
 			return $oTemplate;
 		}
 		return null;
@@ -356,8 +356,8 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		}
 		$oGalleryTemplate = new Template('lists/gallery');
 		$oTemplateProtoType = new Template('lists/gallery_item');
-		$oTemplateProtoType->replaceIdentifier('thumbnail_size', 140);
-		$oTemplateProtoType->replaceIdentifier('full_size', 1000);
+		$oTemplateProtoType->replaceIdentifier('thumbnail_size', 160);
+		$oTemplateProtoType->replaceIdentifier('full_size', 1200);
 		foreach($aEventDocuments as $oEventDocument) {
 			if(!$oEventDocument->getDocument()) {
 				continue;
