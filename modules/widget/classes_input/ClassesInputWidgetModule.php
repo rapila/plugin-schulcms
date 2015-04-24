@@ -8,7 +8,7 @@ class ClassesInputWidgetModule extends WidgetModule {
 		$aResult = array();
 		$oQuery = SchoolClassQuery::create()->orderByName();
 		if($bWithStudentsOnly) {
-			$oQuery->filterByHasStudents();
+			$oQuery->hasStudents();
 		}
 		foreach($oQuery->select(array('Id', 'Name', 'ClassType'))->find() as $i => $aClass) {
 			$aResult[] = array('key' => $aClass['Id'], 'value' => $aClass['ClassType']. ' '. $aClass['Name']);

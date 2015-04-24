@@ -77,40 +77,31 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getLink($oClassesPage = null) {
+		if($oClassesPage === null) {
+			if(self::$CLASS_PAGE === null) {
+				self::$CLASS_PAGE = PageQuery::create()->filterByPageType('classes')->findOne();
+			}
+			$oClassesPage = self::$CLASS_PAGE;
+		}
+		if(!$oClassesPage) {
+			return null;
+		}
+		$aParams = array();
 		if($this->getSubjectId() != null) {
-			return null;
-			// return $this->getSubjectClassLink();
+			array_push($aParams, $this->getSubject()->getSlug());
 		}
-		if($oClassesPage === null && self::$CLASS_PAGE === null) {
-			self::$CLASS_PAGE = PageQuery::create()->filterByPageType('classes')->findOne();
-		} elseif($oClassesPage) {
-			self::$CLASS_PAGE = $oClassesPage;
-		}
-		if(!self::$CLASS_PAGE) {
-			return null;
-		}
-		$aParams = array($this->getSlug());
+		array_push($aParams, $this->getSlug());
 		if(!$this->isCurrent()) {
 			array_push($aParams, $this->getYear());
 		}
-		return array_merge(self::$CLASS_PAGE->getFullPathArray(), $aParams);
+		return array_merge($oClassesPage->getFullPathArray(), $aParams);
 	}
 
-	public function getSubjectClassLink($oSubjectClass = null) {
-		if($oSubjectClass === null && self::$SUBJECT_CLASS_PAGE === null) {
-			self::$SUBJECT_CLASS_PAGE = PageQuery::create()->filterByPageType('subjects')->findOne();
-		} elseif($oSubjectClass) {
-			self::$SUBJECT_CLASS_PAGE = $oSubjectClass;
+	public function getSubjectClassLink() {
+		if(self::$SUBJECT_CLASS_PAGE === null) {
+			self::$SUBJECT_CLASS_PAGE = PageQuery::create()->filterByPageType('classes')->filterByIdentifier('subjects')->findOne();
 		}
-		if(!self::$SUBJECT_CLASS_PAGE) {
-			return null;
-		}
-		$aParams = array($this->getSlug());
-		if(!$this->isCurrent()) {
-			// array_push($aParams, $this->getYear());
-		}
-		return array_merge(self::$SUBJECT_CLASS_PAGE->getFullPathArray(), $aParams);
-
+		return $this->getLink(self::$SUBJECT_CLASS_PAGE);
 	}
 
 	public function getLinkToClassSchedule() {

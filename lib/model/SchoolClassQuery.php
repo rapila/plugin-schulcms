@@ -10,9 +10,8 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 		return $this->filterByYear(SchoolPeer::getCurrentYear(), $bCurrent ? Criteria::EQUAL : Criteria::NOT_EQUAL);
 	}
 
-	public function filterByHasStudents() {
-		$this->addJoin(SchoolClassPeer::ID, ClassStudentPeer::SCHOOL_CLASS_ID, Criteria::INNER_JOIN);
-		return $this->distinct();
+	public function hasStudents() {
+		return $this->filterByStudentCount(0, Criteria::NOT_EQUAL);
 	}
 
 	public function hasTeachers($bClassTeachersOnly = false) {
@@ -34,6 +33,10 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 			$this->filterByClassType($mIncludeClassTypes, Criteria::IN);
 		}
 		return $this;
+	}
+
+	public function excludeSubjectClasses() {
+		return $this->filterBySubjectId(null, Criteria::ISNULL);
 	}
 
 	public function filterByClassTypeYearAndSchool($sClassType = null, $iYear = null, $oSchool = null) {

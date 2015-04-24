@@ -34,6 +34,6 @@ class Subject extends BaseSubject
 	}
 
 	private function getSchoolClassesQuery() {
-		return SchoolClassQuery::create()->filterBySubjectId($this->getId())->hasTeachers();
+		return SchoolClassQuery::create()->filterBySubjectId($this->getId())->hasStudents();
 	}
 }
