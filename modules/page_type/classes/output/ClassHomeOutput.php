@@ -169,7 +169,7 @@ class ClassHomeOutput extends ClassOutput {
 	private function renderDocumentsAndLinks($oTemplate) {
 		// Display documents if available
 		$aDocuments = $this->oClass->getClassDocuments();
-		$aLinks = $this->oClass->getClassLinks();
+		$aLinks = $this->oClass->getClassLinksOrdered();
 		$iDocumentCount = count($aDocuments);
 		$iLinkCount = count($aLinks);
 		$iContainerClass = $iLinkCount === 0 || $iDocumentCount === 0 ? ' single_container' : '';
@@ -192,8 +192,7 @@ class ClassHomeOutput extends ClassOutput {
 			$oTemplate->replaceIdentifier('links_title', StringPeer::getString('class_detail.heading.links'));
 			$oTemplate->replaceIdentifier('single_container_class', $iContainerClass);
 			$oLinkPrototype = $this->oPageType->constructTemplate('link');
-			foreach($aLinks as $oClassLink) {
-				$oLink = $oClassLink->getLink();
+			foreach($aLinks as $oLink) {
 				$oLinkTemplate = clone $oLinkPrototype;
 				$oLinkTemplate->replaceIdentifier('link', $oLink->getUrl());
 				$oLinkTemplate->replaceIdentifier('title', "Link öffnen");

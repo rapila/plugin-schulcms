@@ -12,12 +12,13 @@ class ClassLinksOutput extends ClassOutput {
 		}
 		$oTemplate = $this->oPageType->constructTemplate('link_list');
 		$oLinkPrototype = $this->oPageType->constructTemplate('link_list_item');
-		foreach($this->oClass->getClassLinks() as $oClassLink) {
+		foreach($this->oClass->getClassLinksOrdered() as $oLink) {
 			$oItemTemplate = clone $oLinkPrototype;
-			$oItemTemplate->replaceIdentifier('name', $oClassLink->getLink()->getName());
-			$oItemTemplate->replaceIdentifier('link', $oClassLink->getLink()->getUrl());
-			if($oClassLink->getLink()->getDescription()) {
-				$oItemTemplate->replaceIdentifier('description', $oClassLink->getLink()->getDescription());
+			// ErrorHandler::log();
+			$oItemTemplate->replaceIdentifier('name', $oLink->getName());
+			$oItemTemplate->replaceIdentifier('link', $oLink->getUrl());
+			if($oLink->getDescription()) {
+				$oItemTemplate->replaceIdentifier('description', $oLink->getDescription());
 			}
 			$oTemplate->replaceIdentifierMultiple('items', $oItemTemplate);
 		}

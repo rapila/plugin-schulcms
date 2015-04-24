@@ -219,6 +219,10 @@ class SchoolClass extends BaseSchoolClass {
 		return $this->getYear() === SchoolPeer::getCurrentYear();
 	}
 
+	public function getClassLinksOrdered() {
+		return LinkQuery::create()->useClassLinkQuery()->filterBySchoolClassId($this->getId())->endUse()->orderBySort()->find();
+	}
+
 	public function isClassLink($iLinkId) {
 		$iLinkId = (int) $iLinkId;
 		foreach($this->getClassLinks() as $oClassLink) {
