@@ -19,7 +19,11 @@ abstract class ClassOutput {
 	}
 
 	public abstract function renderContent();
-	public abstract function renderContext();
+	public function renderContext() {}
+
+	protected function getClass() {
+		return $this->oNavigationItem->getClass();
+	}
 }
 
 foreach(ResourceFinder::create()->addPath(DIRNAME_MODULES, 'page_type', 'classes', 'output')->addFilePath()->baseFirst()->find() as $sOutputPath) {
@@ -53,7 +57,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 			$sClassName = 'Class'.StringUtil::camelize($sMode, true).'Output';
 		}
 		// $sClassName = 'ClassListBySubjectsOutput';
-		$oOutput = new $sClassName($this->oNavigationItem, $this);
+		$oOutput = new $sClassName($this->oNavigationItem, $this, $oTemplate);
 
 		$mContent = $oOutput->renderContent();
 		$mContext = $oOutput->renderContext();
@@ -102,6 +106,10 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 		$aResult['display_type'] = $this->getDisplayType();
 		$aResult['class_type'] = $this->getClassType();
 		return $aResult;
+	}
+
+	public function getPage() {
+		return $this->oPage;
 	}
 
 	public function getDisplayType() {
