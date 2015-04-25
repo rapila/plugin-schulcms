@@ -24,15 +24,22 @@ class EventsPageTypeModule extends PageTypeModule {
 	}
 
 	private function displayCalendar(Template $oTemplate) {
+		self::includeCalendar($oTemplate, $this->oPage);
+	}
+
+	public static function includeCalendar($oTemplate, $oEventPage, $iClassId = null) {
 		$oResourceIncluder = ResourceIncluder::namedIncluder('additional_js');
+		$aPageLink = $oEventPage->getFullPathArray();
 		$oResourceIncluder->addResource('events.js');
-		$oResourceIncluder->addResource(LinkUtil::link(array('event_export', '{year}', $this->oPage->getId()), 'FileManager'), ResourceIncluder::RESOURCE_TYPE_LINK, null, array('type' => 'application/json', 'template' => 'source_link', 'source' => '/eventData'));
-		$oDownload = $this->constructTemplate('content/downloads');
-		$oDownload->replaceIdentifier('download_ical', LinkUtil::link($this->oNavigationItem->namedChild('calendar.ics', null, false, true)->getLink()));
-		$oDownload->replaceIdentifier('subscribe_rss', LinkUtil::link($this->oNavigationItem->namedChild('feed', null, false, true)->getLink()));
-		$oDownload->replaceIdentifier('subscribe_ical', LinkUtil::absoluteLink(LinkUtil::link($this->oNavigationItem->namedChild('calendar.ics', null, false, true)->getLink()), null, 'webcal://'));
+		$oResourceIncluder->addResource(LinkUtil::link(array('event_export', '{year}', $oEventPage->getId()), 'FileManager'), ResourceIncluder::RESOURCE_TYPE_LINK, null, array('type' => 'application/json', 'template' => 'source_link', 'source' => '/eventData'));
+		$oDownload = static::template('content/downloads');
+		$oDownload->replaceIdentifier('download_ical', LinkUtil::link(array_merge($aPageLink, array('calendar.ics'))));
+		$oDownload->replaceIdentifier('subscribe_rss', LinkUtil::link(array_merge($aPageLink, array('feed'))));
+		$oDownload->replaceIdentifier('subscribe_ical', LinkUtil::absoluteLink(LinkUtil::link(array_merge($aPageLink, array('calendar.ics'))), null, 'webcal://'));
 		$oTemplate->replaceIdentifierMultiple('container', $oDownload, 'content');
-		$oTemplate->replaceIdentifierMultiple('container', $this->constructTemplate('content/filter'), 'content');
-		$oTemplate->replaceIdentifierMultiple('container', $this->constructTemplate('content/calendar-content'), 'content');
+		$oFilterTemplate = static::template('content/filter');
+		$oFilterTemplate->replaceIdentifier('class_id', $iClassId === null ? 'common_only' : $iClassId);
+		$oTemplate->replaceIdentifierMultiple('container', $oFilterTemplate, 'content');
+		$oTemplate->replaceIdentifierMultiple('container', static::template('content/calendar-content'), 'content');
 	}
 }
