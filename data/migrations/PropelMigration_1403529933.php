@@ -96,8 +96,9 @@ UPDATE `news`, `news_types`
 SET `news`.`headline` = `news_types`.`name`
 WHERE `news`.`news_type_id` = `news_types`.`id`;
 
+# this update should hande first element in case its a heading instead of a paragraph
 UPDATE `news`
-SET `body_short` = (SELECT CONCAT(SUBSTRING_INDEX(`body`, "</p>", 1), "\n</p>") FROM `news`);
+SET `body_short` = (SELECT CONCAT(SUBSTRING_INDEX(`body`, "</p>", 1), "\n</p>")) WHERE 1;
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
