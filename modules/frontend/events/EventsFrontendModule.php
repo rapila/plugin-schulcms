@@ -52,9 +52,9 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	}
 
 	public static function renderOverviewList($aEvents, $iTruncate = 100, $sNoEventMessage = null) {
-		$oTemplate = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'overview_list', false);
-		$oItemPrototype = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'overview_item', false);
-		$oDatePrototype = self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), 'date', false);
+		$oTemplate = static::template('overview_list');
+		$oItemPrototype = static::template('overview_item');
+		$oDatePrototype = static::template('date');
 		$oEventPage =	PageQuery::create()->filterByPageType('events')->findOne();
 		foreach($aEvents as $oEvent) {
 			$oItemTemplate = clone $oItemPrototype;
