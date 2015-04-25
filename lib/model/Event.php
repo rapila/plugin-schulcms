@@ -45,7 +45,8 @@ class Event extends BaseEvent {
 		$sContent = null;
 		if($this->getBodyShort() != null) {
 			$sContent = stream_get_contents($this->getBodyShort());
-			return StringUtil::truncate(strip_tags($sContent), $iLength);
+			$sContent = html_entity_decode(strip_tags($sContent));
+			return StringUtil::truncate($sContent, $iLength);
 		}
 		return null;
 	}

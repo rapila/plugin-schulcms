@@ -35,23 +35,13 @@ class News extends BaseNews {
 		return $this->getNewsType()->getName();
 	}
 
-	public function getBodyTruncated($iLength = 70) {
-		return self::truncateBlob($this->getBody(), $iLength);
-	}
-
 	public function getBodyShortTruncated($iLength = 80) {
-		return self::truncateBlob($this->getBodyShort(), $iLength);
-	}
-
-	private static function truncateBlob($oBlob, $iLength) {
 		$sText = '';
 		if(is_resource($oBlob)) {
 			$sText = RichtextUtil::parseStorageForBackendOutput(stream_get_contents($oBlob))->render();
-			$sText = strip_tags($sText);
+			$sText = html_entity_decode(strip_tags($sText));
 		}
-		if($iLength) {
-			return StringUtil::truncate($sText, $iLength);
-		}
+		return StringUtil::truncate($sText, $iLength);
 	}
 
 	public function renderItem($oTemplate) {
