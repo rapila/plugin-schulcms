@@ -45,6 +45,8 @@ class EventExportFileModule extends FileModule {
 					'date_start' => $oDate->getDateStart('Y-m-d'),
 					'date_end' => $oDate->getDateEnd('Y-m-d'),
 					'type' => $oDate->getType(),
+					'is_common' => true,
+					'is_forced_upon_class' => true,
 					'kind' => 'date'
 				);
 			}
@@ -60,6 +62,9 @@ class EventExportFileModule extends FileModule {
 				'date_end' => $oEvent->getDateEnd('Y-m-d'),
 				'type' => $oEvent->getEventTypeId(),
 				'has_bericht' => $oEvent->hasBericht(),
+				'class_id' => $oEvent->getSchoolClassId(),
+				'is_common' => $oEvent->getSchoolClassId() === null || $oEvent->getIsCommon(),
+				'is_forced_upon_class' => $oEvent->getSchoolClassId() === null && $oEvent->getIsCommon(),
 				'has_images' => $oEvent->hasImages(),
 				'type' => $oEvent->getEventTypeId(),
 				'kind' => 'event'

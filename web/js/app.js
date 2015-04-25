@@ -437,6 +437,27 @@
 					}
 				}
 			};
+		},
+
+		'class-from-event': function(element, mode) {
+			var onlyShowCommon = mode === 'common_only';
+			var classId = parseInt(mode, 10);
+			if(isNaN(classId)) {
+				classId = null;
+			}
+			element.remove();
+			return {
+				render: function(configuration, data) {
+					for(var key in data) {
+						if(onlyShowCommon && !data[key].is_common) {
+							delete data[key];
+						}
+						if(classId !== null && data[key].class_id !== classId && !data[key].is_forced_upon_class) {
+							delete data[key];
+						}
+					}
+				}
+			};
 		}
 	};
 
