@@ -17,7 +17,6 @@ jQuery(document).ready(function() {
 	}.deferred(handlers));
 
 	jQuery.when.apply(jQuery, handlers).then(function() {
-		AdminInterface.strings.handle_strings_for_list_result('wns.events.no_result', ['event_type_name'], content_list);
 
 		// add buttons and search_input
 		info_bar.add_button('add-new-item', function() {
@@ -92,5 +91,8 @@ jQuery(document).ready(function() {
 			content_list.setOption('event_type_id', event_type_id);
 			content_list.reload();
 		});
+
+		// Search result notification
+		AdminInterface.strings.handle_strings_for_list_result('wns.events.no_result', ['event_type_name'], content_list);
 	});
 });

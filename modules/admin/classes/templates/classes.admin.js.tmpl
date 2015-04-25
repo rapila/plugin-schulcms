@@ -1,6 +1,5 @@
 jQuery(document).ready(function() {
 	AdminInterface.content.find('table.class_list').prepareWidget(function(class_list) {
-		AdminInterface.strings.handle_strings_for_list_result('wns.classes.no_result', ['class_type_name', 'is_fe_visible'], class_list);
 
 		// Add info_bar elements
 		var sidebar;
@@ -21,5 +20,8 @@ jQuery(document).ready(function() {
 				}
 			}).add_row_count_info_for_list(class_list).add_pager_for_list(class_list);
 		});
+
+		// Search result notification
+		AdminInterface.strings.handle_strings_for_list_result('wns.classes.no_result', ['class_type_name', 'is_fe_visible'], class_list);
 	});
 });

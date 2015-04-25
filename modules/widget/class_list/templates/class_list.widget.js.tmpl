@@ -1,10 +1,7 @@
-jQuery(document).ready(function() {
-	jQuery('table.class_list').each(function() {
-		jQuery(this).prepareWidget(function(widget) {
-			Widget.callStatic('detail', 'connect_detail_with_list', 'class', widget, 'setSchoolClassId');
-			widget.handle('list-cell_click', function(event, rowIndex, col, row, cell) {
-				// in case you need a delete handling or something
-			});
-		});
-	});
-});
+Widget.types.class_list = {
+	prepare: function() {
+		var widget = this._list;
+		Widget.callStatic('detail', 'connect_detail_with_list', 'class', widget, 'setSchoolClassId');
+	}
+};
+

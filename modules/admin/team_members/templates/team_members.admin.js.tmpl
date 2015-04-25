@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-	AdminInterface.content.find('table.team_member_list').prepareWidget(function(team_member_list) {
+	AdminInterface.content.find('table.team_member_list').prepareWidget(function(content_list) {
 
 		// Sidebar
 		var sidebar;
@@ -7,18 +7,21 @@ jQuery(document).ready(function() {
 			sidebar = widget;
 			sidebar.settings.row_click_active_mode = 'activate';
 			sidebar.handle('list-selection_changed', function(event, selection) {
-				team_member_list.setOption('function_group_id', selection[0] && selection[0].function_group_id);
-				team_member_list.reload();
+				content_list.setOption('function_group_id', selection[0] && selection[0].function_group_id);
+				content_list.reload();
 			});
 		});
 
 		// Add info_bar elements
 		AdminInterface.info_bar.prepareWidget(function(info_bar) {
 			info_bar.add_search_input("{{writeString=wns.search.enter_search}}", function(search) {
-				if(team_member_list.setSearch(search)) {
-					team_member_list.reload();
+				if(content_list.setSearch(search)) {
+					content_list.reload();
 				}
-			}).add_row_count_info_for_list(team_member_list).add_pager_for_list(team_member_list);
+			}).add_row_count_info_for_list(content_list).add_pager_for_list(content_list);
 		});
+
+		// Add search result info
+		AdminInterface.strings.handle_strings_for_list_result('wns.team_member_list.no_result', ['function_group_name'], content_list);
 	});
 });
