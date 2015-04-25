@@ -337,6 +337,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$sContent = RichtextUtil::parseStorageForFrontendOutput($sContent);
 		}
 		if($bStripTags || $iTruncate) {
+			$sContent = html_entity_decode($sContent);
 			$sContent = strip_tags($sContent);
 			if($iTruncate) {
 				$sContent = StringUtil::truncate($sContent, $iTruncate);
