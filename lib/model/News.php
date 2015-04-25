@@ -37,8 +37,8 @@ class News extends BaseNews {
 
 	public function getBodyShortTruncated($iLength = 80) {
 		$sText = '';
-		if(is_resource($oBlob)) {
-			$sText = RichtextUtil::parseStorageForBackendOutput(stream_get_contents($oBlob))->render();
+		if(is_resource($this->getBodyShort())) {
+			$sText = RichtextUtil::parseStorageForBackendOutput(stream_get_contents($this->getBodyShort()))->render();
 			$sText = html_entity_decode(strip_tags($sText));
 		}
 		return StringUtil::truncate($sText, $iLength);
