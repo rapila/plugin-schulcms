@@ -50,15 +50,15 @@ class ClassHomeOutput extends ClassOutput {
 		if($this->oClass->getAncestorClassId() != null) {
 			$oAncestorClass = SchoolClassQuery::create()->findPk($this->oClass->getAncestorClassId());
 			if($oAncestorClass) {
-				$oLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oAncestorClass->getLink())), $oAncestorClass->getClassNameWithYear());
+				$oLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oAncestorClass->getLink($this->oPageType->getPage()))), $oAncestorClass->getClassNameWithYear());
 				$oTemplate->replaceIdentifier('ancestor_class_link', $oLink);
 			}
 		}
 		// Display successor class link
 		if(!$this->oClass->isCurrent()) {
-			$oChildPage = SchoolClassQuery::create()->findOneByAncestorClassId($this->oClass->getId());
-			if($oAncestorClass) {
-				$oLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oAncestorClass->getLink())), $oAncestorClass->getClassNameWithYear());
+			$oSuccessorClass = SchoolClassQuery::create()->findOneByAncestorClassId($this->oClass->getId());
+			if($oSuccessorClass) {
+				$oLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oSuccessorClass->getLink())), $oSuccessorClass->getClassNameWithYear());
 				$oTemplate->replaceIdentifier('successor_class_link', $oLink);
 			}
 		}
