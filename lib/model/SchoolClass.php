@@ -27,6 +27,10 @@ class SchoolClass extends BaseSchoolClass {
 		return $this->getClassName(). ' ('.$this->getYear().')';
 	}
 
+	public function getFullClassNameWithYear() {
+		return $this->getFullClassName(). ' ('.$this->getYear().')';
+	}
+
 	public function getSubjectClassName($bFrontend = true) {
 		if($bFrontend) {
 			$this->getSubject()->getName(). ' '	. $this->getName();
