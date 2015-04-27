@@ -5,7 +5,7 @@
 
 class EventsFrontendModule extends DynamicFrontendModule {
 
-	public static $DISPLAY_MODES = array('list_context', 'list_context_today', 'recent_report');
+	public static $DISPLAY_MODES = array('list_context', 'recent_report');
 
 	public static $EVENT;
 	public $iEventTypeId;
@@ -26,21 +26,20 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		switch($aOptions[self::MODE_SELECT_KEY]) {
 			case 'list': return $this->renderContextList();
 			case 'list_context': return $this->renderContextList();
-			case 'list_context_today': return $this->renderContextList(true);
 			case 'recent_report': return $this->renderRecentReport();
 		}
 		return '';
 	}
 
-	public function renderContextList($bHighlightToday = false) {
+	public function renderContextList() {
 		$oQuery = $this->baseQuery()->orderByDateStart();
 		if($this->iLimit) {
 			$oQuery->limit($this->iLimit);
 		}
-		return self::renderOverviewList($oQuery->find(), 100, String::getString('school.no_future_events_available', null, null), $bHighlightToday);
+		return TagWriter::quickTag('div', array('class' => 'calendar-overview'), self::renderOverviewList($oQuery->find(), 100, String::getString('school.no_future_events_available', null, null)));
 	}
 
-	public static function renderOverviewList($aEvents, $iTruncate = 100, $sNoEventMessage = null, $bHighlightToday = false) {
+	public static function renderOverviewList($aEvents, $iTruncate = 100, $sNoEventMessage = null) {
 		$oTemplate = static::template('overview_list');
 		$oItemPrototype = static::template('overview_item');
 		$oDatePrototype = static::template('date');
