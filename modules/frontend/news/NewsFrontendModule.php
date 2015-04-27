@@ -36,32 +36,32 @@ class NewsFrontendModule extends DynamicFrontendModule {
 	}
 
 	public function renderDetail($aNewsTypes) {
-		$oItemTemplate = self::constructTempl('detail');
+		$oItemTemplate = static::template('detail');
 		return self::renderItem($this->query($aNewsTypes, 1)->findOne(), $oItemTemplate, 'full');
 	}
 
 	public function renderNewsSidebar($aNewsTypes, $iLimit) {
-		$oItemTemplate = self::constructTempl('item_short');
+		$oItemTemplate = static::template('item_short');
 		return self::renderList($this->query($aNewsTypes, $iLimit)->find(), $oItemTemplate, $iLimit);
 	}
 
 	public function renderMainNews($aNews, $iLimit) {
-		$oItemTemplate = self::constructTempl('item_full');
+		$oItemTemplate = static::template('item_full');
 		return self::renderList($this->query($aNewsTypes, $iLimit)->find(), $oItemTemplate, $iLimit);
 	}
 
 	public function renderCurrentListWithoutFirst($aNewsTypes, $iLimit = null) {
-		$oItemTemplate = self::constructTempl('item_title');
+		$oItemTemplate = static::template('item_title');
 		return self::renderList($this->query($aNewsTypes, $iLimit)->offset(1)->find(), $oItemTemplate, $iLimit);
 	}
 
 	public function renderCurrentList($aNewsTypes, $iLimit = null, $sContentType = 'short') {
-		$oItemTemplate = self::constructTempl('item_'.$sContentType);
+		$oItemTemplate = static::template('item_'.$sContentType);
 		return self::renderList($this->query($aNewsTypes, $iLimit)->find(), $oItemTemplate, $sContentType);
 	}
 
 	public static function renderList($aNews, $oItemTemplate, $sContentType = null) {
-		$oTemplate = self::constructTempl('list');
+		$oTemplate = static::template('list');
 		foreach($aNews as $oNews) {
 			$oTemplate->replaceIdentifierMultiple('item', self::renderItem($oNews, clone $oItemTemplate, $sContentType));
 		}
@@ -95,9 +95,4 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		}
 		return $oItemTemplate;
 	}
-
-	public static function constructTempl($sTemplateName = null) {
-		return self::constructTemplateForModuleAndType(self::getType(), self::moduleName(), $sTemplateName);
-	}
-
 }
