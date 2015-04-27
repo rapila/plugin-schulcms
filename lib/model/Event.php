@@ -107,6 +107,14 @@ class Event extends BaseEvent {
 		return false;
 	}
 
+	public function isToday() {
+		$sToday = date('Ymd');
+		if($this->getDateStart('Ymd') === $sToday) {
+			return true;
+		}
+		return $this->getDateEnd() != null && ($this->getDateStart('Ymd') < $sToday && $this->getDateEnd('Ymd') > $sToday);
+	}
+
 	public function isReview() {
 		return $this->getLastDate('Ymd') < date('Ymd');
 	}

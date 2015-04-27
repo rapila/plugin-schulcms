@@ -148,17 +148,8 @@ class ClassHomeOutput extends ClassOutput {
 	}
 
 	private function renderRecentReport($oTemplate) {
-		$oEvent = FrontendEventQuery::create()->past()->filterBySchoolClass($this->oClass)->joinEventDocument()->orderByUpdatedAt(Criteria::DESC)->findOne();
-		if($oEvent === null) {
-			return;
-		}
-		$oImage = $oEvent->getFirstImage()->getDocument();
-		if(!$oImage) {
-			return;
-		}
-		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink()));
-		$oTemplate->replaceIdentifier('detail_link_title', $oEvent->getTitle());
-		$oTemplate->replaceIdentifier('recent_report_image', TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => 300)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle())));
+		$oRecentReport = EventsFrontendModule::recentReport(FrontendEventQuery::create()->past()->filterBySchoolClass($this->oClass)->joinEventDocument()->orderByUpdatedAt(Criteria::DESC)->findOne());
+		$oTemplate->replaceIdentifier('recent_report', $oRecentReport);
 	}
 
 	private function renderUpcomingEvents($oTemplate, $iCount = 10) {
