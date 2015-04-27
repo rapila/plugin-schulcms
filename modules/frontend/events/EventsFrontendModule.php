@@ -57,6 +57,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			$oItemTemplate->replaceIdentifier('description', EventsPageTypeModule::getContentForFrontend($oEvent->getBodyShort(), true, $iTruncate));
 			if($oEvent->isToday()) {
 				$oItemTemplate->replaceIdentifier('class_today', ' today');
+				$oItemTemplate->replaceIdentifier('today', StringPeer::getString('wns.event.today'));
 			}
 			$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
 		}
