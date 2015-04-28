@@ -1,9 +1,17 @@
-{{identifierContext=start;name=portrait_display_url}}<img src="{{portrait_display_url}}" alt="{{portrait_alt}}" />{{identifierContext=end;name=portrait_display_url}}
-{{identifierContext=start;name=profession}}
+{{identifierContext=start;name=email}}
+<p>E-Mail: {{email}}</p>{{identifierContext=end;name=email}}{{identifierContext=start;name=profession}}
 <p>Beruf: {{profession}}</p>{{identifierContext=end;name=profession}}{{identifierContext=start;name=functions}}
 <p>{{functions}}
 </p>{{identifierContext=end;name=functions}}{{identifierContext=start;name=klassenlehrer_info}}
-<p>
-	<label>{{class_teacher}}</label>
+	<h4>{{class_teacher}}</h4>
+	<table class="team_member classes list">
+		<tbody>
 	{{klassenlehrer_info}}
-</p>{{identifierContext=end;name=klassenlehrer_info}}
+		</tbody>
+	</table>{{identifierContext=end;name=klassenlehrer_info}}{{identifierContext=start;name=portrait_display_url}}
+<div class="signature">
+	<figure>
+		<img src="{{portrait_display_url}}" alt="{{portrait_alt}}" />
+	</figure>
+</div>
+{{identifierContext=end;name=portrait_display_url}}

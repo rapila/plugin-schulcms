@@ -61,46 +61,70 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		}
 		$oDetailTemplate = $this->constructTemplate('detail');
 		$oDetailTemplate->replaceIdentifier('full_name_inverted', $this->oTeamMember->getFullName());
-		if($oPortrait = $this->oTeamMember->getDocument()) {
-			$oDetailTemplate->replaceIdentifier('portrait_display_url', $oPortrait->getDisplayUrl(array('max_width' => 194)));
-			$oDetailTemplate->replaceIdentifier('portrait_alt', "Portrait von ". $this->oTeamMember->getFullName());
-		}
 		if($this->oTeamMember->getProfession() != null) {
 			$oDetailTemplate->replaceIdentifier('profession', $this->oTeamMember->getProfession());
 		}
-		//Add is_class_teacher classes with links
-		$aClassTeachers = $this->oTeamMember->getClassTeacherClasses(true);
-		if(count($aClassTeachers) > 0) {
-			$bIsClassTeacher = null;
-			foreach($aClassTeachers as $oClassTeacher) {
-				if($oClassTeacher->getIsClassTeacher() !== $bIsClassTeacher) {
-					$bIsClassTeacher = $oClassTeacher->getIsClassTeacher();
-					if($oClassTeacher->getIsClassTeacher()) {
-						$oDetailTemplate->replaceIdentifier('class_teacher', $this->oTeamMember->getClassTeacherTitle(). ' von: ');
-					}
-				}
-				$oItemTemplate = $this->constructTemplate('class_item');
-				$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link($oClassTeacher->getSchoolClass()->getLink())), $oClassTeacher->getSchoolClass()->getFullClassName()));
-				$oDetailTemplate->replaceIdentifierMultiple('klassenlehrer_info', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
-			}
-		}
-		//Add functions
+		$oDetailTemplate->replaceIdentifier('email', $this->renderEmail(), null, Template::NO_HTML_ESCAPE);
+		$this->renderFunctions($oDetailTemplate);
+		$this->renderClasses($oDetailTemplate);
+		$this->renderPortrait($oDetailTemplate);
+
+		$oTemplate->replaceIdentifier('container', $oDetailTemplate, 'content');
+		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'content');
+	}
+
+	private function renderFunctions($oTemplate) {
 		$aTeamMemberFunctions = $this->oTeamMember->getTeamMemberFunctions();
 		if(count($aTeamMemberFunctions) > 0) {
 			foreach($aTeamMemberFunctions as $oTeamMemberFunction) {
 				$oItemTemplate = $this->constructTemplate('function_item');
 				$oItemTemplate->replaceIdentifier('function_name', $oTeamMemberFunction->getSchoolFunction()->getTitle());
-				$oDetailTemplate->replaceIdentifierMultiple('functions', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
+				$oTemplate->replaceIdentifierMultiple('functions', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
 			}
 		}
+	}
 
-		$oContextTemplate = $this->constructTemplate('detail_context');
-		if($this->oTeamMember->getEmailG()) {
-			$oContextTemplate->replaceIdentifier('email_link', TagWriter::getEmailLinkWriter($this->oTeamMember->getEmailG(), "E-Mail senden"), null, Template::NO_HTML_ESCAPE);
+	private function renderClasses($oTemplate) {
+		$aSchoolClasses = $this->oTeamMember->getClassTeacherClasses(true);
+		if(count($aSchoolClasses) > 0) {
+			$oItemPrototype = $this->constructTemplate('class_item');
+			$bChange = null;
+			foreach($aSchoolClasses as $oSchoolClass) {
+				if($oSchoolClass->getIsClassTeacher() !== $bChange) {
+					$bChange = $oSchoolClass->getIsClassTeacher();
+					if($oSchoolClass->getIsClassTeacher()) {
+						$oTemplate->replaceIdentifier('class_teacher', $this->oTeamMember->getClassTeacherTitle(). ' von: ');
+					}
+				}
+				$oItemTemplate = clone $oItemPrototype;
+				$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link(array_merge($this->oClassPage->getFullPathArray(), array($oSchoolClass->getSchoolClass()->getSlug())))), $oSchoolClass->getSchoolClass()->getFullClassName()));
+				$oTemplate->replaceIdentifierMultiple('klassenlehrer_info', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
+			}
 		}
+	}
 
-		$oTemplate->replaceIdentifier('container', $oDetailTemplate, 'content');
-		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'content');
+	private function renderPortrait($oTemplate) {
+		$oPortrait = $this->oTeamMember->getDocument();
+		if($oPortrait) {
+			$oTemplate->replaceIdentifier('portrait_display_url', $oPortrait->getDisplayUrl(array('max_width' => 194)));
+			$oTemplate->replaceIdentifier('portrait_alt', "Portrait von ". $this->oTeamMember->getFullName());
+		}
+	}
+
+	private function renderEmail() {
+		$sLinkText = $this->oTeamMember->getEmailG();
+		if($sLinkText === null) {
+			return;
+		}
+		if(Settings::getSetting("frontend", "protect_email_addresses", false)) {
+			$sLinkText = str_replace("@", " [at] ", $sLinkText);
+		}
+		return TagWriter::getEmailLinkWriter($this->oTeamMember->getEmailG(), $sLinkText);
+	}
+
+	private function renderContext($oTemplate) {
+		$oContextTemplate = $this->constructTemplate('detail_context');
+		$oContextTemplate->replaceIdentifier('email_link', $this->renderEmail());
 		$oTemplate->replaceIdentifier('container', $oContextTemplate, 'context');
 		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'context');
 	}
