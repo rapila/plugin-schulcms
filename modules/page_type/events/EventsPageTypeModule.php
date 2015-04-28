@@ -103,15 +103,13 @@ class EventsPageTypeModule extends PageTypeModule {
 			}
 			$oDocumentTemplate = clone $oTemplateProtoType;
 			$oDocumentTemplate->replaceIdentifier('event_id', $oEvent->getId());
-			// if($oDocument->isGDImage()) {
-			// 	$oImage = $oDocument->getImage();
-			// 	if($oImage && $oImage->getOriginalHeight()) {
-			// 		$bIsHorizontal = $oImage->getOriginalWidth() > $oImage->getOriginalHeight();
-			// 		$oDocumentTemplate->replaceIdentifier('max_size_param', $bIsHorizontal ? 'max_height' : 'max_width');
-			// 	}
-			// } else {
+			// $oImage = $oDocument->getImage();
+			// if($oImage && $oImage->getOriginalHeight()) {
+			// 	$bIsHorizontal = $oImage->getOriginalWidth() > $oImage->getOriginalHeight();
+			// 	$oDocumentTemplate->replaceIdentifier('max_size_param', $bIsHorizontal ? 'max_height' : 'max_width');
 			// }
-			$oDocumentTemplate->replaceIdentifier('max_size_param', 'max_width');
+			$oDocumentTemplate->replaceIdentifier('max_size_param', 'max_height');
+
 			$mDescription = null;
 			if($oDocument->getDescription() != null) {
 				$mDescription = $oDocument->getDescription();
