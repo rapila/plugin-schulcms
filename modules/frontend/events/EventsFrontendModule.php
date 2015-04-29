@@ -36,7 +36,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		if($this->iLimit) {
 			$oQuery->limit($this->iLimit);
 		}
-		return TagWriter::quickTag('div', array('class' => 'calendar-overview'), self::renderOverviewList($oQuery->find(), 100, String::getString('school.no_future_events_available', null, null)));
+		return TagWriter::quickTag('div', array('class' => 'calendar-overview'), self::renderOverviewList($oQuery->find(), 100, StringPeer::getString('school.no_future_events_available', null, null)));
 	}
 
 	public static function renderOverviewList($aEvents, $iTruncate = 100, $sNoEventMessage = null) {
