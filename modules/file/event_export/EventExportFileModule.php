@@ -35,7 +35,7 @@ class EventExportFileModule extends FileModule {
 			$iTimestamp = max($iTimestamp, $oDateQuery);
 		}
 		$iTimestamp = $oEventQuery->findMostRecentUpdate();
-		LinkUtil::sendCacheControlHeaders($iTimestamp);
+		LinkUtil::sendCacheControlHeaders($iTimestamp, "PT4H");
 		$aResult = array();
 		if($oDateQuery !== null) {
 			foreach($oDateQuery->fromYear($iYear)->find() as $oDate) {
