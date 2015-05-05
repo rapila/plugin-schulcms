@@ -12,8 +12,8 @@ class EventsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 
 		// Event types
 		$aEventTypes = EventTypeQuery::create()->orderByName()->find();
+		$aResult['event_types'] = array();
 		if(count($aEventTypes) > 0) {
-			$aResult['event_types'] = array();
 			foreach($aEventTypes as $oEventType) {
 				$aResult['event_types'][$oEventType->getId()] = $oEventType->getName();
 			}
