@@ -32,7 +32,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	}
 
 	public function renderContextList() {
-		$oQuery = $this->baseQuery()->orderByDateStart();
+		$oQuery = $this->baseQuery()->upcomingOrOngoing()->orderByDateStart();
 		if($this->iLimit) {
 			$oQuery->limit($this->iLimit);
 		}
