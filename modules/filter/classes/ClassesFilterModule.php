@@ -59,7 +59,7 @@ class ClassesFilterModule extends FilterModule {
 
 	private function renderClassPageItems($oNavigationItem) {
 		$oClass = $oNavigationItem->getClass();
-		$oNavigationItem->addChild(ClassNavigationItem::create('anlaesse', 'Anlässe', $oClass, self::CLASS_EVENTS_IDENTIFIER));
+		$oNavigationItem->addChild(ClassNavigationItem::create('aktuell', 'Veranstaltungen', $oClass, self::CLASS_EVENTS_IDENTIFIER));
 		// only display if display_mode is "full"
 		if($oNavigationItem->getDisplayType() === 'full') {
 			$oNavigationItem->addChild(ClassNavigationItem::create('materialien', 'Materialien', $oClass, self::CLASS_MATERIALS_IDENTIFIER));

@@ -77,9 +77,9 @@ class EventsFilterModule extends FilterModule {
 
 	public function handleNewsFeed($oPage) {
 		$aLink = array_merge($oPage->getLink(), array('feed'));
-		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'title' => 'Alle Anlässe', 'location' => LinkUtil::link($aLink)));
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'title' => 'Alle Veranstaltungen', 'location' => LinkUtil::link($aLink)));
 		$aLink = array_merge($oPage->getLink(), array('calendar.ics'));
-		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'ical', 'title' => 'Alle Anlässe', 'location' => LinkUtil::link($aLink)));
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'ical', 'title' => 'Alle Veranstaltungen', 'location' => LinkUtil::link($aLink)));
 	}
 
 	private static function selectNames($aData, $sColumn = null) {

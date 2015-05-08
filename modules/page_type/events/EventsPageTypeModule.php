@@ -67,7 +67,7 @@ class EventsPageTypeModule extends PageTypeModule {
 		*/
 		if($oTemplate->hasIdentifier('back_to_list_link')) {
 			if($oSchoolClass = $oEvent->getSchoolClass()) {
-				$aBackToListLink = array_merge($oSchoolClass->getLink(), array('anlaesse'));
+				$aBackToListLink = array_merge($oSchoolClass->getLink(), array('aktuell'));
 				$sLinkText = StringPeer::getString('class_event.back_to_class_link'). ' ' . $oSchoolClass->getUnitName();
 			} else {
 				$aBackToListLink = Session::getSession()->getAttribute(self::SESSION_BACK_TO_LIST_LINK);
