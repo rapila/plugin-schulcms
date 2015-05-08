@@ -309,7 +309,7 @@
 			};
 		},
 		// Renders a list of options from which one can be chosen
-		options: function options(element, prop) {
+		options: function options(element, prop, options) {
 			var _this = this;
 			var selected = document.createElement('div');
 			selected.className = 'link-label selected';
@@ -336,6 +336,15 @@
 					element.cl.remove('open');
 				}
 			};
+
+			// Handle opening select items initially
+			if(options.open === 'onFirstLoad') {
+				options.open = ('localStorage' in window) && !window.localStorage.getItem(window.location.href+'-options-opened');
+			}
+			if(options.open) {
+				toggle(true);
+			}
+			('localStorage' in window) && window.localStorage.setItem(window.location.href+'-options-opened', true)
 
 			function selectAvailable() {
 				var id = this.getAttribute('data-value');
