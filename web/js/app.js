@@ -317,6 +317,7 @@
 			element.cl = classList(element);
 			var available = element.querySelector('.available');
 			var availables = available.children;
+			options = options || {};
 
 			function toggle(open) {
 				if(open !== true && open !== false) {
