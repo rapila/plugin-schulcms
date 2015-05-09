@@ -1,6 +1,7 @@
 <?php
 class TeamMembersPageTypeModule extends PageTypeModule {
 	private $aFunctionGroupIds;
+	private static $SCHOOLSITES;
 
 	public function __construct(Page $oPage = null, NavigationItem $oNavigationItem = null) {
 		parent::__construct($oPage, $oNavigationItem);
@@ -16,7 +17,66 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			$this->oTeamMember = $this->oNavigationItem->getTeamMember();
 			$this->renderDetail($oTemplate);
 		}
+		$oSchoolSite = SchoolSiteQuery::currentSchoolSite();
+		if($oSchoolSite->isPortalSite()) {
+			return $this->renderPortalList($oTemplate);
+		}
 		$this->renderList($oTemplate);
+	}
+
+	private function renderPortalList($oTemplate) {
+		$oListTemplate = $this->constructTemplate('list_portal');
+		$oItemPrototype = $this->constructTemplate('list_portal_item');
+		foreach($this->listQuery(false)->find() as $oTeamMember) {
+			$aFunctionInfo = $this->getMainSchoolFunctionInfo($oTeamMember);
+			if(!is_array($aFunctionInfo)) {
+				continue;
+			}
+			$oItemTemplate = clone $oItemPrototype;
+			$oItemTemplate->replaceIdentifier('first_function_name', $aFunctionInfo['function_name']);
+			$sUrl = WettingenSettingQuery::getUrlByDomainName('domain');
+			$oItemTemplate->replaceIdentifier('school_site', TagWriter::quickTag('a', array('href' => $sUrl), $aFunctionInfo['school_unit']));
+			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oTeamMember->getLink($this->oPage)));
+			$oItemTemplate->replaceIdentifier('name', $oTeamMember->getFullNameInverted());
+			$oItemTemplate->replaceIdentifier('detail_link_title', 'Title');
+			$oListTemplate->replaceIdentifierMultiple('items', $oItemTemplate);
+		}
+		$oTemplate->replaceIdentifier('container', $oListTemplate, 'content');
+		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'content');
+	}
+
+	private function getMainSchoolFunctionInfo($oTeamMember) {
+		$aSchools = array();
+		foreach($oTeamMember->getTeamMemberFunctionsJoinSchoolFunction(TeamMember::getTeamMemberFunctionsCriteria()) as $oFunction) {
+			$oSchool = $oFunction->getSchoolFunction()->getSchool();
+			if($oSchool && !isset($aSchools[$oSchool->getOriginalId()])) {
+				$aSchools[$oSchool->getOriginalId()]['school_unit'] = $oSchool->getSchoolUnit();
+				$aSchools[$oSchool->getOriginalId()]['domain'] = self::getDomainBySchoolUnit($oSchool->getSchoolUnit());
+				$aSchools[$oSchool->getOriginalId()]['function_name'] = $oFunction->getSchoolFunction()->getTitle();
+			}
+			if(count($aSchools) > 0) {
+				return reset($aSchools);
+			}
+			return null;
+		}
+	}
+
+	private static function getDomainBySchoolUnit($sSchoolUnit) {
+		switch($sSchoolUnit) {
+			case "Kindergarten" : $sDomain = 'kindergarten'; break;
+			case "Primarschule Altenburg" : 	$sDomain = 'primarschule-altenburg'; break;
+			case "Primarschule Dorf" :				$sDomain = 'primarschule-dorf'; break;
+			case "Primarschule Margeläcker" : $sDomain = 'primarschule-margelaecker'; break;
+			case "Primarschule Zehntenhof" :	$sDomain = 'primarschule-zehntenhof'; break;
+			case "Bezirksschule" : $sDomain = 'bezirksschule'; break;
+			case "Realschule Wettingen" : $sDomain = 'sereal'; break;
+			case "Sekundarschule Wettingen" : $sDomain = 'sereal'; break;
+			case "Heilpädagogische Schule" : $sDomain = 'heilpaedagogische-schule'; break;
+			case "Musikschule" : $sDomain = 'musikschule'; break;
+			case "Rathaus" : $sDomain = 'portal'; break;
+			default : $sDomain = null;
+		}
+		return $sDomain;
 	}
 
 	private function renderList($oTemplate) {
@@ -129,8 +189,11 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'context');
 	}
 
-	public function listQuery() {
-		$oQuery = TeamMemberQuery::create()->excludeInactive();
+	public function listQuery($bExcludeInactive = true) {
+		$oQuery = TeamMemberQuery::create();
+		if($bExcludeInactive) {
+			$oQuery->excludeInactive();
+		}
 		if($this->aFunctionGroupIds !== null) {
 			$oQuery->filterByTeamMemberFunctionGroup($this->aFunctionGroupIds);
 		}

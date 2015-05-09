@@ -129,16 +129,24 @@ class TeamMember extends BaseTeamMember {
 		return StringPeer::getString('wns.class.class_teacher_male');
 	}
 
-	public function getFirstTeamMemberFunctionName() {
+	public function getFirstTeamMemberFunctionName($bNameOnly = true) {
+		$oCriteria = self::getTeamMemberFunctionsCriteria();
+		$oCriteria->setLimit(1);
+		foreach($this->getTeamMemberFunctionsJoinSchoolFunction($oCriteria) as $oFunction) {
+			if($bNameOnly) {
+				return $oFunction->getSchoolFunction()->getTitle();
+			}
+			return $oFunction->getSchoolFunction();
+		}
+		return null;
+	}
+
+	public static function getTeamMemberFunctionsCriteria() {
 		$oCriteria = new Criteria();
 		$oCriteria->add(SchoolFunctionPeer::FUNCTION_GROUP_ID, FunctionGroupPeer::getFunctionGroupIdsForTeamlist(), Criteria::IN);
 		$oCriteria->addDescendingOrderByColumn(TeamMemberFunctionPeer::IS_MAIN_FUNCTION);
 		$oCriteria->addAscendingOrderByColumn(SchoolFunctionPeer::TITLE);
-		$oCriteria->setLimit(1);
-		foreach($this->getTeamMemberFunctionsJoinSchoolFunction($oCriteria) as $oFunction) {
-			return $oFunction->getSchoolFunction()->getTitle();
-		}
-		return null;
+		return $oCriteria;
 	}
 
 	public function getGenderKeyFromId() {
