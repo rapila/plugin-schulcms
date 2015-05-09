@@ -5,7 +5,7 @@
 
 class TeamMembersFrontendModule extends FrontendModule {
 
-	public static $DISPLAY_MODES = array('team_liste', 'team_mitglied_detail');
+	public static $DISPLAY_MODES = array('team_liste', 'team_mitglied_detail', 'personen_finder');
 	public static $TEAM_MEMBER;
 	public $aFunctionGroupIds;
 	public $oClassPage;
@@ -33,8 +33,28 @@ class TeamMembersFrontendModule extends FrontendModule {
 
 		switch($aOptions[self::MODE_SELECT_KEY]) {
 			case 'team_mitglied_detail' : return $this->renderDetail();
+			case 'personen_finder' : return $this->renderPersonFinder();
 			default: return $this->renderTeamliste();
 		}
+	}
+
+	private function renderPersonFinder() {
+		$oTemplate = $this->constructTemplate('finder');
+		if(!isset($_REQUEST['finder'])) {
+			return $oTemplate;
+		}
+		$oQuery = TeamMemberQuery::create();
+		TeamMemberPeer::addSearchToCriteria($_REQUEST['finder'], $oQuery);
+		$aPersons = $oQuery->find();
+		$oTemplate->replaceIdentifier('finder_count', count($aPersons));
+		$oItemPrototype = $this->constructTemplate('finder_item');
+		foreach($aPersons as $oTeamMember) {
+			$oItemTemplate = clone $oItemPrototype;
+			$oItemTemplate->replaceIdentifier('name', $oTeamMember->getFullNameInverted());
+			$oItemTemplate->replaceIdentifier('function', $oTeamMember->getFirstTeamMemberFunctionName());
+			$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
+		}
+		return $oTemplate;
 	}
 
 	private function renderTeamliste() {

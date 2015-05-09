@@ -23,8 +23,8 @@ Widget.types.team_members_frontend_config = {
 		//Set Groups
 		var option = jQuery('<option/>');
 		this.functionGroups(function(function_groups) {
-			jQuery.each(function_groups, function(i, data) {
-				option.clone().text(data.name).attr('value', data.id).appendTo(_this.groups_dropdown);
+			jQuery.each(function_groups, function(id, name) {
+				option.clone().text(name).attr('value', id).appendTo(_this.groups_dropdown);
 			})
 			this.groups_dropdown.val(config.function_groups);
 			this.groups_dropdown.change(this.reload_preview.bind(this));

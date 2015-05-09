@@ -1,0 +1,16 @@
+<form id="person-finder" action="{{finder_action}}" method="post">
+	<p>Text</p>
+	<input type="text" name="finder" placeholder="{{writeString=teammember.finder.placeholder}}" value="{{writeRequestValue=finder}}" title="{{writeString=teammember.finder.search_hint}}" /><button id="search_button" href="">&nbsp;</button>
+</form>
+<table class="classes list">
+	<thead>
+		<tr>
+			<th>{{writeString=team_member.heading.name}}</th>
+			<th>{{writeString=team_member.heading.function}}</th>
+			<th>{{writeString=team_member.heading.school_site}}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{items}}
+	</tbody>
+</table>

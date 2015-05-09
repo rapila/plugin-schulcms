@@ -23,8 +23,8 @@ schulcms:
 
   # function_groups of functions displayed in team_member list [function_group_ids in sort order]
   active_function_groups:
-    team_members_with_classes: [1, 2]
-    team_members_others: [6, 7, 12]
+    team_members_with_classes: [1, 2, 8, 12, 15]
+    team_members_others: [4, 5, 6, 9, 10, 16]
 
   # classes of types should not be displayed in class list
   exclude_class_types: []
