@@ -126,7 +126,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 	private function renderFilter($oTemplate, $aFunctionGroups) {
 		// Implement function group filter if it's included in the template and options are given
 		if($oTemplate->hasIdentifier('filters') && count($aFunctionGroups) > 1) {
-			$oOptionPrototype = $this->oPageType->constructTemplate('filter_option', true);
+			$oOptionPrototype = $this->constructTemplate('filter_option');
 			$oItemTemplate = clone $oOptionPrototype;
 			$oItemTemplate->replaceIdentifier('id', '');
 			$oItemTemplate->replaceIdentifier('name', StringPeer::getString('team_member.filter.function_group.default'));
