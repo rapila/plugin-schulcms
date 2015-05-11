@@ -18,9 +18,6 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			$this->oTeamMember = $this->oNavigationItem->getTeamMember();
 			$this->renderDetail($oTemplate);
 		}
-		if(!$oTemplate->hasIdentifier('filters')) {
-			$this->bRequiresFilter = false;
-		}
 		$oSchoolSite = SchoolSiteQuery::currentSchoolSite();
 		if($oSchoolSite->isPortalSite()) {
 			return $this->renderPortalList($oTemplate);
@@ -31,7 +28,9 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 	private function renderPortalList($oTemplate) {
 		$oListTemplate = $this->constructTemplate('list_portal');
 		$oItemPrototype = $this->constructTemplate('list_portal_item');
-
+		if(!$oListTemplate->hasIdentifier('filters')) {
+			$this->bRequiresFilter = false;
+		}
 		$aFunctionGroups = array();
 		foreach($this->listQuery(false)->find() as $oTeamMember) {
 			$aFunctionInfo = $this->getMainSchoolFunctionInfo($oTeamMember);
@@ -53,7 +52,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			$oItemTemplate->replaceIdentifier('detail_link_title', 'Title');
 			$oListTemplate->replaceIdentifierMultiple('items', $oItemTemplate);
 		}
-		$this->renderFilter($oTemplate, $aFunctionGroups);
+		$this->renderFilter($oListTemplate, $aFunctionGroups);
 		$oTemplate->replaceIdentifier('container', $oListTemplate, 'content');
 		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'content');
 	}
@@ -61,6 +60,9 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 	private function renderList($oTemplate) {
 		$oListTemplate = $this->constructTemplate('list');
 		$oListTemplate->replaceIdentifier('team_member_news', $this->includeTeamMemberNews());
+		if(!$oListTemplate->hasIdentifier('filters')) {
+			$this->bRequiresFilter = false;
+		}
 		$oItemPrototype = $this->constructTemplate('list_item');
 		$aFunctionGroups = array();
 		foreach($this->listQuery()->find() as $oTeamMember) {
@@ -99,7 +101,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			}
 			$oListTemplate->replaceIdentifierMultiple('items', $oItemTemplate);
 		}
-		$this->renderFilter($oTemplate, $aFunctionGroups);
+		$this->renderFilter($oListTemplate, $aFunctionGroups);
 		$oTemplate->replaceIdentifier('container', $oListTemplate, 'content');
 		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'content');
 	}
