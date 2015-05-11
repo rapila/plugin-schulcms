@@ -2,6 +2,7 @@
 <div class="news">
 	{{team_member_news}}
 </div>{{identifierContext=end;name=team_member_news}}
+{{includeTemplate=filter}}
 <table class="team_members list">
 	<thead>
 		<tr>
@@ -11,7 +12,7 @@
 			<th>{{writeString=team_member.heading.class}}</th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody data-wok-htmlSource="/teamMemberData" data-wok-htmlFiltered="teamMemberData.filtered">
 		{{items}}
 	</tbody>
 </table>
