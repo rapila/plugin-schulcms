@@ -10,12 +10,16 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		}
 		$this->oClassPage = PageQuery::create()->active()->filterByPageType('classes')->findOne();
 		$this->aFunctionGroupIds = explode(',', $this->oPage->getPagePropertyValue('team_members:function_group_ids', ''));
+		$this->bRequiresFilter = is_array($this->aFunctionGroupIds) && count($this->aFunctionGroupIds) > 1;
 	}
 
 	public function display(Template $oTemplate, $bIsPreview = false) {
 		if($this->oNavigationItem instanceof TeamMemberNavigationItem){
 			$this->oTeamMember = $this->oNavigationItem->getTeamMember();
 			$this->renderDetail($oTemplate);
+		}
+		if(!$oTemplate->hasIdentifier('filters')) {
+			$this->bRequiresFilter = false;
 		}
 		$oSchoolSite = SchoolSiteQuery::currentSchoolSite();
 		if($oSchoolSite->isPortalSite()) {
@@ -35,7 +39,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 				continue;
 			}
 			//prepare function group filter
-			if(!isset($aFunctionGroups[$aFunctionInfo['function_group']->getSlug()])) {
+			if($this->bRequiresFilter && !isset($aFunctionGroups[$aFunctionInfo['function_group']->getSlug()])) {
 				$aFunctionGroups[$aFunctionInfo['function_group']->getSlug()] = $aFunctionInfo['function_group']->getName();
 			}
 			$oItemTemplate = clone $oItemPrototype;
@@ -71,8 +75,8 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 				$oItemTemplate->replaceIdentifier('first_function_name', $sMainSchoolFunction->getTitle());
 				$oItemTemplate->replaceIdentifier('function_group_key', $sMainSchoolFunction->getFunctionGroup()->getSlug());
 				//prepare function group filter
-				if(!isset($aFunctionGroups[$sMainSchoolFunction->getFunctionGroup()->getSlug()])) {
-					$aFunctionGroups[$sMainSchoolFunction->getSlug()] = $sMainSchoolFunction->getFunctionGroup()->getName();
+				if($this->bRequiresFilter && !isset($aFunctionGroups[$sMainSchoolFunction->getFunctionGroup()->getSlug()])) {
+					$aFunctionGroups[$sMainSchoolFunction->getFunctionGroup()->getSlug()] = $sMainSchoolFunction->getFunctionGroup()->getName();
 				}
 			}
 			$aClassTeachers = $oTeamMember->getIsClassTeacherClasses(true);
