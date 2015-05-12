@@ -58,8 +58,12 @@ class EventsPageTypeModule extends PageTypeModule {
 		if($oEvent->getDateStart('Ymd') === date('Ymd')) {
 			$oTemplate->replaceIdentifier('today', StringPeer::getString('wns.event.today'));
 		}
-		$oTemplate->replaceIdentifier('location_info', $oEvent->getLocationInfo());
-		$oTemplate->replaceIdentifier('time_details', $oEvent->getTimeDetails());
+		if($oEvent->getLocationInfo() != null) {
+			$oTemplate->replaceIdentifier('location_info', $oEvent->getLocationInfo());
+		}
+		if($oEvent->getTimeDetails() != null) {
+			$oTemplate->replaceIdentifier('time_details', $oEvent->getTimeDetails());
+		}
 
 		// Back to list link
 		/**
