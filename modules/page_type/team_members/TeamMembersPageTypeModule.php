@@ -43,7 +43,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			}
 			$oItemTemplate = clone $oItemPrototype;
 			$oItemTemplate->replaceIdentifier('first_function_name', $aFunctionInfo['function_name']);
-			$sUrl = WettingenSettingQuery::getUrlByDomainName('domain');
+			$sUrl = WettingenSettingQuery::getUrlByDomainName($aFunctionInfo['domain']);
 			$oItemTemplate->replaceIdentifier('school_site', TagWriter::quickTag('a', array('href' => $sUrl), $aFunctionInfo['school_unit']));
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oTeamMember->getLink($this->oPage)));
 			$oItemTemplate->replaceIdentifier('name', $oTeamMember->getFullNameInverted());
