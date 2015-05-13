@@ -13,6 +13,7 @@ class NewsType extends BaseNewsType
 	const NAME_TEAM_MEMBERS = "Mitarbeiter-News";
 	const NAME_FAQS = "FAQ-News";
 	const NAME_CLASSES = "Klassen-News";
+	const NAME_ABOUT_US = "Über-uns-Text";
 
 	public static function createDefaultTypesIfNotExist() {
 		if(NewsTypeQuery::create()->count() > 1) {
