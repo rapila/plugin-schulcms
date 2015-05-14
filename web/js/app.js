@@ -495,6 +495,29 @@
 			}
 		}
 
+		// Init values from hash
+		var index = window.location.href.indexOf('#')
+		var hash = index === -1 ? '' : window.location.href.substring(index+1);
+		hash = hash.split(/&+/);
+		var newHash = [];
+		for(var i=0;i<hash.length;i++) {
+			var key = hash[i].split('=');
+			if(key.length === 1) {
+				newHash.push(hash[i]);
+				continue;
+			}
+			var value = key.slice(1).join('=');
+			key = key[0];
+			if(!(key in configuration) || typeof configuration[key] !== 'string') {
+				newHash.push(hash[i]);
+				continue;
+			}
+			configuration[key] = value;
+		}
+		if(index > -1) {
+			window.location.replace(window.location.href.substring(0, index)+'#'+newHash.join('&'));
+		}
+
 		// The inner wok with the individual filter modules
 		var filterWok = element.filterWok = new Wok({
 			pluginClass: 'filter wok-'
