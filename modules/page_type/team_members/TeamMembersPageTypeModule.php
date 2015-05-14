@@ -14,18 +14,29 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 	}
 
 	public function display(Template $oTemplate, $bIsPreview = false) {
-		if($this->oNavigationItem instanceof TeamMemberNavigationItem){
-			$this->oTeamMember = $this->oNavigationItem->getTeamMember();
-			$this->renderDetail($oTemplate);
+		$oCache = new Cache('team-members/'.Session::language().'/'.$this->oNavigationItem->getId(), 'full_page');
+		if($oCache->entryExists() && !$oCache->isOlderThan($this->oPage) && !$oCache->isOlderThan($this->listQuery(false))) {
+			$oInnerTemplate = $oCache->getContentsAsVariable();
+		} else {
+			$oInnerTemplate = $this->displayUncached($bIsPreview);
+			$oCache->setContents($oInnerTemplate);
 		}
-		$oSchoolSite = SchoolSiteQuery::currentSchoolSite();
-		if($oSchoolSite->isPortalSite()) {
-			return $this->renderPortalList($oTemplate);
-		}
-		$this->renderList($oTemplate);
+		$oTemplate->replaceIdentifier('container', $oInnerTemplate, 'content');
+		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'content');
 	}
 
-	private function renderPortalList($oTemplate) {
+	public function displayUncached($bIsPreview = false) {
+		if($this->oNavigationItem instanceof TeamMemberNavigationItem){
+			$this->oTeamMember = $this->oNavigationItem->getTeamMember();
+			return $this->renderDetail();
+		}
+		if(SchoolSiteQuery::currentSchoolSite()->isPortalSite()) {
+			return $this->renderPortalList();
+		}
+		return $this->renderList();
+	}
+
+	private function renderPortalList() {
 		$oListTemplate = $this->constructTemplate('list_portal');
 		$oItemPrototype = $this->constructTemplate('list_portal_item');
 		if(!$oListTemplate->hasIdentifier('filters')) {
@@ -33,31 +44,36 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		}
 		$aFunctionGroups = array();
 		foreach($this->listQuery(false)->find() as $oTeamMember) {
-			$aFunctionInfo = $this->getMainSchoolFunctionInfo($oTeamMember);
-			if(!is_array($aFunctionInfo)) {
+			$aMainSchoolInfo = $this->getMainSchool($oTeamMember);
+			if(!is_array($aMainSchoolInfo)) {
+				continue;
+			}
+			list($oSchool, $oFunction) = $aMainSchoolInfo;
+			$oSchoolSite = SchoolSiteQuery::siteBySchool($oSchool);
+			if(!$oSchoolSite) {
+				ErrorHandler::handleException(new Exception("No school site found for school with id "+$oSchool->getId()), true);
 				continue;
 			}
 			//prepare function group filter
-			if($this->bRequiresFilter && !isset($aFunctionGroups[$aFunctionInfo['function_group']->getSlug()])) {
-				$aFunctionGroups[$aFunctionInfo['function_group']->getSlug()] = $aFunctionInfo['function_group']->getName();
+			if($this->bRequiresFilter && !isset($aFunctionGroups[$oFunction->getSchoolFunction()->getFunctionGroup()->getSlug()])) {
+				$aFunctionGroups[$oFunction->getSchoolFunction()->getFunctionGroup()->getSlug()] = $oFunction->getSchoolFunction()->getFunctionGroup()->getName();
 			}
 			$oItemTemplate = clone $oItemPrototype;
-			$oItemTemplate->replaceIdentifier('first_function_name', $aFunctionInfo['function_name']);
-			$sUrl = WettingenSettingQuery::getUrlByDomainName($aFunctionInfo['domain']);
-			$oItemTemplate->replaceIdentifier('school_site', TagWriter::quickTag('a', array('href' => $sUrl), $aFunctionInfo['school_unit']));
-			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oTeamMember->getLink($this->oPage)));
+			$oItemTemplate->replaceIdentifier('first_function_name', $oFunction->getSchoolFunction()->getTitle());
+			$sUrl = WettingenSettingQuery::url($oSchoolSite);
+			$oItemTemplate->replaceIdentifier('school_site', $oSchool->getSchoolUnit());
+			$oItemTemplate->replaceIdentifier('school_site_link', $sUrl);
+			$oItemTemplate->replaceIdentifier('detail_link', $sUrl.'get_file/team_member/'.$oTeamMember->getOriginalId());
 			$oItemTemplate->replaceIdentifier('name', $oTeamMember->getFullNameInverted());
 			$oItemTemplate->replaceIdentifier('id', $oTeamMember->getId());
-			$oItemTemplate->replaceIdentifier('function_group_key', $aFunctionInfo['function_group']->getSlug());
-			$oItemTemplate->replaceIdentifier('detail_link_title', 'Title');
+			$oItemTemplate->replaceIdentifier('function_group_key', $oFunction->getSchoolFunction()->getFunctionGroup()->getSlug());
 			$oListTemplate->replaceIdentifierMultiple('items', $oItemTemplate);
 		}
 		$this->renderFilter($oListTemplate, $aFunctionGroups);
-		$oTemplate->replaceIdentifier('container', $oListTemplate, 'content');
-		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'content');
+		return $oListTemplate;
 	}
 
-	private function renderList($oTemplate) {
+	private function renderList() {
 		$oListTemplate = $this->constructTemplate('list');
 		$oListTemplate->replaceIdentifier('team_member_news', $this->includeTeamMemberNews());
 		if(!$oListTemplate->hasIdentifier('filters')) {
@@ -102,25 +118,17 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			$oListTemplate->replaceIdentifierMultiple('items', $oItemTemplate);
 		}
 		$this->renderFilter($oListTemplate, $aFunctionGroups);
-		$oTemplate->replaceIdentifier('container', $oListTemplate, 'content');
-		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'content');
+		return $oListTemplate;
 	}
 
-	private function getMainSchoolFunctionInfo($oTeamMember) {
-		$aSchools = array();
+	private function getMainSchool($oTeamMember) {
 		foreach($oTeamMember->getTeamMemberFunctionsJoinSchoolFunction(TeamMember::getTeamMemberFunctionsCriteria()) as $oFunction) {
 			$oSchool = $oFunction->getSchoolFunction()->getSchool();
-			if($oSchool && !isset($aSchools[$oSchool->getOriginalId()])) {
-				$aSchools[$oSchool->getOriginalId()]['school_unit'] = $oSchool->getSchoolUnit();
-				$aSchools[$oSchool->getOriginalId()]['domain'] = self::getDomainBySchoolUnit($oSchool->getSchoolUnit());
-				$aSchools[$oSchool->getOriginalId()]['function_name'] = $oFunction->getSchoolFunction()->getTitle();
-				$aSchools[$oSchool->getOriginalId()]['function_group'] = $oFunction->getSchoolFunction()->getFunctionGroup();
+			if($oSchool) {
+				return array($oSchool, $oFunction);
 			}
-			if(count($aSchools) > 0) {
-				return reset($aSchools);
-			}
-			return null;
 		}
+		return null;
 	}
 
 	private function renderFilter($oTemplate, $aFunctionGroups) {
@@ -141,25 +149,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		}
 	}
 
-	private static function getDomainBySchoolUnit($sSchoolUnit) {
-		switch($sSchoolUnit) {
-			case "Kindergarten" : $sDomain = 'kindergarten'; break;
-			case "Primarschule Altenburg" : 	$sDomain = 'primarschule-altenburg'; break;
-			case "Primarschule Dorf" :				$sDomain = 'primarschule-dorf'; break;
-			case "Primarschule Margeläcker" : $sDomain = 'primarschule-margelaecker'; break;
-			case "Primarschule Zehntenhof" :	$sDomain = 'primarschule-zehntenhof'; break;
-			case "Bezirksschule" : $sDomain = 'bezirksschule'; break;
-			case "Realschule Wettingen" : $sDomain = 'sereal'; break;
-			case "Sekundarschule Wettingen" : $sDomain = 'sereal'; break;
-			case "Heilpädagogische Schule" : $sDomain = 'heilpaedagogische-schule'; break;
-			case "Musikschule" : $sDomain = 'musikschule'; break;
-			case "Rathaus" : $sDomain = 'portal'; break;
-			default : $sDomain = null;
-		}
-		return $sDomain;
-	}
-
-	private function renderDetail($oTemplate) {
+	private function renderDetail() {
 		if(!$this->oTeamMember) {
 			return null;
 		}
@@ -173,8 +163,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		$this->renderClasses($oDetailTemplate);
 		$this->renderPortrait($oDetailTemplate);
 
-		$oTemplate->replaceIdentifier('container', $oDetailTemplate, 'content');
-		$oTemplate->replaceIdentifier('container_filled_types', 'team_members', 'content');
+		return $oDetailTemplate;
 	}
 
 	private function renderFunctions($oTemplate) {
@@ -201,7 +190,9 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 					}
 				}
 				$oItemTemplate = clone $oItemPrototype;
-				$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link(array_merge($this->oClassPage->getFullPathArray(), array($oSchoolClass->getSchoolClass()->getSlug())))), $oSchoolClass->getSchoolClass()->getFullClassName()));
+				if($this->oClassPage) {
+					$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link(array_merge($this->oClassPage->getFullPathArray(), array($oSchoolClass->getSchoolClass()->getSlug())))), $oSchoolClass->getSchoolClass()->getFullClassName()));
+				}
 				$oTemplate->replaceIdentifierMultiple('klassenlehrer_info', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
 			}
 		}
