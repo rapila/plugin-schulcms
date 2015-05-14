@@ -30,7 +30,10 @@
 			return React.createElement('div',
 				{},
 				[
-					React.createElement('h3', {key: 'title'}, this.props.faq.Title),
+					React.createElement('h3',
+						{key: 'title'},
+						React.createElement('a', {href: this.props.faq.link}, this.props.faq.Title)
+					),
 					React.createElement('div', {key: 'content', dangerouslySetInnerHTML: {__html: this.props.faq.Content}}),
 					React.createElement(FAQTagList, {key: 'tags', tags: this.props.faq.tags, focusTag: this.props.focusTag})
 				]
