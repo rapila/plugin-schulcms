@@ -1,3 +1,4 @@
+{{includeTemplate=filter}}
 <table class="news list">
 	<thead>
 		<tr>
@@ -6,7 +7,7 @@
 			<th>{{writeString=news.heading.news_type}}</th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody data-wok-htmlSource="/newsData" data-wok-htmlFiltered="newsData.filtered">
 		{{items}}
 	</tbody>
 </table>
