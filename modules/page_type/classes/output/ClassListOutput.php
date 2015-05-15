@@ -7,21 +7,31 @@ class ClassListOutput extends ClassOutput {
 	}
 
 	public function renderContent() {
+		$oCache = new Cache('class_list_outpu/'.Session::language().'/'.$this->oNavigationItem->getId(), 'full_page');
+		if($oCache->entryExists() && !$oCache->isOlderThan($this->oPage) && !$oCache->isOlderThan($this->listQuery())) {
+			$oTemplate = $oCache->getContentsAsVariable();
+		} else {
+			$oTemplate = $this->renderContentUncached();
+			$oCache->setContents($oTemplate);
+		}
+		return $oTemplate;
+	}
+
+	public function renderContentUncached() {
 		$aClassTypes = null;
 		$oTemplate = $this->oPageType->constructTemplate('list', true);
 		$oItemPrototype = $this->oPageType->constructTemplate('list_item', true);
 
-
-		$aClasses = SchoolClassQuery::create()->filterByClassTypeYearAndSchool($aClassTypes)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers(true)->orderByUnitName()->find();
-		$oTemplate->replaceIdentifier('class_news', $this->includeClassNews());
+		$aClasses = $this->listQuery()->orderByUnitName()->find();
 
 		// Prepare class type filter
 		$aClassTypes = array();
+
+		// Render classes
 		foreach($aClasses as $oClass) {
 			if(!in_array($oClass->getClassType(), $aClassTypes)) {
 				$aClassTypes[] = $oClass->getClassType();
 			}
-			// get all infos that are independent of teaching unit
 			$oTemplate->replaceIdentifierMultiple('items', $this->renderItem($oClass, clone $oItemPrototype));
 		}
 
@@ -84,6 +94,10 @@ class ClassListOutput extends ClassOutput {
 			$oNews->renderItem($oTemplate);
 			return $oTemplate;
 		}
+	}
+
+	public function listQuery() {
+		return SchoolClassQuery::create()->filterByClassTypeYearAndSchool($aClassTypes)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers(true);
 	}
 
 	public function renderContext() {
