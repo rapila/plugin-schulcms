@@ -79,6 +79,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		if(!$oListTemplate->hasIdentifier('filters')) {
 			$this->bRequiresFilter = false;
 		}
+		$oListTemplate->replaceIdentifier('title', FrontendManager::$CURRENT_NAVIGATION_ITEM->getTitle());
 		$oItemPrototype = $this->constructTemplate('list_item');
 		$aFunctionGroups = array();
 		foreach($this->listQuery()->find() as $oTeamMember) {
@@ -154,6 +155,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			return null;
 		}
 		$oDetailTemplate = $this->constructTemplate('detail');
+		$oDetailTemplate->replaceIdentifier('title', FrontendManager::$CURRENT_NAVIGATION_ITEM->getTitle());
 		$oDetailTemplate->replaceIdentifier('full_name_inverted', $this->oTeamMember->getFullName());
 		if($this->oTeamMember->getProfession() != null) {
 			$oDetailTemplate->replaceIdentifier('profession', $this->oTeamMember->getProfession());
