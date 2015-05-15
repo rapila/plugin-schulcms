@@ -5,7 +5,9 @@ class EventsFileModule extends FileModule {
 
 	public function __construct($aRequestPath = null, $oQuery = null) {
 		parent::__construct($aRequestPath);
-		if($oQuery) {
+		if($oQuery instanceof ClassNavigationItem) {
+			$this->oQuery = FrontendEventQuery::create()->filterBySchoolClassId($oQuery->getClass()->getId());
+		} elseif($oQuery) {
 			$this->oQuery = $oQuery;
 		} else {
 			$this->oQuery = FrontendEventQuery::create()->excludeClassEvents();
@@ -29,7 +31,7 @@ class EventsFileModule extends FileModule {
 		LinkUtil::sendCacheControlHeaders($this->oQuery);
 		print $sResult;
 	}
-	
+
 	private function getFeed() {
 		$oDocument = new DOMDocument();
 		$oRoot = $oDocument->createElement("rss");
