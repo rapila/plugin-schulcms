@@ -3,6 +3,7 @@ Widget.types.class_detail = {
 		var _this = this;
 		this._element = Widget.parseHTML("{{includeTemplate=edit}}");
 		this.current_detail_id = null;
+		this.force_update=false;
 
 		// Prepare  news, events, documents and links elements
 		this.add_news_button = this._element.find('.add_entry.add_news').click(this.create_news.bind(this));
@@ -39,9 +40,11 @@ Widget.types.class_detail = {
 		});
 
 		this.handle('saving', function(event, data) {
+			var _this = this;
 			data.class_portrait_id = _this.class_portrait_id;
 			data.class_schedule_id = _this.class_schedule_id;
 			data.week_schedule_id = _this.week_schedule_id;
+			data.force_update = _this.force_update;
 		});
 	},
 
@@ -151,6 +154,7 @@ Widget.types.class_detail = {
 	},
 
 	upload_success: function(document_id, options) {
+		var _this = this;
 		if(options.class_document_type === 'schedule') {
 			this.class_schedule_id = document_id;
 		} else if(options.class_document_type === 'week_schedule') {
@@ -158,6 +162,7 @@ Widget.types.class_detail = {
 		} else {
 			this.class_portrait_id = document_id;
 		}
+		_this.force_update = true;
 		this.save(true);
 	},
 
@@ -236,6 +241,7 @@ Widget.types.class_detail = {
 			widget.open();
 			widget.save_callback = function(news_id) {
 				_this.reload_news(true);
+				_this.force_update = true;
 			};
 			_this.add_news_button.removeClass('ui-loading-add');
 		});
@@ -251,6 +257,7 @@ Widget.types.class_detail = {
 			widget.open();
 			widget.save_callback = function() {
 				_this.reload_events(true);
+				_this.force_update = true;
 			};
 			_this.add_event_button.removeClass('ui-loading-add');
 		});
@@ -267,6 +274,7 @@ Widget.types.class_detail = {
 			widget.save_callback = function(document_id) {
 				_this.addClassDocument(document_id);
 				_this.reload_documents(true);
+				_this.force_update = true;
 			};
 			_this.add_document_button.removeClass('ui-loading-add');
 		});

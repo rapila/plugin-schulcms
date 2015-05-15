@@ -103,20 +103,23 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		return $oClassDocument->save();
 	}
 
-	public function saveData($aSchoolClassData) {
+	public function saveData($aData) {
 		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
-		if($aSchoolClassData['class_portrait_id'] == null && $oSchoolClass->getDocumentRelatedByClassPortraitId()) {
+		if($aData['class_portrait_id'] == null && $oSchoolClass->getDocumentRelatedByClassPortraitId()) {
 			$oSchoolClass->getDocumentRelatedByClassPortraitId()->delete();
 		}
-		$oSchoolClass->setClassPortraitId($aSchoolClassData['class_portrait_id']);
-		if($aSchoolClassData['class_schedule_id'] == null && $oSchoolClass->getDocumentRelatedByClassScheduleId()) {
+		$oSchoolClass->setClassPortraitId($aData['class_portrait_id']);
+		if($aData['class_schedule_id'] == null && $oSchoolClass->getDocumentRelatedByClassScheduleId()) {
 			$oSchoolClass->getDocumentRelatedByClassScheduleId()->delete();
 		}
-		$oSchoolClass->setClassScheduleId($aSchoolClassData['class_schedule_id']);
-		if($aSchoolClassData['week_schedule_id'] == null && $oSchoolClass->getDocumentRelatedByWeekScheduleId()) {
+		$oSchoolClass->setClassScheduleId($aData['class_schedule_id']);
+		if($aData['week_schedule_id'] == null && $oSchoolClass->getDocumentRelatedByWeekScheduleId()) {
 			$oSchoolClass->getDocumentRelatedByWeekScheduleId()->delete();
 		}
-		$oSchoolClass->setWeekScheduleId($aSchoolClassData['week_schedule_id']);
+		$oSchoolClass->setWeekScheduleId($aData['week_schedule_id']);
+		if($aData['force_update']) {
+			$oSchoolClass->setUpdatedAt(time());
+		}
 		return $oSchoolClass->save();
 	}
 
