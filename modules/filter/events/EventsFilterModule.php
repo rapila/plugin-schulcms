@@ -52,6 +52,14 @@ class EventsFilterModule extends FilterModule {
 		}
 	}
 
+	public function onNavigationItemChildrenCacheDetectOutdated($oNavigationItem, $oCache, $aContainer) {
+		$bIsOutdated = &$aContainer[0];
+		if($bIsOutdated) {
+			return;
+		}
+		$bIsOutdated = true;
+	}
+
 	public function onPageHasBeenSet($oPage, $bIsNotFound, $oNavigationItem) {
 		$sType = $oPage->getPageType();
 		if($sType !== 'events') {
