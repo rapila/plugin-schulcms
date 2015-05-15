@@ -10,7 +10,7 @@ class ClassMaterialsOutput extends ClassOutput {
 		if(!$this->oClass) {
 			return null;
 		}
-		$oTemplate = $this->oPageType->constructTemplate('document_list');
+		$oTemplate = $this->oPageType->constructTemplate('materials');
 		$oDocumentPrototype = $this->oPageType->constructTemplate('document_list_item');
 		foreach($this->oClass->getClassDocuments() as $oClassDocument) {
 			$oItemTemplate = clone $oDocumentPrototype;

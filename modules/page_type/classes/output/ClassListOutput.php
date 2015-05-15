@@ -20,9 +20,10 @@ class ClassListOutput extends ClassOutput {
 	public function renderContentUncached() {
 		$aClassTypes = null;
 		$oTemplate = $this->oPageType->constructTemplate('list', true);
+		$oTemplate->replaceIdentifier('title', FrontendManager::$CURRENT_NAVIGATION_ITEM->getTitle());
 		$oItemPrototype = $this->oPageType->constructTemplate('list_item', true);
 
-		$aClasses = $this->listQuery()->orderByUnitName()->find();
+		$aClasses = $this->listQuery($aClassTypes)->orderByUnitName()->find();
 
 		// Prepare class type filter
 		$aClassTypes = array();
@@ -96,7 +97,7 @@ class ClassListOutput extends ClassOutput {
 		}
 	}
 
-	public function listQuery() {
+	public function listQuery($aClassTypes = null) {
 		return SchoolClassQuery::create()->filterByClassTypeYearAndSchool($aClassTypes)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers(true);
 	}
 
