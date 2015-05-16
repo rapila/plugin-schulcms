@@ -1,6 +1,5 @@
 <?php
 class EventsPageTypeModule extends PageTypeModule {
-	const SESSION_BACK_TO_LIST_LINK = 'back_to_list_link';
 
 	public function __construct(Page $oPage = null, NavigationItem $oNavigationItem = null) {
 		parent::__construct($oPage, $oNavigationItem);
@@ -61,28 +60,15 @@ class EventsPageTypeModule extends PageTypeModule {
 		if($oEvent->getLocationInfo() != null) {
 			$oTemplate->replaceIdentifier('location_info', $oEvent->getLocationInfo());
 		}
+		$sClassLink = null;
+		if($oClass = $oEvent->getSchoolClass()) {
+			$sClassLink = LinkUtil::link($oClass->getLink());
+			$oTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href' => $sClassLink), $oClass->getFullClassName()));
+		}
 		if($oEvent->getTimeDetails() != null) {
 			$oTemplate->replaceIdentifier('time_details', $oEvent->getTimeDetails());
 		}
-
-		// Back to list link
-		/**
-		 * @todo replace by js history back link or include referrer
-		*/
-		if($oTemplate->hasIdentifier('back_to_list_link')) {
-			if($oSchoolClass = $oEvent->getSchoolClass()) {
-				$aBackToListLink = array_merge($oSchoolClass->getLink(), array('aktuell'));
-				$sLinkText = StringPeer::getString('class_event.back_to_class_link'). ' ' . $oSchoolClass->getUnitName();
-			} else {
-				$aBackToListLink = Session::getSession()->getAttribute(self::SESSION_BACK_TO_LIST_LINK);
-				if(!is_array($aBackToListLink)) {
-					$aBackToListLink = FrontendManager::$CURRENT_PAGE->getFullPathArray();
-					$sLinkText = StringPeer::getString('event.back_to_list_link');
-				}
-			}
-			$oTemplate->replaceIdentifier('link_text', $sLinkText);
-			$oTemplate->replaceIdentifier('back_to_list_link', LinkUtil::link($aBackToListLink));
-		}
+		$oTemplate->replaceIdentifier('fallback_url', $sClassLink ? $sClassLink : LinkUtil::link($this->oPage->getLink()));
 
 		// Display image gallery
 		self::renderGallery($oEvent, $oTemplate);

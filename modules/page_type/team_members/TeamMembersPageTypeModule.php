@@ -157,6 +157,8 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		$oDetailTemplate = $this->constructTemplate('detail');
 		$oDetailTemplate->replaceIdentifier('title', FrontendManager::$CURRENT_NAVIGATION_ITEM->getTitle());
 		$oDetailTemplate->replaceIdentifier('full_name_inverted', $this->oTeamMember->getFullName());
+		$oDetailTemplate->replaceIdentifier('fallback_url', LinkUtil::link($this->oPage->getLink()));
+
 		if($this->oTeamMember->getProfession() != null) {
 			$oDetailTemplate->replaceIdentifier('profession', $this->oTeamMember->getProfession());
 		}

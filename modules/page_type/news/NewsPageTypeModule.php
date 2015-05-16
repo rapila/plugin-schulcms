@@ -74,6 +74,7 @@ class NewsPageTypeModule extends PageTypeModule {
 		$oDetailTemplate->replaceIdentifier('date', $this->oNews->getDateStartFormatted());
 		$oDetailTemplate->replaceIdentifier('author', $this->oNews->getUserRelatedByUpdatedBy()->getFullName());
 		$oDetailTemplate->replaceIdentifier('news_type', $this->oNews->getNewsTypeName());
+		$oDetailTemplate->replaceIdentifier('fallback_url', LinkUtil::link($this->oPage->getLink()));
 
 		$oTemplate->replaceIdentifier('container', $oDetailTemplate, 'content');
 		$oTemplate->replaceIdentifier('container_filled_types', 'news', 'content');
