@@ -75,7 +75,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		return self::recentReport($oEvent);
 	}
 
-	public static function recentReport($oEvent, $oTemplate = null, $iMaxWidth = 300) {
+	public static function recentReport($oEvent, $sTitle = null) {
 		if($oEvent === null) {
 			return;
 		}
@@ -83,7 +83,9 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		if(!$oImage) {
 			return;
 		}
-		$oTemplate = $oTemplate === null ? static::template('recent_report') : $oTemplate;
+		$iMaxWidth = 300;
+		$oTemplate = static::template('recent_report');
+		$oTemplate->replaceIdentifier('title', $sTitle);
 		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink()));
 		$oTemplate->replaceIdentifier('detail_link_title', $oEvent->getTitle());
 		$oTemplate->replaceIdentifier('recent_report_image', TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => $iMaxWidth)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle())));
