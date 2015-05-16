@@ -7,7 +7,7 @@ class ClassListOutput extends ClassOutput {
 	}
 
 	public function renderContent() {
-		$oCache = new Cache('class_list_outpu/'.Session::language().'/'.$this->oNavigationItem->getId(), 'full_page');
+		$oCache = new Cache('class_list_output/'.Session::language().'/'.$this->oNavigationItem->getId(), 'full_page');
 		if($oCache->entryExists() && !$oCache->isOlderThan($this->oPage) && !$oCache->isOlderThan($this->listQuery())) {
 			$oTemplate = $oCache->getContentsAsVariable();
 		} else {
