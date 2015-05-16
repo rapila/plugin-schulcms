@@ -177,7 +177,7 @@ class ClassHomeOutput extends ClassOutput {
 		$aLinks = $this->oClass->getClassLinksOrdered();
 		$iDocumentCount = count($aDocuments);
 		$iLinkCount = count($aLinks);
-		$iContainerClass = $iLinkCount === 0 || $iDocumentCount === 0 ? ' single_container' : '';
+		$iContainerClass = $iLinkCount === 0 || $iDocumentCount === 0 ? ' single-container' : '';
 
 		if($iDocumentCount > 0) {
 			$oTemplate->replaceIdentifier('documents_title', StringPeer::getString('class_detail.heading.documents'));
