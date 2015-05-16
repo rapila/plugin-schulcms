@@ -244,7 +244,7 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function setUnitName($sName) {
-		$this->setSlug(StringUtil::normalize(str_replace('-', '', $sName), '-', '-'));
+		$this->setSlug(StringUtil::normalizePath($sName));
 		return parent::setUnitName($sName);
 	}
 
