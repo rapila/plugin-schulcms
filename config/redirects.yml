@@ -1,0 +1,4 @@
+# redirect examples if page is not found
+'de/verwaltung'                : 'organisation'
+'de/verwaltung/schulpflege'    : 'organisation/schulpflege'
+'de/verwaltung/schulleitung'   : 'schulkreise'
