@@ -309,7 +309,7 @@
 			};
 		},
 		// Renders a list of options from which one can be chosen
-		options: function options(element, prop, options) {
+		options: function options(element, prop, opts) {
 			var _this = this;
 			var selected = document.createElement('div');
 			selected.className = 'link-label selected';
@@ -317,7 +317,7 @@
 			element.cl = classList(element);
 			var available = element.querySelector('.available');
 			var availables = available.children;
-			options = options || {};
+			opts = opts || {};
 
 			function toggle(open) {
 				if(open !== true && open !== false) {
@@ -339,10 +339,10 @@
 			};
 
 			// Handle opening select items initially
-			if(options.open === 'onFirstLoad') {
-				options.open = ('localStorage' in window) && !window.localStorage.getItem(window.location.href+'-options-opened');
+			if(opts.open === 'onFirstLoad') {
+				opts.open = ('localStorage' in window) && !window.localStorage.getItem(window.location.href+'-options-opened');
 			}
-			if(options.open) {
+			if(opts.open) {
 				toggle(true);
 			}
 			('localStorage' in window) && window.localStorage.setItem(window.location.href+'-options-opened', true)
