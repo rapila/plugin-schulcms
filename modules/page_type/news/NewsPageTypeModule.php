@@ -26,7 +26,8 @@ class NewsPageTypeModule extends PageTypeModule {
 
 		$aTypes = array();
 		$oListTemplate->replaceIdentifier('title', FrontendManager::$CURRENT_NAVIGATION_ITEM->getTitle());
-		foreach($this->listQuery()->find() as $oNews) {
+		$aNews = $this->listQuery()->find();
+		foreach($aNews as $oNews) {
 			if($this->bRequiresFilter && !isset($aTypes[$oNews->getNewsTypeId()])) {
 				$aTypes[$oNews->getNewsTypeId()] = $oNews->getNewsType()->getName();
 			}
@@ -38,6 +39,11 @@ class NewsPageTypeModule extends PageTypeModule {
 			$oItemTemplate->replaceIdentifier('id', $oNews->getId());
 			$oItemTemplate->replaceIdentifier('date', $oNews->getDateStartFormatted());
 			$oListTemplate->replaceIdentifierMultiple('items', $oItemTemplate);
+		}
+		if(count($aNews) === 0) {
+			$oItemTemplate = clone $oItemPrototype;
+			$oItemTemplate->replaceIdentifier('date', StringPeer::getString('news.no_entries_available'));
+			$oListTemplate->replaceIdentifier('items', $oItemTemplate);
 		}
 		$this->renderFilter($oListTemplate, $aTypes);
 		$oTemplate->replaceIdentifier('container', $oListTemplate, 'content');
