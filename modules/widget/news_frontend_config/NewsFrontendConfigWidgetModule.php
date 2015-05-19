@@ -28,7 +28,7 @@ class NewsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	private function getDisplayOptions() {
 		$aResult = array();
 		foreach(NewsFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
-			$aResult[$sDisplayMode] = StringPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);
+			$aResult[$sDisplayMode] = StringPeer::getString('news.display_mode.'.$sDisplayMode, null, $sDisplayMode);
 		}
 		return $aResult;
 	}
