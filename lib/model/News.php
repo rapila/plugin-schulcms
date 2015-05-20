@@ -35,7 +35,7 @@ class News extends BaseNews {
 		return $this->getNewsType()->getName();
 	}
 
-	public function getBodyShortTruncated($iLength = 80) {
+	public function getBodyShortTruncated($iLength = 40) {
 		$sText = '';
 		if(is_resource($this->getBodyShort())) {
 			$sText = RichtextUtil::parseStorageForBackendOutput(stream_get_contents($this->getBodyShort()))->render();
