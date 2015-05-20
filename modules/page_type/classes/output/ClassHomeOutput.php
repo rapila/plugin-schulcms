@@ -126,7 +126,7 @@ class ClassHomeOutput extends ClassOutput {
 			$oNewsTemplate->replaceIdentifier('author_name', $oNews->getUserRelatedByUpdatedBy()->getFullName());
 		} else {
 			$oNewsTemplate->replaceIdentifier('headline', 'Willkommen');
-			$oNewsTemplate->replaceIdentifier('content', TagWriter::quickTag('p', array(), 'Some text bla bla'));
+			$oNewsTemplate->replaceIdentifier('content', TagWriter::quickTag('p', array(), 'auf der Webseite der Klasse '.$this->oClass->getFullClassName()));
 		}
 		$oTemplate->replaceIdentifier('news', $oNewsTemplate);
 	}
