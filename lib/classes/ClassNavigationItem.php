@@ -19,8 +19,8 @@ class ClassNavigationItem extends VirtualNavigationItem {
 		parent::__construct(get_class(), $sName, $sTitle, $sLinkText, $oData);
 	}
 
-	public static function create($sName, $sLinkText, SchoolClass $oSchoolClass = null, $sMode, $sDisplayType = 'default') {
-		return new ClassNavigationItem($sName, $sLinkText, $oSchoolClass, $sMode, $sDisplayType);
+	public static function create($sName, $sLinkText, SchoolClass $oSchoolClass = null, $sMode, $sDisplayType = 'default', $sTitle = null) {
+		return new ClassNavigationItem($sName, $sLinkText, $oSchoolClass, $sMode, $sDisplayType, $sTitle);
 	}
 
 	public function getMode() {

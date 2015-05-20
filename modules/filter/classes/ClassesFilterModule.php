@@ -59,13 +59,13 @@ class ClassesFilterModule extends FilterModule {
 
 	private function renderClassPageItems($oNavigationItem) {
 		$oClass = $oNavigationItem->getClass();
-		$oNavigationItem->addChild(ClassNavigationItem::create('aktuell', 'Veranstaltungen', $oClass, self::CLASS_EVENTS_IDENTIFIER));
+		$oNavigationItem->addChild(ClassNavigationItem::create('aktuell', 'Kalender', $oClass, self::CLASS_EVENTS_IDENTIFIER, null, "Veranstaltungen, Ferien & Feiertage"));
 		// only display if display_mode is "full"
 		if($oNavigationItem->getDisplayType() === 'full') {
-			$oNavigationItem->addChild(ClassNavigationItem::create('materialien', 'Materialien', $oClass, self::CLASS_MATERIALS_IDENTIFIER));
+			$oNavigationItem->addChild(ClassNavigationItem::create('materialien', 'Materialien', $oClass, self::CLASS_MATERIALS_IDENTIFIER, null, 'Dokumente & Links'));
 		}
 		if($oNavigationItem->getDisplayType() === 'location') {
-			$oNavigationItem->addChild(ClassNavigationItem::create('standort', 'Standort', $oClass, self::CLASS_LOCATION_IDENTIFIER));
+			$oNavigationItem->addChild(ClassNavigationItem::create('standort', 'Standort', $oClass, self::CLASS_LOCATION_IDENTIFIER, null, 'Adresse & Lageplan'));
 		}
 		$oNavigationItem->addChild(ClassNavigationItem::create('feed', 'RSS-Feed', $oClass, 'feed')->setIndexed(false));
 	}
