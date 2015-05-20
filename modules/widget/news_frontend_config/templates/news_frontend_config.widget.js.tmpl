@@ -2,7 +2,6 @@ Widget.types.news_frontend_config = {
 	prepare: function() {
 		var _this = this;
 		this._element.append(Widget.parseHTML('{{includeTemplate=config}}'));
-
 		var config = this.getConfigData() || {};
 
 		//Elements
@@ -16,17 +15,21 @@ Widget.types.news_frontend_config = {
 		//Set options
 		var finish = [];
 		this.options(function(data) {
-			this.mode_dropdown.populate(data.display_options, config.display_mode);
+			this.mode_dropdown.populate(data.display_options, config.display_mode || this.settings.initial_selection);
 			this.news_type_dropdown.populate(data.news_type_options, config.news_type, false);
 			this.limit_dropdown.populate(data.limit_options, config.limit || "__all");
 		}.deferred(finish));
+		this.mode_dropdown.change(function() {
+			var value = jQuery(this).val();
+			_this._element.find('div.limit_options').toggle(jQuery(this).val() !== 'detail');
+		});
+		this.mode_dropdown.change();
 
 		jQuery.when.apply(jQuery, finish).then(function() {
 			this.update_preview();
 		}.bind(this));
 
 		//Init preview stuff
-		var detail_widget;
 		Widget.create('news_detail', function(widget) {
 			_this.detail_widget = widget;
 			widget.save_callback = _this.update_preview.bind(_this);
@@ -36,6 +39,9 @@ Widget.types.news_frontend_config = {
 			_this.detail_widget.setNoteId(id);
 			_this.detail_widget.fill_data();
 			_this.detail_widget.open();
+		});
+		this.handle('opened', function() {
+			_this.mode_dropdown.change();
 		});
 	},
 
@@ -52,6 +58,10 @@ Widget.types.news_frontend_config = {
 
 	save: function() {
 		return this._element.serializeArrayKV();
+	},
+
+	settings: {
+		initial_selection: 'list_short'
 	},
 
 	additional_buttons: [
