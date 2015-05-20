@@ -1,5 +1,5 @@
 <h1>{{title}}</h1>
-<div>
+<div class="class-heading">
 	<div class="class-portrait">{{class_portrait}}</div>
 	<div class="class-info info-box">
 		<div class="main_info">
@@ -14,10 +14,9 @@
 			{{schedule_extra}}</div>
 	</div>
 </div>
-<span>{{class_portrait_label}}</span>
-	{{news}}{{identifierContext=start;name=document_title}}
+{{news}}{{identifierContext=start;name=document_title}}
 <div class="documents columnview{{single_container_class}}">
-	<h2>{{documents_title}}</h2>
+<h2>{{documents_title}}</h2>
 	{{documents}}
 </div>{{identifierContext=end;name=document_title}}{{identifierContext=start;name=links_title}}
 <div class="links columnview{{single_container_class}}">
