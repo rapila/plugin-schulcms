@@ -167,7 +167,7 @@ class ClassHomeOutput extends ClassOutput {
 	}
 
 	private function renderUpcomingEvents($oTemplate, $iCount = 10) {
-		$aEvents = FrontendEventQuery::create()->filterBySchoolClass($this->oClass)->upcomingOrOngoing()->orderByUpdatedAt()->limit($iCount)->find();
+		$aEvents = FrontendEventQuery::create()->filterBySchoolClass($this->oClass)->upcomingOrOngoing()->orderByDateStart()->limit($iCount)->find();
 		$oTemplate->replaceIdentifier('events_overview', EventsFrontendModule::renderOverviewList($aEvents, 100, StringPeer::getString('class.no_future_events_available')));
 	}
 
@@ -195,6 +195,7 @@ class ClassHomeOutput extends ClassOutput {
 		// Display links if available
 		if($iLinkCount > 0) {
 			$oTemplate->replaceIdentifier('links_title', StringPeer::getString('class_detail.heading.links'));
+			ErrorHandler::log('links single_container_class', $iContainerClass);
 			$oTemplate->replaceIdentifier('single_container_class', $iContainerClass);
 			$oLinkPrototype = $this->oPageType->constructTemplate('link');
 			foreach($aLinks as $oLink) {
