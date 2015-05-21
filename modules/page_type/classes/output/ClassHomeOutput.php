@@ -79,21 +79,14 @@ class ClassHomeOutput extends ClassOutput {
 
 		// Class portrait
 		$oPortrait = $this->oClass->getDocumentRelatedByClassPortraitId();
-		$sLabel = '';
 
 		if(!$oPortrait) {
 			$oPortrait = DocumentQuery::create()->filterByName('klassenbild_platzhalter')->findOne();
-			if(Session::getSession()->isAuthenticated() && Session::getSession()->getUser()->getIsBackendLoginEnabled()) {
-				$sLabel = '(Bitte eigenes Klassenfoto hochladen)';
-			}
-		} else {
-			$sLabel = 'Klassenfoto '.$this->oClass->getUnitName();
 		}
 		if($oPortrait) {
 			$oImageTag = TagWriter::quickTag('img', array('src' => $oPortrait->getDisplayUrl(array('max_width' => 500))));
 			$oTemplate->replaceIdentifier('class_portrait', $oImageTag);
 		}
-		$oTemplate->replaceIdentifier('class_portrait_label', $sLabel);
 
 		// Main class teachers
 		foreach($this->oClass->getTeachersByUnitName(true) as $i => $oClassTeacher) {
