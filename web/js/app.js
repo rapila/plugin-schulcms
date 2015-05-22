@@ -451,8 +451,8 @@
 
 		'class-from-event': function(element, mode) {
 			var onlyShowCommon = mode === 'common_only';
-			var classIds = null;
-			if(!onlyShowCommon) {
+			var classIds = [];
+			if(!onlyShowCommon && mode) {
 				classIds = mode.split('|');
 				for(var i=0;i<classIds.length;i++) {
 					classIds[i] = parseInt(classIds[i], 10);
@@ -462,10 +462,14 @@
 			return {
 				render: function(configuration, data) {
 					for(var key in data) {
-						if(onlyShowCommon && !data[key].is_common) {
-							delete data[key];
-						} else if(classIds.length && classIds.indexOf(data[key].class_id) === -1 && !data[key].is_forced_upon_class) {
-							delete data[key];
+						if(onlyShowCommon) {
+							if(!data[key].is_common) {
+								delete data[key];
+							}
+						} else {
+							if(classIds.length && classIds.indexOf(data[key].class_id) === -1 && !data[key].is_forced_upon_class) {
+								delete data[key];
+							}
 						}
 					}
 				}
