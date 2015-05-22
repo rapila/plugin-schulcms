@@ -87,6 +87,16 @@ class ClassesFilterModule extends FilterModule {
 		if($bIsNotFound || !($oNavigationItem instanceof ClassNavigationItem)) {
 			return;
 		}
+
+		$oClass = $oNavigationItem->getClass();
+		$aArgs = array('class' => $oClass->getId());
+
+		// TODO: Link to RSS feed (in anlässe or as a file module) and pass the class id so it uses class news and class events
+		$aRSSFeedLink = array();
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'location' => LinkUtil::link($aRSSFeedLink, 'FrontendManager', $aArgs), 'title' => StringPeer::getString('appointments.subscribe.rss')));
+		// TODO: Link to ical feed in anlässe and pass class id
+		$aCalendarFeedLink = array();
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'ical', 'location' => LinkUtil::link($aCalendarFeedLink, 'FrontendManager', $aArgs), 'title' => StringPeer::getString('appointments.subscribe.rss')));
 	}
 
 	public function onLinkOperationCheck($sOperation, $oOnObject, $oUser, $aContainer) {
