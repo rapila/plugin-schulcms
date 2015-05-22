@@ -16,7 +16,7 @@ class ClassListOutput extends ClassOutput {
 		$oTemplate->replaceIdentifier('title', FrontendManager::$CURRENT_NAVIGATION_ITEM->getTitle());
 		$oItemPrototype = $this->oPageType->constructTemplate('list_item', true);
 
-		$aClasses = $this->listQuery($aClassTypes)->orderByUnitName()->find();
+		$aClasses = self::listQuery($aClassTypes)->orderByUnitName()->find();
 
 		// Prepare class type filter
 		$aClassTypes = array();
@@ -90,8 +90,8 @@ class ClassListOutput extends ClassOutput {
 		}
 	}
 
-	public function listQuery($aClassTypes = null) {
-		return SchoolClassQuery::create()->filterByClassTypeYearAndSchool($aClassTypes)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers(true);
+	public static function listQuery($aClassTypes = null, $mYear = true) {
+		return SchoolClassQuery::create()->filterByClassTypeAndYear($aClassTypes, $mYear)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers(true);
 	}
 
 	public function renderContext() {

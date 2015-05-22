@@ -19,7 +19,7 @@ class ClassesFilterModule extends FilterModule {
 					$oNavigationItem->addChild(SubjectNavigationItem::create($aData['Slug'], $aData['Name'], $aData['Id'], $sClassType));
 				}
 			} else {
-				$aClasses = SchoolClassQuery::create()->groupByUnitName()->hasStudents()->excludeSubjectClasses()->find();
+				$aClasses = ClassListOutput::listQuery(null, null)->find();
 				$this->renderClassNavigationItems($oNavigationItem, $aClasses, $sDisplayType);
 			}
 		}
@@ -33,11 +33,10 @@ class ClassesFilterModule extends FilterModule {
 		if(!($oNavigationItem instanceof ClassNavigationItem)) {
 			return;
 		}
-
 		// Render all years of current class
 		if($oNavigationItem->getMode() === 'root') {
 			$sSlug = $oNavigationItem->getName();
-			$oCriteria = SchoolClassQuery::create()->filterBySlug($sSlug)->hasStudents()->orderByYear(Criteria::DESC);
+			$oCriteria = SchoolClassQuery::create()->hasStudents()->filterBySlug($sSlug)->orderByYear(Criteria::DESC);
 			foreach($oCriteria->find() as $oClass) {
 				$sName = $oClass->isCurrent() ? $oClass->getFullClassName() : $oClass->getFullClassNameWithYear();
 				$oClassItem = new ClassNavigationItem($oClass->getYear(), $oClass->getFullClassName().' Home', $oClass, 'home', $oNavigationItem->getDisplayType(), $sName);

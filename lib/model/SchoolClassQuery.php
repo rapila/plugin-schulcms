@@ -21,7 +21,6 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 		return $this->useClassTeacherQuery()->filterByIsClassTeacher(true)->endUse();
 	}
 
-
 	/**
 	* @todo should be reconsidered
 	*				School classes should only be synced according to "white lists" and displayed if they have students
@@ -39,25 +38,32 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 		return $this->filterBySubjectId(null, Criteria::ISNULL);
 	}
 
-	public function filterByClassTypeYearAndSchool($sClassType = null, $iYear = null, $oSchool = null) {
-		$this->filterByYearAndSchool($iYear, $oSchool);
-		$this->includeClassTypesIfConfigured();
-		if($sClassType) {
-			$this->filterByClassType($sClassType);
-		}
+	public function filterByClassTypeAndYear($sClassType = null, $mYear = true) {
+		$this->filterBySchoolClassType($sClassType);
+		$this->filterBySchoolYear($mYear);
 		$this->groupByUnitName()->joinClassStudent();
 		return $this;
 	}
 
-	public function filterByYearAndSchool($iYear = null, $oSchool = null) {
-		if($oSchool === null) $oSchool = SchoolPeer::getSchool();
-		if($oSchool === null) {
-			throw new Exception(__METHOD__.' valid school object required. Please check configuration or Sync');
+	public function filterBySchoolClassType($sClassType = null) {
+		$this->includeClassTypesIfConfigured();
+		if($sClassType) {
+			$this->filterByClassType($sClassType);
 		}
-		$iYear = $iYear === null ? $oSchool->getCurrentYear() : $iYear;
-		// Limiting the result by $this->filterBySchool($oSchool)->distinct() can't be used since some schools operate with multiple school_ids
-		// Should be no problem since generally only the data are synced that are related to preconfigured school_ids
-		return $this->filterByYear($iYear);
+		return $this;
+	}
+
+	public function filterBySchoolYear($mYear = true) {
+		if($mYear === true) {
+			$oSchool = SchoolPeer::getSchool();
+			if($oSchool === null) {
+				throw new Exception(__METHOD__.' valid school object required. Please check configuration or Sync');
+			}
+			$mYear = $oSchool->getCurrentYear();
+		}
+		if(is_int($mYear)) {
+			return $this->filterByYear($mYear);
+		}
 	}
 
 }
