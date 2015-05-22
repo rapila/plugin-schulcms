@@ -451,9 +451,12 @@
 
 		'class-from-event': function(element, mode) {
 			var onlyShowCommon = mode === 'common_only';
-			var classId = parseInt(mode, 10);
-			if(isNaN(classId)) {
-				classId = null;
+			var classIds = null;
+			if(!onlyShowCommon) {
+				classIds = mode.split('|');
+				for(var i=0;i<classIds.length;i++) {
+					classIds[i] = parseInt(classIds[i], 10);
+				}
 			}
 			element.remove();
 			return {
@@ -461,8 +464,7 @@
 					for(var key in data) {
 						if(onlyShowCommon && !data[key].is_common) {
 							delete data[key];
-						}
-						if(classId !== null && data[key].class_id !== classId && !data[key].is_forced_upon_class) {
+						} else if(classIds.length && classIds.indexOf(data[key].class_id) === -1 && !data[key].is_forced_upon_class) {
 							delete data[key];
 						}
 					}

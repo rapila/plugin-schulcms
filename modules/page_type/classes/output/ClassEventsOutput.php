@@ -10,7 +10,7 @@ class ClassEventsOutput extends ClassOutput {
 
 	public function renderContent() {
 		$oPage = PageQuery::create()->filterByPageType('events')->findOne();
-		EventsPageTypeModule::includeCalendar($this->oTemplate, $oPage, $this->getClass()->getId());
+		EventsPageTypeModule::includeCalendar($this->oTemplate, $oPage, $this->getClass());
 		$this->oTemplate->replaceIdentifier('container_filled_types', 'classes', 'content');
 	}
 }

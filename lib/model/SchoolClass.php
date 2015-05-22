@@ -259,6 +259,23 @@ class SchoolClass extends BaseSchoolClass {
 		return $this->getSchoolClassRelatedByAncestorClassId();
 	}
 
+	public function getLinkedClassIds() {
+		$aIds = array();
+		// Search forwards
+		$iId = $this->getId();
+		while($iId != null) {
+			$aIds[] = $iId;
+			$iId = SchoolClassQuery::create()->filterByAncestorClassId($iId)->select('Id')->findOne();
+		}
+		// Search backwards
+		$iId = $this->getId();
+		while($iId != null) {
+			$aIds[] = $iId;
+			$iId = SchoolClassQuery::create()->filterById($iId)->select('AncestorClassId')->findOne();
+		}
+		return array_unique($aIds, SORT_NUMERIC);
+	}
+
 	public function latestUpdatedLink($bObject = false) {
 		$oQuery = LinkQuery::create()->useClassLinkQuery()->filterBySchoolClassId($this->getId())->endUse()->orderByUpdatedAt('desc');
 		if($bObject) {

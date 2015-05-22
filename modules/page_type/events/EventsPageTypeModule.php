@@ -21,7 +21,7 @@ class EventsPageTypeModule extends PageTypeModule {
 		self::includeCalendar($oTemplate, $this->oPage);
 	}
 
-	public static function includeCalendar($oTemplate, $oEventPage, $iClassId = null) {
+	public static function includeCalendar($oTemplate, $oEventPage, $oClass = null) {
 		$oResourceIncluder = ResourceIncluder::namedIncluder('additional_js');
 		$aPageLink = $oEventPage->getFullPathArray();
 		$oResourceIncluder->addResource('events.js');
@@ -32,7 +32,7 @@ class EventsPageTypeModule extends PageTypeModule {
 		$oDownload->replaceIdentifier('subscribe_ical', LinkUtil::absoluteLink(LinkUtil::link(array_merge($aPageLink, array('calendar.ics'))), null, 'webcal://'));
 		$oTemplate->replaceIdentifierMultiple('container', $oDownload, 'content');
 		$oFilterTemplate = static::template('content/filter');
-		$oFilterTemplate->replaceIdentifier('class_id', $iClassId === null ? 'common_only' : $iClassId);
+		$oFilterTemplate->replaceIdentifier('class_id', $oClass === null ? 'common_only' : implode('|', $oClass->getLinkedClassIds()));
 		$oTemplate->replaceIdentifierMultiple('container', $oFilterTemplate, 'content');
 		$oTemplate->replaceIdentifierMultiple('container', static::template('content/calendar-content'), 'content');
 	}
