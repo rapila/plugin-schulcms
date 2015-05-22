@@ -598,5 +598,18 @@
 	document.addEventListener('DOMContentLoaded', function() {
 		// Search the entire document for uses of the plugins just registered
 		wok.init(document.documentElement);
+
+		// Handle back links
+		var backLinks = document.querySelectorAll('.back-link');
+		for(var i=0;i<backLinks.length;i++) {
+			var backLink = backLinks[i];
+			backLink.addEventListener('click', function(event) {
+				if(document.referrer) {
+					window.history.back();
+				} else {
+					window.location.href = this.getAttribute('data-url');
+				}
+			}, false);
+		}
 	}, false);
 })();
