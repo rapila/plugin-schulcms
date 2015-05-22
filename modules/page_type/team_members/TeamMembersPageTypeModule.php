@@ -51,7 +51,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			list($oSchool, $oFunction) = $aMainSchoolInfo;
 			$oSchoolSite = SchoolSiteQuery::siteBySchool($oSchool);
 			if(!$oSchoolSite) {
-				ErrorHandler::handleException(new Exception("No school site found for school with id "+$oSchool->getId()), true);
+				ErrorHandler::handleException(new Exception("No school site found for school with id ".$oSchool->getId()), true);
 				continue;
 			}
 			//prepare function group filter
