@@ -1,6 +1,6 @@
 (function(wok) {
 	'use strict';
-	
+
 	var Appointment = React.createClass({
 		render: function() {
 			function shortMonth(month) {
@@ -156,7 +156,7 @@
 			);
 		}
 	});
-	
+
 	var Appointments = React.createClass({
 		render: function() {
 			var _this = this;
@@ -180,7 +180,7 @@
 			);
 		}
 	});
-	
+
 	var Day = React.createClass({
 		render: function() {
 			var day = this.props.day;
@@ -218,13 +218,14 @@
 					'data-appointment-count': day.appointments.length,
 					'data-event-count': day.counts.event || 0,
 					'data-date-count': day.counts.date || 0,
-					'data-day': day.date.getUTCDate()
+					'data-day': day.date.getUTCDate(),
+					title: (day.appointments.length === 1) ? day.appointments[0].name : null
 				},
 				elements
 			);
 		}
 	});
-	
+
 	var Month = React.createClass({
 		render: function() {
 			var _this = this;
@@ -246,7 +247,7 @@
 			);
 		}
 	});
-	
+
 	var Year = React.createClass({
 		render: function() {
 			var _this = this;
@@ -289,7 +290,7 @@
 			)
 		}
 	});
-	
+
 	var Calendar = React.createClass({
 		getInitialState: function() {
 			return {
@@ -456,6 +457,6 @@
 			request: true
 		}
 	}
-	
+
 	wok.use('calendar', calendar);
 })(window.wok);
