@@ -16,10 +16,17 @@ abstract class ClassOutput {
 		if(!$this->oTeacherPage) {
 			throw new Exception('No page with identifier `teachers` found');
 		}
+		if($this->oNavigationItem instanceof ClassNavigationItem) {
+			$this->oClass = $this->oNavigationItem->getClass();
+		}
 	}
 
 	public abstract function renderContent();
 	public function renderContext() {}
+
+	public function cacheIsOutdated($oCache) {
+		return true;
+	}
 
 	protected function getClass() {
 		return $this->oNavigationItem->getClass();
@@ -59,8 +66,14 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 		// $sClassName = 'ClassListBySubjectsOutput';
 		$oOutput = new $sClassName($this->oNavigationItem, $this, $oTemplate);
 
-		$mContent = $oOutput->renderContent();
-		$mContext = $oOutput->renderContext();
+		$oCache = new Cache('class_detail/'.$this->oNavigationItem->getId(), 'full_page');
+		if($oCache->entryExists() && !$oOutput->cacheIsOutdated($oCache)) {
+			list($mContent, $mContext) = $oCache->getContentsAsVariable();
+		} else {
+			$mContent = $oOutput->renderContent();
+			$mContext = $oOutput->renderContext();
+			$oCache->setContents(array($mContent, $mContext));
+		}
 
 		if($mContent) {
 			$oTemplate->replaceIdentifier('container', $mContent, 'content');

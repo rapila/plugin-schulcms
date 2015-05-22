@@ -1,27 +1,21 @@
 <?php
 
 class ClassHomeOutput extends ClassOutput {
+	private $oUpcomingEventQuery;
+
 	public function __construct(NavigationItem $oNavigationItem, ClassesPageTypeModule $oPageType) {
 		parent::__construct($oNavigationItem, $oPageType);
+		$this->oUpcomingEventQuery = EventQuery::create()->filterBySchoolClass($this->oClass);
+	}
+
+	public function cacheIsOutdated($oCache) {
+		return $oCache->isOlderThan($this->oPage) || $oCache->isOlderThan($this->oClass) || $oCache->isOlderThan($this->oUpcomingEventQuery);
 	}
 
 	public function renderContent() {
-		$this->oClass = $this->oNavigationItem->getClass();
 		if(!$this->oClass) {
 			return null;
 		}
-		$oCache = new Cache('class_detail/'.$this->oNavigationItem->getId(), 'full_page');
-		$oUpcomingEventQuery = EventQuery::create()->filterBySchoolClass($this->oClass);
-		if($oCache->entryExists() && !$oCache->isOlderThan($this->oClass) && !$oCache->isOlderThan($oUpcomingEventQuery)) {
-			$oTemplate = $oCache->getContentsAsVariable();
-		} else {
-			$oTemplate = $this->renderContentUncached();
-			$oCache->setContents($oTemplate);
-		}
-		return $oTemplate;
-	}
-
-	public function renderContentUncached() {
 		// render content depending on display_type
 		switch($this->oPageType->getDisplayType()) {
 			case 'full': return $this->renderContentWithSubjects();
@@ -31,26 +25,28 @@ class ClassHomeOutput extends ClassOutput {
 
 	private function renderContentDefault() {
 		$oTemplate = $this->oPageType->constructTemplate('detail.home_content.default');
-		$oTemplate->replaceIdentifier('title', FrontendManager::$CURRENT_NAVIGATION_ITEM->getTitle());
-		$this->renderClassInfo($oTemplate);
-		$this->renderSchedules($oTemplate);
-		$this->renderClassNews($oTemplate);
+		$this->renderCommonContent($oTemplate);
 		$this->renderDocumentsAndLinks($oTemplate);
 		return $oTemplate;
 	}
 
 	private function renderContentWithSubjects() {
 		$oTemplate = $this->oPageType->constructTemplate('detail.home_content.subjects');
-		$oTemplate->replaceIdentifier('title', FrontendManager::$CURRENT_NAVIGATION_ITEM->getTitle());
-		$this->renderClassInfo($oTemplate);
-		$this->renderSchedules($oTemplate);
-		$this->renderClassNews($oTemplate);
+		$this->renderCommonContent($oTemplate);
 		$this->renderSubjectsAndTeachers($oTemplate);
 		return $oTemplate;
 	}
 
+	private function renderCommonContent($oTemplate) {
+		$oTemplate->replaceIdentifier('title', FrontendManager::$CURRENT_NAVIGATION_ITEM->getTitle());
+		$this->renderClassInfo($oTemplate);
+		$this->renderSchedules($oTemplate);
+		$this->renderClassNews($oTemplate);
+	}
+
 	public function renderContext() {
 		$oTemplate = $this->oPageType->constructTemplate('detail.home_context');
+		$oTemplate->replaceIdentifier('fallback_url', LinkUtil::link($this->oPage->getLink()));
 		$this->renderRecentReport($oTemplate);
 		$this->renderUpcomingEvents($oTemplate, 10);
 		return $oTemplate;
@@ -160,7 +156,7 @@ class ClassHomeOutput extends ClassOutput {
 	}
 
 	private function renderUpcomingEvents($oTemplate, $iCount = 10) {
-		$aEvents = FrontendEventQuery::create()->filterBySchoolClass($this->oClass)->upcomingOrOngoing()->orderByDateStart()->limit($iCount)->find();
+		$aEvents = $this->oUpcomingEventQuery->upcomingOrOngoing()->orderByDateStart()->limit($iCount)->find();
 		$oTemplate->replaceIdentifier('events_overview', EventsFrontendModule::renderOverviewList($aEvents, 100, StringPeer::getString('class.no_future_events_available')));
 	}
 

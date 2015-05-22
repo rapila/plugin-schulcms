@@ -6,18 +6,11 @@ class ClassListOutput extends ClassOutput {
 		parent::__construct($oNavigationItem, $oPageType);
 	}
 
-	public function renderContent() {
-		$oCache = new Cache('class_list_output/'.Session::language().'/'.$this->oNavigationItem->getId(), 'full_page');
-		if($oCache->entryExists() && !$oCache->isOlderThan($this->oPage) && !$oCache->isOlderThan($this->listQuery())) {
-			$oTemplate = $oCache->getContentsAsVariable();
-		} else {
-			$oTemplate = $this->renderContentUncached();
-			$oCache->setContents($oTemplate);
-		}
-		return $oTemplate;
+	public function cacheIsOutdated($oCache) {
+		return $oCache->isOlderThan($this->oPage) || $oCache->isOlderThan($this->listQuery());
 	}
 
-	public function renderContentUncached() {
+	public function renderContent() {
 		$aClassTypes = null;
 		$oTemplate = $this->oPageType->constructTemplate('list', true);
 		$oTemplate->replaceIdentifier('title', FrontendManager::$CURRENT_NAVIGATION_ITEM->getTitle());
