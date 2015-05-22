@@ -40,7 +40,7 @@ class ClassesFilterModule extends FilterModule {
 			$oCriteria = SchoolClassQuery::create()->filterBySlug($sSlug)->hasStudents()->orderByYear(Criteria::DESC);
 			foreach($oCriteria->find() as $oClass) {
 				$sName = $oClass->isCurrent() ? $oClass->getFullClassName() : $oClass->getFullClassNameWithYear();
-				$oClassItem = new ClassNavigationItem($oClass->getYear(), $sName, $oClass, 'home', $oNavigationItem->getDisplayType(), $oClass->getFullClassName());
+				$oClassItem = new ClassNavigationItem($oClass->getYear(), $oClass->getFullClassName().' Home', $oClass, 'home', $oNavigationItem->getDisplayType(), $sName);
 				$oClassItem->setVisible($oClass->isCurrent());
 				$oNavigationItem->addChild($oClassItem);
 			}
@@ -52,7 +52,7 @@ class ClassesFilterModule extends FilterModule {
 
 	private function renderClassNavigationItems($oNavigationItem, $aClasses, $sDisplayType) {
 		foreach($aClasses as $oClass) {
-			$oNavItem = new ClassNavigationItem($oClass->getSlug(), $oClass->getFullClassName().' Home', null, 'root', $sDisplayType, $oClass->getFullClassName(), true, false);
+			$oNavItem = new ClassNavigationItem($oClass->getSlug(), $oClass->getFullClassName(), null, 'root', $sDisplayType, null, true, false);
 			$oNavigationItem->addChild($oNavItem);
 		}
 	}
