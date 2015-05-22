@@ -67,7 +67,6 @@ class ClassesFilterModule extends FilterModule {
 		if($oNavigationItem->getDisplayType() === 'location') {
 			$oNavigationItem->addChild(ClassNavigationItem::create('standort', 'Standort', $oClass, self::CLASS_LOCATION_IDENTIFIER, null, 'Adresse & Lageplan'));
 		}
-		$oNavigationItem->addChild(ClassNavigationItem::create('feed', 'RSS-Feed', $oClass, 'feed')->setIndexed(false));
 	}
 
 	private function renderEventNavigationItems($oNavigationItem) {
@@ -88,22 +87,6 @@ class ClassesFilterModule extends FilterModule {
 		if($bIsNotFound || !($oNavigationItem instanceof ClassNavigationItem)) {
 			return;
 		}
-
-		$oClass = $oNavigationItem->getClass();
-		// Add the feed
-		if($oNavigationItem->getMode() === 'feed') {
-			$oQuery = FrontendEventQuery::create()->filterBySchoolClass($oClass);
-			$oFeed = new EventsFileModule(null, $oNavigationItem, $oQuery);
-			$oFeed->renderFile();exit;
-		}
-		// Link to the feed
-		$oHomeNavigationItem = $oNavigationItem;
-		while(!StringUtil::startsWith($oHomeNavigationItem->getMode(), 'home')) {
-			$oHomeNavigationItem = $oHomeNavigationItem->getParent();
-		}
-		$oFeedItem = $oHomeNavigationItem->namedChild('feed');
-
-		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'location' => LinkUtil::link($oFeedItem->getLink())));
 	}
 
 	public function onLinkOperationCheck($sOperation, $oOnObject, $oUser, $aContainer) {
