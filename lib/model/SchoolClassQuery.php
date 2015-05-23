@@ -41,7 +41,12 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 	public function filterByClassTypeAndYear($sClassType = null, $mYear = true) {
 		$this->filterBySchoolClassType($sClassType);
 		$this->filterBySchoolYear($mYear);
-		$this->groupByUnitName()->joinClassStudent();
+		if($mYear === null) {
+			// don't groupByUnitName, because then only the oldest one is shown, I guess?
+			$this->joinClassStudent();
+		} else {
+			$this->groupByUnitName()->joinClassStudent();
+		}
 		return $this;
 	}
 
