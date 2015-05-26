@@ -11,13 +11,14 @@ class NewsFilterModule extends FilterModule {
 	}
 
 	public function onNavigationItemChildrenCacheDetectOutdated($oNavigationItem, $oCache, $aContainer) {
-		if(!($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getType() === 'services')) {
+		if(!($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getType() === 'news')) {
 			return;
 		}
 		$bIsOutdated = &$aContainer[0];
 		if($bIsOutdated) {
 			return;
 		}
+		$oPageType = PageTypeModule::getModuleInstance($oNavigationItem->getMe()->getPageType(), $oNavigationItem->getMe(), $oNavigationItem);
 		$bIsOutdated = $oCache->isOlderThan($oPageType->listQuery());
 	}
 
