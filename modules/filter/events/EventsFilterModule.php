@@ -57,7 +57,20 @@ class EventsFilterModule extends FilterModule {
 		if($bIsOutdated) {
 			return;
 		}
-		$bIsOutdated = true;
+		$sType = $oNavigationItem->getType();
+		if($oNavigationItem instanceof PageNavigationItem) {
+			// Events page
+			if($sType === 'events') {
+				return;
+			}
+			$bIsOutdated = $oCache->isOlderThan(EventQuery::create());
+		} else if($oNavigationItem instanceof VirtualNavigationItem) {
+			if(!in_array($sType, array(self::ITEM_EVENT_YEAR, self::ITEM_EVENT_MONTH, self::ITEM_EVENT_DAY))) {
+				return;
+			}
+			$aData = $oNavigationItem->getData();
+			$bIsOutdated = $oCache->isOlderThan(EventQuery::create()->filterByNavigationItem($aData));
+		}
 	}
 
 	public function onPageHasBeenSet($oPage, $bIsNotFound, $oNavigationItem) {
