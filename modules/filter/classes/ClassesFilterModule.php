@@ -6,13 +6,13 @@ class ClassesFilterModule extends FilterModule {
 	const CLASS_MATERIALS_IDENTIFIER = 'materials';
 
 	public function onNavigationItemChildrenRequested($oNavigationItem) {
-		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getMe()->getPageType() === 'classes') {
+		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getType() === 'classes') {
 			$oPageType = PageTypeModule::getModuleInstance('classes', $oNavigationItem->getMe(), $oNavigationItem);
 			$aOptions = $oPageType->config();
 			$sDisplayType = @$aOptions['display_type'];
 			$sClassType = @$aOptions['class_type'];
 
-			//Render subjects or school classes
+			// Render subjects or school classes
 			if($sClassType === 'subject') {
 				$oQuery = SubjectQuery::create()->filterByHasClasses()->select(array('Id', 'Slug', 'Name'));
 				foreach($oQuery->find() as $aData) {
@@ -22,10 +22,8 @@ class ClassesFilterModule extends FilterModule {
 				$aClasses = ClassListOutput::listQuery(null, null)->find();
 				$this->renderClassNavigationItems($oNavigationItem, $aClasses, $sDisplayType);
 			}
-		}
-
-		// Render subject class navigation items
-		if($oNavigationItem instanceof SubjectNavigationItem) {
+		} // Render subject class navigation items
+		else if($oNavigationItem instanceof SubjectNavigationItem) {
 			$oSubject = SubjectQuery::create()->findPk($oNavigationItem->getId());
 			$this->renderClassNavigationItems($oNavigationItem, $oSubject->getSchoolClasses(), $oNavigationItem->getMode());
 		}
@@ -46,6 +44,42 @@ class ClassesFilterModule extends FilterModule {
 		} else if($oNavigationItem->getMode() === 'home') {
 			// Render specific class year subpage items
 			$this->renderClassPageItems($oNavigationItem);
+		}
+	}
+
+	public function onNavigationItemChildrenCacheDetectOutdated($oNavigationItem, $oCache, $aContainer) {
+		$bIsOutdated = &$aContainer[0];
+		if($bIsOutdated) {
+			return;
+		}
+		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getType() === 'classes') {
+			$oPageType = PageTypeModule::getModuleInstance('classes', $oNavigationItem->getMe(), $oNavigationItem);
+			$aOptions = $oPageType->config();
+			$sDisplayType = @$aOptions['display_type'];
+			$sClassType = @$aOptions['class_type'];
+
+			// Subjects or school classes
+			if($sClassType === 'subject') {
+				$oQuery = SubjectQuery::create()->filterByHasClasses();
+			} else {
+				$oQuery = ClassListOutput::listQuery(null, null);
+			}
+			$bIsOutdated = $oCache->isOlderThan($oQuery);
+		} // Subject class navigation items
+		else if($oNavigationItem instanceof SubjectNavigationItem) {
+			$bIsOutdated = $oCache->isOlderThan(SchoolClassQuery::create()->filterBySubjectId($oNavigationItem->getId()));
+		}
+
+		if(!($oNavigationItem instanceof ClassNavigationItem)) {
+			return;
+		}
+
+		// Render all years of current class
+		if($oNavigationItem->getMode() === 'root') {
+			$bIsOutdated = $oCache->isOlderThan(SchoolClassQuery::create()->hasStudents()->filterBySlug($sSlug));
+		} else if($oNavigationItem->getMode() === 'home') {
+			for($oPageNavItem = $oNavigationItem->getParent();!($oPageNavItem instanceof PageNavigationItem);) {}
+			$bIsOutdated = $oCache->isOlderThan($oPageNavItem->getMe());
 		}
 	}
 
