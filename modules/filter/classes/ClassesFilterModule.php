@@ -53,9 +53,13 @@ class ClassesFilterModule extends FilterModule {
 			return;
 		}
 		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getType() === 'classes') {
-			$oPageType = PageTypeModule::getModuleInstance('classes', $oNavigationItem->getMe(), $oNavigationItem);
+			$oPage = $oNavigationItem->getMe();
+			$bIsOutdated = $oCache->isOlderThan(PagePropertyQuery::create()->filterByPage($oPage));
+			if($bIsOutdated) {
+				return;
+			}
+			$oPageType = PageTypeModule::getModuleInstance('classes', $oPage, $oNavigationItem);
 			$aOptions = $oPageType->config();
-			$sDisplayType = @$aOptions['display_type'];
 			$sClassType = @$aOptions['class_type'];
 
 			// Subjects or school classes
@@ -74,12 +78,21 @@ class ClassesFilterModule extends FilterModule {
 			return;
 		}
 
-		// Render all years of current class
+		// Find parent page navigation item (to base updated_at on page and page properties’ modification date)
+		$oPageNavItem = $oNavigationItem;
+		do {
+			$oPageNavItem = $oPageNavItem->getParent();
+		} while(!($oPageNavItem instanceof PageNavigationItem));
+		$oPage = $oPageNavItem->getMe();
+		$bIsOutdated = $oCache->isOlderThan(PagePropertyQuery::create()->filterByPage($oPage));
+		if($bIsOutdated) {
+			return;
+		}
+
+		// Check if classes in year have changed
 		if($oNavigationItem->getMode() === 'root') {
+			$sSlug = $oNavigationItem->getName();
 			$bIsOutdated = $oCache->isOlderThan(SchoolClassQuery::create()->hasStudents()->filterBySlug($sSlug));
-		} else if($oNavigationItem->getMode() === 'home') {
-			for($oPageNavItem = $oNavigationItem->getParent();!($oPageNavItem instanceof PageNavigationItem);) {}
-			$bIsOutdated = $oCache->isOlderThan($oPageNavItem->getMe());
 		}
 	}
 
