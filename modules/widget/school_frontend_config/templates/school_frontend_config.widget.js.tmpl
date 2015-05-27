@@ -1,16 +1,16 @@
 Widget.types.school_frontend_config = {
 	prepare: function() {
 		var _this = this;
-		
+
 		var config = this.getConfigData() || {};
-		
+
 		this.mode_dropdown = jQuery("<select/>").addClass('ui-widget-content');
 		this.mode_dropdown.populate(this.getDisplayModes(), config.display_mode);
-		
-		this._element.append(jQuery('<label/>').text('{{writeString=wns.classes.display_options}}'));
+
+		this._element.append(jQuery('<label/>').text('{{writeString=school_classes.display_mode}}'));
 		this._element.append(this.mode_dropdown);
 	},
-		
+
 	save: function() {
 		return {display_mode: this.mode_dropdown.val()};
 	}
