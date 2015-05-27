@@ -89,6 +89,10 @@
 
 		var data;
 		function prepare() {
+			if(data) {
+				// Already initialized
+				return;
+			}
 			data = {};
 			var items = element.children;
 			for(var i=0;i<items.length;i++) {
