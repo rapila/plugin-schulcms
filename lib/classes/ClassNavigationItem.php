@@ -5,10 +5,15 @@
 class ClassNavigationItem extends VirtualNavigationItem {
 	private $bIsFolder;
 	private $bIsVisible;
+	private $oClass = null;
+	private $iClassId = null;
 
 	public function __construct($sName, $sLinkText, SchoolClass $oSchoolClass = null, $sMode, $sDisplayType = null, $sTitle = null, $bIsFolder = false, $bIsVisible = true) {
+		$this->oClass = $oSchoolClass;
+		if($this->oClass !== null) {
+			$this->iClassId = $this->oClass->getId();
+		}
 		$oData = new stdClass();
-		$oData->schoolClass = $oSchoolClass;
 		$oData->mode = $sMode;
 		$oData->display_type = $sDisplayType;
 		if($sTitle === null) {
@@ -36,7 +41,10 @@ class ClassNavigationItem extends VirtualNavigationItem {
 	}
 
 	public function getClass() {
-		return $this->getData()->schoolClass;
+		if($this->oClass === null && $this->iClassId !== null) {
+			$this->oClass = SchoolClassQuery::create()->findPk($this->iClassId);
+		}
+		return $this->oClass;
 	}
 
 	public function isFolder() {
@@ -55,5 +63,10 @@ class ClassNavigationItem extends VirtualNavigationItem {
 	public function setVisible($bIsVisible) {
 		$this->bIsVisible = $bIsVisible;
 		return $this;
+	}
+
+	public function __sleep() {
+		$this->oClass = null;
+		return parent::__sleep();
 	}
 }
