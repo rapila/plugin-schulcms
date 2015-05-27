@@ -10,7 +10,9 @@ class TeamMemberFileModule extends FileModule {
 		$sFunctionGroupName = null;
 		if($oTeamMember) {
 			$oSchoolFunction = $oTeamMember->getFirstTeamMemberFunctionName(false);
-			$sFunctionGroupName = $oSchoolFunction->getFunctionGroupName();
+			if($oSchoolFunction) {
+				$sFunctionGroupName = $oSchoolFunction->getFunctionGroupName();
+			}
 		}
 		// Switch target page name or identifier
 		switch($sFunctionGroupName) {
@@ -24,7 +26,7 @@ class TeamMemberFileModule extends FileModule {
 		}
 		// Redirect any teaching person to their profile
 		if($oTeamMember && $sPageName === 'lehrpersonen') {
-			$oTargetPage = PageQuery::create()->filterByPageType('team_member')->findOne();
+			$oTargetPage = PageQuery::create()->filterByPageType('team_members')->findOne();
 			if($oTargetPage) {
 				self::redirectToTarget($oTeamMember->getLink($oTargetPage));
 			}
@@ -33,12 +35,12 @@ class TeamMemberFileModule extends FileModule {
 		if($oTeamMember && $sPageName !== null) {
 			$oTargetPage = PageQuery::create()->filterByNameOrIdentifier($sPageName)->findOne();
 			if($oTargetPage) {
-				self::redirectToTarget($oTargetPage);
+				self::redirectToTarget($oTargetPage->getFullPathArray());
 			}
 		}
 		// Redirect to home page
 		$oRootPage = PageQuery::create()->findRoot();
-		self::redirectToTarget($oRootPage->getLink());
+		self::redirectToTarget($oRootPage->getFullPathArray());
 	}
 
 	private static function redirectToTarget($aParams) {
