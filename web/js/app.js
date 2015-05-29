@@ -241,6 +241,7 @@
 					}
 					// Put the month names into the configuration
 					configuration.monthNames = months;
+					configuration.title = (granularity === 'day' ? ''+currentValue.day+' ' : '') + (granularity === 'day' || granularity === 'month' ? months[currentValue.month]+' ' : '') + (currentValue.year);
 				},
 				request: true
 			}
