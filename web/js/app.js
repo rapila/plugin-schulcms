@@ -615,7 +615,7 @@
 				if(document.referrer) {
 					window.history.back();
 				} else {
-					window.location.href = this.getAttribute('data-url');
+					window.location.href = this.getAttribute('data-url') || './';
 				}
 			}, false);
 		}
