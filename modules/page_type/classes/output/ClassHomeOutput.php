@@ -47,8 +47,8 @@ class ClassHomeOutput extends ClassOutput {
 	public function renderContext() {
 		$oTemplate = $this->oPageType->constructTemplate('detail.home_context');
 		$oTemplate->replaceIdentifier('fallback_url', LinkUtil::link($this->oPage->getLink()));
-		$this->renderRecentReport($oTemplate);
-		$this->renderUpcomingEvents($oTemplate, 10);
+		$bHasRecentReport = $this->renderRecentReport($oTemplate);
+		$this->renderUpcomingEvents($oTemplate, $bHasRecentReport, 10);
 		return $oTemplate;
 	}
 
@@ -114,8 +114,8 @@ class ClassHomeOutput extends ClassOutput {
 			$oNewsTemplate->replaceIdentifier('date', LocaleUtil::localizeDate($oNews->getDateStart()));
 			$oNewsTemplate->replaceIdentifier('author_name', $oNews->getUserRelatedByUpdatedBy()->getFullName());
 		} else {
-			$oNewsTemplate->replaceIdentifier('headline', 'Willkommen');
-			$oNewsTemplate->replaceIdentifier('content', TagWriter::quickTag('p', array(), 'auf der Webseite der Klasse '.$this->oClass->getFullClassName()));
+			// $oNewsTemplate->replaceIdentifier('headline', 'Willkommen');
+			// $oNewsTemplate->replaceIdentifier('content', TagWriter::quickTag('p', array(), 'auf der Webseite der Klasse '.$this->oClass->getFullClassName()));
 		}
 		$oTemplate->replaceIdentifier('news', $oNewsTemplate);
 	}
@@ -153,10 +153,15 @@ class ClassHomeOutput extends ClassOutput {
 	private function renderRecentReport($oTemplate) {
 		$oRecentReport = EventsFrontendModule::recentReport(FrontendEventQuery::create()->past()->filterBySchoolClass($this->oClass)->joinEventDocument()->orderByUpdatedAt(Criteria::DESC)->findOne());
 		$oTemplate->replaceIdentifier('recent_report', $oRecentReport);
+		return $oRecentReport !== null;
 	}
 
-	private function renderUpcomingEvents($oTemplate, $iCount = 10) {
+	private function renderUpcomingEvents($oTemplate, $bHasRecentReport, $iCount = 10) {
 		$aEvents = $this->oUpcomingEventQuery->upcomingOrOngoing()->orderByDateStart()->limit($iCount)->find();
+		if($bHasRecentReport === false) {
+			$oTemplate->replaceIdentifier('recent_report', TagWriter::quickTag('div', array('class'=> "recent-report no-report"), TagWriter::quickTag('p', array(), "Keine Bilder zu Veranstaltungen")));
+		}
+
 		$oTemplate->replaceIdentifier('events_overview', EventsFrontendModule::renderOverviewList($aEvents, 100, StringPeer::getString('class.no_future_events_available')));
 	}
 
