@@ -357,6 +357,10 @@
 				var configuration = {};
 				configuration[prop] = id;
 				toggle(false);
+				element.cl.add('force-close');
+				window.setTimeout(function() {
+					element.cl.remove('force-close');
+				}, 100);
 				_this.request(configuration);
 			}
 
