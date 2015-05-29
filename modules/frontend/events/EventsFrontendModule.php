@@ -39,7 +39,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		return TagWriter::quickTag('div', array('class' => 'calendar-overview'), self::renderOverviewList($oQuery->find(), 100, StringPeer::getString('school.no_future_events_available', null, null)));
 	}
 
-	public static function renderOverviewList($aEvents, $iTruncate = 100, $sNoEventMessage = null) {
+	public static function renderOverviewList($aEvents, $iTruncate = 50, $sNoEventMessage = null) {
 		$oTemplate = static::template('overview_list');
 		$oItemPrototype = static::template('overview_item');
 		$oDatePrototype = static::template('date');
