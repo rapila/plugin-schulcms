@@ -39,6 +39,9 @@ class News extends BaseNews {
 		$sText = '';
 		if(is_resource($this->getBodyShort())) {
 			$sText = RichtextUtil::parseStorageForBackendOutput(stream_get_contents($this->getBodyShort()))->render();
+			if($iLength === null) {
+				return $sText;
+			}
 			$sText = html_entity_decode(strip_tags($sText));
 		}
 		return StringUtil::truncate($sText, $iLength);
