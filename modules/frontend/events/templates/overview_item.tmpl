@@ -1,7 +1,7 @@
 <div class="event{{class_today}}">
 	{{date_item}}
 	<div class="introduction">
-		<h4><a href="{{detail_link}}" title="Detail Veranstaltung">{{identifierContext=start;name=today}}<span class="highlight">{{today}}</span>{{identifierContext=end;name=today}}{{title}}</a></h4>
-		<p>{{description}}</p>
+		<h4>{{identifierContext=start;name=today}}<span class="highlight">{{today}}</span>{{identifierContext=end;name=today}}{{title}}</h4>
+		<p><a class="text_link" href="{{detail_link}}">{{description}}</a> <a href="{{detail_link}}" title="Detail Veranstaltung">{{writeString=link_text.read_more}}</a></p>
 	</div>
 </div>
