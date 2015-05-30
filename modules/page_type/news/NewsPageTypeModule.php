@@ -6,6 +6,7 @@ class NewsPageTypeModule extends PageTypeModule {
 
 	public function __construct(Page $oPage = null, NavigationItem $oNavigationItem = null) {
 		parent::__construct($oPage, $oNavigationItem);
+		$sConfig = $this->oPage->getPagePropertyValue('news:news_types', '');
 		$this->aNewsTypes = explode(',', $this->oPage->getPagePropertyValue('news:news_types', ''));
 	}
 
@@ -89,18 +90,28 @@ class NewsPageTypeModule extends PageTypeModule {
 	public function listQuery() {
 		$oQuery = FrontendNewsQuery::create()->current();
 		if($this->aNewsTypes !== null) {
-			$oQuery->filterByNewsTypeId($this->aNewsTypes);
+			if(in_array(CriteriaListWidgetDelegate::SELECT_ALL, $this->aNewsTypes)) {
+				$oQuery->excludeExternallyManaged();
+			} else {
+				$oQuery->filterByNewsTypeId($this->aNewsTypes);
+			}
 		}
 		$oQuery->orderByDateStart('desc')->orderByHeadline();
 		return $oQuery;
 	}
 
 	public function listNewsTypes() {
-		return WidgetJsonFileModule::jsonOrderedObject(NewsTypeQuery::create()->filterByIsExternallyManaged(false)->orderByName()->select(array('Id', 'Name'))->find()->toKeyValue('Id', 'Name'));
+		$aResult[0] = array('key' => CriteriaListWidgetDelegate::SELECT_ALL, 'value' => StringPeer::getString('news.display_option.show_all_type'));
+		$aResult = array_merge($aResult, WidgetJsonFileModule::jsonOrderedObject(NewsTypeQuery::create()->filterByIsExternallyManaged(false)->orderByName()->select(array('Id', 'Name'))->find()->toKeyValue('Id', 'Name')));
+		return $aResult;
 	}
 
 	public function saveNewsPageConfiguration($aData) {
+		// allow option to save all, so the news types list is dynamic, if new category is added it's automatically added to displayed list
 		$this->aNewsTypes = $aData['news_types'];
+		if(in_array(CriteriaListWidgetDelegate::SELECT_ALL, $this->aNewsTypes)) {
+			$this->aNewsTypes = array(CriteriaListWidgetDelegate::SELECT_ALL);
+		}
 		$this->oPage->updatePageProperty('news:news_types', implode(',', array_filter($this->aNewsTypes)));
 	}
 
