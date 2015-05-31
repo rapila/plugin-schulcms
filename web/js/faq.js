@@ -33,7 +33,11 @@
 					React.createElement('h3', {key: 'title'}, this.props.faq.Title),
 					React.createElement('p', {key: 'content'},
 						[
-							React.createElement('a', {href: this.props.faq.link, className: 'text-link', dangerouslySetInnerHTML: {__html: this.props.faq.Content}})
+							React.createElement('a', {
+								href: this.props.faq.link,
+								className: 'text-link',
+								dangerouslySetInnerHTML: {__html: this.props.faq.Content}
+							})
 						]
 					),
 					React.createElement(FAQTagList, {key: 'tags', tags: this.props.faq.tags, focusTag: this.props.focusTag})
