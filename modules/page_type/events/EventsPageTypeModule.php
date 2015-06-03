@@ -102,6 +102,7 @@ class EventsPageTypeModule extends PageTypeModule {
 					$bIsHorizontal = $oImage->getOriginalWidth() > $oImage->getOriginalHeight();
 					$sMaxSizeKey = $bIsHorizontal ? 'max_height' : 'max_width';
 				}
+				$oImage->destroy();
 			}
 			$oDocumentTemplate->replaceIdentifier('max_size_param', $sMaxSizeKey);
 
