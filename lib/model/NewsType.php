@@ -7,13 +7,8 @@ class NewsType extends BaseNewsType
 {
 	// these configurations should be community specific and defined independently of this generic class
 	const NAME_JOBS = "Offene Stellen";
-	const NAME_HOME = "Schul-News Home";
-	const NAME_PARENTS = "Eltern-News";
-	const NAME_SERVICES = "Angebots-News";
-	const NAME_TEAM_MEMBERS = "Mitarbeiter-News";
-	const NAME_FAQS = "FAQ-News";
-	const NAME_CLASSES = "Klassen-News";
-	const NAME_ABOUT_US = "Über-uns-Text";
+	const NAME_MAIN_HOME = "Thema Home";
+	const NAME_SIDEBAR_HOME = "Sidebar Home";
 
 	public static function createDefaultTypesIfNotExist() {
 		if(NewsTypeQuery::create()->count() > 1) {
