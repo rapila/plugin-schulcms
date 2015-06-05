@@ -31,22 +31,16 @@
 					'details'
 				));
 			}
-			title.push(React.createElement(
-				this.props.appointment.link ? 'a' : 'span',
-				{
-					href: this.props.appointment.link,
-					className: 'link',
-					key: 'link'
-				},
+			title.push(
 				this.props.appointment.name
-			));
+			);
 			if(this.props.detailed) {
 				title.push(icons);
 			} else {
 				title.unshift(icons);
 			}
 			content.push(React.createElement(
-				'span',
+				this.props.detailed ? 'h4' : 'span',
 				{
 					className: 'title',
 					key: 'title'
@@ -64,7 +58,19 @@
 							className: 'description',
 							key: 'description'
 						},
-						this.props.appointment.description
+						[
+							React.createElement(
+								'a',
+								{
+									href: this.props.appointment.link,
+									className: 'text-link',
+								},
+								[
+									React.createElement('span', {key: 'description'}, this.props.appointment.description),
+									React.createElement('span', {key: 'read-more', className: 'read-more'}, this.props.readMoreText)
+								]
+							)
+						]
 					));
 				}
 				var dates = [];
@@ -167,6 +173,7 @@
 						appointment: appointment,
 						detailed: _this.props.detailed,
 						monthNames: _this.props.monthNames,
+						readMoreText: _this.props.readMoreText,
 						key: appointment.__key
 					}
 				);
@@ -307,7 +314,8 @@
 					{
 						appointments: this.state.appointments,
 						monthNames: this.state.monthNames,
-						detailed: true
+						detailed: true,
+						readMoreText: this.props.readMoreText
 					}
 				);
 			}
@@ -342,7 +350,8 @@
 				{
 					focusMonth: function(year, month) {
 						_this.request({year: year, month: month, granularity: 'month'});
-					}
+					},
+					readMoreText: element.getAttribute('data-read-more-text')
 				}
 			),
 			element
