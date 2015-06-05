@@ -33,11 +33,16 @@
 					React.createElement('h3', {key: 'title'}, this.props.faq.Title),
 					React.createElement('p', {key: 'content'},
 						[
-							React.createElement('a', {
-								href: this.props.faq.link,
-								className: 'text-link',
-								dangerouslySetInnerHTML: {__html: this.props.faq.Content}
-							})
+							React.createElement('a',
+								{
+									href: this.props.faq.link,
+									className: 'text-link'
+								},
+								[
+								React.createElement('span', {key: 'description'}, this.props.faq.Content),
+								React.createElement('span', {key: 'read-more', className: 'read-more'}, this.props.readMoreText)
+								]
+							)
 						]
 					),
 					React.createElement(FAQTagList, {key: 'tags', tags: this.props.faq.tags, focusTag: this.props.focusTag})
@@ -61,7 +66,8 @@
 						faq: faq,
 						key: faq.__key,
 						focusTag: _this.props.focusTag,
-						focusType: _this.props.focusType
+						focusType: _this.props.focusType,
+						readMoreText: _this.props.readMoreText
 					}
 				);
 			});
@@ -90,7 +96,8 @@
 						_this.request({
 							type: type
 						});
-					}
+					},
+					readMoreText: element.getAttribute('data-read-more-text')
 				}
 			),
 			element
