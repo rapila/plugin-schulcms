@@ -68,7 +68,7 @@
 			return React.createElement(
 				'div',
 				{
-					className: 'faq-list'
+					className: 'faq list'
 				},
 				faqs
 			);
