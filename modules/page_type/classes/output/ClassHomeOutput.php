@@ -176,26 +176,29 @@ class ClassHomeOutput extends ClassOutput {
 		if($iDocumentCount > 0) {
 			$oTemplate->replaceIdentifier('documents_title', StringPeer::getString('class_detail.heading.documents'));
 			$oTemplate->replaceIdentifier('single_container_class', $iContainerClass);
-			$oDocPrototype = $this->oPageType->constructTemplate('document');
+			$oDocPrototype = $this->oPageType->constructTemplate('document_list_item');
 			foreach($aDocuments as $oClassDocument) {
+				$oItemTemplate = clone $oDocPrototype;
 				$oDocument = $oClassDocument->getDocument();
-				$oDocTemplate = clone $oDocPrototype;
-				$oDocTemplate->replaceIdentifier('link', $oDocument->getDisplayUrl());
-				$oDocTemplate->replaceIdentifier('title', "Dokument anschauen / runterladen");
-				$oDocTemplate->replaceIdentifier('name', $oDocument->getName());
-				$oTemplate->replaceIdentifierMultiple('documents', $oDocTemplate);
+				$oItemTemplate->replaceIdentifier('name', $oDocument->getName());
+				$oItemTemplate->replaceIdentifier('title', $oDocument->getDescriptionOrName());
+				$oItemTemplate->replaceIdentifier('extension', $oDocument->getExtension());
+				$oItemTemplate->replaceIdentifier('url', $oDocument->getDisplayUrl());
+				if($oItemTemplate->hasIdentifier('size')) {
+					$oItemTemplate->replaceIdentifier("size", DocumentPeer::getDocumentSize($oDocument->getDataSize(), 'auto_iso'));
+				}
+				$oTemplate->replaceIdentifierMultiple('documents', $oItemTemplate);
 			}
 		}
 		// Display links if available
 		if($iLinkCount > 0) {
 			$oTemplate->replaceIdentifier('links_title', StringPeer::getString('class_detail.heading.links'));
-			ErrorHandler::log('links single_container_class', $iContainerClass);
 			$oTemplate->replaceIdentifier('single_container_class', $iContainerClass);
-			$oLinkPrototype = $this->oPageType->constructTemplate('link');
+			$oLinkPrototype = $this->oPageType->constructTemplate('link_list_item');
 			foreach($aLinks as $oLink) {
 				$oLinkTemplate = clone $oLinkPrototype;
-				$oLinkTemplate->replaceIdentifier('link', $oLink->getUrl());
-				$oLinkTemplate->replaceIdentifier('title', "Link öffnen");
+				$oLinkTemplate->replaceIdentifier('url', $oLink->getUrl());
+				$oLinkTemplate->replaceIdentifier('title', $oLink->getDescriptionOrName());
 				$oLinkTemplate->replaceIdentifier('name', $oLink->getName());
 				$oTemplate->replaceIdentifierMultiple('links', $oLinkTemplate);
 			}

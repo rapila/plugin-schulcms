@@ -15,11 +15,19 @@
 	</div>
 </div>
 {{news}}{{identifierContext=start;name=documents_title}}
-<div class="documents columnview single-container">
-<h2>{{documents_title}}</h2>
-	{{documents}}
+<div>
+	<h2>{{documents_title}}</h2>
+	<table class="documents list">
+		<tbody>
+			{{documents}}
+		</tbody>
+	</table>
 </div>{{identifierContext=end;name=documents_title}}{{identifierContext=start;name=links_title}}
-<div class="links columnview single-container">
+<div>
 	<h2>{{links_title}}</h2>
-	{{links}}
+	<table class="links list">
+		<tbody>
+			{{links}}
+		</tbody>
+	</table>
 </div>{{identifierContext=end;name=links_title}}
