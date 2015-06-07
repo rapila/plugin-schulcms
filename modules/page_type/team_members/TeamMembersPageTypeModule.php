@@ -75,7 +75,6 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 
 	private function renderList() {
 		$oListTemplate = $this->constructTemplate('list');
-		$oListTemplate->replaceIdentifier('team_member_news', $this->includeTeamMemberNews());
 		if(!$oListTemplate->hasIdentifier('filters')) {
 			$this->bRequiresFilter = false;
 		}
@@ -248,14 +247,5 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 
 	public function config() {
 		return $this->aFunctionGroupIds;
-	}
-
-	private function includeTeamMemberNews() {
-		$oNews = FrontendNewsQuery::create()->findLatestByNewsTypeName(NewsType::NAME_TEAM_MEMBERS);
-		if($oNews) {
-			$oTemplate = $this->constructTemplate('news');
-			$oNews->renderItem($oTemplate);
-			return $oTemplate;
-		}
 	}
 }
