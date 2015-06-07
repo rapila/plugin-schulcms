@@ -81,15 +81,6 @@ class ClassListOutput extends ClassOutput {
 		return $oItemTemplate;
 	}
 
-	private function includeClassNews() {
-		$oNews = FrontendNewsQuery::create()->findLatestByNewsTypeName(NewsType::NAME_CLASSES);
-		if($oNews) {
-			$oTemplate = $this->oPageType->constructTemplate('list_news', true);
-			$oNews->renderItem($oTemplate);
-			return $oTemplate;
-		}
-	}
-
 	public static function listQuery($aClassTypes = null, $mYear = true) {
 		return SchoolClassQuery::create()->filterByClassTypeAndYear($aClassTypes, $mYear)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers(true);
 	}
