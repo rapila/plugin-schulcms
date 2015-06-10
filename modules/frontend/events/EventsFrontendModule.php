@@ -44,6 +44,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$oItemPrototype = static::template('overview_item');
 		$oDatePrototype = static::template('date');
 		$oEventPage =	PageQuery::create()->filterByPageType('events')->findOne();
+		setlocale(LC_ALL, "de_CH");
 		foreach($aEvents as $oEvent) {
 			$oItemTemplate = clone $oItemPrototype;
 
