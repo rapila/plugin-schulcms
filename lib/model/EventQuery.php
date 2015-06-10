@@ -13,6 +13,10 @@ class EventQuery extends BaseEventQuery {
 		return $this->filterByDateStart(date('Y-m-d'), Criteria::GREATER_EQUAL);
 	}
 
+	public function common() {
+		return $this->filterBySchoolClassId(null, Criteria::ISNULL)->_or()->filterByIsCommon(true);
+	}
+
 	public function fromYear($iYear) {
 		$this->addCond('betweenStart', 'YEAR(DATE_START)', $iYear, Criteria::LESS_EQUAL);
 		$this->addCond('betweenEnd', 'YEAR(DATE_END)', $iYear, Criteria::GREATER_EQUAL);
@@ -76,7 +80,7 @@ class EventQuery extends BaseEventQuery {
 		if($bIncludeCommon) {
 			return $this->filterBySchoolClassId(null, Criteria::ISNULL);
 		}
-		return $this->filterBySchoolClassId(null, Criteria::ISNULL)->_or()->filterByIsCommon(true);
+		return $this->common();
 	}
 
 	public function filterbyHasImagesOrReview() {
