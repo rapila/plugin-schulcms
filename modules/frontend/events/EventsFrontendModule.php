@@ -41,29 +41,35 @@ class EventsFrontendModule extends DynamicFrontendModule {
 
 	public static function renderOverviewList($aEvents, $iTruncate = 50, $sNoEventMessage = null) {
 		$oTemplate = static::template('overview_list');
-		$oItemPrototype = static::template('overview_item');
-		$oDatePrototype = static::template('date');
-		$oEventPage =	PageQuery::create()->filterByPageType('events')->findOne();
-		setlocale(LC_ALL, "de_CH");
-		foreach($aEvents as $oEvent) {
-			$oItemTemplate = clone $oItemPrototype;
-
-			$oDateTemplate = clone $oDatePrototype;
-			$oDateTemplate->replaceIdentifier('date_day', strftime("%d",$oEvent->getDateStart('U')));
-			$oDateTemplate->replaceIdentifier('date_month', strftime("%b",$oEvent->getDateStart('U')));
-			$oItemTemplate->replaceIdentifier('date_item', $oDateTemplate);
-			$oItemTemplate->replaceIdentifier('title', $oEvent->getTitle());
-			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink($oEventPage)));
-			$oItemTemplate->replaceIdentifier('description', EventsPageTypeModule::getContentForFrontend($oEvent->getBodyShort(), true, $iTruncate));
-			if($oEvent->isToday()) {
-				$oItemTemplate->replaceIdentifier('class_today', ' today');
-				$oItemTemplate->replaceIdentifier('today', StringPeer::getString('wns.event.today'));
+		$oTemplate->replaceIdentifierCallback('item', function($oIdentifier) use (&$oTemplate, &$aEvents, &$iTruncate, &$sNoEventMessage) {
+			$sLanguage = 'de_CH';
+			if($oIdentifier->hasParameter('locale')) {
+				$sLanguage = $oIdentifier->getParameter('locale');
 			}
-			$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
-		}
-		if(count($aEvents) === 0 && $sNoEventMessage) {
-			$oTemplate->replaceIdentifier('item', TagWriter::quickTag('p', array(), $sNoEventMessage));
-		}
+			$oItemPrototype = static::template('overview_item');
+			$oDatePrototype = static::template('date');
+			$oEventPage =	PageQuery::create()->filterByPageType('events')->findOne();
+
+			foreach($aEvents as $oEvent) {
+				$oItemTemplate = clone $oItemPrototype;
+				$oDateTemplate = clone $oDatePrototype;
+				$oDateTemplate->replaceIdentifier('date_day', strftime("%d",$oEvent->getDateStart('U')));
+				$sMonthName = LocaleUtil::localizeDate($oEvent->getDateStartTimeStamp(), $sLanguage, 'b');
+				$oDateTemplate->replaceIdentifier('date_month', $sMonthName);
+				$oItemTemplate->replaceIdentifier('date_item', $oDateTemplate);
+				$oItemTemplate->replaceIdentifier('title', $oEvent->getTitle());
+				$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink($oEventPage)));
+				$oItemTemplate->replaceIdentifier('description', EventsPageTypeModule::getContentForFrontend($oEvent->getBodyShort(), true, $iTruncate));
+				if($oEvent->isToday()) {
+					$oItemTemplate->replaceIdentifier('class_today', ' today');
+					$oItemTemplate->replaceIdentifier('today', StringPeer::getString('wns.event.today'));
+				}
+				$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
+			}
+			if(count($aEvents) === 0 && $sNoEventMessage) {
+				$oTemplate->replaceIdentifier('item', TagWriter::quickTag('p', array(), $sNoEventMessage));
+			}
+		});
 		return $oTemplate;
 	}
 
