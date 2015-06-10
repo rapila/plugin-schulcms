@@ -45,6 +45,7 @@
 							)
 						]
 					),
+					React.createElement('div', {key: 'local_overwrite_sites', className: 'overwrites'}, this.props.faq.local_overwrite_sites),
 					React.createElement(FAQTagList, {key: 'tags', tags: this.props.faq.tags, focusTag: this.props.focusTag})
 				]
 			);
