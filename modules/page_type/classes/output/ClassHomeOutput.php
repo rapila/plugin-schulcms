@@ -111,11 +111,12 @@ class ClassHomeOutput extends ClassOutput {
 			$oNewsTemplate->replaceIdentifier('headline', $oNews->getHeadline());
 			$sContent = is_resource($oNews->getBody()) ? stream_get_contents($oNews->getBody()) : '';
 			$oNewsTemplate->replaceIdentifier('content', RichtextUtil::parseStorageForFrontendOutput($sContent));
-			$oNewsTemplate->replaceIdentifier('date', LocaleUtil::localizeDate($oNews->getDateStart()));
-			$oNewsTemplate->replaceIdentifier('author_name', $oNews->getUserRelatedByUpdatedBy()->getFullName());
-		} else {
-			// $oNewsTemplate->replaceIdentifier('headline', 'Willkommen');
-			// $oNewsTemplate->replaceIdentifier('content', TagWriter::quickTag('p', array(), 'auf der Webseite der Klasse '.$this->oClass->getFullClassName()));
+			if($oNewsTemplate->hasIdentifier('author_name')) {
+				$oNewsTemplate->replaceIdentifier('author_name', $oNews->getUserRelatedByUpdatedBy()->getFullName());
+			}
+			if($oNewsTemplate->hasIdentifier('date')) {
+				$oNewsTemplate->replaceIdentifier('date', LocaleUtil::localizeDate($oNews->getDateStart()));
+			}
 		}
 		$oTemplate->replaceIdentifier('news', $oNewsTemplate);
 	}
