@@ -19,7 +19,7 @@
 						className: 'wett-icon',
 						key: 'has_images'
 					},
-					'grid'
+					'has-gallery'
 				));
 			}
 			if(this.props.appointment.has_bericht) {
@@ -29,7 +29,7 @@
 						className: 'wett-icon',
 						key: 'has_bericht'
 					},
-					'details'
+					'has-report'
 				));
 			}
 			title.push(
