@@ -17,7 +17,8 @@
 					'span',
 					{
 						className: 'wett-icon',
-						key: 'has_images'
+						key: 'has_images',
+						title: 'Bilder'
 					},
 					'has-gallery'
 				));
@@ -27,7 +28,8 @@
 					'span',
 					{
 						className: 'wett-icon',
-						key: 'has_bericht'
+						key: 'has_bericht',
+						title: 'Bericht'
 					},
 					'has-report'
 				));
