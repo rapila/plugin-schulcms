@@ -45,7 +45,7 @@
 					]
 				),
 			];
-			if(this.props.faq.local_overwrite_sites.length) {
+			if(this.props.faq.local_overwrite_sites && this.props.faq.local_overwrite_sites.length) {
 				contents.push(React.createElement(
 					'div',
 					{key: 'local_overwrite_sites', className: 'local-overwrites'},
