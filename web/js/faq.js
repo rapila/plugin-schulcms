@@ -18,7 +18,8 @@
 			return React.createElement(
 				'div',
 				{
-					className: 'tags'
+					className: 'tags',
+					title: 'Schlagwörter'
 				},
 				tags
 			);
