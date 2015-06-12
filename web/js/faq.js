@@ -27,27 +27,42 @@
 
 	var FAQ = React.createClass({
 		render: function() {
-			return React.createElement('div',
-				{},
-				[
-					React.createElement('h3', {key: 'title'}, this.props.faq.Title),
-					React.createElement('p', {key: 'content'},
-						[
-							React.createElement('a',
-								{
-									href: this.props.faq.link,
-									className: 'text-link'
-								},
-								[
+			var contents = [
+				React.createElement('h3', {key: 'title'}, this.props.faq.Title),
+				React.createElement('p', {key: 'content'},
+					[
+						React.createElement('a',
+							{
+								href: this.props.faq.link,
+								className: 'text-link',
+								key: 'text-link'
+							},
+							[
 								React.createElement('span', {key: 'description'}, this.props.faq.Content),
 								React.createElement('span', {key: 'read-more', className: 'read-more'}, this.props.readMoreText)
-								]
-							)
-						]
-					),
-					React.createElement('div', {key: 'local_overwrite_sites', className: 'overwrites'}, this.props.faq.local_overwrite_sites),
-					React.createElement(FAQTagList, {key: 'tags', tags: this.props.faq.tags, focusTag: this.props.focusTag})
-				]
+							]
+						)
+					]
+				),
+			];
+			if(this.props.faq.local_overwrite_sites.length) {
+				contents.push(React.createElement(
+					'div',
+					{key: 'local_overwrite_sites', className: 'overwrites'},
+					[
+						React.createElement('span', {key: 'site_overwrite_intro'}, "Achtung: "),
+						React.createElement('span', {key: 'site_overwrites'}, this.props.faq.local_overwrite_sites)
+					]
+				));
+			}
+			contents.push(React.createElement(
+				FAQTagList,
+				{key: 'tags', tags: this.props.faq.tags, focusTag: this.props.focusTag}
+			));
+			return React.createElement(
+				'div',
+				{},
+				contents
 			);
 		}
 	});
