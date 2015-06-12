@@ -48,9 +48,9 @@
 			if(this.props.faq.local_overwrite_sites.length) {
 				contents.push(React.createElement(
 					'div',
-					{key: 'local_overwrite_sites', className: 'overwrites'},
+					{key: 'local_overwrite_sites', className: 'local-overwrites'},
 					[
-						React.createElement('span', {key: 'site_overwrite_intro'}, "Achtung: "),
+						React.createElement('span', {key: 'site_overwrite_intro'}, this.props.localSiteOverwriteLabel),
 						React.createElement('span', {key: 'site_overwrites'}, this.props.faq.local_overwrite_sites)
 					]
 				));
@@ -83,7 +83,8 @@
 						key: faq.__key,
 						focusTag: _this.props.focusTag,
 						focusType: _this.props.focusType,
-						readMoreText: _this.props.readMoreText
+						readMoreText: _this.props.readMoreText,
+						localSiteOverwriteLabel: _this.props.localSiteOverwriteLabel
 					}
 				);
 			});
@@ -113,7 +114,8 @@
 							type: type
 						});
 					},
-					readMoreText: element.getAttribute('data-read-more-text')
+					readMoreText: element.getAttribute('data-read-more-text'),
+					localSiteOverwriteLabel: element.getAttribute('data-local-site-overwrite-label')
 				}
 			),
 			element
