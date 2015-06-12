@@ -185,6 +185,17 @@
 			next.addEventListener('click', function() {
 				update(1);
 			}, false);
+			element.ownerDocument.body.addEventListener('keypress', function(event) {
+				if(event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+					return;
+				}
+				if(event.key === 'ArrowLeft' || (event.which || event.keyCode) === 37) {
+					update(-1);
+				}
+				if(event.key === 'ArrowRight' || (event.which || event.keyCode) === 39) {
+					update(1);
+				}
+			}, false);
 			function updateGranularity(newGranularity) {
 				if(newGranularity in currentValue) {
 					if(granularity) {
