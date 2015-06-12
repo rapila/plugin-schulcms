@@ -67,7 +67,7 @@ class ClassHomeOutput extends ClassOutput {
 		// Display successor class link
 		if(!$this->oClass->isCurrent()) {
 			// Hack to find correct parent page, since icampus passes ancestor_id even if there is no ancestor
-			$oSuccessorClass = SchoolClassQuery::create()->orderByOriginalId('desc')->findOneByAncestorClassId($this->oClass->getId());
+			$oSuccessorClass = SchoolClassQuery::create()->findOneByAncestorClassId($this->oClass->getId());
 			if($oSuccessorClass) {
 				$oLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oSuccessorClass->getLink())), $oSuccessorClass->getClassNameWithYear());
 				$oTemplate->replaceIdentifier('successor_class_link', $oLink);
