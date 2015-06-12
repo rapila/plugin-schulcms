@@ -11,6 +11,7 @@
 			var title = [];
 			var icons = [];
 			var content = [];
+			var link = this.props.appointment.link;
 			if(this.props.appointment.has_images) {
 				icons.push(React.createElement(
 					'span',
@@ -39,19 +40,35 @@
 			} else {
 				title.unshift(icons);
 			}
+			var inner = title;
+			if(link) {
+				inner = React.createElement(
+					'a',
+					{
+						href: this.props.appointment.link
+					},
+					inner
+				);
+			}
 			content.push(React.createElement(
 				this.props.detailed ? 'h4' : 'span',
 				{
 					className: 'title',
 					key: 'title'
 				},
-				title
+				inner
 			));
 			var start = new Date(this.props.appointment.date_start);
 			var end = new Date(this.props.appointment.date_end || this.props.appointment.date_start);
 			if(this.props.detailed) {
 				var sameDay = +start === +end;
-				if(this.props.appointment.description) {
+				if(link) {
+					var texts = [];
+					if(this.props.appointment.description) {
+						texts.push(React.createElement('span', {key: 'description'}, this.props.appointment.description));
+					}
+					texts.push(React.createElement('span', {key: 'read-more', className: 'read-more'}, this.props.readMoreText));
+
 					content.push(React.createElement(
 						'p',
 						{
@@ -65,10 +82,7 @@
 									href: this.props.appointment.link,
 									className: 'text-link',
 								},
-								[
-									React.createElement('span', {key: 'description'}, this.props.appointment.description),
-									React.createElement('span', {key: 'read-more', className: 'read-more'}, this.props.readMoreText)
-								]
+								texts
 							)
 						]
 					));
