@@ -617,11 +617,7 @@
 		for(var i=0;i<backLinks.length;i++) {
 			var backLink = backLinks[i];
 			backLink.addEventListener('click', function(event) {
-				if(document.referrer) {
-					window.history.back();
-				} else {
-					window.location.href = this.getAttribute('data-url') || './';
-				}
+				window.location.href = this.getAttribute('data-url') || document.referrer || '../';
 			}, false);
 		}
 	}, false);
