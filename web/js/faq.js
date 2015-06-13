@@ -9,6 +9,7 @@
 					'span',
 					{
 						className: 'tag',
+						title: 'Schlagwort',
 						key: tag,
 						onClick: _this.props.focusTag.bind(null, tag)
 					},
@@ -18,8 +19,7 @@
 			return React.createElement(
 				'div',
 				{
-					className: 'tags',
-					title: 'Schlagwörter'
+					className: 'tags'
 				},
 				tags
 			);
