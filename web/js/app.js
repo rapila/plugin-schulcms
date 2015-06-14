@@ -174,30 +174,36 @@
 			exitFullscreen: (document.exitFullscreen || document.msExitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || function() {}).bind(document),
 			fullscreenElement: function() {
 				return document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-			}
+			},
+			fullscreenEnabled: document.fullscreenEnabled || document.mozFullScreenEnabled || document.msFullScreenEnabled || document.webkitFullscreenEnabled
 		};
-		fullscreen.addEventListener('click', function() {
-			var fse = fs.fullscreenElement();
-			if(fse) {
-				fs.exitFullscreen()
-				if(fse === element) {
-					return;
+		if(fs.fullscreenEnabled) {
+			fullscreen.addEventListener('click', function() {
+				var fse = fs.fullscreenElement();
+				if(fse) {
+					fs.exitFullscreen()
+					if(fse === element) {
+						return;
+					}
 				}
-			}
-			fs.requestFullscreen();
-		}, false);
-		element.ownerDocument.addEventListener('fullscreenchange', function(event) {
-			fullscreen.textContent = fs.fullscreenElement() === element ? 'shrink' : 'grow';
-		}, false);
-		element.ownerDocument.addEventListener('mozfullscreenchange', function(event) {
-			fullscreen.textContent = fs.fullscreenElement() === element ? 'shrink' : 'grow';
-		}, false);
-		element.ownerDocument.addEventListener('webkitfullscreenchange', function(event) {
-			fullscreen.textContent = fs.fullscreenElement() === element ? 'shrink' : 'grow';
-		}, false);
-		element.ownerDocument.addEventListener('msfullscreenchange', function(event) {
-			fullscreen.textContent = fs.fullscreenElement() === element ? 'shrink' : 'grow';
-		}, false);
+				fs.requestFullscreen();
+			}, false);
+			element.ownerDocument.addEventListener('fullscreenchange', function(event) {
+				fullscreen.textContent = fs.fullscreenElement() === element ? 'shrink' : 'grow';
+			}, false);
+			element.ownerDocument.addEventListener('mozfullscreenchange', function(event) {
+				fullscreen.textContent = fs.fullscreenElement() === element ? 'shrink' : 'grow';
+			}, false);
+			element.ownerDocument.addEventListener('webkitfullscreenchange', function(event) {
+				fullscreen.textContent = fs.fullscreenElement() === element ? 'shrink' : 'grow';
+			}, false);
+			element.ownerDocument.addEventListener('msfullscreenchange', function(event) {
+				fullscreen.textContent = fs.fullscreenElement() === element ? 'shrink' : 'grow';
+			}, false);
+		} else {
+			fullscreen.parentElement.removeChild(fullscreen);
+			fullscreen = null;
+		}
 
 		function render(data, configuration) {
 			console.log('render', data.length, data);
