@@ -83,6 +83,17 @@
 			request: request
 		};
 	});
+	
+	wok.use('directSource', function(element, options) {
+		var _this = this;
+		var args = [].slice.call(arguments, 2);
+
+		return {
+			request: function(config) {
+				_this.render.apply(_this, args);
+			}
+		}
+	});
 
 	wok.use('htmlSource', function(element, useJSON) {
 		var _this = this;
@@ -147,9 +158,106 @@
 			}
 		}
 	});
+	
+	wok.use('galleryDisplay', function(element, settings) {
+		var image = element.querySelector('.image');
+		var fullscreen = element.querySelector('.fullscreen-button');
+		var info = element.querySelector('.info');
+		var img = document.createElement('img');
+
+		var maxWidth = settings.maxWidth || 2000;
+		var maxHeight = settings.maxHeight || 1500;
+		var field = settings.field || 'index';
+
+		var fs = {
+			requestFullscreen: (element.requestFullscreen || element.msRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen || function() {}).bind(element),
+			exitFullscreen: (document.exitFullscreen || document.msExitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || function() {}).bind(document),
+			fullscreenElement: function() {
+				return document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+			}
+		};
+		fullscreen.addEventListener('click', function() {
+			var fse = fs.fullscreenElement();
+			if(fse) {
+				fs.exitFullscreen()
+				if(fse === element) {
+					return;
+				}
+			}
+			fs.requestFullscreen();
+		}, false);
+		element.ownerDocument.addEventListener('fullscreenchange', function(event) {
+			fullscreen.textContent = fs.fullscreenElement() === element ? 'shrink' : 'grow';
+		}, false);
+		element.ownerDocument.addEventListener('mozfullscreenchange', function(event) {
+			fullscreen.textContent = fs.fullscreenElement() === element ? 'shrink' : 'grow';
+		}, false);
+		element.ownerDocument.addEventListener('webkitfullscreenchange', function(event) {
+			fullscreen.textContent = fs.fullscreenElement() === element ? 'shrink' : 'grow';
+		}, false);
+		element.ownerDocument.addEventListener('msfullscreenchange', function(event) {
+			fullscreen.textContent = fs.fullscreenElement() === element ? 'shrink' : 'grow';
+		}, false);
+
+		function render(data, configuration) {
+			console.log('render', data.length, data);
+			if(!data.length || data.length !== 1) {
+				image.textContent = '';
+				return;
+			}
+			info.textContent = ''+(configuration[field]+1)+'/'+(configuration.length);
+			img.src = data[0]+'?max_width='+maxWidth+'&max_height='+maxHeight;
+			image.appendChild(img);
+		}
+		return {
+			render: render
+		};
+	});
 
 	var filterPlugins = {
-		'date-pager': function datePager(element, startField, endField, granularity, granularityChanger, months) {
+		pager: function pager(element, field, step) {
+			var _this = this;
+			var prev = element.querySelector('.prev');
+			var next = element.querySelector('.next');
+			var current = element.querySelector('.current');
+			step = step || 1;
+			function update(delta) {
+				var diff = {};
+				diff[field] = Number(current.textContent)+delta
+				_this.request(diff);
+			}
+			prev.addEventListener('click', function() {
+				update(-step);
+			}, false);
+			next.addEventListener('click', function() {
+				update(step);
+			}, false);
+			element.ownerDocument.addEventListener('keydown', function(event) {
+				if(event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+					return;
+				}
+				if(event.key === 'ArrowLeft' || (event.which || event.keyCode) === 37) {
+					update(-1);
+				}
+				if(event.key === 'ArrowRight' || (event.which || event.keyCode) === 39) {
+					update(1);
+				}
+			}, false);
+			return {
+				render: function(configuration, data) {
+					if(field in configuration) {
+						current.textContent = configuration[field];
+					}
+					for(var key in data) {
+						if(data[key][field] !== configuration[field]) {
+							delete data[key];
+						}
+					}
+				},
+				request: true
+			}
+		},
+		datePager: function datePager(element, startField, endField, granularity, granularityChanger, months) {
 			var _this = this;
 			var prev = element.querySelector('.prev');
 			var next = element.querySelector('.next');
@@ -185,7 +293,7 @@
 			next.addEventListener('click', function() {
 				update(1);
 			}, false);
-			element.ownerDocument.body.addEventListener('keypress', function(event) {
+			element.ownerDocument.addEventListener('keydown', function(event) {
 				if(event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
 					return;
 				}
@@ -207,84 +315,162 @@
 					element.cl.add('granularity-'+newGranularity);
 				}
 			}
+			function render(configuration, data) {
+				for(var dateKey in currentValue) {
+					if(dateKey in configuration) {
+						currentValue[dateKey] = configuration[dateKey];
+					}
+				}
+				// If the granularity has changed (from month to year or vice versa)
+				if(granularityChanger && granularityChanger in configuration) {
+					updateGranularity(configuration[granularityChanger]);
+				}
+				// Update the text inside the “current” element
+				if(granularity === 'year') {
+					current.textContent = currentValue.year;
+				} else {
+					current.textContent = months[currentValue.month];
+				}
+				var d = currentValueDate().getTime();
+				for(var key in data) {
+					var start = data[key][startField];
+					var end = data[key][endField];
+					if(!end) {
+						end = start;
+					}
+					start = new Date(start);
+					end = new Date(end);
+					if(granularity === 'day') {
+						end.setUTCDate(end.getUTCDate()+1);
+					} else if(granularity === 'month') {
+						start.setUTCDate(1);
+						end.setUTCDate(1);
+						end.setUTCMonth(end.getUTCMonth()+1);
+					} else if(granularity === 'year') {
+						start.setUTCDate(1);
+						end.setUTCDate(1);
+						start.setUTCMonth(0);
+						end.setUTCMonth(0);
+						end.setUTCFullYear(end.getUTCFullYear()+1);
+					}
+					if(!(start.getTime() <= d && d < end.getTime())) {
+						delete data[key];
+					}
+				}
+				// Put the month names into the configuration
+				configuration.monthNames = months;
+				configuration.title = (granularity === 'day' ? ''+currentValue.day+' ' : '') + (granularity === 'day' || granularity === 'month' ? months[currentValue.month]+' ' : '') + (currentValue.year);
+			}
 			return {
-				render: function(configuration, data) {
-					for(var dateKey in currentValue) {
-						if(dateKey in configuration) {
-							currentValue[dateKey] = configuration[dateKey];
-						}
-					}
-					// If the granularity has changed (from month to year or vice versa)
-					if(granularityChanger && granularityChanger in configuration) {
-						updateGranularity(configuration[granularityChanger]);
-					}
-					// Update the text inside the “current” element
-					if(granularity === 'year') {
-						current.textContent = currentValue.year;
-					} else {
-						current.textContent = months[currentValue.month];
-					}
-					var d = currentValueDate().getTime();
-					for(var key in data) {
-						var start = data[key][startField];
-						var end = data[key][endField];
-						if(!end) {
-							end = start;
-						}
-						start = new Date(start);
-						end = new Date(end);
-						if(granularity === 'day') {
-							end.setUTCDate(end.getUTCDate()+1);
-						} else if(granularity === 'month') {
-							start.setUTCDate(1);
-							end.setUTCDate(1);
-							end.setUTCMonth(end.getUTCMonth()+1);
-						} else if(granularity === 'year') {
-							start.setUTCDate(1);
-							end.setUTCDate(1);
-							start.setUTCMonth(0);
-							end.setUTCMonth(0);
-							end.setUTCFullYear(end.getUTCFullYear()+1);
-						}
-						if(!(start.getTime() <= d && d < end.getTime())) {
-							delete data[key];
-						}
-					}
-					// Put the month names into the configuration
-					configuration.monthNames = months;
-					configuration.title = (granularity === 'day' ? ''+currentValue.day+' ' : '') + (granularity === 'day' || granularity === 'month' ? months[currentValue.month]+' ' : '') + (currentValue.year);
-				},
+				render: render,
 				request: true
 			}
 		},
-		pager: function pager(element, field, step) {
+		imagePager: function imagePager(element, settings) {
 			var _this = this;
 			var prev = element.querySelector('.prev');
 			var next = element.querySelector('.next');
-			var current = element.querySelector('.current');
-			step = step || 1;
-			function update(delta) {
+			var thumbnails = element.querySelector('.thumbnails');
+			var field = settings.field || 'index';
+			var step = settings.step || 1;
+			var num = settings.thumbnails || 10;
+			var maxWidth = settings.maxWidth || 150;
+			var maxHeight = settings.maxHeight || 180;
+			element.cl = classList(element);
+
+			var currentIndex = 0;
+			function update(delta, index) {
 				var diff = {};
-				diff[field] = Number(current.textContent)+delta
+				diff[field] = currentIndex+delta
 				_this.request(diff);
 			}
 			prev.addEventListener('click', function() {
-				update(step*-1);
+				update(-step);
 			}, false);
 			next.addEventListener('click', function() {
 				update(step);
 			}, false);
+			element.ownerDocument.addEventListener('keydown', function(event) {
+				console.log('keydown', event);
+				if(event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+					return;
+				}
+				if(event.key === 'ArrowLeft' || (event.which || event.keyCode) === 37) {
+					update(-1);
+				}
+				if(event.key === 'ArrowRight' || (event.which || event.keyCode) === 39) {
+					update(1);
+				}
+			}, false);
+			function render(configuration, data) {
+				currentIndex = configuration[field];
+				if(!data.length) {
+					return;
+				}
+				// Clamp currentIndex to min, max
+				var length = data.length;
+				if(!data[length-1]) {
+					data.splice(length-1, 1);
+					length--;
+				}
+				if(currentIndex < 0) {
+					currentIndex += length;
+				}
+				if(currentIndex >= length) {
+					currentIndex -= length;
+				}
+				configuration[field] = currentIndex;
+				configuration.length = length;
+				// Update classes
+				if(currentIndex === 0) {
+					element.cl.add('at-first');
+				} else {
+					element.cl.remove('at-first');
+				}
+				if(currentIndex === length-1) {
+					element.cl.add('at-last');
+				} else {
+					element.cl.remove('at-last');
+				}
+				// Determine how many/which thumbnails to show
+				var start = 0;
+				var end = length-1;
+				if(length > num) {
+					// Not enough space to render all items, clamp
+					start = currentIndex - Math.floor((num-1)/2);
+					end = currentIndex + Math.ceil((num-1)/2);
+					while(start < 0) {
+						start++;
+						end++;
+					}
+					while(end >= length) {
+						start--;
+						end--;
+					}
+				}
+				thumbnails.textContent = '';
+				var thumbs = document.createDocumentFragment();
+				data.slice(start, end+1).forEach(function(url, index) {
+					var image = document.createElement('div');
+					image.className = 'image';
+					var img = document.createElement('img');
+					img.src = url+'?max_width='+maxWidth+'&max_height='+maxHeight;
+					if(index === currentIndex - start) {
+						img.className = "current";
+					}
+					img.addEventListener('click', function() {
+						update(start + index - currentIndex);
+					}, true);
+					image.appendChild(img);
+					thumbs.appendChild(image);
+				});
+				thumbnails.appendChild(thumbs);
+				if(length) {
+					data.splice(0, data.length, data[currentIndex]);
+				}
+			};
 			return {
-				render: function(configuration, data) {
-					if(field in configuration) {
-						current.textContent = configuration[field];
-					}
-					for(var key in data) {
-						if(data[key][field] !== configuration[field]) {
-							delete data[key];
-						}
-					}
-				},
+				render: render,
 				request: true
 			}
 		},
@@ -563,9 +749,13 @@
 
 		function update() {
 			// Duplicate data into filteredData so that it can be modified at will
-			filteredData = {};
-			for(var key in data) {
-				filteredData[key] = data[key];
+			if(Array.isArray(data)) {
+				filteredData = data.slice();
+			} else {
+				filteredData = {};
+				for(var key in data) {
+					filteredData[key] = data[key];
+				}
 			}
 			// Let the child controls update themselves and filter data depending on the current configuration
 			filterControls.render(configuration, filteredData);

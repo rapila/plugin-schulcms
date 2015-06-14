@@ -81,9 +81,7 @@ class EventsPageTypeModule extends PageTypeModule {
 	*/
 	public static function renderGallery($oEvent, &$oDetailTemplate) {
 		$aEventDocuments = $oEvent->getEventDocumentsOrdered();
-		if(empty($aEventDocuments)) {
-			return;
-		}
+		$iCount = 0;
 		$oGalleryTemplate = new Template('lists/gallery');
 		$oTemplateProtoType = new Template('lists/gallery_item');
 		foreach($aEventDocuments as $oEventDocument) {
@@ -91,6 +89,7 @@ class EventsPageTypeModule extends PageTypeModule {
 			if(!$oDocument || !$oDocument->isImage()) {
 				continue;
 			}
+			$iCount++;
 			$oDocumentTemplate = clone $oTemplateProtoType;
 			$oDocumentTemplate->replaceIdentifier('event_id', $oEvent->getId());
 			$mDescription = null;
@@ -103,7 +102,9 @@ class EventsPageTypeModule extends PageTypeModule {
 			$oDocument->renderListItem($oDocumentTemplate);
 			$oGalleryTemplate->replaceIdentifierMultiple("items", $oDocumentTemplate);
 		}
-		$oDetailTemplate->replaceIdentifier('gallery', $oGalleryTemplate);
+		if($iCount > 0) {
+			$oDetailTemplate->replaceIdentifier('gallery', $oGalleryTemplate);
+		}
 	}
 
 	public static function getContentForFrontend($oBlob, $bStripTags = false, $iTruncate = null) {
