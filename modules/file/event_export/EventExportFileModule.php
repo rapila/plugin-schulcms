@@ -55,7 +55,7 @@ class EventExportFileModule extends FileModule {
 			$aResult["event-{$oEvent->getId()}"] = array(
 				'id' => $oEvent->getId(),
 				'name' => $oEvent->getTitle(),
-				'description' => EventsPageTypeModule::getContentForFrontend($oEvent->isPreview() || !$oEvent->hasReviewText() ? $oEvent->getBodyShort() : $oEvent->getBodyReview(), true),
+				'description' => EventsPageTypeModule::getContentForFrontend($oEvent->isPreview() || !$oEvent->hasReviewText() ? $oEvent->getBodyShort() : $oEvent->getBodyReview(), true, 250),
 				'slug' => $oEvent->getSlug(),
 				'link' => LinkUtil::link($oEvent->getLink($oPage), 'FrontendManager'),
 				'date_start' => $oEvent->getDateStart('Y-m-d'),
