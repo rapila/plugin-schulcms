@@ -61,34 +61,12 @@ class TeamMembersFrontendModule extends FrontendModule {
 		$oPage = FrontendManager::$CURRENT_PAGE;
 
 		$oTemplate = $this->constructTemplate('list');
-		$aTeamMembers = $this->listQuery()->find();
-
-		$sOddEven = 'odd';
-		foreach($aTeamMembers as $oTeamMember) {
-			$oItemTemplate = $this->constructTemplate('list_item');
-			$oItemTemplate->replaceIdentifier('oddeven', $sOddEven = $sOddEven === 'even' ? 'odd' : 'even');
-			if(Util::equals(self::$TEAM_MEMBER, $oTeamMember)) {
-				$oItemTemplate->replaceIdentifier('is_active_class', ' active');
-				$oItemTemplate->replaceIdentifier('show_active', '➜');
-			}
+		foreach($this->listQuery()->find() as $oTeamMember) {
+			$oItemTemplate = $this->constructTemplate('list_item_simple');
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oTeamMember->getLink($oPage)));
 			$oItemTemplate->replaceIdentifier('name', $oTeamMember->getFullNameInverted());
 			$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.team_member.link_title_prefix').$oTeamMember->getFullName());
 			$oItemTemplate->replaceIdentifier('first_function_name', $oTeamMember->getFirstTeamMemberFunctionName());
-
-			$aClassTeachers = $oTeamMember->getIsClassTeacherClasses(true);
-			if(count($aClassTeachers) > 0) {
-				foreach($aClassTeachers as $i => $oClassTeacher) {
-					if($i > 0) {
-						$oItemTemplate->replaceIdentifierMultiple('school_class', ', ', null, Template::NO_NEWLINE);
-					}
-					$aLink = $oClassTeacher->getSchoolClass()->getLink($this->oClassPage);
-					$oItemTemplate->replaceIdentifierMultiple('school_class', TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.class.link_title_prefix').$oClassTeacher->getSchoolClass()->getName(), 'href' => LinkUtil::link($aLink)), $oClassTeacher->getSchoolClass()->getName()), null, Template::NO_NEWLINE);
-				}
-			} else {
-				$oItemTemplate->replaceIdentifier('school_class', '-');
-			}
-
 			$oItemTemplate->replaceIdentifier('profession', $oTeamMember->getProfession());
 			$oTemplate->replaceIdentifierMultiple('list_item', $oItemTemplate);
 		}
