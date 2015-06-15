@@ -37,31 +37,24 @@ class NewsFrontendModule extends DynamicFrontendModule {
 
 	public function renderDetail($aNewsTypes) {
 		$oItemTemplate = static::template('detail');
-		return self::renderItem($this->query($aNewsTypes, 1)->findOne(), $oItemTemplate, 'full');
-	}
-
-	public function renderNewsSidebar($aNewsTypes, $iLimit) {
-		$oItemTemplate = static::template('item_short');
-		return self::renderList($this->query($aNewsTypes, $iLimit)->find(), $oItemTemplate, $iLimit);
-	}
-
-	public function renderMainNews($aNews, $iLimit) {
-		$oItemTemplate = static::template('item_full');
-		return self::renderList($this->query($aNewsTypes, $iLimit)->find(), $oItemTemplate, $iLimit);
+		$oNews = $this->query($aNewsTypes, 1)->findOne();
+		if($oNews) {
+			return self::renderItem($oNews, $oItemTemplate, 'full');
+		}
 	}
 
 	public function renderCurrentListWithoutFirst($aNewsTypes, $iLimit = null) {
 		$oItemTemplate = static::template('item_title');
-		return self::renderList($this->query($aNewsTypes, $iLimit)->offset(1)->find(), $oItemTemplate, $iLimit);
+		return self::renderList($this->query($aNewsTypes, $iLimit)->offset(1)->find(), $oItemTemplate, 'title', static::template('list_more'));
 	}
 
-	public function renderCurrentList($aNewsTypes, $iLimit = null, $sContentType = 'short') {
+	public function renderCurrentList($aNewsTypes, $iLimit = null, $sContentType = 'full') {
 		$oItemTemplate = static::template('item_'.$sContentType);
 		return self::renderList($this->query($aNewsTypes, $iLimit)->find(), $oItemTemplate, $sContentType);
 	}
 
-	public static function renderList($aNews, $oItemTemplate, $sContentType = null) {
-		$oTemplate = static::template('list');
+	public static function renderList($aNews, $oItemTemplate, $sContentType = null, $oListTemplate = null) {
+		$oTemplate = $oListTemplate? $oListTemplate :static::template('list');
 		foreach($aNews as $oNews) {
 			$oTemplate->replaceIdentifierMultiple('item', self::renderItem($oNews, clone $oItemTemplate, $sContentType));
 		}
