@@ -9,6 +9,7 @@ Widget.types.news_frontend_config = {
 		this.news_type_dropdown = this._element.find('select[name=news_type\\[\\]]');
 		this.limit_dropdown = this._element.find('select[name=limit]');
 		this.result_list = this._element.find('ol.ui-editable-items-list');
+		this.limit_option = this._element.find('div.limit_options').toggle(config.display_mode === 'detail');
 
 		this._element.on('change', ':input', this.update_preview.bind(this));
 
@@ -19,14 +20,13 @@ Widget.types.news_frontend_config = {
 			this.news_type_dropdown.populate(data.news_type_options, config.news_type, false);
 			this.limit_dropdown.populate(data.limit_options, config.limit || "__all");
 		}.deferred(finish));
+
 		this.mode_dropdown.change(function() {
-			var value = jQuery(this).val();
-			_this._element.find('div.limit_options').toggle(jQuery(this).val() !== 'detail');
+			_this.limit_option.toggle(jQuery(this).val() !== 'detail');
 		});
-		this.mode_dropdown.change();
 
 		jQuery.when.apply(jQuery, finish).then(function() {
-			this.update_preview();
+			this.mode_dropdown.change();
 		}.bind(this));
 
 		//Init preview stuff
@@ -49,6 +49,9 @@ Widget.types.news_frontend_config = {
 		var result_list = this.result_list;
 		result_list.empty();
 		var data = this.save();
+		if(data.display_mode === 'detail') {
+			data.limit = 1;
+		}
 		this.listNews(data, function(news) {
 			jQuery.each(news, function(i, news) {
 				result_list.append(jQuery('<li/>').text(news.headline).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', news.id));
