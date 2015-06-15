@@ -57,12 +57,15 @@ class SchoolPeer extends BaseSchoolPeer {
 		// throw new LocalizedException('configuration.error.school_id_required', array('config_file_path' => 'site/config/config.yml > schulcms'));
 	}
 
-	public static function getFirstSchoolId() {
+	public static function getFirstSchoolId($bReturnInternId = true) {
 		$mSchoolId = self::getSchoolId();
 		if(!$mSchoolId) {
 			return null;
 		}
 		if(is_array($mSchoolId) && count($mSchoolId) > 0) {
+			if($bReturnInternId) {
+				return SchoolQuery::create()->filterByOriginalId($mSchoolId[0])->select('Id')->findOne();
+			}
 			return $mSchoolId[0];
 		}
 		return $mSchoolId;
