@@ -48,7 +48,7 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		return self::renderList($this->query($aNewsTypes, $iLimit)->offset(1)->find(), $oItemTemplate, 'title', static::template('list_more'));
 	}
 
-	public function renderCurrentList($aNewsTypes, $iLimit = null, $sContentType = 'full') {
+	public function renderCurrentList($aNewsTypes, $iLimit = null, $sContentType = 'short') {
 		$oItemTemplate = static::template('item_'.$sContentType);
 		return self::renderList($this->query($aNewsTypes, $iLimit)->find(), $oItemTemplate, $sContentType);
 	}
