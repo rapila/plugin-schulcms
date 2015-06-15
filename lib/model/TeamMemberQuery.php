@@ -28,8 +28,12 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		return $this;
 	}
 
+	/**
+	* Attempt to replace filterByTeamMemberFunctionGroup()
+	* Error “Syntax error or access violation: 1066 Not unique table/alias: 'team_member_functions']'”
+	*/
 	public function filterByFunctionGroup($mFunctionGroup) {
-		$this->useTeamMemberFunctionQuery()->useSchoolFunctionQuery()->useFunctionGroupQuery()->filterByValue($sName)->endUse()->endUse()->endUse();
+		$this->useTeamMemberFunctionQuery()->useSchoolFunctionQuery()->useFunctionGroupQuery()->filterByValue($mFunctionGroup)->endUse()->endUse()->endUse();
 		return $this;
 	}
 
