@@ -28,6 +28,16 @@ class TeamMemberQuery extends BaseTeamMemberQuery {
 		return $this;
 	}
 
+	public function filterByFunctionGroup($mFunctionGroup) {
+		$this->useTeamMemberFunctionQuery()->useSchoolFunctionQuery()->useFunctionGroupQuery()->filterByValue($sName)->endUse()->endUse()->endUse();
+		return $this;
+	}
+
+	public function filterByFunctionGroupNameAndSchoolId($sName, $iSchoolId) {
+		$this->useTeamMemberFunctionQuery()->useSchoolFunctionQuery()->filterBySchoolId($iSchoolId)->useFunctionGroupQuery()->filterByName($sName)->endUse()->endUse()->endUse();
+		return $this;
+	}
+
 	/**
 	* Excludes all team members that are not part of the configured active_function_groups
 	* they can be

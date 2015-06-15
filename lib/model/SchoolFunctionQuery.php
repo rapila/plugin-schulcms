@@ -15,5 +15,13 @@ class SchoolFunctionQuery extends BaseSchoolFunctionQuery {
 		$this->joinFunctionGroup()->joinTeamMemberFunction();
 		return $this;
 	}
+
+	public function filterByFunctionGroupNameAndSchoolId($sName, $iSchoolId = null) {
+		$this->useFunctionGroupQuery()->filterByName($sName)->endUse();
+		if($iSchoolId) {
+			$this->filterBySchoolId($iSchoolId);
+		}
+		return $this;
+	}
 }
 
