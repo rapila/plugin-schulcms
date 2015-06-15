@@ -89,6 +89,8 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		}
 		$oItemTemplate->replaceIdentifier('headline', $oNews->getHeadline());
 		$oItemTemplate->replaceIdentifier('date', LocaleUtil::localizeDate($oNews->getDateStart()));
+		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oNews->getLink()));
+
 		if($sContentType !== 'title') {
 			$oItemTemplate->replaceIdentifier('content', RichtextUtil::parseStorageForFrontendOutput($sBody));
 			$oItemTemplate->replaceIdentifier('name', $oNews->getUserRelatedByCreatedBy()->getFullName());
