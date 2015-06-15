@@ -3,8 +3,8 @@
 * @package modules.widget
 */
 class TeamMemberInputWidgetModule extends WidgetModule {
-		
-  public function allTeamMembers($bOrderByFirstName = true) {
+
+  public function listTeamMembers($bOrderByFirstName = true) {
 		$aResult = array();
 		$oQuery = TeamMemberQuery::create()->filterByFunctionId();
 		if($bOrderByFirstName) {
@@ -18,7 +18,7 @@ class TeamMemberInputWidgetModule extends WidgetModule {
 		}
 		return $aResult;
 	}
-	
+
 	public function getElementType() {
 		return 'select';
 	}

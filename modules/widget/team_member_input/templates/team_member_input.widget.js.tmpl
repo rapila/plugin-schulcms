@@ -3,14 +3,14 @@ Widget.types.team_member_input = {
 		var _this = this;
 		var current = this._element.val();
 		this._element.empty();
-		
-		this.allTeamMembers(function(team_members) {
+
+		this.listTeamMembers(function(team_members) {
 			this._element.populate({'': _this.settings.default_value_label});
 			this._element.populate(team_members, null, false);
 			this._element.val(current || this.settings.initial_selection || '');
 		});
 	},
-	
+
 	val: function(value) {
 		if(arguments.length) {
 			this._element.val(value);
@@ -19,7 +19,7 @@ Widget.types.team_member_input = {
 		}
 		return this._element.val();
 	},
-	
+
 	settings: {
 		default_value_label: '-----',
 		initial_selection: null

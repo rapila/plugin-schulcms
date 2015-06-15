@@ -56,7 +56,7 @@ Widget.types.team_members_frontend_config = {
 			return;
 		}
 		this.list_options.show();
-		this.allTeamMembers(this.selected_groups(), function(team_members) {
+		this.listTeamMembers(this.selected_groups(), function(team_members) {
 			jQuery.each(team_members, function(i, team_member) {
 				result_list.append(jQuery('<li/>').text(team_member.full_name_inverted).attr('title', "{{writeString=wns.edit_entry}}").addClass('preview_edit').data('id', team_member.id));
 			});

@@ -1,6 +1,6 @@
 <?php
 class TeamMembersFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
-	public function allTeamMembers($aFunctionGroupIds = null) {
+	public function listTeamMembers($aFunctionGroupIds = null) {
 		$oTeamMemberQuery = TeamMemberQuery::create()->excludeInactive();
 		if($aFunctionGroupIds !== null) {
 			$oTeamMemberQuery->filterByTeamMemberFunctionGroup($aFunctionGroupIds);
