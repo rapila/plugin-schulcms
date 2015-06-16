@@ -65,7 +65,7 @@ class EventTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('EventType', 'EventType', RelationMap::MANY_TO_ONE, array('event_type_id' => 'id', ), 'CASCADE', null);
+        $this->addRelation('EventType', 'EventType', RelationMap::MANY_TO_ONE, array('event_type_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('SchoolClass', 'SchoolClass', RelationMap::MANY_TO_ONE, array('school_class_id' => 'id', ), 'CASCADE', null);
         $this->addRelation('DocumentCategory', 'DocumentCategory', RelationMap::MANY_TO_ONE, array('gallery_id' => 'id', ), 'SET NULL', null);
         $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);

@@ -750,9 +750,10 @@ abstract class BaseEventType extends BaseObject implements Persistent
 
             if ($this->eventsScheduledForDeletion !== null) {
                 if (!$this->eventsScheduledForDeletion->isEmpty()) {
-                    EventQuery::create()
-                        ->filterByPrimaryKeys($this->eventsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
+                    foreach ($this->eventsScheduledForDeletion as $event) {
+                        // need to save related object because we set the relation to null
+                        $event->save($con);
+                    }
                     $this->eventsScheduledForDeletion = null;
                 }
             }

@@ -55,7 +55,7 @@ class EventTypeTableMap extends TableMap
     {
         $this->addRelation('UserRelatedByCreatedBy', 'User', RelationMap::MANY_TO_ONE, array('created_by' => 'id', ), 'SET NULL', null);
         $this->addRelation('UserRelatedByUpdatedBy', 'User', RelationMap::MANY_TO_ONE, array('updated_by' => 'id', ), 'SET NULL', null);
-        $this->addRelation('Event', 'Event', RelationMap::ONE_TO_MANY, array('id' => 'event_type_id', ), 'CASCADE', null, 'Events');
+        $this->addRelation('Event', 'Event', RelationMap::ONE_TO_MANY, array('id' => 'event_type_id', ), 'SET NULL', null, 'Events');
     } // buildRelations()
 
     /**

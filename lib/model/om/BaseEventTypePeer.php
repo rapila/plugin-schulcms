@@ -1200,7 +1200,7 @@ abstract class BaseEventTypePeer
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            $affectedRows += EventTypePeer::doOnDeleteCascade(new Criteria(EventTypePeer::DATABASE_NAME), $con);
+            EventTypePeer::doOnDeleteSetNull(new Criteria(EventTypePeer::DATABASE_NAME), $con);
             $affectedRows += BasePeer::doDeleteAll(EventTypePeer::TABLE_NAME, $con, EventTypePeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
@@ -1256,7 +1256,7 @@ abstract class BaseEventTypePeer
 
             // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
             $c = clone $criteria;
-            $affectedRows += EventTypePeer::doOnDeleteCascade($c, $con);
+            EventTypePeer::doOnDeleteSetNull($c, $con);
 
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
@@ -1283,7 +1283,7 @@ abstract class BaseEventTypePeer
     }
 
     /**
-     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+     * This is a method for emulating ON DELETE SET NULL DBs that don't support this
      * feature (like MySQL or SQLite).
      *
      * This method is not very speedy because it must perform a query first to get
@@ -1293,26 +1293,24 @@ abstract class BaseEventTypePeer
      *
      * @param      Criteria $criteria
      * @param      PropelPDO $con
-     * @return int The number of affected rows (if supported by underlying database driver).
+     * @return void
      */
-    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+    protected static function doOnDeleteSetNull(Criteria $criteria, PropelPDO $con)
     {
-        // initialize var to track total num of affected rows
-        $affectedRows = 0;
 
         // first find the objects that are implicated by the $criteria
         $objects = EventTypePeer::doSelect($criteria, $con);
         foreach ($objects as $obj) {
 
+            // set fkey col in related Event rows to null
+            $selectCriteria = new Criteria(EventTypePeer::DATABASE_NAME);
+            $updateValues = new Criteria(EventTypePeer::DATABASE_NAME);
+            $selectCriteria->add(EventPeer::EVENT_TYPE_ID, $obj->getId());
+            $updateValues->add(EventPeer::EVENT_TYPE_ID, null);
 
-            // delete related Event objects
-            $criteria = new Criteria(EventPeer::DATABASE_NAME);
+            BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
-            $criteria->add(EventPeer::EVENT_TYPE_ID, $obj->getId());
-            $affectedRows += EventPeer::doDelete($criteria, $con);
         }
-
-        return $affectedRows;
     }
 
     /**

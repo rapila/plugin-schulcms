@@ -221,7 +221,7 @@
 	<column name="is_active" type="boolean" size="1" default="0" />
 	<column name="is_common" type="boolean" size="1" default="0" />
 	<column name="event_type_id" type="integer" />
-	<foreign-key foreignTable="event_types" onDelete="cascade">
+	<foreign-key foreignTable="event_types" onDelete="setnull">
 		<reference local="event_type_id" foreign="id" />
 	</foreign-key>
 	<column name="school_class_id" type="integer" />
