@@ -59,8 +59,8 @@ class EventQuery extends BaseEventQuery {
 		if(isset($aData['day'])) {
 			$this->add('DAY(DATE_START)', $aData['day']);
 		}
-		if(isset($aData['title_normalized'])) {
-			$this->add(EventPeer::TITLE_NORMALIZED, $aData['title_normalized']);
+		if(isset($aData['slug'])) {
+			$this->add(EventPeer::SLUG, $aData['slug']);
 		}
 		return $this;
 	}
