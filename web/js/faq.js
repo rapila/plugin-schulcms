@@ -19,7 +19,7 @@
 			return React.createElement(
 				'div',
 				{
-					className: 'tags'
+					className: 'tags filter-info'
 				},
 				tags
 			);
@@ -51,7 +51,7 @@
 					'div',
 					{key: 'local_overwrite_sites', className: 'local-overwrites'},
 					[
-						React.createElement('span', {key: 'site_overwrite_intro'}, this.props.localSiteOverwriteLabel),
+						React.createElement('span', {key: 'site_overwrite_intro', className: 'label'}, this.props.localSiteOverwriteLabel),
 						React.createElement('span', {key: 'site_overwrites'}, this.props.faq.local_overwrite_sites)
 					]
 				));
