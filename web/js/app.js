@@ -164,6 +164,9 @@
 		var fullscreen = element.querySelector('.fullscreen-button');
 		var info = element.querySelector('.info');
 		var img = document.createElement('img');
+		img.addEventListener('load', function() {
+			window.loader.hide();
+		}, false);
 
 		var maxWidth = settings.maxWidth || 2000;
 		var maxHeight = settings.maxHeight || 1500;
@@ -212,7 +215,13 @@
 				return;
 			}
 			info.textContent = ''+(configuration[field]+1)+'/'+(configuration.length);
+			if(!img.complete) {
+				window.loader.hide();
+			}
 			img.src = data[0]+'?max_width='+maxWidth+'&max_height='+maxHeight;
+			if(!img.complete) {
+				window.loader.show();
+			}
 			image.appendChild(img);
 		}
 		return {
