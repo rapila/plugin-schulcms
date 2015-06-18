@@ -17,6 +17,19 @@ class EventQuery extends BaseEventQuery {
 		return $this->filterBySchoolClassId(null, Criteria::ISNULL)->_or()->filterByIsCommon(true);
 	}
 
+	public function displayedInClass($oClass, $bExcludePushed = false) {
+		$this->addCond('has_no_class', EventPeer::SCHOOL_CLASS_ID, null, Criteria::ISNULL);
+		$this->addCond('is_common', EventPeer::IS_COMMON, true);
+		$this->combine(array('has_no_class', 'is_common'), Criteria::LOGICAL_AND, 'is_pushed_to_classes');
+		$this->addCond('is_of_class', EventPeer::SCHOOL_CLASS_ID, $oClass->getLinkedClassIds(), Criteria::IN);
+		if($bExcludePushed) {
+			$this->combine(array('is_of_class'), Criteria::LOGICAL_OR);
+		} else {
+			$this->combine(array('is_pushed_to_classes', 'is_of_class'), Criteria::LOGICAL_OR);
+		}
+		return $this;
+	}
+
 	public function fromYear($iYear) {
 		$this->addCond('betweenStart', 'YEAR(DATE_START)', $iYear, Criteria::LESS_EQUAL);
 		$this->addCond('betweenEnd', 'YEAR(DATE_END)', $iYear, Criteria::GREATER_EQUAL);
