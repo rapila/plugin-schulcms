@@ -15,9 +15,19 @@
 				while(this.contains(className)) {
 					element.className = (' '+element.className+' ').replace(' '+className+' ', ' ').trim();
 				}
+			},
+			toggle: function(className) {
+				if(this.contains(className)) {
+					this.add(className);
+				} else {
+					this.remove(className);
+				}
 			}
 		};
 	}
+	
+	// Export for other files to use
+	window.classList = classList;
 
 	// A global Wok instance
 	var wok = window.wok = new Wok();
