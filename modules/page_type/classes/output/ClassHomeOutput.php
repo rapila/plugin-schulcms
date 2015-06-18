@@ -108,7 +108,6 @@ class ClassHomeOutput extends ClassOutput {
 	private function renderClassNews($oTemplate) {
 		$oNews = FrontendNewsQuery::create()->current()->filterBySchoolClass($this->oClass)->orderByDateStart('desc')->findOne();
 		$oNewsTemplate = $this->oPageType->constructTemplate('news_detail');
-		Util::dumpAll($oNews);
 		if($oNews) {
 			$oNewsTemplate->replaceIdentifier('headline', $oNews->getHeadline());
 			$sContent = is_resource($oNews->getBody()) ? stream_get_contents($oNews->getBody()) : '';
