@@ -89,8 +89,8 @@ class EventQuery extends BaseEventQuery {
 		return $this;
 	}
 
-	public function excludeClassEvents($bIncludeCommon = false) {
-		if($bIncludeCommon) {
+	public function excludeClassEvents($bAlsoExcludePushedToCommonFromClasses = false) {
+		if($bAlsoExcludePushedToCommonFromClasses) {
 			return $this->filterBySchoolClassId(null, Criteria::ISNULL);
 		}
 		return $this->common();
