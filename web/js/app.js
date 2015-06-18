@@ -209,7 +209,6 @@
 		}
 
 		function render(data, configuration) {
-			console.log('render', data.length, data);
 			if(!data.length || data.length !== 1) {
 				image.textContent = '';
 				return;
@@ -406,7 +405,6 @@
 				update(step);
 			}, false);
 			element.ownerDocument.addEventListener('keydown', function(event) {
-				console.log('keydown', event);
 				if(event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
 					return;
 				}
