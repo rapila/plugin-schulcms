@@ -588,6 +588,7 @@
 				var id = this.getAttribute('data-value');
 				var configuration = {};
 				configuration[prop] = id;
+				configuration[prop+'.title'] = this.textContent;
 				toggle(false);
 				element.cl.add('force-close');
 				window.setTimeout(function() {
@@ -617,6 +618,7 @@
 						}
 					}
 					selected.textContent = displayName;
+					configuration[prop+'.title'] = displayName;
 
 					// Don’t filter if id is empty string, 0 or null (allows filter value showing all)
 					if(!id) {
