@@ -83,6 +83,7 @@
 								{
 									href: this.props.appointment.link,
 									className: 'text-link',
+									key: 'text-link'
 								},
 								texts
 							)
