@@ -757,11 +757,11 @@
 			}
 			var value = key.slice(1).join('=');
 			key = key[0];
-			if(!(key in configuration) || typeof configuration[key] !== 'string') {
+			if(!(key in configuration) || (typeof configuration[key] !== 'string' && typeof configuration[key] !== 'number')) {
 				newHash.push(hash[i]);
 				continue;
 			}
-			configuration[key] = value;
+			configuration[key] = typeof configuration[key] === 'number' ? parseInt(value, 10) : value;
 		}
 		if(index > -1) {
 			window.location.replace(window.location.href.substring(0, index)+'#'+newHash.join('&'));
