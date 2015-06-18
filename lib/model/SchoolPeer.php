@@ -62,11 +62,9 @@ class SchoolPeer extends BaseSchoolPeer {
 		if(!$mSchoolId) {
 			return null;
 		}
-		if(is_array($mSchoolId) && count($mSchoolId) > 0) {
-			if($bReturnInternId) {
-				return SchoolQuery::create()->filterByOriginalId($mSchoolId[0])->select('Id')->findOne();
-			}
-			return $mSchoolId[0];
+		$iOriginalId = is_array($mSchoolId) && count($mSchoolId) > 0 ? $mSchoolId[0] : $mSchoolId;
+		if($bReturnInternId) {
+			return SchoolQuery::create()->filterByOriginalId($iOriginalId)->select('Id')->findOne();
 		}
 		return $mSchoolId;
 	}
