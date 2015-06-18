@@ -526,10 +526,22 @@
 			}
 		},
 		title: function title(element, prop) {
+			var template;
+			if(prop === undefined) {
+				template = element.textContent;
+			} else if(prop.indexOf('$') > -1) {
+				template = prop;
+			} else {
+				template = '${'+prop+'}';
+			}
 			return {
 				request: true,
 				render: function(configuration, data) {
-					element.textContent = configuration[prop];
+					var text = template;
+					for(var prop in configuration) {
+						text = text.replace(new RegExp('\\$\\{'+prop+'\\}', 'g'), configuration[prop]);
+					}
+					element.textContent = text;
 				}
 			};
 		},
