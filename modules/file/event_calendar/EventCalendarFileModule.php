@@ -17,8 +17,8 @@ class EventCalendarFileModule extends FileModule {
 		if($oClass) {
 			$this->oClass = $oClass;
 			$this->oQuery->displayedInClass($oClass, isset($_REQUEST['local']));
-		} else {
-			$this->oQuery->excludeClassEvents(isset($_REQUEST['global']));
+		} else if(!isset($_REQUEST['global'])) {
+			$this->oQuery->excludeClassEvents(isset($_REQUEST['local']));
 		}
 		$oAYearAgo = new DateTime();
 		$oAYearAgo->sub(new DateInterval('P1Y'));
