@@ -27,9 +27,13 @@ class EventsPageTypeModule extends PageTypeModule {
 		$oResourceIncluder->addResource('events.js');
 		$oResourceIncluder->addResource(LinkUtil::link(array('event_export', '{year}', $oEventPage->getId()), 'FileManager'), ResourceIncluder::RESOURCE_TYPE_LINK, null, array('type' => 'application/json', 'template' => 'source_link', 'source' => '/eventData'));
 		$oDownload = static::template('content/downloads');
-		$oDownload->replaceIdentifier('download_ical', LinkUtil::link(array_merge($aPageLink, array('calendar.ics'))));
-		$oDownload->replaceIdentifier('subscribe_rss', LinkUtil::link(array_merge($aPageLink, array('feed'))));
-		$oDownload->replaceIdentifier('subscribe_ical', LinkUtil::absoluteLink(LinkUtil::link(array_merge($aPageLink, array('calendar.ics'))), null, 'webcal://'));
+		$aArgs = array();
+		if($oClass) {
+			$aArgs['class'] = $oClass->getId();
+		}
+		$oDownload->replaceIdentifier('download_ical', LinkUtil::link(array_merge($aPageLink, array('calendar.ics')), null, $aArgs));
+		$oDownload->replaceIdentifier('subscribe_rss', LinkUtil::link(array_merge($aPageLink, array('feed')), null, $aArgs));
+		$oDownload->replaceIdentifier('subscribe_ical', LinkUtil::absoluteLink(LinkUtil::link(array_merge($aPageLink, array('calendar.ics')), null, $aArgs), null, 'webcal://'));
 		$oTemplate->replaceIdentifierMultiple('container', $oDownload, 'content');
 		$oFilterTemplate = static::template('content/filter');
 		$oFilterTemplate->replaceIdentifier('class_id', $oClass === null ? 'common_only' : implode('|', $oClass->getLinkedClassIds()));
