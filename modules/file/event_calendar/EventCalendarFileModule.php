@@ -63,10 +63,7 @@ class EventCalendarFileModule extends FileModule {
 			  ->setNoTime(true)
 			  ->setUniqueId('event-'.$oEvent->getId())
 			  ->setUrl(LinkUtil::absoluteLink(LinkUtil::link($oEvent->getLink(), 'FrontendManager'), null, 'auto'));
-			$sTitle = $oEvent->getTitle();
-			if($oEvent->getIsClassEvent()) {
-				$sTitle = $oEvent->getSchoolClass()->getClassName().': '.$sTitle;
-			}
+			$sTitle = $oEvent->getFullTitle();
 			$oCalendarEvent->setSummary($sTitle);
 			$oCalendar->addComponent($oCalendarEvent);
 		}

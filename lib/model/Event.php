@@ -39,6 +39,13 @@ class Event extends BaseEvent {
 	public function getIsClassEvent() {
 		return $this->getSchoolClassId() !== null;
 	}
+	
+	public function getFullTitle() {
+		if($this->getIsClassEvent()) {
+			return $this->getSchoolClass()->getClassName().': '.$this->getTitle();
+		}
+		return $this->getTitle();
+	}
 
 	public function getBodyShortTruncated($iLength = 40) {
 		// refactor to use body short when implemented
