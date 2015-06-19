@@ -36,7 +36,7 @@ class ClassesFilterModule extends FilterModule {
 			$sSlug = $oNavigationItem->getName();
 			$oCriteria = SchoolClassQuery::create()->hasStudents()->filterBySlug($sSlug)->orderByYear(Criteria::DESC);
 			foreach($oCriteria->find() as $oClass) {
-				$sName = $oClass->isCurrent() ? $oClass->getFullClassName() : $oClass->getFullClassNameWithYear();
+				$sName = $oClass->getFullClassName(true);
 				$oClassItem = new ClassNavigationItem($oClass->getYear(), $oClass->getFullClassName().' Home', $oClass, 'home', $oNavigationItem->getDisplayType(), $sName);
 				$oClassItem->setVisible($oClass->isCurrent());
 				$oNavigationItem->addChild($oClassItem);

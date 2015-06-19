@@ -23,12 +23,12 @@ class SchoolClass extends BaseSchoolClass {
 		return $this->getUnitName();
 	}
 
-	public function getClassNameWithYear() {
-		return $this->getClassName(). ' ('.$this->getYear().')';
+	public function getClassNameWithYear($bOmitCurrentYear = false) {
+		return $this->getClassName() . ($bOmitCurrentYear && $this->isCurrent() ? '' : ' ('.$this->getYear().')');
 	}
 
-	public function getFullClassNameWithYear() {
-		return $this->getFullClassName(). ' ('.$this->getYear().')';
+	public function getFullClassNameWithYear($bOmitCurrentYear = false) {
+		return $this->getFullClassName() . ($bOmitCurrentYear && $this->isCurrent() ? '' : ' ('.$this->getYear().')');
 	}
 
 	public function getSubjectClassName($bFrontend = true) {
