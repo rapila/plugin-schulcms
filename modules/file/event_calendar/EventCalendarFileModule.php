@@ -5,7 +5,6 @@ require_once MAIN_DIR.'/'.DIRNAME_PLUGINS.'/schulcms/lib/vendor/autoload.php';
 class EventCalendarFileModule extends FileModule {
 	private $oQuery = null;
 	private $oDateQuery = null;
-	private $iClassId = null;
 	private $oClass = null;
 
 	public function __construct($aRequestPath = null, $oClass = null) {
