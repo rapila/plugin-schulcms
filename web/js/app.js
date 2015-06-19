@@ -25,7 +25,7 @@
 			}
 		};
 	}
-	
+
 	// Export for other files to use
 	window.classList = classList;
 
@@ -93,7 +93,7 @@
 			request: request
 		};
 	});
-	
+
 	wok.use('directSource', function(element, options) {
 		var _this = this;
 		var args = [].slice.call(arguments, 2);
@@ -139,7 +139,6 @@
 			return data;
 		}
 
-
 		return {
 			request: function() {
 				prepare();
@@ -168,7 +167,7 @@
 			}
 		}
 	});
-	
+
 	wok.use('galleryDisplay', function(element, settings) {
 		var image = element.querySelector('.image');
 		var fullscreen = element.querySelector('.fullscreen-button');
