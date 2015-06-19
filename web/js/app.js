@@ -573,17 +573,14 @@
 				} else {
 					element.cl.remove('open');
 				}
-			};
-
-			// Handle opening select items initially
-			if(opts.open === 'onFirstLoad') {
-				opts.open = ('localStorage' in window) && !window.localStorage.getItem(window.location.href+'-options-opened');
 			}
-			if(opts.open) {
-				toggle(true);
+			function findOption(id) {
+				for(var i=0;i<availables.length;i++) {
+					if(availables[i].getAttribute('data-value') === id) {
+						return availables[i];
+					}
+				}
 			}
-			('localStorage' in window) && window.localStorage.setItem(window.location.href+'-options-opened', true)
-
 			function selectAvailable() {
 				var id = this.getAttribute('data-value');
 				var configuration = {};
@@ -596,6 +593,17 @@
 				}, 100);
 				_this.request(configuration);
 			}
+
+			// Handle opening select items initially
+			if(opts.open === 'onFirstLoad') {
+				opts.open = ('localStorage' in window) && !window.localStorage.getItem(window.location.href+'-options-opened');
+			}
+			if(opts.open) {
+				toggle(true);
+			}
+			('localStorage' in window) && window.localStorage.setItem(window.location.href+'-options-opened', true);
+
+			var isInitial = true;
 
 			for(var i=0;i<availables.length;i++) {
 				availables[i].addEventListener('click', selectAvailable, false);
@@ -618,7 +626,12 @@
 						}
 					}
 					selected.textContent = displayName;
-					configuration[prop+'.title'] = displayName;
+					if(isInitial) {
+						isInitial = false;
+						// Propagate the initial value of the title property to the other filters
+						configuration[prop+'.title'] = displayName;
+						_this.request(configuration);
+					}
 
 					// Don’t filter if id is empty string, 0 or null (allows filter value showing all)
 					if(!id) {
