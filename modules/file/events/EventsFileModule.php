@@ -2,20 +2,32 @@
 class EventsFileModule extends FileModule {
 
 	private $oQuery = null;
+	private $oClass = null;
 
 	public function __construct($aRequestPath = null, $oQuery = null) {
 		parent::__construct($aRequestPath);
+		$oClass = null;
 		if($oQuery instanceof ClassNavigationItem) {
-			$this->oQuery = FrontendEventQuery::create()->filterBySchoolClassId($oQuery->getClass()->getId());
-		} elseif($oQuery) {
-			$this->oQuery = $oQuery;
-		} else {
-			$this->oQuery = FrontendEventQuery::create()->excludeClassEvents();
+			$oClass = $oQuery->getClass();
+			$oQuery = null;
 		}
-		$this->oQuery->upcomingOrOngoing()->filterByIsActive(true);
-		// header("Content-Type: application/rss+xml;charset=".Settings::getSetting('encoding', 'db', 'utf-8'));
+		if(isset($_REQUEST['class'])) {
+			$oClass = SchoolClassQuery::create()->findPk($_REQUEST['class']);
+		}
+		if(!$oQuery) {
+			$oQuery = FrontendEventQuery::create();
+		}
+		$this->oQuery = $oQuery;
+		if($oClass) {
+			$this->oClass = $oClass;
+			$this->oQuery->displayedInClass($oClass, isset($_REQUEST['local']));
+		} else if(!isset($_REQUEST['global'])) {
+			$this->oQuery->excludeClassEvents(isset($_REQUEST['local']));
+		}
+		$this->oQuery->filterbyHasImagesOrReview()->orderByDateStart(Criteria::DESC);
+		
+		header("Content-Type: application/rss+xml;charset=".Settings::getSetting('encoding', 'db', 'utf-8'));
 		header("Cache-Control: Private", true);
-		RichtextUtil::$USE_ABSOLUTE_LINKS = true;
 	}
 
 	public function renderFile() {
@@ -33,14 +45,22 @@ class EventsFileModule extends FileModule {
 	}
 
 	private function getFeed() {
+		// Make sure links contain the correct protocol
+		RichtextUtil::$USE_ABSOLUTE_LINKS = LinkUtil::isSSL();
+
 		$oDocument = new DOMDocument();
 		$oRoot = $oDocument->createElement("rss");
 		$oRoot->setAttribute('version', "2.0");
 		$oDocument->appendChild($oRoot);
 		$oChannel = $oDocument->createElement("channel");
-		self::addSimpleAttribute($oDocument, $oChannel, 'title', PageQuery::create()->filterByPageType('events')->findOne()->getPageTitle());
+		if($this->oClass) {
+			$sTitle = $this->oClass->getFullClassNameWithYear(true);
+		} else {
+			$sTitle = SchoolSiteQuery::currentSchoolSite()->getName();
+		}
+		self::addSimpleAttribute($oDocument, $oChannel, 'title', $sTitle);
 		self::addSimpleAttribute($oDocument, $oChannel, 'description', PageQuery::create()->filterByPageType('events')->findOne()->getDescription());
-		self::addSimpleAttribute($oDocument, $oChannel, 'link', LinkUtil::absoluteLink(LinkUtil::link(PageQuery::create()->filterByPageType('events')->findOne()->getLink(), 'FrontendManager')));
+		self::addSimpleAttribute($oDocument, $oChannel, 'link', LinkUtil::absoluteLink(LinkUtil::link(PageQuery::create()->filterByPageType('events')->findOne()->getLink(), 'FrontendManager'), null, 'auto'));
 		self::addSimpleAttribute($oDocument, $oChannel, 'language', Session::language());
 		self::addSimpleAttribute($oDocument, $oChannel, 'ttl', "15");
 		$oRoot->appendChild($oChannel);
@@ -49,13 +69,17 @@ class EventsFileModule extends FileModule {
 
 		foreach($aEvents as $oEvent) {
 			$oItem = $oDocument->createElement('item');
-			foreach($oEvent->getRssAttributes(false) as $sAttributeName => $mAttributeValue) {
+			foreach($oEvent->getRssAttributes(true) as $sAttributeName => $mAttributeValue) {
 				if(is_array($mAttributeValue)) {
 					if(ArrayUtil::arrayIsAssociative($mAttributeValue)) {
 						//Add one elements with attributes
 						$oAttribute = $oDocument->createElement($sAttributeName);
 						foreach($mAttributeValue as $sSubAttributeName => $sSubAttributeValue) {
-							$oAttribute->setAttribute($sSubAttributeName, $sSubAttributeValue);
+							if($sSubAttributeName === '__content') {
+								$oAttribute->appendChild($oDocument->createTextNode($sSubAttributeValue));
+							} else {
+								$oAttribute->setAttribute($sSubAttributeName, $sSubAttributeValue);
+							}
 						}
 						$oChannel->appendChild($oAttribute);
 					} else {

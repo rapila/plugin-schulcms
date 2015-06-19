@@ -182,23 +182,52 @@ class Event extends BaseEvent {
 	}
 
 	public function getRssAttributes($bForReview = false) {
+		$mOldLinkingSetting = RichtextUtil::$USE_ABSOLUTE_LINKS;
+		RichtextUtil::$USE_ABSOLUTE_LINKS = LinkUtil::isSSL();
+
 		$aResult = array();
-		$aResult['title'] = $this->getTitle();
+		$aResult['title'] = $this->getFullTitle();
 		$aLink = array();
 		$aLink = $this->getLink();
-		$aResult['link'] = LinkUtil::absoluteLink(LinkUtil::link($aLink), 'FrontendManager');
+		$aResult['link'] = LinkUtil::absoluteLink(LinkUtil::link($aLink, 'FrontendManager'), null, 'auto');
 		if($bForReview) {
-			// if there is a bericht, display bericht hier
-			// show images also <image>
+			$sBody = null;
+			if($this->hasBericht() && is_resource($this->getBodyReview())) {
+				$sBody = RichtextUtil::parseStorageForFrontendOutput(stream_get_contents($this->getBodyReview()));
+			}
+			if($sBody === null && is_resource($this->getBody())) {
+				$sBody = RichtextUtil::parseStorageForFrontendOutput(stream_get_contents($this->getBody()));
+			} else {
+				$sBody = $this->getTeaser();
+			}
+			$aEventDocuments = $this->getEventDocumentsOrdered();
+			foreach($aEventDocuments as $oEventDocument) {
+				$oDocument = $oEventDocument->getDocument();
+				if(!$oDocument || !$oDocument->isImage()) {
+					continue;
+				}
+				$mDescription = '';
+				if($oDocument->getDescription() != null) {
+					$mDescription = $oDocument->getDescription();
+				} elseif(Settings::getSetting('schulcms', 'gallery_display_image_name', true)) {
+					$mDescription = $oDocument->getName();
+				}
+				$sBody .= '<img src="'.$oDocument->getDisplayUrl(array('max_width' => 400)).'" alt="'.$mDescription.'" /><br />';
+			}
+			$aResult['description'] = $sBody;
 		} else {
 			$aResult['description'] = $this->getTeaser();
 		}
 		if($this->getUserRelatedByCreatedBy()) {
 			$aResult['author'] = $this->getUserRelatedByCreatedBy()->getEmail().' ('.$this->getUserRelatedByCreatedBy()->getFullName().')';
 		}
-		$aResult['guid'] = $aResult['link'];
+		$aResult['guid'] = array('isPermaLink' => 'true', '__content' => $aResult['link']);
 		$aResult['pubDate'] = date(DATE_RSS, (int)$this->getDateStartTimeStamp());
-		$aResult['category'] = $this->getEventType()->getName();
+		if($this->getEventType()) {
+			$aResult['category'] = $this->getEventType()->getName();
+		}
+
+		RichtextUtil::$USE_ABSOLUTE_LINKS = $mOldLinkingSetting;
 		return $aResult;
 	}
 
