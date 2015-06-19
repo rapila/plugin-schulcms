@@ -122,7 +122,7 @@
 				var ob = {};
 				for(var j=0;j<attrs.length;j++) {
 					var name = attrs[j].nodeName;
-					var value = attrs[j].nodeValue;
+					var value = attrs[j].value || attrs[j].nodeValue;
 					if(useJSON) {
 						value = JSON.parse(value);
 					}
