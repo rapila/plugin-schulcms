@@ -97,7 +97,7 @@ class EventQuery extends BaseEventQuery {
 	}
 
 	public function filterbyHasImagesOrReview() {
-		return $this->joinEventDocument()->_or()->filterByBodyReview(null, Criteria::ISNOTNULL);
+		return $this->joinEventDocument(null, Criteria::LEFT_JOIN)->useQuery('EventDocument')->filterByEventId(null, Criteria::ISNOTNULL)->endUse()->_or()->filterByBodyReview(null, Criteria::ISNOTNULL)->distinct();
 	}
 
 	public static function findYearsByEventTypeId($iEventType = null) {
