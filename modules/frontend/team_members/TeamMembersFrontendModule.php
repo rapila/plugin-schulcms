@@ -61,10 +61,12 @@ class TeamMembersFrontendModule extends FrontendModule {
 		$oPage = FrontendManager::$CURRENT_PAGE;
 
 		$oTemplate = $this->constructTemplate('list');
+		$oItemPrototype = $this->constructTemplate('list_item_simple');
 		foreach($this->listQuery()->find() as $oTeamMember) {
-			$oItemTemplate = $this->constructTemplate('list_item_simple');
+			$oItemTemplate =  clone $oItemPrototype;
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oTeamMember->getLink($oPage)));
 			$oItemTemplate->replaceIdentifier('name', $oTeamMember->getFullNameInverted());
+			$oItemTemplate->replaceIdentifier('email', TagWriter::getEmailLinkWriter($oTeamMember->getEmailG()), null, Template::NO_HTML_ESCAPE);
 			$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.team_member.link_title_prefix').$oTeamMember->getFullName());
 			$oItemTemplate->replaceIdentifier('first_function_name', $oTeamMember->getFirstTeamMemberFunctionName());
 			$oItemTemplate->replaceIdentifier('profession', $oTeamMember->getProfession());
