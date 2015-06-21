@@ -169,8 +169,11 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		return $oDetailTemplate;
 	}
 
-	private function renderFunctions($oTemplate) {
-		foreach($this->oTeamMember->getTeamMemberFunctionsJoinSchoolFunction(TeamMember::getTeamMemberFunctionsCriteria()) as $oTeamMemberFunction) {
+	private function renderFunctions($oTemplate, $oTeamMember = null) {
+		if(!$oTeamMember) {
+			$oTeamMember = $this->oTeamMember;
+		}
+		foreach($oTeamMember->getTeamMemberFunctionsJoinSchoolFunction(TeamMember::getTeamMemberFunctionsCriteria()) as $oTeamMemberFunction) {
 			$oItemTemplate = $this->constructTemplate('function_item');
 			$oItemTemplate->replaceIdentifier('function_name', $oTeamMemberFunction->getSchoolFunction()->getTitle());
 			$oTemplate->replaceIdentifierMultiple('functions', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
