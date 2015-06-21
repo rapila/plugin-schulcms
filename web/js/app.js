@@ -666,6 +666,9 @@
 				if(!value) {
 					return false;
 				}
+				if(Array.isArray(value)) {
+					value = value.join(' ');
+				}
 				if(value.toLowerCase) {
 					value = value.toLowerCase();
 				}
