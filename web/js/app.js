@@ -148,7 +148,16 @@
 	});
 
 	wok.use('htmlFiltered', function(element) {
+		var _this = this;
 		var items = element.children;
+
+		var triggers = [].slice.call(element.querySelectorAll('[data-filter-onclick]'));
+		triggers.forEach(function(trigger) {
+			trigger.addEventListener('click', function() {
+				var req = trigger.getAttribute('data-filter-onclick');
+				_this.request(JSON.parse(req));
+			});
+		});
 
 		return {
 			render: function(data) {
@@ -602,8 +611,6 @@
 			}
 			('localStorage' in window) && window.localStorage.setItem(window.location.href+'-options-opened', true);
 
-			var isInitial = true;
-
 			for(var i=0;i<availables.length;i++) {
 				availables[i].addEventListener('click', selectAvailable, false);
 			}
@@ -625,11 +632,11 @@
 						}
 					}
 					selected.textContent = displayName;
-					if(isInitial) {
-						isInitial = false;
-						// Propagate the initial value of the title property to the other filters
+					if(configuration[prop+'.title'] !== displayName) {
+						// Re-request the data with the correct title attribute set
 						configuration[prop+'.title'] = displayName;
 						_this.request(configuration);
+						return;
 					}
 
 					// Don’t filter if id is empty string, 0 or null (allows filter value showing all)
