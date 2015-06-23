@@ -723,7 +723,7 @@
 					classIds[i] = parseInt(classIds[i], 10);
 				}
 			}
-			element.remove();
+			element.parentNode.removeChild(element);
 			return {
 				render: function(configuration, data) {
 					for(var key in data) {
