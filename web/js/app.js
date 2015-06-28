@@ -191,12 +191,12 @@
 		var field = settings.field || 'index';
 
 		var fs = {
-			requestFullscreen: (element.requestFullscreen || element.msRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen || function() {}).bind(element),
-			exitFullscreen: (document.exitFullscreen || document.msExitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || function() {}).bind(document),
+			requestFullscreen: (element.requestFullscreen || element.msRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen || element.webkitRequestFullScreen || function() {}).bind(element),
+			exitFullscreen: (document.exitFullscreen || document.msExitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || document.webkitExitFullScreen || function() {}).bind(document),
 			fullscreenElement: function() {
-				return document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+				return document.fullscreenElement || document.msFullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.webkitFullScreenElement;
 			},
-			fullscreenEnabled: document.fullscreenEnabled || document.mozFullScreenEnabled || document.msFullScreenEnabled || document.webkitFullscreenEnabled
+			fullscreenEnabled: document.fullscreenEnabled || !!document.msRequestFullscreen || document.mozFullScreenEnabled || document.webkitFullscreenEnabled || document.webkitFullScreenEnabled
 		};
 		if(fs.fullscreenEnabled) {
 			fullscreen.addEventListener('click', function() {
