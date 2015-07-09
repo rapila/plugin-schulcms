@@ -49,6 +49,9 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		}
 		$aResult = $oSchoolClass->toArray(BasePeer::TYPE_PHPNAME, false);
 		$aResult['ClassTeacher'] = $oSchoolClass->getClassTeacherNames();
+		if($oDocument = $oSchoolClass->getDocumentRelatedByWeekScheduleId()) {
+			$aResult['OptionalDocumentName'] = $oDocument->getName();
+		}
 		$aResult['YearPeriod'] = $oSchoolClass->getYearPeriod();
 		$aResult['NewsCountInfo'] = $this->getNewsCountInfo($oSchoolClass);
 		$aResult['CountEvents'] = $oSchoolClass->countEvents();
@@ -65,7 +68,11 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 			$oSchoolClass = SchoolClassQuery::create()->findPk($mSchoolClass);
 		}
 		if($oSchoolClass) {
-			return $oSchoolClass->countNews().' / '.StringPeer::getString('school_class.current_news_shown', null, 'Default', array('headline' => $oSchoolClass->getCurrentNewsHeadline()));
+			$sInfo = $oSchoolClass->countNews();
+			if($sHeadLine = $oSchoolClass->getCurrentNewsHeadline()) {
+				$sInfo .= ' / '.StringPeer::getString('school_class.current_news_shown', null, 'Default', array('headline' => $oSchoolClass->getCurrentNewsHeadline()));
+			}
+			return $sInfo;
 		}
 	}
 
