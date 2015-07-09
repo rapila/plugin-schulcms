@@ -187,7 +187,6 @@ class SchoolClass extends BaseSchoolClass {
 		if($sHeadline) {
 			return $sHeadline;
 		}
-		return 'Standard';
 	}
 
 	public function isClassEvent($iEventId) {

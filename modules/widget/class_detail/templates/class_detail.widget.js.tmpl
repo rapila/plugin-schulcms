@@ -128,7 +128,7 @@ Widget.types.class_detail = {
 		});
 		this.uploader.allow_drag_to(wochenplan, null, function(target, file) {
 			if(file.type !== 'application/pdf') {
-				Widget.notifyUser(Widget.logSeverity.ALERT, 'Der Wochenplan muss eine Datei vom Typ «PDF» sein');
+				Widget.notifyUser(Widget.logSeverity.ALERT, 'Der optionale Plan muss eine Datei vom Typ «PDF» sein');
 				return false;
 			}
 			return {document_kind: 'application', document_id: _this.week_schedule_id, document_category_id: _this.settings.class_schedule_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this), class_document_type: 'week_schedule'};
@@ -147,7 +147,7 @@ Widget.types.class_detail = {
 					remove_link.hide();
 				} else {
 					remove_link.show();
-					wochenplan.find('.week_schedule').html('<a class="pdf" href="'+FILE_PREFIX+'/display_document/'+week_schedule_id+'">Wochenplan</a>');
+					wochenplan.find('.week_schedule').html('<a class="pdf" href="'+FILE_PREFIX+'/display_document/'+week_schedule_id+'">Optionaler Plan</a>');
 				}
 			}
 		});
