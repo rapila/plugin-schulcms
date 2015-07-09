@@ -101,7 +101,7 @@ class ClassHomeOutput extends ClassOutput {
 			$oTemplate->replaceIdentifier('schedule', TagWriter::quickTag('a', array('href' => $oSchedule->getDisplayUrl(), 'class' => 'pdf', 'rel' => 'document', 'title' => StringPeer::getString('class_detail.schedule_download')), StringPeer::getString('class_detail.schedule')));
 		}
 		if($oScheduleExtra = $this->oClass->getDocumentRelatedByWeekScheduleId()) {
-			$oTemplate->replaceIdentifier('schedule_extra', TagWriter::quickTag('a', array('href' => $oScheduleExtra->getDisplayUrl(), 'class' => 'pdf', 'rel' => 'document', 'title' => StringPeer::getString('class_detail.schedule_extra_download')), StringPeer::getString('class_detail.schedule_extra')));
+			$oTemplate->replaceIdentifier('schedule_extra', TagWriter::quickTag('a', array('href' => $oScheduleExtra->getDisplayUrl(), 'class' => 'pdf', 'rel' => 'document', 'title' => StringPeer::getString('class_detail.document_download')), $oScheduleExtra->getName()));
 		}
 	}
 
