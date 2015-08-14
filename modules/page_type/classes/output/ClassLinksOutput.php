@@ -14,7 +14,6 @@ class ClassLinksOutput extends ClassOutput {
 		$oLinkPrototype = $this->oPageType->constructTemplate('link_list_item');
 		foreach($this->oClass->getClassLinksOrdered() as $oLink) {
 			$oItemTemplate = clone $oLinkPrototype;
-			// ErrorHandler::log();
 			$oItemTemplate->replaceIdentifier('name', $oLink->getName());
 			$oItemTemplate->replaceIdentifier('link', $oLink->getUrl());
 			if($oLink->getDescription()) {
