@@ -66,7 +66,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 		// $sClassName = 'ClassListBySubjectsOutput';
 		$oOutput = new $sClassName($this->oNavigationItem, $this, $oTemplate);
 
-		$oCache = new Cache('class_detail/'.$this->oNavigationItem->getId(), 'full_page');
+		$oCache = new Cache('class_detail/'.$this->oNavigationItem->getId(), 'full_page', $bIsPreview ? CachingStrategy::fromConfig('off') : null);
 		if($oCache->entryExists() && !$oOutput->cacheIsOutdated($oCache)) {
 			list($mContent, $mContext) = $oCache->getContentsAsVariable();
 		} else {
