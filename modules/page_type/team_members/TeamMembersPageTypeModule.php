@@ -14,7 +14,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 	}
 
 	public function display(Template $oTemplate, $bIsPreview = false) {
-		$oCache = new Cache('team-members/'.Session::language().'/'.$this->oNavigationItem->getId(), 'full_page');
+		$oCache = new Cache('team-members/'.Session::language().'/'.$this->oNavigationItem->getId(), 'full_page', $bIsPreview ? CachingStrategy::fromConfig('off') : null);
 		if($oCache->entryExists() && !$oCache->isOlderThan($this->oPage) && !$oCache->isOlderThan($this->listQuery(false))) {
 			$oInnerTemplate = $oCache->getContentsAsVariable();
 		} else {
