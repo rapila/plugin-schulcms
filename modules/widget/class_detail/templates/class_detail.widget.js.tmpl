@@ -6,10 +6,10 @@ Widget.types.class_detail = {
 		this.force_update=false;
 
 		// Prepare  news, events, documents and links elements
-		this.add_news_button = this._element.find('.add_entry.add_news').click(this.create_news.bind(this));
-		this.add_event_button = this._element.find('.add_entry.add_event').click(this.create_event.bind(this));
-		this.add_document_button = this._element.find('.add_entry.add_document').click(this.create_document.bind(this));
-		this.add_link_button = this._element.find('.add_entry.add_link').click(this.create_link.bind(this));
+		this.add_news_button = this._element.find('.add_entry.add_news').click(this.create_news_detail.bind(this));
+		this.add_event_button = this._element.find('.add_entry.add_event').click(this.create_event_detail.bind(this));
+		this.add_document_button = this._element.find('.add_entry.add_document').click(this.create_document_detail.bind(this));
+		this.add_link_button = this._element.find('.add_entry.add_link').click(this.create_link_detail.bind(this));
 		this.news_list = null;
 		this.event_list = null;
 		this.document_list = null;
@@ -27,13 +27,13 @@ Widget.types.class_detail = {
 				option: {'active': this.settings.accordion_active || 0 },
 				beforeActivate: function(event, ui) {
 					if(ui.newPanel.is('.news')) {
-						_this.reload_news(false);
+						_this.reload_news_list(false);
 					} else if(ui.newPanel.is('.events')) {
-						_this.reload_events(false);
+						_this.reload_event_list(false);
 					} else if(ui.newPanel.is('.documents')) {
-						_this.reload_documents(false);
+						_this.reload_document_list(false);
 					} else if(ui.newPanel.is('.links')) {
-						_this.reload_links(false);
+						_this.reload_link_list(false);
 					}
 				}
 			});
@@ -208,30 +208,44 @@ Widget.types.class_detail = {
 		this.getNewsCountInfo(this.current_detail_id, function(news_count_info) {
 			_this._element.find("span.news_count_info").text(news_count_info);
 		});
+		if(this.news_list) {
+			this.news_list.settings.school_class_news_type_id = _this.settings.class_news_type_id;
+			this.news_list.settings.predefined_school_class_id = _this.current_detail_id;
+		}
 	},
 
-	update_events_count: function() {
+	update_events_info: function() {
 		var _this = this;
 		this.countEvents(this.current_detail_id, function(count) {
 			_this._element.find("span.events_count").text(count);
 		});
+		if(this.event_list) {
+			this.event_list.settings.school_class_event_type_id = _this.settings.class_event_type_id;
+			this.event_list.settings.predefined_school_class_id = _this.current_detail_id;
+		}
 	},
 
-	update_documents_count: function() {
+	update_documents_info: function() {
 		var _this = this;
 		this.countDocuments(this.current_detail_id, function(count) {
 			_this._element.find("span.documents_count").text(count);
 		});
+		if(this.document_list) {
+			this.document_list.settings.school_class_document_category_id = _this.settings.class_document_category_id;
+		}
 	},
 
-	update_links_count: function() {
+	update_links_info: function() {
 		var _this = this;
 		this.countLinks(this.current_detail_id, function(count) {
 			_this._element.find("span.links_count").text(count);
 		});
+		if(this.link_list) {
+			this.link_list.settings.school_class_link_category_id = _this.settings.class_link_category_id;
+		}
 	},
 
-	create_news: function() {
+	create_news_detail: function() {
 		var _this = this;
 		this.add_news_button.addClass('ui-loading-add');
 		Widget.create('news_detail', function(widget){
@@ -240,14 +254,14 @@ Widget.types.class_detail = {
 		}, function(widget) {
 			widget.open();
 			widget.save_callback = function(news_id) {
-				_this.reload_news(true);
+				_this.reload_news_list(true);
 				_this.force_update = true;
 			};
 			_this.add_news_button.removeClass('ui-loading-add');
 		});
 	},
 
-	create_event: function() {
+	create_event_detail: function() {
 		var _this = this;
 		this.add_event_button.addClass('ui-loading-add');
 		Widget.create('event_detail', function(widget) {
@@ -256,14 +270,14 @@ Widget.types.class_detail = {
 		}, function(widget) {
 			widget.open();
 			widget.save_callback = function() {
-				_this.reload_events(true);
+				_this.reload_event_list(true);
 				_this.force_update = true;
 			};
 			_this.add_event_button.removeClass('ui-loading-add');
 		});
 	},
 
-	create_document: function() {
+	create_document_detail: function() {
 		var _this = this;
 		this.add_document_button.addClass('ui-loading-add');
 		Widget.create('document_detail', function(widget) {
@@ -273,14 +287,14 @@ Widget.types.class_detail = {
 			widget.open();
 			widget.save_callback = function(document_id) {
 				_this.addClassDocument(document_id);
-				_this.reload_documents(true);
+				_this.reload_document_list(true);
 				_this.force_update = true;
 			};
 			_this.add_document_button.removeClass('ui-loading-add');
 		});
 	},
 
-	create_link: function() {
+	create_link_detail: function() {
 		var _this = this;
 		this.add_link_button.addClass('ui-loading-add');
 		Widget.create('link_detail', function(widget) {
@@ -289,7 +303,7 @@ Widget.types.class_detail = {
 			widget.open();
 			widget.save_callback = function(link_id) {
 				_this.addClassLink(link_id);
-				_this.reload_links(true);
+				_this.reload_link_list(true);
 			};
 			_this.add_link_button.removeClass('ui-loading-add');
 		});
@@ -308,13 +322,13 @@ Widget.types.class_detail = {
 	},
 
 	reload_active_panel_content: function(index) {
-		if(index === 1) this.reload_news(true);
-		if(index === 2) this.reload_events(true);
-		if(index === 3) this.reload_documents(true);
-		if(index === 4) this.reload_links(true);
+		if(index === 1) this.reload_news_list(true);
+		if(index === 2) this.reload_event_list(true);
+		if(index === 3) this.reload_document_list(true);
+		if(index === 4) this.reload_link_list(true);
 	},
 
-	reload_news: function(reload) {
+	reload_news_list: function(reload) {
 		var _this = this;
 		reload = this.list_requires_loading('news', reload);
 		if(this.news_list) {
@@ -332,14 +346,14 @@ Widget.types.class_detail = {
 		}
 	},
 
-	reload_events: function(reload) {
+	reload_event_list: function(reload) {
 		var _this = this;
 		reload = this.list_requires_loading('events', reload);
 		if(this.event_list) {
 			if(reload) {
 				this.event_list.reload();
 			}
-			_this.update_events_count();
+			_this.update_events_info();
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				widget.settings.school_class_event_type_id = _this.settings.class_event_type_id;
@@ -350,14 +364,14 @@ Widget.types.class_detail = {
 		}
 	},
 
-	reload_documents: function(reload) {
+	reload_document_list: function(reload) {
 		var _this = this;
 		reload = this.list_requires_loading('documents', reload);
 		if(this.document_list) {
 			if(reload) {
 				this.document_list.reload();
 			}
-			_this.update_documents_count();
+			_this.update_documents_info();
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				widget.settings.school_class_document_category_id = _this.settings.class_document_category_id;
@@ -368,14 +382,14 @@ Widget.types.class_detail = {
 		}
 	},
 
-	reload_links: function(reload) {
+	reload_link_list: function(reload) {
 		var _this = this;
 		reload = this.list_requires_loading('links', reload);
 		if(this.link_list) {
 			if(reload) {
 				this.link_list.reload();
 			}
-			_this.update_links_count();
+			_this.update_links_info();
 		} else {
 			Widget.createWithElement('list', function(widget) {
 				widget.settings.school_class_link_category_id = _this.settings.class_link_category_id;

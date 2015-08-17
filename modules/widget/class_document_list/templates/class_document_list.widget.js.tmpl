@@ -3,8 +3,10 @@ Widget.types.class_document_list = {
 		var widget = this._list;
 		Widget.callStatic('detail', 'connect_detail_with_list', 'document', widget, 'setDocumentId', null, {
 			initialized: function(detail) {
-				detail.settings.initial.document_category_id = widget.settings.school_class_document_category_id;
-				detail.settings.is_called_externally = widget.settings.is_called_externally;
+				detail.handle('opening', function() {
+					detail.settings.initial.document_category_id = widget.settings.school_class_document_category_id;
+					detail.settings.is_called_externally = widget.settings.is_called_externally;
+				});
 			}
 		});
 		widget.handle('list-cell_click', function(event, rowIndex, col, row, cell) {
