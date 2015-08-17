@@ -3,7 +3,9 @@ Widget.types.class_link_list = {
 		var widget = this._list;
 		Widget.callStatic('detail', 'connect_detail_with_list', 'link', widget, 'setLinkId', null, {
 			initialized: function(detail) {
-				detail.settings.predefined_link_category_id = widget.settings.school_class_link_category_id;
+				detail.handle('opening', function() {
+					detail.settings.predefined_link_category_id = widget.settings.school_class_link_category_id;
+				});
 			}
 		});
 

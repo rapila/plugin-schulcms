@@ -8,8 +8,25 @@ class Event extends BaseEvent {
 	private static $EVENTPAGE = null;
 
 	public function setTitle($sTitle) {
-		$sNameNormalized = StringUtil::normalizePath($sTitle);
-		$this->setSlug($sNameNormalized);
+		$sPrefix = $this->getSchoolClass() ? $this->getSchoolClass()->getClassName().' ' : '';
+		$sNameNormalized = StringUtil::normalizePath("$sPrefix$sTitle");
+		$sSlug = $this->getSlug();
+		$iCount = 0;
+		// Keep current slug if possible
+		if(!$sSlug) {
+			$sSlug = $sNameNormalized;
+			// No need to start at zero if we’re already using the normalized name in the first round
+			$iCount++;
+		}
+		// This is even more strict than the unique index: slug and date have to be unique (not slug, date and class). However, since the class name is part of the title, this will yield the same outcome in most cases
+		while(EventQuery::create()->filterBySlug($sSlug)->_if(!$this->isNew())->filterById($this->getId(), Criteria::NOT_EQUAL)->_endIf()->filterByDateStart($this->getDateStart(null))->count() > 0) {
+			$sSlug = $sNameNormalized;
+			if($iCount) {
+				$sSlug = "$sSlug-$iCount";
+			}
+			$iCount++;
+		}
+		$this->setSlug($sSlug);
 		return parent::setTitle($sTitle);
 	}
 
