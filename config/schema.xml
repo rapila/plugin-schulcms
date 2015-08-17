@@ -235,6 +235,11 @@
 	<behavior name="denyable">
 		<parameter name="role_key" value="events" />
 	</behavior>
+	<unique>
+		<unique-column name="slug" />
+		<unique-column name="date_start" />
+		<unique-column name="school_class_id" />
+	</unique>
 </table>
 
 <table name="event_types" phpName="EventType">

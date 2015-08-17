@@ -121,13 +121,6 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 			}
 		}
 
-		if($oExistingEvent = EventQuery::create()->filterBySlug($oEvent->getSlug())->findOne()) {
-			if($oExistingEvent !== $oEvent
-				&& $oExistingEvent->getEventTypeId() === $oEvent->getEventTypeId()
-				&& $oExistingEvent->getDateStart('Y-m-d') === $oEvent->getDateStart('Y-m-d')) {
-				$oFlash->addMessage("same_identity_not_permitted");
-			}
-		}
 		$oFlash->finishReporting();
 	}
 
@@ -152,7 +145,6 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 			}
 		}
 		$oEvent->setEventTypeId($mEventTypeId);
-		$oEvent->setTitle($aData['title']);
 		$oEvent->setLocationInfo($aData['location_info']);
 		$oEvent->setTimeDetails($aData['time_details']);
 		if(isset($aData['is_common'])) {
@@ -164,6 +156,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		if($oEvent->getDateEnd() !== null && $oEvent->getDateEnd() < $oEvent->getDateStart()) {
 			$oEvent->setDateEnd(null);
 		}
+		$oEvent->setTitle($aData['title']);
 		$this->validate($aData, $oEvent);
 
 		// track page, document and link references and hande preview and review text
