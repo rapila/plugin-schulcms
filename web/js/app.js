@@ -679,8 +679,8 @@
 				if(value.toLowerCase) {
 					value = value.toLowerCase();
 				}
-				if(search.toLowerCase) {
-					search = search.toLowerCase();
+				if(value.replace) {
+					value = value.replace('ä', 'ae').replace('ö', 'oe').replace('ü', 'ue');
 				}
 				if(value.indexOf) {
 					return value.indexOf(search) > -1;
@@ -692,6 +692,12 @@
 				request: true,
 				render: function(configuration, data) {
 					var search = element.value.trim()
+					if(search.toLowerCase) {
+						search = search.toLowerCase();
+					}
+					if(search.replace) {
+						search = search.replace('ä', 'ae').replace('ö', 'oe').replace('ü', 'ue');
+					}
 					if(!search) {
 						// Do not filter empty search term
 						return;
