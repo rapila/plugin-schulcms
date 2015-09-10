@@ -104,6 +104,15 @@
 			}
 		}
 	});
+	
+	wok.use('displayConfig', function(element, field) {
+		var _this = this;
+		return {
+			render: function(data, configuration) {
+				element.textContent = configuration[field];
+			}
+		}
+	});
 
 	wok.use('htmlSource', function(element, useJSON) {
 		var _this = this;
@@ -172,6 +181,19 @@
 					} else {
 						item.cl.add('hidden');
 					}
+				}
+			}
+		}
+	});
+
+	wok.use('configMatches', function(element, attribute, value) {
+		element.cl = classList(element);
+		return {
+			render: function(data, configuration) {
+				if(configuration[attribute] === value) {
+					element.cl.remove('hidden');
+				} else {
+					element.cl.add('hidden');
 				}
 			}
 		}
