@@ -111,7 +111,7 @@ class ClassesFilterModule extends FilterModule {
 			$oNavigationItem->addChild(ClassNavigationItem::create('materialien', 'Materialien', $oClass, self::CLASS_MATERIALS_IDENTIFIER, null, 'Dokumente & Links'));
 		}
 		if($oNavigationItem->getDisplayType() === 'location') {
-			$oNavigationItem->addChild(ClassNavigationItem::create('standort', 'Standort', $oClass, self::CLASS_LOCATION_IDENTIFIER, null, 'Adresse & Lageplan')->setVisible(false));
+			$oNavigationItem->addChild(ClassNavigationItem::create('standort', 'Standort', $oClass, self::CLASS_LOCATION_IDENTIFIER, null, 'Adresse & Lageplan')->setVisible(true));
 		}
 	}
 
@@ -125,7 +125,7 @@ class ClassesFilterModule extends FilterModule {
 	private function renderSubjectNavigationItems($oNavigationItem) {
 		// refactor to improve performance, check url, etc
 		foreach($oNavigationItem->getClass()->getSubjectClasses() as $oSubject) {
-			$oNavigationItem->addChild(SubjectNavigationItem::create($oSubject->getSlug(), $oSubject->getName(), $oSubject->getId(), false)->setVisible(false));
+			$oNavigationItem->addChild(SubjectNavigationItem::create($oSubject->getSlug(), $oSubject->getName(), $oSubject->getId(), false)->setVisible(true));
 		}
 	}
 
