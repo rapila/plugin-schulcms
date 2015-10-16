@@ -1,7 +1,0 @@
-libraries:
-  wok:
-    url: 'wok/build/Wok.min.js'
-    url_uncompressed: 'wok/src/Wok.js'
-  react:
-    url: '//fb.me/react-${version}.min.js'
-    url_uncompressed: '//fb.me/react-${version}.js'
