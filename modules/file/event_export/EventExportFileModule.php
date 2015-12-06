@@ -30,11 +30,10 @@ class EventExportFileModule extends FileModule {
 		if(class_exists('SchoolDate')) {
 			$oDateQuery = SchoolDateQuery::create();
 		}
-		$iTimestamp = $oEventQuery->findMostRecentUpdate();
+		$iTimestamp = $oEventQuery->findMostRecentUpdate(true);
 		if($oDateQuery !== null) {
-			$iTimestamp = max($iTimestamp, $oDateQuery);
+			$iTimestamp = max($iTimestamp, $oDateQuery->findMostRecentUpdate(true));
 		}
-		$iTimestamp = $oEventQuery->findMostRecentUpdate();
 		LinkUtil::sendCacheControlHeaders($iTimestamp, "PT4H");
 		$aResult = array();
 		if($oDateQuery !== null) {

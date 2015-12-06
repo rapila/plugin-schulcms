@@ -32,9 +32,9 @@ class EventCalendarFileModule extends FileModule {
 	public function renderFile() {
 		$sKey = 'event-calendar/'.md5(serialize($this->oQuery)).'/'.Session::language();
 		$oCache = new Cache($sKey, 'events');
-		$iTimestamp = $this->oQuery->findMostRecentUpdate();
+		$iTimestamp = $this->oQuery->findMostRecentUpdate(true);
 		if($this->oDateQuery) {
-			$iTimestamp = max($iTimestamp, $this->oDateQuery->findMostRecentUpdate());
+			$iTimestamp = max($iTimestamp, $this->oDateQuery->findMostRecentUpdate(true));
 		}
 		if($oCache->entryExists() && !$oCache->isOlderThan($iTimestamp)) {
 			$oCache->sendCacheControlHeaders($iTimestamp);
