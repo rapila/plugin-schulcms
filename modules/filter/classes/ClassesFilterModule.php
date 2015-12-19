@@ -142,7 +142,7 @@ class ClassesFilterModule extends FilterModule {
 		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'location' => LinkUtil::link($aRSSFeedLink, 'FrontendManager', $aArgs), 'title' => StringPeer::getString('appointments.subscribe.rss')));
 		// TODO: Link to ical feed in anlässe and pass class id
 		$aCalendarFeedLink = array();
-		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'ical', 'location' => LinkUtil::link($aCalendarFeedLink, 'FrontendManager', $aArgs), 'title' => StringPeer::getString('appointments.subscribe.rss')));
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'ical', 'location' => LinkUtil::link($aCalendarFeedLink, 'FrontendManager', $aArgs), 'title' => StringPeer::getString('appointments.subscribe.ical')));
 	}
 
 	public function onLinkOperationCheck($sOperation, $oOnObject, $oUser, $aContainer) {
