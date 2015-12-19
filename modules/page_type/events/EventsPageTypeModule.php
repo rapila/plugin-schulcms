@@ -20,20 +20,29 @@ class EventsPageTypeModule extends PageTypeModule {
 	private function displayCalendar(Template $oTemplate) {
 		self::includeCalendar($oTemplate, $this->oPage);
 	}
-
-	public static function includeCalendar($oTemplate, $oEventPage, $oClass = null) {
-		$oResourceIncluder = ResourceIncluder::namedIncluder('additional_js');
+	
+	public static function getFeedLinks($oEventPage, $oClass = null) {
+		$oResult = new stdClass();
 		$aPageLink = $oEventPage->getFullPathArray();
-		$oResourceIncluder->addResource('events.js');
-		$oResourceIncluder->addResource(LinkUtil::link(array('event_export', '{year}', $oEventPage->getId()), 'FileManager'), ResourceIncluder::RESOURCE_TYPE_LINK, null, array('type' => 'application/json', 'template' => 'source_link', 'source' => '/eventData'));
-		$oDownload = static::template('content/downloads');
 		$aArgs = array();
 		if($oClass) {
 			$aArgs['class'] = $oClass->getId();
 		}
-		$oDownload->replaceIdentifier('download_ical', LinkUtil::link(array_merge($aPageLink, array('calendar.ics')), null, $aArgs));
-		$oDownload->replaceIdentifier('subscribe_rss', LinkUtil::link(array_merge($aPageLink, array('feed')), null, $aArgs));
-		$oDownload->replaceIdentifier('subscribe_ical', LinkUtil::absoluteLink(LinkUtil::link(array_merge($aPageLink, array('calendar.ics')), null, $aArgs), null, 'webcal://'));
+		$oResult->download_ical = LinkUtil::link(array_merge($aPageLink, array('calendar.ics')), null, $aArgs);
+		$oResult->subscribe_rss = LinkUtil::link(array_merge($aPageLink, array('feed')), null, $aArgs);
+		$oResult->subscribe_ical = LinkUtil::absoluteLink(LinkUtil::link(array_merge($aPageLink, array('calendar.ics')), null, $aArgs), null, 'webcal://');
+		return $oResult;
+	}
+
+	public static function includeCalendar($oTemplate, $oEventPage, $oClass = null) {
+		$oResourceIncluder = ResourceIncluder::namedIncluder('additional_js');
+		$oResourceIncluder->addResource('events.js');
+		$oResourceIncluder->addResource(LinkUtil::link(array('event_export', '{year}', $oEventPage->getId()), 'FileManager'), ResourceIncluder::RESOURCE_TYPE_LINK, null, array('type' => 'application/json', 'template' => 'source_link', 'source' => '/eventData'));
+		$oDownload = static::template('content/downloads');
+		$oFeedLinks = self::getFeedLinks($oEventPage, $oClass);
+		$oDownload->replaceIdentifier('download_ical', $oFeedLinks->download_ical);
+		$oDownload->replaceIdentifier('subscribe_rss', $oFeedLinks->subscribe_rss);
+		$oDownload->replaceIdentifier('subscribe_ical', $oFeedLinks->subscribe_ical);
 		$oTemplate->replaceIdentifierMultiple('container', $oDownload, 'content');
 		$oFilterTemplate = static::template('content/filter');
 		$oFilterTemplate->replaceIdentifier('class_id', $oClass === null ? 'common_only' : implode('|', $oClass->getLinkedClassIds()));
