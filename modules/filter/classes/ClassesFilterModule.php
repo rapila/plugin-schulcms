@@ -115,13 +115,6 @@ class ClassesFilterModule extends FilterModule {
 		}
 	}
 
-	private function renderEventNavigationItems($oNavigationItem) {
-		$oClass = $oNavigationItem->getClass();
-		foreach(FrontendEventQuery::create()->filterBySchoolClass($oClass)->find() as $oEvent) {
-			$oNavigationItem->addChild(ClassNavigationItem::create($oEvent->getSlug(), $oEvent->getTitle(), $oClass, 'event')->setEvent($oEvent)->setVisible(false));
-		}
-	}
-
 	private function renderSubjectNavigationItems($oNavigationItem) {
 		// refactor to improve performance, check url, etc
 		foreach($oNavigationItem->getClass()->getSubjectClasses() as $oSubject) {
@@ -133,16 +126,21 @@ class ClassesFilterModule extends FilterModule {
 		if($bIsNotFound || !($oNavigationItem instanceof ClassNavigationItem)) {
 			return;
 		}
+		$this->addFeedResources($oNavigationItem);
+	}
+	
+	private function addFeedResources(ClassNavigationItem $oNavigationItem) {
+		if($oNavigationItem->getMode() === 'root') {
+			// Only render starting with home
+			return;
+		}
 
 		$oClass = $oNavigationItem->getClass();
-		$aArgs = array('class' => $oClass->getId());
+		$oEventPage = PageQuery::create()->filterByPageType('events')->findOne();
+		$oFeedLinks = EventsPageTypeModule::getFeedLinks($oEventPage, $oClass);
 
-		// TODO: Link to RSS feed (in anlässe or as a file module) and pass the class id so it uses class news and class events
-		$aRSSFeedLink = array();
-		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'location' => LinkUtil::link($aRSSFeedLink, 'FrontendManager', $aArgs), 'title' => StringPeer::getString('appointments.subscribe.rss')));
-		// TODO: Link to ical feed in anlässe and pass class id
-		$aCalendarFeedLink = array();
-		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'ical', 'location' => LinkUtil::link($aCalendarFeedLink, 'FrontendManager', $aArgs), 'title' => StringPeer::getString('appointments.subscribe.ical')));
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'location' => $oFeedLinks->subscribe_rss, 'title' => StringPeer::getString('appointments.subscribe.rss')));
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'ical', 'location' => $oFeedLinks->download_ical, 'title' => StringPeer::getString('appointments.subscribe.ical')));
 	}
 
 	public function onLinkOperationCheck($sOperation, $oOnObject, $oUser, $aContainer) {
