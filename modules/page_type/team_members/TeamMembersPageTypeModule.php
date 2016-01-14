@@ -173,9 +173,15 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		if(!$oTeamMember) {
 			$oTeamMember = $this->oTeamMember;
 		}
-		foreach($oTeamMember->getTeamMemberFunctionsJoinSchoolFunction(TeamMember::getTeamMemberFunctionsCriteria()) as $oTeamMemberFunction) {
+		$aUsed = array();
+		foreach($oTeamMember->getTeamMemberFunctionsJoinSchoolFunction(TeamMember::getTeamMemberFunctionsCriteria()->setDistinct()) as $oTeamMemberFunction) {
+			$sFunctionName = $oTeamMemberFunction->getSchoolFunction()->getTitle();
+			if(isset($aUsed[$sFunctionName])) {
+				continue;
+			}
+			$aUsed[$sFunctionName] = true;
 			$oItemTemplate = $this->constructTemplate('function_item');
-			$oItemTemplate->replaceIdentifier('function_name', $oTeamMemberFunction->getSchoolFunction()->getTitle());
+			$oItemTemplate->replaceIdentifier('function_name', $sFunctionName);
 			$oTemplate->replaceIdentifierMultiple('functions', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
 		}
 	}
