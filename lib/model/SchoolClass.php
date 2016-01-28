@@ -37,6 +37,10 @@ class SchoolClass extends BaseSchoolClass {
 		}
 		return $this->getName(). ' ('.$this->getSubject()->getName().')';
 	}
+	
+	public function isSubjectClass() {
+		return $this->getSubject() !== null;
+	}
 
 	public function hasClassTeachers($bIsClassTeacher = true) {
 		return count($this->getClassTeachersOrdered($bIsClassTeacher)) > 0;
