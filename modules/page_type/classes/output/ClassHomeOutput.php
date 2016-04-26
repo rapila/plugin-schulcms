@@ -126,6 +126,10 @@ class ClassHomeOutput extends ClassOutput {
 		$oTemplate->replaceIdentifier('subject_teasers_title', StringPeer::getString('class_detail.heading.subjects_and_teachers'));
 		$oRowPrototype = $this->oPageType->constructTemplate('class_subject_teaser_item');
 		foreach($this->oClass->getSubjectClasses() as $oClass) {
+			if($this->oClass->countClassTeachers() === 0) {
+				// Ignore subject classes without teachers, as there won’t be navigation items for these
+				continue;
+			}
 			$oRowTemplate = clone $oRowPrototype;
 			$oRowTemplate->replaceIdentifier('class_name', $oClass->getName());
 			$oRowTemplate->replaceIdentifier('subject_name', $oClass->getSubjectName());
