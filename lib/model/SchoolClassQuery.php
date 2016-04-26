@@ -20,6 +20,14 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 		}
 		return $this->useClassTeacherQuery()->filterByIsClassTeacher(true)->endUse();
 	}
+	
+	public function filterByUnitFromClass($oClass) {
+		return $this->filterByYear($oClass->getYear())->filterByUnitName($oClass->getUnitName());
+	}
+	
+	public function studentCount() {
+		return $this->select('students')->withColumn('SUM(student_count)', 'students')->findOne();
+	}
 
 	/**
 	* @todo should be reconsidered

@@ -131,11 +131,7 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function countStudentsByUnitName() {
-		return ClassStudentQuery::create()->filterByUnitFromClass($this)->count();
-	}
-
-	public function getStudentsByUnitName() {
-		return ClassStudentQuery::create()->filterByUnitFromClass($this)->find();
+		return SchoolClassQuery::create()->filterByUnitFromClass($this)->studentCount();
 	}
 
 	public function countTeachersByUnitName($bClassTeachersOnly = false) {
