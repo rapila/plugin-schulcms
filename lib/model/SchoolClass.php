@@ -107,7 +107,17 @@ class SchoolClass extends BaseSchoolClass {
 
 	public function getSubjectClassLink() {
 		if(self::$SUBJECT_CLASS_PAGE === null) {
-			self::$SUBJECT_CLASS_PAGE = PageQuery::create()->filterByPageType('classes')->filterByIdentifier('subjects')->findOne();
+			$oQuery = PageQuery::create()
+				->filterByPageType('classes')
+				->filterByIdentifier('subjects')
+				// Either use the identifier or determine the page type config
+				->_or()
+				->usePagePropertyQuery()
+					->condition('pp_name', 'PageProperty.Name = ?', 'classes:class_type')
+					->condition('pp_value', 'PageProperty.Value = ?', 'subject')
+					->where(array('pp_name', 'pp_value'), 'and')
+				->endUse();
+			self::$SUBJECT_CLASS_PAGE = $oQuery->findOne();
 		}
 		return $this->getLink(self::$SUBJECT_CLASS_PAGE);
 	}
