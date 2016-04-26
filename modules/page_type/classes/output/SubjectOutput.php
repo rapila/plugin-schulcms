@@ -12,6 +12,7 @@ class SubjectOutput extends ClassOutput {
 			return null;
 		}
 		$oTemplate = $this->oPageType->constructTemplate('subject_class_list');
+		$oTemplate->replaceIdentifier('title', $this->oNavigationItem->getTitle());
 		$oClassPrototype = $this->oPageType->constructTemplate('subject_class_item');
 		foreach($oSubject->getSchoolClasses() as $oClass) {
 			$oTemplate->replaceIdentifierMultiple('items', $this->renderItem($oClass, clone $oClassPrototype));
