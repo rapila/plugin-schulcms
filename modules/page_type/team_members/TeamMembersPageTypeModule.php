@@ -96,7 +96,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 					$aFunctionGroups[$sMainSchoolFunction->getFunctionGroup()->getSlug()] = $sMainSchoolFunction->getFunctionGroup()->getName();
 				}
 			}
-			$aClassTeachers = $oTeamMember->getIsClassTeacherClasses(true);
+			$aClassTeachers = $oTeamMember->getIsClassTeacherClasses(true, true);
 			if(count($aClassTeachers) > 0) {
 				foreach($aClassTeachers as $i => $oClassTeacher) {
 					if($i > 0) {
@@ -186,7 +186,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 	}
 
 	private function renderClasses($oTemplate) {
-		$aSchoolClasses = $this->oTeamMember->getClassTeacherClasses(true);
+		$aSchoolClasses = $this->oTeamMember->getClassTeacherClasses(true, false);
 		if(count($aSchoolClasses) > 0) {
 			$oItemPrototype = $this->constructTemplate('class_item');
 			$bChange = null;
