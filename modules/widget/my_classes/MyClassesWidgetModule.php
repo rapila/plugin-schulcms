@@ -22,7 +22,7 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 		}
 		$oQuery = ClassTeacherQuery::create()->joinSchoolClass()->useSchoolClassQuery()->orderByYear(Criteria::DESC)->orderByUnitName()->endUse()->filterByTeamMemberId($this->oTeamMember->getId());
 		if($bOnlyMainClasses) {
-			$oQuery->filterByIsClassTeacher(true);
+			$oQuery->filterByIsClassTeacher(true)->useSchoolClassQuery()->excludeSubjectClasses()->endUse();
 		}
 		foreach($oQuery->find() as $i => $oClassTeacher) {
 			$oClass = $oClassTeacher->getSchoolClass();
