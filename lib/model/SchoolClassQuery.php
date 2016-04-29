@@ -20,22 +20,38 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 		}
 		return $this->useClassTeacherQuery()->filterByIsClassTeacher(true)->endUse();
 	}
+	
+	public function filterByUnitFromClass($oClass) {
+		return $this->filterByYear($oClass->getYear())->filterByUnitName($oClass->getUnitName());
+	}
+	
+	public function studentCount() {
+		return $this->select('students')->withColumn('SUM(student_count)', 'students')->findOne();
+	}
 
 	/**
 	* @todo should be reconsidered
 	*				School classes should only be synced according to "white lists" and displayed if they have students
 	*/
-	public function includeClassTypesIfConfigured() {
+	public function includeClassTypesIfConfigured($bIncludeSubjectClasses = false) {
 		$mIncludeClassTypes = Settings::getSetting("schulcms", 'include_class_types', null);
 		if($mIncludeClassTypes !== null) {
 			$mIncludeClassTypes = is_array($mIncludeClassTypes) ? $mIncludeClassTypes : array($mIncludeClassTypes);
 			$this->filterByClassType($mIncludeClassTypes, Criteria::IN);
+			if($bIncludeSubjectClasses) {
+				// The subject classes’ type does not appear in the whitelist so we add a separate condition.
+				$this->_or()->filterBySubjectId(null, Criteria::ISNOTNULL);
+			}
 		}
 		return $this;
 	}
 
 	public function excludeSubjectClasses() {
 		return $this->filterBySubjectId(null, Criteria::ISNULL);
+	}
+	
+	public function filterByDisplayConditionForNonSubjectClasses($aClassTypes = null, $mYear = true) {
+		return $this->filterByClassTypeAndYear($aClassTypes, $mYear)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers(true);
 	}
 
 	public function filterByClassTypeAndYear($sClassType = null, $mYear = true) {

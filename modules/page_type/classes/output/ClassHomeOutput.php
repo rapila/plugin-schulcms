@@ -129,7 +129,10 @@ class ClassHomeOutput extends ClassOutput {
 			$oRowTemplate = clone $oRowPrototype;
 			$oRowTemplate->replaceIdentifier('class_name', $oClass->getName());
 			$oRowTemplate->replaceIdentifier('subject_name', $oClass->getSubjectName());
-			$oRowTemplate->replaceIdentifier('detail_link_subject', LinkUtil::link($oClass->getSubjectClassLink()));
+			$sLink = $oClass->getLink();
+			if($sLink) {
+				$oRowTemplate->replaceIdentifier('detail_link_subject', LinkUtil::link($sLink));
+			}
 			foreach($oClass->getClassTeachersOrdered() as $i => $oClassTeacher) {
 				if($i === 0) {
 					$oTeacher = $oClassTeacher->getTeamMember();

@@ -115,13 +115,6 @@ class ClassesFilterModule extends FilterModule {
 		}
 	}
 
-	private function renderSubjectNavigationItems($oNavigationItem) {
-		// refactor to improve performance, check url, etc
-		foreach($oNavigationItem->getClass()->getSubjectClasses() as $oSubject) {
-			$oNavigationItem->addChild(SubjectNavigationItem::create($oSubject->getSlug(), $oSubject->getName(), $oSubject->getId(), false)->setVisible(true));
-		}
-	}
-
 	public function onPageHasBeenSet($oCurrentPage, $bIsNotFound, $oNavigationItem) {
 		if($bIsNotFound || !($oNavigationItem instanceof ClassNavigationItem)) {
 			return;

@@ -12,6 +12,9 @@ class Subject extends BaseSubject
 		return parent::setName($sName);
 	}
 
+	/**
+	* FIXME: Remove if unused
+	*/
 	public function getLink($oSubjectPage = null) {
 		if($oSubjectPage === null && self::$SUBJECT_PAGE === null) {
 			self::$SUBJECT_PAGE = PageQuery::create()->filterByPageType('classes')->findOne();

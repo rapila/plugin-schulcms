@@ -8,6 +8,7 @@ class SubjectListOutput extends ClassOutput {
 
 	public function renderContent() {
 		$oTemplate = $this->oPageType->constructTemplate('subject_list', true);
+		$oTemplate->replaceIdentifier('title', $this->oNavigationItem->getTitle());
 		$oItemPrototype = $this->oPageType->constructTemplate('subject_list_item', true);
 		$aSubjects = SubjectQuery::create()->filterByHasClasses()->distinct()->find();
 		foreach($aSubjects as $oSubject) {
@@ -35,6 +36,7 @@ class SubjectListOutput extends ClassOutput {
 		return $oItemTemplate;
 	}
 
+	// FIXME: Remove if unused
 	private function renderClassItem($oClass) {
 		$oItemTemplate = clone $this->oClassItemPrototype;
 		// add more identifiers for flexibility if necessary

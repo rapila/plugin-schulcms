@@ -12,6 +12,7 @@ class SubjectOutput extends ClassOutput {
 			return null;
 		}
 		$oTemplate = $this->oPageType->constructTemplate('subject_class_list');
+		$oTemplate->replaceIdentifier('title', $this->oNavigationItem->getTitle());
 		$oClassPrototype = $this->oPageType->constructTemplate('subject_class_item');
 		foreach($oSubject->getSchoolClasses() as $oClass) {
 			$oTemplate->replaceIdentifierMultiple('items', $this->renderItem($oClass, clone $oClassPrototype));
@@ -27,7 +28,10 @@ class SubjectOutput extends ClassOutput {
 		// add more identifiers for flexibility if necessary
 		$oItemTemplate->replaceIdentifier('id', $oClass->getId());
 		$oItemTemplate->replaceIdentifier('name', $oClass->getSubjectClassName(true));
-		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getSubjectClassLink()));
+		$sLink = $oClass->getLink();
+		if($sLink) {
+			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($sLink));
+		}
 		$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('class.view_detail').' '.$oClass->getUnitName());
 		$oItemTemplate->replaceIdentifier('count_students', $oClass->countStudentsByUnitName());
 

@@ -11,9 +11,12 @@ class ClassStudentQuery extends BaseClassStudentQuery {
 		return $this;
 	}
 
+	/**
+	* @deprecated Students should not be used anymore
+	*/
 	public function filterByUnitFromClass($oClass) {
 		$this->distinct();
-		$this->joinSchoolClass()->useQuery('SchoolClass')->filterByYear($oClass->getYear())->filterByUnitName($oClass->getUnitName())->endUse();
+		$this->joinSchoolClass()->useQuery('SchoolClass')->filterByUnitFromClass($oClass)->endUse();
 		return $this;
 	}
 
