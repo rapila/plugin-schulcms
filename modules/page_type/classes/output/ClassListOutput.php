@@ -82,7 +82,7 @@ class ClassListOutput extends ClassOutput {
 	}
 
 	public static function listQuery($aClassTypes = null, $mYear = true) {
-		return SchoolClassQuery::create()->filterByClassTypeAndYear($aClassTypes, $mYear)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers(true);
+		return SchoolClassQuery::create()->filterByDisplayConditionForNonSubjectClasses($aClassTypes, $mYear);
 	}
 
 	public function renderContext() {

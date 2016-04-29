@@ -49,6 +49,10 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 	public function excludeSubjectClasses() {
 		return $this->filterBySubjectId(null, Criteria::ISNULL);
 	}
+	
+	public function filterByDisplayConditionForNonSubjectClasses($aClassTypes = null, $mYear = true) {
+		return $this->filterByClassTypeAndYear($aClassTypes, $mYear)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers(true);
+	}
 
 	public function filterByClassTypeAndYear($sClassType = null, $mYear = true) {
 		$this->filterBySchoolClassType($sClassType);
