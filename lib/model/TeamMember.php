@@ -22,20 +22,6 @@ class TeamMember extends BaseTeamMember {
 		return $this->countClassTeachers(ClassTeacherQuery::create()->joinWith('SchoolClass', Criteria::INNER_JOIN)) > 0;
 	}
 
-	/**
-	* getIsClassTeacherClasses()
-	* @param boolean $bGroupByUnitName, default=false
-	* for the team_member list we only want to display the teaching units and not the classes
-	* @return PropelCollection|array ClassTeacher[] List of ClassTeacher objects
-	*/
-	public function getIsClassTeacherClasses($bGroupByUnitName = false) {
-		$oQuery = ClassTeacherQuery::create()->filterByIsClassTeacher(true);
-		if($bGroupByUnitName) {
-			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->groupByUnitName()->endUse();
-		}
-		return $this->getClassTeachersJoinSchoolClass($oQuery);
-	}
-
 	public function getClassTeachersJoinSchoolClass($oQuery = null, $oCon = null, $sJoinBehavior = Criteria::INNER_JOIN, $bIncludeOldClasses = false) {
 		if(!$oQuery) {
 			$oQuery = ClassTeacherQuery::create();
@@ -51,19 +37,46 @@ class TeamMember extends BaseTeamMember {
 	}
 
 	/**
+	* getIsClassTeacherClasses()
+	* @param boolean $bGroupByUnitName, default=false If we only want to display the teaching units and not the classes
+	* @param boolean $bOnlyMainClasses, default=true Exclude subject classes
+	* @return PropelCollection|array ClassTeacher[] List of ClassTeacher objects
+	*/
+	public function getIsClassTeacherClasses($bGroupByUnitName = false, $bExcludeSubjectClasses = true, $bUseTypeWhitelist = true) {
+		return $this->getClassTeacherClasses($bGroupByUnitName, $bExcludeSubjectClasses, $bUseTypeWhitelist, true);
+	}
+
+	/**
 	* getClassTeacherClasses()
 	* @param boolean $bGroupByUnitName, default=false
 	* for the team_member detail we only want to display the teaching units and not the classes
 	* @return PropelCollection|array ClassTeacher[] List of ClassTeacher objects
+	* FIXME: Document differences between this method an the one with the added „Is“, getIsClassTeacherClasses…
 	*/
-	public function getClassTeacherClasses($bGroupByUnitName = false) {
-	  $oQuery = ClassTeacherQuery::create();
-		$oQuery->orderByIsClassTeacher(Criteria::DESC);
-		if($bGroupByUnitName) {
-			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->includeClassTypesIfConfigured()->groupByUnitName()->orderByName()->endUse();
+	public function getClassTeacherClasses($bGroupByUnitName = false, $bExcludeSubjectClasses = true, $bUseTypeWhitelist = true, $bRestrictToClassTeacher = false) {
+		$oQuery = ClassTeacherQuery::create();
+
+		if($bRestrictToClassTeacher) {
+			$oQuery->filterByIsClassTeacher(true);
 		} else {
-			$oQuery->joinSchoolClass()->useQuery('SchoolClass')->orderByName()->endUse();
+			$oQuery->orderByIsClassTeacher(Criteria::DESC);
 		}
+
+		//  Begin using SchoolClass query
+		$oQuery = $oQuery->useSchoolClassQuery();
+		if($bGroupByUnitName) {
+			$oQuery->groupByUnitName();
+		}
+		if($bUseTypeWhitelist) {
+			$oQuery->includeClassTypesIfConfigured(!$bExcludeSubjectClasses);
+		}
+		$oQuery = $oQuery->orderByName()->endUse();
+		//  End using SchoolClass query
+
+		if($bExcludeSubjectClasses) {
+			$oQuery->useSchoolClassQuery()->excludeSubjectClasses()->endUse();
+		}
+
 		return $this->getClassTeachersJoinSchoolClass($oQuery);
 	}
 
