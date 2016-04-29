@@ -33,11 +33,15 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 	* @todo should be reconsidered
 	*				School classes should only be synced according to "white lists" and displayed if they have students
 	*/
-	public function includeClassTypesIfConfigured() {
+	public function includeClassTypesIfConfigured($bIncludeSubjectClasses = false) {
 		$mIncludeClassTypes = Settings::getSetting("schulcms", 'include_class_types', null);
 		if($mIncludeClassTypes !== null) {
 			$mIncludeClassTypes = is_array($mIncludeClassTypes) ? $mIncludeClassTypes : array($mIncludeClassTypes);
 			$this->filterByClassType($mIncludeClassTypes, Criteria::IN);
+			if($bIncludeSubjectClasses) {
+				// The subject classes’ type does not appear in the whitelist so we add a separate condition.
+				$this->_or()->filterBySubjectId(null, Criteria::ISNOTNULL);
+			}
 		}
 		return $this;
 	}
