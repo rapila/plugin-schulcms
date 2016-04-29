@@ -8,7 +8,6 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 		if(Settings::getSetting("frontend", "protect_email_addresses", false)) {
 			ResourceIncluder::defaultIncluder()->addResource('e-mail-defuscate.js');
 		}
-		$this->oClassPage = PageQuery::create()->active()->filterByPageType('classes')->findOne();
 		$this->aFunctionGroupIds = explode(',', $this->oPage->getPagePropertyValue('team_members:function_group_ids', ''));
 		$this->bRequiresFilter = is_array($this->aFunctionGroupIds) && count($this->aFunctionGroupIds) > 1;
 	}
@@ -92,7 +91,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			if($sMainSchoolFunction) {
 				$oItemTemplate->replaceIdentifier('first_function_name', $sMainSchoolFunction->getTitle());
 				$oItemTemplate->replaceIdentifier('function_group_key', $sMainSchoolFunction->getFunctionGroup()->getSlug());
-				//prepare function group filter
+				// Prepare function group filter
 				if($this->bRequiresFilter && !isset($aFunctionGroups[$sMainSchoolFunction->getFunctionGroup()->getSlug()])) {
 					$aFunctionGroups[$sMainSchoolFunction->getFunctionGroup()->getSlug()] = $sMainSchoolFunction->getFunctionGroup()->getName();
 				}
@@ -103,7 +102,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 					if($i > 0) {
 						$oItemTemplate->replaceIdentifierMultiple('school_class', ', ', null, Template::NO_NEWLINE);
 					}
-					$aLink = $oClassTeacher->getSchoolClass()->getLink($this->oClassPage);
+					$aLink = $oClassTeacher->getSchoolClass()->getLink();
 					if($aLink === null) {
 						$oLink = $oClassTeacher->getSchoolClass()->getName();
 					} else {
@@ -199,8 +198,11 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 					}
 				}
 				$oItemTemplate = clone $oItemPrototype;
-				if($this->oClassPage) {
-					$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link(array_merge($this->oClassPage->getFullPathArray(), array($oSchoolClass->getSchoolClass()->getSlug())))), $oSchoolClass->getSchoolClass()->getFullClassName()));
+				$sLink = $oSchoolClass->getSchoolClass()->getLink();
+				if($sLink) {
+					$oItemTemplate->replaceIdentifier('class_link', TagWriter::quickTag('a', array('href'=> LinkUtil::link($sLink)), $oSchoolClass->getSchoolClass()->getFullClassName()));
+				} else {
+					$oItemTemplate->replaceIdentifier('class_link', $oSchoolClass->getSchoolClass()->getFullClassName());
 				}
 				$oTemplate->replaceIdentifierMultiple('klassenlehrer_info', $oItemTemplate, null, Template::NO_NEW_CONTEXT);
 			}
