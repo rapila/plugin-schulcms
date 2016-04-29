@@ -21,7 +21,6 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 			return $aResult;
 		}
 		$oQuery = ClassTeacherQuery::create()->joinSchoolClass()->useSchoolClassQuery()->orderByYear(Criteria::DESC)->orderByUnitName()->endUse()->filterByTeamMemberId($this->oTeamMember->getId());
-		$oClassesPage = PageQuery::create()->filterByPageType('classes')->findOne();
 		if($bOnlyMainClasses) {
 			$oQuery->filterByIsClassTeacher(true);
 		}
@@ -42,7 +41,7 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 			$aClassInfo['WeekSchedule'] = $oClass->getHasWeekSchedule();
 			$aClassInfo['ClassPortrait'] = $oClass->getHasClassPortrait();
 
-			$aClassInfo['ClassLink'] = LinkUtil::link($oClass->getLink($oClassesPage), 'FrontendManager');
+			$aClassInfo['ClassLink'] = LinkUtil::link($oClass->getLink(), 'FrontendManager');
 			$aResult[$i] = $aClassInfo;
 		}
 		return $aResult;
