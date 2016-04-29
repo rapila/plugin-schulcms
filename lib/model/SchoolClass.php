@@ -121,6 +121,10 @@ class SchoolClass extends BaseSchoolClass {
 				->filterByPagePropertyValue('classes:class_type', 'subject');
 			self::$SUBJECT_CLASS_PAGE = $oQuery->findOne();
 		}
+		if($this->countClassTeachers() === 0) {
+			// Ignore subject classes without teachers, as there won’t be navigation items for these
+			return null;
+		}
 		return $this->getLinkToPage(self::$SUBJECT_CLASS_PAGE);
 	}
 
