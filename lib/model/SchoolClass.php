@@ -116,7 +116,7 @@ class SchoolClass extends BaseSchoolClass {
 	*/
 	public function getSubjectClassLink() {
 		if(self::$SUBJECT_CLASS_PAGE === false) {
-			$oQuery = PageQuery::create()
+			$oQuery = PageQuery::create()->active()
 				->filterByPageType('classes')
 				->filterByPagePropertyValue('classes:class_type', 'subject');
 			self::$SUBJECT_CLASS_PAGE = $oQuery->findOne();
@@ -131,7 +131,7 @@ class SchoolClass extends BaseSchoolClass {
 	private function getNonSubjectClassLink($oClassesPage = false) {
 		if($oClassesPage === false) {
 			if(self::$CLASS_PAGE === false) {
-				$oQuery = PageQuery::create()
+				$oQuery = PageQuery::create()->active()
 					->filterByPageType('classes')
 					->filterByPagePropertyValue('classes:class_type', 'standard');
 				self::$CLASS_PAGE = $oQuery->findOne();
