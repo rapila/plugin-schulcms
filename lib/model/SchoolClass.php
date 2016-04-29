@@ -5,8 +5,8 @@
  */
 class SchoolClass extends BaseSchoolClass {
 
-	private static $CLASS_PAGE;
-	private static $SUBJECT_CLASS_PAGE;
+	private static $CLASS_PAGE = false;
+	private static $SUBJECT_CLASS_PAGE = false;
 
 	public function getClassTeachersOrdered($bIsClassTeacher = true) {
 		$oCriteria = new Criteria();
@@ -84,13 +84,19 @@ class SchoolClass extends BaseSchoolClass {
 		return SchoolPeer::getPeriodFromYear($this->getYear());
 	}
 
-	public function getLink($oClassesPage = null) {
-		if($oClassesPage === null) {
-			if(self::$CLASS_PAGE === null) {
-				self::$CLASS_PAGE = PageQuery::create()->filterByPageType('classes')->findOne();
-			}
-			$oClassesPage = self::$CLASS_PAGE;
+	/**
+	* Gets the correct link to this class.
+	* @param $oClassesPage Page Pass in the regular class page for caching. @deprecated
+	* @return the link or null if there is no page for this class to appear on.
+	*/
+	public function getLink($oClassesPage = false) {
+		if($this->isSubjectClass()) {
+			return $this->getSubjectClassLink();
 		}
+		return $this->getNonSubjectClassLink($oClassesPage);
+	}
+
+	private function getLinkToPage($oClassesPage) {
 		if(!$oClassesPage) {
 			return null;
 		}
@@ -105,21 +111,34 @@ class SchoolClass extends BaseSchoolClass {
 		return array_merge($oClassesPage->getFullPathArray(), $aParams);
 	}
 
+	/**
+	* @deprecated for public use, use getLink instead.
+	*/
 	public function getSubjectClassLink() {
-		if(self::$SUBJECT_CLASS_PAGE === null) {
+		if(self::$SUBJECT_CLASS_PAGE === false) {
 			$oQuery = PageQuery::create()
 				->filterByPageType('classes')
-				->filterByIdentifier('subjects')
-				// Either use the identifier or determine the page type config
-				->_or()
-				->usePagePropertyQuery()
-					->condition('pp_name', 'PageProperty.Name = ?', 'classes:class_type')
-					->condition('pp_value', 'PageProperty.Value = ?', 'subject')
-					->where(array('pp_name', 'pp_value'), 'and')
-				->endUse();
+				->filterByPagePropertyValue('classes:class_type', 'subject');
 			self::$SUBJECT_CLASS_PAGE = $oQuery->findOne();
 		}
-		return $this->getLink(self::$SUBJECT_CLASS_PAGE);
+		return $this->getLinkToPage(self::$SUBJECT_CLASS_PAGE);
+	}
+
+	private function getNonSubjectClassLink($oClassesPage = false) {
+		if($oClassesPage === false) {
+			if(self::$CLASS_PAGE === false) {
+				$oQuery = PageQuery::create()
+					->filterByPageType('classes')
+					->filterByPagePropertyValue('classes:class_type', 'standard');
+				self::$CLASS_PAGE = $oQuery->findOne();
+			}
+			$oClassesPage = self::$CLASS_PAGE;
+		}
+		if(SchoolClassQuery::create()->distinct()->filterByDisplayConditionForNonSubjectClasses(null, null)->filterById($this->getId())->count() !== 1) {
+			// This is a class that won’t be displayed by the page. Don’t return a link.
+			return null;
+		}
+		return $this->getLinkToPage($oClassesPage);
 	}
 
 	public function getLinkToClassSchedule() {
