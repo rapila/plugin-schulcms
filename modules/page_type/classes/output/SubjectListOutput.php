@@ -36,6 +36,7 @@ class SubjectListOutput extends ClassOutput {
 		return $oItemTemplate;
 	}
 
+	// FIXME: Remove if unused
 	private function renderClassItem($oClass) {
 		$oItemTemplate = clone $this->oClassItemPrototype;
 		// add more identifiers for flexibility if necessary
