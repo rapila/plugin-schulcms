@@ -24,7 +24,7 @@ class ClassesFilterModule extends FilterModule {
 			}
 		} // Render subject class navigation items
 		else if($oNavigationItem instanceof SubjectNavigationItem) {
-			$oSubject = SubjectQuery::create()->findPk($oNavigationItem->getId());
+			$oSubject = SubjectQuery::create()->findPk($oNavigationItem->getSubjectId());
 			$this->renderClassNavigationItems($oNavigationItem, $oSubject->getSchoolClasses(), $oNavigationItem->getMode());
 		}
 
@@ -71,7 +71,7 @@ class ClassesFilterModule extends FilterModule {
 			$bIsOutdated = $oCache->isOlderThan($oQuery);
 		} // Subject class navigation items
 		else if($oNavigationItem instanceof SubjectNavigationItem) {
-			$bIsOutdated = $oCache->isOlderThan(SchoolClassQuery::create()->filterBySubjectId($oNavigationItem->getId()));
+			$bIsOutdated = $oCache->isOlderThan(SchoolClassQuery::create()->filterBySubjectId($oNavigationItem->getSubjectId()));
 		}
 
 		if(!($oNavigationItem instanceof ClassNavigationItem)) {

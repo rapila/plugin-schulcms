@@ -1,4 +1,5 @@
 <?php
+// FIXME: Delete if unused
 /**
  * @package navigation
  */
@@ -23,7 +24,7 @@ class SubjectNavigationItem extends VirtualNavigationItem {
 		return $this;
 	}
 
-	public function getId() {
+	public function getSubjectId() {
 		$this->getData()->id;
 	}
 
