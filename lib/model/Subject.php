@@ -12,22 +12,6 @@ class Subject extends BaseSubject
 		return parent::setName($sName);
 	}
 
-	/**
-	* FIXME: Remove if unused
-	*/
-	public function getLink($oSubjectPage = null) {
-		if($oSubjectPage === null && self::$SUBJECT_PAGE === null) {
-			self::$SUBJECT_PAGE = PageQuery::create()->filterByPageType('classes')->findOne();
-		} elseif($oSubjectPage) {
-			self::$SUBJECT_PAGE = $oSubjectPage;
-		}
-		if(!self::$SUBJECT_PAGE) {
-			return null;
-		}
-		$aParams = array($this->getSlug());
-		return array_merge(self::$SUBJECT_PAGE->getFullPathArray(), $aParams);
-	}
-
 	public function getSchoolClasses() {
 		return $this->getSchoolClassesQuery()->find();
 	}
