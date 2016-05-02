@@ -64,18 +64,22 @@ class TeamMember extends BaseTeamMember {
 
 		//  Begin using SchoolClass query
 		$oQuery = $oQuery->useSchoolClassQuery();
+
 		if($bGroupByUnitName) {
 			$oQuery->groupByUnitName();
 		}
 		if($bUseTypeWhitelist) {
 			$oQuery->includeClassTypesIfConfigured(!$bExcludeSubjectClasses);
 		}
-		$oQuery = $oQuery->orderByName()->endUse();
-		//  End using SchoolClass query
 
 		if($bExcludeSubjectClasses) {
-			$oQuery->useSchoolClassQuery()->excludeSubjectClasses()->endUse();
+			$oQuery->excludeSubjectClasses();
+		} else {
+			$oQuery->orderBySubjectId(Criteria::ASC);
 		}
+
+		//  End using SchoolClass query
+		$oQuery = $oQuery->orderByName()->endUse();
 
 		return $this->getClassTeachersJoinSchoolClass($oQuery);
 	}
