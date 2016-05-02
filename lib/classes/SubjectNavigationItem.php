@@ -37,7 +37,7 @@ class SubjectNavigationItem extends VirtualNavigationItem {
 		return $this->getData()->mode;
 	}
 
-	public function getId() {
+	public function getSubjectId() {
 		return $this->getData()->id;
 	}
 
