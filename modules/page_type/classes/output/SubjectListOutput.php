@@ -25,53 +25,8 @@ class SubjectListOutput extends ClassOutput {
 		$oItemTemplate->replaceIdentifier('count_classes', $oSubject->countSchoolClasses());
 		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($this->oPage->getFullPathArray(array($oSubject->getSlug()))));
 
-		// foreach($oSubject->getSchoolClasses() as $i => $oClass) {
-		// 	$oItemTemplate->replaceIdentifierMultiple('items', $this->renderClassItem($oClass));
-		// 	foreach($oClass->getClassTeachersOrdered() as $i => $oClassTeacher) {
-		// 		if($i === 0) {
-		// 			$oItemTemplate->replaceIdentifierMultiple('teachers', TagWriter::quickTag('a', array('href' => LinkUtil::link($oClassTeacher->getTeamMember()->getLink($this->oTeacherPage))), $oClassTeacher->getTeamMember()->getFullName()));
-		// 		}
-		// 	}
-		// }
 		return $oItemTemplate;
 	}
-
-	// FIXME: Remove if unused
-	private function renderClassItem($oClass) {
-		$oItemTemplate = clone $this->oClassItemPrototype;
-		// add more identifiers for flexibility if necessary
-		$oItemTemplate->replaceIdentifier('id', $oClass->getId());
-		$oItemTemplate->replaceIdentifier('name', $oClass->getUnitName());
-		$oItemTemplate->replaceIdentifier('class_type', $oClass->getClassType());
-		$oItemTemplate->replaceIdentifier('class_type_key', StringUtil::normalizeToASCII($oClass->getClassType()));
-		$oItemTemplate->replaceIdentifier('year', $oClass->getYearPeriod());
-		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getLink($this->oPage)));
-		$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('class.view_detail').' '.$oClass->getUnitName());
-		$oItemTemplate->replaceIdentifier('count_students', $oClass->countStudentsByUnitName());
-
-		// get related class teacher links, in case there are 3 class teachers, to be just ;=)
-		$iLimit = 3;
-		$aClassTeachers = $oClass->getTeachersByUnitName(true, $iLimit+1);
-		$iCountTeachers = count($aClassTeachers);
-		$iCountMax = $iCountTeachers < $iLimit ? $iCountTeachers : $iLimit;
-		foreach($aClassTeachers as $i => $oTeacher) {
-			if($i < $iLimit) {
-				$sFunctionAddon = $oTeacher->getIsClassTeacher() ? $oTeacher->getTeamMember()->getClassTeacherTitle() : $oTeacher->getFunctionName(true);
-				if($sFunctionAddon != ''){
-					$sFunctionAddon = ', '. $sFunctionAddon;
-				}
-				$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', TagWriter::quickTag('a', array('title' => $oTeacher->getTeamMember()->getFullName().$sFunctionAddon, 'href' => LinkUtil::link(array_merge($this->oTeacherPage->getFullPathArray(), array($oTeacher->getTeamMember()->getSlug())))), $oTeacher->getTeamMember()->getFullNameShort()), null, Template::NO_NEWLINE);
-				if($i < $iCountMax-1) {
-					$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ', ', null, Template::NO_NEWLINE);
-				}
-			}
-		}
-		if($iCountTeachers > $iLimit) {
-			$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ' '.StringPeer::getString('class.and_others_teachers'));
-		}
-		return $oItemTemplate;
-	}
-
 
 	public function renderContext() {
 	}
