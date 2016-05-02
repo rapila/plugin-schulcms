@@ -60,8 +60,12 @@ class ClassHomeOutput extends ClassOutput {
 		if($this->oClass->getAncestorClassId() != null) {
 			$oAncestorClass = SchoolClassQuery::create()->findPk($this->oClass->getAncestorClassId());
 			if($oAncestorClass) {
-				$oLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oAncestorClass->getLink($this->oPageType->getPage()))), $oAncestorClass->getClassNameWithYear());
-				$oTemplate->replaceIdentifier('ancestor_class_link', $oLink);
+				$aHref = $oAncestorClass->getLink($this->oPageType->getPage());
+				$mLink = $oAncestorClass->getClassNameWithYear();
+				if($aHref) {
+					$oLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aHref)), $mLink);
+				}
+				$oTemplate->replaceIdentifier('ancestor_class_link', $mLink);
 			}
 		}
 		// Display successor class link
