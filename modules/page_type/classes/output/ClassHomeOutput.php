@@ -51,6 +51,18 @@ class ClassHomeOutput extends ClassOutput {
 		$this->renderUpcomingEvents($oTemplate, $bHasRecentReport, 10);
 		return $oTemplate;
 	}
+	
+	private function getLinkTagForLinkedClass($oClass) {
+		if(!$oClass) {
+			return null;
+		}
+		$aHref = $oClass->getLink($this->oPageType->getPage());
+		$mLink = $oClass->getClassNameWithYear();
+		if($aHref) {
+			$mLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aHref)), $mLink);
+		}
+		return $mLink;
+	}
 
 	private function renderClassInfo($oTemplate) {
 		// Students count info
@@ -59,23 +71,13 @@ class ClassHomeOutput extends ClassOutput {
 		// Display ancestor class link
 		if($this->oClass->getAncestorClassId() != null) {
 			$oAncestorClass = SchoolClassQuery::create()->findPk($this->oClass->getAncestorClassId());
-			if($oAncestorClass) {
-				$aHref = $oAncestorClass->getLink($this->oPageType->getPage());
-				$mLink = $oAncestorClass->getClassNameWithYear();
-				if($aHref) {
-					$mLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aHref)), $mLink);
-				}
-				$oTemplate->replaceIdentifier('ancestor_class_link', $mLink);
-			}
+			$oTemplate->replaceIdentifier('ancestor_class_link', $this->getLinkTagForLinkedClass($oAncestorClass));
 		}
 		// Display successor class link
 		if(!$this->oClass->isCurrent()) {
 			// Hack to find correct parent page, since icampus passes ancestor_id even if there is no ancestor
 			$oSuccessorClass = SchoolClassQuery::create()->findOneByAncestorClassId($this->oClass->getId());
-			if($oSuccessorClass) {
-				$oLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oSuccessorClass->getLink())), $oSuccessorClass->getClassNameWithYear());
-				$oTemplate->replaceIdentifier('successor_class_link', $oLink);
-			}
+			$oTemplate->replaceIdentifier('successor_class_link', $this->getLinkTagForLinkedClass($oSuccessorClass));
 		}
 
 		// Class portrait
