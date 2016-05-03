@@ -63,7 +63,7 @@ class ClassHomeOutput extends ClassOutput {
 				$aHref = $oAncestorClass->getLink($this->oPageType->getPage());
 				$mLink = $oAncestorClass->getClassNameWithYear();
 				if($aHref) {
-					$oLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aHref)), $mLink);
+					$mLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($aHref)), $mLink);
 				}
 				$oTemplate->replaceIdentifier('ancestor_class_link', $mLink);
 			}
