@@ -51,18 +51,24 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 	}
 	
 	public function filterByDisplayConditionForNonSubjectClasses($aClassTypes = null, $mYear = true) {
-		return $this->filterByClassTypeAndYear($aClassTypes, $mYear)->filterBySubjectId(null, Criteria::ISNULL)->hasTeachers(true);
+		$this->filterByClassTypeAndYear($aClassTypes, $mYear)->filterBySubjectId(null, Criteria::ISNULL);
+
+		$oSchool = SchoolPeer::getSchool();
+		if($mYear === true || $mYear === $oSchool->getCurrentYear()) {
+			// If we select non-current years, we ignore missing class teachers (they may have left the school and are not synchronized anymore)
+			$this->hasTeachers(true);
+		}
+		return $this;
 	}
 
 	public function filterByClassTypeAndYear($sClassType = null, $mYear = true) {
 		$this->filterBySchoolClassType($sClassType);
 		$this->filterBySchoolYear($mYear);
-		if($mYear === null) {
-			// don't groupByUnitName, because then only the oldest one is shown, I guess?
-			$this->joinClassStudent();
-		} else {
-			$this->groupByUnitName()->joinClassStudent();
+		if($mYear !== null) {
+			// Don't groupByUnitName if we’re selecting all years, because then only the oldest one is shown, I guess?
+			$this->groupByUnitName();
 		}
+		$this->hasStudents();
 		return $this;
 	}
 
