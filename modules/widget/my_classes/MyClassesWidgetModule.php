@@ -15,15 +15,31 @@ class MyClassesWidgetModule extends PersistentWidgetModule {
 		return $this->oTeamMember->getFullName();
 	}
 
-	public function listClasses($bOnlyMainClasses = true) {
+	public function listClasses($bHideSubjectClasses = false, $bHideOldClasses = true) {
 		$aResult = array();
 		if(!$this->oTeamMember) {
 			return $aResult;
 		}
-		$oQuery = ClassTeacherQuery::create()->joinSchoolClass()->useSchoolClassQuery()->orderByYear(Criteria::DESC)->orderByUnitName()->endUse()->filterByTeamMemberId($this->oTeamMember->getId());
-		if($bOnlyMainClasses) {
-			$oQuery->filterByIsClassTeacher(true)->useSchoolClassQuery()->excludeSubjectClasses()->endUse();
+		$oQuery = ClassTeacherQuery::create()->filterByTeamMemberId($this->oTeamMember->getId());
+
+		// Use school class query from now on
+		$oQuery = $oQuery->useSchoolClassQuery();
+
+		$oQuery->orderByYear(Criteria::DESC)->orderByUnitName();
+		if($bHideSubjectClasses) {
+			$oQuery->excludeSubjectClasses();
 		}
+		if($bHideOldClasses) {
+			$oQuery->filterBySchoolYear();
+		}
+		// End use
+		$oQuery = $oQuery->endUse();
+
+		// For legacy subjects (no subject classes)
+		if($bHideSubjectClasses) {
+			$oQuery->filterByIsClassTeacher(true);
+		}
+
 		foreach($oQuery->find() as $i => $oClassTeacher) {
 			$oClass = $oClassTeacher->getSchoolClass();
 			$aClassInfo = array();

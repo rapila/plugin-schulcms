@@ -176,7 +176,7 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getCountStudents() {
-		$iCount = $this->countClassStudents();
+		$iCount = max($this->countClassStudents(), $this->getStudentCount());
 		if($iCount === 0) {
 			return '-';
 		}
