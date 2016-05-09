@@ -7,7 +7,7 @@ class SubjectOutput extends ClassOutput {
 	}
 
 	public function renderContent() {
-		$oSubject = SubjectQuery::create()->findPk($this->oNavigationItem->getId());
+		$oSubject = SubjectQuery::create()->findPk($this->oNavigationItem->getSubjectId());
 		if(!$oSubject) {
 			return null;
 		}

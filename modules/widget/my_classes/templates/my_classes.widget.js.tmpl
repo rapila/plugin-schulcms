@@ -1,4 +1,13 @@
 Widget.types.my_classes = {
+	changed_dashboard_config: function() {
+		console.log('changed_dashboard_config', this.settings.dashboard);
+		this.reload_list();
+	},
+	
+	dashboard_config_form: function() {
+		return Widget.parseHTML('{{includeTemplate=config_form}}');
+	},
+
 	prepare: function() {
 		var _this = this;
 		this._element.append(Widget.parseHTML("{{includeTemplate=edit}}"));
@@ -11,7 +20,7 @@ Widget.types.my_classes = {
 	reload_list: function() {
 		var _this = this;
 		this.list.empty();
-		this.listClasses(function(result) {
+		this.listClasses(this.settings.dashboard.hide_subject_classes, this.settings.dashboard.hide_old_classes, function(result) {
 			if(result.length === 0) {
 				_this.list.append(jQuery('<tr/>').addClass('ui-list-row').append(jQuery('<td/>').attr('colspan', 4).text('{{writeString=wns.no_results}}')));
 			}
@@ -42,7 +51,7 @@ Widget.types.my_classes = {
 					var targetClasses = event.target.classList;
 					Widget.createOnce('class_detail', function apply(widget) {
 						var tab = 0;
-						if(targetClasses.contains('news')) {					   tab = 1;
+						if(targetClasses.contains('news')) {             tab = 1;
 						} else if(targetClasses.contains('events')) {    tab = 2;
 						} else if(targetClasses.contains('documents')) { tab = 3;
 						} else if(targetClasses.contains('links')) {     tab = 4;
@@ -75,6 +84,10 @@ Widget.types.my_classes = {
 	},
 
 	settings: {
-		documentation_key: 'widget.my_classes'
+		documentation_key: 'widget.my_classes',
+		dashboard: {
+			hide_subject_classes: false,
+			hide_old_classes: true
+		}
 	}
 };
