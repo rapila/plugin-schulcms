@@ -35,6 +35,9 @@ schulcms:
   # display image name allows to hide meaningless names from automatic upload
   gallery_display_image_name: true
 
+  event_filter_event_kind: true
+  event_filter_event_type: false
+
 documentation:
   support_info:
     heading: 'Support-Infos SchulCMS'

@@ -45,6 +45,12 @@ class EventsPageTypeModule extends PageTypeModule {
 		$oDownload->replaceIdentifier('subscribe_ical', $oFeedLinks->subscribe_ical);
 		$oTemplate->replaceIdentifierMultiple('container', $oDownload, 'content');
 		$oFilterTemplate = static::template('content/filter');
+		foreach(EventTypeQuery::create()->excludeExternallyManaged()->hasActiveEvents()->find() as $oEventType) {
+			$oTypeTemplate = static::template('content/event_type');
+			$oTypeTemplate->replaceIdentifier('id', $oEventType->getId());
+			$oTypeTemplate->replaceIdentifier('name', $oEventType->getName());
+			$oFilterTemplate->replaceIdentifierMultiple('event_types', $oTypeTemplate);
+		}
 		$oFilterTemplate->replaceIdentifier('class_id', $oClass === null ? 'common_only' : implode('|', $oClass->getLinkedClassIds()));
 		$oTemplate->replaceIdentifierMultiple('container', $oFilterTemplate, 'content');
 		$oTemplate->replaceIdentifierMultiple('container', static::template('content/calendar-content'), 'content');
