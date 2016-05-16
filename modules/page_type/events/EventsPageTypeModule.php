@@ -37,7 +37,7 @@ class EventsPageTypeModule extends PageTypeModule {
 	public static function includeCalendar($oTemplate, $oEventPage, $oClass = null) {
 		$oResourceIncluder = ResourceIncluder::namedIncluder('additional_js');
 		$oResourceIncluder->addResource('events.js');
-		$oResourceIncluder->addResource(LinkUtil::link(array('event_export', '{year}', $oEventPage->getId()), 'FileManager'), ResourceIncluder::RESOURCE_TYPE_LINK, null, array('type' => 'application/json', 'template' => 'source_link', 'source' => '/eventData'));
+		ResourceIncluder::defaultIncluder()->addResource(LinkUtil::link(array('event_export', '{year}', $oEventPage->getId()), 'FileManager'), ResourceIncluder::RESOURCE_TYPE_LINK, null, array('type' => 'application/json', 'template' => 'source_link', 'source' => '/eventData'));
 		$oDownload = static::template('content/downloads');
 		$oFeedLinks = self::getFeedLinks($oEventPage, $oClass);
 		$oDownload->replaceIdentifier('download_ical', $oFeedLinks->download_ical);
