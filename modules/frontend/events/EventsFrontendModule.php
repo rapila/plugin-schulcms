@@ -109,7 +109,20 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$oTemplate->replaceIdentifier('title', $sTitle);
 		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink()));
 		$oTemplate->replaceIdentifier('detail_link_title', $oEvent->getTitle());
-		$oTemplate->replaceIdentifier('recent_report_image', TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => $iMaxWidth)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle())));
+		$oTemplate->replaceIdentifierCallback('recent_report_intro', function($oIdentifier) use ($oEvent) {
+			$iLength = 160;
+			if($oIdentifier->hasParameter('length')) {
+				$iLength = $oIdentifier->getParameter('length');
+			}
+			return $oEvent->getBodyShortTruncated($iLength);
+		});
+		$oTemplate->replaceIdentifierCallback('recent_report_image', function($oIdentifier) use ($oEvent, $oImage, $iMaxWidth) {
+			$iMax = $iMaxWidth;
+			if($oIdentifier->hasParameter('max_width')) {
+				$iMax = $oIdentifier->getParameter('max_width');
+			}
+			return TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => $iMax)), 'alt' => $oImage->getDescription(), 'class' => $oIdentifier->getParameter('class'), 'title' => $oEvent->getTitle()));
+		});
 		return $oTemplate;
 	}
 
