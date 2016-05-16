@@ -68,6 +68,7 @@ class EventsPageTypeModule extends PageTypeModule {
 		}
 		$oTemplate->replaceIdentifier('body', $sBody, null, Template::NO_HTML_ESCAPE);
 
+		$oTemplate->replaceIdentifier('ts', $oEvent->getDateStart('U'));
 		if($oEvent->getDateEnd() === $oEvent->getDateStart()) {
 			$oTemplate->replaceIdentifier('date_info', $oEvent->getWeekdayName().', '.$oEvent->getDatumWithMonthName());
 		} else {
@@ -107,6 +108,11 @@ class EventsPageTypeModule extends PageTypeModule {
 			$oDocument = $oEventDocument->getDocument();
 			if(!$oDocument || !$oDocument->isImage()) {
 				continue;
+			}
+			if($iCount === 0 && $oDetailTemplate->hasIdentifier('render_first_gallery_item')) {
+				// Render first document to main template as well
+				$oDocument->renderListItem($oDetailTemplate);
+				$oDetailTemplate->replaceIdentifier('render_first_gallery_item', '');
 			}
 			$iCount++;
 			$oDocumentTemplate = clone $oTemplateProtoType;
