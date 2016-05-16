@@ -95,9 +95,17 @@ class EventQuery extends BaseEventQuery {
 		}
 		return $this->common();
 	}
+	
+	public function filterByHasImages() {
+		return $this->joinEventDocument(null, Criteria::LEFT_JOIN)->useQuery('EventDocument')->filterByEventId(null, Criteria::ISNOTNULL)->endUse()->distinct();
+	}
+	
+	public function filterByHasReview() {
+		return $this->filterByBodyReview(null, Criteria::ISNOTNULL);
+	}
 
 	public function filterbyHasImagesOrReview() {
-		return $this->joinEventDocument(null, Criteria::LEFT_JOIN)->useQuery('EventDocument')->filterByEventId(null, Criteria::ISNOTNULL)->endUse()->_or()->filterByBodyReview(null, Criteria::ISNOTNULL)->distinct();
+		return $this->filterByHasImages()->_or()->filterByHasReview();
 	}
 
 	public static function findYearsByEventTypeId($iEventType = null) {
