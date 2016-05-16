@@ -55,8 +55,10 @@ class EventsFileModule extends FileModule {
 		$oChannel = $oDocument->createElement("channel");
 		if($this->oClass) {
 			$sTitle = $this->oClass->getFullClassNameWithYear(true);
-		} else {
+		} else if(class_exists('SchoolSiteQuery')) {
 			$sTitle = SchoolSiteQuery::currentSchoolSite()->getName();
+		} else {
+			$sTitle = Settings::getSetting('domain_holder', 'name', 'Events').' – '.Event::getEventPage()->getPageTitle();
 		}
 		self::addSimpleAttribute($oDocument, $oChannel, 'title', $sTitle);
 		self::addSimpleAttribute($oDocument, $oChannel, 'description', PageQuery::create()->filterByPageType('events')->findOne()->getDescription());

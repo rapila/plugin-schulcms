@@ -5,7 +5,7 @@
  */
 class Event extends BaseEvent {
 
-	private static $EVENTPAGE = null;
+	private static $EVENTPAGE = false;
 
 	public function setTitle($sTitle) {
 		$sPrefix = $this->getSchoolClass() ? $this->getSchoolClass()->getClassName().' ' : '';
@@ -177,16 +177,20 @@ class Event extends BaseEvent {
 
 	public function getLink($oEventPage = null) {
 		if($oEventPage === null || $oEventPage->getPageType() !== 'events') {
-			if(!self::$EVENTPAGE) {
-				self::$EVENTPAGE = PageQuery::create()->filterByPageType('events')->findOne();
-				if(!self::$EVENTPAGE) {
-					throw new Exception("Error: Your current event page requires a page with type “events”");
-				}
+			$oEventPage = $this->getEventPage();
+			if(!$oEventPage) {
+				throw new Exception("Error: Your current event page requires a page with type “events”");
 			}
-			$oEventPage = self::$EVENTPAGE;
 		}
 		$aDateStart = explode('-', $this->getDateStart('Y-n-j'));
 		return array_merge($oEventPage->getFullPathArray(), array_merge($aDateStart, array($this->getSlug())));
+	}
+	
+	public static function getEventPage() {
+		if(self::$EVENTPAGE === false) {
+			self::$EVENTPAGE = PageQuery::create()->filterByPageType('events')->findOne();
+		}
+		return self::$EVENTPAGE;
 	}
 
 	public function getAdminLink() {

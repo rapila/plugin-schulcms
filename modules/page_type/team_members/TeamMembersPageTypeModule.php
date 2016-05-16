@@ -29,7 +29,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			$this->oTeamMember = $this->oNavigationItem->getTeamMember();
 			return $this->renderDetail();
 		}
-		if(SchoolSiteQuery::currentSchoolSite()->isPortalSite()) {
+		if(class_exists('SchoolSiteQuery') && SchoolSiteQuery::currentSchoolSite()->isPortalSite()) {
 			return $this->renderPortalList();
 		}
 		return $this->renderList();
