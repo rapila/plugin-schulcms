@@ -177,7 +177,7 @@ class Event extends BaseEvent {
 
 	public function getLink($oEventPage = null) {
 		if($oEventPage === null || $oEventPage->getPageType() !== 'events') {
-			$oEventPage = $this->getEventPage();
+			$oEventPage = self::getEventPage();
 			if(!$oEventPage) {
 				throw new Exception("Error: Your current event page requires a page with type “events”");
 			}
