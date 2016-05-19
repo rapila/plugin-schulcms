@@ -54,7 +54,7 @@ class NewsFrontendModule extends DynamicFrontendModule {
 	}
 
 	public static function renderList($aNews, $oItemTemplate, $sContentType = null, $oListTemplate = null) {
-		$oTemplate = $oListTemplate? $oListTemplate :static::template('list');
+		$oTemplate = $oListTemplate ? $oListTemplate : static::template('list');
 		foreach($aNews as $oNews) {
 			$oTemplate->replaceIdentifierMultiple('item', self::renderItem($oNews, clone $oItemTemplate, $sContentType));
 		}
