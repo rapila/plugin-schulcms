@@ -54,8 +54,7 @@ class TeamMemberDetailWidgetModule extends PersistentWidgetModule {
 		$oTemplate->replaceIdentifier('username', $oUser->getUsername());
 		$oEmail = new EMail(StringPeer::getString('team_member.admin_invite'), $oTemplate);
 		try {
-			// $oEmail->addRecipient($sEmail);
-			$oEmail->addRecipient('jm@rapi.la');
+			$oEmail->addRecipient($sEmail);
 		} catch(Exception $e) {
 			throw new LocalizedException('team_member.invite_email.error_message');
 		}
