@@ -58,6 +58,14 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['CountStudents'] = $oSchoolClass->countStudentsByUnitName();
 		$aResult['CountDocuments'] = $oSchoolClass->countClassDocuments();
 		$aResult['CountLinks'] = $oSchoolClass->countClassLinks();
+		$oPredecessorClass = $oSchoolClass->getAncestorClass();
+		if($oPredecessorClass) {
+			$aResult['Predecessor'] = array('id' => $oPredecessorClass->getId(), 'name' => $oPredecessorClass->getClassNameWithYear());
+		}
+		$oSuccessorClass = $oSchoolClass->getSuccessorClass();
+		if($oSuccessorClass) {
+			$aResult['Successor'] = array('id' => $oSuccessorClass->getId(), 'name' => $oSuccessorClass->getClassNameWithYear());
+		}
 		$aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getLink(), 'FrontendManager');
 		return $aResult;
 	}
@@ -74,6 +82,66 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 			}
 			return $sInfo;
 		}
+	}
+	
+	public function migrateData($bForce = false) {
+		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
+		if(!$oSchoolClass) {
+			throw new Exception('School class does not exist');
+		}
+		$oPredecessorClass = $oSchoolClass->getAncestorClass();
+		if(!$oPredecessorClass) {
+			throw new LocalizedException('school_class.no_predecessor');
+		}
+
+		// Migrate portrait
+		if(($bForce || !$oSchoolClass->getHasClassPortrait()) && $oPredecessorClass->getHasClassPortrait()) {
+			$oClassPortrait = $oPredecessorClass->getDocumentRelatedByClassPortraitId()->copy();
+			$oClassPortrait->save();
+			$oSchoolClass->setClassPortraitId($oClassPortrait->getId());
+		}
+
+		// Migrate schedules
+		if(($bForce || !$oSchoolClass->getHasClassSchedule()) && $oPredecessorClass->getHasClassSchedule()) {
+			$oClassSchedule = $oPredecessorClass->getDocumentRelatedByClassScheduleId()->copy();
+			$oClassSchedule->save();
+			$oSchoolClass->setClassScheduleId($oClassSchedule->getId());
+		}
+		if(($bForce || !$oSchoolClass->getHasWeekSchedule()) && $oPredecessorClass->getHasWeekSchedule()) {
+			$oWeekSchedule = $oPredecessorClass->getDocumentRelatedByWeekScheduleId()->copy();
+			$oWeekSchedule->save();
+			$oSchoolClass->setWeekScheduleId($oWeekSchedule->getId());
+		}
+
+		// Migrate documents
+		foreach($oPredecessorClass->getClassDocuments() as $oClassDocument) {
+			$oDocument = $oClassDocument->getDocument();
+			if(!$oDocument) {
+				continue;
+			}
+			$oDocument = $oDocument->copy();
+			$oDocument->save();
+			$oClassDocument = new ClassDocument();
+			$oClassDocument->setSchoolClass($oSchoolClass);
+			$oClassDocument->setDocument($oDocument);
+			$oClassDocument->save();
+		}
+
+		// Migrate links
+		foreach($oPredecessorClass->getClassLinks() as $oClassLink) {
+			$oLink = $oClassLink->getLink();
+			if(!$oLink) {
+				continue;
+			}
+			$oLink = $oLink->copy();
+			$oLink->save();
+			$oClassLink = new ClassLink();
+			$oClassLink->setSchoolClass($oSchoolClass);
+			$oClassLink->setLink($oLink);
+			$oClassLink->save();
+		}
+
+		return $oSchoolClass->save();
 	}
 
 	public function countEvents($iSchoolClassId) {
@@ -112,15 +180,15 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 
 	public function saveData($aData) {
 		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
-		if($aData['class_portrait_id'] == null && $oSchoolClass->getDocumentRelatedByClassPortraitId()) {
+		if($aData['class_portrait_id'] == null && $oSchoolClass->getHasClassPortrait()) {
 			$oSchoolClass->getDocumentRelatedByClassPortraitId()->delete();
 		}
 		$oSchoolClass->setClassPortraitId($aData['class_portrait_id']);
-		if($aData['class_schedule_id'] == null && $oSchoolClass->getDocumentRelatedByClassScheduleId()) {
+		if($aData['class_schedule_id'] == null && $oSchoolClass->getHasClassSchedule()) {
 			$oSchoolClass->getDocumentRelatedByClassScheduleId()->delete();
 		}
 		$oSchoolClass->setClassScheduleId($aData['class_schedule_id']);
-		if($aData['week_schedule_id'] == null && $oSchoolClass->getDocumentRelatedByWeekScheduleId()) {
+		if($aData['week_schedule_id'] == null && $oSchoolClass->getHasWeekSchedule()) {
 			$oSchoolClass->getDocumentRelatedByWeekScheduleId()->delete();
 		}
 		$oSchoolClass->setWeekScheduleId($aData['week_schedule_id']);

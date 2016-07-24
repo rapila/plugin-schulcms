@@ -290,6 +290,10 @@ class SchoolClass extends BaseSchoolClass {
 	public function getAncestorClass() {
 		return $this->getSchoolClassRelatedByAncestorClassId();
 	}
+	
+	public function getSuccessorClass() {
+		return SchoolClassQuery::create()->findOneByAncestorClassId($this->getId());
+	}
 
 	public function getLinkedClassIds() {
 		$aIds = array();

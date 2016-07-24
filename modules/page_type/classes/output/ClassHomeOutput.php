@@ -53,6 +53,7 @@ class ClassHomeOutput extends ClassOutput {
 	}
 	
 	private function getLinkTagForLinkedClass($oClass) {
+		// Hack to find correct parent page, since icampus passes ancestor_id even if there is no ancestor
 		if(!$oClass) {
 			return null;
 		}
@@ -70,13 +71,12 @@ class ClassHomeOutput extends ClassOutput {
 
 		// Display ancestor class link
 		if($this->oClass->getAncestorClassId() != null) {
-			$oAncestorClass = SchoolClassQuery::create()->findPk($this->oClass->getAncestorClassId());
+			$oAncestorClass = $this->oClass->getAncestorClass();
 			$oTemplate->replaceIdentifier('ancestor_class_link', $this->getLinkTagForLinkedClass($oAncestorClass));
 		}
 		// Display successor class link
 		if(!$this->oClass->isCurrent()) {
-			// Hack to find correct parent page, since icampus passes ancestor_id even if there is no ancestor
-			$oSuccessorClass = SchoolClassQuery::create()->findOneByAncestorClassId($this->oClass->getId());
+			$oSuccessorClass = $this->oClass->getSuccessorClass();
 			$oTemplate->replaceIdentifier('successor_class_link', $this->getLinkTagForLinkedClass($oSuccessorClass));
 		}
 
