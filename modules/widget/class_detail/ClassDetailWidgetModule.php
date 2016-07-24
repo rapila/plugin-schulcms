@@ -58,6 +58,14 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['CountStudents'] = $oSchoolClass->countStudentsByUnitName();
 		$aResult['CountDocuments'] = $oSchoolClass->countClassDocuments();
 		$aResult['CountLinks'] = $oSchoolClass->countClassLinks();
+		$oPredecessorClass = $oSchoolClass->getAncestorClass();
+		if($oPredecessorClass) {
+			$aResult['Predecessor'] = array('id' => $oPredecessorClass->getId(), 'name' => $oPredecessorClass->getClassNameWithYear());
+		}
+		$oSuccessorClass = $oSchoolClass->getSuccessorClass();
+		if($oSuccessorClass) {
+			$aResult['Successor'] = array('id' => $oSuccessorClass->getId(), 'name' => $oSuccessorClass->getClassNameWithYear());
+		}
 		$aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getLink(), 'FrontendManager');
 		return $aResult;
 	}
@@ -112,15 +120,15 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 
 	public function saveData($aData) {
 		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
-		if($aData['class_portrait_id'] == null && $oSchoolClass->getDocumentRelatedByClassPortraitId()) {
+		if($aData['class_portrait_id'] == null && $oSchoolClass->getHasClassPortrait()) {
 			$oSchoolClass->getDocumentRelatedByClassPortraitId()->delete();
 		}
 		$oSchoolClass->setClassPortraitId($aData['class_portrait_id']);
-		if($aData['class_schedule_id'] == null && $oSchoolClass->getDocumentRelatedByClassScheduleId()) {
+		if($aData['class_schedule_id'] == null && $oSchoolClass->getHasClassSchedule()) {
 			$oSchoolClass->getDocumentRelatedByClassScheduleId()->delete();
 		}
 		$oSchoolClass->setClassScheduleId($aData['class_schedule_id']);
-		if($aData['week_schedule_id'] == null && $oSchoolClass->getDocumentRelatedByWeekScheduleId()) {
+		if($aData['week_schedule_id'] == null && $oSchoolClass->getHasWeekSchedule()) {
 			$oSchoolClass->getDocumentRelatedByWeekScheduleId()->delete();
 		}
 		$oSchoolClass->setWeekScheduleId($aData['week_schedule_id']);

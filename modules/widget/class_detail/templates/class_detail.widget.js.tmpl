@@ -10,6 +10,9 @@ Widget.types.class_detail = {
 		this.add_event_button = this._element.find('.add_entry.add_event').click(this.create_event_detail.bind(this));
 		this.add_document_button = this._element.find('.add_entry.add_document').click(this.create_document_detail.bind(this));
 		this.add_link_button = this._element.find('.add_entry.add_link').click(this.create_link_detail.bind(this));
+
+		// FIXME: Make successor/predecessor class names clickable, open new detail widgets…
+
 		this.news_list = null;
 		this.event_list = null;
 		this.document_list = null;
@@ -191,6 +194,16 @@ Widget.types.class_detail = {
 			this._element.find("span.links_count").text(class_data.CountLinks);
 			this._element.find("span.count_students").text(class_data.CountStudents);
 			this._element.find("span.detail_id").text(class_data.Id);
+
+			// Show/hide predecessor/successor info
+			var predecessor = this._element.find("span.predecessor").parent().toggle(!!class_data.Predecessor).end();
+			if(class_data.Predecessor) {
+				predecessor.data({id: class_data.Predecessor.id}).text(class_data.Predecessor.name);
+			}
+			var successor = this._element.find("span.successor").parent().toggle(!!class_data.Successor).end();
+			if(class_data.Successor) {
+				successor.data({id: class_data.Successor.id}).text(class_data.Successor.name);
+			}
 
 			this.class_portrait_id = class_data.ClassPortraitId;
 			this.class_schedule_id = class_data.ClassScheduleId;
