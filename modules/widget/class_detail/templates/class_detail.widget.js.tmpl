@@ -195,6 +195,9 @@ Widget.types.class_detail = {
 			this._element.find("span.count_students").text(class_data.CountStudents);
 			this._element.find("span.detail_id").text(class_data.Id);
 
+			// Show/hide migration button
+			this.detail_widget._element.find('button.migrate').toggle(!!class_data.Predecessor);
+
 			// Show/hide predecessor/successor info
 			var predecessor = this._element.find("span.predecessor").parent().toggle(!!class_data.Predecessor).end();
 			if(class_data.Predecessor) {
@@ -425,7 +428,21 @@ Widget.types.class_detail = {
 	settings: {
 		detail_widget: {
 			title: "{{writeString=school_class.create}}",
-			width: 700
+			width: 700,
+			additionalButtons: [{
+				text: '{{writeString=school_class.migrate}}',
+				'class': 'migrate',
+				click: function(event, detail_widget, class_detail) {
+					detail_widget.set_is_loading(true);
+					class_detail.migrateData(!!event.altKey, function(result) {
+						// Reload widget with new data
+						detail_widget.set_is_loading(false);
+						if(!arguments[1]) {
+							class_detail.fill_data();
+						}
+					});
+				}
+			}]
 		},
 		accordion_active: 0
 	}

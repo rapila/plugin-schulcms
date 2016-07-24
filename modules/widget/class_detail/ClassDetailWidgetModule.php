@@ -83,6 +83,63 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 			return $sInfo;
 		}
 	}
+	
+	public function migrateData($bForce = false) {
+		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
+		if(!$oSchoolClass) {
+			throw new Exception('School class does not exist');
+		}
+		$oPredecessorClass = $oSchoolClass->getAncestorClass();
+		if(!$oPredecessorClass) {
+			throw new LocalizedException('school_class.no_predecessor');
+		}
+		ErrorHandler::log('current', $oSchoolClass->getHasClassPortrait(), $oSchoolClass->getHasClassSchedule(), $oSchoolClass->getHasWeekSchedule());
+		ErrorHandler::log('predecessor', $oPredecessorClass->getHasClassPortrait(), $oPredecessorClass->getHasClassSchedule(), $oPredecessorClass->getHasWeekSchedule());
+		// Migrate portrait
+		if(($bForce || !$oSchoolClass->getHasClassPortrait()) && $oPredecessorClass->getHasClassPortrait()) {
+			$oClassPortrait = $oPredecessorClass->getDocumentRelatedByClassPortraitId()->copy();
+			$oClassPortrait->save();
+			$oSchoolClass->setClassPortraitId($oClassPortrait->getId());
+		}
+		// Migrate schedules
+		if(($bForce || !$oSchoolClass->getHasClassSchedule()) && $oPredecessorClass->getHasClassSchedule()) {
+			$oClassSchedule = $oPredecessorClass->getDocumentRelatedByClassScheduleId()->copy();
+			$oClassSchedule->save();
+			$oSchoolClass->setClassScheduleId($oClassSchedule->getId());
+		}
+		if(($bForce || !$oSchoolClass->getHasWeekSchedule()) && $oPredecessorClass->getHasWeekSchedule()) {
+			$oWeekSchedule = $oPredecessorClass->getDocumentRelatedByWeekScheduleId()->copy();
+			$oWeekSchedule->save();
+			$oSchoolClass->setWeekScheduleId($oWeekSchedule->getId());
+		}
+		// Migrate documents
+		foreach($oPredecessorClass->getClassDocuments() as $oClassDocument) {
+			$oDocument = $oClassDocument->getDocument();
+			if(!$oDocument) {
+				continue;
+			}
+			$oDocument = $oDocument->copy();
+			$oDocument->save();
+			$oClassDocument = new ClassDocument();
+			$oClassDocument->setSchoolClass($oSchoolClass);
+			$oClassDocument->setDocument($oDocument);
+			$oClassDocument->save();
+		}
+		// Migrate links
+		foreach($oPredecessorClass->getClassLinks() as $oClassLink) {
+			$oLink = $oClassLink->getLink();
+			if(!$oLink) {
+				continue;
+			}
+			$oLink = $oLink->copy();
+			$oLink->save();
+			$oClassLink = new ClassLink();
+			$oClassLink->setSchoolClass($oSchoolClass);
+			$oClassLink->setLink($oLink);
+			$oClassLink->save();
+		}
+		return $oSchoolClass->save();
+	}
 
 	public function countEvents($iSchoolClassId) {
 		return EventQuery::create()->filterBySchoolClassId($iSchoolClassId)->count();
