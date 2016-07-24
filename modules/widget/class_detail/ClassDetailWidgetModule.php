@@ -93,14 +93,14 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		if(!$oPredecessorClass) {
 			throw new LocalizedException('school_class.no_predecessor');
 		}
-		ErrorHandler::log('current', $oSchoolClass->getHasClassPortrait(), $oSchoolClass->getHasClassSchedule(), $oSchoolClass->getHasWeekSchedule());
-		ErrorHandler::log('predecessor', $oPredecessorClass->getHasClassPortrait(), $oPredecessorClass->getHasClassSchedule(), $oPredecessorClass->getHasWeekSchedule());
+
 		// Migrate portrait
 		if(($bForce || !$oSchoolClass->getHasClassPortrait()) && $oPredecessorClass->getHasClassPortrait()) {
 			$oClassPortrait = $oPredecessorClass->getDocumentRelatedByClassPortraitId()->copy();
 			$oClassPortrait->save();
 			$oSchoolClass->setClassPortraitId($oClassPortrait->getId());
 		}
+
 		// Migrate schedules
 		if(($bForce || !$oSchoolClass->getHasClassSchedule()) && $oPredecessorClass->getHasClassSchedule()) {
 			$oClassSchedule = $oPredecessorClass->getDocumentRelatedByClassScheduleId()->copy();
@@ -112,6 +112,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 			$oWeekSchedule->save();
 			$oSchoolClass->setWeekScheduleId($oWeekSchedule->getId());
 		}
+
 		// Migrate documents
 		foreach($oPredecessorClass->getClassDocuments() as $oClassDocument) {
 			$oDocument = $oClassDocument->getDocument();
@@ -125,6 +126,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 			$oClassDocument->setDocument($oDocument);
 			$oClassDocument->save();
 		}
+
 		// Migrate links
 		foreach($oPredecessorClass->getClassLinks() as $oClassLink) {
 			$oLink = $oClassLink->getLink();
@@ -138,6 +140,7 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 			$oClassLink->setLink($oLink);
 			$oClassLink->save();
 		}
+
 		return $oSchoolClass->save();
 	}
 
