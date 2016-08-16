@@ -114,6 +114,10 @@
  * @method SchoolClassQuery rightJoinSchoolClassRelatedById($relationAlias = null) Adds a RIGHT JOIN clause to the query using the SchoolClassRelatedById relation
  * @method SchoolClassQuery innerJoinSchoolClassRelatedById($relationAlias = null) Adds a INNER JOIN clause to the query using the SchoolClassRelatedById relation
  *
+ * @method SchoolClassQuery leftJoinSchoolClassUnitOriginalID($relationAlias = null) Adds a LEFT JOIN clause to the query using the SchoolClassUnitOriginalID relation
+ * @method SchoolClassQuery rightJoinSchoolClassUnitOriginalID($relationAlias = null) Adds a RIGHT JOIN clause to the query using the SchoolClassUnitOriginalID relation
+ * @method SchoolClassQuery innerJoinSchoolClassUnitOriginalID($relationAlias = null) Adds a INNER JOIN clause to the query using the SchoolClassUnitOriginalID relation
+ *
  * @method SchoolClassQuery leftJoinClassLink($relationAlias = null) Adds a LEFT JOIN clause to the query using the ClassLink relation
  * @method SchoolClassQuery rightJoinClassLink($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ClassLink relation
  * @method SchoolClassQuery innerJoinClassLink($relationAlias = null) Adds a INNER JOIN clause to the query using the ClassLink relation
@@ -2320,6 +2324,80 @@ abstract class BaseSchoolClassQuery extends ModelCriteria
         return $this
             ->joinSchoolClassRelatedById($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'SchoolClassRelatedById', 'SchoolClassQuery');
+    }
+
+    /**
+     * Filter the query by a related SchoolClassUnitOriginalID object
+     *
+     * @param   SchoolClassUnitOriginalID|PropelObjectCollection $schoolClassUnitOriginalID  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SchoolClassQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterBySchoolClassUnitOriginalID($schoolClassUnitOriginalID, $comparison = null)
+    {
+        if ($schoolClassUnitOriginalID instanceof SchoolClassUnitOriginalID) {
+            return $this
+                ->addUsingAlias(SchoolClassPeer::ID, $schoolClassUnitOriginalID->getSchoolClassId(), $comparison);
+        } elseif ($schoolClassUnitOriginalID instanceof PropelObjectCollection) {
+            return $this
+                ->useSchoolClassUnitOriginalIDQuery()
+                ->filterByPrimaryKeys($schoolClassUnitOriginalID->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterBySchoolClassUnitOriginalID() only accepts arguments of type SchoolClassUnitOriginalID or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the SchoolClassUnitOriginalID relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SchoolClassQuery The current query, for fluid interface
+     */
+    public function joinSchoolClassUnitOriginalID($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('SchoolClassUnitOriginalID');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'SchoolClassUnitOriginalID');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the SchoolClassUnitOriginalID relation SchoolClassUnitOriginalID object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   SchoolClassUnitOriginalIDQuery A secondary query class using the current class as primary query
+     */
+    public function useSchoolClassUnitOriginalIDQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinSchoolClassUnitOriginalID($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'SchoolClassUnitOriginalID', 'SchoolClassUnitOriginalIDQuery');
     }
 
     /**

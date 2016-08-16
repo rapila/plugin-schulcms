@@ -244,6 +244,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     protected $collSchoolClasssRelatedByIdPartial;
 
     /**
+     * @var        PropelObjectCollection|SchoolClassUnitOriginalID[] Collection to store aggregation of SchoolClassUnitOriginalID objects.
+     */
+    protected $collSchoolClassUnitOriginalIDs;
+    protected $collSchoolClassUnitOriginalIDsPartial;
+
+    /**
      * @var        PropelObjectCollection|ClassLink[] Collection to store aggregation of ClassLink objects.
      */
     protected $collClassLinks;
@@ -316,6 +322,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $schoolClasssRelatedByIdScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $schoolClassUnitOriginalIDsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1380,6 +1392,8 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
 
             $this->collSchoolClasssRelatedById = null;
 
+            $this->collSchoolClassUnitOriginalIDs = null;
+
             $this->collClassLinks = null;
 
             $this->collClassDocuments = null;
@@ -1704,6 +1718,23 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
 
             if ($this->collSchoolClasssRelatedById !== null) {
                 foreach ($this->collSchoolClasssRelatedById as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->schoolClassUnitOriginalIDsScheduledForDeletion !== null) {
+                if (!$this->schoolClassUnitOriginalIDsScheduledForDeletion->isEmpty()) {
+                    SchoolClassUnitOriginalIDQuery::create()
+                        ->filterByPrimaryKeys($this->schoolClassUnitOriginalIDsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->schoolClassUnitOriginalIDsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collSchoolClassUnitOriginalIDs !== null) {
+                foreach ($this->collSchoolClassUnitOriginalIDs as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -2152,6 +2183,14 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collSchoolClassUnitOriginalIDs !== null) {
+                    foreach ($this->collSchoolClassUnitOriginalIDs as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collClassLinks !== null) {
                     foreach ($this->collClassLinks as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -2388,6 +2427,9 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             }
             if (null !== $this->collSchoolClasssRelatedById) {
                 $result['SchoolClasssRelatedById'] = $this->collSchoolClasssRelatedById->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collSchoolClassUnitOriginalIDs) {
+                $result['SchoolClassUnitOriginalIDs'] = $this->collSchoolClassUnitOriginalIDs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collClassLinks) {
                 $result['ClassLinks'] = $this->collClassLinks->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2705,6 +2747,12 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             foreach ($this->getSchoolClasssRelatedById() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addSchoolClassRelatedById($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getSchoolClassUnitOriginalIDs() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addSchoolClassUnitOriginalID($relObj->copy($deepCopy));
                 }
             }
 
@@ -3275,6 +3323,9 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
         }
         if ('SchoolClassRelatedById' == $relationName) {
             $this->initSchoolClasssRelatedById();
+        }
+        if ('SchoolClassUnitOriginalID' == $relationName) {
+            $this->initSchoolClassUnitOriginalIDs();
         }
         if ('ClassLink' == $relationName) {
             $this->initClassLinks();
@@ -4878,6 +4929,284 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collSchoolClassUnitOriginalIDs collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return SchoolClass The current object (for fluent API support)
+     * @see        addSchoolClassUnitOriginalIDs()
+     */
+    public function clearSchoolClassUnitOriginalIDs()
+    {
+        $this->collSchoolClassUnitOriginalIDs = null; // important to set this to null since that means it is uninitialized
+        $this->collSchoolClassUnitOriginalIDsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collSchoolClassUnitOriginalIDs collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialSchoolClassUnitOriginalIDs($v = true)
+    {
+        $this->collSchoolClassUnitOriginalIDsPartial = $v;
+    }
+
+    /**
+     * Initializes the collSchoolClassUnitOriginalIDs collection.
+     *
+     * By default this just sets the collSchoolClassUnitOriginalIDs collection to an empty array (like clearcollSchoolClassUnitOriginalIDs());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initSchoolClassUnitOriginalIDs($overrideExisting = true)
+    {
+        if (null !== $this->collSchoolClassUnitOriginalIDs && !$overrideExisting) {
+            return;
+        }
+        $this->collSchoolClassUnitOriginalIDs = new PropelObjectCollection();
+        $this->collSchoolClassUnitOriginalIDs->setModel('SchoolClassUnitOriginalID');
+    }
+
+    /**
+     * Gets an array of SchoolClassUnitOriginalID objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this SchoolClass is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|SchoolClassUnitOriginalID[] List of SchoolClassUnitOriginalID objects
+     * @throws PropelException
+     */
+    public function getSchoolClassUnitOriginalIDs($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collSchoolClassUnitOriginalIDsPartial && !$this->isNew();
+        if (null === $this->collSchoolClassUnitOriginalIDs || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collSchoolClassUnitOriginalIDs) {
+                // return empty collection
+                $this->initSchoolClassUnitOriginalIDs();
+            } else {
+                $collSchoolClassUnitOriginalIDs = SchoolClassUnitOriginalIDQuery::create(null, $criteria)
+                    ->filterBySchoolClass($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collSchoolClassUnitOriginalIDsPartial && count($collSchoolClassUnitOriginalIDs)) {
+                      $this->initSchoolClassUnitOriginalIDs(false);
+
+                      foreach ($collSchoolClassUnitOriginalIDs as $obj) {
+                        if (false == $this->collSchoolClassUnitOriginalIDs->contains($obj)) {
+                          $this->collSchoolClassUnitOriginalIDs->append($obj);
+                        }
+                      }
+
+                      $this->collSchoolClassUnitOriginalIDsPartial = true;
+                    }
+
+                    $collSchoolClassUnitOriginalIDs->getInternalIterator()->rewind();
+
+                    return $collSchoolClassUnitOriginalIDs;
+                }
+
+                if ($partial && $this->collSchoolClassUnitOriginalIDs) {
+                    foreach ($this->collSchoolClassUnitOriginalIDs as $obj) {
+                        if ($obj->isNew()) {
+                            $collSchoolClassUnitOriginalIDs[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collSchoolClassUnitOriginalIDs = $collSchoolClassUnitOriginalIDs;
+                $this->collSchoolClassUnitOriginalIDsPartial = false;
+            }
+        }
+
+        return $this->collSchoolClassUnitOriginalIDs;
+    }
+
+    /**
+     * Sets a collection of SchoolClassUnitOriginalID objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $schoolClassUnitOriginalIDs A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return SchoolClass The current object (for fluent API support)
+     */
+    public function setSchoolClassUnitOriginalIDs(PropelCollection $schoolClassUnitOriginalIDs, PropelPDO $con = null)
+    {
+        $schoolClassUnitOriginalIDsToDelete = $this->getSchoolClassUnitOriginalIDs(new Criteria(), $con)->diff($schoolClassUnitOriginalIDs);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->schoolClassUnitOriginalIDsScheduledForDeletion = clone $schoolClassUnitOriginalIDsToDelete;
+
+        foreach ($schoolClassUnitOriginalIDsToDelete as $schoolClassUnitOriginalIDRemoved) {
+            $schoolClassUnitOriginalIDRemoved->setSchoolClass(null);
+        }
+
+        $this->collSchoolClassUnitOriginalIDs = null;
+        foreach ($schoolClassUnitOriginalIDs as $schoolClassUnitOriginalID) {
+            $this->addSchoolClassUnitOriginalID($schoolClassUnitOriginalID);
+        }
+
+        $this->collSchoolClassUnitOriginalIDs = $schoolClassUnitOriginalIDs;
+        $this->collSchoolClassUnitOriginalIDsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related SchoolClassUnitOriginalID objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related SchoolClassUnitOriginalID objects.
+     * @throws PropelException
+     */
+    public function countSchoolClassUnitOriginalIDs(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collSchoolClassUnitOriginalIDsPartial && !$this->isNew();
+        if (null === $this->collSchoolClassUnitOriginalIDs || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collSchoolClassUnitOriginalIDs) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getSchoolClassUnitOriginalIDs());
+            }
+            $query = SchoolClassUnitOriginalIDQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySchoolClass($this)
+                ->count($con);
+        }
+
+        return count($this->collSchoolClassUnitOriginalIDs);
+    }
+
+    /**
+     * Method called to associate a SchoolClassUnitOriginalID object to this object
+     * through the SchoolClassUnitOriginalID foreign key attribute.
+     *
+     * @param    SchoolClassUnitOriginalID $l SchoolClassUnitOriginalID
+     * @return SchoolClass The current object (for fluent API support)
+     */
+    public function addSchoolClassUnitOriginalID(SchoolClassUnitOriginalID $l)
+    {
+        if ($this->collSchoolClassUnitOriginalIDs === null) {
+            $this->initSchoolClassUnitOriginalIDs();
+            $this->collSchoolClassUnitOriginalIDsPartial = true;
+        }
+
+        if (!in_array($l, $this->collSchoolClassUnitOriginalIDs->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddSchoolClassUnitOriginalID($l);
+
+            if ($this->schoolClassUnitOriginalIDsScheduledForDeletion and $this->schoolClassUnitOriginalIDsScheduledForDeletion->contains($l)) {
+                $this->schoolClassUnitOriginalIDsScheduledForDeletion->remove($this->schoolClassUnitOriginalIDsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	SchoolClassUnitOriginalID $schoolClassUnitOriginalID The schoolClassUnitOriginalID object to add.
+     */
+    protected function doAddSchoolClassUnitOriginalID($schoolClassUnitOriginalID)
+    {
+        $this->collSchoolClassUnitOriginalIDs[]= $schoolClassUnitOriginalID;
+        $schoolClassUnitOriginalID->setSchoolClass($this);
+    }
+
+    /**
+     * @param	SchoolClassUnitOriginalID $schoolClassUnitOriginalID The schoolClassUnitOriginalID object to remove.
+     * @return SchoolClass The current object (for fluent API support)
+     */
+    public function removeSchoolClassUnitOriginalID($schoolClassUnitOriginalID)
+    {
+        if ($this->getSchoolClassUnitOriginalIDs()->contains($schoolClassUnitOriginalID)) {
+            $this->collSchoolClassUnitOriginalIDs->remove($this->collSchoolClassUnitOriginalIDs->search($schoolClassUnitOriginalID));
+            if (null === $this->schoolClassUnitOriginalIDsScheduledForDeletion) {
+                $this->schoolClassUnitOriginalIDsScheduledForDeletion = clone $this->collSchoolClassUnitOriginalIDs;
+                $this->schoolClassUnitOriginalIDsScheduledForDeletion->clear();
+            }
+            $this->schoolClassUnitOriginalIDsScheduledForDeletion[]= clone $schoolClassUnitOriginalID;
+            $schoolClassUnitOriginalID->setSchoolClass(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this SchoolClass is new, it will return
+     * an empty collection; or if this SchoolClass has previously
+     * been saved, it will retrieve related SchoolClassUnitOriginalIDs from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in SchoolClass.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|SchoolClassUnitOriginalID[] List of SchoolClassUnitOriginalID objects
+     */
+    public function getSchoolClassUnitOriginalIDsJoinUserRelatedByCreatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = SchoolClassUnitOriginalIDQuery::create(null, $criteria);
+        $query->joinWith('UserRelatedByCreatedBy', $join_behavior);
+
+        return $this->getSchoolClassUnitOriginalIDs($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this SchoolClass is new, it will return
+     * an empty collection; or if this SchoolClass has previously
+     * been saved, it will retrieve related SchoolClassUnitOriginalIDs from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in SchoolClass.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|SchoolClassUnitOriginalID[] List of SchoolClassUnitOriginalID objects
+     */
+    public function getSchoolClassUnitOriginalIDsJoinUserRelatedByUpdatedBy($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = SchoolClassUnitOriginalIDQuery::create(null, $criteria);
+        $query->joinWith('UserRelatedByUpdatedBy', $join_behavior);
+
+        return $this->getSchoolClassUnitOriginalIDs($query, $con);
+    }
+
+    /**
      * Clears out the collClassLinks collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -6184,6 +6513,11 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collSchoolClassUnitOriginalIDs) {
+                foreach ($this->collSchoolClassUnitOriginalIDs as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collClassLinks) {
                 foreach ($this->collClassLinks as $o) {
                     $o->clearAllReferences($deep);
@@ -6255,6 +6589,10 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
             $this->collSchoolClasssRelatedById->clearIterator();
         }
         $this->collSchoolClasssRelatedById = null;
+        if ($this->collSchoolClassUnitOriginalIDs instanceof PropelCollection) {
+            $this->collSchoolClassUnitOriginalIDs->clearIterator();
+        }
+        $this->collSchoolClassUnitOriginalIDs = null;
         if ($this->collClassLinks instanceof PropelCollection) {
             $this->collClassLinks->clearIterator();
         }
