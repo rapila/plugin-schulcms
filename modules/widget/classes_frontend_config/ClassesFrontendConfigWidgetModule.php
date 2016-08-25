@@ -9,11 +9,11 @@ class ClassesFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	}
 
 	public function getDisplayModes() {
-	  $aResult = array();
+		$aResult = array();
 	  foreach(ClassesFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
-	    $aResult[$sDisplayMode] = StringPeer::getString('classes.display_mode.'.$sDisplayMode, null, $sDisplayMode);
-	  }
-	  $aClassTypes = SchoolClassQuery::create()->filterByHasClassesWithStudents()->distinct()->orderByClassType()->select(array('ClassType'))->find();
+			$aResult[$sDisplayMode] = StringPeer::getString('classes.display_mode.'.$sDisplayMode, null, $sDisplayMode);
+		}
+		$aClassTypes = SchoolClassQuery::create()->filterByHasClassesWithStudents()->distinct()->orderByClassType()->select(array('ClassType'))->find();
 		if(count($aClassTypes) > 0) {
 			foreach($aClassTypes as $sClassType) {
 				$aResult[$sClassType] = $sClassType;
