@@ -9,10 +9,16 @@ Widget.types.page_type.types.classes = {
 		this.page_type = page_type;
 		this.container.append(this.form);
 
+		this.current_config = null;
 		this.display_type = this.form.find('select[name=display_type]');
 		this.class_type = this.form.find('select[name=class_type]');
-		this.update_display_type_input();
-		this.update_class_type_input();
+		this.include_address = this.form.find('input[name=include_address]');
+
+		this.load_config(function(config) {
+			this.update_display_type_input();
+			this.update_class_type_input();
+			this.include_address.prop('checked', config.include_address);
+		});
 	},
 
 	will_save: function() {
@@ -23,6 +29,17 @@ Widget.types.page_type.types.classes = {
 			}
 		});
 	},
+	
+	load_config: function(callback) {
+		var _this = this;
+		if(_this.current_config) {
+			return callback.call(_this, this.current_config);
+		}
+		_this.page_type.methods.config(function(config) {
+			_this.current_config = config;
+			callback.call(_this, config);
+		});
+	},
 
 	update_display_type_input: function() {
 		var _this = this;
@@ -31,7 +48,7 @@ Widget.types.page_type.types.classes = {
 			jQuery.each(display_types, function(i, data) {
 				option.clone().text(data.value).attr('value', data.key).appendTo(_this.display_type);
 			});
-			_this.page_type.methods.config(function(result) {
+			_this.load_config(function(result) {
 				_this.display_type.val(result.display_type);
 			});
 		});
@@ -45,7 +62,7 @@ Widget.types.page_type.types.classes = {
 				option.clone().text(data.value).attr('value', data.key).appendTo(_this.class_type);
 			});
 
-			_this.page_type.methods.config(function(result) {
+			_this.load_config(function(result) {
 				_this.class_type.val(result.class_type);
 			});
 		});

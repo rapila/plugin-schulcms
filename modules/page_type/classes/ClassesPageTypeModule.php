@@ -41,11 +41,13 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 
 	protected $sDisplayType;
 	protected $sClassType;
+	protected $bIncludeAddress;
 
 	public function __construct(Page $oPage = null, NavigationItem $oNavigationItem = null) {
 		parent::__construct($oPage, $oNavigationItem);
 		$this->sDisplayType = $this->oPage->getPagePropertyValue('classes:display_type');
 		$this->sClassType = $this->oPage->getPagePropertyValue('classes:class_type');
+		$this->bIncludeAddress = BooleanParser::booleanForString($this->oPage->getPagePropertyValue('classes:include_address'));
 	}
 
 	public function display(Template $oTemplate, $bIsPreview = false) {
@@ -93,8 +95,10 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 	public function saveClassesPageConfiguration($aData) {
 		$this->sDisplayType = $aData['display_type'];
 		$this->sClassType = $aData['class_type'];
+		$this->bIncludeAddress= $aData['include_address'];
 		$this->oPage->updatePageProperty('classes:display_type', $this->sDisplayType);
 		$this->oPage->updatePageProperty('classes:class_type', $this->sClassType);
+		$this->oPage->updatePageProperty('classes:include_address', BooleanParser::stringForBoolean($this->bIncludeAddress));
 	}
 
 	public function listDisplayTypes() {
@@ -118,6 +122,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 	public function config() {
 		$aResult['display_type'] = $this->getDisplayType();
 		$aResult['class_type'] = $this->getClassType();
+		$aResult['include_address'] = $this->includesAddress();
 		return $aResult;
 	}
 
@@ -131,6 +136,10 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 
 	public function getClassType() {
 		return $this->sClassType ? $this->sClassType : 'standard';
+	}
+
+	public function includesAddress() {
+		return $this->bIncludeAddress || false;
 	}
 
 
