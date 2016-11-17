@@ -1,6 +1,6 @@
-<h1>{{title}}</h1>
-	<table class="classes list">
-		<tbody>
-			{{items}}
-		</tbody>
-	</table>
+{{includeTemplate=subject_filter}}
+<table class="classes list">
+	<tbody data-wok-htmlSource="/subjectData/true" data-wok-htmlFiltered="subjectData.filtered">
+		{{items}}
+	</tbody>
+</table>
