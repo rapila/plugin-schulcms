@@ -53,7 +53,7 @@ class SubjectListOutput extends ClassOutput {
 		// }
 		return $oItemTemplate;
 	}
-	
+
 	private function subjectCategoryMapping() {
 		$aCategories = Settings::getSetting('subject-groups', null, array(), 'schulcms');
 		$aSubjectToCategoryMapping = array();

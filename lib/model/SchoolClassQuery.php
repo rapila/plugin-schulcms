@@ -7,7 +7,7 @@
 class SchoolClassQuery extends BaseSchoolClassQuery {
 
 	public function filterByIsCurrent($bCurrent = true) {
-		return $this->filterByYear(SchoolPeer::getCurrentYear(), $bCurrent ? Criteria::EQUAL : Criteria::NOT_EQUAL);
+		return $this->filterBySchoolYear(true, $bCurrent);
 	}
 
 	public function hasStudents() {
@@ -20,11 +20,11 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 		}
 		return $this->useClassTeacherQuery()->filterByIsClassTeacher(true)->endUse();
 	}
-	
+
 	public function filterByUnitFromClass($oClass) {
 		return $this->filterByYear($oClass->getYear())->filterByUnitName($oClass->getUnitName());
 	}
-	
+
 	public function studentCount() {
 		return $this->select('students')->withColumn('SUM(student_count)', 'students')->findOne();
 	}
@@ -49,9 +49,13 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 	public function excludeSubjectClasses() {
 		return $this->filterBySubjectId(null, Criteria::ISNULL);
 	}
-	
+
 	public function filterByDisplayConditionForNonSubjectClasses($aClassTypes = null, $mYear = true) {
-		$this->filterByClassTypeAndYear($aClassTypes, $mYear)->filterBySubjectId(null, Criteria::ISNULL);
+		return $this->filterByDisplayCondition($aClassTypes, $mYear)->filterBySubjectId(null, Criteria::ISNULL);
+	}
+
+	public function filterByDisplayCondition($aClassTypes = null, $mYear = true) {
+		$this->filterByClassTypeAndYear($aClassTypes, $mYear);
 
 		$oSchool = SchoolPeer::getSchool();
 		if($mYear === true || $mYear === $oSchool->getCurrentYear()) {
@@ -73,23 +77,21 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 	}
 
 	public function filterBySchoolClassType($sClassType = null) {
-		$this->includeClassTypesIfConfigured();
+		if($sClassType !== false) {
+			$this->includeClassTypesIfConfigured();
+		}
 		if($sClassType) {
 			$this->filterByClassType($sClassType);
 		}
 		return $this;
 	}
 
-	public function filterBySchoolYear($mYear = true) {
+	public function filterBySchoolYear($mYear = true, $bIsEqual = true) {
 		if($mYear === true) {
-			$oSchool = SchoolPeer::getSchool();
-			if($oSchool === null) {
-				throw new Exception(__METHOD__.' valid school object required. Please check configuration or Sync');
-			}
-			$mYear = $oSchool->getCurrentYear();
+			$mYear = SchoolPeer::getCurrentYear();
 		}
 		if(is_int($mYear)) {
-			return $this->filterByYear($mYear);
+			return $this->filterByYear($mYear, $bIsEqual ? Criteria::EQUAL : Criteria::NOT_EQUAL);
 		}
 	}
 

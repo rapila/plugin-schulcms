@@ -6,9 +6,9 @@
 class SubjectQuery extends BaseSubjectQuery
 {
 
-	public function filterByHasClasses($bHasClasses = true) {
+	public function filterByHasClasses($bHasClasses = true, $iYear = true) {
 		if($bHasClasses) {
-			$this->useSchoolClassQuery(null, Criteria::INNER_JOIN)->filterBySubjectId(null, Criteria::ISNOTNULL)->hasTeachers()->orderByName()->endUse();
+			$this->useSchoolClassQuery(null, Criteria::INNER_JOIN)->filterByDisplayCondition(false, $iYear)->filterBySubjectId(null, Criteria::ISNOTNULL)->hasTeachers()->orderByName()->endUse();
 		}
 		return $this;
 	}
