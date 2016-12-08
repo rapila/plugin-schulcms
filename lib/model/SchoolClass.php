@@ -33,11 +33,11 @@ class SchoolClass extends BaseSchoolClass {
 
 	public function getSubjectClassName($bFrontend = true) {
 		if($bFrontend) {
-			$this->getSubject()->getName(). ' '	. $this->getName();
+			return $this->getSubject()->getName(). ' '	. $this->getName();
 		}
 		return $this->getName(). ' ('.$this->getSubject()->getName().')';
 	}
-	
+
 	public function isSubjectClass() {
 		return $this->getSubject() !== null;
 	}
@@ -290,7 +290,7 @@ class SchoolClass extends BaseSchoolClass {
 	public function getAncestorClass() {
 		return $this->getSchoolClassRelatedByAncestorClassId();
 	}
-	
+
 	public function getSuccessorClass() {
 		return SchoolClassQuery::create()->findOneByAncestorClassId($this->getId());
 	}
