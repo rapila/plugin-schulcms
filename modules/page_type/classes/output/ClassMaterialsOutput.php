@@ -15,7 +15,7 @@ class ClassMaterialsOutput extends ClassOutput {
 		foreach($this->oClass->getClassDocuments() as $oClassDocument) {
 			$oItemTemplate = clone $oDocumentPrototype;
 			$oItemTemplate->replaceIdentifier('name', $oClassDocument->getDocument()->getName());
-			$oItemTemplate->replaceIdentifier('link', $oClassDocument->getDocument()->getDisplayUrl());
+			$oItemTemplate->replaceIdentifier('url', $oClassDocument->getDocument()->getDisplayUrl());
 			if($oClassDocument->getDocument()->getDescription()) {
 				$oItemTemplate->replaceIdentifier('description', $oClassDocument->getDocument()->getDescription());
 			}
