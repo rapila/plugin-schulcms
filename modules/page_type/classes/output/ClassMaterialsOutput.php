@@ -17,8 +17,10 @@ class ClassMaterialsOutput extends ClassOutput {
 			$oItemTemplate->replaceIdentifier('name', $oClassDocument->getDocument()->getName());
 			$oItemTemplate->replaceIdentifier('url', $oClassDocument->getDocument()->getDisplayUrl());
 			if($oClassDocument->getDocument()->getDescription()) {
-				$oItemTemplate->replaceIdentifier('description', $oClassDocument->getDocument()->getDescription());
+				$oItemTemplate->replaceIdentifier('title', $oClassDocument->getDocument()->getDescription());
 			}
+			$oItemTemplate->replaceIdentifier('extension', $oClassDocument->getDocument()->getExtension());
+			$oItemTemplate->replaceIdentifier("size", DocumentPeer::getDocumentSize($oClassDocument->getDocument()->getDataSize(), 'auto_iso'));
 			$oTemplate->replaceIdentifierMultiple('items', $oItemTemplate);
 		}
 		return $oTemplate;
