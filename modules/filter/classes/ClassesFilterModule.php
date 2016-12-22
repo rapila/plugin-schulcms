@@ -14,7 +14,7 @@ class ClassesFilterModule extends FilterModule {
 
 			// Render subjects or school classes
 			if($sClassType === 'subject') {
-				$oQuery = SubjectQuery::create()->filterByHasClasses()->select(array('Id', 'Slug', 'Name'));
+				$oQuery = SubjectQuery::create()->filterByHasClasses(true, null)->select(array('Id', 'Slug', 'Name'));
 				foreach($oQuery->find() as $aData) {
 					$oNavigationItem->addChild(SubjectNavigationItem::create($aData['Slug'], $aData['Name'], $aData['Id'], $sClassType));
 				}
@@ -25,7 +25,8 @@ class ClassesFilterModule extends FilterModule {
 		} // Render subject class navigation items
 		else if($oNavigationItem instanceof SubjectNavigationItem) {
 			$oSubject = SubjectQuery::create()->findPk($oNavigationItem->getSubjectId());
-			$this->renderClassNavigationItems($oNavigationItem, $oSubject->getSchoolClasses(), $oNavigationItem->getMode());
+			$aSchoolClasses = SchoolClassQuery::create()->filterBySubjectId($oSubject->getId())->filterByDisplayCondition(false, null)->find();
+			$this->renderClassNavigationItems($oNavigationItem, $aSchoolClasses, $oNavigationItem->getMode());
 		}
 
 		if(!($oNavigationItem instanceof ClassNavigationItem)) {
@@ -121,7 +122,7 @@ class ClassesFilterModule extends FilterModule {
 		}
 		$this->addFeedResources($oNavigationItem);
 	}
-	
+
 	private function addFeedResources(ClassNavigationItem $oNavigationItem) {
 		if($oNavigationItem->getMode() === 'root') {
 			// Only render starting with home

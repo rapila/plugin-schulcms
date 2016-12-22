@@ -133,7 +133,9 @@
 					var name = attrs[j].nodeName;
 					var value = attrs[j].value || attrs[j].nodeValue;
 					if(useJSON) {
-						value = JSON.parse(value);
+						try {
+							value = JSON.parse(value);
+						} catch(e) {}
 					}
 					if(name === 'data-id') {
 						id = value;
