@@ -2,6 +2,12 @@ libraries:
   wok:
     url: 'wok/build/Wok.min.js'
     url_uncompressed: 'wok/src/Wok.js'
+    sri: 'sha384-32QYKx0Mlde3B76oAXysHGTpMV0Krz2lmdb9+3ue4z7aOkhzclghKMFwP2Z3KhOY'
+    sri_uncompressed: 'sha384-0WRzMfBa3cgoSdM4hzYcDXqR0wPSBb+UPoKTtAw3hTLapYRO8bV002/Liwhgy5bj'
   react:
     url: '//cdnjs.cloudflare.com/ajax/libs/react/${version}/react.min.js'
     url_uncompressed: '//cdnjs.cloudflare.com/ajax/libs/react/${version}/react.js'
+    sri:
+      '0.13.3': 'sha384-tjjw37fFr0JRWChbN+Q4hnYgm0XG7ol9fHz/IaBctiM7mPTWqtSwx7kf4tRPEhzw'
+    sri_uncompressed:
+      '0.13.3': 'sha384-3Hmws2uIls+SVGUI8AR5SWcLAhkv69dej4qvyOYeCef2+IkrOFQ0WXq3osS3Ks1g'

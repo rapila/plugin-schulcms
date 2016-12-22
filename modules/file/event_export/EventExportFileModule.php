@@ -65,7 +65,7 @@ class EventExportFileModule extends FileModule {
 				'is_common' => $oEvent->getSchoolClassId() === null || $oEvent->getIsCommon(),
 				'is_forced_upon_class' => $oEvent->getSchoolClassId() === null && $oEvent->getIsCommon(),
 				'has_images' => $oEvent->hasImages(),
-				'type' => $oEvent->getEventTypeId(),
+				'type' => (string)$oEvent->getEventTypeId(),
 				'kind' => 'event'
 			);
 		}

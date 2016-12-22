@@ -5,7 +5,7 @@
 
 class EventsFrontendModule extends DynamicFrontendModule {
 
-	public static $DISPLAY_MODES = array('list_context', 'recent_report');
+	public static $DISPLAY_MODES = array('list', 'list_context', 'recent_report', 'recent_reports');
 
 	public static $EVENT;
 	public $iEventTypeId;
@@ -27,6 +27,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			case 'list': return $this->renderContextList();
 			case 'list_context': return $this->renderContextList();
 			case 'recent_report': return $this->renderRecentReport();
+			case 'recent_reports': return $this->renderRecentReports();
 		}
 		return '';
 	}
@@ -74,12 +75,25 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	}
 
 	private function renderRecentReport() {
-		$oEvent = $this->pastQuery(true)->joinEventDocument()->orderByUpdatedAt(Criteria::DESC)->findOne();
+		$oEvent = $this->pastQuery(true)->filterByHasImages()->findOne();
 		if($oEvent === null) {
 			return;
 		}
 		// $oTemplate = $this->constructTemplate('report_short');
 		return self::recentReport($oEvent);
+	}
+
+	private function renderRecentReports() {
+		$aEvents = $this->pastQuery()->filterByHasImages()->orderByDateStart(Criteria::DESC)->find();
+		if(count($aEvents) === 0) {
+			return;
+		}
+		$oTemplate = new Template(TemplateIdentifier::constructIdentifier('reports'), null, true);
+		foreach($aEvents as $oEvent) {
+			$oTemplate->replaceIdentifierMultiple('reports', self::recentReport($oEvent));
+		}
+
+		return $oTemplate;
 	}
 
 	public static function recentReport($oEvent, $sTitle = null) {
@@ -95,15 +109,32 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		$oTemplate->replaceIdentifier('title', $sTitle);
 		$oTemplate->replaceIdentifier('detail_link', LinkUtil::link($oEvent->getLink()));
 		$oTemplate->replaceIdentifier('detail_link_title', $oEvent->getTitle());
-		$oTemplate->replaceIdentifier('recent_report_image', TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => $iMaxWidth)), 'alt' => $oImage->getDescription(), 'title' => $oEvent->getTitle())));
+		$oTemplate->replaceIdentifierCallback('recent_report_intro', function($oIdentifier) use ($oEvent) {
+			$iLength = 160;
+			if($oIdentifier->hasParameter('length')) {
+				$iLength = $oIdentifier->getParameter('length');
+			}
+			return $oEvent->getBodyShortTruncated($iLength);
+		});
+		$oTemplate->replaceIdentifierCallback('recent_report_image', function($oIdentifier) use ($oEvent, $oImage, $iMaxWidth) {
+			$iMax = $iMaxWidth;
+			if($oIdentifier->hasParameter('max_width')) {
+				$iMax = $oIdentifier->getParameter('max_width');
+			}
+			return TagWriter::quickTag('img', array('src' => $oImage->getDisplayUrl(array('max_width' => $iMax)), 'alt' => $oImage->getDescription(), 'class' => $oIdentifier->getParameter('class'), 'title' => $oEvent->getTitle()));
+		});
 		return $oTemplate;
 	}
 
 	private function pastQuery($bLimitAge = false) {
+		$oQuery = $this->baseQuery();
 		if($bLimitAge) {
 			$sDate = date('Y-m-d', time() - (Settings::getSetting('schulcms', 'event_is_recent_report_day_count', 60) * 24 * 60 * 60));
-			$oQuery = $this->baseQuery()->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
+			// FIXME: Do we still need this?
+			$oQuery->filterByUpdatedAt($sDate, Criteria::GREATER_EQUAL);
 			$oQuery->past($sDate);
+		} else {
+			$oQuery->past();
 		}
 		return $oQuery;
 	}

@@ -51,8 +51,10 @@ class EventCalendarFileModule extends FileModule {
 		$oCalendar = new \Eluceo\iCal\Component\Calendar(Settings::getSetting('domain_holder', 'domain', 'example.com'));
 		if($this->oClass) {
 			$oCalendar->setName($this->oClass->getFullClassNameWithYear(true));
-		} else {
+		} else if(class_exists('SchoolSiteQuery')) {
 			$oCalendar->setName(SchoolSiteQuery::currentSchoolSite()->getName());
+		} else {
+			$oCalendar->setName(Settings::getSetting('domain_holder', 'name', 'Events').' – '.Event::getEventPage()->getPageTitle());
 		}
 		foreach($this->oQuery->find() as $oEvent) {
 			$oCalendarEvent = new \Eluceo\iCal\Component\Event();

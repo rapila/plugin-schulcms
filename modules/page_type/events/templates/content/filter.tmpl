@@ -1,14 +1,22 @@
-<div data-wok-filter='eventData/eventData.filtered/{"year": {{writeDate=Y}}, "month": {{doCalculation=\{\{writeDate\=n\;locale=_\}\} - 1}}, "view": "list", "granularity": "year", "kind": ""},"session"'>
+<div data-wok-filter='eventData/eventData.filtered/{"year": {{writeDate=Y}}, "month": {{doCalculation=\{\{writeDate\=n\;locale=_\}\} - 1}}, "view": "list", "granularity": "year", "kind": "", "type": ""},"session"'>
 	<span data-wok-filter-class-from-event='filter//"{{class_id}}"'></span>
 	<h1 data-wok-filter-title='filter//"title"'></h1>
 	<div class="filters">
-		<div data-wok-filter-options='filter//"kind"' class="popup-links" title="{{writeString=event.filter.date_types}}">
+		{{if;1=\{\{writeSettingValue=event_filter_event_kind\;section=schulcms\}\};2=true}}<!--
+		--><div data-wok-filter-options='filter//"kind"' class="popup-links" title="{{writeString=event.filter.date_types}}">
 			<ul class="available links">
 				<li data-value="">{{writeString=appointments.kind.all}}</li>
 				<li data-value="event">{{writeString=appointments.kind.events}}</li>
 				<li data-value="date">{{writeString=appointments.kind.dates}}</li>
 			</ul>
-		</div><!--
+		</div>{{endIf}}<!--
+		-->{{if;1=\{\{writeSettingValue=event_filter_event_type\;section=schulcms\}\};2=true}}<!--
+		--><div data-wok-filter-options='filter//"type"' class="popup-links" title="{{writeString=event.filter.date_types}}">
+			<ul class="available links">
+				<li data-value="">{{writeString=appointments.kind.all}}</li>
+				{{event_types}}
+			</ul>
+		</div>{{endIf}}<!--
 		--><div data-wok-filter-datePager='filter//"date_start","date_end", null, "granularity", ["{{writeDate=B;date=1-1;format=n-j}}", "{{writeDate=B;date=2-1;format=n-j}}", "{{writeDate=B;date=3-1;format=n-j}}", "{{writeDate=B;date=4-1;format=n-j}}", "{{writeDate=B;date=5-1;format=n-j}}", "{{writeDate=B;date=6-1;format=n-j}}", "{{writeDate=B;date=7-1;format=n-j}}", "{{writeDate=B;date=8-1;format=n-j}}", "{{writeDate=B;date=9-1;format=n-j}}", "{{writeDate=B;date=10-1;format=n-j}}", "{{writeDate=B;date=11-1;format=n-j}}", "{{writeDate=B;date=12-1;format=n-j}}"]'>
 			<span class="prev wett-icon" title="{{writeString=event.filter.previous_year}}">&lt;</span><!--
 			--><span class="current"></span><!--
