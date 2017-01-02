@@ -31,29 +31,29 @@ class EventListWidgetModule extends SpecializedListWidgetModule {
 		$aResult = array('is_sortable' => true);
 		switch($sColumnIdentifier) {
 			case 'title':
-				$aResult['heading'] = StringPeer::getString('wns.event.title');
+				$aResult['heading'] = TranslationPeer::getString('wns.event.title');
 				break;
 			case 'body_short_truncated':
-				$aResult['heading'] = StringPeer::getString('wns.event.body_short');
+				$aResult['heading'] = TranslationPeer::getString('wns.event.body_short');
 				break;
 			case 'date_start_formatted':
-				$aResult['heading'] = StringPeer::getString('wns.event.date_start');
+				$aResult['heading'] = TranslationPeer::getString('wns.event.date_start');
 				break;
 			case 'is_common':
-				$aResult['heading'] = StringPeer::getString('wns.event.is_common_list');
+				$aResult['heading'] = TranslationPeer::getString('wns.event.is_common_list');
 				break;
 			case 'is_active':
-				$aResult['heading'] = StringPeer::getString('wns.event.is_online');
+				$aResult['heading'] = TranslationPeer::getString('wns.event.is_online');
 				break;
 			case 'class_name':
-				$aResult['heading'] = StringPeer::getString('wns.event.is_class_event');
+				$aResult['heading'] = TranslationPeer::getString('wns.event.is_class_event');
 				break;
 			case 'has_images':
-				$aResult['heading'] = StringPeer::getString('event.images');
+				$aResult['heading'] = TranslationPeer::getString('event.images');
 				$aResult['is_sortable'] = false;
 				break;
 			case 'has_bericht':
-				$aResult['heading'] = StringPeer::getString('event.bericht');
+				$aResult['heading'] = TranslationPeer::getString('event.bericht');
 				$aResult['is_sortable'] = false;
 				break;
 			case 'delete':

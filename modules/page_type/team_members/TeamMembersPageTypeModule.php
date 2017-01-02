@@ -86,7 +86,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			$oItemTemplate->replaceIdentifier('name', $oTeamMember->getFullNameInverted());
 			$oItemTemplate->replaceIdentifier('id', $oTeamMember->getId());
 			$oItemTemplate->replaceIdentifier('email', TagWriter::getEmailLinkWriter($oTeamMember->getEmailG()), null, Template::NO_HTML_ESCAPE);
-			$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('wns.team_member.link_title_prefix').$oTeamMember->getFullName());
+			$oItemTemplate->replaceIdentifier('detail_link_title', TranslationPeer::getString('wns.team_member.link_title_prefix').$oTeamMember->getFullName());
 			$sMainSchoolFunction = $oTeamMember->getFirstTeamMemberFunctionName(false);
 			if($sMainSchoolFunction) {
 				$oItemTemplate->replaceIdentifier('first_function_name', $sMainSchoolFunction->getTitle());
@@ -106,7 +106,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 					if($aLink === null) {
 						$oLink = $oClassTeacher->getSchoolClass()->getName();
 					} else {
-						$oLink = TagWriter::quickTag('a', array('title' => StringPeer::getString('wns.class.link_title_prefix').$oClassTeacher->getSchoolClass()->getName(), 'href' => LinkUtil::link($aLink)), $oClassTeacher->getSchoolClass()->getName());
+						$oLink = TagWriter::quickTag('a', array('title' => TranslationPeer::getString('wns.class.link_title_prefix').$oClassTeacher->getSchoolClass()->getName(), 'href' => LinkUtil::link($aLink)), $oClassTeacher->getSchoolClass()->getName());
 					}
 					// display only class links with active classes
 					$oItemTemplate->replaceIdentifierMultiple('school_class', $oLink, null, Template::NO_NEWLINE);
@@ -136,7 +136,7 @@ class TeamMembersPageTypeModule extends PageTypeModule {
 			$oOptionPrototype = $this->constructTemplate('filter_option');
 			$oItemTemplate = clone $oOptionPrototype;
 			$oItemTemplate->replaceIdentifier('id', '');
-			$oItemTemplate->replaceIdentifier('name', StringPeer::getString('team_member.filter.function_group.default'));
+			$oItemTemplate->replaceIdentifier('name', TranslationPeer::getString('team_member.filter.function_group.default'));
 			$oTemplate->replaceIdentifierMultiple('filters', $oItemTemplate, null, Template::NO_NEWLINE|Template::NO_NEW_CONTEXT);
 
 			foreach($aFunctionGroups as $sKey => $sName) {

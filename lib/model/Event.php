@@ -50,13 +50,13 @@ class Event extends BaseEvent {
 	* for reference tracking only
 	*/
 	public function getDescription() {
-		return StringPeer::getString('wns.event.description', null, null, array('title' => $this->getTitle()));
+		return TranslationPeer::getString('wns.event.description', null, null, array('title' => $this->getTitle()));
 	}
 
 	public function getIsClassEvent() {
 		return $this->getSchoolClassId() !== null;
 	}
-	
+
 	public function getFullTitle() {
 		if($this->getIsClassEvent()) {
 			return $this->getSchoolClass()->getClassName().': '.$this->getTitle();
@@ -185,7 +185,7 @@ class Event extends BaseEvent {
 		$aDateStart = explode('-', $this->getDateStart('Y-n-j'));
 		return array_merge($oEventPage->getFullPathArray(), array_merge($aDateStart, array($this->getSlug())));
 	}
-	
+
 	public static function getEventPage() {
 		if(self::$EVENTPAGE === false) {
 			self::$EVENTPAGE = PageQuery::create()->filterByPageType('events')->findOne();

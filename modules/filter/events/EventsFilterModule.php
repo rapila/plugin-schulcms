@@ -23,11 +23,11 @@ class EventsFilterModule extends FilterModule {
 					}
 				}
 				// Events RSS feed
-				$oFeedItem = new HiddenVirtualNavigationItem(self::EVENT_FEED_ITEM, 'feed', StringPeer::getString('wns.events.feed', null, 'Feed').' '.$oNavigationItem->getLinkText());
+				$oFeedItem = new HiddenVirtualNavigationItem(self::EVENT_FEED_ITEM, 'feed', TranslationPeer::getString('wns.events.feed', null, 'Feed').' '.$oNavigationItem->getLinkText());
 				$oFeedItem->bIsIndexed = false; //Don’t index the feed item or else you’ll be exit()-ed before finishing the index
 				$oNavigationItem->addChild($oFeedItem);
 				// Events ics feed
-				$oFeedItem = new HiddenVirtualNavigationItem(self::EVENT_ICS_ITEM, 'calendar.ics', StringPeer::getString('wns.events.feed', null, 'Calendar-Feed').' '.$oNavigationItem->getLinkText());
+				$oFeedItem = new HiddenVirtualNavigationItem(self::EVENT_ICS_ITEM, 'calendar.ics', TranslationPeer::getString('wns.events.feed', null, 'Calendar-Feed').' '.$oNavigationItem->getLinkText());
 				$oFeedItem->bIsIndexed = false; //Don’t index the feed item or else you’ll be exit()-ed before finishing the index
 				$oNavigationItem->addChild($oFeedItem);
 			}

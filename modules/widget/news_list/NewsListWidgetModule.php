@@ -32,21 +32,21 @@ class NewsListWidgetModule extends SpecializedListWidgetModule {
 		$aResult = array('is_sortable' => true);
 		switch($sColumnIdentifier) {
 			case 'date_start_formatted':
-				$aResult['heading'] = StringPeer::getString('wns.news.date');
+				$aResult['heading'] = TranslationPeer::getString('wns.news.date');
 				break;
 			case 'date_end_formatted':
-				$aResult['heading'] = StringPeer::getString('wns.news.date_to');
+				$aResult['heading'] = TranslationPeer::getString('wns.news.date_to');
 				$aResult['is_sortable'] = false;
 				break;
 			case 'headline':
-				$aResult['heading'] = StringPeer::getString('wns.news.headline');
+				$aResult['heading'] = TranslationPeer::getString('wns.news.headline');
 				break;
 			case 'body_short_truncated':
-				$aResult['heading'] = StringPeer::getString('wns.news.body_short_truncated');
+				$aResult['heading'] = TranslationPeer::getString('wns.news.body_short_truncated');
 				$aResult['is_sortable'] = false;
 				break;
 			case 'is_active':
-				$aResult['heading'] = StringPeer::getString('wns.news.is_active');
+				$aResult['heading'] = TranslationPeer::getString('wns.news.is_active');
 				break;
 			case 'delete':
 				$aResult['heading'] = ' ';
@@ -75,7 +75,7 @@ class NewsListWidgetModule extends SpecializedListWidgetModule {
 			return $oNewsType->getName();
 		}
 		if($this->oDelegateProxy->getNewsTypeId() === CriteriaListWidgetDelegate::SELECT_WITHOUT) {
-			return StringPeer::getString('wns.news.without_news_type');
+			return TranslationPeer::getString('wns.news.without_news_type');
 		}
 		return $this->oDelegateProxy->getNewsTypeId();
 	}

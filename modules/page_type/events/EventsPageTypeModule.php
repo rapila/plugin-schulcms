@@ -20,7 +20,7 @@ class EventsPageTypeModule extends PageTypeModule {
 	private function displayCalendar(Template $oTemplate) {
 		self::includeCalendar($oTemplate, $this->oPage);
 	}
-	
+
 	public static function getFeedLinks($oEventPage, $oClass = null) {
 		$oResult = new stdClass();
 		$aPageLink = $oEventPage->getFullPathArray();
@@ -75,7 +75,7 @@ class EventsPageTypeModule extends PageTypeModule {
 			$oTemplate->replaceIdentifier('date_info', $oEvent->getDateFromTo());
 		}
 		if($oEvent->getDateStart('Ymd') === date('Ymd')) {
-			$oTemplate->replaceIdentifier('today', StringPeer::getString('wns.event.today'));
+			$oTemplate->replaceIdentifier('today', TranslationPeer::getString('wns.event.today'));
 		}
 		if($oEvent->getLocationInfo() != null) {
 			$oTemplate->replaceIdentifier('location_info', $oEvent->getLocationInfo());

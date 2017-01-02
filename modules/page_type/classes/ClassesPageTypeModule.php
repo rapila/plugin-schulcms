@@ -104,7 +104,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 	public function listDisplayTypes() {
 		$aOptions = array();
 		foreach(array('default' , 'full', 'location') as $sKey) {
-			$aOptions[$sKey] = StringPeer::getString('classes.display_type.'.$sKey);
+			$aOptions[$sKey] = TranslationPeer::getString('classes.display_type.'.$sKey);
 		}
 		asort($aOptions);
 		return WidgetJsonFileModule::jsonOrderedObject($aOptions);
@@ -113,7 +113,7 @@ class ClassesPageTypeModule extends DefaultPageTypeModule {
 	public function listClassTypes() {
 		$aOptions = array();
 		foreach(array('standard' , 'subject') as $sKey) {
-			$aOptions[$sKey] = StringPeer::getString('classes.class_type.'.$sKey);
+			$aOptions[$sKey] = TranslationPeer::getString('classes.class_type.'.$sKey);
 		}
 		asort($aOptions);
 		return WidgetJsonFileModule::jsonOrderedObject($aOptions);

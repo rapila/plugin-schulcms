@@ -7,7 +7,7 @@ class EventsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 		// Display modes
 		$aResult['display_modes'] = array();
 		foreach(EventsFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
-			$aResult['display_modes'][$sDisplayMode] = StringPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);
+			$aResult['display_modes'][$sDisplayMode] = TranslationPeer::getString('display_mode.'.$sDisplayMode, null, $sDisplayMode);
 		}
 
 		// Event types
@@ -20,7 +20,7 @@ class EventsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 		}
 
 		// Display list limit
-		$aResult['event_limits'] = array('' => StringPeer::getString('wns.events.display_all'));
+		$aResult['event_limits'] = array('' => TranslationPeer::getString('wns.events.display_all'));
 		foreach(range(1,5) as $iCount) {
 			$aResult['event_limits'][$iCount] = $iCount;
 			$aResult['event_limits'][10] = 10;

@@ -38,7 +38,7 @@ class ClassesAdminModule extends AdminModule implements ListWidgetDelegate {
 				$aResult['field_name'] = 'id';
 				break;
 			case 'name':
-				$aResult['heading'] = StringPeer::getString('wns.classes.sidebar_heading');
+				$aResult['heading'] = TranslationPeer::getString('wns.classes.sidebar_heading');
 				break;
 			case 'magic_column':
 				$aResult['display_type'] = ListWidgetModule::DISPLAY_TYPE_CLASSNAME;
@@ -51,7 +51,7 @@ class ClassesAdminModule extends AdminModule implements ListWidgetDelegate {
 	public static function getCustomListElements() {
 		return array(
 			array('class_type' => CriteriaListWidgetDelegate::SELECT_ALL,
-						'name' => StringPeer::getString('wns.sidebar.select_all'),
+						'name' => TranslationPeer::getString('wns.sidebar.select_all'),
 						'magic_column' => 'all')
 						);
 	}

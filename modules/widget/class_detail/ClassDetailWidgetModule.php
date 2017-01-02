@@ -78,12 +78,12 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		if($oSchoolClass) {
 			$sInfo = $oSchoolClass->countNews();
 			if($sHeadLine = $oSchoolClass->getCurrentNewsHeadline()) {
-				$sInfo .= ' / '.StringPeer::getString('school_class.current_news_shown', null, 'Default', array('headline' => $oSchoolClass->getCurrentNewsHeadline()));
+				$sInfo .= ' / '.TranslationPeer::getString('school_class.current_news_shown', null, 'Default', array('headline' => $oSchoolClass->getCurrentNewsHeadline()));
 			}
 			return $sInfo;
 		}
 	}
-	
+
 	public function migrateData($bForce = false) {
 		$oSchoolClass = SchoolClassQuery::create()->findPk($this->iSchoolClassId);
 		if(!$oSchoolClass) {

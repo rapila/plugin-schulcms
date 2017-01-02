@@ -34,7 +34,7 @@ class SubjectOutput extends ClassOutput {
 		if($sLink) {
 			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($sLink));
 		}
-		$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('class.view_detail').' '.$oClass->getUnitName());
+		$oItemTemplate->replaceIdentifier('detail_link_title', TranslationPeer::getString('class.view_detail').' '.$oClass->getUnitName());
 		$oItemTemplate->replaceIdentifier('count_students', $oClass->countStudentsByUnitName());
 
 		// get related class teacher links, in case there are 3 class teachers, to be just ;=)

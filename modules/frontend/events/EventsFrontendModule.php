@@ -37,7 +37,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 		if($this->iLimit) {
 			$oQuery->limit($this->iLimit);
 		}
-		return TagWriter::quickTag('div', array('class' => 'calendar-overview'), self::renderOverviewList($oQuery->find(), 100, StringPeer::getString('school.no_future_events_available', null, null)));
+		return TagWriter::quickTag('div', array('class' => 'calendar-overview'), self::renderOverviewList($oQuery->find(), 100, TranslationPeer::getString('school.no_future_events_available', null, null)));
 	}
 
 	public static function renderOverviewList($aEvents, $iTruncate = 50, $sNoEventMessage = null) {
@@ -63,7 +63,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 				$oItemTemplate->replaceIdentifier('description', EventsPageTypeModule::getContentForFrontend($oEvent->getBodyShort(), true, $iTruncate));
 				if($oEvent->isToday()) {
 					$oItemTemplate->replaceIdentifier('class_today', ' today');
-					$oItemTemplate->replaceIdentifier('today', StringPeer::getString('wns.event.today'));
+					$oItemTemplate->replaceIdentifier('today', TranslationPeer::getString('wns.event.today'));
 				}
 				$oTemplate->replaceIdentifierMultiple('item', $oItemTemplate);
 			}

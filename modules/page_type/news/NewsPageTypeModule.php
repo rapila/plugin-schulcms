@@ -43,7 +43,7 @@ class NewsPageTypeModule extends PageTypeModule {
 		}
 		if(count($aNews) === 0) {
 			$oItemTemplate = clone $oItemPrototype;
-			$oItemTemplate->replaceIdentifier('date', StringPeer::getString('news.no_entries_available'));
+			$oItemTemplate->replaceIdentifier('date', TranslationPeer::getString('news.no_entries_available'));
 			$oListTemplate->replaceIdentifier('items', $oItemTemplate);
 		}
 		$this->renderFilter($oListTemplate, $aTypes);
@@ -57,7 +57,7 @@ class NewsPageTypeModule extends PageTypeModule {
 			$oOptionPrototype = $this->constructTemplate('filter_option');
 			$oItemTemplate = clone $oOptionPrototype;
 			$oItemTemplate->replaceIdentifier('id', '');
-			$oItemTemplate->replaceIdentifier('name', StringPeer::getString('news.filter.type.default'));
+			$oItemTemplate->replaceIdentifier('name', TranslationPeer::getString('news.filter.type.default'));
 			$oTemplate->replaceIdentifierMultiple('filters', $oItemTemplate, null, Template::NO_NEWLINE|Template::NO_NEW_CONTEXT);
 
 			foreach($aTypes as $sKey => $sName) {
@@ -101,7 +101,7 @@ class NewsPageTypeModule extends PageTypeModule {
 	}
 
 	public function listNewsTypes() {
-		$aResult[0] = array('key' => CriteriaListWidgetDelegate::SELECT_ALL, 'value' => StringPeer::getString('news.display_option.show_all_type'));
+		$aResult[0] = array('key' => CriteriaListWidgetDelegate::SELECT_ALL, 'value' => TranslationPeer::getString('news.display_option.show_all_type'));
 		$aResult = array_merge($aResult, WidgetJsonFileModule::jsonOrderedObject(NewsTypeQuery::create()->filterByIsExternallyManaged(false)->orderByName()->select(array('Id', 'Name'))->find()->toKeyValue('Id', 'Name')));
 		return $aResult;
 	}

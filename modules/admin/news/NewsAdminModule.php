@@ -36,7 +36,7 @@ class NewsAdminModule extends AdminModule {
 			$aResult['field_name'] = 'id';
 			break;
 		case 'name':
-			$aResult['heading'] = StringPeer::getSTring('wns.news.sidebar.heading');
+			$aResult['heading'] = TranslationPeer::getSTring('wns.news.sidebar.heading');
 			break;
 		case 'magic_column':
 			$aResult['display_type'] = ListWidgetModule::DISPLAY_TYPE_CLASSNAME;
@@ -50,10 +50,10 @@ class NewsAdminModule extends AdminModule {
 		if(NewsTypeQuery::create()->filterByIsExternallyManaged(false)->count() > 0) {
 			return array(
 				array('news_type_id' => CriteriaListWidgetDelegate::SELECT_ALL,
-							'name' => StringPeer::getString('wns.sidebar.select_all'),
+							'name' => TranslationPeer::getString('wns.sidebar.select_all'),
 							'magic_column' => 'all'),
 				array('news_type_id' => CriteriaListWidgetDelegate::SELECT_WITHOUT,
-							'name' => StringPeer::getString('wns.news.without_type'),
+							'name' => TranslationPeer::getString('wns.news.without_type'),
 							'magic_column' => 'without'));
 		}
 		return array();

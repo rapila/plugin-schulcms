@@ -52,7 +52,7 @@ class TeamMemberDetailWidgetModule extends PersistentWidgetModule {
 		$oTemplate->replaceIdentifier('last_name', $oTeamMember->getLastName());
 		$oTemplate->replaceIdentifier('password', $sPassword);
 		$oTemplate->replaceIdentifier('username', $oUser->getUsername());
-		$oEmail = new EMail(StringPeer::getString('team_member.admin_invite'), $oTemplate);
+		$oEmail = new EMail(TranslationPeer::getString('team_member.admin_invite'), $oTemplate);
 		try {
 			$oEmail->addRecipient($sEmail);
 		} catch(Exception $e) {

@@ -133,8 +133,8 @@ class ClassesFilterModule extends FilterModule {
 		$oEventPage = PageQuery::create()->filterByPageType('events')->findOne();
 		$oFeedLinks = EventsPageTypeModule::getFeedLinks($oEventPage, $oClass);
 
-		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'location' => $oFeedLinks->subscribe_rss, 'title' => StringPeer::getString('appointments.subscribe.rss')));
-		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'ical', 'location' => $oFeedLinks->download_ical, 'title' => StringPeer::getString('appointments.subscribe.ical')));
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'feed', 'location' => $oFeedLinks->subscribe_rss, 'title' => TranslationPeer::getString('appointments.subscribe.rss')));
+		ResourceIncluder::defaultIncluder()->addCustomResource(array('template' => 'ical', 'location' => $oFeedLinks->download_ical, 'title' => TranslationPeer::getString('appointments.subscribe.ical')));
 	}
 
 	public function onLinkOperationCheck($sOperation, $oOnObject, $oUser, $aContainer) {

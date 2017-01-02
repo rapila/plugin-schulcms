@@ -141,9 +141,9 @@ class TeamMember extends BaseTeamMember {
 
 	public function getClassTeacherTitle() {
 		if($this->getGenderId() === 'f') {
-			return StringPeer::getString('wns.class.class_teacher_female');
+			return TranslationPeer::getString('wns.class.class_teacher_female');
 		}
-		return StringPeer::getString('wns.class.class_teacher_male');
+		return TranslationPeer::getString('wns.class.class_teacher_male');
 	}
 
 	public function getFirstTeamMemberFunctionName($bNameOnly = true) {

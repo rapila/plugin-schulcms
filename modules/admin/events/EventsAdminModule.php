@@ -41,7 +41,7 @@ class EventsAdminModule extends AdminModule {
 				$aResult['field_name'] = 'id';
 				break;
 			case 'name':
-				$aResult['heading'] = StringPeer::getString('wns.events.sidebar_heading');
+				$aResult['heading'] = TranslationPeer::getString('wns.events.sidebar_heading');
 				break;
 			case 'magic_column':
 				$aResult['display_type'] = ListWidgetModule::DISPLAY_TYPE_CLASSNAME;
@@ -55,7 +55,7 @@ class EventsAdminModule extends AdminModule {
 		if(EventTypePeer::doCount(new Criteria()) > 0) {
 			return array(
 				array('event_type_id' => CriteriaListWidgetDelegate::SELECT_ALL,
-							'name' => StringPeer::getString('wns.sidebar.select_all'),
+							'name' => TranslationPeer::getString('wns.sidebar.select_all'),
 							'magic_column' => 'all'));
 		}
 		return array();

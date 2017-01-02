@@ -51,7 +51,7 @@ class ClassHomeOutput extends ClassOutput {
 		$this->renderUpcomingEvents($oTemplate, $bHasRecentReport, 10);
 		return $oTemplate;
 	}
-	
+
 	private function getLinkTagForLinkedClass($oClass) {
 		// Hack to find correct parent page, since icampus passes ancestor_id even if there is no ancestor
 		if(!$oClass) {
@@ -97,17 +97,17 @@ class ClassHomeOutput extends ClassOutput {
 			if($i > 0) {
 				$oTemplate->replaceIdentifierMultiple('class_teacher', '<br />', null, Template::NO_HTML_ESCAPE);
 			}
-			$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oTeacher->getLink($this->oTeacherPage)), 'title' => StringPeer::getString('team_member.link_to'). ' '. $oTeacher->getFullName()), $oTeacher->getFullName());
+			$oTeacherLink = TagWriter::quickTag('a', array('href' => LinkUtil::link($oTeacher->getLink($this->oTeacherPage)), 'title' => TranslationPeer::getString('team_member.link_to'). ' '. $oTeacher->getFullName()), $oTeacher->getFullName());
 			$oTemplate->replaceIdentifierMultiple('class_teacher', $oTeacherLink);
 		}
 	}
 
 	private function renderSchedules($oTemplate) {
 		if($oSchedule = $this->oClass->getDocumentRelatedByClassScheduleId()) {
-			$oTemplate->replaceIdentifier('schedule', TagWriter::quickTag('a', array('href' => $oSchedule->getDisplayUrl(), 'class' => 'pdf', 'rel' => 'document', 'title' => StringPeer::getString('class_detail.schedule_download')), StringPeer::getString('class_detail.schedule')));
+			$oTemplate->replaceIdentifier('schedule', TagWriter::quickTag('a', array('href' => $oSchedule->getDisplayUrl(), 'class' => 'pdf', 'rel' => 'document', 'title' => TranslationPeer::getString('class_detail.schedule_download')), TranslationPeer::getString('class_detail.schedule')));
 		}
 		if($oScheduleExtra = $this->oClass->getDocumentRelatedByWeekScheduleId()) {
-			$oTemplate->replaceIdentifier('schedule_extra', TagWriter::quickTag('a', array('href' => $oScheduleExtra->getDisplayUrl(), 'class' => 'pdf', 'rel' => 'document', 'title' => StringPeer::getString('class_detail.document_download')), $oScheduleExtra->getName()));
+			$oTemplate->replaceIdentifier('schedule_extra', TagWriter::quickTag('a', array('href' => $oScheduleExtra->getDisplayUrl(), 'class' => 'pdf', 'rel' => 'document', 'title' => TranslationPeer::getString('class_detail.document_download')), $oScheduleExtra->getName()));
 		}
 	}
 
@@ -129,7 +129,7 @@ class ClassHomeOutput extends ClassOutput {
 	}
 
 	private function renderSubjectsAndTeachers($oTemplate) {
-		$oTemplate->replaceIdentifier('subject_teasers_title', StringPeer::getString('class_detail.heading.subjects_and_teachers'));
+		$oTemplate->replaceIdentifier('subject_teasers_title', TranslationPeer::getString('class_detail.heading.subjects_and_teachers'));
 		$oRowPrototype = $this->oPageType->constructTemplate('class_subject_teaser_item');
 		foreach($this->oClass->getSubjectClasses() as $oClass) {
 			$oRowTemplate = clone $oRowPrototype;
@@ -173,7 +173,7 @@ class ClassHomeOutput extends ClassOutput {
 			$oTemplate->replaceIdentifier('recent_report', TagWriter::quickTag('div', array('class'=> "recent-report no-report"), TagWriter::quickTag('p', array(), "Keine Bilder zu Veranstaltungen")));
 		}
 
-		$oTemplate->replaceIdentifier('events_overview', EventsFrontendModule::renderOverviewList($aEvents, 100, StringPeer::getString('class.no_future_events_available')));
+		$oTemplate->replaceIdentifier('events_overview', EventsFrontendModule::renderOverviewList($aEvents, 100, TranslationPeer::getString('class.no_future_events_available')));
 	}
 
 	private function renderDocumentsAndLinks($oTemplate) {
@@ -185,7 +185,7 @@ class ClassHomeOutput extends ClassOutput {
 		$iContainerClass = $iLinkCount === 0 || $iDocumentCount === 0 ? ' single-container' : '';
 
 		if($iDocumentCount > 0) {
-			$oTemplate->replaceIdentifier('documents_title', StringPeer::getString('class_detail.heading.documents'));
+			$oTemplate->replaceIdentifier('documents_title', TranslationPeer::getString('class_detail.heading.documents'));
 			$oTemplate->replaceIdentifier('single_container_class', $iContainerClass);
 			$oDocPrototype = $this->oPageType->constructTemplate('document_list_item');
 			foreach($aDocuments as $oClassDocument) {
@@ -203,7 +203,7 @@ class ClassHomeOutput extends ClassOutput {
 		}
 		// Display links if available
 		if($iLinkCount > 0) {
-			$oTemplate->replaceIdentifier('links_title', StringPeer::getString('class_detail.heading.links'));
+			$oTemplate->replaceIdentifier('links_title', TranslationPeer::getString('class_detail.heading.links'));
 			$oTemplate->replaceIdentifier('single_container_class', $iContainerClass);
 			$oLinkPrototype = $this->oPageType->constructTemplate('link_list_item');
 			foreach($aLinks as $oLink) {

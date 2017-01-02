@@ -28,7 +28,7 @@ class ClassListWidgetModule extends SpecializedListWidgetModule {
 		$aResult = array('is_sortable' => true);
 		switch($sColumnIdentifier) {
 			case 'class_name':
-				$aResult['heading'] = StringPeer::getString('wns.class.name');
+				$aResult['heading'] = TranslationPeer::getString('wns.class.name');
 				break;
 			case 'year_period':
 				$aResult['heading'] = '';
@@ -36,37 +36,37 @@ class ClassListWidgetModule extends SpecializedListWidgetModule {
 				$aResult['is_sortable'] = false;
 				break;
 			case 'level':
-				$aResult['heading'] = StringPeer::getString('wns.class.level');
+				$aResult['heading'] = TranslationPeer::getString('wns.class.level');
 				$aResult['display_type'] = ListWidgetModule::DISPLAY_TYPE_NUMERIC;
 				break;
 			case 'is_fe_visible':
-				$aResult['heading'] = StringPeer::getString('wns.class.is_fe_visible');
+				$aResult['heading'] = TranslationPeer::getString('wns.class.is_fe_visible');
 				$aResult['heading_filter'] = array('classes_fe_visibles_input', $this->oClassesFeVisiblesInputFilter->getSessionKey());
 				$aResult['display_type'] = ListWidgetModule::DISPLAY_TYPE_NUMERIC;
 				$aResult['is_sortable'] = false;
 				break;
 			case 'class_teacher_names':
-				$aResult['heading'] = StringPeer::getString('wns.class.class_teacher');
+				$aResult['heading'] = TranslationPeer::getString('wns.class.class_teacher');
 				$aResult['is_sortable'] = false;
 				break;
 			case 'room_number':
-				$aResult['heading'] = StringPeer::getString('wns.class.room_number');
+				$aResult['heading'] = TranslationPeer::getString('wns.class.room_number');
 				break;
 			case 'has_class_portrait':
-				$aResult['heading'] = StringPeer::getString('wns.class.has_portrait');
+				$aResult['heading'] = TranslationPeer::getString('wns.class.has_portrait');
 				$aResult['is_sortable'] = false;
 				break;
 			case 'has_class_schedule':
-				$aResult['heading'] = StringPeer::getString('wns.class.has_class_schedule');
+				$aResult['heading'] = TranslationPeer::getString('wns.class.has_class_schedule');
 				$aResult['is_sortable'] = false;
 				break;
 			case 'count_events':
-				$aResult['heading'] = StringPeer::getString('wns.class.events');
+				$aResult['heading'] = TranslationPeer::getString('wns.class.events');
 				$aResult['display_type'] = ListWidgetModule::DISPLAY_TYPE_NUMERIC;
 				$aResult['is_sortable'] = false;
 				break;
 			case 'count_links':
-				$aResult['heading'] = StringPeer::getString('wns.class.links');
+				$aResult['heading'] = TranslationPeer::getString('wns.class.links');
 				$aResult['is_sortable'] = false;
 				break;
 		}

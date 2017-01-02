@@ -14,7 +14,7 @@ class YearInputWidgetModule extends PersistentWidgetModule {
 		$aResult = array();
 		$oCriteria = SchoolClassQuery::create()->groupByYear(SchoolClassPeer::YEAR)->orderByYear(Criteria::DESC);
 		$oCriteria->clearSelectColumns()->addSelectColumn(SchoolClassPeer::YEAR);
-		$aResult[CriteriaListWidgetDelegate::SELECT_ALL] = StringPeer::getString('wns.year_input.show_all');
+		$aResult[CriteriaListWidgetDelegate::SELECT_ALL] = TranslationPeer::getString('wns.year_input.show_all');
 		foreach(SchoolClassPeer::doSelectStmt($oCriteria)->fetchAll(PDO::FETCH_COLUMN) as $sYear) {
       $aResult[$sYear] = SchoolPeer::getPeriodFromYear($sYear);
 		}

@@ -28,29 +28,29 @@ class TeamMemberListWidgetModule extends SpecializedListWidgetModule {
 		$aResult = array('is_sortable' => true);
 		switch($sColumnIdentifier) {
 			case 'full_name_inverted':
-				$aResult['heading'] = StringPeer::getString('wns.name');
+				$aResult['heading'] = TranslationPeer::getString('wns.name');
 				break;
 			case 'profession':
-				$aResult['heading'] = StringPeer::getString('wns.team_member.profession');
+				$aResult['heading'] = TranslationPeer::getString('wns.team_member.profession');
 				break;
 			case 'is_active_team_member':
-        $aResult['heading'] = StringPeer::getString('wns.team_member.is_active');
+        $aResult['heading'] = TranslationPeer::getString('wns.team_member.is_active');
 				$aResult['heading_filter'] = array('active_team_member_input', $this->oIsActiveTeamMemberInputFilter->getSessionKey());
 				$aResult['is_sortable'] = false;
 				break;
 			case 'class_names':
-				$aResult['heading'] = StringPeer::getString('wns.team_member.classes');
+				$aResult['heading'] = TranslationPeer::getString('wns.team_member.classes');
 				$aResult['is_sortable'] = false;
 				break;
 			case 'has_portrait':
-				$aResult['heading'] = StringPeer::getString('wns.team_member.has_portrait');
+				$aResult['heading'] = TranslationPeer::getString('wns.team_member.has_portrait');
 				$aResult['is_sortable'] = false;
 				break;
 			case 'employed_since_formatted':
-				$aResult['heading'] = StringPeer::getString('wns.team_member.employed_since');
+				$aResult['heading'] = TranslationPeer::getString('wns.team_member.employed_since');
 				break;
 			case 'age_and_date_of_birth':
-				$aResult['heading'] = StringPeer::getString('wns.team_member.age_and_date_of_birth');
+				$aResult['heading'] = TranslationPeer::getString('wns.team_member.age_and_date_of_birth');
 				break;
 		}
 		return $aResult;

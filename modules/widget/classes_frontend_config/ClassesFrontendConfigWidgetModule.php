@@ -11,7 +11,7 @@ class ClassesFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 	public function getDisplayModes() {
 		$aResult = array();
 	  foreach(ClassesFrontendModule::$DISPLAY_MODES as $sDisplayMode) {
-			$aResult[$sDisplayMode] = StringPeer::getString('classes.display_mode.'.$sDisplayMode, null, $sDisplayMode);
+			$aResult[$sDisplayMode] = TranslationPeer::getString('classes.display_mode.'.$sDisplayMode, null, $sDisplayMode);
 		}
 		$aClassTypes = SchoolClassQuery::create()->filterByHasClassesWithStudents()->distinct()->orderByClassType()->select(array('ClassType'))->find();
 		if(count($aClassTypes) > 0) {

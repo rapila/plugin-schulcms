@@ -34,7 +34,7 @@ class ClassListOutput extends ClassOutput {
 			$oOptionPrototype = $this->oPageType->constructTemplate('filter_option', true);
 			$oItemTemplate = clone $oOptionPrototype;
 			$oItemTemplate->replaceIdentifier('id', '');
-			$oItemTemplate->replaceIdentifier('name', StringPeer::getString('classes.filter.class_type.default'));
+			$oItemTemplate->replaceIdentifier('name', TranslationPeer::getString('classes.filter.class_type.default'));
 			$oTemplate->replaceIdentifierMultiple('filters', $oItemTemplate, null, Template::NO_NEWLINE|Template::NO_NEW_CONTEXT);
 
 			foreach($aClassTypes as $sClassType) {
@@ -55,7 +55,7 @@ class ClassListOutput extends ClassOutput {
 		$oItemTemplate->replaceIdentifier('class_type_key', StringUtil::normalizeToASCII($oClass->getClassType()));
 		$oItemTemplate->replaceIdentifier('year', $oClass->getYearPeriod());
 		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oClass->getLink($this->oPage)));
-		$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('class.view_detail').' '.$oClass->getUnitName(). ' '.$oClass->getYear());
+		$oItemTemplate->replaceIdentifier('detail_link_title', TranslationPeer::getString('class.view_detail').' '.$oClass->getUnitName(). ' '.$oClass->getYear());
 		$oItemTemplate->replaceIdentifier('count_students', $oClass->countStudentsByUnitName());
 
 		// get related class teacher links, in case there are 3 class teachers, to be just ;=)
@@ -76,7 +76,7 @@ class ClassListOutput extends ClassOutput {
 			}
 		}
 		if($iCountTeachers > $iLimit) {
-			$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ' '.StringPeer::getString('class.and_others_teachers'));
+			$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', ' '.TranslationPeer::getString('class.and_others_teachers'));
 		}
 		return $oItemTemplate;
 	}
