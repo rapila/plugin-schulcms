@@ -130,7 +130,7 @@ class ClassListWidgetModule extends SpecializedListWidgetModule {
 	public function getCriteria() {
 		$oQuery = static::listQuery();
 		if($this->bDisplayFeVisiblesOnly) {
-			$oQuery->joinClassStudent()->hasTeachers(true);
+			$oQuery->hasStudents()->hasTeachers(true);
 		}
 		return $oQuery;
 	}
