@@ -15,9 +15,9 @@ class SubjectOutput extends ClassOutput {
 		$oTemplate->replaceIdentifier('title', $this->oNavigationItem->getTitle());
 		$oClassPrototype = $this->oPageType->constructTemplate('subject_class_item');
 
-		$aSchoolClasses = SchoolClassQuery::create()->filterBySubjectId($oSubject->getId())->filterByDisplayCondition(false)->find();
-		foreach($aSchoolClasses as $oClass) {
-			$oTemplate->replaceIdentifierMultiple('items', $this->renderItem($oClass, clone $oClassPrototype));
+		// Render a list of only the navigation items that are visible (have classes in the current year)
+		foreach($this->oNavigationItem->getChildren() as $oNavigationItem) {
+			$oTemplate->replaceIdentifierMultiple('items', $this->renderItem($oNavigationItem, $oNavigationItem->getClass(), clone $oClassPrototype));
 		}
 		return $oTemplate;
 	}
@@ -26,14 +26,11 @@ class SubjectOutput extends ClassOutput {
 		// do nothing, handle context in each subject class
 	}
 
-	private function renderItem($oClass, $oItemTemplate) {
+	private function renderItem($oNavigationItem, $oClass, $oItemTemplate) {
 		// add more identifiers for flexibility if necessary
 		$oItemTemplate->replaceIdentifier('id', $oClass->getId());
 		$oItemTemplate->replaceIdentifier('name', $oClass->getSubjectClassName(true));
-		$sLink = $oClass->getLink();
-		if($sLink) {
-			$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($sLink));
-		}
+		$oItemTemplate->replaceIdentifier('detail_link', LinkUtil::link($oNavigationItem->getLink()));
 		$oItemTemplate->replaceIdentifier('detail_link_title', StringPeer::getString('class.view_detail').' '.$oClass->getUnitName());
 		$oItemTemplate->replaceIdentifier('count_students', $oClass->countStudentsByUnitName());
 
