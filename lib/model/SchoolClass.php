@@ -33,6 +33,10 @@ class SchoolClass extends BaseSchoolClass {
 
 	public function getSubjectClassName($bFrontend = true) {
 		if($bFrontend) {
+			// Don’t prepend subject name if already contained in name
+			if(strpos($this->getSubject()->getName(), $this->getName()) !== false) {
+				return $this->getName();
+			}
 			return $this->getSubject()->getName(). ' '	. $this->getName();
 		}
 		return $this->getName(). ' ('.$this->getSubject()->getName().')';
