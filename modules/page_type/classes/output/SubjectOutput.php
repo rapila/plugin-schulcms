@@ -37,7 +37,7 @@ class SubjectOutput extends ClassOutput {
 		// get related class teacher links, in case there are 3 class teachers, to be just ;=)
 		$aClassTeachers = $oClass->getTeachersByUnitName(true, 1);
 		foreach($aClassTeachers as $i => $oTeacher) {
-			$oLink = TagWriter::quickTag('a', array('title' => $oTeacher->getTeamMember()->getFullName(), 'href' => LinkUtil::link(array_merge($this->oTeacherPage->getFullPathArray(), array($oTeacher->getTeamMember()->getSlug())))), $oTeacher->getTeamMember()->getFullNameShort());
+			$oLink = TagWriter::quickTag('a', array('title' => $oTeacher->getTeamMember()->getFullName(), 'href' => LinkUtil::link($oTeacher->getTeamMember()->getLink($this->oTeacherPage))), $oTeacher->getTeamMember()->getFullNameShort());
 			$oItemTemplate->replaceIdentifierMultiple('class_teacher_links', $oLink);
 		}
 		return $oItemTemplate;
