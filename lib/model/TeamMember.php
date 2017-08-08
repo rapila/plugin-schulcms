@@ -200,6 +200,12 @@ class TeamMember extends BaseTeamMember {
 		if($oTeamMemberPage === null) {
 			$oTeamMemberPage = PageQuery::create()->filterByIdentifier(SchoolPeer::getPageIdentifier(SchoolPeer::PAGE_IDENTIFIER_TEAM));
 		}
+		if($oTeamMemberPage === null) {
+			$oTeamMemberPage = PagePeer::getRootPage();
+		}
+		if(!$oTeamMemberPage->getPageType() !== 'team_members') {
+			return $oTeamMemberPage->getFullPathArray();
+		}
 		return array_merge($oTeamMemberPage->getFullPathArray(), array($this->getSlug()));
 	}
 
