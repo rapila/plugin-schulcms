@@ -41,9 +41,9 @@ class SchoolClassTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('original_id', 'OriginalId', 'INTEGER', false, null, null);
         $this->addForeignKey('ancestor_class_id', 'AncestorClassId', 'INTEGER', 'school_classes', 'id', false, null, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', false, 80, null);
-        $this->addColumn('unit_name', 'UnitName', 'VARCHAR', false, 80, null);
-        $this->addColumn('slug', 'Slug', 'VARCHAR', false, 80, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', false, 180, null);
+        $this->addColumn('unit_name', 'UnitName', 'VARCHAR', false, 180, null);
+        $this->addColumn('slug', 'Slug', 'VARCHAR', false, 180, null);
         $this->addColumn('year', 'Year', 'SMALLINT', true, null, null);
         $this->addColumn('level', 'Level', 'TINYINT', false, null, null);
         $this->addColumn('room_number', 'RoomNumber', 'VARCHAR', false, 5, null);
