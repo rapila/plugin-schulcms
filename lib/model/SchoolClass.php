@@ -299,7 +299,13 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getSuccessorClass() {
-		return SchoolClassQuery::create()->findOneByAncestorClassId($this->getId());
+		$oQuery = SchoolClassQuery::create();
+		if($this->isSubjectClass()) {
+			$oQuery->filterByDisplayCondition(false, null);
+		} else {
+			$oQuery->filterByDisplayConditionForNonSubjectClasses(null, null);
+		}
+		return $oQuery->findOneByAncestorClassId($this->getId());
 	}
 
 	public function getLinkedClassIds() {
