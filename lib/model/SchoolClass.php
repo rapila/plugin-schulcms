@@ -69,7 +69,7 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getFullClassName() {
-		if($this->getClassType() === "Kindergarten") {
+		if($this->getClassType() === "Kindergarten" || $this->getClassType() === "Musikschule") {
 			return $this->getUnitName();
 		}
 		return $this->getClassType().' '.$this->getUnitName();
