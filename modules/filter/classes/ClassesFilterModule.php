@@ -40,7 +40,7 @@ class ClassesFilterModule extends FilterModule {
 
 			$aSchoolClasses = $oQuery->find();
 			\FilterModule::getFilters()->handleSubjectClassesFoundForNavigationItem($oNavigationItem, $oQuery, array(&$aSchoolClasses));
-			$this->renderClassNavigationItems($oNavigationItem, $aSchoolClasses, $oNavigationItem->getMode(), SchoolPeer::getCurrentYear());
+			$this->renderClassNavigationItems($oNavigationItem, $aSchoolClasses, $oNavigationItem->getMode());
 		}
 
 		if(!($oNavigationItem instanceof ClassNavigationItem)) {
