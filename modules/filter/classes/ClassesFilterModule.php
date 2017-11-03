@@ -111,10 +111,11 @@ class ClassesFilterModule extends FilterModule {
 		}
 	}
 
-	private function renderClassNavigationItems($oNavigationItem, $aClasses, $sDisplayType, $iShowIfYear = false) {
+	private function renderClassNavigationItems($oNavigationItem, $aClasses, $sDisplayType, $iShowInListIfYear = false) {
 		foreach($aClasses as $oClass) {
-			$bVisible = $iShowIfYear === $oClass->getYear();
-			$oNavItem = new ClassNavigationItem($oClass->getSlug(), $oClass->getFullClassName(), $oClass, 'root', $sDisplayType, null, true, $bVisible);
+			$bShowInList = $iShowInListIfYear && $iShowInListIfYear === $oClass->getYear();
+			$oNavItem = new ClassNavigationItem($oClass->getSlug(), $oClass->getFullClassName(), $oClass, 'root', $sDisplayType, null, true, false);
+			$oNavItem->setShowInList($bShowInList);
 			$oNavigationItem->addChild($oNavItem);
 		}
 	}

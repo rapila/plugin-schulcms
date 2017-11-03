@@ -5,6 +5,7 @@
 class ClassNavigationItem extends VirtualNavigationItem {
 	private $bIsFolder;
 	private $bIsVisible;
+	private $bShowInList;
 	private $oClass = null;
 	private $iClassId = null;
 
@@ -25,7 +26,16 @@ class ClassNavigationItem extends VirtualNavigationItem {
 		}
 		$this->bIsFolder = $bIsFolder;
 		$this->bIsVisible = $bIsVisible;
+		$this->$bShowInList = $bIsVisible;
 		parent::__construct(get_class(), $sName, $sTitle, $sLinkText, $oData);
+	}
+
+	public function setShowInList($bShowInList) {
+		$this->bShowInList = $bShowInList;
+	}
+
+	public function getShowInList() {
+		return $this->bShowInList;
 	}
 
 	public static function create($sName, $sLinkText, SchoolClass $oSchoolClass = null, $sMode, $sDisplayType = 'default', $sTitle = null) {

@@ -15,8 +15,11 @@ class SubjectOutput extends ClassOutput {
 		$oTemplate->replaceIdentifier('title', $this->oNavigationItem->getTitle());
 		$oClassPrototype = $this->oPageType->constructTemplate('subject_class_item');
 
-		// Render a list of only the navigation items that are visible (have classes in the current year)
-		foreach($this->oNavigationItem->getChildren() as $oNavigationItem) {
+		// Render a list of only the navigation items that set bShowInList to true (have classes in the current year)
+		foreach($this->oNavigationItem->getChildren(null, false, true) as $oNavigationItem) {
+			if(!$oNavigationItem->getShowInList()) {
+				continue;
+			}
 			$oTemplate->replaceIdentifierMultiple('items', $this->renderItem($oNavigationItem, $oNavigationItem->getClass(), clone $oClassPrototype));
 		}
 		return $oTemplate;
