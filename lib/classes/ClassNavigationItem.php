@@ -26,7 +26,7 @@ class ClassNavigationItem extends VirtualNavigationItem {
 		}
 		$this->bIsFolder = $bIsFolder;
 		$this->bIsVisible = $bIsVisible;
-		$this->$bShowInList = $bIsVisible;
+		$this->bShowInList = $bIsVisible;
 		parent::__construct(get_class(), $sName, $sTitle, $sLinkText, $oData);
 	}
 
