@@ -58,6 +58,9 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		$aResult['CountStudents'] = $oSchoolClass->countStudentsByUnitName();
 		$aResult['CountDocuments'] = $oSchoolClass->countClassDocuments();
 		$aResult['CountLinks'] = $oSchoolClass->countClassLinks();
+		self::ensureDocumentExists($aResult, 'ClassPortraitId');
+		self::ensureDocumentExists($aResult, 'ClassScheduleId');
+		self::ensureDocumentExists($aResult, 'WeekScheduleId');
 		$oPredecessorClass = $oSchoolClass->getAncestorClass();
 		if($oPredecessorClass) {
 			$aResult['Predecessor'] = array('id' => $oPredecessorClass->getId(), 'name' => $oPredecessorClass->getClassNameWithYear());
@@ -68,6 +71,12 @@ class ClassDetailWidgetModule extends PersistentWidgetModule {
 		}
 		$aResult['ClassPageUrl'] = LinkUtil::link($oSchoolClass->getLink(), 'FrontendManager');
 		return $aResult;
+	}
+
+	private static function ensureDocumentExists(&$aResult, $sIdKey) {
+		if(DocumentQuery::create()->filterById($aResult[$sIdKey])->count() < 1) {
+			$aResult[$sIdKey] = null;
+		}
 	}
 
 	public function getNewsCountInfo($mSchoolClass) {
