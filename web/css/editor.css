@@ -1,3 +1,8 @@
+html {
+  overflow: auto !important;
+  padding: 2px;
+}
+
 p {
-  font-size: 12px;
+  font-size: 13px;
 }
