@@ -25,8 +25,22 @@ class ClassesFilterModule extends FilterModule {
 		} // Render subject class navigation items
 		else if($oNavigationItem instanceof SubjectNavigationItem) {
 			$oSubject = SubjectQuery::create()->findPk($oNavigationItem->getSubjectId());
-			$aSchoolClasses = SchoolClassQuery::create()->filterBySubjectId($oSubject->getId())->filterByDisplayCondition(false, null)->find();
-			$this->renderClassNavigationItems($oNavigationItem, $aSchoolClasses, $oNavigationItem->getMode());
+
+			$oJoin = new Join();
+			$oJoin->setJoinType(Criteria::LEFT_JOIN);
+			$oJoin->addExplicitCondition('school_classes', 'slug', null, 'school_classes', 'slug', 'max_year_class');
+			// Filter out all but the latest year (per slug)
+			$oJoin->addCondition('year', 'year', Criteria::LESS_THAN);
+			$oQuery = SchoolClassQuery::create()
+				->filterByDisplayCondition(false, null)
+				->filterBySubjectId($oSubject->getId())
+				->addJoinObject($oJoin)
+				->where('max_year_class.id IS NULL')
+				->groupBySlug();
+
+			$aSchoolClasses = $oQuery->find();
+			\FilterModule::getFilters()->handleSubjectClassesFoundForNavigationItem($oNavigationItem, $oQuery, array(&$aSchoolClasses));
+			$this->renderClassNavigationItems($oNavigationItem, $aSchoolClasses, $oNavigationItem->getMode(), SchoolPeer::getCurrentYear());
 		}
 
 		if(!($oNavigationItem instanceof ClassNavigationItem)) {
@@ -97,9 +111,11 @@ class ClassesFilterModule extends FilterModule {
 		}
 	}
 
-	private function renderClassNavigationItems($oNavigationItem, $aClasses, $sDisplayType) {
+	private function renderClassNavigationItems($oNavigationItem, $aClasses, $sDisplayType, $iShowInListIfYear = false) {
 		foreach($aClasses as $oClass) {
-			$oNavItem = new ClassNavigationItem($oClass->getSlug(), $oClass->getFullClassName(), null, 'root', $sDisplayType, null, true, false);
+			$bShowInList = $iShowInListIfYear && $iShowInListIfYear === $oClass->getYear();
+			$oNavItem = new ClassNavigationItem($oClass->getSlug(), $oClass->getFullClassName(), $oClass, 'root', $sDisplayType, null, true, false);
+			$oNavItem->setShowInList($bShowInList);
 			$oNavigationItem->addChild($oNavItem);
 		}
 	}

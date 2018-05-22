@@ -91,8 +91,10 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 			$mYear = SchoolPeer::getCurrentYear();
 		}
 		if(is_int($mYear)) {
-			return $this->filterByYear($mYear, $bIsEqual ? Criteria::EQUAL : Criteria::NOT_EQUAL);
+			$this->filterByYear($mYear, $bIsEqual ? Criteria::EQUAL : Criteria::NOT_EQUAL);
 		}
+
+		return $this;
 	}
 
 }

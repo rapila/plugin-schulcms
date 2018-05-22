@@ -32,7 +32,14 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getSubjectClassName($bFrontend = true) {
+		if(!$this->getSubject()) {
+			return $this->getName();
+		}
 		if($bFrontend) {
+			// Don’t prepend subject name if already contained in name
+			if(strpos($this->getSubject()->getName(), $this->getName()) !== false) {
+				return $this->getName();
+			}
 			return $this->getSubject()->getName(). ' '	. $this->getName();
 		}
 		return $this->getName(). ' ('.$this->getSubject()->getName().')';
@@ -62,7 +69,7 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getFullClassName() {
-		if($this->getClassType() === "Kindergarten") {
+		if($this->getClassType() === "Kindergarten" || $this->getClassType() === "Musikschule") {
 			return $this->getUnitName();
 		}
 		return $this->getClassType().' '.$this->getUnitName();
@@ -292,7 +299,13 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getSuccessorClass() {
-		return SchoolClassQuery::create()->findOneByAncestorClassId($this->getId());
+		$oQuery = SchoolClassQuery::create();
+		if($this->isSubjectClass()) {
+			$oQuery->filterByDisplayCondition(false, null);
+		} else {
+			$oQuery->filterByDisplayConditionForNonSubjectClasses(null, null);
+		}
+		return $oQuery->findOneByAncestorClassId($this->getId());
 	}
 
 	public function getLinkedClassIds() {
