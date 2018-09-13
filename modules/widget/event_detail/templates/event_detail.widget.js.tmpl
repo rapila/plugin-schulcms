@@ -45,17 +45,6 @@ Widget.types.event_detail = {
 		this.droppable_area = _this._element.find('.droppable_area');
 		this.droppable_area.append(this.no_images_upload_info);
 
-		this.droppable_area.sortable({
-			update: function(document, ui) {
-				var ids = _this.droppable_area.children().map(function() {
-					return jQuery(this).data('document_id');
-				}).get();
-				if(_this.current_detail_id !== null) {
-					// only reorder if detail has been saved, otherwise sort order is taken from dom at saving time
-					_this.reorderDocuments(ids);
-				}
-			}
-		});
 		this.uploader = Widget.create('file_upload');
 		this.uploader.allow_drag_to(_this.droppable_area, null, function(target, file) {
 			return { document_category_id: _this.settings.events_document_category_id, callback: _this.upload_success.bind(_this), error: _this.upload_error.bind(_this)};
@@ -67,6 +56,17 @@ Widget.types.event_detail = {
 		// Handlers
 		this.handle('opened', function() {
 			this.init_textareas();
+			this.droppable_area.sortable({
+				update: function(document, ui) {
+					var ids = _this.droppable_area.children().map(function() {
+						return jQuery(this).data('document_id');
+					}).get();
+					if(_this.current_detail_id !== null) {
+						// only reorder if detail has been saved, otherwise sort order is taken from dom at saving time
+						_this.reorderDocuments(ids);
+					}
+				}
+			});
 		});
 
 		this.handle('saving', function(event, data) {
