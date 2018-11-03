@@ -267,8 +267,12 @@ class SchoolClass extends BaseSchoolClass {
 		return false;
 	}
 
-	public function getSubjectClasses() {
-		return SchoolClassQuery::create()->useSchoolClassSubjectClassesRelatedBySubjectClassIdQuery()->filterBySchoolClassRelatedBySchoolClassId($this)->endUse()->orderByName()->find();
+	public function getSubjectClasses($bWithStudentsOnly = false) {
+		$oQuery = SchoolClassQuery::create()->useSchoolClassSubjectClassesRelatedBySubjectClassIdQuery()->filterBySchoolClassRelatedBySchoolClassId($this)->endUse();
+		if($bWithStudentsOnly) {
+			$oQuery->filterByStudentCount(0, Criteria::GREATER_THAN);
+		}
+		return $oQuery->orderByName()->find();
 	}
 
 	public function getSubjects() {
