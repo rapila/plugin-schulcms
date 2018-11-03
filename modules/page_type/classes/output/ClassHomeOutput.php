@@ -131,14 +131,16 @@ class ClassHomeOutput extends ClassOutput {
 	private function renderSubjectsAndTeachers($oTemplate) {
 		$oTemplate->replaceIdentifier('subject_teasers_title', TranslationPeer::getString('class_detail.heading.subjects_and_teachers'));
 		$oRowPrototype = $this->oPageType->constructTemplate('class_subject_teaser_item');
-		foreach($this->oClass->getSubjectClasses() as $oClass) {
+		foreach($this->oClass->getSubjectClasses(true) as $oClass) {
 			$oRowTemplate = clone $oRowPrototype;
 			$oRowTemplate->replaceIdentifier('class_name', $oClass->getName());
 			$oRowTemplate->replaceIdentifier('subject_name', $oClass->getSubjectName());
 			$sLink = $oClass->getLink();
-			if($sLink) {
-				$oRowTemplate->replaceIdentifier('detail_link_subject', LinkUtil::link($sLink));
+			if(!$sLink) {
+				continue;
 			}
+			$oRowTemplate->replaceIdentifier('detail_link_subject', LinkUtil::link($sLink));
+
 			foreach($oClass->getClassTeachersOrdered() as $i => $oClassTeacher) {
 				if($i === 0) {
 					$oTeacher = $oClassTeacher->getTeamMember();
