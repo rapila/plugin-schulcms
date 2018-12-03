@@ -11,7 +11,7 @@ class TeamMemberDetailWidgetModule extends PersistentWidgetModule {
 
 		// Set / create document category for the portraits to be saved with
 		$sPortraitCategory = Settings::getSetting('externally_managed_categories', 'team_member_portrait', "Team Member Portrait");
-		$iPortraitCategoryId = DocumentCategoryQuery::create()->select('Id')->findOneByName($sPortraitCategory);
+		$iPortraitCategoryId = DocumentCategoryQuery::create()->select(['Id'])->findOneByName($sPortraitCategory);
 		if($iPortraitCategoryId === null) {
 			$oDocumentCategory = new DocumentCategory();
 			$oDocumentCategory->setName($sPortraitCategory)->setIsExternallyManaged(true)->save();

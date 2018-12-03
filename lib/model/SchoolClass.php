@@ -223,7 +223,7 @@ class SchoolClass extends BaseSchoolClass {
 	}
 
 	public function getCurrentNewsHeadline() {
-		$sHeadline = FrontendNewsQuery::create()->current()->filterBySchoolClassId($this->getId())->select('Headline')->orderByDateStart('desc')->findOne();
+		$sHeadline = FrontendNewsQuery::create()->current()->filterBySchoolClassId($this->getId())->select(['Headline'])->orderByDateStart('desc')->findOne();
 		if($sHeadline) {
 			return $sHeadline;
 		}
@@ -318,13 +318,13 @@ class SchoolClass extends BaseSchoolClass {
 		$iId = $this->getId();
 		while($iId != null) {
 			$aIds[] = $iId;
-			$iId = SchoolClassQuery::create()->filterByAncestorClassId($iId)->select('Id')->findOne();
+			$iId = SchoolClassQuery::create()->filterByAncestorClassId($iId)->select(['Id'])->findOne();
 		}
 		// Search backwards
 		$iId = $this->getId();
 		while($iId != null) {
 			$aIds[] = $iId;
-			$iId = SchoolClassQuery::create()->filterById($iId)->select('AncestorClassId')->findOne();
+			$iId = SchoolClassQuery::create()->filterById($iId)->select(['AncestorClassId'])->findOne();
 		}
 		return array_unique($aIds, SORT_NUMERIC);
 	}
@@ -334,7 +334,7 @@ class SchoolClass extends BaseSchoolClass {
 		if($bObject) {
 			return $oQuery->findOne();
 		}
-		return $oQuery->select('UpdatedAt')->findOne();
+		return $oQuery->select(['UpdatedAt'])->findOne();
 	}
 
 	public function latestUpdatedDocument($bObject = false) {
@@ -342,7 +342,7 @@ class SchoolClass extends BaseSchoolClass {
 		if($bObject) {
 			return $oQuery->findOne();
 		}
-		return $oQuery->select('UpdatedAt')->findOne();
+		return $oQuery->select(['UpdatedAt'])->findOne();
 	}
 
 	public function latestUpdatedEvent($bObject = false) {
@@ -350,7 +350,7 @@ class SchoolClass extends BaseSchoolClass {
 		if($bObject) {
 			return $oQuery->findOne();
 		}
-		return $oQuery->select('UpdatedAt')->findOne();
+		return $oQuery->select(['UpdatedAt'])->findOne();
 	}
 
 	public function latestUpdatedNews($bObject = false) {
@@ -358,7 +358,7 @@ class SchoolClass extends BaseSchoolClass {
 		if($bObject) {
 			return $oQuery->findOne();
 		}
-		return $oQuery->select('UpdatedAt')->findOne();
+		return $oQuery->select(['UpdatedAt'])->findOne();
 	}
 
 	public function preDelete(PropelPDO $con = null) {

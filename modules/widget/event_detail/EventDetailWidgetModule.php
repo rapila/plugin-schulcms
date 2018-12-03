@@ -12,7 +12,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 
 		// Set / create document category for the event images to be saved in
 		$sEventDocumentCategory = Settings::getSetting('externally_managed_categories', 'event_images', "Event Images");
-		$iEventDocumentCategoryId = DocumentCategoryQuery::create()->select('Id')->findOneByName($sEventDocumentCategory);
+		$iEventDocumentCategoryId = DocumentCategoryQuery::create()->select(['Id'])->findOneByName($sEventDocumentCategory);
 		if($iEventDocumentCategoryId === null) {
 			$oDocumentCategory = new DocumentCategory();
 			$oDocumentCategory->setName($sEventDocumentCategory)->setIsExternallyManaged(true)->save();
