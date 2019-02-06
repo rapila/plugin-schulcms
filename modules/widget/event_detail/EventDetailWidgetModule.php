@@ -12,7 +12,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 
 		// Set / create document category for the event images to be saved in
 		$sEventDocumentCategory = Settings::getSetting('externally_managed_categories', 'event_images', "Event Images");
-		$iEventDocumentCategoryId = DocumentCategoryQuery::create()->select('Id')->findOneByName($sEventDocumentCategory);
+		$iEventDocumentCategoryId = DocumentCategoryQuery::create()->select(['Id'])->findOneByName($sEventDocumentCategory);
 		if($iEventDocumentCategoryId === null) {
 			$oDocumentCategory = new DocumentCategory();
 			$oDocumentCategory->setName($sEventDocumentCategory)->setIsExternallyManaged(true)->save();
@@ -114,6 +114,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$oFlash = Flash::getFlash();
 		$oFlash->setArrayToCheck($aData);
 		$oFlash->checkForValue('title', 'title_required');
+		$oFlash->checkForValue('event_type_id', 'event_type_required');
 		if($aData['is_active']) {
 			$oFlash->checkForValue('body', 'is_active_body_required');
 			if($aData['date_start'] == null) {

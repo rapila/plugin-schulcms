@@ -26,7 +26,7 @@ class SchoolClassQuery extends BaseSchoolClassQuery {
 	}
 
 	public function studentCount() {
-		return $this->select('students')->withColumn('SUM(student_count)', 'students')->findOne();
+		return $this->select(['students'])->withColumn('SUM(student_count)', 'students')->findOne();
 	}
 
 	/**
