@@ -114,6 +114,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$oFlash = Flash::getFlash();
 		$oFlash->setArrayToCheck($aData);
 		$oFlash->checkForValue('title', 'title_required');
+		$oFlash->checkForValue('event_type_id', 'event_type_required');
 		if($aData['is_active']) {
 			$oFlash->checkForValue('body', 'is_active_body_required');
 			if($aData['date_start'] == null) {
