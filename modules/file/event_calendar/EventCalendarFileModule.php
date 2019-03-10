@@ -48,7 +48,7 @@ class EventCalendarFileModule extends FileModule {
 	}
 
 	private function getFeed() {
-		$oCalendar = new \Eluceo\iCal\Component\Calendar(Settings::getSetting('domain_holder', 'domain', 'example.com'));
+		$oCalendar = new \Eluceo\iCal\Component\Calendar(LinkUtil::getHostName());
 		if($this->oClass) {
 			$oCalendar->setName($this->oClass->getFullClassNameWithYear(true));
 		} else if(class_exists('SchoolSiteQuery')) {
