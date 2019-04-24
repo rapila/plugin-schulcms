@@ -141,9 +141,8 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		// Discuss removing of this type since it's confusing and since class events should be handled independently of other events (exception request id)
 		if($oEvent->getSchoolClassId()) {
 			$iClassEventTypeId = SchoolSiteConfig::getClassEventTypeId();
-			if($mEventTypeId !== $iClassEventTypeId) {
-				$mEventTypeId = $iClassEventTypeId;
-			}
+			$mEventTypeId = $iClassEventTypeId;
+			$aData['event_type_id'] = $iClassEventTypeId;
 		}
 		$oEvent->setEventTypeId($mEventTypeId);
 		$oEvent->setLocationInfo($aData['location_info']);
