@@ -54,7 +54,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 			foreach($aEvents as $oEvent) {
 				$oItemTemplate = clone $oItemPrototype;
 				$oDateTemplate = clone $oDatePrototype;
-				$oDateTemplate->replaceIdentifier('date_day', LocaleUtil::strftime("%d",$oEvent->getDateStart('U'), $sLanguage));
+				$oDateTemplate->replaceIdentifier('date_day', LocaleUtil::strftime("%d", $oEvent->getDateStart(null), $sLanguage));
 				$sMonthName = LocaleUtil::localizeDate($oEvent->getDateStartTimeStamp(), $sLanguage, 'b');
 				$oDateTemplate->replaceIdentifier('date_month', $sMonthName);
 				$oItemTemplate->replaceIdentifier('date_item', $oDateTemplate);
