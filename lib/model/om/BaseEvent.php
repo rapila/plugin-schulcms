@@ -310,7 +310,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getDateStart($format = '%x')
+    public function getDateStart($format = 'H:i:s')
     {
         if ($this->date_start === null) {
             return null;
@@ -350,7 +350,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getDateEnd($format = '%x')
+    public function getDateEnd($format = 'H:i:s')
     {
         if ($this->date_end === null) {
             return null;
@@ -2674,7 +2674,7 @@ abstract class BaseEvent extends BaseObject implements Persistent
     }
 
     /**
-     * @param	EventDocument $eventDocument The eventDocument object to remove.
+     * @param  EventDocument $eventDocument The eventDocument object to remove.
      * @return Event The current object (for fluent API support)
      */
     public function removeEventDocument($eventDocument)

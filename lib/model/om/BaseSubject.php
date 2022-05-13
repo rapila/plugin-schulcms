@@ -1718,7 +1718,7 @@ abstract class BaseSubject extends BaseObject implements Persistent
     }
 
     /**
-     * @param	SchoolClass $schoolClass The schoolClass object to remove.
+     * @param  SchoolClass $schoolClass The schoolClass object to remove.
      * @return Subject The current object (for fluent API support)
      */
     public function removeSchoolClass($schoolClass)

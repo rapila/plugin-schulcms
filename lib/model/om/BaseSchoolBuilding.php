@@ -1608,7 +1608,7 @@ abstract class BaseSchoolBuilding extends BaseObject implements Persistent
     }
 
     /**
-     * @param	SchoolClass $schoolClass The schoolClass object to remove.
+     * @param  SchoolClass $schoolClass The schoolClass object to remove.
      * @return SchoolBuilding The current object (for fluent API support)
      */
     public function removeSchoolClass($schoolClass)

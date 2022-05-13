@@ -1663,7 +1663,7 @@ abstract class BaseFunctionGroup extends BaseObject implements Persistent
     }
 
     /**
-     * @param	SchoolFunction $schoolFunction The schoolFunction object to remove.
+     * @param  SchoolFunction $schoolFunction The schoolFunction object to remove.
      * @return FunctionGroup The current object (for fluent API support)
      */
     public function removeSchoolFunction($schoolFunction)

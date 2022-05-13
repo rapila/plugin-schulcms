@@ -189,7 +189,7 @@ abstract class BaseStudent extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getDateOfBirth($format = '%x')
+    public function getDateOfBirth($format = 'H:i:s')
     {
         if ($this->date_of_birth === null) {
             return null;
@@ -1887,7 +1887,7 @@ abstract class BaseStudent extends BaseObject implements Persistent
     }
 
     /**
-     * @param	ClassStudent $classStudent The classStudent object to remove.
+     * @param  ClassStudent $classStudent The classStudent object to remove.
      * @return Student The current object (for fluent API support)
      */
     public function removeClassStudent($classStudent)

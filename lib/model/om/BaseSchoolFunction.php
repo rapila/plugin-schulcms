@@ -1882,7 +1882,7 @@ abstract class BaseSchoolFunction extends BaseObject implements Persistent
     }
 
     /**
-     * @param	TeamMemberFunction $teamMemberFunction The teamMemberFunction object to remove.
+     * @param  TeamMemberFunction $teamMemberFunction The teamMemberFunction object to remove.
      * @return SchoolFunction The current object (for fluent API support)
      */
     public function removeTeamMemberFunction($teamMemberFunction)

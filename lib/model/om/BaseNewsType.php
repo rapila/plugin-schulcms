@@ -1642,7 +1642,7 @@ abstract class BaseNewsType extends BaseObject implements Persistent
     }
 
     /**
-     * @param	News $news The news object to remove.
+     * @param  News $news The news object to remove.
      * @return NewsType The current object (for fluent API support)
      */
     public function removeNews($news)

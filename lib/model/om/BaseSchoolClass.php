@@ -3551,7 +3551,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
-     * @param	ClassStudent $classStudent The classStudent object to remove.
+     * @param  ClassStudent $classStudent The classStudent object to remove.
      * @return SchoolClass The current object (for fluent API support)
      */
     public function removeClassStudent($classStudent)
@@ -3854,7 +3854,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
-     * @param	ClassTeacher $classTeacher The classTeacher object to remove.
+     * @param  ClassTeacher $classTeacher The classTeacher object to remove.
      * @return SchoolClass The current object (for fluent API support)
      */
     public function removeClassTeacher($classTeacher)
@@ -4157,7 +4157,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
-     * @param	SchoolClassSubjectClassesRelatedBySchoolClassId $schoolClassSubjectClassesRelatedBySchoolClassId The schoolClassSubjectClassesRelatedBySchoolClassId object to remove.
+     * @param  SchoolClassSubjectClasses $schoolClassSubjectClassesRelatedBySchoolClassId The schoolClassSubjectClassesRelatedBySchoolClassId object to remove.
      * @return SchoolClass The current object (for fluent API support)
      */
     public function removeSchoolClassSubjectClassesRelatedBySchoolClassId($schoolClassSubjectClassesRelatedBySchoolClassId)
@@ -4435,7 +4435,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
-     * @param	SchoolClassSubjectClassesRelatedBySubjectClassId $schoolClassSubjectClassesRelatedBySubjectClassId The schoolClassSubjectClassesRelatedBySubjectClassId object to remove.
+     * @param  SchoolClassSubjectClasses $schoolClassSubjectClassesRelatedBySubjectClassId The schoolClassSubjectClassesRelatedBySubjectClassId object to remove.
      * @return SchoolClass The current object (for fluent API support)
      */
     public function removeSchoolClassSubjectClassesRelatedBySubjectClassId($schoolClassSubjectClassesRelatedBySubjectClassId)
@@ -4710,7 +4710,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
-     * @param	SchoolClassRelatedById $schoolClassRelatedById The schoolClassRelatedById object to remove.
+     * @param  SchoolClass $schoolClassRelatedById The schoolClassRelatedById object to remove.
      * @return SchoolClass The current object (for fluent API support)
      */
     public function removeSchoolClassRelatedById($schoolClassRelatedById)
@@ -5138,7 +5138,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
-     * @param	SchoolClassUnitOriginalID $schoolClassUnitOriginalID The schoolClassUnitOriginalID object to remove.
+     * @param  SchoolClassUnitOriginalID $schoolClassUnitOriginalID The schoolClassUnitOriginalID object to remove.
      * @return SchoolClass The current object (for fluent API support)
      */
     public function removeSchoolClassUnitOriginalID($schoolClassUnitOriginalID)
@@ -5416,7 +5416,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
-     * @param	ClassLink $classLink The classLink object to remove.
+     * @param  ClassLink $classLink The classLink object to remove.
      * @return SchoolClass The current object (for fluent API support)
      */
     public function removeClassLink($classLink)
@@ -5719,7 +5719,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
-     * @param	ClassDocument $classDocument The classDocument object to remove.
+     * @param  ClassDocument $classDocument The classDocument object to remove.
      * @return SchoolClass The current object (for fluent API support)
      */
     public function removeClassDocument($classDocument)
@@ -6019,7 +6019,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
-     * @param	Event $event The event object to remove.
+     * @param  Event $event The event object to remove.
      * @return SchoolClass The current object (for fluent API support)
      */
     public function removeEvent($event)
@@ -6344,7 +6344,7 @@ abstract class BaseSchoolClass extends BaseObject implements Persistent
     }
 
     /**
-     * @param	News $news The news object to remove.
+     * @param  News $news The news object to remove.
      * @return SchoolClass The current object (for fluent API support)
      */
     public function removeNews($news)

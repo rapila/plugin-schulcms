@@ -2043,7 +2043,7 @@ abstract class BaseSchool extends BaseObject implements Persistent
     }
 
     /**
-     * @param	SchoolClass $schoolClass The schoolClass object to remove.
+     * @param  SchoolClass $schoolClass The schoolClass object to remove.
      * @return School The current object (for fluent API support)
      */
     public function removeSchoolClass($schoolClass)
@@ -2468,7 +2468,7 @@ abstract class BaseSchool extends BaseObject implements Persistent
     }
 
     /**
-     * @param	SchoolFunction $schoolFunction The schoolFunction object to remove.
+     * @param  SchoolFunction $schoolFunction The schoolFunction object to remove.
      * @return School The current object (for fluent API support)
      */
     public function removeSchoolFunction($schoolFunction)

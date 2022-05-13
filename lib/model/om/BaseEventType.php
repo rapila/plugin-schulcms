@@ -1642,7 +1642,7 @@ abstract class BaseEventType extends BaseObject implements Persistent
     }
 
     /**
-     * @param	Event $event The event object to remove.
+     * @param  Event $event The event object to remove.
      * @return EventType The current object (for fluent API support)
      */
     public function removeEvent($event)

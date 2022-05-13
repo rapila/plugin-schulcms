@@ -300,7 +300,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getEmployedSince($format = '%x')
+    public function getEmployedSince($format = 'H:i:s')
     {
         if ($this->employed_since === null) {
             return null;
@@ -340,7 +340,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getDateOfBirth($format = '%x')
+    public function getDateOfBirth($format = 'H:i:s')
     {
         if ($this->date_of_birth === null) {
             return null;
@@ -2538,7 +2538,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     }
 
     /**
-     * @param	ClassTeacher $classTeacher The classTeacher object to remove.
+     * @param  ClassTeacher $classTeacher The classTeacher object to remove.
      * @return TeamMember The current object (for fluent API support)
      */
     public function removeClassTeacher($classTeacher)
@@ -2841,7 +2841,7 @@ abstract class BaseTeamMember extends BaseObject implements Persistent
     }
 
     /**
-     * @param	TeamMemberFunction $teamMemberFunction The teamMemberFunction object to remove.
+     * @param  TeamMemberFunction $teamMemberFunction The teamMemberFunction object to remove.
      * @return TeamMember The current object (for fluent API support)
      */
     public function removeTeamMemberFunction($teamMemberFunction)
