@@ -106,7 +106,10 @@ class EventCalendarFileModule extends FileModule {
 
 		return $aComponentFactory
 			->createCalendar($oCalendar)
-			->withProperty(new \Eluceo\iCal\Presentation\Component\Property('X-WR-CALNAME', $sName))
+			->withProperty(new \Eluceo\iCal\Presentation\Component\Property(
+					'X-WR-CALNAME',
+					new \Eluceo\iCal\Presentation\Component\Property\Value\TextValue($sName)
+				))
 			->__toString();
 	}
 }
