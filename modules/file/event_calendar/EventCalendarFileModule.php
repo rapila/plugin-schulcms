@@ -47,40 +47,66 @@ class EventCalendarFileModule extends FileModule {
 		print $sResult;
 	}
 
-	private function getFeed() {
-		$oCalendar = new \Eluceo\iCal\Component\Calendar(Settings::getSetting('domain_holder', 'domain', 'example.com'));
-		if($this->oClass) {
-			$oCalendar->setName($this->oClass->getFullClassNameWithYear(true));
-		} else if(class_exists('SchoolSiteQuery')) {
-			$oCalendar->setName(SchoolSiteQuery::currentSchoolSite()->getName());
-		} else {
-			$oCalendar->setName(Settings::getSetting('domain_holder', 'name', 'Events').' – '.Event::getEventPage()->getPageTitle());
+	private function createOccurrence(DateTimeInterface $oDateStart, DateTimeInterface $oDateEnd) : \Eluceo\iCal\Domain\ValueObject\Occurrence {
+		if(!$oDateEnd || $oDateEnd->getTimestamp() === $oDateStart->getTimestamp()) {
+			return new \Eluceo\iCal\Domain\ValueObject\SingleDay(
+				new \Eluceo\iCal\Domain\ValueObject\Date($oDateStart)
+			);
 		}
+		return new \Eluceo\iCal\Domain\ValueObject\MultiDay(
+			new \Eluceo\iCal\Domain\ValueObject\Date($oDateStart),
+			new \Eluceo\iCal\Domain\ValueObject\Date($oDateEnd)
+		);
+	}
+
+	private function getFeed() : string {
+		$sDomain = Settings::getSetting('domain_holder', 'domain', 'example.com');
+
+		$aCalendarEvents = [];
+
 		foreach($this->oQuery->find() as $oEvent) {
-			$oCalendarEvent = new \Eluceo\iCal\Component\Event();
+			$oCalendarEvent = new \Eluceo\iCal\Domain\Entity\Event(
+				new \Eluceo\iCal\Domain\ValueObject\UniqueIdentifier("$sDomain-event-{$oEvent->getId()}")
+			);
 			$oCalendarEvent
-			  ->setDtStart($oEvent->getDateStart(null))
-			  ->setDtEnd($oEvent->getDateEnd(null))
-			  ->setNoTime(true)
-			  ->setUniqueId('event-'.$oEvent->getId())
-			  ->setUrl(LinkUtil::absoluteLink(LinkUtil::link($oEvent->getLink(), 'FrontendManager'), null, 'auto'));
-			$sTitle = $oEvent->getFullTitle();
-			$oCalendarEvent->setSummary($sTitle);
-			$oCalendar->addComponent($oCalendarEvent);
+				->setSummary($oEvent->getFullTitle())
+				->setDescription($oEvent->getBodyShortTruncated(500))
+			  ->setOccurrence($this->createOccurrence($oEvent->getDateStart(null), $oEvent->getDateEnd(null)))
+			  ->setUrl(
+					new \Eluceo\iCal\Domain\ValueObject\Uri(
+						LinkUtil::absoluteLink(LinkUtil::link($oEvent->getLink(), 'FrontendManager'), null, 'auto')
+					)
+				);
+			$aCalendarEvents[] = $oCalendarEvent;
 		}
+
 		if($this->oDateQuery) {
 			foreach($this->oDateQuery->find() as $oDate) {
-				$oCalendarEvent = new \Eluceo\iCal\Component\Event();
+				$oCalendarEvent = new \Eluceo\iCal\Domain\Entity\Event(
+					new \Eluceo\iCal\Domain\ValueObject\UniqueIdentifier("$sDomain-date-{$oDate->getId()}")
+				);
 				$oCalendarEvent
-				  ->setDtStart($oDate->getDateStart(null))
-				  ->setDtEnd($oDate->getDateEnd(null))
-				  ->setUniqueId('date-'.$oDate->getId())
-				  ->setNoTime(true)
-				  ->setSummary($oDate->getName());
-				$oCalendar->addComponent($oCalendarEvent);
+					->setSummary($oDate->getName())
+					->setOccurrence($this->createOccurrence($oDate->getDateStart(null), $oDate->getDateEnd(null)));
+				$aCalendarEvents[] = $oCalendarEvent;
 			}
 		}
-		return $oCalendar->render();
+
+
+		$oCalendar = new \Eluceo\iCal\Domain\Entity\Calendar($aCalendarEvents);
+
+		$sName = Settings::getSetting('domain_holder', 'name', 'Events').' – '.Event::getEventPage()->getPageTitle();
+		if($this->oClass) {
+			$sName = $this->oClass->getFullClassNameWithYear(true);
+		} else if(class_exists('SchoolSiteQuery')) {
+			$sName = SchoolSiteQuery::currentSchoolSite()->getName();
+		}
+
+		$aComponentFactory = new Eluceo\iCal\Presentation\Factory\CalendarFactory();
+
+		return $aComponentFactory
+			->createCalendar($oCalendar)
+			->withProperty(new \Eluceo\iCal\Presentation\Component\Property('X-WR-CALNAME', $sName))
+			->__toString();
 	}
-	
 }
