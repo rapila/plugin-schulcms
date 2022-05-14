@@ -66,9 +66,9 @@ class Event extends BaseEvent {
 
 	public function getBodyShortTruncated($iLength = 40) {
 		// refactor to use body short when implemented
-		$sContent = null;
-		if($this->getBodyShort() != null) {
-			$sContent = stream_get_contents($this->getBodyShort());
+		$sContent = $this->getTeaser();
+		if($sContent) {
+			RichtextUtil::parseStorageForFrontendOutput($sContent);
 			$sContent = html_entity_decode(strip_tags($sContent));
 			return StringUtil::truncate($sContent, $iLength);
 		}
