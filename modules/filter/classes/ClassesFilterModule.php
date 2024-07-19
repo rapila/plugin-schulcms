@@ -9,8 +9,8 @@ class ClassesFilterModule extends FilterModule {
 		if($oNavigationItem instanceof PageNavigationItem && $oNavigationItem->getType() === 'classes') {
 			$oPageType = PageTypeModule::getModuleInstance('classes', $oNavigationItem->getMe(), $oNavigationItem);
 			$aOptions = $oPageType->config();
-			$sDisplayType = @$aOptions['display_type'];
-			$sClassType = @$aOptions['class_type'];
+			$sDisplayType = isset($aOptions['display_type']) ? $aOptions['display_type'] : null;
+			$sClassType = isset($aOptions['class_type']) ? $aOptions['class_type'] : null;
 
 			// Render subjects or school classes
 			if($sClassType === 'subject') {
@@ -75,7 +75,7 @@ class ClassesFilterModule extends FilterModule {
 			}
 			$oPageType = PageTypeModule::getModuleInstance('classes', $oPage, $oNavigationItem);
 			$aOptions = $oPageType->config();
-			$sClassType = @$aOptions['class_type'];
+			$sClassType = isset($aOptions['class_type']) ? $aOptions['class_type'] : null;
 
 			// Subjects or school classes
 			if($sClassType === 'subject') {

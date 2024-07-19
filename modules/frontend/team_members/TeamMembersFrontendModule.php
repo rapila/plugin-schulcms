@@ -29,7 +29,7 @@ class TeamMembersFrontendModule extends FrontendModule {
 	public function renderFrontend() {
 		$this->oClassPage = PagePeer::getPageByIdentifier(SchoolPeer::getPageIdentifier('classes'));
 		$aOptions = @unserialize($this->getData());
-		$this->aFunctionGroupIds = @$aOptions[self::GROUPS_SELECT_KEY];
+		$this->aFunctionGroupIds = isset($aOptions[self::GROUPS_SELECT_KEY]) ? $aOptions[self::GROUPS_SELECT_KEY] : null;
 
 		switch($aOptions[self::MODE_SELECT_KEY]) {
 			case 'team_mitglied_detail' : return $this->renderDetail();
