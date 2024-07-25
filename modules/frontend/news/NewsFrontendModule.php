@@ -22,7 +22,7 @@ class NewsFrontendModule extends DynamicFrontendModule {
 		$this->sDisplayMode = isset($aOptions[self::MODE_SELECT_KEY]) ? $aOptions[self::MODE_SELECT_KEY] : null;
 
 		$aNewsTypes = isset($aOptions['news_type']) ? $aOptions['news_type'] : null;
-		$iLimit = isset($aOptions['limit']) ? $aOptions['limit'] : null;
+		$iLimit = (int) isset($aOptions['limit']) ? $aOptions['limit'] : null;
 		switch($this->sDisplayMode) {
 			case 'list_full': return $this->renderCurrentList($aNewsTypes, $iLimit);
 			case 'list_short': return $this->renderCurrentList($aNewsTypes, $iLimit, 'short');
