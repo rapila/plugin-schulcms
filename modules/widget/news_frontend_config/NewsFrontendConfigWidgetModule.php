@@ -16,8 +16,9 @@ class NewsFrontendConfigWidgetModule extends FrontendConfigWidgetModule {
 		if($aData['news_type'] !== null) {
 			$oNewsQuery->filterByNewsTypeId($aData['news_type']);
 		}
-		if($aData['limit']) {
-			$oNewsQuery->limit($aData['limit']);
+		$iLimit = (int) (isset($aData['limit']) ? $aData['limit'] : null);
+		if($iLimit) {
+			$oNewsQuery->limit($iLimit);
 		}
 		if($aData['display_mode'] ==='list_without_first') {
 			$oNewsQuery->offset(1);
