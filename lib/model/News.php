@@ -17,11 +17,11 @@ class News extends BaseNews {
 	}
 
 	public function getDateStartFormatted() {
-		return LocaleUtil::localizeDate($this->getDateStart());
+		return LocaleUtil::localizeDate($this->getDateStart(null));
 	}
 
 	public function getDateEndFormatted() {
-		return LocaleUtil::localizeDate($this->getDateEnd());
+		return LocaleUtil::localizeDate($this->getDateEnd(null));
 	}
 
 	public function getHasImage() {

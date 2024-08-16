@@ -122,7 +122,7 @@ class ClassHomeOutput extends ClassOutput {
 				$oNewsTemplate->replaceIdentifier('author_name', $oNews->getUserRelatedByUpdatedBy()->getFullName());
 			}
 			if($oNewsTemplate->hasIdentifier('date')) {
-				$oNewsTemplate->replaceIdentifier('date', LocaleUtil::localizeDate($oNews->getDateStart()));
+				$oNewsTemplate->replaceIdentifier('date', $oNews->getDateStartFormatted());
 			}
 		}
 		$oTemplate->replaceIdentifier('news', $oNewsTemplate);

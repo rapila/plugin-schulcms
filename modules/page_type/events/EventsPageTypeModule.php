@@ -69,7 +69,7 @@ class EventsPageTypeModule extends PageTypeModule {
 		$oTemplate->replaceIdentifier('body', $sBody, null, Template::NO_HTML_ESCAPE);
 
 		$oTemplate->replaceIdentifier('ts', $oEvent->getDateStart('U'));
-		if($oEvent->getDateEnd() === $oEvent->getDateStart()) {
+		if($oEvent->getDateEnd('U') === $oEvent->getDateStart('U')) {
 			$oTemplate->replaceIdentifier('date_info', $oEvent->getWeekdayName().', '.$oEvent->getDatumWithMonthName());
 		} else {
 			$oTemplate->replaceIdentifier('date_info', $oEvent->getDateFromTo());

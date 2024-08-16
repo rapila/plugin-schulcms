@@ -154,7 +154,7 @@ class EventDetailWidgetModule extends PersistentWidgetModule {
 		$oEvent->setIsActive($aData['is_active']);
 		$oEvent->setDateStart($aData['date_start']);
 		$oEvent->setDateEnd($aData['date_end'] == null ? null : $aData['date_end']);
-		if($oEvent->getDateEnd() !== null && $oEvent->getDateEnd() < $oEvent->getDateStart()) {
+		if($oEvent->getDateEnd() !== null && $oEvent->getDateEnd(null) < $oEvent->getDateStart(null)) {
 			$oEvent->setDateEnd(null);
 		}
 		$oEvent->setTitle($aData['title']);

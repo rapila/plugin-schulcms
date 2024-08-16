@@ -83,7 +83,7 @@ class Event extends BaseEvent {
 	}
 
 	public function isMultiDay() {
-		return $this->getDateEnd() > $this->getDateStart();
+		return $this->getDateEnd(null) > $this->getDateStart(null);
 	}
 
 	public function getDateFromTo($sFormat = 'd.m.Y') {
@@ -118,7 +118,7 @@ class Event extends BaseEvent {
 	}
 
 	public function getDateStartFormatted() {
-		return LocaleUtil::localizeDate($this->getDateStart());
+		return LocaleUtil::localizeDate($this->getDateStart(null));
 	}
 
 	public function isEventDocument($iDocumentId) {
@@ -264,7 +264,7 @@ class Event extends BaseEvent {
 
 	public function save(PropelPDO $con = null) {
 		if($this->getDateEnd() === null) {
-			$this->setDateEnd($this->getDateStart());
+			$this->setDateEnd($this->getDateStart(null));
 		}
 		return parent::save($con);
 	}
