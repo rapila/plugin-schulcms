@@ -11,6 +11,7 @@ class EventsFrontendModule extends DynamicFrontendModule {
 	public $iEventTypeId;
 	private $bIsSidebar;
 	private $oEventPage;
+	private $iLimit;
 
 	const DETAIL_IDENTIFIER = 'id';
 	const MODE_SELECT_KEY = 'display_mode';
