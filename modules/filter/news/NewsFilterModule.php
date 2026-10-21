@@ -28,6 +28,6 @@ class NewsFilterModule extends FilterModule {
 		if(!($oNavigationItem instanceof NewsNavigationItem)) {
 			return;
 		}
-		$oNavigationItem->news = NewsQuery::create()->findPk($oNavigationItem->getName());
+		$oNavigationItem->getData()->news = NewsQuery::create()->findPk($oNavigationItem->getName());
 	}
 }

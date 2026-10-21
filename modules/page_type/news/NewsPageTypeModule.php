@@ -2,6 +2,7 @@
 class NewsPageTypeModule extends PageTypeModule {
 
 	private $aNewsTypes;
+	private $oNews;
 	private $bRequiresFilter = true;
 
 	public function __construct(Page $oPage = null, NavigationItem $oNavigationItem = null) {
