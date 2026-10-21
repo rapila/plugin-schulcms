@@ -1,6 +1,9 @@
 <?php
 class TeamMembersPageTypeModule extends PageTypeModule {
 	private $aFunctionGroupIds;
+	private $bRequiresFilter;
+	private $oTeamMember;
+
 	private static $SCHOOLSITES;
 
 	public function __construct(Page $oPage = null, NavigationItem $oNavigationItem = null) {
