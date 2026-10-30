@@ -4,6 +4,7 @@
  */
 class TeamMembersAdminModule extends AdminModule {
 	private $oListWidget;
+	private $oSidebarWidget;
 
 	public function __construct() {
 		$this->oListWidget = new TeamMemberListWidgetModule();
